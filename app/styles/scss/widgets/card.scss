@@ -1,0 +1,76 @@
+/* styles for cards */
+
+.demo-card-wide.mdl-card {
+	// width: 400px;
+}
+.demo-card-wide > .mdl-card__title {
+	color: #fff;
+	height: 176px;	
+}
+.demo-card-wide > .mdl-card__menu {
+	color: #fff;
+}
+
+.material1 > .mdl-card__title {
+	background: url('../images/material3.jpg') center / cover;
+}
+
+.material > .mdl-card__title {
+	background: url('../images/material1.jpg') center / cover;
+}
+
+.bg1 {
+	background: #3E4EB8;
+	color: white;
+	.mdl-card__title {
+		color: white;
+	}
+	.mdl-card__supporting-text {
+		color: white;
+		font-size: 18px;
+		line-height: 2;
+		height: 150px;
+	}
+	.mdl-card__actions {
+		border-top: 1px solid #C8C8CC;
+		.mdl-button {
+			color: white;			
+		}
+	}
+}
+
+.bg2 {
+	background: url('../images/portrait1.jpg') center / cover;
+	color: white;
+	.mdl-card__title {
+		height: 176px;
+		color: white;
+	}
+	.mdl-card__supporting-text {
+		color: white;
+		height: 36px;
+	}
+	.mdl-card__actions {
+		background:rgba(0, 0, 0, 0.5);
+		.mdl-button {
+			color: white;			
+		}
+	}
+}
+
+.bg3 {
+	.mdl-card__title {
+		color: white;
+		height: auto;
+	}
+	.mdl-card__supporting-text {
+		color: white;
+		height: 180px;
+	}
+	.mdl-card__actions {
+		background:rgba(0, 0, 0, 0.1);
+		.mdl-button {
+			color: #59595B;			
+		}
+	}
+}

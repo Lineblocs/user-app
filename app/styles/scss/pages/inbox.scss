@@ -1,0 +1,155 @@
+/* Styles for the inbox  */
+
+.dialog-lg {
+	width:80%;
+	max-width:600px;
+	md-toolbar {
+		position: relative;
+		.mdi-close {
+			position: absolute;
+		    right: 20px;
+		    top: 20px;
+		    font-size: 26px;
+		    cursor: pointer;
+		}
+	}
+}
+.inbox {
+	.lists {
+		ul.tabs {
+			list-style-type: none;
+			padding-left: 0;
+			li {
+				height: 50px;
+				a {
+					width: 90%;
+					height: 50px;
+					line-height: 3.5;
+					text-align: left;
+					padding-left: 30px;
+					font-weight: 400;
+					text-transform: none;
+					display: flex;
+					font-size: 14px;
+					.mdi {
+						font-size: 24px;
+						margin-right: 10px;
+						color: #777783;
+					}
+					.mdi-email {
+						color: #296CDB;
+					}
+					.mdi-check {
+						color: #57D25F;
+					}
+					.mdi-pencil {
+						color: #FFA327;
+					}
+					.mdi-airplane {
+						color: #B07AEF;
+					}
+					.mdi-label {
+						color: #EF5E84;
+					}
+				}	
+			}
+		}
+	}
+	.content {
+		padding: 10px;
+		h6 {
+			color: #A6A3AA;
+			font-weight: 400;
+			font-size: 14px;
+		}
+		.collapse-card {
+			.collapse-card__heading::after {
+				display: none;
+			}
+			.collapse-card__title {
+				position:relative;
+				.mdi {
+					float: initial;
+					font-size: 22px;
+					margin-right: 10px;
+				}
+				.sender {
+					.mdi-check-all {
+						color: #2BD035;
+						margin-left: 5px;
+					}
+				}
+				.subjecth {
+					font-weight: 600;	
+					position: absolute;
+					left: 40%;
+				}
+				.time {
+					font-size: 11px;
+				}
+			}
+			.collapse-card__body {
+				border-top: 1px solid #D3D6D8;
+				position: relative;
+				.subject {
+					margin-top: 5px;
+					margin-bottom: 15px;
+					color: #777783;
+					font-size: 16px;
+				}
+				.footer {
+					font-size: 13px;
+					.mdl-button--fab {
+						right: 15px;
+						bottom: 10px;
+						min-width: 40px;
+						width: 40px;
+						height: 40px;
+						.mdi {
+							font-size: 21px;
+							line-height: 2;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 630px) {
+	.subjecth {
+		display: none;
+	}
+}
+/* Styles for compose modal */
+.remodal-overlay {
+	background: rgba(162, 162, 162, 0.3);
+}
+.remodal {
+	padding: 0;
+	.remodal-close {
+		right: 10px;
+		top: 10px;
+		z-index: 2;
+		color: white;
+		left: initial;
+	}
+	.modal-body {
+		padding: 25px;
+		.mdl-textfield {
+			width: 100%;
+		}
+		.send {
+			float: right;
+			color: white;
+			background: $green;
+		}
+		.cancel {
+			float: right;
+			color: white;
+			background: $secondary;
+			margin-bottom: 15px;
+			margin-left: 15px;
+		}
+	}
+}

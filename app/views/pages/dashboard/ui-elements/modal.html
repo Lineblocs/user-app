@@ -1,0 +1,50 @@
+<pageheader pagename="Modal" subtitle="Bootstrap UI Elements"></pageheader>
+
+<div class="conter-wrapper">                
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modal</h3>
+        </div>
+        <div class="panel-body" ng-controller="ModalDemoCtrl">
+            <table class="table modal-table">
+                <tbody>
+                <tr>
+                    <td class="moleft"> Normal Size</td>    
+                    <td class="moright">
+                       <button class="btn btn-primary btn-rounded" ng-click="open()">View Modal</button>
+                        
+                    </td>
+                </tr>
+                <tr>    
+                    <td class="moleft"> Large Size</td> 
+                    <td class="moright">
+                        <button class="btn btn-primary btn-rounded" ng-click="open('lg')">View Modal</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="moleft"> Small Size</td> 
+                    <td class="moright">
+                         <button class="btn btn-primary btn-rounded" ng-click="open('sm')">View Modal</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <div ng-controller="ModalDemoCtrl">
+        <script type="text/ng-template" id="myModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Modal Title</h3>
+            </div>
+            <div class="modal-body">
+                <div class="high-padding text-center">
+                    This is a modal body
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-rounded" ng-click="cancel()">Cancel</button>
+                <button class="btn btn-primary btn-rounded" ng-click="ok()">Confirm</button>
+            </div>
+        </script>
+    </div>
+</div>

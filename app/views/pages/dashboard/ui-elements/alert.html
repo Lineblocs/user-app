@@ -1,0 +1,144 @@
+<pageheader pagename="Alerts" subtitle="Bootstrap UI Elements"></pageheader>
+
+<div class="conter-wrapper">				
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h3 class="panel-title">Dismissable Alerts		  
+				<div class="panel-control pull-right">
+					<a class="panelButton"><i class="fa fa-refresh"></i></a>
+					<a class="panelButton"><i class="fa fa-minus"></i></a>
+					<a class="panelButton"><i class="fa fa-remove"></i></a>
+				</div>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div ng-controller="AlertDemoCtrl">
+				<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+					<form class="form-inline">
+						<div class="form-group">
+							<input type="text" class="form-control" ng-model="message" placeholder="Enter Alert Message">
+						</div>
+						<button class='btn btn-default' ng-click="addAlert()">Add Alert</button>
+					</form>	
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Growl Alerts		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<growl-notifications>
+						<growl-notification ng-if="showGrowlDefault" class="fading">
+							<a href="javascript:;" ng-click="$growlNotification.remove()" class="close"><i class="fa fa-times"></i></a>
+							Default Notification</growl-notification>
+
+						<growl-notification ng-if="showGrowlPrimary" class="growl-primary fading">
+							<a href="javascript:;" ng-click="$growlNotification.remove()" class="close"><i class="fa fa-times"></i></a>
+							Primary Notification</growl-notification>
+
+						<growl-notification ng-if="showGrowlInfo" class="growl-info fading">
+							<a href="javascript:;" ng-click="$growlNotification.remove()" class="close"><i class="fa fa-times"></i></a>
+							Info Notification</growl-notification>
+
+						<growl-notification ng-if="showGrowlWarning" class="growl-warning">
+							<a href="javascript:;" ng-click="$growlNotification.remove()" class="close"><i class="fa fa-times"></i></a>
+							Warning Notification
+						</growl-notification>
+
+						<growl-notification ng-if="showGrowlError" class="growl-error fading">
+							<a href="javascript:;" ng-click="$growlNotification.remove()" class="close"><i class="fa fa-times"></i></a>
+							Error Notification</growl-notification>
+					</growl-notifications>
+
+					<p>
+						<button type="button" class="btn btn-default" ng-click="showGrowlDefault = true">Show Growl</button>
+						<button type="button" class="btn btn-primary" ng-click="showGrowlPrimary = true">Primary Growl</button>
+						<button type="button" class="btn btn-info" ng-click="showGrowlInfo = true">Info Growl</button> 
+						<button type="button" class="btn btn-warning" ng-click="showGrowlWarning = true">Warning Growl</button> 
+						<button type="button" class="btn btn-danger" ng-click="showGrowlError = true">Danger Growl</button> 
+					</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Growl Alerts		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<p>
+						<button type="button" class="btn btn-primary primary-growl">
+						Primary Growl</button> 
+					</p>
+					<p>
+					<button type="button" class="btn btn-info info-growl">
+						Info Growl</button> 
+					</p>
+					<p>
+					<button type="button" class="btn btn-warning warning-growl">
+						Warning Growl</button> 
+					</p>
+					<button type="button" class="btn btn-danger danger-growl">
+						Danger Growl</button> 
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h3 class="panel-title">Growl Positions		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<p>
+						<button type="button" class="btn btn-primary top-left">
+						Top Left</button> 
+					</p>
+					<p>
+					<button type="button" class="btn btn-info top-right">
+						Top Right</button> 
+					</p>
+					<p>
+					<button type="button" class="btn btn-danger bottom-left">
+						Bottom Left</button> 
+					</p>
+					<p>
+						<button type="button" class="btn btn-success bottom-right">
+						Bottom Right</button> 
+					</p>
+					<p>
+						<button type="button" class="btn btn-primary top-center">
+						Top Center</button> 
+					</p>
+					<p>
+						<button type="button" class="btn btn-warning bottom-center">
+						Bottom Center</button> 
+					</p>
+				</div>
+			</div>
+		</div>
+	</div> -->
+</div>

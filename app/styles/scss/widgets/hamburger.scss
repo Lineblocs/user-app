@@ -1,0 +1,98 @@
+/* Styels for Hamburger menu */
+
+
+
+.c-hamburger {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 55px;
+    height: 70px;
+    font-size: 0;
+    text-indent: -9999px;
+    appearance: none;
+    box-shadow: none;
+    border-radius: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.4s;
+    z-index: 99;
+}
+
+.c-hamburger:focus {
+    outline: none;
+}
+
+.c-hamburger span {
+    display: block;
+    position: absolute;
+    top: 35px;
+    left: 18px;
+    right: 18px;
+    height: 2px;
+    background: #415B65;
+}
+
+.c-hamburger span::before,
+.c-hamburger span::after {
+    position: absolute;
+    display: block;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #415B65;
+    content: "";
+}
+
+.c-hamburger span::before {
+  top: -6px;
+}
+
+.c-hamburger span::after {
+  bottom: -6px;
+}
+
+.c-hamburger--htla {
+    background-color: transparent;
+    margin-left: 15px;
+}
+
+.c-hamburger--htla span {
+    transition: transform 0.4s;
+}
+
+.c-hamburger--htla span::before {
+    transform-origin: top right;
+}
+
+.c-hamburger--htla span::after {
+    transform-origin: bottom right;
+}
+
+/* active state, i.e. menu open */
+.c-hamburger--htla.is-active {
+    background-color: transparent;
+}
+
+.c-hamburger--htla.is-active span {
+    transform: rotate(180deg);
+}
+
+.c-hamburger--htla.is-active span::before,
+.c-hamburger--htla.is-active span::after {
+    width: 55%;
+    left: -28px;
+}
+
+.c-hamburger--htla.is-active span::before {
+    top: -3px;
+    transform: translateX(38px) translateY(4px) rotate(45deg);
+}
+
+.c-hamburger--htla.is-active span::after {
+    bottom: -3px;
+    transform: translateX(38px) translateY(-4px) rotate(-45deg);
+}

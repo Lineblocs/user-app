@@ -1,0 +1,67 @@
+<div class="login-overlay">
+	<div class="logo">
+		Material <br> <span class="smaller">Dashboard</span>
+	</div>
+	<div class="form-container shadow">
+		<div class="icon">
+			<i class="mdi mdi-account-circle"></i>
+			<div class="header">
+				Sign Up
+			</div>
+		</div>
+		<div class="inputs">
+			<form style="display: flex; justify-content: center;">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="user.name" type="text" placeholder="name">
+	                </md-input-container>
+				</div>
+			</form>
+			<form style="display: flex; justify-content: center;">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="user.mail" type="email" placeholder="email">
+	                </md-input-container>
+				</div>
+			</form>
+			<form style="display: flex; justify-content: center;">	
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="user.password" type="password" placeholder="password">
+	                </md-input-container>
+				</div>
+			</form>
+			<form style="display: flex; justify-content: center;">	
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+					<md-input-container >
+	                    <input ng-model="user.password2" type="password" placeholder="confirm password">
+	                </md-input-container>
+				</div>
+			</form>
+			<div class="buttons">
+				
+				<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+	                Remember Me
+	            </md-checkbox>
+				<span class="signup">
+					<a ui-sref="login">Login here</a>
+				</span>
+				<div class="link">
+					<div class="link" style="padding-bottom:0;">
+						<md-button class="md-raised primary" ui-sref="home"> Signup </md-button>
+					</div>					
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="login-footer">
+		<div class="left-section">
+			&copy; Material Dashboard Theme
+		</div>
+
+		<div class="right-section">
+			Terms and Conditions Apply
+		</div>
+	</footer>
+</div>
+

@@ -1,0 +1,22 @@
+<div class="demo-grid-ruler mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col shadow" style="background: white; text-align: center;">
+        <calendar-md flex layout layout-fill
+            calendar-direction="direction"
+            on-prev-month="prevMonth"
+            on-next-month="nextMonth"
+            on-day-click="dayClick"
+            title-format="'MMMM y'"
+            ng-model='selectedDate'
+            week-starts-on="firstDayOfWeek"
+
+            data-start-month="8"
+
+            data-start-year="2014"
+            day-format="'d'"
+            day-label-format="'EEE'"
+            day-label-tooltip-format="'EEEE'"
+            day-tooltip-format="'fullDate'"
+            day-content="setDayContent">
+        </calendar-md>
+    </div>
+</div>

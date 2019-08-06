@@ -1,0 +1,209 @@
+/* Styles for profile */
+.lightbox-container {
+	a {
+	cursor: pointer;
+	}
+}
+.profile-content {
+	div.cover-photo {
+		background-image: url('../images/cover.jpg');
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		height: 350px;
+		.opacity-overlay {
+			background:rgba(0, 0, 0, 0.6);
+			height: 100%;
+			width: 100%;
+			.profile-info {
+				display: table;
+				bottom: 70px;
+				left: 50px;
+				padding-bottom : 20px;
+				border-bottom: 2px solid rgba(255, 255, 255, .2);
+				letter-spacing: 1px;
+				font-weight: 300;
+				.profile-photo {
+					display: table-cell;
+					vertical-align: middle;
+					img {
+						width: 110px;
+						border-radius: 50px;
+					}
+				}
+				.profile-desc {
+					display: table-cell;
+					vertical-align: middle;
+					color: rgba(255, 255, 255, 1);
+					padding-left: 20px;
+					padding-right: 40px;
+					font-size: 22px;
+					line-height: 1.4;
+					.smaller {						
+						font-size: 17px;
+					}
+					.location {
+						line-height: 2;
+						font-size: 16px;						
+					}
+					.social-icons {
+						a {
+							color: white;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+			.numbers {
+				color: rgba(255, 255, 255, 1);
+				bottom: 15px;
+				left: 50px;
+				font-size: 22px;
+				display: table;
+				width: 380px;
+				.detail {
+					text-align: center;
+					display: table-cell;
+					padding-left: 10px;
+					padding-right: 10px;
+					font-weight: 300;
+					letter-spacing: 1px;
+					.desc {
+						font-size: 14px;						
+					}
+				}
+			}
+			.buttons {
+				top: 100%;
+				margin-top: -25px;
+				right: 150px;
+				.mdi {
+					font-size: 26px;
+				}
+				.mdl-menu__container {
+					top: 0 !important;
+				}
+			}
+		}
+	}
+	.profile-body {
+		padding: 30px;
+		md-content {
+			background-color: transparent;
+		}
+		.lightbox-container {
+			padding: 10px;	
+			text-align: center; 
+			img {
+				width: 270px;
+				height: 200px;
+				margin: 10px;
+			}
+		} 
+		.info-container {
+			padding: 8px;
+			display: table;
+			width: 100%;
+			.cell {
+				display: table-cell;
+				width: 33%;
+				text-align: -webkit-center;
+				.mdl-data-table {
+					width: 75%;
+					th.table-header {
+						text-align: center;
+						font-size: 16px !important;
+						position: relative;
+						vertical-align: bottom;
+						text-overflow: ellipsis;
+						font-weight: 700;
+						line-height: 24px;
+						letter-spacing: 0;
+						height: 48px;
+						font-size: 12px;
+						color: rgba(0,0,0,.54);
+						padding-bottom: 8px;
+						box-sizing: border-box;
+						padding-left: 24px;
+						padding-right: 24px;
+						.mdi {
+							font-size: 20px;
+						}
+					}
+					tbody {
+						font-size: 14px;
+						font-weight: 300;
+						.mdi {
+							font-size: 18px;
+						}
+						td.table-left {
+							position: relative;
+							vertical-align: top;
+							height: 48px;
+							border-top: 1px solid rgba(0,0,0,.12);
+							border-bottom: 1px solid rgba(0,0,0,.12);
+							padding: 12px 18px 0;
+							box-sizing: border-box;
+							padding-left: 24px;
+							text-align: left;
+						}
+						td.table-right {
+							position: relative;
+							vertical-align: top;
+							height: 48px;
+							border-top: 1px solid rgba(0,0,0,.12);
+							border-bottom: 1px solid rgba(0,0,0,.12);
+							padding: 12px 18px 0;
+							box-sizing: border-box;
+							padding-right: 24px;
+							text-align: left;
+						}
+					}
+				} 
+			}
+		}
+	}
+}
+
+
+/* responsive */
+
+@media screen and (max-width: 990px) {
+	.buttons {
+		top: 50px;
+		right: 50px !important;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.profile-photo {
+		img {
+			width: 80px !important;
+		}
+	}
+	.buttons {
+		top: 20px;
+		right: 20px !important;
+	}
+	.profile-info {
+		left: 20px !important;
+	}
+	.numbers {
+		left: 20px !important;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	.cell {
+		display: block !important;
+		margin-bottom: 20px;
+		width: 100% !important;
+	}
+}
+
+
+.expandedContainer {
+	max-width: 100%;
+	padding: 0;
+}

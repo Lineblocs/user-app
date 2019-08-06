@@ -1,0 +1,110 @@
+<pageheader pagename="Collapse & Tabs" subtitle="Bootstrap UI Elements"></pageheader>
+
+<div class="conter-wrapper">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Collapse</h3>
+                </div>
+                <div class="panel-body">
+                    <accordion>
+                        <accordion-group heading="Click here for Collapse" is-open="true">
+                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                        </accordion-group>
+                        <accordion-group heading="Click here for Collapse">
+                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                        </accordion-group>
+                        <accordion-group heading="Click here for Collapse">
+                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                        </accordion-group>
+                    </accordion> 
+                </div>
+            </div>
+        </div>      
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Collapse</h3>
+                </div>
+                <div class="panel-body">
+                    <accordion close-others="false">
+                        <accordion-group class="panel-primary" heading="Click here for Collapse" is-open="true">
+                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                        </accordion-group>
+                        <accordion-group class="panel-primary" heading="Click here for Collapse">
+                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                        </accordion-group>
+                        <accordion-group class="panel-primary" heading="Click here for Collapse">
+                            Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                        </accordion-group>
+                    </accordion> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tabs</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-controller="TabsDemoCtrl">
+                        <tabset>
+                            <tab>
+                                <tab-heading><i class="fa fa-home"></i> Home</tab-heading>
+                                <div class="t-p">
+                                    loremLorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis laborum commodi, placeat voluptates quisquam accusantium corporis ipsa, distinctio, consequuntur explicabo aliquid illo doloremque. Ut, nam, cum saepe repellat cumque eaque... Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto assumenda dolore unde, eos. Fugit aut officiis, et modi debitis, eum, qui praesentium ducimus dolores perferendis aliquam temporibus! Velit, tenetur, corporis?
+                                </div>
+                            </tab>
+                            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+                                <div class="t-p">{{tab.content}}</div>
+                            </tab>
+                            <tab select="alertMe()">
+                                <tab-heading>
+                                    <i class="glyphicon glyphicon-bell"></i> Alert!
+                                </tab-heading>
+                                <div class="t-p">
+                                    I've got an HTML heading, and a select callback. 
+                                    Pretty cool!
+                                </div>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tabs</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-controller="TabsDemoCtrl">
+                        <tabset class="primary-tabs">
+                            <tab>
+                                <tab-heading><i class="fa fa-home"></i> Home</tab-heading>
+                                <div class="t-p">
+                                    loremLorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis laborum commodi, placeat voluptates quisquam accusantium corporis ipsa, distinctio, consequuntur explicabo aliquid illo doloremque. Ut, nam, cum saepe repellat cumque eaque... Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto assumenda dolore unde, eos. Fugit aut officiis, et modi debitis, eum, qui praesentium ducimus dolores perferendis aliquam temporibus! Velit, tenetur, corporis?
+                                </div>
+                            </tab>
+                            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+                                <div class="t-p">{{tab.content}}</div>
+                            </tab>
+                            <tab select="alertMe()">
+                                <tab-heading>
+                                    <i class="glyphicon glyphicon-bell"></i> Alert!
+                                </tab-heading>
+                                <div class="t-p">
+                                    I've got an HTML heading, and a select callback. 
+                                    Pretty cool!
+                                </div>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

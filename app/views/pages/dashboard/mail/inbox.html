@@ -1,0 +1,28 @@
+<div class="inbox">
+	<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+		<div flex="50" class="mdl-cell">
+			<div class="lists">
+				<ul class="tabs">
+					<li><md-button ui-sref="inbox"><i class="mdi mdi-email"></i>&nbsp;&nbsp;Inbox</md-button></li>
+					<li><md-button href="" ng-click="showAdvanced($event)"><i class="mdi mdi-pencil"></i>&nbsp;&nbsp;Compose</a></li>
+					<li><md-button href=""><i class="mdi mdi-check"></i>&nbsp;&nbsp;Done</a></li>
+					<hr>
+					<li><md-button href=""><i class="mdi mdi-email-open"></i>&nbsp;&nbsp;Drafts</a></li>
+					<li><md-button href=""><i class="mdi mdi-send"></i>&nbsp;&nbsp;Sent</a></li>
+					<li><md-button href=""><i class="mdi mdi-delete"></i>&nbsp;&nbsp;Trash</a></li>
+					<li><md-button href=""><i class="mdi mdi-alert-circle"></i>&nbsp;&nbsp;Spam</a></li>
+					<li><md-button href=""><i class="mdi mdi-account-multiple-plus"></i>&nbsp;&nbsp;Names</a></li>
+					<hr>
+					<li><md-button href=""><i class="mdi mdi-airplane"></i>&nbsp;&nbsp;Trips</a></li>
+					<li><md-button href=""><i class="mdi mdi-label"></i>&nbsp;&nbsp;Labels</a></li>
+				</ul>
+			</div>			
+		</div>
+		<div class="mdl-cell">
+			<div class="content">
+				<h6>Today</h6>
+				<div paper-collapse paper-collapse-cards="cards"></div>
+			</div>
+		</div>
+	</div>
+</div>

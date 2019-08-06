@@ -1,0 +1,61 @@
+//colors
+$white: #fff;
+$color_gallery_approx: #eee;
+$color_tapa_approx: #777;
+$black_20: rgba(0, 0, 0, 0.2);
+$black_18: rgba(0, 0, 0, 0.18824);
+
+.collapse-card {
+	background-color: $white;
+	border: 1px solid $color_gallery_approx;
+	color: $color_tapa_approx;
+	//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+	transition: .4s;
+	&.active {
+		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+		box-shadow: 0 8px 17px 0 $black_20, 0 6px 20px 0 $black_18;
+		z-index: 200;
+		margin: 1rem -1rem;
+		.collapse-card__body {
+			max-height: 400px;
+			padding: 1em;
+			opacity: 1;
+		}
+	}
+}
+.collapse-card__title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.collapse-card__heading {
+	font-size: 1em;
+	line-height: 2em;
+	cursor: pointer;
+	padding: 1em;
+	position: relative;
+	i {
+		float: left;
+	}
+	&:focus {
+		outline: 0;
+	}
+}
+.collapse-card__body {
+	overflow: hidden;
+	//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+	transition: .4s;
+	max-height: 0;
+	opacity: 0;
+	.trigger {
+		right: 15px;
+		bottom: 10px;
+		min-width: 40px;
+		width: 40px;
+		height: 40px;
+		.mdi {
+			font-size: 21px;
+			line-height: 1;
+		}
+	}
+}

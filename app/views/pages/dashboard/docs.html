@@ -1,0 +1,330 @@
+<div id="installation" class="shadow panel">
+	<h4>Installation</h4>
+	To use the Material Dashboard Theme, you need to make sure you have <code>bower</code>, <code>npm</code> and <code>gulp</code> globally installed. Now navigate to your app directory ($ cd app/) and run the following terminal commands :
+	<ul>		
+		<li> <code>npm install</code> </li>
+		<li> <code>bower install</code> </li>
+		<li> <code>gulp serve</code> </li>
+	</ul>
+</div>
+<div id="features" class="shadow panel">
+       <h4>Features</h4>
+       Material Admin is a lightweight and feature rich admin template which is clean and easy to use. Current release comes with the following features:
+       <ul>
+              <li> Responsive desing based on Material Design Lite</li>
+              <li> Custom elemenrs and plugins including
+                     <ul>
+                            <li>User profile</li>
+                            <li>Inbox</li>
+                            <li>Lightbox Gallery</li>
+                            <li>Customizable in different colors and styles</li>
+                            <li>Login, Register and 404 page</li>
+                     </ul>
+              </li>
+              <li>Angular Material Design and third party plugins and elemnts including
+                     <ul>
+                            <li>Tables</li>
+                            <li>Buttons</li>
+                            <li>Forms with validation</li>
+                            <li>Progressbars and Spinners</li>
+                            <li>Cards</li>
+                            <li>Tabs</li>
+                            <li>Sliders</li>
+                            <li>Badges</li>
+                            <li>Paper Collapse</li>
+                     </ul>
+              </li>                              
+       </ul>
+</div>
+<div id="widgets" class="shadow panel">
+<h4>Widgets</h4>
+                                   The following widgets/plugins have been used in Material Dashboard theme:
+                            <h5>Buttons</h5>
+                           <md-button class="md-raised md-warn">Primary</md-button>
+                            <div class="code-block">
+                                   <code><pre>&lt;md-button class="md-raised md-warn"&gt;Primary&lt;/md-button&gt;</pre></code>
+                            </div>
+                            <h5>Cards</h5>
+                              <md-card flex="50" flex-sm="100">
+                                    <img src="images/material1.jpg" class="md-card-image" alt="Washed Out">
+                                    <md-card-title>
+                                  <md-card-title-text>
+                                          <span class="md-headline">Action buttons</span>
+                                        </md-card-title-text>
+                                    </md-card-title>
+                                    <md-card-content>
+                                     <p>
+                                          The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+                                          two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+                                  </p>
+                                    </md-card-content>
+                                    <md-card-actions layout="row" layout-align="end center">
+                                  <md-button>Action 1</md-button>
+                                  <md-button>Action 2</md-button>
+                                    </md-card-actions>
+                                </md-card>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>
+&lt;md-card flex="50" flex-sm="100"&gt;
+  &lt;img src="images/material1.jpg" class="md-card-image" alt="Washed Out"&gt;
+  &lt;md-card-title&gt;
+    &lt;md-card-title-text&gt;
+      &lt;span class="md-headline"&gt;Action buttons&lt;/span&gt;
+    &lt;/md-card-title-text&gt;
+  &lt;/md-card-title&gt;
+  &lt;md-card-content&gt;
+    &lt;p&gt;
+      The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+      two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+    &lt;/p&gt;
+  &lt;/md-card-content&gt;
+  &lt;md-card-actions layout="row" layout-align="end center"&gt;
+    &lt;md-button&gt;Action 1&lt;/md-button&gt;
+    &lt;md-button&gt;Action 2&lt;/md-button&gt;
+  &lt;/md-card-actions&gt;
+&lt;/md-card&gt;
+                                          </pre>
+                                   </code>
+                            </div>
+                            <h5>Dropdowns</h5>
+                            <md-select placeholder="Pick" ng-model="someVal" style="width: 25%;">
+                                <md-option value="1">One</md-option>
+                                <md-option value="2">Two</md-option>
+                                <md-option value="3">Three</md-option>
+                                <md-option value="4">Four</md-option>
+                            </md-select>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-select placeholder="Pick" ng-model="someVal"&gt;
+    &lt;md-option value="1"&gt;One&lt;/md-option&gt;
+    &lt;md-option value="2"&gt;Two&lt;/md-option&gt;
+    &lt;md-option value="3"&gt;Three&lt;/md-option&gt;
+    &lt;md-option value="4"&gt;Four&lt;/md-option&gt;
+&lt;/md-select&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Slider</h5>
+                            <md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider"></md-slider>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider"&gt;&lt;/md-slider&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Circular Progress</h5>
+                            <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-progress-circular class="md-accent" md-mode="indeterminate"&gt;&lt;/md-progress-circular&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Progress Bars</h5>
+                            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                             <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-progress-linear md-mode="indeterminate"&gt;&lt;/md-progress-linear&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Toast</h5>
+                            <md-button class="md-raised md-accent" ng-click="showActionToast()">Show With Action</md-button>
+                             <div class="code-block">
+                                   <code>
+                                          HTML<pre>
+&lt;md-button class="md-raised md-accent" ng-click="showActionToast()"&gt;
+Show With Action
+&lt;/md-button&gt;
+</pre>
+JavaScript
+<pre>
+ $scope.toastPosition = {
+    bottom: false,
+    top: true,
+    left: false,
+    right: true
+  }
+  $scope.getToastPosition = function() {
+    return Object.keys($scope.toastPosition)
+      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .join(' ');
+  }
+   $scope.showActionToast = function() {
+    var toast = $mdToast.simple()
+          .content('Action Toast!')
+          .action('OK')
+          .highlightAction(false)
+          .hideDelay(9000)
+          .position($scope.getToastPosition());
+    $mdToast.show(toast).then(function() {
+      alert('You clicked \'OK\'.');
+    });
+  };
+</pre>
+                                   </code>
+                            </div>
+                            <h5>Dialogs</h5>
+                             <md-button class="md-primary" ng-click="showAlert($event)">Alert Dialog</md-button>
+                             <div class="code-block">
+                                   <code>
+                                          HTML<pre>&lt;md-button class="md-primary" ng-click="showAlert($event)"&gt;
+Alert Dialog
+&lt;/md-button&gt;</pre>
+JavaScript<pre>
+$scope.alert = '';
+  $scope.showAlert = function(ev) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.body))
+        .title('This is an alert title')
+        .content('You can specify some description text in here. This is your alert body.')
+        .ariaLabel('Alert Dialog Demo')
+        .ok('Got it!')
+        .targetEvent(ev)
+    );
+  };
+</pre>
+                                   </code>
+                            </div>
+                            <h5>Tabs</h5>
+                            <md-content class="md-padding">
+                                  <md-tabs md-dynamic-height md-border-bottom>
+                                    <md-tab label="one">
+                                      <md-content class="md-padding">
+                                        <h1 class="md-display-2">Tab One</h1>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+                                      </md-content>
+                                    </md-tab>
+                                    <md-tab label="two">
+                                      <md-content class="md-padding">
+                                        <h1 class="md-display-2">Tab Two</h1>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices.</p>                                          
+                                      </md-content>
+                                    </md-tab>
+                                    <md-tab label="three">
+                                      <md-content class="md-padding">
+                                        <h1 class="md-display-2">Tab Three</h1>
+                                        <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi.</p>
+                                      </md-content>
+                                    </md-tab>
+                                  </md-tabs>
+                            </md-content>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-content class="md-padding"&gt;
+&lt;md-tabs md-dynamic-height md-border-bottom&gt;
+    &lt;md-tab label="one"&gt;
+       &lt;md-content class="md-padding"&gt;
+          &lt;h1 class="md-display-2"&gt;Tab One&lt;/h1&gt;
+          &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate.&lt;/p&gt;
+        &lt;/md-content&gt;
+    &lt;/md-tab&gt;
+    &lt;md-tab label="two"&gt;
+        &lt;md-content class="md-padding"&gt;
+          &lt;h1 class="md-display-2"&gt;Tab Two&lt;/h1&gt;
+          &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus. Vivamus convallis sodales ante varius gravida. Curabitur a purus vel augue ultricesPraesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.&lt;/p&gt;
+        &lt;/md-content&gt;
+    &lt;/md-tab&gt;
+    &lt;md-tab label="three"&gt;
+        &lt;md-content class="md-padding"&gt;
+          &lt;h1 class="md-display-2"&gt;Tab Three&lt;/h1&gt;
+          &lt;p&gt;Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum.&lt;/p&gt;
+        &lt;/md-content&gt;
+      &lt;/md-tab&gt;
+  &lt;/md-tabs&gt;
+&lt;/md-content&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Switches and Checkboxes</h5>
+                            <md-switch aria-label="Switch 1">
+                                Switch
+                            </md-switch>
+                            <md-checkbox aria-label="Checkbox 1">
+                                Checkbox
+                            </md-checkbox>   
+                            <div class="code-block">
+                                   <code>
+                                         <pre>&lt;md-switch aria-label="Switch 1"&gt;
+    Switch
+&lt;/md-switch&gt;
+&lt;md-checkbox aria-label="Checkbox 1"&gt;
+       Checkbox
+&lt;/md-checkbox&gt; </pre>
+                                   </code>
+                            </div>
+                            <h5>Form Elements</h5>
+                            <md-input-container flex>
+                                   <label>Name</label>
+                                   <input ng-model="user.firstName">
+                            </md-input-container>
+                            <md-input-container flex>
+                                   <label>Email</label>
+                                   <input ng-model="theMax" type="email">
+                            </md-input-container>
+                             <div class="code-block">
+                                   <code>
+                                         <pre>&lt;md-input-container flex&gt;
+       &lt;label&gt;Name&lt;/label&gt;
+       &lt;input ng-model="user.firstName"&gt;
+&lt;/md-input-container&gt;
+&lt;md-input-container flex&gt;
+       &lt;label&gt;Email&lt;/label&gt;
+       &lt;input ng-model="theMax" type="email"&gt;
+&lt;/md-input-container&gt;</pre>
+                                   </code>
+                            </div>
+
+</div> 
+<div id="plugin" class="shadow panel">
+    <h4>Plugins</h4> 
+    3rd party plugins and elements
+    <h5>ChartJS</h5>
+    <div style="width: 500px;">
+    <canvas id="pie" class="chart chart-pie chart-xs" data="pie.data" labels="pie.labels" colours="pie.colours"></canvas>
+    </div>
+    <div class="code-block">
+                                   <code>
+                                         HTML<pre>&lt;div ng-controller="chartCtrl.js"&gt;
+&lt;canvas id="pie" class="chart chart-pie chart-xs" data="pie.data" labels="pie.labels" colours="pie.colours"&gt;
+&lt;/canvas&gt;
+&lt;/div&gt;</pre>
+JavaScript<pre>
+$scope.pie = {
+    labels : ["Success", "Danger", "Info"],
+    data : [220, 70, 100],
+    colours: ['#a2d19e','#80b1cb','#e8b769','#d57d6d','#06c5ac']
+    };
+}]);    
+</pre>
+                                   </code>
+                            </div>
+                            <h5>C3 Charts</h5>
+                            <div style="width: 500px;">
+                                <c3chart bindto-id="pie-chart">
+                                    <chart-column column-id="data-1" column-values="10" column-type="pie"/>    
+                                    <chart-column column-id="data-2" column-values="30" column-type="pie"/>      
+                                    <chart-column column-id="data-3" column-values="5" column-type="pie"/>  
+                                    <chart-column column-id="data-4" column-values="19" column-type="pie"/>  
+                                    <chart-legend show-legend="false"/>  
+                                    <chart-colors color-pattern="#FF4081,#00D554,#FFA726,#2979FF,#80b1cb"/>  
+                                </c3chart>
+                            </div>
+                            <div class="code-block">
+                                   <code>
+                                         <pre>&lt;c3chart bindto-id="pie-chart"&gt;
+    &lt;chart-column column-id="data-1" column-values="10" column-type="pie"/&gt;    
+    &lt;chart-column column-id="data-2" column-values="30" column-type="pie"/&gt;      
+    &lt;chart-column column-id="data-3" column-values="5" column-type="pie"/&gt;  
+    &lt;chart-legend show-legend="false"/&gt;  
+    &lt;chart-colors color-pattern="#06c5ac,#e8b769,#d57d6d,#a2d19e,#80b1cb"/&gt;  
+    &lt;chart-size chart-height="300" chart-width="400"/&gt;    
+&lt;/c3chart&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Stats</h5>
+                            <stats options="options1" percent="45" value="45%" header="Goals Achieved" arrow="up" footer="18% Up this month"></stats>
+                            <div class="code-block">
+                                   <code>
+                                         <pre>&lt;stats options="options1" percent="45" value="45%" header="Goals Achieved" arrow="up" 
+footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
+                                   </code>
+                            </div>
+</div>

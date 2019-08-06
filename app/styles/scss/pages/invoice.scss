@@ -1,0 +1,54 @@
+/* styles for invoice */
+
+.invoice-logo {
+	font-weight: 600;
+	color: $primary;
+	font-size: 25px;
+	letter-spacing: 1.2px;
+	line-height: 1.1;
+	text-transform: uppercase;
+	display: inline-block;
+	.lighter {
+		font-weight: 400;
+		font-size: 20px;
+	}
+}
+
+.name {
+	display: inline-block;
+	margin-top: 5px;
+}
+.invoice-table {
+	border: 1px solid rgba(0,0,0,.12);
+	th.table-header {
+		text-align: left;
+		font-size: 16px !important;
+		position: relative;
+		vertical-align: bottom;
+		text-overflow: ellipsis;
+		font-weight: 700;
+		line-height: 24px;
+		letter-spacing: 0;
+		height: 48px;
+		font-size: 12px;
+		color: rgba(0,0,0,.54);
+		padding-bottom: 8px;
+		box-sizing: border-box;
+		padding-left: 24px;
+		padding-right: 24px;
+		.mdi {
+			font-size: 20px;
+		}
+	}
+	td.table-data {
+		position: relative;
+		vertical-align: top;
+		height: 48px;
+		border-top: 1px solid rgba(0,0,0,.12);
+		border-bottom: 1px solid rgba(0,0,0,.12);
+		padding: 12px 18px 0;
+		box-sizing: border-box;
+		padding-left: 24px;
+		text-align: left;
+	}
+}

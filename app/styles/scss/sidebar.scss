@@ -1,0 +1,153 @@
+/* Sidebar styles */
+
+
+.sidebar {
+    width: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: $primary;
+    min-height: 100%;
+    z-index: 3;
+    transition: width .3s, left .3s cubic-bezier(.27,.63,.5,1.05);
+    .top-logo {
+   	    color: white;
+	    font-size: 30px;
+    	padding: 25px;
+        line-height: 20px;
+        font-weight: 500;
+        position: fixed;
+        z-index: 999;
+        background-color: $primary;
+        width: 80px;
+    }
+    .scrollbar {
+        padding-top: 70px;
+    }
+    .top-logo-extended {
+    	display: none;
+    	opacity: 0;
+    }
+    .user-info {
+    	height: 175px;
+    	background-image: url('../images/background1.jpg');
+    	background-size: cover;
+        position: relative;
+    	.opacity {
+    		background:rgba(0, 0, 0, 0.2);
+    		@include transition(.2s);
+    		height: 100%;
+    		img.sidebar-profile {
+	    		width: 53px;
+	    		border-radius: 50%;
+	    		margin-top: 60px;
+	    		margin-left: 13px;
+	    		@include transition(.3s);
+	    	}
+	    	.info {
+	    		display: none;
+    			opacity: 0;  			
+				@include transition(.1s);
+	    	}
+    	}
+    }
+    .dashboard-menu {
+        ul.menu-list {
+            padding-left: 0;
+            li {
+                height: 43px;  
+                display: block;
+                width: 100%;
+                float: left;              
+                .md-button {
+                    margin: 0;
+                    min-width: 0;
+                    width: 100%;
+                    border-radius: 0;
+                }                   
+                &.show-subnav {
+                    &:hover {
+                        ul.sub-menu {
+                            display: block;
+                        }                        
+                    }
+                }
+                position: relative;
+                &.active {
+                    overflow: hidden;
+                    a {
+                        border-radius: 0;      
+                        padding: 5px;
+                        display: block;
+                        padding-left: 0;
+                    }
+                    a:first-child {
+                        border-left: 4px solid lighten($primary, 25%);
+                    }
+                }
+                a {
+                    color: white;
+                    padding-top: 5px;
+                    span.text {
+                        display: none;
+                    }
+                    .mdi {
+                        font-size: 17px;
+                        line-height: 2;
+                    }
+                    .mdi-chevron-down {
+                        display: none;
+                    }
+                    &:hover {
+                        background: darken($primary, 10%);
+                    }
+                }
+                ul.sub-menu {
+                    display: none;
+                    list-style-type: none;
+                    position: absolute;
+                    padding-left: 0;
+                    left: 80px;
+                    top: 0;
+                    width: 210px;
+                    background: $primary;
+                    li {
+                        background: inherit;
+                        overflow: hidden;
+                        a {
+                            width: 100%;                           
+                            font-weight: 300;
+                            text-align: left; 
+                            span.text {
+                                display: inherit;
+                            }
+                        }
+                        &.active {
+                            a {
+                                border-left: initial;
+                                padding-left: 8px;
+                            }
+                        }
+                    }
+                }
+            }
+        }        
+    }
+}
+
+
+@media screen and (max-width: 839px) {
+    .sidebar {
+        width: 210px !important;
+    }
+    .page-content {
+        padding-left: 15px !important;
+    }
+    .mdl-layout__header-row {
+        padding-left: 2px !important;
+    }
+    .profile-content {
+        margin-left: -15px !important;
+    }
+}
+

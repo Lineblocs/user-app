@@ -1,0 +1,118 @@
+<div class="layout-row" layout-sm="column" layout-xs="column"  dragula>	
+	<stats options="options1" percent="45" value="45%" header="Goals Achieved" arrow="up" footer="18% Up this month"></stats>
+	<stats options="options2" percent="68" value="68%" header="Sales" arrow="up" footer="27% Up this month"></stats>
+	<stats options="options3" percent="32" value="32%" header="Customers" arrow="down" footer="3% Down this month"></stats>
+</div>
+<div class="layout-row" layout-sm="column" layout-xs="column">
+	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
+		<div class="panel-header">Sales Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
+                <md-icon ><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
+            </md-button></span>
+		</div>
+		<div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options"></canvas>
+		</div>
+	</div>
+	<div flex="33" flex-sm="100" flex-xs="100" class="mdl-cell shadow grid-margin relative" style="background: #1abc9c;">
+		<div class="panel-body weather">
+			<h5><i class="mdi mdi-map-marker"></i>&nbsp;Bangalore</h5>
+			<div class="weather-container" style="text-align: center;">
+				<div class="temp">
+					23°<sup>C</sup> <br>
+				</div>				
+				<img src="images/weather.svg" alt="" class="weather-icon">
+			</div>
+			<div class="weather-table">
+				<table class="home-table">
+					<thead>
+						<tr>
+							<th style="text-align: left; padding-left: 24px;">Day</th>
+							<th>Max </th>
+							<th>Min</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="">Tuesday</td>
+							<td>22°C</td>
+							<td>31°C</td>
+						</tr>
+						<tr>
+							<td class="">Wednesday</td>
+							<td>17°C</td>
+							<td>29°C</td>
+						</tr>
+						<tr>
+							<td class="">Thursday</td>
+							<td>19°C</td>
+							<td>27°C</td>
+						</tr>
+						<tr>
+							<td class="">Friday</td>
+							<td>22°C</td>
+							<td>34°C</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="layout-row" layout-sm="column" layout-xs="column">
+	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
+		<div class="panel-header">Live traffic</div>
+		<div class="linechart" relink-event="resize">
+			<canvas id="line2" class="chart chart-line chart-xl" data="line2.data" labels="line2.labels" click="line2.onClick" series="line2.series" colours="line2.colours" options="line2.options"></canvas>
+		</div>
+	</div>
+	<div flex="33" flex-sm="100" flex-xs="100" class="mdl-cell shadow grid-margin" style="background: white; position: relative;">
+		<div class="panel-header">to do list <span class="cog">
+			
+			<md-menu md-position-mode="target-right target" >
+
+					<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)" style="min-width: 0;margin-top:0;">
+						<i class="mdi mdi-settings" style="font-size: 22px"></i>
+					</md-button>
+					<md-menu-content width="3" >					
+						<md-menu-item>							
+							<md-button >2 new friends</md-button>
+						</md-menu-item>
+						<md-menu-item>							
+							<md-button >4 new messages</md-button>
+						</md-menu-item>
+						<md-menu-item>							
+							<md-button >Friend request accepted</md-button>
+						</md-menu-item>
+						<md-menu-item>							
+							<md-button >No new notifs.</md-button>
+						</md-menu-item>
+					</md-menu-content>
+				</md-menu></span>
+		</div>
+		<todolist></todolist>
+	</div>
+</div>
+<div class="layout-row" layout-sm="column" layout-xs="column" id="drag2" dragula>
+	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="66" flex-sm="100">
+		<div class="panel-header">Month Breakdown</div>
+		<div relink="resize">
+			<c3chart bindto-id="bar-chart" padding-top="10" padding-right="50" padding-left="70">
+			    <chart-column column-id="data-1" column-values="30, 200, 100, 400, 150, 250, 200, 120, 80, 180, 40, 90, 220, 110, 20, 65" column-type="bar"/>  
+			    <chart-legend show-legend="false"/>  
+			    <chart-colors color-pattern="#00D554"/>  
+			</c3chart>
+		</div>
+	</div>
+	<div flex="33" flex-sm="100" flex-xs="100" class="mdl-cell shadow grid-margin" style="background: white;">
+		<div class="panel-header" relink="resize">Approvals</div>
+		<div relink="resize">
+			<c3chart bindto-id="donut-chart" padding-top="30" padding-right="30" padding-bottom="15" padding-left="30">
+			    <chart-column column-id="Approved" column-values="13" column-type="donut"/>  
+			    <chart-column column-id="Pending" column-values="25" column-type="donut"/>  
+			    <chart-column column-id="Rejected" column-values="25" column-type="donut"/>  
+			    <chart-column column-id="Others" column-values="37" column-type="donut"/>  
+			    <chart-legend show-legend="true"/>  
+			    <chart-colors color-pattern="#FF8300,#00AEFF,#00D554,#FF2800"/>  
+			</c3chart>
+		</div>
+	</div>
+</div>

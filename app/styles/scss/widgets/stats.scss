@@ -1,0 +1,38 @@
+/* Styles for stat */ 
+
+.stat {
+	display: table;
+	width: 100%;
+	height: 115px;
+	&:hover {
+		cursor: move;
+	}
+	.chart-container {
+		display: table-cell;
+		vertical-align: middle;
+		width: 30%;
+		position: relative;
+		text-align: center; 
+		.value {
+			position: absolute;
+			top: 37%;
+			left: 0;
+			right: 0;
+			font-size: 20px;
+		}
+	}
+	.stat-values {
+		display: table-cell;
+		vertical-align: middle;
+		padding-left: 20px;
+		font-size: 20px;
+		border-left: 1px solid #DCDAE1;
+		.bottom-stat {
+			margin-top: 10px;	
+			.lighter {
+				font-size: 14px;
+				color: #89888C;
+			}			
+		}
+	}
+}

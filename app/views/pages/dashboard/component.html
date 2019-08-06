@@ -1,0 +1,96 @@
+<div class="mdl-grid bars">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Loading Bars</h5>
+		<p style="margin-top: 10px;">
+		<md-progress-linear md-mode="determinate" value="45"></md-progress-linear>
+		</p>
+		<p style="margin-top: 10px;">
+		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</p>
+		<p style="margin-top: 10px;">
+		<md-progress-linear class="md-warn" md-mode="query" value="30" md-buffer-value="30"></md-progress-linear>
+		</p>		
+	</div>	
+</div>
+<div class="mdl-grid tabs">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Tabs</h5>
+		<md-tabs md-dynamic-height md-border-bottom>
+      		<md-tab label="one">
+		        <md-content class="md-padding">
+		          <h1 class="md-display-2">Tab One</h1>
+		          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+		        </md-content>
+    		</md-tab>
+	   		<md-tab label="two">
+	        	<md-content class="md-padding">
+					<h1 class="md-display-2">Tab Two</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus. Vivamus convallis sodales ante varius gravida. Curabitur a purus vel augue ultrices ultricies id a nisl. Nullam malesuada consequat diam, a facilisis tortor volutpat et. Sed urna dolor, aliquet vitae posuere vulputate, euismod ac lorem. Sed felis risus, pulvinar at interdum quis, vehicula sed odio. Phasellus in enim venenatis, iaculis tortor eu, bibendum ante. Donec ac tellus dictum neque volutpat blandit. Praesent efficitur faucibus risus, ac auctor purus porttitor vitae. Phasellus ornare dui nec orci posuere, nec luctus mauris semper.</p>
+		        </md-content>
+	      	</md-tab>
+			<md-tab label="three">
+				<md-content class="md-padding">
+					<h1 class="md-display-2">Tab Three</h1>
+					<p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+				</md-content>
+			</md-tab>
+    </md-tabs>
+	</div>	
+</div>
+<div class="mdl-grid sliders">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Sliders</h5>			
+		<h3>Rating: {{rating2}}/5 - demo of theming classes</h3>
+			<div layout>
+				<div flex="10" layout layout-align="center center">
+					<span class="md-body-1">default</span>
+				</div>
+				<md-slider flex md-discrete ng-model="rating1" step="1" min="1" max="5" aria-label="rating">
+				</md-slider>
+			</div>
+			<div layout>
+				<div flex="10" layout layout-align="center center">
+					<span class="md-body-1">md-warn</span>
+				</div>
+				<md-slider flex class="md-warn" md-discrete ng-model="rating2" step="1" min="1" max="5" aria-label="rating">
+				</md-slider>
+			</div>
+			<div layout>
+				<div flex="10" layout layout-align="center center">
+					<span class="md-body-1">md-primary</span>
+				</div>
+				<md-slider flex class="md-primary" md-discrete ng-model="rating3" step="1" min="1" max="5" aria-label="rating">
+				</md-slider>
+			</div>
+	</div>	
+</div>
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid spinners">
+	<div class="mdl-cell shadow" flex="33" style="background: white; padding:15px; justify-content: center;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Spinners</h5>	
+		<md-progress-circular md-mode="indeterminate" style="display:inline-block;"></md-progress-circular>
+	</div>	
+	<div class="mdl-cell shadow relative" flex="66" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Tooltips</h5>	
+		<md-button class="md-fab md-fab-top-left left" aria-label="Insert Drive">
+			<md-icon><i class="mdi mdi-file"></i></md-icon>
+			<md-tooltip md-visible="demo.showTooltip">
+			Insert Drive
+			</md-tooltip>
+		</md-button>
+
+	</div>	
+</div>
+<div class="mdl-grid tooltips">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Toasts</h5>	
+		<md-button ng-click="showSimpleToast()">
+		Show Simple
+		</md-button>
+		<md-button class="md-raised" ng-click="showActionToast()">
+		Show With Action
+		</md-button>
+		<md-button ng-click="showCustomToast()">
+		Show Custom
+		</md-button>
+	</div>	
+</div>

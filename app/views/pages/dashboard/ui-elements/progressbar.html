@@ -1,0 +1,123 @@
+<pageheader pagename="Progressbar" subtitle="Bootstrap UI Elements"></pageheader>
+
+<div class="conter-wrapper">                
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Progress Bars         
+                        <div class="panel-control pull-right">
+                            <a class="panelButton"><i class="fa fa-refresh"></i></a>
+                            <a class="panelButton"><i class="fa fa-minus"></i></a>
+                            <a class="panelButton"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <h4>Regular</h4>
+                    <progressbar value="47"></progressbar>
+                    <h4>With label</h4>
+                    <progressbar value="63">63%</progressbar>     
+                    <h4>Stacked</h4>
+                    <progress><bar value="22" type="success"></bar><bar value="12" type="danger"></bar><bar value="27" type="warning"></bar></progress>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Contextual Progressbars       
+                        <div class="panel-control pull-right">
+                            <a class="panelButton"><i class="fa fa-refresh"></i></a>
+                            <a class="panelButton"><i class="fa fa-minus"></i></a>
+                            <a class="panelButton"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <progressbar value="97" type="success"></progressbar>        
+                    <progressbar value="63" type="primary"></progressbar>        
+                    <progressbar value="52" type="info"></progressbar>        
+                    <progressbar value="31" type="warning"></progressbar>        
+                    <progressbar value="16" type="danger"></progressbar>        
+           
+                </div>
+            </div>
+        </div>
+   </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Striped Progresbars       
+                        <div class="panel-control pull-right">
+                            <a class="panelButton"><i class="fa fa-refresh"></i></a>
+                            <a class="panelButton"><i class="fa fa-minus"></i></a>
+                            <a class="panelButton"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <progressbar value="97" class="progress-striped" type="success"></progressbar>            
+                    <progressbar value="52" class="progress-striped" type="info"></progressbar>            
+                    <progressbar value="63" class="progress-striped" type="primary"></progressbar>            
+                    <progressbar value="31" class="progress-striped" type="warning"></progressbar>            
+                    <progressbar value="16" class="progress-striped" type="danger"></progressbar>  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Animated Progresbars          
+                        <div class="panel-control pull-right">
+                            <a class="panelButton"><i class="fa fa-refresh"></i></a>
+                            <a class="panelButton"><i class="fa fa-minus"></i></a>
+                            <a class="panelButton"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <progressbar value="65" class="progress-striped active" type="primary"></progressbar>  
+                    <progressbar value="92" class="progress-striped active" type="success"></progressbar>  
+                    <progressbar value="77" class="progress-striped active" type="info"></progressbar>  
+                    <progressbar value="34" class="progress-striped active" type="warning"></progressbar>  
+                    <progressbar value="22" class="progress-striped active" type="danger"></progressbar>  
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">AngularJS Dynamic Progressbars       
+                        <div class="panel-control pull-right">
+                            <a class="panelButton"><i class="fa fa-refresh"></i></a>
+                            <a class="panelButton"><i class="fa fa-minus"></i></a>
+                            <a class="panelButton"><i class="fa fa-remove"></i></a>
+                        </div>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-controller="ProgressDemoCtrl">
+                       <h3>Dynamic <button class="btn btn-sm btn-primary" type="button" ng-click="random()">Randomize</button></h3>
+                        <progressbar max="max" value="dynamic"><span style="color:black; white-space:nowrap;">{{dynamic}} / {{max}}</span></progressbar>
+
+                        <small><em>No animation</em></small>
+                        <progressbar animate="false" value="dynamic" type="success"><b>{{dynamic}}%</b></progressbar>
+
+                        <small><em>Object (changes type based on value)</em></small>
+                        <progressbar class="progress-striped active" value="dynamic" type="{{type}}">{{type}} <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
+
+                        <hr />
+                        <h3>Stacked <button class="btn btn-sm btn-primary" type="button" ng-click="randomStacked()">Randomize</button></h3>
+                        <progress><bar ng-repeat="bar in stacked track by $index" value="bar.value" type="{{bar.type}}"><span ng-hide="bar.value < 5">{{bar.value}}%</span></bar></progress>
+                    </div>
+                </div>   
+            </div>     
+        </div>
+    </div>
+</div>

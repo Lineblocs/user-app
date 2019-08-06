@@ -1,0 +1,18 @@
+/* Variables here */
+
+/* Colors */
+
+$primary: #C54033;
+$secondary: #ff4081;
+$warning: #ffa726;
+$pink: #2979ff;
+$green: #00D554;
+
+
+$bg: #f5f5f5;
+
+/* Transition Mixin */
+
+@mixin transition($duration) {
+	transition: all $duration cubic-bezier(.27,.63,.5,1.05);
+}

@@ -1,0 +1,24 @@
+<div class="to-do">
+	<div class="todo-body" ng-controller="todoCtrl">
+		<div class="todo-list-wrap">
+			<ul >
+				<li ng-repeat="todo in todos">
+					<md-checkbox aria-label="Checkbox 1" class="animated lightSpeedIn">
+						<span class="done-{{todo.done}}">{{todo.text}}</span>					      	
+				    </md-checkbox>
+				</li>
+			</ul>
+		</div>
+		<div class="bottom">
+			<form class="form-horizontal todo-from-bottom">			
+				<md-input-container style="width: 100%;">
+		        	<label>New Task</label>
+		        	<input ng-model="formTodoText">
+		        </md-input-container>				
+			</form>
+			<md-button class="md-fab" aria-label="Eat cake" ng-click="addTodo()">
+                <md-icon ><i class="mdi mdi-check"></i></md-icon>
+            </md-button>				
+		</div>				
+	</div>
+</div>

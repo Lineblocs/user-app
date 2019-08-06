@@ -1,0 +1,66 @@
+/* styles for components */
+
+div.table-container {
+	padding-left: 4%;
+	padding-right: 4%;
+	th:first-child {
+		text-align: left; 
+	}
+	.mdl-js-data-table {
+		width: 100%;
+	}	
+}
+
+
+@media screen and (max-width: 1100px) {
+	.first {
+		display: block !important;
+		margin-bottom: 20px;
+		width: 100% !important;
+	}
+}
+
+
+.bars {
+	.mdl-progress {
+		width: 100%;
+	}
+}
+
+.sliders {
+	.mdl-slider__container {
+		margin-top: 20px;
+		margin-bottom: 15px;
+	}
+}
+
+.spinners {
+	.mdl-badge[data-badge]:after {
+		top: -15px;
+		right: -12px;
+	}
+}
+
+.tooltips {
+	.mdi {
+		font-size: 30px;
+		color: #515153;
+	}
+}
+
+@media (max-width: 839px) {
+	div.table-container {
+		padding-left: 3%;
+		padding-right: 3%;
+	}
+}
+
+.md-toast-open-top .md-button.md-fab-top-left, .md-toast-open-top .md-button.md-fab-top-right {
+	transform: none;
+	
+}
+.md-button.md-fab.md-fab-top-left { 
+	top: 40px;
+	left: 160px;
+	z-index: 4;
+}

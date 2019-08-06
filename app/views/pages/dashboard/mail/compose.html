@@ -1,0 +1,34 @@
+
+<md-dialog aria-label="New Email" class="dialog-lg">
+		<form class="">
+		  	<md-toolbar>
+		    	<div class="md-toolbar-tools">
+		     		 <h2>New Email</h2>
+		     		 <span flex></span>
+		    	</div>
+		    	<i class="mdi mdi-close" ng-click="cancel()"></i>
+		  	</md-toolbar>
+			<md-dialog-content>
+				<md-content layout-padding>
+				<form action="">
+					<md-input-container>
+	                    <input ng-model="user.name" type="email" placeholder="Email">
+	                </md-input-container>
+
+					<md-input-container>
+	                    <input ng-model="user.subject" type="text" placeholder="Subject">
+	                </md-input-container>
+
+	               <md-input-container style="padding-top:20px;">
+	                    <textarea ng-model="user.message" placeholder="Message" rows="6"></textarea>
+	                </md-input-container>
+
+				</form>	
+
+				<md-button class="md-raised" ng-click="cancel()">Cancel</md-button>
+				<md-button class="md-raised md-primary" ng-click="hide()">Send</md-button>
+
+  				</md-content>
+		  	</md-dialog-content>
+	  	</form>
+</md-dialog>

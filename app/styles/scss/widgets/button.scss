@@ -1,0 +1,55 @@
+/* styles for buttons */
+
+.primary {
+	background: $primary !important;
+	color: #fff !important;
+	&:hover {
+	    background-color: $primary !important;
+	}
+}
+
+.green {
+	background: $green !important;
+	color: #fff !important;
+	&:hover {
+	    background-color: $green !important;
+	}
+}
+
+.primary-flat {
+	color: $primary;
+}
+
+.green-flat {
+	color: $green;
+}
+
+.md-icon-button {
+	&.green-flat {
+		.mdi {
+			color: $green;
+		}
+	}
+}
+
+.md-icon-button {
+	&.primary-flat {
+		.mdi {
+			color: $primary;
+		}
+	}
+}
+
+.md-icon-button {
+	line-height: 20px !important;
+	.mdi {
+		font-size: 24px;
+	}	
+}
+
+.md-fab {
+	line-height: 34px !important;
+	.mdi {
+		font-size: 26px;
+	}
+}

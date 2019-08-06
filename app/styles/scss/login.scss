@@ -1,0 +1,166 @@
+/* Login page styles */
+
+.login-overlay {
+	position: relative;
+	text-align: center;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding-bottom: 200px;
+	min-height: 100vh;
+	background: #f5f5f5;
+	-webkit-transition: all .4s cubic-bezier(0.175, 0.885, 0.335, 1.05);
+	transition: all .4s cubic-bezier(0.175, 0.885, 0.335, 1.05);	
+		&:after {
+			position: absolute;
+			top: 0;
+			width: 100%;
+			height: 300px;
+			left: 0;
+			right: 0;
+			background-image: url('../images/login-cover.jpg');
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;			
+			background-repeat:no-repeat;
+			background-position: center center;
+			content: "";
+			box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14);
+		}
+
+	.logo {
+		display: block;
+		margin: 0 auto;
+		position: relative;
+		z-index: 1;
+		text-transform: uppercase;
+		color: white;
+		font-size: 27px;
+		letter-spacing: 1px;
+		top: 70px;
+		.smaller {
+			font-size: 16px;			
+			letter-spacing: 5px;
+			margin-left: -8px;
+		}
+	}
+	.form-container {
+	    position: relative;
+	    z-index: 1;
+	    top: 100px;
+	    background: #ffffff;
+	    width: 50%;
+	    margin: 0 auto;
+	    .icon {
+	    	padding-top: 30px;
+	    	.mdi {
+	    		color: $primary;
+	    		font-size: 110px;
+	    	}
+	    	.header {
+	    		margin-top: 10px;
+	    		font-size: 20px;	    		
+	    		text-transform: uppercase;
+	    	}
+	    }
+	    .inputs {
+	    	margin-top: 10px;
+	    	.mdl-textfield {
+	    		width: 75%;
+	    		padding: 0;
+	    	}
+	    	.buttons {
+	    		width: 75%;
+	    		margin: 5px auto;
+	    		md-checkbox {
+	    			text-align: initial;
+	    			float: left;
+	    			display: inline-block;
+	    		}
+	    		.signup {
+	    			float: right;
+	    			margin-top: 15px;
+	    			a {
+	    				text-decoration: none;
+	    				color: $primary;
+	    			}
+	    		}
+				.link {
+					padding-top: 40px;
+					padding-bottom: 30px;
+					.mdl-button {
+						background: $primary;
+						color: white;						
+						width: 25%;
+						font-size: 15px;
+					}
+				}
+	    	}
+	    }
+	}	
+}
+
+h5.four {
+	font-size: 50px;
+}
+
+div.not-found {
+	font-size: 28px;
+	padding-bottom: 50px;
+}
+
+.login-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    bottom: 0;
+    padding: 32px 16px;
+    color: #9e9e9e;
+    background-color: #424242;
+    box-shadow: 0px -1px 2px rgba(0, 0, 0, 0.1);
+	.mdl-logo {
+		color: #88878B;
+	}
+	.left-section {
+		display: inline-block;
+		order: 0;
+	}
+	.right-section {
+		display: inline-block;
+		order: 1;
+	}
+}
+
+
+	
+
+@media screen and (max-width: 990px) {
+    .form-container {
+        width: 75% !important;
+    }
+}
+
+@media screen and (max-width: 490px) {
+    .logo {
+        top: 40px !important;
+    }
+    .form-container {
+    	top: 60px !important;
+    	width: 90% !important;
+    	.mdl-textfield {
+    		width: 85% !important;
+    	}
+    }
+     .login-footer {
+        text-decoration: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        .left-section, .right-section {
+        	width: 100%;
+        	display: block;
+        }
+    }
+}

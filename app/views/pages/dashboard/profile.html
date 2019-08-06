@@ -1,0 +1,173 @@
+<div class="profile-content">
+    <div class="cover-photo">
+        <div class="opacity-overlay relative">
+            <div class="profile-info absolute">
+                <div class="profile-photo">
+                    <img src="images/profile.jpg" alt="">
+                </div>
+                <div class="profile-desc">
+                    Sankhadeep Roy <span class="smaller">&nbsp;  @rishi</span>
+                    <br>
+                    <span class="location"><i class="mdi mdi-map-marker"></i> Liverpool, Merseyside </span>
+                    <br>
+                    <div class="social-icons">
+                        <a href="#"><i class="mdi mdi-facebook-box"></i>&nbsp;</a>
+                        <a href="#"><i class="mdi mdi-twitter-box"></i>&nbsp;</a>
+                        <a href="#"><i class="mdi mdi-instagram"></i>&nbsp;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="numbers absolute">
+                <div class="detail">
+                    29
+                    <br>
+                    <div class="desc">
+                        Photos
+                    </div>
+                </div>
+                <div class="detail">
+                    342
+                    <br>
+                    <div class="desc">
+                        Followers
+                    </div>
+                </div>
+                <div class="detail">
+                    5k
+                    <br>
+                    <div class="desc">
+                        Friends
+                    </div>
+                </div>
+                <div class="detail">
+                    12
+                    <br>
+                    <div class="desc">
+                        Relationships
+                    </div>
+                </div>
+            </div>
+            <div class="buttons absolute">
+               
+                <md-menu md-position-mode="target-right target" >
+                    <md-button class="md-fab" aria-label="Eat cake" id="profile-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon ><i class="mdi mdi-settings"></i> </md-icon>
+                    </md-button>
+                    <md-menu-content width="3" >                    
+                        <md-menu-item>                          
+                            <md-button >Some Action</md-button>
+                        </md-menu-item>
+                        <md-menu-item>                          
+                            <md-button >My Profile</md-button>
+                        </md-menu-item>
+                        <md-menu-item>                          
+                            <md-button >Disabled Action</md-button>
+                        </md-menu-item>
+                        <md-menu-item>                          
+                            <md-button >Yet Another Action</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </div>
+    </div>
+        <div class="profile-body">
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="photos">
+                    <md-content class="md-padding">
+                        <div class="lightbox-container">    
+                            <a ng-repeat="product in products" ng-click="openLightboxModal($index)"><img class="img-thumbnail shadow" ng-src="{{product.url}}" alt=""></a> 
+                        </div>                
+                    </md-content>
+                </md-tab>
+                <md-tab label="info">
+                    <md-content class="md-padding">
+                        <div class="info-container">
+                            <div class="cell">
+                                <table class="mdl-data-table mdl-js-data-table shadow">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-header" colspan="2">Personal <i class="mdi mdi-account left"></i> <i class="mdi mdi-pencil right"></i></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-left">Name</td>
+                                            <td class="table-right">Sankhadeep Roy</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Address</td>
+                                            <td class="table-right">Liverpool, Merseyside</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Relationship status</td>
+                                            <td class="table-right">Single</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Phone</td>
+                                            <td class="table-right">+91 8874122148</td>                                    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cell">
+                                <table class="mdl-data-table mdl-js-data-table shadow">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-header" colspan="2">Work <i class="mdi mdi-briefcase-check left"></i> <i class="mdi mdi-pencil right"></i></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-left">Club</td>
+                                            <td class="table-right">Liverpool FC</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Position</td>
+                                            <td class="table-right">Centre Forward</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Wages</td>
+                                            <td class="table-right">250k</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Market Value</td>
+                                            <td class="table-right">$32m</td>                                    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cell">
+                                <table class="mdl-data-table mdl-js-data-table shadow">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-header" colspan="2">Social <i class="mdi mdi-thumb-up-outline left"></i> <i class="mdi mdi-pencil right"></i></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-facebook"></i></td>
+                                            <td class="table-right">Sankhadeep Roy</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-twitter"></i></td>
+                                            <td class="table-right">Liverpool, Merseyside</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-pinterest"></i></td>
+                                            <td class="table-right">Single</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-instagram"></i></td>
+                                            <td class="table-right">+91 8874122148</td>                                    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+    </div>
+</div>
+        

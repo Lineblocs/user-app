@@ -1,0 +1,40 @@
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Line Chart
+		</div>
+		<div class="linechart" relink-event="resize">
+			<canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours"></canvas>
+		</div>
+	</div>
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Bar Chart
+		</div>
+		<div class="linechart" relink-event="resize">
+			<canvas id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series"
+                options="bar.options" colours="bar.colours"></canvas>
+		</div>
+	</div>
+</div>
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Pie Chart
+		</div>
+		<div class="linechart" relink-event="resize">
+			<div class="round-container">
+				<canvas id="pie" class="chart chart-pie chart-xs" data="pie.data" labels="pie.labels" colours="pie.colours"></canvas>
+				
+			</div>
+		</div>
+	</div>
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Donut Chart
+		</div>
+		<div class="linechart" relink-event="resize">
+			<canvas id="doughnut" class="chart chart-doughnut chart-xs" data="donut.data" labels="donut.labels" colours="donut.colours" legend="false"></canvas>
+		</div>
+	</div>
+</div>

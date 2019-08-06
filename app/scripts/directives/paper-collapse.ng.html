@@ -1,0 +1,19 @@
+<div class="paper-collapse" >
+    <div ng-repeat="card in cards" class="collapse-card shadow" ng-class="{ active: card.$active }" style="margin-bottom: 5px;">
+        <div class="collapse-card__heading" ng-click="card.$active = !card.$active">
+            <div class="collapse-card__title">
+                <span class="sender left"><i class="mdi mdi-account"></i>{{ card.name }}  <i class="mdi mdi-check-all"></i></span> <span class="subjecth">{{ card.subject }}</span><span class="time right">{{ card.time }}</span>
+            </div>
+        </div>
+        <div class="collapse-card__body">
+            <p>{{ card.body }}</p>
+            <div class="footer">
+                Sincerely, <br>
+                {{ card.name }}
+                <md-button class="md-fab accent right absolute trigger" aria-label="Use Android" ng-click="showAdvanced($event)">
+                    <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </div>
+</div>

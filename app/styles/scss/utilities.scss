@@ -1,0 +1,255 @@
+/* Extras */
+
+/* Shadow */
+
+.shadow {
+	-webkit-box-shadow: 1px 1px 7px 0px rgba(145,145,145,0.5);
+	-moz-box-shadow: 1px 1px 7px 0px rgba(145,145,145,0.5);
+	box-shadow: 1px 1px 7px 0px rgba(145,145,145,0.5);
+}
+
+.panel-header {
+	padding: 15px;
+	font-size: 16px;
+	background: $primary;
+	color: #fff;	
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	position: relative;
+	border-top-right-radius: 2px;
+	border-top-left-radius: 2px;
+	.cog {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+}
+
+.panel-body {
+	position: relative;
+	padding:15px;
+}
+
+.mdl-cell {
+	border-radius: 2px !important;
+}
+
+* {
+	a {
+		text-decoration: none;
+		&:hover, &:focus, &:visited {
+			text-decoration: none;
+		}
+	}
+}
+
+
+/* Arrows */
+
+.arrow-up {
+	display: inline-block;
+	width: 0; 
+	height: 0; 
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;	
+	border-bottom: 10px solid #00D554;
+}
+
+.arrow-down {
+	display: inline-block;
+	width: 0; 
+	height: 0; 
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;	
+	border-top: 10px solid #FF2800;
+}
+
+/* Relative and absolutr divs */
+
+.relative {
+	position: relative;
+}
+
+.absolute {
+	position: absolute;
+}
+
+/* float left and right */
+
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0; }
+
+/**
+  * Styles for HTML elements
+  */
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  opacity: 0.54;
+  font-size: 0.6em; }
+
+h1 {
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  margin-top: 24px;
+  margin-bottom: 24px; }
+
+h2 {
+  font-size: 45px;
+  font-weight: 400;
+  line-height: 48px;
+  margin-top: 24px;
+  margin-bottom: 24px; }
+
+h3 {
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 40px;
+  margin-top: 24px;
+  margin-bottom: 24px; }
+
+h4 {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  -moz-osx-font-smoothing: grayscale;
+  margin-top: 24px;
+  margin-bottom: 16px; }
+
+h5 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  margin-top: 24px;
+  margin-bottom: 16px; }
+
+h6 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.04em;
+  margin-top: 24px;
+  margin-bottom: 16px; }
+
+.mdl-checkbox {
+	height:auto;
+	min-height: 24px;
+}
+
+.zero-padding {
+	padding: 0;
+}
+
+.mt-15 {
+	margin-top: 15px;
+}
+
+md-toast {
+	&.md-top {
+		position: fixed;
+		top: 78px;
+	}
+}
+
+md-menu-item > .md-button {
+	text-align: left;
+}
+
+/* Hidden in mobiles */ 
+ 
+@media screen and (max-width: 600px) {
+   .hidden-sm {
+   		display: none !important;
+   }
+}
+
+/* Text color */
+
+.text-primary {
+	color: $primary !important;
+}
+
+#blue {
+	.mdi {
+		color: #2979ff;
+	}
+}
+#green {
+	.mdi {
+		color: #4CAF50;
+	}
+}
+#red {
+	.mdi {
+		color: #C54033;
+	}
+}
+#grey {
+	.mdi {
+		color: #607D8B;
+	}
+}
+#purple {
+	.mdi {
+		color: #370252;
+	}
+}
+#cyan {
+	.mdi {
+		color: #009788;
+	}
+}
+md-input-container.md-icon-float > label {
+	margin-left: 0;
+}
+
+.mdl-layout {
+	overflow-y: hidden !important;
+} 
+/* Print */
+
+@media print {
+	.navbar {
+		display: none;
+	}
+	.sidebar {
+		display: none !important;
+	}
+	.content-holder {
+		margin-left: 0 !important;
+	}
+}
+.mdl-cell {
+	margin: 16px;
+}
+.flex-66 {
+	max-width: calc(67% - 32px) !important;
+}
+@media screen and (max-width: 960px) {
+   .flex-66 {
+		max-width: initial !important;
+	}
+}
+
+md-input-container {
+	width: 100%;
+}
+md-card {
+	img {
+		max-height: 280px;
+	}
+}

@@ -1,0 +1,64 @@
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Line Chart
+		</div>
+		<div class="panel-body forms" >
+			<c3chart bindto-id="line-chart">
+			    <chart-column column-id="data-1" column-values="30,200,100,400,150,250" column-type="line"/>  
+			    <chart-column column-id="data-2" column-values="100,400,150,250,30,100" column-type="line"/>  
+			    <chart-legend show-legend="false"/>  
+			    <chart-colors color-pattern="#2979FF,#00D554,#D9534F,#5CB85C,#80b1cb"/>  
+			    <chart-size chart-height="300" width="450" />
+			</c3chart>
+		</div>
+	</div>
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Bar Chart
+		</div>
+		<div class="panel-body forms" >
+			<c3chart bindto-id="area-chart">
+			    <chart-column column-id="data-1" column-values="30,200,100,400,150,250" column-type="bar"/>  
+			    <chart-column column-id="data-2" column-values="100,400,150,250,30,100" column-type="bar"/>  
+			    <chart-legend show-legend="false"/>  
+			    <chart-colors color-pattern="#00D554,#FF4081,#80b1cb"/>  
+			    <chart-size chart-height="300" width="450" />					    
+			</c3chart>
+		</div>
+	</div>
+</div>
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Pie Chart
+		</div>
+		<div class="panel-body forms" >
+			<div class="round-container">
+				<c3chart bindto-id="pie-chart">
+				    <chart-column column-id="data-1" column-values="10" column-type="pie"/>    
+	                <chart-column column-id="data-2" column-values="30" column-type="pie"/>      
+				    <chart-column column-id="data-3" column-values="5" column-type="pie"/>  
+				    <chart-column column-id="data-4" column-values="19" column-type="pie"/>  
+				    <chart-legend show-legend="false"/>  
+				    <chart-colors color-pattern="#FF4081,#00D554,#FFA726,#2979FF,#80b1cb"/>  
+				</c3chart>
+			</div>
+		</div>
+	</div>
+	<div class="mdl-cell shadow" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+		<div class="panel-header">
+			Donut Chart
+		</div>
+		<div class="panel-body forms" >
+			<c3chart bindto-id="donut-chart">
+			    <chart-column column-id="data-1" column-values="30" column-type="donut"/>  
+			    <chart-column column-id="data-2" column-values="100" column-type="donut"/>  
+			    <chart-column column-id="data-3" column-values="200" column-type="donut"/>  
+			    <chart-legend show-legend="false"/>  
+			    <chart-colors color-pattern="#FF4081,#00D554,#FFA726,"/>  
+			    <chart-size chart-height="300" width="450" />			    
+			</c3chart>
+		</div>
+	</div>
+</div>
