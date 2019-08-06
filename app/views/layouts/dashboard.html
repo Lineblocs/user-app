@@ -1,13 +1,16 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 	<header class=" navbar shadow">
 		<!-- Hamburger -->
+		<!--
 		<button class="c-hamburger c-hamburger--htla is-active" ng-click="extend()">
 			<span>toggle menu</span>
 		</button>
+	-->
 		<div class="responsive-logo">
 			Material <br><span class="smaller">Dashboard</span>
 		</div>
 		<!-- Left aligned menu below button -->
+		<!--
 		<md-menu class="navbar-menu">
 			<md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
 				<i class="mdi mdi-brightness-1 text-primary"></i>
@@ -33,88 +36,22 @@
 				</md-menu-item>
 			</md-menu-content>
 		</md-menu>
+	-->
 		<nav class="right" style="margin-right: 20px; margin-top: 10px;">
-			<md-button class="thisrtl" ng-click="rtl();">
-				RTL
-			</md-button>
-			<md-menu md-position-mode="target-right target" >
-				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
-					<div class="mdl-badge" data-badge="3"><i class="mdi mdi-email"></i></div>
-				</md-button>
-				<md-menu-content width="3" >
-					<md-menu-item>
-						<md-button ui-sref="inbox">Mail from Elsa</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ui-sref="inbox">Inbox</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ui-sref="inbox">Tickets confirmed</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ui-sref="inbox">Check here</md-button>
-					</md-menu-item>
-				</md-menu-content>
-			</md-menu>
-			<md-menu md-position-mode="target-right target" >
-				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
-					<div class="mdl-badge" data-badge="3"><i class="mdi mdi-keyboard"></i></div>
-				</md-button>
-				<md-menu-content width="3" >
-					<md-menu-item>
-						<md-button ng-click="changeLanguage('en')">English</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ng-click="changeLanguage('ur')">اردو</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ng-click="changeLanguage('de')">Dutch</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ng-click="changeLanguage('Hn')">हिन्दी</md-button>
-					</md-menu-item>
-				</md-menu-content>
-			</md-menu>
-			<md-menu md-position-mode="target-right target" >
-				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
-					<div class="mdl-badge" data-badge="7"><i class="mdi mdi-bell"></i></div>
-				</md-button>
-				<md-menu-content width="3" >
-					<md-menu-item>
-						<md-button >2 new friends</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button >4 new messages</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button >Friend request accepted</md-button>
-					</md-menu-item>
-				</md-menu-content>
-			</md-menu>
 			<md-menu md-position-mode="target-right target" >
 				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
 					<i class="mdi mdi-dots-vertical"></i>
 				</md-button>
 				<md-menu-content width="3" >
 					<md-menu-item>
-						<md-button >Some Action</md-button>
+						<md-button ui-sref="settings" style="display:flex;">Settings</md-button>
 					</md-menu-item>
 					<md-menu-item>
-						<md-button ui-sref="login" style="display:flex;">Logout</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button >Disabled Action</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button >Yet Another Action</md-button>
+						<md-button >Logout</md-button>
 					</md-menu-item>
 				</md-menu-content>
 			</md-menu>
 		</nav>
-		<md-button class="right primary md-button md-default-theme shadow buy" style="margin-right: 10px; margin-top: 17px;" href="http://www.strapui.com/themes/material-dashboard-admin-angular/">
-			Buy Now
-		</md-button>
-
 	</header>
 <!-- Side bar here -->
 <aside id="" class="sidebar">
@@ -125,7 +62,7 @@
 		Material <br/> <span class="smaller">dashboard</span>
 	</div>
 	<div class="scrollbar" id="scroll">
-		<div class="user-info">
+		<div class="user-info" ng-show="false">
 			<div class="opacity">
 				<a ui-sref="profile"><img src="images/profile.jpg" alt="" class="sidebar-profile"></a>
 				<div class="info">
@@ -143,35 +80,17 @@
 					<md-button href="" class=" show-menu" ng-click="subnav('ui')">
 						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
 						<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-						<span class="text"> {{ 'elements' | translate }}</span>
+						<span class="text"> {{ 'did-numbers' | translate }}</span>
 					</md-button>
 					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
-						<li ng-class="{active: $state.includes('button')}"><md-button ui-sref="button" class=""><span class="text">{{ 'buttons' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('card')}"><md-button ui-sref="card" class=""><span class="text">{{ 'cards' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('components')}"><md-button ui-sref="components" class=""><span class="text">{{ 'components' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('my-numbers')}"><md-button ui-sref="my-numbers" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('buy-numbers')}"><md-button ui-sref="buy-numbers" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
 					</ul>
 				</li>
-				<li ng-class="{active: $state.includes('form')}"><md-button ui-sref="form" class=""><i class="mdi mdi-receipt"></i> &nbsp;<span class="text">{{ 'form' | translate }}</span></md-button></li>
-				<li class="show-subnav">
-					<md-button href="" class=" show-menu" ng-click="subnav('chart')">
-						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='chart'}"></i>
-						<i class="mdi mdi-chart-areaspline"></i> &nbsp;
-						<span class="text">{{ 'charts' | translate }}</span>
-					</md-button>
-					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='chart'}">
-						<li ng-class="{active: $state.includes('chartjs')}"><md-button ui-sref="chartjs" class=""><span class="text">ChartJS</span></md-button></li>
-						<li ng-class="{active: $state.includes('c3chart')}"><md-button ui-sref="c3chart" class=""><span class="text">C3 Charts</span></md-button></li>
-					</ul>
-				</li>
-				<li ng-class="{active: $state.includes('calendar')}"><md-button ui-sref="calendar" class=""><i class="mdi mdi-calendar"></i> &nbsp;<span class="text"> {{ 'calendar' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('inbox')}"><md-button ui-sref="inbox" class=""><i class="mdi mdi-message"></i> &nbsp;<span class="text">{{ 'inbox' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('profile')}"><md-button ui-sref="profile" class=""><i class="mdi mdi-account"></i> &nbsp;<span class="text">{{ 'profilee' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('invoice')}"><md-button ui-sref="invoice" class=""><i class="mdi mdi-barcode"></i> &nbsp;<span class="text"> {{ 'invoice' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('signup')}"><md-button ui-sref="signup" class=""><i class="mdi mdi-account-multiple-plus"></i> &nbsp;<span class="text">{{ 'signup' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('login')}"><md-button ui-sref="login" class=""><i class="mdi mdi-logout"></i> &nbsp;<span class="text">{{ 'login' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('404')}"><md-button ui-sref="404" class=""><i class="mdi mdi-alert-octagon"></i> &nbsp;<span class="text">{{ '404page' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('blank')}"><md-button ui-sref="blank" class=""><i class="mdi mdi-content-paste"></i> &nbsp;<span class="text">{{ 'blankpage' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('docs')}"><md-button ui-sref="docs" class=""><i class="mdi mdi-texture"></i> &nbsp;<span class="text"> Documentation</span></md-button></li>
+				<li ng-class="{active: $state.includes('flows')}"><md-button ui-sref="flows" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('extensions')}"><md-button ui-sref="extensions" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('calls')}"><md-button ui-sref="calls" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('recordings')}"><md-button ui-sref="recordings" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
 			</ul>
 		</div>
 	</div>

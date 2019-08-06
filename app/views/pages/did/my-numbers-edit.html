@@ -1,0 +1,27 @@
+<!-- exact table from live demo -->
+<md-card md-theme="'default'"" md-theme-watch>
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">{{number.number}}</span>
+      <span class="md-subhead">Below are settings to configure "{{number.number}}"</span>
+    </md-card-title-text>
+  </md-card-title>
+  <md-card-content>
+    <form ng-submit="saveNumber()">
+        <md-input-container>
+          <label>Name</label>
+          <input ng-model="number.name">
+        </md-input-container>
+        <md-input-container>
+          <label>Attached Flow</label>
+          <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
+            <md-option><em>None</em></md-option>
+            <md-option ng-repeat="flow in flows" ng-value="flow.id">
+              {{flow.name}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-button ng-click="saveNumber()" class="md-raised md-primary">Save</md-button>
+    </form>
+  </md-card-content>
+</md-card>

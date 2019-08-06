@@ -64,5 +64,12 @@
       "register": "Register",
       "loginpage": "Login Page",
       "fullname": "Full Name",
-      "repeatpass": "Repeat Password"
+      "repeatpass": "Repeat Password",
+      "did-numbers": "DID Numbers",
+      "my-numbers": "My Numbers",
+      "buy-numbers": "Buy Numbers",
+      "flows": "Flows",
+      "extensions": "Extensions",
+      "calls": "Calls",
+      "recordings": "Recordings"
   }

@@ -10,6 +10,10 @@
 */
 window.app_version = 2.0;
 
+function checkExpires(expiresIn)
+{
+
+}
 angular
 .module('MaterialApp', [
     'ui.router',
@@ -26,11 +30,67 @@ angular
     'bootstrapLightbox',
     'materialCalendar',
     'paperCollapse',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'md.data.table'
     ])
-    .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+    .service('JWTHttpInterceptor', function() {
+        return {
+            // optional method
+            'request': function(config) {
+                // do something on success
+                var token = localStorage.getItem("AUTH");
+                if (token) {
+                    try {
+                        var tokenObj = JSON.parse( token );
+                        if (checkExpires()) {
+                            getNewToken();
+                        } else {
+                            config.headers['Authorization'] = "Bearer " + tokenObj.token;
+                        }
+                    } catch (e) {
+                        console.error("error parsing token ", token);
+                    }
+                }
+                console.log("request headers are ", config.headers);
+                return config;
+            }
+        };
+    })
+    .factory("Backend", function($http, $q) {
+        var factory = this;
+        var baseUrl = "http://45.76.62.46:8086/api";
+        function createUrl(path) {
+            return baseUrl + path;
+        }
+        factory.getJWTToken = function(email, password) {
+            var params = {
+                email: email,
+                password: password
+            };
+            return $q(function(resolve, reject) {
+                $http.post( createUrl( "/jwt/authenticate"), params).then( function(res) {
+                    localStorage.setItem("AUTH", JSON.stringify(res.data));
+                    resolve();
+                }).catch(function(err) {
+                    reject( err );
+                });
+            });
+        }
+        factory.get = function(path, params)
+        {
+            return $http.get(createUrl(path), params);
+        }
+        factory.post = function(path, params)
+        {
+            return $http.post(createUrl(path), params);
+        }
+        return factory;
+    })
+    .config(['cfpLoadingBarProvider', '$httpProvider', function(cfpLoadingBarProvider, $httpProvider) {
         cfpLoadingBarProvider.latencyThreshold = 5;
           cfpLoadingBarProvider.includeSpinner = false;
+          $httpProvider.interceptors.push('JWTHttpInterceptor');
+
     }])
        
     .config(function($translateProvider) {
@@ -76,6 +136,48 @@ angular
         parent: 'base',
         templateUrl: 'views/layouts/dashboard.html?v='+window.app_version,
         controller: 'DashboardCtrl'
+    })
+    .state('my-numbers', {
+        url: '/dids/my-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/my-numbers.html?v='+window.app_version,
+        controller: 'MyNumbersCtrl'
+    })
+    .state('my-numbers-edit', {
+        url: '/dids/my-numbers/{numberId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/my-numbers-edit.html?v='+window.app_version,
+        controller: 'MyNumbersEditCtrl'
+    })
+    .state('buy-numbers', {
+        url: '/dids/buy-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/buy-numbers.html?v='+window.app_version,
+        controller: 'BuyNumbersCtrl'
+    })
+    .state('flows', {
+        url: '/flows',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/flows.html?v='+window.app_version,
+        controller: 'FlowsCtrl'
+    })
+    .state('extensions', {
+        url: '/extensions',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/extensions.html?v='+window.app_version,
+        controller: 'ExtensionsCtrl'
+    })
+    .state('calls', {
+        url: '/calls',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/calls.html?v='+window.app_version,
+        controller: 'CallsCtrl'
+    })
+    .state('recordings', {
+        url: '/recordings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/recordings.html?v='+window.app_version,
+        controller: 'RecordingsCtrl'
     })
     .state('home', {
         url: '/home',
