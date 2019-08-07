@@ -1,0 +1,50 @@
+<md-card md-theme="'default'"" md-theme-watch>
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">Create Extension</span>
+      <span class="md-subhead">create an extension to use with any softphone</span>
+    </md-card-title-text>
+  </md-card-title>
+  <md-card-content>
+    <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
+      <md-input-container>
+        <label>Username</label>
+        <input name="username" ng-model="values.username" required="" minlength="5">
+        <div ng-show="triedSubmit">
+          <div class="box">
+            <div ng-show="extensionForm.username.$error.minlength">Please enter 5 characters or more</div>
+            <div ng-show="extensionForm.username.$error.required">This field is required</div>
+          </div>
+        </div>
+      </md-input-container>
+      <div layout="row" layout-wrap="">
+        <div flex="66">
+          <md-input-container>
+            <label>Secret</label>
+            <input name="secret" type="{{ui.showSecret ? 'text':'password'}}" required="" minlength="6" ng-model="values.secret">
+              <div ng-show="triedSubmit">
+                <div class="box">
+                  <div ng-show="extensionForm.secret.error.minlength">Please enter 6 characters or more</div>
+                  <div ng-show="extensionForm.secret.$error.required">This field is required</div>
+                </div>
+              </div>
+          </md-input-container>
+        </div>
+        <div flex="33">
+          <md-button ng-click="generateSecret()" class="md-raised">Generate Secret</md-button>
+          <md-button ng-show="!ui.showSecret" ng-click="showSecret()" class="md-icon-button" aria-label="Settings">
+            <md-icon>
+            <i class="mdi mdi-eye"></i>
+            </md-icon>
+          </md-button>
+          <md-button ng-show="ui.showSecret" ng-click="hideSecret()" class="md-icon-button" aria-label="Settings">
+            <md-icon>
+              <i class="mdi mdi-eye-off"></i>
+            </md-icon>
+          </md-button>
+        </div>
+      </div>
+
+      <md-button type="submit" class="md-raised md-primary">Save</md-button>
+    </form>
+</md-card>

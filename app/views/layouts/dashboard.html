@@ -1,5 +1,5 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-	<header class=" navbar shadow">
+	<header ng-show="SharedPref.SHOW_NAVBAR" class=" navbar shadow">
 		<!-- Hamburger -->
 		<!--
 		<button class="c-hamburger c-hamburger--htla is-active" ng-click="extend()">
@@ -96,7 +96,7 @@
 	</div>
 </aside>
 <main class=" content-holder">
-	<div class="page-content remodal-bg animsition" ng-class="{expandedContainer: $state.includes('profile')}" >
+	<div class="page-content remodal-bg animsition" ng-class="{expandedContainer: $state.includes('profile'), 'no-padding': SharedPref.PAGE_CONTENT_NO_PADDING}" >
 		<!-- Your content goes here -->
 		<div ui-view ></div>
 	</div>

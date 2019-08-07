@@ -1,0 +1,30 @@
+<div layout="row" layout-align="end center">
+  <md-button ng-click="createExtension()" class="md-raised md-primary">Create New</md-button>
+</div>
+<!-- exact table from live demo -->
+<md-card md-theme="'default'"" md-theme-watch>
+  <md-table-container>
+    <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+      <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+        <tr md-row>
+          <th md-column md-order-by="nameToLower"><span>Username</span></th>
+          <th md-column>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody md-body>
+        <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="extension in extensions">
+          <td md-cell>{{extension.username}}</td>
+          <td md-cell>
+            <md-button ng-click="editExtension(extension)" class="md-icon-button" aria-label="Settings">
+                <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+            </md-button>
+            <md-button ng-click="deleteExtension($event, extension)" class="md-icon-button" aria-label="Settings">
+                <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+            </md-button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </md-table-container>
+</md-card>

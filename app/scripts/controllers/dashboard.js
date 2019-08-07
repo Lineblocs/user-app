@@ -8,8 +8,8 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window) {
-
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, SharedPref) {
+	$scope.SharedPref = SharedPref;
   	if ($(window).width()<1450) {
         $( '.c-hamburger' ).removeClass('is-active');
         $('body').removeClass('extended');
@@ -69,7 +69,7 @@ angular.module('MaterialApp')
         } 
         if ($(window).width()>1600) {
             $('.c-hamburger').addClass('is-active');
-            $('body').addClass('extended');          
+            //$('body').addClass('extended');          
         };
 	});   
 

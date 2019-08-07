@@ -38,6 +38,8 @@ module.exports = function(config) {
       '../bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
       '../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
       '../bower_components/angular-material-data-table/dist/md-data-table.js',
+      '../bower_components/zxcvbn/dist/zxcvbn.js',
+      '../bower_components/nickel.minStrength/dist/nickel.minStrength.js',
       '../bower_components/angular-mocks/angular-mocks.js',
       // endbower
       '../app/scripts/**/*.js',

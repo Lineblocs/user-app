@@ -14,6 +14,16 @@ function checkExpires(expiresIn)
 {
 
 }
+
+function generatePassword() {
+    var length = 32,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 angular
 .module('MaterialApp', [
     'ui.router',
@@ -55,6 +65,25 @@ angular
                 return config;
             }
         };
+    })
+    .factory("SharedPref", function() {
+        var factory = this;
+        factory.FLOW_EDITOR_URL = "http://localhost:8000";
+        factory.SHOW_NAVBAR = true;
+        factory.PAGE_CONTENT_NO_PADDING = false; 
+        factory.collapseNavbar = function() {
+            factory.SHOW_NAVBAR = false;
+            factory.PAGE_CONTENT_NO_PADDING = true;
+            $( '.c-hamburger' ).removeClass('is-active');
+            $('body').removeClass('extended');
+        }
+        factory.showNavbar = function() {
+            factory.SHOW_NAVBAR = true;
+            factory.PAGE_CONTENT_NO_PADDING = false;
+            $( '.c-hamburger' ).addClass('is-active');
+            $('body').addClass('extended');
+        }
+        return factory;
     })
     .factory("Backend", function($http, $q) {
         var factory = this;
@@ -158,14 +187,32 @@ angular
     .state('flows', {
         url: '/flows',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/flows.html?v='+window.app_version,
+        templateUrl: 'views/pages/flows.html?v='+window.app_version,
         controller: 'FlowsCtrl'
+    })
+    .state('flow-editor', {
+        url: '/flows/{flowId}',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/flow-editor.html?v='+window.app_version,
+        controller: 'FlowEditorCtrl'
     })
     .state('extensions', {
         url: '/extensions',
         parent: 'dashboard',
         templateUrl: 'views/pages/extensions.html?v='+window.app_version,
         controller: 'ExtensionsCtrl'
+    })
+    .state('extension-create', {
+        url: '/extension/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/extension-create.html?v='+window.app_version,
+        controller: 'ExtensionCreateCtrl'
+    })
+    .state('extension-edit', {
+        url: '/extension/{extensionId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/extension-edit.html?v='+window.app_version,
+        controller: 'ExtensionEditCtrl'
     })
     .state('calls', {
         url: '/calls',
@@ -254,6 +301,11 @@ angular
         templateUrl: 'views/pages/dashboard/docs.html?v='+window.app_version,
         controller: 'docsCtrl'
     });
+}).run(function($rootScope, SharedPref) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
+        // do something
+        SharedPref.showNavbar();
+    })
 });
 
 

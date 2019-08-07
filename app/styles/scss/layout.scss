@@ -13,27 +13,38 @@ body {
 }
 
 .page-content {
-	padding: 15px;	
+	/*padding: 15px;*/
 	padding-top: 85px;
-	padding-left : 95px;	
-	max-width: 1390px;
+	/*padding-left : 95px;*/
+	/*max-width: 1390px;*/
 	margin: 0 auto;	
 }
+.page-content.no-padding {
+	padding-top: 0px;
+}
 
+.collapsed-content {
+	margin-left: 80px;
+}
 .profile-content {
 	margin-left: 80px;
+}
+.flow-editor-iframe {
+	border: none;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 /* Styles for extended layout */
 
 .extended {
 	.navbar {
-		margin-left: 290px;
-		width: calc(100% - 290px); 
+		margin-left: 200px;
+		width: calc(100% - 200px); 
 	}
 
 	.sidebar {
-		width: 290px;
+		width: 200px;
 		position: fixed;
 		bottom:0;
 		overflow: hidden; 
@@ -52,7 +63,7 @@ body {
 			color: white;
 			font-weight: 500;
 			opacity: 1;
-			width: 290px;
+			width: 200px;
 			position: fixed;
 			z-index: 999;
 			background-color: $primary;
@@ -199,7 +210,7 @@ body {
 	}
 
 	.content-holder {
-		margin-left: 210px;
+		margin-left: 200px;
 	}
 }
 
