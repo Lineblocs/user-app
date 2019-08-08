@@ -220,6 +220,12 @@ angular
         templateUrl: 'views/pages/calls.html?v='+window.app_version,
         controller: 'CallsCtrl'
     })
+    .state('call-view', {
+        url: '/call/{callId}/view',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/call-view.html?v='+window.app_version,
+        controller: 'CallViewCtrl'
+    })
     .state('recordings', {
         url: '/recordings',
         parent: 'dashboard',

@@ -29,6 +29,11 @@ body {
 .profile-content {
 	margin-left: 80px;
 }
+.no-list-style {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
 .flow-editor-iframe {
 	border: none;
 	overflow-x: hidden;

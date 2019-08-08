@@ -1,0 +1,40 @@
+<md-card md-theme="'default'"" md-theme-watch>
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">Call {{call.api_id}}</span>
+      <span class="md-subhead">below are the call details and recordings associated with your call</span>
+    </md-card-title-text>
+  </md-card-title>
+  <md-card-content>
+    <div layout="row" layout-align="start center">
+      <div flex="10">From</div>
+      <div flex="90">{{call.from}}</div>
+    </div>
+    <hr/>
+    <div layout="row" layout-align="start center">
+      <div flex="10">To</div>
+      <div flex="90">{{call.to}}</div>
+    </div>
+    <hr/>
+    <div layout="row" layout-align="start center">
+      <div flex="10">Direction</div>
+      <div flex="90">{{call.direction}}</div>
+    </div>
+    <hr/>
+    <div layout="row" layout-align="start center">
+      <div flex="10">Status</div>
+      <div flex="90">{{call.status}}</div>
+    </div>
+    <hr/>
+    <h5>Recordings</h5>
+    <div layout="row">
+      <ul class="call-recordings no-list-style">
+        <li ng-repeat="recording in call.recordings">
+          <audio controls>
+            <source ng-src="{{recording.uri}}" type="audio/wav">
+          </audio>
+        </li>
+      </ul>
+    </div>
+  </md-card-content>
+</md-card>
