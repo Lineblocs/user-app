@@ -17,6 +17,9 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
       $scope.numbers = res.data.data;
     })
   }
+  $scope.buyNumber = function() {
+    $state.go('buy-numbers', {});
+  }
   $scope.editNumber = function(number) {
     $state.go('my-numbers-edit', {numberId: number.id});
   }

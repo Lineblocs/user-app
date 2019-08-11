@@ -22,7 +22,23 @@ body {
 .page-content.no-padding {
 	padding-top: 0px;
 }
-
+.no-results {
+	padding: 20px;
+	h5 {
+		margin: 0;
+	}
+}
+.red {
+	color: #FF0000;
+}
+.inputs {
+	md-input-container {
+		margin: 10px 0;
+	}
+}
+md-tabs.settings {
+	min
+}
 .collapsed-content {
 	margin-left: 80px;
 }

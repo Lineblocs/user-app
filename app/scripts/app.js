@@ -66,9 +66,9 @@ angular
             }
         };
     })
-    .factory("SharedPref", function() {
+    .factory("SharedPref", function($state) {
         var factory = this;
-        factory.FLOW_EDITOR_URL = "http://localhost:8000";
+        factory.FLOW_EDITOR_URL = "http://45.76.62.46:8087";
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.collapseNavbar = function() {
@@ -82,6 +82,13 @@ angular
             factory.PAGE_CONTENT_NO_PADDING = false;
             $( '.c-hamburger' ).addClass('is-active');
             $('body').addClass('extended');
+        }
+        factory.doLogout = function() {
+            localStorage.removeItem("AUTH");
+            $state.go('login', {});
+        }
+        factory.setAuthToken = function(token) {
+            localStorage.setItem("AUTH", JSON.stringify(token));
         }
         return factory;
     })
@@ -149,11 +156,11 @@ angular
         templateUrl: 'views/pages/login.html?v='+window.app_version,
         controller: 'LoginCtrl'
     })
-    .state('signup', {
-        url: '/signup',
+    .state('register', {
+        url: '/register',
         parent: 'base',
-        templateUrl: 'views/pages/signup.html?v='+window.app_version,
-        controller: 'LoginCtrl'
+        templateUrl: 'views/pages/register.html?v='+window.app_version,
+        controller: 'RegisterCtrl'
     })
     .state('404', {
         url: '/404-page',
@@ -165,6 +172,12 @@ angular
         parent: 'base',
         templateUrl: 'views/layouts/dashboard.html?v='+window.app_version,
         controller: 'DashboardCtrl'
+    })
+    .state('dashboard-user-welcome', {
+        url: '/dashboard/welcome',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard-welcome.html?v='+window.app_version,
+        controller: 'DashboardWelcomeCtrl'
     })
     .state('my-numbers', {
         url: '/dids/my-numbers',
@@ -237,6 +250,12 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/home.html?v='+window.app_version,
         controller: 'HomeCtrl'
+    })
+    .state('settings', {
+        url: '/settings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings.html?v='+window.app_version,
+        controller: 'SettingsCtrl'
     })
     .state('blank', {
         url: '/blank',

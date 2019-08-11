@@ -1,32 +1,45 @@
-<div layout="row" layout-align="end center">
-  <md-button ng-click="createFlow()" class="md-raised md-primary">Create New</md-button>
-</div>
-<!-- exact table from live demo -->
-<md-card md-theme="'default'"" md-theme-watch>
-  <md-table-container>
-    <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-      <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-        <tr md-row>
-          <th md-column md-order-by="nameToLower"><span>Name</span></th>
-          <th md-column>Description</th>
-          <th md-column>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody md-body>
-        <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="flow in flows">
-          <td md-cell>{{flow.name}}</td>
-          <td md-cell>{{flow.description}}</td>
-          <td md-cell>
-            <md-button ng-click="editFlow(flow)" class="md-icon-button" aria-label="Settings">
-                <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
-            </md-button>
-            <md-button ng-click="deleteFlow($event, flow)" class="md-icon-button" aria-label="Settings">
-                <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-            </md-button>
 
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </md-table-container>
-</md-card>
+<div ng-show="flows.length === 0">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No flows listed</h5>
+        <md-button ng-click="createFlow()" class="md-raised md-primary">Create New Flow</md-button>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="flows.length > 0">
+  <div layout="row" layout-align="end center">
+    <md-button ng-click="createFlow()" class="md-raised md-primary">Create New</md-button>
+  </div>
+  <!-- exact table from live demo -->
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column md-order-by="nameToLower"><span>Name</span></th>
+            <th md-column>Description</th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="flow in flows">
+            <td md-cell>{{flow.name}}</td>
+            <td md-cell>{{flow.description}}</td>
+            <td md-cell>
+              <md-button ng-click="editFlow(flow)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+              </md-button>
+              <md-button ng-click="deleteFlow($event, flow)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+</div>

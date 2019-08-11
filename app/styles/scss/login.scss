@@ -2,7 +2,6 @@
 
 .login-overlay {
 	position: relative;
-	text-align: center;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -12,23 +11,11 @@
 	-webkit-transition: all .4s cubic-bezier(0.175, 0.885, 0.335, 1.05);
 	transition: all .4s cubic-bezier(0.175, 0.885, 0.335, 1.05);	
 		&:after {
-			position: absolute;
-			top: 0;
-			width: 100%;
-			height: 300px;
-			left: 0;
-			right: 0;
-			background-image: url('../images/login-cover.jpg');
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;			
-			background-repeat:no-repeat;
-			background-position: center center;
-			content: "";
-			box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.14);
 		}
 
+		.invalid-login {
+
+		}
 	.logo {
 		display: block;
 		margin: 0 auto;
@@ -51,7 +38,10 @@
 	    top: 100px;
 	    background: #ffffff;
 	    width: 50%;
-	    margin: 0 auto;
+		margin: 0 auto;
+		.inner {
+			padding: 20px;
+		}
 	    .icon {
 	    	padding-top: 30px;
 	    	.mdi {
@@ -61,7 +51,6 @@
 	    	.header {
 	    		margin-top: 10px;
 	    		font-size: 20px;	    		
-	    		text-transform: uppercase;
 	    	}
 	    }
 	    .inputs {
@@ -71,8 +60,7 @@
 	    		padding: 0;
 	    	}
 	    	.buttons {
-	    		width: 75%;
-	    		margin: 5px auto;
+	    		width: 100%;
 	    		md-checkbox {
 	    			text-align: initial;
 	    			float: left;

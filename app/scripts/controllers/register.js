@@ -8,27 +8,35 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state) {
-	$scope.triedSubmit = false;
-	$scope.couldNotLogin = false;
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state) {
+	  $scope.triedSubmit = false;
+	  $scope.passwordsDontMatch = false;
 	$scope.user = {
+		first_name: "",
+		last_name: "",
 		email: "",
-		password: ""
+		password: "",
+		password2: ""
 	};
-    $scope.submit = function($event, loginForm) {
+    $scope.submit = function($event, registerForm) {
 		$scope.triedSubmit = true;
-		if (loginForm.$valid) {
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (registerForm.$valid) {
 			var data = angular.copy( $scope.user );
-			Backend.post("/jwt/authenticate", data).then(function( res ) {
+			Backend.post("/register", data).then(function( res ) {
 				var token = res.data;
-				$scope.couldNotLogin = false;
 				SharedPref.setAuthToken( token );
-		        $state.go('home', {});
-			}).catch(function() {
-				$scope.couldNotLogin = true;
-			})
+		        $state.go('dashboard-user-welcome', {});
+			});
 			return;
 		}
+      	return false;
+
     }
 
     $scope.authenticate = function() {

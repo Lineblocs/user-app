@@ -1,0 +1,69 @@
+<md-card md-theme="'default'"" md-theme-watch>
+  <!--
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">User Settings</span>
+      <span class="md-subhead">edit your settings</span>
+    </md-card-title-text>
+  </md-card-title>
+-->
+  <md-card-content>
+    <md-content>
+    <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+      <md-tab label="Your Info">
+        <md-content class="md-padding">
+          <form ng-submit="submitSettings($event, settingsForm)" name="settingsForm" novalidate>
+                <md-input-container>
+                  <input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="settingsForm.first_name.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+                <md-input-container>
+                  <input name="last_name" ng-model="user.last_name" type="text" placeholder="Last Name" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="settingsForm.last_name.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+                <md-input-container>
+                  <input name="email" ng-model="user.email" type="email" placeholder="Company Email" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="settingsForm.email.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+            <md-button type="submit" class="md-raised md-primary">Save</md-button>
+          </form>
+        </md-content>
+      </md-tab>
+      <md-tab label="Password">
+        <md-content class="md-padding">
+          <form ng-submit="submitPasswords($event, passwordsForm)" name="passwordsForm" novalidate>
+                <md-input-container>
+                  <input name="password" ng-model="user.password" type="password" placeholder="Password" required="" minlength="5">
+                  <small>Type new password to change</small>
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="passwordsForm.password.$error.minlength">Please enter 5 characters or more</div>
+                      <div ng-show="passwordsForm.password.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+                <md-input-container>
+                  <input name="password2" ng-model="user.password2" type="password" placeholder="Confirm Password" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="passwordsDontMatch">Passwords don't match</div>
+                    </div>
+                  </div>
+                </md-input-container>
+            <md-button type="submit" class="md-raised md-primary">Save</md-button>
+            </form>
+          </md-content>
+    </md-tabs>
+</md-card>

@@ -1,30 +1,41 @@
-<!-- exact table from live demo -->
-<md-card md-theme="'default'"" md-theme-watch>
-  <md-table-container>
-    <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-      <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-        <tr md-row>
-          <th md-column md-order-by="nameToLower"><span>From</span></th>
-          <th md-column>To</th>
-          <th md-column>Direction</th>
-          <th md-column>Status</th>
-          <th md-column>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody md-body>
-        <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="call in calls">
-          <td md-cell>{{call.from}}</td>
-          <td md-cell>{{call.to}}</td>
-          <td md-cell>{{call.direction}}</td>
-          <td md-cell>{{call.status}}</td>
+<div ng-show="calls.length === 0">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No calls listed</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="calls.length > 0">
+  <!-- exact table from live demo -->
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column md-order-by="nameToLower"><span>From</span></th>
+            <th md-column>To</th>
+            <th md-column>Direction</th>
+            <th md-column>Status</th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="call in calls">
+            <td md-cell>{{call.from}}</td>
+            <td md-cell>{{call.to}}</td>
+            <td md-cell>{{call.direction}}</td>
+            <td md-cell>{{call.status}}</td>
 
-          <td md-cell>
-            <md-button ng-click="viewCall(call)" class="md-icon-button" aria-label="View Call">
-                <md-icon ><i class="mdi mdi-eye"></i></md-icon>
-            </md-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </md-table-container>
-</md-card>
+            <td md-cell>
+              <md-button ng-click="viewCall(call)" class="md-icon-button" aria-label="View Call">
+                  <md-icon ><i class="mdi mdi-eye"></i></md-icon>
+              </md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+</div>

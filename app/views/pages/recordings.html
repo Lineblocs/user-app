@@ -1,33 +1,44 @@
-<!-- exact table from live demo -->
-<md-card md-theme="'default'"" md-theme-watch>
-  <md-table-container>
-    <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-      <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-        <tr md-row>
-          <th md-column md-order-by="nameToLower"><span>From</span></th>
-          <th md-column>To</th>
-          <th md-column>Direction</th>
-          <th md-column>Recoridng</th>
-          <th md-column>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody md-body>
-        <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="recording in recordings">
-          <td md-cell>{{recording.call_from}}</td>
-          <td md-cell>{{recording.call_to}}</td>
-          <td md-cell>{{recording.call_direction}}</td>
-          <td md-cell>
-            <audio controls>
-              <source ng-src="{{recording.uri}}" type="audio/wav"></source>
-            </audio>
-          </td>
-          <td md-cell>
-            <md-button ng-click="deleteRecording($event, recording)" class="md-icon-button" aria-label="Delete recording">
-                <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-            </md-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </md-table-container>
-</md-card>
+<div ng-show="recordings.length === 0">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No recordings listed</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="recordings.length > 0">
+  <!-- exact table from live demo -->
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column md-order-by="nameToLower"><span>From</span></th>
+            <th md-column>To</th>
+            <th md-column>Direction</th>
+            <th md-column>Recoridng</th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="recording in recordings">
+            <td md-cell>{{recording.call_from}}</td>
+            <td md-cell>{{recording.call_to}}</td>
+            <td md-cell>{{recording.call_direction}}</td>
+            <td md-cell>
+              <audio controls>
+                <source ng-src="{{recording.uri}}" type="audio/wav"></source>
+              </audio>
+            </td>
+            <td md-cell>
+              <md-button ng-click="deleteRecording($event, recording)" class="md-icon-button" aria-label="Delete recording">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+</div>
