@@ -13,10 +13,11 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   };
   $scope.numbers = [];
   var flowUrl;
+  var token = SharedPref.getAuthToken();
   if ($stateParams['flowId'] === "new" ) {
-    flowUrl = SharedPref.FLOW_EDITOR_URL;
+    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token;
   } else {
-    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId'];
+    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token;
   }
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);

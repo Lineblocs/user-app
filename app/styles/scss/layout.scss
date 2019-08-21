@@ -31,13 +31,17 @@ body {
 .red {
 	color: #FF0000;
 }
+md-dialog-content.add-card-form md-input-container {
+	//height: 32px;
+	//margin-top: 3px;
+	//margin-bottom: 3px;
+}
 .inputs {
 	md-input-container {
 		margin: 10px 0;
 	}
 }
 md-tabs.settings {
-	min
 }
 .collapsed-content {
 	margin-left: 80px;

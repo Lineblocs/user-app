@@ -71,6 +71,16 @@ angular
         factory.FLOW_EDITOR_URL = "http://45.76.62.46:8087";
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
+        factory.billingCountries = [
+    {
+       iso: 'CA',
+       name: 'Canada'
+    },
+    {
+       iso: 'US',
+       name: 'United States'
+    }
+  ];
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
             factory.PAGE_CONTENT_NO_PADDING = true;
@@ -89,6 +99,9 @@ angular
         }
         factory.setAuthToken = function(token) {
             localStorage.setItem("AUTH", JSON.stringify(token));
+        }
+        factory.getAuthToken = function() {
+            return JSON.parse(localStorage.getItem("AUTH"));
         }
         return factory;
     })
@@ -244,6 +257,18 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/recordings.html?v='+window.app_version,
         controller: 'RecordingsCtrl'
+    })
+    .state('billing', {
+        url: '/billing',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing.html?v='+window.app_version,
+        controller: 'BillingCtrl'
+    })
+    .state('billing-add-card', {
+        url: '/billing/add-card',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-add-card.html?v='+window.app_version,
+        controller: 'BillingCtrl'
     })
     .state('home', {
         url: '/home',

@@ -71,5 +71,6 @@
       "flows": "Flows",
       "extensions": "Extensions",
       "calls": "Calls",
-      "recordings": "Recordings"
+      "recordings": "Recordings",
+      "billing": "Billing"
   }

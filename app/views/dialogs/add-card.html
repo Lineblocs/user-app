@@ -1,0 +1,80 @@
+<md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add Card</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+  <form ng-cloak ng-submit="submit()">
+    <md-dialog-content class="add-card-form">
+      <div class="md-dialog-content">
+      <md-input-container>
+          <label>Your Name</label>
+          <input ng-model="card.name"/>
+        </md-input-container>
+        <md-input-container>
+          <label>Address</label>
+          <input ng-model="card.address"/>
+        </md-input-container>
+        <div layout="row">
+          <div flex>
+          <md-input-container>
+              <label>City</label>
+              <input ng-model="card.city"/>
+            </md-input-container>
+          </div>
+          <div flex>
+            <md-input-container>
+              <label>Postal Code</label>
+              <input ng-model="card.postal_code"/>
+            </md-input-container>
+          </div>
+          <div flex>
+            <md-input-container>
+              <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
+                <md-option><em>None</em></md-option>
+                <md-option ng-repeat="SharedPref.country in billingCountries" ng-value="country">
+                  {{country.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </div>
+        <h5>Card Details</h5>
+        <div layout="row">
+          <div flex>
+          <md-input-container>
+              <label>Number</label>
+              <input ng-model="card.number"/>
+            </md-input-container>
+          </div>
+          <div flex>
+            <md-input-container>
+              <label>Expires</label>
+              <input placeholder="MM/YY" ng-model="card.expires"/>
+            </md-input-container>
+          </div>
+          <div flex>
+            <md-input-container>
+              <label>CVV</label>
+              <input ng-model="card.cvv" />
+            </md-input-container>
+          </div>
+        </div>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="submit()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
