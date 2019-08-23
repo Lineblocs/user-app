@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, $location, $state, $mdDialog) {
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast) {
   $scope.settings = {
     page: 0
   };
@@ -33,6 +33,16 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Flow deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load();
+
+      })
     }, function() {
     });
   }

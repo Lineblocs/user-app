@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog) {
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast) {
   $scope.settings = {
     page: 0
   };
@@ -33,6 +33,16 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      Backend.delete("/extension/deleteExtension/" + extension.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Extension deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load();
+
+      })
     }, function() {
     });
   }

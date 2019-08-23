@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog) {
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast) {
   $scope.settings = {
     page: 0
   };
@@ -33,6 +33,16 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load();
+
+      })
     }, function() {
     });
   }

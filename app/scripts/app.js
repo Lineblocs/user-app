@@ -129,6 +129,10 @@ angular
         {
             return $http.get(createUrl(path), params);
         }
+        factory.delete = function(path)
+        {
+            return $http.delete(createUrl(path));
+        }
         factory.post = function(path, params)
         {
             return $http.post(createUrl(path), params);
