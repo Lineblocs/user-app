@@ -74,9 +74,9 @@
           </div>
           <div flex>
             <md-input-container>
+              <label>Country</label>
               <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
-                <md-option><em>None</em></md-option>
-                <md-option ng-repeat="SharedPref.country in billingCountries" ng-value="country">
+                <md-option ng-repeat="country in SharedPref.billingCountries" ng-value="country">
                   {{country.name}}
                 </md-option>
               </md-select>

@@ -9,6 +9,7 @@
  */
 angular.module('MaterialApp')
   .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog) {
+	  $scope.SharedPref = SharedPref;
 	  $scope.triedSubmit = false;
 	$scope.cards = [];
 	$scope.creditAmounts = [
@@ -67,7 +68,8 @@ angular.module('MaterialApp')
 			});
 		}
 
-	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError) {
+	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, SharedPref) {
+		$scope.SharedPref = SharedPref;
 		$scope.card = {
 			name: "",
 			address: "",

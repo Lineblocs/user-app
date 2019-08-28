@@ -68,7 +68,7 @@ angular
     })
     .factory("SharedPref", function($state) {
         var factory = this;
-        factory.FLOW_EDITOR_URL = "http://45.76.62.46:8087";
+        factory.FLOW_EDITOR_URL = "http://45.76.62.46:8091";
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.billingCountries = [
@@ -107,7 +107,7 @@ angular
     })
     .factory("Backend", function($http, $q) {
         var factory = this;
-        var baseUrl = "http://45.76.62.46:8086/api";
+        var baseUrl = "http://45.76.62.46:8090/api";
         function createUrl(path) {
             return baseUrl + path;
         }

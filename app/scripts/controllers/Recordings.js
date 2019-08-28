@@ -7,14 +7,18 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, $location, $state, $mdDialog) {
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $sce) {
   $scope.settings = {
     page: 0
   };
   $scope.recordings = [];
   $scope.load = function() {
     Backend.get("/recording/listRecordings", $scope.settings).then(function(res) {
-      $scope.recordings = res.data.data;
+      var recordings = res.data.data;
+      $scope.recordings = recordings.map(function(obj) {
+        obj.uri = $sce.trustAsResourceUrl(obj.uri);
+        return obj;
+      });
     })
   }
   $scope.deleteRecording = function($event, recording) {

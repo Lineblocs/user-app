@@ -26,9 +26,9 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
   $scope.deleteExtension = function($event, extension) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this flow?')
-          .textContent('This will permantely remove the flow and also unset the flow on numbers that have this flow attached to it')
-          .ariaLabel('Delete flow')
+          .title('Are you sure you want to delete this extension?')
+          .textContent('This will permantely remove the extension and you will no longer be able to use it')
+          .ariaLabel('Delete extension')
           .targetEvent($event)
           .ok('Yes')
           .cancel('No');

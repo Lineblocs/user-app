@@ -31,6 +31,21 @@ body {
 .red {
 	color: #FF0000;
 }
+.responsive-logo img {
+	margin: 10px 0;
+}
+.top-logo-extended img {
+	margin: 0 10px;
+}
+.top-logo img {
+	margin: 10px 10px 0;
+}
+audio.small {
+	height: 32px;
+	width: 256px;
+}
+
+
 md-dialog-content.add-card-form md-input-container {
 	//height: 32px;
 	//margin-top: 3px;
