@@ -7,7 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast) {
+angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Edit Number");
   $scope.flows = [];
   $scope.number = null;
   $scope.saveNumber = function(number) {
@@ -24,8 +25,10 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
       .filter(function(pos) { return toastPos[pos]; })
       .join(' ');
     console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
     Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
         console.log("updated number..");
+      SharedPref.isCreateLoading = false;
         $mdToast.show(
           $mdToast.simple()
             .textContent('Number updated..')

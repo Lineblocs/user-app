@@ -63,6 +63,7 @@ angular.module('MaterialApp')
 	var w = angular.element($window);
   
 	w.bind('resize', function () {
+		/*
 	    if ($(window).width()<1200) {
             $('.c-hamburger').removeClass('is-active');
             $('body').removeClass('extended');
@@ -70,7 +71,8 @@ angular.module('MaterialApp')
         if ($(window).width()>1600) {
             $('.c-hamburger').addClass('is-active');
             //$('body').addClass('extended');          
-        };
+		};
+		*/
 	});   
 
 	if ($(window).width()<1200) {		

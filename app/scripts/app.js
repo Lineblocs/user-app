@@ -66,11 +66,14 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state) {
+    .factory("SharedPref", function($state, Backend) {
         var factory = this;
+        var baseTitle = "LineBlocs.com";
+        factory.title = baseTitle;
         factory.FLOW_EDITOR_URL = "http://45.76.62.46:8091";
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
+        factory.isLoading = true;
         factory.billingCountries = [
     {
        iso: 'CA',
@@ -102,6 +105,12 @@ angular
         }
         factory.getAuthToken = function() {
             return JSON.parse(localStorage.getItem("AUTH"));
+        }
+        factory.updateTitle = function(text) {
+            factory.title = baseTitle;
+            if (text) {
+                   factory.title = baseTitle + " - " + text;
+            }
         }
         return factory;
     })
@@ -142,6 +151,9 @@ angular
     .config(['cfpLoadingBarProvider', '$httpProvider', function(cfpLoadingBarProvider, $httpProvider) {
         cfpLoadingBarProvider.latencyThreshold = 5;
           cfpLoadingBarProvider.includeSpinner = false;
+          cfpLoadingBarProvider.includeBar = false;
+          //cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
+          //cfpLoadingBarProvider.spinnerTemplate = '<md-progress-circular md-mode="indeterminate"></md-progress-circular>';
           $httpProvider.interceptors.push('JWTHttpInterceptor');
 
     }])
@@ -359,6 +371,11 @@ angular
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
         // do something
         SharedPref.showNavbar();
+        /*
+		Backend.get("/getBillingInfo").then(function(res) {
+            SharedPref.billInfo = res.data;
+        });
+        */
     })
 });
 

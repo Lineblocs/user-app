@@ -7,14 +7,17 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast) {
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Flows");
   $scope.settings = {
     page: 0
   };
   $scope.flows = [];
   $scope.load = function() {
+    SharedPref.isLoading =true;
     Backend.get("/flow/listFlows", $scope.settings).then(function(res) {
       $scope.flows = res.data.data;
+      SharedPref.isLoading =false;
     })
   }
   $scope.editFlow = function(flow) {

@@ -7,7 +7,8 @@
  * # HomeCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', function ($scope, $timeout, Backend) {
+angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
+	  SharedPref.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
@@ -48,64 +49,72 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	};
 	$timeout(function () {
 		var color = Chart.helpers.color;
-		Backend.get("/call/graphData").then(function(res) {
-			var graph = res.data;
+		SharedPref.isLoading = true;
+		$q.all([
+			Backend.get("/call/graphData"),
+			Backend.get("/getBillingInfo")
+		]).then(function(res) {
+			var graph = res[0].data;
+			SharedPref.billInfo=  res[1].data;
+			SharedPref.isLoading = false;
 			console.log("graph data is ", graph);
-			$scope.line = {
-				legend: true,
-				labels: graph.labels,
-					data: [
-				graph.data.inbound,
-				graph.data.outbound
-				//[7, 20, 10, 15, 17, 10, 27],
-				//[6, 9, 22, 11, 13, 20, 27]
-				],
-				series: [
-			'Inbound',
-			'Outbound'
-		],
-				colours: [{ 
-						fillColor: "#2b36ff",
-						strokeColor: "#2b36ff",
-						pointColor: "#2b36ff",
-						pointStrokeColor: "#2b36ff", 
-						pointHighlightFill: "#2b36ff", 
-						pointHighlightStroke: "#2b36ff"
-					},
-					{
-		        		fillColor: "#ffa01c",
-						strokeColor: "#ffa01c",
-						pointColor: "#ffa01c",
-						pointStrokeColor: "#ffa01c", 
-						pointHighlightFill: "#ffa01c",
-						pointHighlightStroke: "#ffa01c"
-					}
+			$timeout(function(){
+				$scope.line = {
+					legend: true,
+					labels: graph.labels,
+						data: [
+					graph.data.inbound,
+					graph.data.outbound
+					//[7, 20, 10, 15, 17, 10, 27],
+					//[6, 9, 22, 11, 13, 20, 27]
 					],
-options: {
-	    legend: {
-      display: true,
-      position: 'right'
-    },
-					responsive: true,
-						bezierCurve : false,
-						datasetStroke: false,
-						/*
-						legendTemplate: '<ul>'
-                  +'<% for (var i=0; i<datasets.length; i++) { %>'
-					+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-                    +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                  +'</li>'
-                +'<% } %>'
-			  +'</ul>',
-			  */
-						pointDotRadius : 6,
-						showTooltips: false,
-				},
-				onClick: function (points, evt) {
-				console.log(points, evt);
-				}
+					series: [
+				'Inbound',
+				'Outbound'
+			],
+					colours: [{ 
+							fillColor: "#2b36ff",
+							strokeColor: "#2b36ff",
+							pointColor: "#2b36ff",
+							pointStrokeColor: "#2b36ff", 
+							pointHighlightFill: "#2b36ff", 
+							pointHighlightStroke: "#2b36ff"
+						},
+						{
+							fillColor: "#ffa01c",
+							strokeColor: "#ffa01c",
+							pointColor: "#ffa01c",
+							pointStrokeColor: "#ffa01c", 
+							pointHighlightFill: "#ffa01c",
+							pointHighlightStroke: "#ffa01c"
+						}
+						],
+	options: {
+			legend: {
+		display: true,
+		position: 'right'
+		},
+						responsive: true,
+							bezierCurve : false,
+							datasetStroke: false,
+							/*
+							legendTemplate: '<ul>'
+					+'<% for (var i=0; i<datasets.length; i++) { %>'
+						+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+						+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+					+'</li>'
+					+'<% } %>'
+				+'</ul>',
+				*/
+							pointDotRadius : 6,
+							showTooltips: false,
+					},
+					onClick: function (points, evt) {
+					console.log(points, evt);
+					}
 
-			};
+				};
+			}, 0);
 		});
 	}, 100);
     $scope.line2 = {

@@ -28,6 +28,34 @@ body {
 		margin: 0;
 	}
 }
+.md-button.md-small {
+	font-size: 12px;
+	line-height: 28px;
+	min-height: 28px;
+	padding: 0;
+	height: 28px;
+	width: 64px;
+}
+.nav-item {
+	float: left;
+	height: 45px;
+	margin-top: 8.5px;
+}
+.vert-line {
+	height: 45px;
+	width: 1px;
+	background: #CCCCCC;
+	margin: 0 10px;
+	margin-top: 8.5px;
+	float: left;
+}
+.balance {
+	width: 64px;
+	strong {
+	}
+	span.account-balance {
+	}
+}
 .red {
 	color: #FF0000;
 }

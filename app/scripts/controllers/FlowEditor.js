@@ -8,6 +8,7 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref, $stateParams, $sce) {
+	  SharedPref.updateTitle("Flow Editor");
   $scope.settings = {
     page: 0
   };

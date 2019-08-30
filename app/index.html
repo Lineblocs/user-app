@@ -1,8 +1,8 @@
 <!doctype html>
-<html class="no-js">
-  <head>
+<html class="no-js" ng-app="MaterialApp">
+  <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
-    <title>Material Admin Dashboard Angular</title>
+    <title>{{SharedPref.title}}</title>
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -22,6 +22,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/app-blue.css">
+    <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
     <!-- endbuild -->
     <!-- build:js scripts/vendor.js -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
@@ -78,6 +79,7 @@
     <script src="scripts/controllers/CallView.js"></script>
     <script src="scripts/controllers/Recordings.js"></script>
     <script src="scripts/controllers/Billing.js"></script>
+    <script src="scripts/controllers/headCtrl.js"></script>
      <script src="scripts/controllers/alertCtrl.js"></script>
     <script src="scripts/controllers/btnCtrl.js"></script>
     <script src="scripts/controllers/componentCtrl.js"></script>
@@ -108,7 +110,7 @@
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <!-- endbuild -->
     </head>
-  <body ng-app="MaterialApp" class="extended">
+  <body class="extended">
 
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>

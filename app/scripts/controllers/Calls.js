@@ -7,13 +7,16 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, $location, $state, $mdDialog) {
+angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
+	  SharedPref.updateTitle("Calls");
   $scope.settings = {
     page: 0
   };
   $scope.calls = [];
   $scope.load = function() {
+    SharedPref.isLoading = true;
     Backend.get("/call/listCalls", $scope.settings).then(function(res) {
+      SharedPref.isLoading =false; 
       $scope.calls = res.data.data;
     })
   }

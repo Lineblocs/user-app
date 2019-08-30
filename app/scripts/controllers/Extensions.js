@@ -7,14 +7,17 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast) {
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Extensions");
   $scope.settings = {
     page: 0
   };
   $scope.extensions = [];
   $scope.load = function() {
+      SharedPref.isLoading = true;
     Backend.get("/extension/listExtensions", $scope.settings).then(function(res) {
       $scope.extensions = res.data.data;
+      SharedPref.isLoading = false;
     })
   }
   $scope.editExtension = function(extension) {

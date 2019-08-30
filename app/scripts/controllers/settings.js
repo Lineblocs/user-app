@@ -9,6 +9,7 @@
  */
 angular.module('MaterialApp')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast) {
+	  SharedPref.updateTitle("Settings");
 	  $scope.triedSubmit = false;
 	$scope.user = {
 		first_name: "",
@@ -24,8 +25,9 @@ angular.module('MaterialApp')
 			data['first_name'] = $scope.user.first_name;
 			data['last_name'] = $scope.user.last_name;
 			data['email'] = $scope.user.email;
-
+			SharedPref.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
+					SharedPref.isCreateLoading = false;
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Updated your info')
@@ -49,7 +51,9 @@ angular.module('MaterialApp')
 		if (passwordsForm.$valid) {
 			var data = {};
 			data['password'] = $scope.user.password;
+			SharedPref.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
+				SharedPref.isCreateLoading = false;
 				var token = res.data;
 					$mdToast.show(
 					$mdToast.simple()
@@ -62,8 +66,10 @@ angular.module('MaterialApp')
 		}
       	return false;
 
-    }
+	}
+	SharedPref.isLoading = true;
 	Backend.get("/self").then(function(res) {
+		SharedPref.isLoading = false;
 		$scope.user = res.data;
 		console.log("user is ", $scope.user);
 	});

@@ -9,6 +9,7 @@
  */
 angular.module('MaterialApp')
   .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog) {
+	  SharedPref.updateTitle("Billing");
 	  $scope.SharedPref = SharedPref;
 	  $scope.triedSubmit = false;
 	$scope.cards = [];
@@ -192,12 +193,14 @@ angular.module('MaterialApp')
 		$scope.data.creditAmount = value;
 	}
 	function loadData() {
+		SharedPref.isLoading = true;
 		$q.all([
 			Backend.get("/getBillingInfo"),
 			Backend.get("/card/listCards?page=0"),
 			Backend.get("/getConfig"),
 			Backend.get("/getBillingHistory"),
 		]).then(function(res) {
+			SharedPref.isLoading = false;
 			$scope.billing = res[0].data;
 			$scope.cards = res[1].data.data;
 			$scope.config = res[2].data;

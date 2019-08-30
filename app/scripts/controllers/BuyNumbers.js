@@ -7,7 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog) {
+angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
+	  SharedPref.updateTitle("Buy Numbers");
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
@@ -59,9 +60,11 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     data['region'] = null;
     data['prefix'] = $scope.settings['pattern'];
     data['country_iso'] = $scope.settings['country']['iso'];
+    SharedPref.isCreateLoading = true;
     Backend.get("/did/available", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
+      SharedPref.isCreateLoading = false;
     });
   }
   $scope.buyNumber = function($event, number) {

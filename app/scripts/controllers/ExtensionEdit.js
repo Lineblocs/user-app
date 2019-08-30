@@ -7,7 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams) {
+angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref) {
+	  SharedPref.updateTitle("Edit Extension");
   $scope.values = {
     username: "",
     secret: ""
@@ -49,8 +50,10 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
       Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
        console.log("updated extension..");
+      SharedPref.isCreateLoading = false;
         $mdToast.show(
           $mdToast.simple()
             .textContent('Updated extension')

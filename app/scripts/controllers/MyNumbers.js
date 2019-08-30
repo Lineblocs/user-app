@@ -7,14 +7,17 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast) {
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("My Numbers");
   $scope.settings = {
     page: 0
   };
   $scope.numbers = [];
   $scope.load = function() {
+      SharedPref.isLoading = true;
     Backend.get("/did/listNumbers", $scope.settings).then(function(res) {
       $scope.numbers = res.data.data;
+      SharedPref.isLoading = false;
     })
   }
   $scope.buyNumber = function() {
