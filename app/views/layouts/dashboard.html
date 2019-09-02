@@ -37,7 +37,7 @@
 			</md-menu-content>
 		</md-menu>
 	-->
-		<nav class="right" style="margin-right: 20px; margin-top: 10px;">
+		<nav class="right">
 			<md-menu md-position-mode="target-right target" >
 				<div class="nav-item">
 					<md-button aria-label="Open demo menu" class="md-raised md-primary md-small" ng-click="$mdOpenMenu($event)">
@@ -57,9 +57,14 @@
 			<md-menu md-position-mode="target-right target" >
 				<div class="nav-item balance">
 					<strong>Balance</strong>
-					<span class="account-balance">
+					<br/>
+					<span class="account-balance" ng-show="!SharedPref.billInfo.info.trialMode">
 						{{SharedPref.billInfo.info.accountBalance}}
 					</span>
+					<span class="account-balance" ng-show="SharedPref.billInfo.info.trialMode">
+						{{SharedPref.billInfo.info.accountBalance}} (trial)
+					</span>
+
 				</div>
 			</md-menu>
 			<md-menu md-position-mode="target-right target" >

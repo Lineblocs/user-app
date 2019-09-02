@@ -86,6 +86,12 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
               var number = res.data;
               purchaseConfirm($event, number);
           });
+        }, function(res) {
+          console.log("res is: ", res);
+          if (res.status === 400) {
+            var data = res.data;
+            SharedPref.showError("Error", data.message);
+          }
         });
     }, function() {
     });

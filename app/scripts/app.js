@@ -66,7 +66,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, Backend) {
+    .factory("SharedPref", function($state, Backend, $mdDialog) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -105,6 +105,18 @@ angular
         }
         factory.getAuthToken = function() {
             return JSON.parse(localStorage.getItem("AUTH"));
+        }
+        factory.showError = function(title, msg) {
+                $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title(title)
+                    .textContent(msg)
+                    .ariaLabel(title)
+                    .ok('Ok')
+                );
+
         }
         factory.updateTitle = function(text) {
             factory.title = baseTitle;

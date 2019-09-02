@@ -8,7 +8,15 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
-	  SharedPref.updateTitle("Extensions");
+    SharedPref.updateTitle("Extensions");
+    
+    function DialogController($scope, $mdDialog, extension, SharedPref) {
+      $scope.SharedPref = SharedPref;
+      $scope.extension = extension;
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
   $scope.settings = {
     page: 0
   };
@@ -25,6 +33,22 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
   }
   $scope.createExtension = function(extension) {
     $state.go('extension-create', {});
+  }
+  $scope.connectInfo = function($event, extension) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/extension-connect-info.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "extension": extension
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
   }
   $scope.deleteExtension = function($event, extension) {
     // Appending dialog to document.body to cover sidenav in docs app

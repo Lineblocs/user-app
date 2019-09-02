@@ -52,10 +52,12 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 		SharedPref.isLoading = true;
 		$q.all([
 			Backend.get("/call/graphData"),
-			Backend.get("/getBillingInfo")
+			Backend.get("/getBillingInfo"),
+			Backend.get("/self")
 		]).then(function(res) {
 			var graph = res[0].data;
 			SharedPref.billInfo=  res[1].data;
+			SharedPref.userInfo=  res[2].data;
 			SharedPref.isLoading = false;
 			console.log("graph data is ", graph);
 			$timeout(function(){

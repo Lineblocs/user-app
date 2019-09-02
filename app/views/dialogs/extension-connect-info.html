@@ -1,0 +1,22 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2>How to Connect</h2>
+        <hr/>
+        <p>to connect to your extension please use the following login credentials</p>
+        <br/>
+        <strong>SIP server:</strong><span>{{SharedPref.userInfo.sip_url}}</span>
+        <br/>
+        <strong>user:</strong><span>{{extension.username}}</span>
+        <br/>
+        <strong>secret:</strong><span>{{extension.secret}}</span>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="close()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -36,10 +36,19 @@ body {
 	height: 28px;
 	width: 64px;
 }
-.nav-item {
+md-menu {
 	float: left;
+}
+.nav-item {
 	height: 45px;
 	margin-top: 8.5px;
+}
+
+.nav-item:after {
+	clear: both;
+	content: '';
+	display: block;
+	margin: 0;
 }
 .vert-line {
 	height: 45px;
@@ -50,7 +59,6 @@ body {
 	float: left;
 }
 .balance {
-	width: 64px;
 	strong {
 	}
 	span.account-balance {
