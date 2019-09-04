@@ -33,6 +33,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     if (form.$valid) {
       var values = {};
       values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
       values['secret'] = $scope.values.secret;
       var toastPos = {
         bottom: false,

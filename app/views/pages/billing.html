@@ -159,6 +159,17 @@
     </md-table-container>
 
             </md-content>
+            </md-tab>
+    <md-tab label="Limits">
+          <md-content class="md-padding">
+              <h5>Maximum Concurrent Calls: {{billing.info.limits.ports}}</h5>
+              <br/>
+              <h5>Extensions: {{billing.info.limits.extensions}}</h5>
+              <br/>
+              <h5>Recording Space: {{billing.info.limits.recording_space}}</h5>
+              <br/>
+              <h5>Numbers: {{billing.info.limits.numbers}}</h5>
+            </md-content>
       </md-tabs>
   </md-card>
 </div>
