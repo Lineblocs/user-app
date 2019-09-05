@@ -36,6 +36,42 @@ body {
 	height: 28px;
 	width: 64px;
 }
+.load-mask {
+	position:relative; 
+	z-index: 9999999;
+	    box-sizing: border-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+	.container {
+		position: absolute;
+		height: 768px;
+		width: 100%;
+			.mask {
+				position: absolute;
+				height: 768px;
+				width: 100%;
+				.block {
+					background: #FFF;
+					opacity: .5;
+					height: 768px;
+					width: 100%;
+
+				}
+			}
+			.spinner {
+				position: absolute;
+				top: 40px;
+				left: 0;
+			right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			}
+		}
+}
 md-menu {
 	float: left;
 }

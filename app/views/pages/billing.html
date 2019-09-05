@@ -170,6 +170,31 @@
               <br/>
               <h5>Numbers: {{billing.info.limits.numbers}}</h5>
             </md-content>
+            </md-tab>
+        <md-tab label="Settings">
+          <md-content class="md-padding">
+            <!--
+            <p>
+              use the following settings to configure your billing according to your needs
+            </p>
+          -->
+
+            <md-checkbox ng-model="settings.auto_recharge" aria-label="Auto Recharge">
+              Auto Recharge Account
+            </md-checkbox>
+            <p>when your account is in negative balance we will automatically add balance for you</p>
+            <div ng-show="settings.auto_recharge">
+              <md-input-container>
+                <label>Auto Recharge Amount</label>
+                    <md-select ng-model="settings.auto_recharge_top_up" ng-change="changeAutoRechargeAmount(settings.auto_recharge_top_up)">
+                      <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                        {{amount.name}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+              <p>Amount to add when your account is in negative balance</p>
+            </div>
+             <md-button ng-click="saveSettings($event)" class="md-raised md-primary">Save Settings</md-button>
       </md-tabs>
   </md-card>
 </div>

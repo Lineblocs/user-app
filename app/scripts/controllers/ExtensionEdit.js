@@ -40,6 +40,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       var values = {};
       values['username'] = $scope.values.username;
       values['secret'] = $scope.values.secret;
+      values['caller_id'] = $scope.values.caller_id;
       var toastPos = {
         bottom: false,
         top: true,

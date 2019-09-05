@@ -137,6 +137,21 @@
 			</div>
 		</center>
 		<div ng-show="!SharedPref.isLoading">
+			<div ng-show="SharedPref.isCreateLoading">
+				<div class="load-mask">
+					<div class="container">
+						<div class="mask">
+							<div class="block"></div>
+						</div>
+						<div class="spinner">
+							<center>
+								<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+								<small>Please wait..</small>
+							</center>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div ui-view ></div>
 			</div>
 	</div>

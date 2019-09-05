@@ -37,6 +37,9 @@ angular.module('MaterialApp')
 		expires: "",
 		cvv: ""
 	};
+	function toCents(dollars) {
+		return dollars * 100;
+	}
 		function submitBilling(cardId, amount) {
 			var data = {};
 		data['card_id'] = cardId;
@@ -192,6 +195,25 @@ angular.module('MaterialApp')
 		console.log("changeAmount ", value);
 		$scope.data.creditAmount = value;
 	}
+	$scope.changeAutoRechargeAmount = function(value) {
+		console.log("changeAutoRechargeAmount ", value);
+		$scope.settings.auto_recharge_top_up = value;
+	}
+	$scope.saveSettings = function() {
+		var data = {};
+		data['auto_recharge'] = $scope.settings.auto_recharge;
+		var recharge = $scope.settings.auto_recharge_top_up.value;
+		data['auto_recharge_top_up'] = toCents(recharge);
+		console.log("recharge in cents is ", data['auto_recharge_top_up']);
+		Backend.post("/changeBillingSettings", data).then(function(res) {
+			$mdToast.show(
+			$mdToast.simple()
+				.textContent('Saved billing settings')
+				.position("top right")
+				.hideDelay(3000)
+			);
+			});
+	}
 	function loadData() {
 		SharedPref.isLoading = true;
 		$q.all([
@@ -202,6 +224,18 @@ angular.module('MaterialApp')
 		]).then(function(res) {
 			SharedPref.isLoading = false;
 			$scope.billing = res[0].data;
+			$scope.settings = res[0].data.info.settings;
+			var compare = parseFloat( $scope.settings.auto_recharge_top_up_dollars );
+
+			if ($scope.settings.auto_recharge_top_up) {
+				for ( var index in $scope.creditAmounts ) {
+					var amount = $scope.creditAmounts[ index ];
+					console.log("comparing amount ", amount, compare);
+					if (amount.value === compare) {
+						$scope.settings.auto_recharge_top_up = amount;
+					}
+				}
+			}
 			$scope.cards = res[1].data.data;
 			$scope.config = res[2].data;
 			$scope.history = res[3].data;
@@ -209,6 +243,7 @@ angular.module('MaterialApp')
 			Stripe.setPublishableKey($scope.config.stripe.key);
 			console.log("billing data is ", $scope.billing);
 			console.log("cards are ", $scope.cards);
+			console.log("settings are ", $scope.settings);
 			$scope.creditAmount = $scope.creditAmounts[0];
 		});
 	}
