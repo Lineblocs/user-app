@@ -11,6 +11,7 @@ angular.module('MaterialApp')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state) {
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
+	  $scope.shouldSplash = false;
 	$scope.user = {
 		first_name: "",
 		last_name: "",
@@ -28,6 +29,7 @@ angular.module('MaterialApp')
 		}
 		if (registerForm.$valid) {
 			var data = angular.copy( $scope.user );
+			$scope.shouldSplash = true;
 			Backend.post("/register", data).then(function( res ) {
 				var token = res.data;
 				SharedPref.setAuthToken( token );

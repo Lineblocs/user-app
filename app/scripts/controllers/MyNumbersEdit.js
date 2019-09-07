@@ -42,12 +42,14 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
     $scope.number.flow_id = flow;
     console.log("changeFlow", flow);
   }
+  SharedPref.isLoading = true;
   $q.all([
     Backend.get("/flow/listFlows"),
     Backend.get("/did/numberData/" + $stateParams['numberId'])
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
     $scope.number = res[1].data;
+    SharedPref.isLoading = false;
   });
 });
 

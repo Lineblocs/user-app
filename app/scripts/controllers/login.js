@@ -11,6 +11,8 @@ angular.module('MaterialApp')
   .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state) {
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
+	$scope.shouldSplash = false;
+	$scope.isLoading = false;
 	$scope.user = {
 		email: "",
 		password: ""
@@ -19,12 +21,15 @@ angular.module('MaterialApp')
 		$scope.triedSubmit = true;
 		if (loginForm.$valid) {
 			var data = angular.copy( $scope.user );
+			$scope.isLoading = true;
 			Backend.post("/jwt/authenticate", data).then(function( res ) {
 				var token = res.data;
+				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
 				SharedPref.setAuthToken( token );
 		        $state.go('home', {});
 			}).catch(function() {
+				$scope.isLoading = false;
 				$scope.couldNotLogin = true;
 			})
 			return;

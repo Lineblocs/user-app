@@ -1,79 +1,95 @@
-<div class="login-overlay">
-	<div class="form-container shadow">
-			<div class="inner">
-				<center>
-			<div class="icon">
-				<div class="header">
-					<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
-					<h4>Sign Up</h4>
-					<p>
-						register for an account to start using LineBlocs today!
-					</p>
-				</div>
-			</div>
-		</center>
-			<div class="inputs">
-				<form ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
-					<md-input-container>
-						<input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name" required="">
-						<div ng-show="triedSubmit">
-							<div class="box">
-								<div ng-show="registerForm.first_name.$error.required">This field is required</div>
-							</div>
-						</div>
-					</md-input-container>
-					<md-input-container>
-						<input name="last_name" ng-model="user.last_name" type="text" placeholder="Last Name" required="">
-						<div ng-show="triedSubmit">
-							<div class="box">
-								<div ng-show="registerForm.last_name.$error.required">This field is required</div>
-							</div>
-						</div>
-					</md-input-container>
-					<md-input-container>
-						<input name="email" ng-model="user.email" type="email" placeholder="Company Email" required="">
-						<div ng-show="triedSubmit">
-							<div class="box">
-								<div ng-show="registerForm.email.$error.required">This field is required</div>
-							</div>
-						</div>
-					</md-input-container>
-					<md-input-container>
-						<input name="password" ng-model="user.password" type="password" placeholder="Password" required="" minlength="5">
-						<div ng-show="triedSubmit">
-							<div class="box">
-								<div ng-show="registerForm.password.$error.minlength">Please enter 5 characters or more</div>
-								<div ng-show="registerForm.password.$error.required">This field is required</div>
-							</div>
-						</div>
-					</md-input-container>
-					<md-input-container>
-						<input name="password2" ng-model="user.password2" type="password" placeholder="Confirm Password" required="">
-						<div ng-show="triedSubmit">
-							<div class="box">
-								<div ng-show="passwordsDontMatch">Passwords don't match</div>
-							</div>
-						</div>
-					</md-input-container>
-					<center>
-					<div class="buttons">
-						<div class="link" style="padding-bottom:0;">
-							<md-button type="submit" class="md-raised primary">Register</md-button>
-						</div>
-						<a ui-sref="login">Login here</a>
-					</div>
-				</center>
-				</form>
-			</div>
-		</div>
-	</div>
-	<footer class="login-footer">
-		<div class="left-section">
-			&copy; LineBlocs.com
+<div>
+	<div ng-show="shouldSplash">
+		<div class="full-blue splash">
+<div class="outer">
+  <div class="middle">
+    <div class="inner">
+				<img src="/images/logo-blue.png" width="256"/>
+				<p>Setting up your account..</p>
+    </div>
+  </div>
+</div>
+
 		</div>
 
-		<div class="right-section">
+	</div>
+	<div class="login-overlay" ng-show="!shouldSplash">
+		<div class="form-container shadow">
+				<div class="inner">
+					<center>
+				<div class="icon">
+					<div class="header">
+						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+						<h4>Sign Up</h4>
+						<p>
+							register for an account to start using LineBlocs today!
+						</p>
+					</div>
+				</div>
+			</center>
+				<div class="inputs">
+					<form ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
+						<md-input-container>
+							<input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name" required="">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="registerForm.first_name.$error.required">This field is required</div>
+								</div>
+							</div>
+						</md-input-container>
+						<md-input-container>
+							<input name="last_name" ng-model="user.last_name" type="text" placeholder="Last Name" required="">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="registerForm.last_name.$error.required">This field is required</div>
+								</div>
+							</div>
+						</md-input-container>
+						<md-input-container>
+							<input name="email" ng-model="user.email" type="email" placeholder="Company Email" required="">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="registerForm.email.$error.required">This field is required</div>
+								</div>
+							</div>
+						</md-input-container>
+						<md-input-container>
+							<input name="password" ng-model="user.password" type="password" placeholder="Password" required="" minlength="5">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="registerForm.password.$error.minlength">Please enter 5 characters or more</div>
+									<div ng-show="registerForm.password.$error.required">This field is required</div>
+								</div>
+							</div>
+						</md-input-container>
+						<md-input-container>
+							<input name="password2" ng-model="user.password2" type="password" placeholder="Confirm Password" required="">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="passwordsDontMatch">Passwords don't match</div>
+								</div>
+							</div>
+						</md-input-container>
+						<center>
+						<div class="buttons">
+							<div class="link" style="padding-bottom:0;">
+								<md-button type="submit" class="md-raised primary">Register</md-button>
+							</div>
+							<a ui-sref="login">Login here</a>
+						</div>
+					</center>
+					</form>
+				</div>
+			</div>
 		</div>
-	</footer>
+		<footer class="login-footer">
+			<div class="left-section">
+				&copy; LineBlocs.com
+			</div>
+
+			<div class="right-section">
+			</div>
+		</footer>
+	</div>
 </div>
 

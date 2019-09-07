@@ -19,9 +19,11 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   }
   $scope.triedSubmit = false;
   $scope.load = function() {
+    SharedPref.isLoading = true;
     Backend.get("/extension/extensionData/" + $stateParams['extensionId']).then(function(res) {
       $scope.extension = res.data;
       $scope.values = angular.copy( $scope.extension );
+      SharedPref.isLoading = false;
     });
   }
   $scope.generateSecret = function() {

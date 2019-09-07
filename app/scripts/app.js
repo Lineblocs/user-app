@@ -30,16 +30,6 @@ angular
     'ngAnimate',
     'ngMaterial',
     'chart.js',
-    'gridshore.c3js.chart',
-    'angular-growl',
-    'growlNotifications',    
-    'angular-loading-bar',
-    'easypiechart',
-    'ui.sortable',
-    angularDragula(angular),
-    'bootstrapLightbox',
-    'materialCalendar',
-    'paperCollapse',
     'pascalprecht.translate',
     'md.data.table'
     ])
@@ -66,7 +56,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, Backend, $mdDialog) {
+    .factory("SharedPref", function($state, $mdDialog) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -126,11 +116,14 @@ angular
         }
         return factory;
     })
-    .factory("Backend", function($http, $q) {
+    .factory("Backend", function($http, $q, SharedPref) {
         var factory = this;
         var baseUrl = "http://45.76.62.46:8090/api";
         function createUrl(path) {
             return baseUrl + path;
+        }
+        function errorHandler(error) {
+            SharedPref.showError("An error occured.");
         }
         factory.getJWTToken = function(email, password) {
             var params = {
@@ -148,25 +141,37 @@ angular
         }
         factory.get = function(path, params)
         {
-            return $http.get(createUrl(path), params);
+            return $q(function(resolve, reject) {
+                $http.get(createUrl(path), params).then(resolve,function(err) {
+                    errorHandler();
+                    reject(err);
+                 });
+            });
         }
         factory.delete = function(path)
         {
-            return $http.delete(createUrl(path));
+            return $q(function(resolve, reject) {
+                $http.delete(createUrl(path), params).then(resolve,function(err) {
+                    errorHandler();
+                    reject(err);
+                 });
+            });
+
         }
         factory.post = function(path, params)
         {
-            return $http.post(createUrl(path), params);
+            return $q(function(resolve, reject) {
+                $http.post(createUrl(path), params).then(resolve,function(err) {
+                    errorHandler();
+                    reject(err);
+                 });
+            });
+
         }
         return factory;
     })
-    .config(['cfpLoadingBarProvider', '$httpProvider', function(cfpLoadingBarProvider, $httpProvider) {
-        cfpLoadingBarProvider.latencyThreshold = 5;
-          cfpLoadingBarProvider.includeSpinner = false;
-          cfpLoadingBarProvider.includeBar = false;
-          //cfpLoadingBarProvider.parentSelector = '#loading-bar-container';
-          //cfpLoadingBarProvider.spinnerTemplate = '<md-progress-circular md-mode="indeterminate"></md-progress-circular>';
-          $httpProvider.interceptors.push('JWTHttpInterceptor');
+    .config(['$httpProvider', function($httpProvider) {
+         $httpProvider.interceptors.push('JWTHttpInterceptor');
 
     }])
        
