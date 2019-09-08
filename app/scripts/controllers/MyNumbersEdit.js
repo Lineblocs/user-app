@@ -42,6 +42,9 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
     $scope.number.flow_id = flow;
     console.log("changeFlow", flow);
   }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
   SharedPref.isLoading = true;
   $q.all([
     Backend.get("/flow/listFlows"),

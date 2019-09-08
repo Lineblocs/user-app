@@ -45,8 +45,10 @@ angular.module('MaterialApp')
 		data['card_id'] = cardId;
 		data['amount'] =  amount;
 		$scope.data.creditAmount.value;
+		SharedPref.isCreateLoading = true;
 		Backend.post("/credit/addCredit", data).then(function(res) {
 			console.log("added credit amount");
+				SharedPref.isCreateLoading = false;
 				$mdToast.show(
 				$mdToast.simple()
 					.textContent('Added credits successfully')
@@ -64,7 +66,9 @@ angular.module('MaterialApp')
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
+				SharedPref.isCreateLoading = true;
 				Backend.post("/card/addCard", data).then(function(res) {
+					SharedPref.isCreateLoading = false;
 					resolve(res);
 				}, function(err) {
 					console.error("an error occured ", err);
@@ -205,7 +209,9 @@ angular.module('MaterialApp')
 		var recharge = $scope.settings.auto_recharge_top_up.value;
 		data['auto_recharge_top_up'] = toCents(recharge);
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
+		SharedPref.isCreateLoading = true;
 		Backend.post("/changeBillingSettings", data).then(function(res) {
+			SharedPref.isCreateLoading = false;
 			$mdToast.show(
 			$mdToast.simple()
 				.textContent('Saved billing settings')
