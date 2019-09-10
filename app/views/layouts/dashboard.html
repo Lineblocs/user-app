@@ -59,10 +59,10 @@
 					<strong>Balance</strong>
 					<br/>
 					<span class="account-balance" ng-show="!SharedPref.billInfo.info.trialMode">
-						{{SharedPref.billInfo.info.accountBalance}}
+						{{SharedPref.billInfo.info.remainingBalance}}
 					</span>
 					<span class="account-balance" ng-show="SharedPref.billInfo.info.trialMode">
-						{{SharedPref.billInfo.info.accountBalance}} (trial)
+						{{SharedPref.billInfo.info.remainingBalance}} (trial)
 					</span>
 
 				</div>

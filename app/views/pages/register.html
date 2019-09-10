@@ -14,7 +14,7 @@
 
 	</div>
 	<div class="login-overlay" ng-show="!shouldSplash">
-		<div class="form-container shadow">
+		<div class="form-container shadow" ng-show="step===1">
 				<div class="inner">
 					<center>
 				<div class="icon">
@@ -82,6 +82,73 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- step 2 -->
+		<div class="form-container shadow" ng-show="step===2">
+				<div class="inner">
+					<center>
+				<div class="icon">
+					<div class="header">
+						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+						<h4>Verify Your Account</h4>
+						<p>
+							please enter your mobile number so that we can call you with your verification code.
+						</p>
+					</div>
+				</div>
+			</center>
+			<div class="box invalid-login">
+				<center>
+					<div ng-show="invalidCode" class="red">The code you entered was invalid. <a href="#/register" ng-click="recall()">Recall with Code</a></div>
+					<div ng-show="invalidNumber" class="red">The number you entered was invalid.</div>
+				</center>
+			</div>
+				<div class="inputs">
+					<div ng-show="!didVerifyCall">
+						<form ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form" novalidate>
+							<md-input-container>
+								<input name="mobile_number" ng-model="verify1.mobile_number" type="text" placeholder="Mobile Number" required="">
+								<div ng-show="triedSubmit">
+									<div class="box">
+										<div ng-show="verify1Form.mobile_number.$error.required">This field is required</div>
+									</div>
+								</div>
+							</md-input-container>
+						<center>
+							<div class="buttons">
+								<div class="link" style="padding-bottom:0;">
+									<md-button type="submit" class="md-raised primary">Submit</md-button>
+								</div>
+								<a ui-sref="login">Login here</a>
+							</div>
+						</center>
+
+						</form>
+					</div>
+					<div ng-show="didVerifyCall">
+						<form ng-submit="submitVerify2Form($event, verify2Form)" name="verify2Form" novalidate>
+							<md-input-container>
+								<input name="confirmation_Code" ng-model="verify2.confirmation_code" type="text" placeholder="Confirmation Code" required="">
+								<div ng-show="triedSubmit">
+									<div class="box">
+										<div ng-show="verify2Form.confirmation_code.$error.required">This field is required</div>
+									</div>
+								</div>
+							</md-input-container>
+						<center>
+							<div class="buttons">
+								<div class="link" style="padding-bottom:0;">
+									<md-button type="submit" class="md-raised primary">Submit</md-button>
+								</div>
+								<a ui-sref="login">Login here</a>
+							</div>
+						</center>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<footer class="login-footer">
 			<div class="left-section">
 				&copy; LineBlocs.com
