@@ -32,7 +32,8 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
   $scope.settings = {
     country: "",
     region: "",
-    pattern: ""
+    pattern: "",
+    rate_center: ""
   };
   $scope.numbers = [];
   $scope.didFetch = false;
@@ -54,11 +55,17 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     });
   };
 
-  $scope.fetch =  function() {
+  $scope.fetch =  function(event, didForm) {
+		$scope.triedSubmit = true;
+		if (!didForm.$valid) {
+        return;
+    }
     var data = {};
     //data['region'] = $scope.settings['region'];
-    data['region'] = null;
-    data['prefix'] = $scope.settings['pattern'];
+    data['region'] = $scope.settings['region'];
+    data['rate_center'] = $scope.settings['rate_center'];
+    //data['prefix'] = $scope.settings['pattern'];
+    data['prefix'] = "";
     data['country_iso'] = $scope.settings['country']['iso'];
     SharedPref.isCreateLoading = true;
     Backend.get("/did/available", { "params": data }).then(function(res) {
@@ -78,9 +85,12 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         var params = {};
+        params['api_number'] = number.api_number;
         params['number'] = number.number;
         params['region'] = number.region;
         params['monthly_cost'] = number.monthly_cost;
+        params['provider'] = number.provider;
+        params['country'] = number.country;
         Backend.post("/did/saveNumber", params).then(function(res) {
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;

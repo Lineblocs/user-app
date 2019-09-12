@@ -7,14 +7,21 @@
     </md-card-title-text>
   </md-card-title>
   <md-card-content>
+    <form ng-submit="fetch($event,didForm)" name="didForm" novalidate>
+
     <md-input-container>
       <label>Country</label>
-      <md-select ng-model="settings.country" ng-change="changeCountry(settings.country)">
+      <md-select name="country" ng-model="settings.country" ng-change="changeCountry(settings.country)" required="">
         <md-option><em>None</em></md-option>
         <md-option ng-repeat="country in countries" ng-value="country">
           {{country.name}}
         </md-option>
       </md-select>
+      <div ng-show="triedSubmit">
+        <div class="box">
+          <div ng-show="didForm.country.$error.required">This field is required</div>
+        </div>
+      </div>
     </md-input-container>
     <!--
       <md-input-container>
@@ -23,10 +30,27 @@
     </md-input-container>
   -->
     <md-input-container>
+      <label>Region</label>
+      <input name="region" ng-model="settings.region" placeholder="" required=""/>
+      <small>2 letter province or state code. e.g: AB</small>
+      <div ng-show="triedSubmit">
+        <div class="box">
+          <div ng-show="didForm.region.$error.required">This field is required</div>
+        </div>
+      </div>
+    </md-input-container>
+    <md-input-container ng-show="true">
+      <label>Rate Center</label>
+      <input ng-model="settings.rate_center" placeholder=""/>
+      <small>e.g: Edmonton</small>
+    </md-input-container>
+
+    <md-input-container ng-show="false">
       <label>Pattern</label>
       <input ng-model="settings.pattern" placeholder="e.g: 312" />
     </md-input-container>
-    <md-button ng-click="fetch()" class="md-raised md-primary">Search</md-button>
+    <md-button type="submit" class="md-raised md-primary">Search</md-button>
+  </form>
   </md-card-content>
 </md-card>
 <div ng-show="didFetch">
