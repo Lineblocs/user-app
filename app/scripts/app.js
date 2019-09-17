@@ -60,7 +60,7 @@ angular
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
-        factory.FLOW_EDITOR_URL = "http://45.76.62.46:8091";
+        factory.FLOW_EDITOR_URL = "http://editor.lineblocs.com";
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.isLoading = true;
@@ -118,7 +118,7 @@ angular
     })
     .factory("Backend", function($http, $q, SharedPref) {
         var factory = this;
-        var baseUrl = "http://45.76.62.46:8090/api";
+        var baseUrl = "http://lineblocs.com/api";
         function createUrl(path) {
             return baseUrl + path;
         }
