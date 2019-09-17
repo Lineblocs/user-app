@@ -105,12 +105,22 @@ md-menu {
 	height: 45px;
 	margin-top: 8.5px;
 }
-
+.no-margin-sides {
+	margin-left: 0;
+	margin-right: 0;
+}
+.no-padding {
+	padding: 0;
+}
 .nav-item:after {
 	clear: both;
 	content: '';
 	display: block;
 	margin: 0;
+}
+.line-left {
+	border-left: 1px solid #E3E3E3;
+	padding-left: 20px;
 }
 .vert-line {
 	height: 45px;

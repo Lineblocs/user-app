@@ -8,7 +8,7 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog) {
+  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog, $window) {
 	  SharedPref.updateTitle("Billing");
 	  $scope.SharedPref = SharedPref;
 	  $scope.triedSubmit = false;
@@ -21,7 +21,8 @@ angular.module('MaterialApp')
 		{"name": "$250", "value": 250.00}
 	];
 	$scope.settings = {
-		newCard: false
+		newCard: false,
+		type: 'CARD'
 	};
 	$scope.data = {
 		selectedCard: null,
@@ -182,6 +183,20 @@ angular.module('MaterialApp')
 		submitBilling($scope.data.selectedCard, $scope.data.creditAmount.value);
 
 	}
+	$scope.addCreditPayPal = function() {
+		var data = {};
+		console.log("card is ", $scope.data.selectedCard);
+		console.log("amount is ", $scope.data.creditAmount);
+		data.amount = $scope.data.creditAmount.value;
+		SharedPref.isCreateLoading = true;
+		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
+			var data = res.data;
+			//$window.replace(data.url);
+			$window.location.href = data.url;
+		});
+	}
+
+
 	$scope.getCardOptions = function() {
 		var options = angular.copy($scope.cards);
 		//options.push({""})
@@ -201,12 +216,15 @@ angular.module('MaterialApp')
 	}
 	$scope.changeAutoRechargeAmount = function(value) {
 		console.log("changeAutoRechargeAmount ", value);
-		$scope.settings.auto_recharge_top_up = value;
+		$scope.settings.db.auto_recharge_top_up = value;
+	}
+	$scope.changeType = function(newType) {
+		$scope.settings.type = newType;
 	}
 	$scope.saveSettings = function() {
 		var data = {};
-		data['auto_recharge'] = $scope.settings.auto_recharge;
-		var recharge = $scope.settings.auto_recharge_top_up.value;
+		data['auto_recharge'] = $scope.settings.db.auto_recharge;
+		var recharge = $scope.settings.db.auto_recharge_top_up.value;
 		data['auto_recharge_top_up'] = toCents(recharge);
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
 		SharedPref.isCreateLoading = true;
@@ -228,17 +246,18 @@ angular.module('MaterialApp')
 			Backend.get("/getConfig"),
 			Backend.get("/getBillingHistory"),
 		]).then(function(res) {
+			console.log("finished loading..");
 			SharedPref.isLoading = false;
 			$scope.billing = res[0].data;
-			$scope.settings = res[0].data.info.settings;
-			var compare = parseFloat( $scope.settings.auto_recharge_top_up_dollars );
+			$scope.settings.db = res[0].data.info.settings;
+			var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
-			if ($scope.settings.auto_recharge_top_up) {
+			if ($scope.settings.db.auto_recharge_top_up) {
 				for ( var index in $scope.creditAmounts ) {
 					var amount = $scope.creditAmounts[ index ];
 					console.log("comparing amount ", amount, compare);
 					if (amount.value === compare) {
-						$scope.settings.auto_recharge_top_up = amount;
+						$scope.settings.db.auto_recharge_top_up = amount;
 					}
 				}
 			}
