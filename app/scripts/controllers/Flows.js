@@ -21,10 +21,10 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
     })
   }
   $scope.editFlow = function(flow) {
-    $state.go('flow-editor', {flowId: flow.id});
+    SharedPref.changeRoute('flow-editor', {flowId: flow.id});
   }
   $scope.createFlow = function() {
-    $state.go('flow-editor', {flowId: "new"}); 
+    SharedPref.changeRoute('flow-editor', {flowId: "new"}); 
   }
   $scope.deleteFlow = function($event, flow) {
     // Appending dialog to document.body to cover sidenav in docs app

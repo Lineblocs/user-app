@@ -55,6 +55,9 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     });
   };
 
+  $scope.load = function() {
+    SharedPref.endIsLoading();
+  }
   $scope.fetch =  function(event, didForm) {
 		$scope.triedSubmit = true;
 		if (!didForm.$valid) {
@@ -111,5 +114,6 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     $scope.settings.country = country;
   }
 
+    $scope.load();
 });
 

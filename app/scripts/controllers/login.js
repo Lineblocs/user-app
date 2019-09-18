@@ -9,6 +9,7 @@
  */
 angular.module('MaterialApp')
   .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
+	  SharedPref.updateTitle("Login");
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
 	$scope.shouldSplash = false;

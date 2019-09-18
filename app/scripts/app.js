@@ -61,7 +61,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog, $timeout) {
+    .factory("SharedPref", function($state, $mdDialog, $timeout, $q) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -81,19 +81,29 @@ angular
   ];
   var flickerTimeout = 0;
   factory.endIsLoading = function() {
-      $timeout(function() {
-          factory.isLoading = false;
-      }, flickerTimeout);
+      return $q(function(resolve, reject) {
+        $timeout(function() {
+            factory.isLoading = false;
+            resolve();
+        }, flickerTimeout);
+    });
   }
     factory.endIsCreateLoading = function() {
-      $timeout(function() {
-          factory.isCreateLoading = false;
-      }, flickerTimeout);
+      return $q(function(resolve, reject) {
+        $timeout(function() {
+            factory.isCreateLoading = false;
+            resolve();
+        }, flickerTimeout);
+    });
   }
 
   factory.changeRoute = function(route, params) {
+      console.log("changeRoute called ", arguments);
       var params = params || {};
-      factory.isLoading = true;
+      var except = ['flow-editor'];
+      if (!except.includes(route)) {
+        factory.isLoading = true;
+      }
       $state.go(route, params)
   }
         factory.collapseNavbar = function() {

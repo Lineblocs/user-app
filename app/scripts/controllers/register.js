@@ -9,6 +9,7 @@
  */
 angular.module('MaterialApp')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+	  SharedPref.updateTitle("Register");
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
 	  $scope.shouldSplash = false;

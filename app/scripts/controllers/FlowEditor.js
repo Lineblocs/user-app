@@ -15,6 +15,7 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   $scope.numbers = [];
   var flowUrl;
   var token = SharedPref.getAuthToken();
+
   if ($stateParams['flowId'] === "new" ) {
     flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token;
   } else {
