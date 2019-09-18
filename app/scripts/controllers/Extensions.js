@@ -25,7 +25,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
       SharedPref.isLoading = true;
     Backend.get("/extension/listExtensions", $scope.settings).then(function(res) {
       $scope.extensions = res.data.data;
-      SharedPref.isLoading = false;
+      SharedPref.endIsLoading();
     })
   }
   $scope.editExtension = function(extension) {

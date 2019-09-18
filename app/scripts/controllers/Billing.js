@@ -49,7 +49,6 @@ angular.module('MaterialApp')
 		SharedPref.isCreateLoading = true;
 		Backend.post("/credit/addCredit", data).then(function(res) {
 			console.log("added credit amount");
-				SharedPref.isCreateLoading = false;
 				$mdToast.show(
 				$mdToast.simple()
 					.textContent('Added credits successfully')
@@ -58,6 +57,7 @@ angular.module('MaterialApp')
 				);
 				loadData();
 				});
+				SharedPref.endIsCreateLoading();
 		}
 
 		function stripeRespAddCard(response) {
@@ -69,8 +69,8 @@ angular.module('MaterialApp')
 				data['issuer'] = response.card.brand;
 				SharedPref.isCreateLoading = true;
 				Backend.post("/card/addCard", data).then(function(res) {
-					SharedPref.isCreateLoading = false;
 					resolve(res);
+					SharedPref.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
 				});
@@ -229,7 +229,6 @@ angular.module('MaterialApp')
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
 		SharedPref.isCreateLoading = true;
 		Backend.post("/changeBillingSettings", data).then(function(res) {
-			SharedPref.isCreateLoading = false;
 			$mdToast.show(
 			$mdToast.simple()
 				.textContent('Saved billing settings')
@@ -237,6 +236,7 @@ angular.module('MaterialApp')
 				.hideDelay(3000)
 			);
 			});
+			SharedPref.endIsCreateLoading();
 	}
 	function loadData() {
 		SharedPref.isLoading = true;
@@ -247,7 +247,6 @@ angular.module('MaterialApp')
 			Backend.get("/getBillingHistory"),
 		]).then(function(res) {
 			console.log("finished loading..");
-			SharedPref.isLoading = false;
 			$scope.billing = res[0].data;
 			$scope.settings.db = res[0].data.info.settings;
 			var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
@@ -270,6 +269,7 @@ angular.module('MaterialApp')
 			console.log("cards are ", $scope.cards);
 			console.log("settings are ", $scope.settings);
 			$scope.creditAmount = $scope.creditAmounts[0];
+			SharedPref.endIsLoading();
 		});
 	}
 	loadData();

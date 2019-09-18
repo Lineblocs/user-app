@@ -8,7 +8,7 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state) {
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
 	$scope.shouldSplash = false;
@@ -27,6 +27,7 @@ angular.module('MaterialApp')
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
 				SharedPref.setAuthToken( token );
+				Idle.watch();
 		        $state.go('home', {});
 			}).catch(function() {
 				$scope.isLoading = false;
@@ -45,6 +46,7 @@ angular.module('MaterialApp')
     		defer.resolve();
 
     		$timeout(function(){
+				Idle.watch();
     		   	$location.path('/dashboard/home');
     		}, 600);
 

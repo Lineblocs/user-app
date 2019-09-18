@@ -47,7 +47,7 @@
 				</div>
 				<md-menu-content width="3" >
 					<md-menu-item>
-						<md-button ui-sref="flow-editor({flowId: 'new'})" style="display:flex;">New Flow</md-button>
+						<md-button href="" ng-click="SharedPref.changeRoute('flow-editor', {flowId: 'new'})" style="display:flex;">New Flow</md-button>
 					</md-menu-item>
 				</md-menu-content>
 			</md-menu>
@@ -104,7 +104,7 @@
 		</div>
 		<div class="dashboard-menu">
 			<ul class="menu-list">
-				<li ng-class="{active: $state.includes('home')}"><md-button ui-sref="home" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('home')}"><md-button href="" ng-click="SharedPref.changeRoute('home')" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
 				<li class="show-subnav">
 					<md-button href="" class=" show-menu" ng-click="subnav('ui')">
 						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
@@ -112,15 +112,15 @@
 						<span class="text"> {{ 'did-numbers' | translate }}</span>
 					</md-button>
 					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
-						<li ng-class="{active: $state.includes('my-numbers')}"><md-button ui-sref="my-numbers" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('buy-numbers')}"><md-button ui-sref="buy-numbers" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('my-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('my-numbers')" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('buy-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('buy-numbers')" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
 					</ul>
 				</li>
-				<li ng-class="{active: $state.includes('flows')}"><md-button ui-sref="flows" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('extensions')}"><md-button ui-sref="extensions" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('calls')}"><md-button ui-sref="calls" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('recordings')}"><md-button ui-sref="recordings" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('billing')}"><md-button ui-sref="billing" class=""><i class="mdi mdi-credit-card"></i> &nbsp;<span class="text">{{ 'billing' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('flows')}"><md-button href="" ng-click="SharedPref.changeRoute('flows')" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('extensions')}"><md-button href="" ng-click="SharedPref.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="SharedPref.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('billing')}"><md-button href="" ng-click="SharedPref.changeRoute('billing')" class=""><i class="mdi mdi-credit-card"></i> &nbsp;<span class="text">{{ 'billing' | translate }}</span></md-button></li>
 			</ul>
 		</div>
 	</div>

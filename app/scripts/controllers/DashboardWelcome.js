@@ -13,8 +13,8 @@
             Backend.get("/self"),
             Backend.get("/getBillingInfo")
         ]).then(function(res) {
-            SharedPref.isLoading = false;
             SharedPref.userInfo = res[0].data;
             SharedPref.billInfo = res[1].data; 
+            SharedPref.endIsLoading();
                 });
 });

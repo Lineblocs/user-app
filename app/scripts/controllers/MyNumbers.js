@@ -17,7 +17,7 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
       SharedPref.isLoading = true;
     Backend.get("/did/listNumbers", $scope.settings).then(function(res) {
       $scope.numbers = res.data.data;
-      SharedPref.isLoading = false;
+      SharedPref.endIsLoading();
     })
   }
   $scope.buyNumber = function() {

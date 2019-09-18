@@ -48,7 +48,6 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
       SharedPref.isCreateLoading = true;
       Backend.post("/extension/saveExtension", values).then(function() {
        console.log("updated extension..");
-        SharedPref.isCreateLoading = false;
         $mdToast.show(
           $mdToast.simple()
             .textContent('Created extension')
@@ -56,6 +55,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
             .hideDelay(3000)
         );
         $state.go('extensions', {});
+        SharedPref.endIsCreateLoading();
       });
     }
   }

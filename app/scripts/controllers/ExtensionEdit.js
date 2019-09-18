@@ -23,7 +23,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
     Backend.get("/extension/extensionData/" + $stateParams['extensionId']).then(function(res) {
       $scope.extension = res.data;
       $scope.values = angular.copy( $scope.extension );
-      SharedPref.isLoading = false;
+      SharedPref.endIsLoading();
     });
   }
   $scope.generateSecret = function() {
@@ -56,7 +56,6 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       SharedPref.isCreateLoading = true;
       Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
        console.log("updated extension..");
-      SharedPref.isCreateLoading = false;
         $mdToast.show(
           $mdToast.simple()
             .textContent('Updated extension')
@@ -64,6 +63,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
             .hideDelay(3000)
         );
         $state.go('extensions', {});
+      SharedPref.endIsCreateLoading();
       });
     }
   }

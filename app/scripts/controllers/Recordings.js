@@ -17,11 +17,11 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
     SharedPref.isLoading = true;
     Backend.get("/recording/listRecordings", $scope.settings).then(function(res) {
       var recordings = res.data.data;
-      SharedPref.isLoading = false;
       $scope.recordings = recordings.map(function(obj) {
         obj.uri = $sce.trustAsResourceUrl(obj.uri);
         return obj;
       });
+      SharedPref.endIsLoading();
     })
   }
   $scope.deleteRecording = function($event, recording) {

@@ -16,8 +16,8 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
   $scope.load = function() {
     SharedPref.isLoading = true;
     Backend.get("/call/listCalls", $scope.settings).then(function(res) {
-      SharedPref.isLoading =false; 
       $scope.calls = res.data.data;
+      SharedPref.endIsLoading();
     })
   }
   $scope.viewCall= function(call) {

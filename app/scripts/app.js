@@ -14,7 +14,20 @@ function checkExpires(expiresIn)
 {
 
 }
+function getJWTToken() {
+    var token = localStorage.getItem("AUTH");
+    if (token) {
+            var parsed = JSON.parse(token);
+            return "Bearer " + parsed.token;
+    }
+    return "";
+}
 
+var baseUrl = "http://lineblocs.com/api";
+function createUrl(path) {
+    return baseUrl + path;
+}
+        
 function generatePassword() {
     var length = 32,
         charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -31,7 +44,8 @@ angular
     'ngMaterial',
     'chart.js',
     'pascalprecht.translate',
-    'md.data.table'
+    'md.data.table',
+    'ngIdle'
     ])
     .service('JWTHttpInterceptor', function() {
         return {
@@ -40,23 +54,14 @@ angular
                 // do something on success
                 var token = localStorage.getItem("AUTH");
                 if (token) {
-                    try {
-                        var tokenObj = JSON.parse( token );
-                        if (checkExpires()) {
-                            getNewToken();
-                        } else {
-                            config.headers['Authorization'] = "Bearer " + tokenObj.token;
-                        }
-                    } catch (e) {
-                        console.error("error parsing token ", token);
-                    }
+                    config.headers['Authorization'] = getJWTToken(); 
                 }
                 console.log("request headers are ", config.headers);
                 return config;
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog) {
+    .factory("SharedPref", function($state, $mdDialog, $timeout) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -74,6 +79,23 @@ angular
        name: 'United States'
     }
   ];
+  var flickerTimeout = 0;
+  factory.endIsLoading = function() {
+      $timeout(function() {
+          factory.isLoading = false;
+      }, flickerTimeout);
+  }
+    factory.endIsCreateLoading = function() {
+      $timeout(function() {
+          factory.isCreateLoading = false;
+      }, flickerTimeout);
+  }
+
+  factory.changeRoute = function(route, params) {
+      var params = params || {};
+      factory.isLoading = true;
+      $state.go(route, params)
+  }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
             factory.PAGE_CONTENT_NO_PADDING = true;
@@ -118,10 +140,6 @@ angular
     })
     .factory("Backend", function($http, $q, SharedPref) {
         var factory = this;
-        var baseUrl = "http://lineblocs.com/api";
-        function createUrl(path) {
-            return baseUrl + path;
-        }
         function errorHandler(error) {
             SharedPref.showError("An error occured.");
         }
@@ -174,7 +192,21 @@ angular
          $httpProvider.interceptors.push('JWTHttpInterceptor');
 
     }])
-       
+      
+    .config(function(IdleProvider, KeepaliveProvider) {
+        IdleProvider.idle(900); // 15 min
+        IdleProvider.timeout(60);
+        KeepaliveProvider.interval(600); // heartbeat every 10 min
+        /*
+        KeepaliveProvider.http({
+            method: 'GET',
+            url: createUrl('/jwt/heartbeat'),
+            headers: {
+                "Authorization": getJWTToken
+            } 
+        }); // URL that makes sure session is alive
+        */
+    })
     .config(function($translateProvider) {
         $translateProvider.useStaticFilesLoader({
           prefix: 'languages/',
@@ -385,6 +417,14 @@ angular
         controller: 'docsCtrl'
     });
 }).run(function($rootScope, SharedPref) {
+      //Idle.watch();
+    $rootScope.$on('IdleStart', function() { 
+        /* Display modal warning or sth */ 
+    });
+    $rootScope.$on('IdleTimeout', function() { 
+        /* Logout user */ 
+        SharedPref.doLogout();
+    });
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
         // do something
         SharedPref.showNavbar();

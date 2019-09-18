@@ -8,7 +8,7 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast) {
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
 	  $scope.shouldSplash = false;
@@ -91,6 +91,7 @@ angular.module('MaterialApp')
 					Backend.post("/userSpinup", data).then(function( res ) {
 						var data = res.data;
 						if ( data.success ) {
+							Idle.watch();
 							$state.go('dashboard-user-welcome', {});
 							return;
 						}

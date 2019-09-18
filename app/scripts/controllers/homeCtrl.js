@@ -58,8 +58,8 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 			var graph = res[0].data;
 			SharedPref.billInfo=  res[1].data;
 			SharedPref.userInfo=  res[2].data;
-			SharedPref.isLoading = false;
 			console.log("graph data is ", graph);
+			SharedPref.isLoading = false;
 			$timeout(function(){
 				$scope.line = {
 					legend: true,
@@ -118,7 +118,7 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 				};
 			}, 0);
 		});
-	}, 100);
+	}, 0);
     $scope.line2 = {
 	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
 	          data: [

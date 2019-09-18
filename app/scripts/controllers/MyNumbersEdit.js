@@ -28,7 +28,6 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
       SharedPref.isCreateLoading = true;
     Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
         console.log("updated number..");
-      SharedPref.isCreateLoading = false;
         $mdToast.show(
           $mdToast.simple()
             .textContent('Number updated..')
@@ -36,6 +35,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
             .hideDelay(3000)
         );
         $state.go('my-numbers', {});
+      SharedPref.endIsCreateLoading();
     });
   }
   $scope.changeFlow = function(flow) {
@@ -52,7 +52,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
     $scope.number = res[1].data;
-    SharedPref.isLoading = false;
+    SharedPref.endIsLoading();
   });
 });
 

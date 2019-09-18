@@ -27,13 +27,13 @@ angular.module('MaterialApp')
 			data['email'] = $scope.user.email;
 			SharedPref.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
-					SharedPref.isCreateLoading = false;
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Updated your info')
 						.position("top right")
 						.hideDelay(3000)
 					);
+					SharedPref.endIsCreateLoading();
 			});
 			return;
 		}
@@ -53,7 +53,6 @@ angular.module('MaterialApp')
 			data['password'] = $scope.user.password;
 			SharedPref.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
-				SharedPref.isCreateLoading = false;
 				var token = res.data;
 					$mdToast.show(
 					$mdToast.simple()
@@ -61,6 +60,7 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
+				SharedPref.endIsCreateLoading();
 			});
 			return;
 		}
@@ -69,8 +69,8 @@ angular.module('MaterialApp')
 	}
 	SharedPref.isLoading = true;
 	Backend.get("/self").then(function(res) {
-		SharedPref.isLoading = false;
 		$scope.user = res.data;
 		console.log("user is ", $scope.user);
+		SharedPref.endIsLoading();
 	});
   });

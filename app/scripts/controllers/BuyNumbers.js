@@ -71,7 +71,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     Backend.get("/did/available", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
-      SharedPref.isCreateLoading = false;
+      SharedPref.endIsCreateLoading();
     });
   }
   $scope.buyNumber = function($event, number) {

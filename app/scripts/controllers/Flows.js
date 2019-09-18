@@ -17,7 +17,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
     SharedPref.isLoading =true;
     Backend.get("/flow/listFlows", $scope.settings).then(function(res) {
       $scope.flows = res.data.data;
-      SharedPref.isLoading =false;
+      SharedPref.endIsLoading();
     })
   }
   $scope.editFlow = function(flow) {
