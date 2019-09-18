@@ -23,7 +23,7 @@ function getJWTToken() {
     return "";
 }
 
-var baseUrl = "http://lineblocs.com/api";
+var baseUrl = "/api";
 function createUrl(path) {
     return baseUrl + path;
 }

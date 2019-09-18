@@ -97,11 +97,22 @@ md-menu {
   height: 45px;
   margin-top: 8.5px; }
 
+.no-margin-sides {
+  margin-left: 0;
+  margin-right: 0; }
+
+.no-padding {
+  padding: 0; }
+
 .nav-item:after {
   clear: both;
   content: '';
   display: block;
   margin: 0; }
+
+.line-left {
+  border-left: 1px solid #E3E3E3;
+  padding-left: 20px; }
 
 .vert-line {
   height: 45px;
@@ -722,7 +733,7 @@ md-card img {
   background: #2979ff;
   min-height: 100%;
   z-index: 3;
-  transition: width 0.3s, left 0.3s cubic-bezier(0.27, 0.63, 0.5, 1.05); }
+  /*transition: width .3s, left .3s cubic-bezier(.27,.63,.5,1.05);*/ }
   .sidebar .top-logo {
     color: white;
     font-size: 30px;
