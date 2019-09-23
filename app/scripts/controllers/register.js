@@ -32,6 +32,7 @@ angular.module('MaterialApp')
 	$scope.verify2 = {
 		confirmation_code: ""
 	};
+  $scope.workspace = "";
 
     $scope.submit = function($event, registerForm) {
 		console.log("called submit");

@@ -1,0 +1,39 @@
+{
+  "name": "c3-angular",
+  "version": "1.2.0",
+  "homepage": "https://github.com/jettro/c3-angular-sample",
+  "authors": [
+    "Jettro Coenradie <jettro@gridshore.nl>"
+  ],
+  "description": "An angularjs directive to integrate c3.js within your angularjs project.",
+  "main": "c3-angular.min.js",
+  "moduleType": [
+    "yui"
+  ],
+  "keywords": [
+    "c3.js",
+    "angularjs",
+    "graph"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4",
+    "c3": "~0.4.10"
+  },
+  "_release": "1.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.2.0",
+    "commit": "37ba14a88d959b32b1a95cb0af61a8e0793acb78"
+  },
+  "_source": "https://github.com/jettro/c3-angular-sample.git",
+  "_target": "1.2.0",
+  "_originalSource": "c3-angular"
+}
