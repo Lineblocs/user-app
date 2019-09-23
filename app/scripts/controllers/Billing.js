@@ -89,17 +89,17 @@ angular.module('MaterialApp')
 			cvv: ""
 		};
 		function stripeResponseHandler(status, response) {
-			if (response.error) { // Problem!
-				// Show the errors on the form
-				$scope.errorMsg = response.error.message;
-
-			} else { // Token was created!
-				// Get the token ID:
-				$mdDialog.hide();
-				onSuccess(response);
-			}
 			$timeout(function() {
 				$scope.$apply();
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.errorMsg = response.error.message;
+
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					onSuccess(response);
+				}
 			}, 0);
 		}
 
