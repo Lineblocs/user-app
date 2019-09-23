@@ -240,15 +240,10 @@ angular.module('MaterialApp')
 	}
 	function loadData() {
 		SharedPref.isLoading = true;
-		$q.all([
-			Backend.get("/getBillingInfo"),
-			Backend.get("/card/listCards?page=0"),
-			Backend.get("/getConfig"),
-			Backend.get("/getBillingHistory"),
-		]).then(function(res) {
+		Backend.get("/billing").then(function(res) {
 			console.log("finished loading..");
-			$scope.billing = res[0].data;
-			$scope.settings.db = res[0].data.info.settings;
+			$scope.billing = res.data[0];
+			$scope.settings.db = res.data[0].info.settings;
 			var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
 			if ($scope.settings.db.auto_recharge_top_up) {
@@ -260,9 +255,9 @@ angular.module('MaterialApp')
 					}
 				}
 			}
-			$scope.cards = res[1].data.data;
-			$scope.config = res[2].data;
-			$scope.history = res[3].data;
+			$scope.cards = res.data[1];
+			$scope.config = res.data[2];
+			$scope.history = res.data[3];
 			console.log("config is ", $scope.config);
 			Stripe.setPublishableKey($scope.config.stripe.key);
 			console.log("billing data is ", $scope.billing);
