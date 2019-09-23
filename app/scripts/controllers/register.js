@@ -34,6 +34,27 @@ angular.module('MaterialApp')
 	};
   $scope.workspace = "";
 
+  function doSpinup() {
+	$scope.shouldSplash = true;
+	SharedPref.setAuthToken( $scope.token );
+	var data = { "userId": $scope.userId };
+	$scope.invalidCode = false;
+	Backend.post("/userSpinup", data).then(function( res ) {
+		var data = res.data;
+		if ( data.success ) {
+			Idle.watch();
+			$state.go('dashboard-user-welcome', {});
+			return;
+		}
+		$mdToast.show(
+		$mdToast.simple()
+			.textContent('Error occured while creating your account. please account support')
+			.position("top right")
+			.hideDelay(1000*10)
+		);
+	});
+
+  }
     $scope.submit = function($event, registerForm) {
 		console.log("called submit");
 		$scope.triedSubmit = true;
@@ -86,24 +107,7 @@ angular.module('MaterialApp')
 			Backend.post("/registerVerify", data).then(function( res ) {
 				var isValid = res.data.isValid;
 				if (isValid) {
-					$scope.shouldSplash = true;
-					SharedPref.setAuthToken( $scope.token );
-					var data = { "userId": $scope.userId };
-					$scope.invalidCode = false;
-					Backend.post("/userSpinup", data).then(function( res ) {
-						var data = res.data;
-						if ( data.success ) {
-							Idle.watch();
-							$state.go('dashboard-user-welcome', {});
-							return;
-						}
-						$mdToast.show(
-						$mdToast.simple()
-							.textContent('Error occured while creating your account. please account support')
-							.position("top right")
-							.hideDelay(1000*10)
-						);
-					});
+					$scope.step = 3;
 				} else {
 					$scope.invalidCode = true;
 				}
@@ -112,6 +116,26 @@ angular.module('MaterialApp')
 		}
 		return false;
 	}
+
+	$scope.submitWorkspaceForm = function($event, workspaceForm) {
+		console.log("called submitWorkspaceForm");
+		$scope.triedSubmit = true;
+		if (workspaceForm.$valid) {
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.workspace = $scope.workspace;
+			Backend.post("/updateWorkspace", data).then(function( res ) {
+				if (res.data.success) {
+					$scope.invalidWorkspaceTaken = false;
+					doSpinup();
+					return;
+				}
+				$scope.invalidWorkspaceTaken = true;
+			});
+		}
+		return false;
+	}
+
 
 	$scope.recall = function() {
 		var data = angular.copy( $scope.verify1 );

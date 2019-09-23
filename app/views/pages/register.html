@@ -148,6 +148,55 @@
 				</div>
 			</div>
 		</div>
+		<div class="form-container shadow" ng-show="step === 3">
+			<div class="inner">
+					<center>
+				<div class="icon">
+					<div class="header">
+						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+						<h4>Enter Workspace Name</h4>
+						<p>
+							this will be used to log you into the site.
+						</p>
+					</div>
+				</div>
+			</center>
+			<div class="box invalid-login">
+				<center>
+					<div ng-show="invalidWorkspaceTaken" class="red">This workspace name is already taken.</div>
+				</center>
+			</div>
+				<div class="inputs">
+					<form ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm" novalidate>
+						<center>
+							<div class="clearfix" style="width: 500px;">
+								<div style="float:left; width: 364px;">
+									<md-input-container>
+										<input name="workspace" ng-model="workspace" type="text" placeholder="e.g: cool-project" required="">
+										<div ng-show="triedSubmit">
+											<div class="box">
+												<div ng-show="workspaceForm.workspace.$error.required">This field is required</div>
+											</div>
+										</div>
+									</md-input-container>
+								</div>
+								<div style="float: left; width: 136px;">
+									<h5>.lineblocs.com</h5>
+								</div>
+							</div>
+						</center>
+					<center>
+						<div class="buttons">
+							<div class="link" style="padding-bottom:0;">
+								<md-button type="submit" class="md-raised primary">Submit</md-button>
+							</div>
+							<a ui-sref="login">Login here</a>
+						</div>
+					</center>
+				</div>
+				</div>
+			</form>
+		</div>
 
 		<footer class="login-footer">
 			<div class="left-section">

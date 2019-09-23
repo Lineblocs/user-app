@@ -22,8 +22,12 @@ function getJWTToken() {
     }
     return "";
 }
-
-var baseUrl = "/api";
+var href = document.location.href.includes("http://localhost");
+if (href) {
+    var baseUrl = "http://lineblocs.com/api";
+} else {
+    var baseUrl = "/api";
+}
 function createUrl(path) {
     return baseUrl + path;
 }
