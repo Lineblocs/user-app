@@ -190,11 +190,13 @@ angular
             });
 
         }
-        factory.post = function(path, params)
+        factory.post = function(path, params, suppressErrDialog)
         {
             return $q(function(resolve, reject) {
                 $http.post(createUrl(path), params).then(resolve,function(err) {
-                    errorHandler();
+                    if (!suppressErrDialog) {
+                        errorHandler();
+                    }
                     reject(err);
                  });
             });
@@ -254,6 +256,19 @@ angular
         templateUrl: 'views/pages/register.html?v='+window.app_version,
         controller: 'RegisterCtrl'
     })
+    .state('forgot', {
+        url: '/forgot',
+        parent: 'base',
+        templateUrl: 'views/pages/forgot.html?v='+window.app_version,
+        controller: 'ForgotCtrl'
+    })
+    .state('reset', {
+        url: '/reset',
+        parent: 'base',
+        templateUrl: 'views/pages/reset.html?v='+window.app_version,
+        controller: 'ResetCtrl'
+    })
+
     .state('404', {
         url: '/404-page',
         parent: 'base',
