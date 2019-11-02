@@ -1,0 +1,2100 @@
+'use strict';
+
+/**
+* @ngdoc overview
+* @name MaterialApp
+* @description
+* # MaterialApp
+*
+* Main module of the application.
+*/
+window.app_version = 2.0;
+
+function checkExpires(expiresIn)
+{
+
+}
+function getJWTToken() {
+    var token = localStorage.getItem("AUTH");
+    if (token) {
+            var parsed = JSON.parse(token);
+            return "Bearer " + parsed.token;
+    }
+    return "";
+}
+var href = document.location.href.includes("http://localhost");
+if (href) {
+    var baseUrl = "http://lineblocs.com/api";
+} else {
+    var baseUrl = "/api";
+}
+function createUrl(path) {
+    return baseUrl + path;
+}
+        
+function generatePassword() {
+    var length = 32,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
+angular
+.module('MaterialApp', [
+    'ui.router',
+    'ngAnimate',
+    'ngMaterial',
+    'chart.js',
+    'pascalprecht.translate',
+    'md.data.table',
+    'ngIdle'
+    ])
+    .service('JWTHttpInterceptor', function() {
+        return {
+            // optional method
+            'request': function(config) {
+                // do something on success
+                var token = localStorage.getItem("AUTH");
+                if (token) {
+                    config.headers['Authorization'] = getJWTToken(); 
+                }
+                console.log("request headers are ", config.headers);
+                return config;
+            }
+        };
+    })
+    .factory("SharedPref", function($state, $mdDialog, $timeout, $q) {
+        var factory = this;
+        var baseTitle = "LineBlocs.com";
+        factory.title = baseTitle;
+        factory.FLOW_EDITOR_URL = "http://editor.lineblocs.com";
+        factory.SHOW_NAVBAR = true;
+        factory.PAGE_CONTENT_NO_PADDING = false; 
+        factory.isLoading = true;
+        factory.billingCountries = [
+    {
+       iso: 'CA',
+       name: 'Canada'
+    },
+    {
+       iso: 'US',
+       name: 'United States'
+    }
+  ];
+  var flickerTimeout = 0;
+  factory.endIsLoading = function() {
+      return $q(function(resolve, reject) {
+        $timeout(function() {
+            factory.isLoading = false;
+            resolve();
+        }, flickerTimeout);
+    });
+  }
+    factory.endIsCreateLoading = function() {
+      return $q(function(resolve, reject) {
+        $timeout(function() {
+            factory.isCreateLoading = false;
+            resolve();
+        }, flickerTimeout);
+    });
+  }
+
+  factory.changeRoute = function(route, params) {
+      console.log("changeRoute called ", arguments);
+      var params = params || {};
+      var except = ['flow-editor'];
+      if (!except.includes(route)) {
+        factory.isLoading = true;
+      }
+      $state.go(route, params)
+  }
+        factory.collapseNavbar = function() {
+            factory.SHOW_NAVBAR = false;
+            factory.PAGE_CONTENT_NO_PADDING = true;
+            $( '.c-hamburger' ).removeClass('is-active');
+            $('body').removeClass('extended');
+        }
+        factory.showNavbar = function() {
+            factory.SHOW_NAVBAR = true;
+            factory.PAGE_CONTENT_NO_PADDING = false;
+            $( '.c-hamburger' ).addClass('is-active');
+            $('body').addClass('extended');
+        }
+        factory.doLogout = function() {
+            localStorage.removeItem("AUTH");
+            $state.go('login', {});
+        }
+        factory.setAuthToken = function(token) {
+            localStorage.setItem("AUTH", JSON.stringify(token));
+        }
+        factory.getAuthToken = function() {
+            return JSON.parse(localStorage.getItem("AUTH"));
+        }
+        factory.showError = function(title, msg) {
+                $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title(title)
+                    .textContent(msg)
+                    .ariaLabel(title)
+                    .ok('Ok')
+                );
+
+        }
+        factory.updateTitle = function(text) {
+            factory.title = baseTitle;
+            if (text) {
+                   factory.title = baseTitle + " - " + text;
+            }
+        }
+        return factory;
+    })
+    .factory("Backend", function($http, $q, SharedPref) {
+        var factory = this;
+        function errorHandler(error) {
+            SharedPref.showError("An error occured.");
+        }
+        factory.getJWTToken = function(email, password) {
+            var params = {
+                email: email,
+                password: password
+            };
+            return $q(function(resolve, reject) {
+                $http.post( createUrl( "/jwt/authenticate"), params).then( function(res) {
+                    localStorage.setItem("AUTH", JSON.stringify(res.data));
+                    resolve();
+                }).catch(function(err) {
+                    reject( err );
+                });
+            });
+        }
+        factory.get = function(path, params)
+        {
+            return $q(function(resolve, reject) {
+                $http.get(createUrl(path), params).then(resolve,function(err) {
+                    errorHandler();
+                    reject(err);
+                 });
+            });
+        }
+        factory.delete = function(path)
+        {
+            return $q(function(resolve, reject) {
+                $http.delete(createUrl(path), params).then(resolve,function(err) {
+                    errorHandler();
+                    reject(err);
+                 });
+            });
+
+        }
+        factory.post = function(path, params, suppressErrDialog)
+        {
+            return $q(function(resolve, reject) {
+                $http.post(createUrl(path), params).then(resolve,function(err) {
+                    if (!suppressErrDialog) {
+                        errorHandler();
+                    }
+                    reject(err);
+                 });
+            });
+
+        }
+        return factory;
+    })
+    .config(['$httpProvider', function($httpProvider) {
+         $httpProvider.interceptors.push('JWTHttpInterceptor');
+
+    }])
+      
+    .config(function(IdleProvider, KeepaliveProvider) {
+        IdleProvider.idle(900); // 15 min
+        IdleProvider.timeout(60);
+        KeepaliveProvider.interval(600); // heartbeat every 10 min
+        /*
+        KeepaliveProvider.http({
+            method: 'GET',
+            url: createUrl('/jwt/heartbeat'),
+            headers: {
+                "Authorization": getJWTToken
+            } 
+        }); // URL that makes sure session is alive
+        */
+    })
+    .config(function($translateProvider) {
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'languages/',
+          suffix: '.json'
+        });
+        $translateProvider.useSanitizeValueStrategy(null);
+        $translateProvider.preferredLanguage('en');       
+    })
+
+    .config(function($stateProvider, $urlRouterProvider) {
+
+    $urlRouterProvider.when('/dashboard', '/dashboard/home');
+    $urlRouterProvider.otherwise('/dashboard/home');
+
+    $stateProvider
+    .state('base', {
+        abstract: true,
+        url: '',
+        templateUrl: 'views/base.html',
+        controller: 'DashboardCtrl'
+    })
+    .state('login', {
+        url: '/login',
+        parent: 'base',
+        templateUrl: 'views/pages/login.html',
+        controller: 'LoginCtrl'
+    })
+    .state('register', {
+        url: '/register',
+        parent: 'base',
+        templateUrl: 'views/pages/register.html?v='+window.app_version,
+        controller: 'RegisterCtrl'
+    })
+    .state('forgot', {
+        url: '/forgot',
+        parent: 'base',
+        templateUrl: 'views/pages/forgot.html?v='+window.app_version,
+        controller: 'ForgotCtrl'
+    })
+    .state('reset', {
+        url: '/reset',
+        parent: 'base',
+        templateUrl: 'views/pages/reset.html?v='+window.app_version,
+        controller: 'ResetCtrl'
+    })
+
+    .state('404', {
+        url: '/404-page',
+        parent: 'base',
+        templateUrl: 'views/pages/404-page.html?v='+window.app_version
+    })
+    .state('dashboard', {
+        url: '/dashboard',
+        parent: 'base',
+        templateUrl: 'views/layouts/dashboard.html?v='+window.app_version,
+        controller: 'DashboardCtrl'
+    })
+    .state('dashboard-user-welcome', {
+        url: '/dashboard/welcome',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard-welcome.html?v='+window.app_version,
+        controller: 'DashboardWelcomeCtrl'
+    })
+    .state('my-numbers', {
+        url: '/dids/my-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/my-numbers.html?v='+window.app_version,
+        controller: 'MyNumbersCtrl'
+    })
+    .state('my-numbers-edit', {
+        url: '/dids/my-numbers/{numberId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/my-numbers-edit.html?v='+window.app_version,
+        controller: 'MyNumbersEditCtrl'
+    })
+    .state('buy-numbers', {
+        url: '/dids/buy-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/buy-numbers.html?v='+window.app_version,
+        controller: 'BuyNumbersCtrl'
+    })
+    .state('flows', {
+        url: '/flows',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/flows.html?v='+window.app_version,
+        controller: 'FlowsCtrl'
+    })
+    .state('flow-editor', {
+        url: '/flows/{flowId}',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/flow-editor.html?v='+window.app_version,
+        controller: 'FlowEditorCtrl'
+    })
+    .state('extensions', {
+        url: '/extensions',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/extensions.html?v='+window.app_version,
+        controller: 'ExtensionsCtrl'
+    })
+    .state('extension-create', {
+        url: '/extension/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/extension-create.html?v='+window.app_version,
+        controller: 'ExtensionCreateCtrl'
+    })
+    .state('extension-edit', {
+        url: '/extension/{extensionId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/extension-edit.html?v='+window.app_version,
+        controller: 'ExtensionEditCtrl'
+    })
+    .state('calls', {
+        url: '/calls',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/calls.html?v='+window.app_version,
+        controller: 'CallsCtrl'
+    })
+    .state('call-view', {
+        url: '/call/{callId}/view',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/call-view.html?v='+window.app_version,
+        controller: 'CallViewCtrl'
+    })
+    .state('recordings', {
+        url: '/recordings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/recordings.html?v='+window.app_version,
+        controller: 'RecordingsCtrl'
+    })
+    .state('billing', {
+        url: '/billing',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing.html?v='+window.app_version,
+        controller: 'BillingCtrl'
+    })
+    .state('billing-add-card', {
+        url: '/billing/add-card',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-add-card.html?v='+window.app_version,
+        controller: 'BillingCtrl'
+    })
+    .state('home', {
+        url: '/home',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/home.html?v='+window.app_version,
+        controller: 'HomeCtrl'
+    })
+    .state('settings', {
+        url: '/settings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings.html?v='+window.app_version,
+        controller: 'SettingsCtrl'
+    })
+    .state('blank', {
+        url: '/blank',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/blank.html?v='+window.app_version
+    })
+    .state('profile', {
+        url: '/profile',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/profile.html?v='+window.app_version,
+        controller: 'profileCtrl'
+    })
+    .state('form', {
+        url: '/form',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/form.html?v='+window.app_version,
+        controller: 'formCtrl'
+    }) 
+
+    .state('button', {
+        url: '/ui-elements/button',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/ui-elements/button.html?v='+window.app_version
+    }) 
+    .state('card', {
+        url: '/ui-elements/card',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/ui-elements/card.html?v='+window.app_version,
+        controller: 'cardCtrl'
+    })
+    .state('components', {
+        url: '/ui-elements/components',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/component.html?v='+window.app_version,
+        controller: 'componentCtrl'
+    })
+    .state('chartjs', {
+        url: '/charts/chart.js',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/charts/chartjs.html?v='+window.app_version,
+        controller: 'ChartCtrl'
+    })  
+    .state('c3chart', {
+        url: '/charts/c3chart',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/charts/c3chart.html?v='+window.app_version
+    })      
+    .state('calendar', {
+        url: '/calendar',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/calendar.html?v='+window.app_version,
+        controller: 'calendarCtrl'
+    })
+    .state('invoice', {
+        url: '/invoice',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/invoice.html?v='+window.app_version
+    })
+    .state('inbox', {
+        url: '/mail/inbox',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/mail/inbox.html?v='+window.app_version,
+        controller: 'paperCtrl'
+    })
+    .state('docs', {
+        url: '/docs',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/dashboard/docs.html?v='+window.app_version,
+        controller: 'docsCtrl'
+    });
+}).run(function($rootScope, SharedPref) {
+      //Idle.watch();
+    $rootScope.$on('IdleStart', function() { 
+        /* Display modal warning or sth */ 
+    });
+    $rootScope.$on('IdleTimeout', function() { 
+        /* Logout user */ 
+        SharedPref.doLogout();
+    });
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
+        // do something
+        SharedPref.showNavbar();
+        /*
+		Backend.get("/getBillingInfo").then(function(res) {
+            SharedPref.billInfo = res.data;
+        });
+        */
+    })
+});
+
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog, $window) {
+	  SharedPref.updateTitle("Billing");
+	  $scope.SharedPref = SharedPref;
+	  $scope.triedSubmit = false;
+	$scope.cards = [];
+	$scope.creditAmounts = [
+		{"name": "$10", "value": 10.00},
+		{"name": "$25", "value": 25.00},
+		{"name": "$50", "value": 50.00},
+		{"name": "$100", "value": 100.00},
+		{"name": "$250", "value": 250.00}
+	];
+	$scope.settings = {
+		newCard: false,
+		type: 'CARD'
+	};
+	$scope.data = {
+		selectedCard: null,
+		creditAmount: null
+
+	};
+	$scope.card = {
+		name: "",
+		address: "",
+		city: "",
+		postal_code: "",
+		number: "",
+		expires: "",
+		cvv: ""
+	};
+	function toCents(dollars) {
+		return dollars * 100;
+	}
+		function submitBilling(cardId, amount) {
+			var data = {};
+		data['card_id'] = cardId;
+		data['amount'] =  amount;
+		$scope.data.creditAmount.value;
+		SharedPref.isCreateLoading = true;
+		Backend.post("/credit/addCredit", data).then(function(res) {
+			console.log("added credit amount");
+				$mdToast.show(
+				$mdToast.simple()
+					.textContent('Added credits successfully')
+					.position('top right')
+					.hideDelay(3000)
+				);
+				loadData();
+				});
+				SharedPref.endIsCreateLoading();
+		}
+
+		function stripeRespAddCard(response) {
+			return $q(function(resolve, reject) {
+				var data = {};
+				data['stripe_token'] = response.id;
+				data['stripe_card'] = response.card.id;
+				data['last_4'] = response.card.last4;
+				data['issuer'] = response.card.brand;
+				SharedPref.isCreateLoading = true;
+				Backend.post("/card/addCard", data).then(function(res) {
+					resolve(res);
+					SharedPref.endIsCreateLoading();
+				}, function(err) {
+					console.error("an error occured ", err);
+				});
+			});
+		}
+
+	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, SharedPref) {
+		$scope.SharedPref = SharedPref;
+		$scope.card = {
+			name: "",
+			address: "",
+			city: "",
+			postal_code: "",
+			number: "",
+			expires: "",
+			cvv: ""
+		};
+		function stripeResponseHandler(status, response) {
+			$timeout(function() {
+				$scope.$apply();
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.errorMsg = response.error.message;
+
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					onSuccess(response);
+				}
+			}, 0);
+		}
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		}
+		$scope.submit = function() {
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, stripeResponseHandler);
+
+		}
+	}
+	$scope.createLabel = function(card) {
+		return "**** **** **** " + card.last_4;
+	}
+	$scope.addCard = function($event) {
+		function onSuccess(response) {
+			stripeRespAddCard(response).then(function() {
+				loadData();
+			});
+		}
+		function onError() {
+
+		}
+		$mdDialog.show({
+			controller: DialogController,
+			templateUrl: '/views/dialogs/add-card.html',
+			parent: angular.element(document.body),
+			targetEvent: $event,
+			clickOutsideToClose:true,
+			locals: {
+				onSuccess: onSuccess,
+				onError: onError
+			}
+		}).then(function(answer) {
+			$scope.status = 'You said the information was "' + answer + '".';
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	}
+	$scope.addCredit = function() {
+		var data = {};
+		console.log("card is ", $scope.data.selectedCard);
+		console.log("amount is ", $scope.data.creditAmount);
+		if (!$scope.data.selectedCard) {
+			return;
+		}
+		if ($scope.data.selectedCard === 'new') {
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, function (status, response) {
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.errorMsg = response.error.message;
+
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					stripeRespAddCard(response).then(function(res) {
+						var cardId = res.headers('X-Card-ID');
+						submitBilling(cardId, $scope.data.creditAmount.value);
+					})
+				}
+				$timeout(function() {
+					$scope.$apply();
+				}, 0);
+			});
+			return;
+		}
+		submitBilling($scope.data.selectedCard, $scope.data.creditAmount.value);
+
+	}
+	$scope.addCreditPayPal = function() {
+		var data = {};
+		console.log("card is ", $scope.data.selectedCard);
+		console.log("amount is ", $scope.data.creditAmount);
+		data.amount = $scope.data.creditAmount.value;
+		SharedPref.isCreateLoading = true;
+		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
+			var data = res.data;
+			//$window.replace(data.url);
+			$window.location.href = data.url;
+		});
+	}
+
+
+	$scope.getCardOptions = function() {
+		var options = angular.copy($scope.cards);
+		//options.push({""})
+	}
+	$scope.changeCard = function(value) {
+		console.log("changeCard ", value);
+		$scope.data.selectedCard = value;
+		if (value === 'new') {
+			$scope.settings.newCard = true;
+		} else {
+			$scope.settings.newCard = false;
+		}
+	}
+	$scope.changeAmount = function(value) {
+		console.log("changeAmount ", value);
+		$scope.data.creditAmount = value;
+	}
+	$scope.changeAutoRechargeAmount = function(value) {
+		console.log("changeAutoRechargeAmount ", value);
+		$scope.settings.db.auto_recharge_top_up = value;
+	}
+	$scope.changeType = function(newType) {
+		$scope.settings.type = newType;
+	}
+	$scope.saveSettings = function() {
+		var data = {};
+		data['auto_recharge'] = $scope.settings.db.auto_recharge;
+		var recharge = $scope.settings.db.auto_recharge_top_up.value;
+		data['auto_recharge_top_up'] = toCents(recharge);
+		console.log("recharge in cents is ", data['auto_recharge_top_up']);
+		SharedPref.isCreateLoading = true;
+		Backend.post("/changeBillingSettings", data).then(function(res) {
+			$mdToast.show(
+			$mdToast.simple()
+				.textContent('Saved billing settings')
+				.position("top right")
+				.hideDelay(3000)
+			);
+			});
+			SharedPref.endIsCreateLoading();
+	}
+	function loadData() {
+		SharedPref.isLoading = true;
+		Backend.get("/billing").then(function(res) {
+			console.log("finished loading..");
+			$scope.billing = res.data[0];
+			$scope.settings.db = res.data[0].info.settings;
+			var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
+
+			if ($scope.settings.db.auto_recharge_top_up) {
+				for ( var index in $scope.creditAmounts ) {
+					var amount = $scope.creditAmounts[ index ];
+					console.log("comparing amount ", amount, compare);
+					if (amount.value === compare) {
+						$scope.settings.db.auto_recharge_top_up = amount;
+					}
+				}
+			}
+			$scope.cards = res.data[1];
+			$scope.config = res.data[2];
+			$scope.history = res.data[3];
+			console.log("config is ", $scope.config);
+			Stripe.setPublishableKey($scope.config.stripe.key);
+			console.log("billing data is ", $scope.billing);
+			console.log("cards are ", $scope.cards);
+			console.log("settings are ", $scope.settings);
+			$scope.creditAmount = $scope.creditAmounts[0];
+			SharedPref.endIsLoading();
+		});
+	}
+	loadData();
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
+	  SharedPref.updateTitle("Buy Numbers");
+    function DialogController($scope, $mdDialog, number) {
+      $scope.number = number;
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.gotoSettings = function() {
+        $mdDialog.hide("");
+        $state.go('my-numbers-edit', { numberId: number.id });
+    }
+  }
+  $scope.countries = [
+    {
+       iso: 'CA',
+       name: 'Canada'
+    },
+    {
+       iso: 'US',
+       name: 'United States'
+    }
+  ];
+  $scope.settings = {
+    country: "",
+    region: "",
+    pattern: "",
+    rate_center: ""
+  };
+  $scope.numbers = [];
+  $scope.didFetch = false;
+
+  function purchaseConfirm(ev, number) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/purchase-did-confirm.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "number": number
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  };
+
+  $scope.load = function() {
+    SharedPref.endIsLoading();
+  }
+  $scope.fetch =  function(event, didForm) {
+		$scope.triedSubmit = true;
+		if (!didForm.$valid) {
+        return;
+    }
+    var data = {};
+    //data['region'] = $scope.settings['region'];
+    data['region'] = $scope.settings['region'];
+    data['rate_center'] = $scope.settings['rate_center'];
+    //data['prefix'] = $scope.settings['pattern'];
+    data['prefix'] = "";
+    data['country_iso'] = $scope.settings['country']['iso'];
+    SharedPref.isCreateLoading = true;
+    Backend.get("/did/available", { "params": data }).then(function(res) {
+      $scope.numbers = res.data;
+      $scope.didFetch = true;
+      SharedPref.endIsCreateLoading();
+    });
+  }
+  $scope.buyNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to purchase number "' + number.number + '"?')
+          .textContent('this number will cost you ' + number.monthly_cost + ' monthly. you may unrent this number at any time ')
+          .ariaLabel('Buy number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        var params = {};
+        params['api_number'] = number.api_number;
+        params['number'] = number.number;
+        params['region'] = number.region;
+        params['monthly_cost'] = number.monthly_cost;
+        params['provider'] = number.provider;
+        params['country'] = number.country;
+        Backend.post("/did/saveNumber", params).then(function(res) {
+          Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
+              var number = res.data;
+              purchaseConfirm($event, number);
+          });
+        }, function(res) {
+          console.log("res is: ", res);
+          if (res.status === 400) {
+            var data = res.data;
+            SharedPref.showError("Error", data.message);
+          }
+        });
+    }, function() {
+    });
+  }
+  $scope.changeCountry = function(country) {
+    console.log("changeCountry ", country);
+    $scope.settings.country = country;
+  }
+
+    $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Call View");
+  $scope.call = [];
+  $scope.load = function() {
+    SharedPref.isLoading =true;
+    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
+      console.log("call is ", res.data);
+      SharedPref.isLoading =false;
+      var call = res.data;
+      call.recordings = call.recordings.map(function(obj) {
+        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        return obj;
+      });
+      $scope.call = call;
+    })
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
+	  SharedPref.updateTitle("Calls");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.calls = [];
+  $scope.load = function() {
+    SharedPref.isLoading = true;
+    Backend.get("/call/listCalls", $scope.settings).then(function(res) {
+      $scope.calls = res.data.data;
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.viewCall= function(call) {
+    $state.go('call-view', {callId: call.id});
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('DashboardWelcomeCtrl', function ($scope, Backend, SharedPref, $q) {
+      SharedPref.updateTitle("Dashboard");
+	    $q.all([
+            Backend.get("/self"),
+            Backend.get("/getBillingInfo")
+        ]).then(function(res) {
+            SharedPref.userInfo = res[0].data;
+            SharedPref.billInfo = res[1].data; 
+            SharedPref.endIsLoading();
+                });
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Create Extension");
+  $scope.values = {
+    username: "",
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
+      values['secret'] = $scope.values.secret;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/saveExtension", values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref) {
+	  SharedPref.updateTitle("Edit Extension");
+  $scope.values = {
+    username: "",
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.load = function() {
+    SharedPref.isLoading = true;
+    Backend.get("/extension/extensionData/" + $stateParams['extensionId']).then(function(res) {
+      $scope.extension = res.data;
+      $scope.values = angular.copy( $scope.extension );
+      SharedPref.endIsLoading();
+    });
+  }
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['secret'] = $scope.values.secret;
+      values['caller_id'] = $scope.values.caller_id;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Updated extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+      SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $scope.load();
+});
+
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+    SharedPref.updateTitle("Extensions");
+    
+    function DialogController($scope, $mdDialog, extension, SharedPref) {
+      $scope.SharedPref = SharedPref;
+      $scope.extension = extension;
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+  $scope.settings = {
+    page: 0
+  };
+  $scope.extensions = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+    Backend.get("/extension/listExtensions", $scope.settings).then(function(res) {
+      $scope.extensions = res.data.data;
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.editExtension = function(extension) {
+    $state.go('extension-edit', {extensionId: extension.id});
+  }
+  $scope.createExtension = function(extension) {
+    $state.go('extension-create', {});
+  }
+  $scope.connectInfo = function($event, extension) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/extension-connect-info.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "extension": extension
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteExtension = function($event, extension) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this extension?')
+          .textContent('This will permantely remove the extension and you will no longer be able to use it')
+          .ariaLabel('Delete extension')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      Backend.delete("/extension/deleteExtension/" + extension.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Extension deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load();
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref, $stateParams, $sce) {
+	  SharedPref.updateTitle("Flow Editor");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.numbers = [];
+  var flowUrl;
+  var token = SharedPref.getAuthToken();
+
+  if ($stateParams['flowId'] === "new" ) {
+    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token;
+  } else {
+    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token;
+  }
+  $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
+  console.log("flow url is ", $scope.flowUrl);
+  SharedPref.collapseNavbar();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Flows");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.flows = [];
+  $scope.load = function() {
+    SharedPref.isLoading =true;
+    Backend.get("/flow/listFlows", $scope.settings).then(function(res) {
+      $scope.flows = res.data.data;
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.editFlow = function(flow) {
+    SharedPref.changeRoute('flow-editor', {flowId: flow.id});
+  }
+  $scope.createFlow = function() {
+    SharedPref.changeRoute('flow-editor', {flowId: "new"}); 
+  }
+  $scope.deleteFlow = function($event, flow) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this flow?')
+          .textContent('This will permantely remove the flow and also unset the flow on numbers that have this flow attached to it')
+          .ariaLabel('Delete flow')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Flow deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load();
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("My Numbers");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.numbers = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+    Backend.get("/did/listNumbers", $scope.settings).then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.buyNumber = function() {
+    $state.go('buy-numbers', {});
+  }
+  $scope.editNumber = function(number) {
+    $state.go('my-numbers-edit', {numberId: number.id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load();
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Edit Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.saveNumber = function(number) {
+    var params = {};
+    params['name'] = $scope.number.name;
+    params['flow_id'] = $scope.number.flow_id;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('my-numbers', {});
+      SharedPref.endIsCreateLoading();
+    });
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  SharedPref.isLoading = true;
+  $q.all([
+    Backend.get("/flow/listFlows"),
+    Backend.get("/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
+    SharedPref.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $sce, SharedPref) {
+	  SharedPref.updateTitle("Recordings");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.recordings = [];
+  $scope.load = function() {
+    SharedPref.isLoading = true;
+    Backend.get("/recording/listRecordings", $scope.settings).then(function(res) {
+      var recordings = res.data.data;
+      $scope.recordings = recordings.map(function(obj) {
+        obj.uri = $sce.trustAsResourceUrl(obj.uri);
+        return obj;
+      });
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.deleteRecording = function($event, recording) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this recording?')
+          .textContent('This will permantely remove the recordings from your storage')
+          .ariaLabel('Delete recording')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+        console.log("deleted recording..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('recording deleted..')
+            .position('top right')
+            .hideDelay(3000)
+        );
+        $scope.load();
+      });
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, SharedPref) {
+	$scope.SharedPref = SharedPref;
+  	if ($(window).width()<1450) {
+        $( '.c-hamburger' ).removeClass('is-active');
+        $('body').removeClass('extended');
+    }
+
+  	$scope.$state = $state;
+
+  	$rootScope.$on('$stateChangeSuccess', function(){ 
+		$timeout(function() {
+			$('body').scrollTop(0);
+		}, 200);
+	});
+
+  	if ($('body').hasClass('extended')) {
+	  	$timeout(function(){
+			$('.sidebar').perfectScrollbar();
+		}, 200);		
+  	};
+
+  	$scope.rtl = function(){
+  		$('body').toggleClass('rtl');
+  	}
+  	$scope.subnav = function(x){
+		if(x==$scope.showingSubNav)
+			$scope.showingSubNav = 0;			
+		else
+			$scope.showingSubNav = x;
+		return false;
+	}
+	$scope.extend = function  () {
+		$( '.c-hamburger' ).toggleClass('is-active');
+        $('body').toggleClass('extended');
+        $('.sidebar').toggleClass('ps-container');	
+        $rootScope.$broadcast('resize');
+        $timeout(function(){
+			$('.sidebar').perfectScrollbar();
+			console.log('pfscroll');
+		}, 200);	
+	}	
+	
+	
+
+	$scope.changeTheme = function(setTheme){
+
+		$('<link>')
+		  .appendTo('head')
+		  .attr({type : 'text/css', rel : 'stylesheet'})
+		  .attr('href', 'styles/app-'+setTheme+'.css');
+	}
+	
+	var w = angular.element($window);
+  
+	w.bind('resize', function () {
+		/*
+	    if ($(window).width()<1200) {
+            $('.c-hamburger').removeClass('is-active');
+            $('body').removeClass('extended');
+        } 
+        if ($(window).width()>1600) {
+            $('.c-hamburger').addClass('is-active');
+            //$('body').addClass('extended');          
+		};
+		*/
+	});   
+
+	if ($(window).width()<1200) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.c-hamburger' ).removeClass('is-active');
+        	$('body').removeClass('extended');
+		});
+	}
+
+	if ($(window).width()<600) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.mdl-grid' ).removeAttr('dragula');
+		});
+	}
+	
+	$scope.changeLanguage = (function (l) {
+		
+		$translate.use(l);			
+		
+	});
+	
+});	
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+	  SharedPref.updateTitle("Forgot Password");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+	$scope.user = {
+		email: "",
+	};
+    $scope.submit = function($event, forgotForm) {
+		$scope.triedSubmit = true;
+		if (forgotForm.$valid) {
+			var data = angular.copy( $scope.user );
+			$scope.isLoading = true;
+			Backend.post("/forgot", data).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Reset instructions sent to email..')
+						.position("top right")
+						.hideDelay(3000)
+					);
+			}).catch(function() {
+				$scope.isLoading = false;
+			})
+			return;
+		}
+    }
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('HeadCtrl', function ($scope, SharedPref) {
+  $scope.SharedPref = SharedPref;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
+	  SharedPref.updateTitle("Dashboard");
+	$scope.options1 = {
+	    lineWidth: 8,
+	    scaleColor: false,
+	    size: 85,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	$scope.options2 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#00D554",
+        trackColor: "#c7f9db"
+	};
+	$scope.options3 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#F800FC",
+        trackColor: "#F5E5F5"
+	};
+
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	$scope.series = ['Series A', 'Series B'];
+	$scope.data = [
+		[65, 59, 80, 81, 56, 55, 40],
+		[28, 48, 40, 19, 86, 27, 90]
+	];
+
+	$scope.onClick = function (points, evt) {
+		console.log(points, evt);
+	};
+	if ($(window).width()<600) {		
+		$( '.mdl-grid' ).removeAttr('dragula');
+	};
+	$timeout(function () {
+		var color = Chart.helpers.color;
+		SharedPref.isLoading = true;
+		Backend.get("/dashboard").then(function(res) {
+			var graph = res.data[0];
+			SharedPref.billInfo=  res.data[1];
+			SharedPref.userInfo=  res.data[2];
+			console.log("graph data is ", graph);
+			SharedPref.isLoading = false;
+			$timeout(function(){
+				$scope.line = {
+					legend: true,
+					labels: graph.labels,
+						data: [
+					graph.data.inbound,
+					graph.data.outbound
+					//[7, 20, 10, 15, 17, 10, 27],
+					//[6, 9, 22, 11, 13, 20, 27]
+					],
+					series: [
+				'Inbound',
+				'Outbound'
+			],
+					colours: [{ 
+							fillColor: "#2b36ff",
+							strokeColor: "#2b36ff",
+							pointColor: "#2b36ff",
+							pointStrokeColor: "#2b36ff", 
+							pointHighlightFill: "#2b36ff", 
+							pointHighlightStroke: "#2b36ff"
+						},
+						{
+							fillColor: "#ffa01c",
+							strokeColor: "#ffa01c",
+							pointColor: "#ffa01c",
+							pointStrokeColor: "#ffa01c", 
+							pointHighlightFill: "#ffa01c",
+							pointHighlightStroke: "#ffa01c"
+						}
+						],
+	options: {
+			legend: {
+		display: true,
+		position: 'right'
+		},
+						responsive: true,
+							bezierCurve : false,
+							datasetStroke: false,
+							/*
+							legendTemplate: '<ul>'
+					+'<% for (var i=0; i<datasets.length; i++) { %>'
+						+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+						+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+					+'</li>'
+					+'<% } %>'
+				+'</ul>',
+				*/
+							pointDotRadius : 6,
+							showTooltips: false,
+					},
+					onClick: function (points, evt) {
+					console.log(points, evt);
+					}
+
+				};
+			}, 0);
+		});
+	}, 0);
+    $scope.line2 = {
+	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
+	          data: [
+	      			[99, 180, 80, 140, 120, 220, 100],
+	      			[50, 145, 200, 75, 50, 100, 50]
+		],
+	    colours: [{ 
+				fillColor: "#2b36ff",
+	            strokeColor: "#C172FF",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#8F00FF",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#8F00FF"
+        	},
+        	{
+        		fillColor: "#ffa01c",
+	            strokeColor: "#FFB53A",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#FF8300",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#FF8300"
+        	}
+        	],
+	    options: {
+	    	responsive: true,
+            bezierCurve : false,
+            datasetStroke: false,
+            legendTemplate: false,
+            pointDotRadius : 9,
+            pointDotStrokeWidth : 3,
+            datasetStrokeWidth : 3
+	    },
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+    };
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
+	  SharedPref.updateTitle("Login");
+	$scope.triedSubmit = false;
+	$scope.couldNotLogin = false;
+	$scope.shouldSplash = false;
+	$scope.isLoading = false;
+	$scope.user = {
+		email: "",
+		password: ""
+	};
+    $scope.submit = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (loginForm.$valid) {
+			var data = angular.copy( $scope.user );
+			$scope.isLoading = true;
+			Backend.post("/jwt/authenticate", data).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				SharedPref.setAuthToken( token );
+				Idle.watch();
+		        $state.go('home', {});
+			}).catch(function() {
+				$scope.isLoading = false;
+				$scope.couldNotLogin = true;
+			})
+			return;
+		}
+    }
+
+    $scope.authenticate = function() {
+
+    	var defer = $q.defer();
+
+    	$timeout(function(){
+
+    		defer.resolve();
+
+    		$timeout(function(){
+				Idle.watch();
+    		   	$location.path('/dashboard/home');
+    		}, 600);
+
+    	}, 1100);
+
+    	return defer.promise;
+
+    }
+
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+	  SharedPref.updateTitle("Register");
+	  $scope.triedSubmit = false;
+	  $scope.passwordsDontMatch = false;
+	  $scope.shouldSplash = false;
+	  $scope.didVerifyCall = false;
+	  $scope.step = 1;
+	  $scope.userId = null;
+	  $scope.token = null;
+	  $scope.invalidCode =false; 
+	  $scope.invalidNumber =false; 
+	$scope.user = {
+		first_name: "",
+		last_name: "",
+		email: "",
+		password: "",
+		password2: ""
+	};
+	$scope.verify1 = {
+		mobile_number: ""
+	};
+	$scope.verify2 = {
+		confirmation_code: ""
+	};
+  $scope.workspace = "";
+
+  function doSpinup() {
+	$scope.shouldSplash = true;
+	SharedPref.setAuthToken( $scope.token );
+	var data = { "userId": $scope.userId };
+	$scope.invalidCode = false;
+	Backend.post("/userSpinup", data).then(function( res ) {
+		var data = res.data;
+		if ( data.success ) {
+			Idle.watch();
+			$state.go('dashboard-user-welcome', {});
+			return;
+		}
+		$mdToast.show(
+		$mdToast.simple()
+			.textContent('Error occured while creating your account. please account support')
+			.position("top right")
+			.hideDelay(1000*10)
+		);
+	});
+
+  }
+    $scope.submit = function($event, registerForm) {
+		console.log("called submit");
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (registerForm.$valid) {
+			var data = angular.copy( $scope.user );
+			Backend.post("/register", data).then(function( res ) {
+				$scope.token = res.data.token;
+				$scope.userId = res.data.userId;
+				$scope.step = 2;
+			});
+			return;
+		}
+      	return false;
+
+	}
+
+	$scope.submitVerify1Form = function($event, verify1Form) {
+		console.log("called submitVerify1Form");
+		$scope.triedSubmit = true;
+		if (verify1Form.$valid) {
+			var data = angular.copy( $scope.verify1 );
+			data.userId = $scope.userId;
+			Backend.post("/registerSendVerify", data).then(function( res ) {
+				var data = res.data;
+				if (res.data.valid) {
+					$scope.didVerifyCall = true;
+					$scope.invalidNumber = false;
+					return;
+				}
+				$scope.invalidNumber = true;
+				//$scope.showNumberInvalid = true;
+			});
+			return;
+		}
+		return false;
+	}
+
+	$scope.submitVerify2Form = function($event, verify2Form) {
+		console.log("called submitVerify2Form");
+		$scope.triedSubmit = true;
+		if (verify2Form.$valid) {
+			var data = angular.copy( $scope.verify2 );
+			data.userId = $scope.userId;
+			Backend.post("/registerVerify", data).then(function( res ) {
+				var isValid = res.data.isValid;
+				if (isValid) {
+					$scope.step = 3;
+				} else {
+					$scope.invalidCode = true;
+				}
+			});
+			return;
+		}
+		return false;
+	}
+
+	$scope.submitWorkspaceForm = function($event, workspaceForm) {
+		console.log("called submitWorkspaceForm");
+		$scope.triedSubmit = true;
+		if (workspaceForm.$valid) {
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.workspace = $scope.workspace;
+			Backend.post("/updateWorkspace", data).then(function( res ) {
+				if (res.data.success) {
+					$scope.invalidWorkspaceTaken = false;
+					doSpinup();
+					return;
+				}
+				$scope.invalidWorkspaceTaken = true;
+			});
+		}
+		return false;
+	}
+
+
+	$scope.recall = function() {
+		var data = angular.copy( $scope.verify1 );
+		data.userId = $scope.userId;
+		Backend.post("/registerSendVerify", data).then(function( res ) {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('You will be called shortly.')
+            .position("top right")
+            .hideDelay(3000)
+		);
+		   });
+	}
+    $scope.authenticate = function() {
+
+    	var defer = $q.defer();
+
+    	$timeout(function(){
+
+    		defer.resolve();
+
+    		$timeout(function(){
+    		   	$location.path('/dashboard/home');
+    		}, 600);
+
+    	}, 1100);
+
+    	return defer.promise;
+
+    }
+
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+	  SharedPref.updateTitle("Reset");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+	$scope.couldNotReset = false;
+	$scope.couldNotResetMsg = "";
+	var token = $location.search()['token'];
+	$scope.user = {
+		email: "",
+		password: "",
+		confirmPassword: "",
+		token: token
+	};
+	console.log("reset params are ", $scope.user);
+    $scope.submit = function($event, resetForm) {
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.confirmPassword) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (resetForm.$valid) {
+			var data = {};
+			data.email = $scope.user.email;
+			data.token = $scope.user.token;
+			data.password = $scope.user.password;
+			data.password_confirmation = $scope.user.confirmPassword;
+			$scope.isLoading = true;
+			console.log("requesting reset ", data);
+			$scope.couldNotReset = false;
+			$scope.couldNotResetMsg = "";
+			Backend.post("/reset", data, true).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Password was reset successfully.')
+						.position("top right")
+						.hideDelay(3000)
+					);
+			
+		        $state.go('login', {});
+			}).catch(function(res) {
+				console.log("error reply is ", res);
+				$scope.couldNotReset = true;
+				$scope.couldNotResetMsg = res.data.message;
+
+				$scope.isLoading = false;
+			})
+			return;
+		}
+    }
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast) {
+	  SharedPref.updateTitle("Settings");
+	  $scope.triedSubmit = false;
+	$scope.user = {
+		first_name: "",
+		last_name: "",
+		email: "",
+		password: "",
+		password2: ""
+	};
+    $scope.submitSettings = function($event, settingsForm) {
+		$scope.triedSubmit = true;
+		if (settingsForm.$valid) {
+			var data = {};
+			data['first_name'] = $scope.user.first_name;
+			data['last_name'] = $scope.user.last_name;
+			data['email'] = $scope.user.email;
+			SharedPref.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					SharedPref.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+    $scope.submitPasswords = function($event, passwordsForm) {
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (passwordsForm.$valid) {
+			var data = {};
+			data['password'] = $scope.user.password;
+			SharedPref.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+				var token = res.data;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your passwords')
+						.position("top right")
+						.hideDelay(3000)
+					);
+				SharedPref.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+	SharedPref.isLoading = true;
+	Backend.get("/self").then(function(res) {
+		$scope.user = res.data;
+		console.log("user is ", $scope.user);
+		SharedPref.endIsLoading();
+	});
+  });

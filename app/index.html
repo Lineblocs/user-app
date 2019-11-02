@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" ng-app="MaterialApp">
+<html class="no-js">
   <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
     <title ng-bind="SharedPref.title">LineBlocs.com</title>
@@ -55,6 +55,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <!--
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/login.js"></script>
     <script src="scripts/controllers/register.js"></script>
@@ -77,7 +78,8 @@
     <script src="scripts/controllers/Recordings.js"></script>
     <script src="scripts/controllers/Billing.js"></script>
     <script src="scripts/controllers/headCtrl.js"></script>
-
+    -->
+    <script src="scripts/main.js"></script>
 
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     <!-- endbuild -->
@@ -110,6 +112,15 @@
     <script src="../bower_components/json3/lib/json3.js"></script>
     <![endif]-->
     <!-- endbuild -->
-
+    <!-- start templates -->
+    {templates}
+    <!-- end templates -->
+    <script>
+        $.get("./templates.html", function(data) {
+          console.log("data is ", data);
+          $(data).appendTo('body');
+          angular.bootstrap(document, ['MaterialApp']);
+        });
+    </script>
   </body>
 </html>

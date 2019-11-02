@@ -241,13 +241,13 @@ angular
     .state('base', {
         abstract: true,
         url: '',
-        templateUrl: 'views/base.html?v='+window.app_version,
+        templateUrl: 'views/base.html',
         controller: 'DashboardCtrl'
     })
     .state('login', {
         url: '/login',
         parent: 'base',
-        templateUrl: 'views/pages/login.html?v='+window.app_version,
+        templateUrl: 'views/pages/login.html',
         controller: 'LoginCtrl'
     })
     .state('register', {
