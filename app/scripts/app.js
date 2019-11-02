@@ -253,198 +253,134 @@ angular
     .state('register', {
         url: '/register',
         parent: 'base',
-        templateUrl: 'views/pages/register.html?v='+window.app_version,
+        templateUrl: 'views/pages/register.html',
         controller: 'RegisterCtrl'
     })
     .state('forgot', {
         url: '/forgot',
         parent: 'base',
-        templateUrl: 'views/pages/forgot.html?v='+window.app_version,
+        templateUrl: 'views/pages/forgot.html',
         controller: 'ForgotCtrl'
     })
     .state('reset', {
         url: '/reset',
         parent: 'base',
-        templateUrl: 'views/pages/reset.html?v='+window.app_version,
+        templateUrl: 'views/pages/reset.html',
         controller: 'ResetCtrl'
     })
 
     .state('404', {
         url: '/404-page',
         parent: 'base',
-        templateUrl: 'views/pages/404-page.html?v='+window.app_version
+        templateUrl: 'views/pages/404-page.html',
     })
     .state('dashboard', {
         url: '/dashboard',
         parent: 'base',
-        templateUrl: 'views/layouts/dashboard.html?v='+window.app_version,
+        templateUrl: 'views/layouts/dashboard.html',
         controller: 'DashboardCtrl'
     })
     .state('dashboard-user-welcome', {
         url: '/dashboard/welcome',
         parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard-welcome.html?v='+window.app_version,
+        templateUrl: 'views/pages/dashboard-welcome.html',
         controller: 'DashboardWelcomeCtrl'
     })
     .state('my-numbers', {
         url: '/dids/my-numbers',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/my-numbers.html?v='+window.app_version,
+        templateUrl: 'views/pages/did/my-numbers.html',
         controller: 'MyNumbersCtrl'
     })
     .state('my-numbers-edit', {
         url: '/dids/my-numbers/{numberId}/edit',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/my-numbers-edit.html?v='+window.app_version,
+        templateUrl: 'views/pages/did/my-numbers-edit.html',
         controller: 'MyNumbersEditCtrl'
     })
     .state('buy-numbers', {
         url: '/dids/buy-numbers',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/buy-numbers.html?v='+window.app_version,
+        templateUrl: 'views/pages/did/buy-numbers.html',
         controller: 'BuyNumbersCtrl'
     })
     .state('flows', {
         url: '/flows',
         parent: 'dashboard',
-        templateUrl: 'views/pages/flows.html?v='+window.app_version,
+        templateUrl: 'views/pages/flows.html',
         controller: 'FlowsCtrl'
     })
     .state('flow-editor', {
         url: '/flows/{flowId}',
         parent: 'dashboard',
-        templateUrl: 'views/pages/flow-editor.html?v='+window.app_version,
+        templateUrl: 'views/pages/flow-editor.html',
         controller: 'FlowEditorCtrl'
     })
     .state('extensions', {
         url: '/extensions',
         parent: 'dashboard',
-        templateUrl: 'views/pages/extensions.html?v='+window.app_version,
+        templateUrl: 'views/pages/extensions.html',
         controller: 'ExtensionsCtrl'
     })
     .state('extension-create', {
         url: '/extension/create',
         parent: 'dashboard',
-        templateUrl: 'views/pages/extension-create.html?v='+window.app_version,
+        templateUrl: 'views/pages/extension-create.html',
         controller: 'ExtensionCreateCtrl'
     })
     .state('extension-edit', {
         url: '/extension/{extensionId}/edit',
         parent: 'dashboard',
-        templateUrl: 'views/pages/extension-edit.html?v='+window.app_version,
+        templateUrl: 'views/pages/extension-edit.html',
         controller: 'ExtensionEditCtrl'
     })
     .state('calls', {
         url: '/calls',
         parent: 'dashboard',
-        templateUrl: 'views/pages/calls.html?v='+window.app_version,
+        templateUrl: 'views/pages/calls.html',
         controller: 'CallsCtrl'
     })
     .state('call-view', {
         url: '/call/{callId}/view',
         parent: 'dashboard',
-        templateUrl: 'views/pages/call-view.html?v='+window.app_version,
+        templateUrl: 'views/pages/call-view.html',
         controller: 'CallViewCtrl'
     })
     .state('recordings', {
         url: '/recordings',
         parent: 'dashboard',
-        templateUrl: 'views/pages/recordings.html?v='+window.app_version,
+        templateUrl: 'views/pages/recordings.html',
         controller: 'RecordingsCtrl'
     })
     .state('billing', {
         url: '/billing',
         parent: 'dashboard',
-        templateUrl: 'views/pages/billing.html?v='+window.app_version,
+        templateUrl: 'views/pages/billing.html',
         controller: 'BillingCtrl'
     })
     .state('billing-add-card', {
         url: '/billing/add-card',
         parent: 'dashboard',
-        templateUrl: 'views/pages/billing-add-card.html?v='+window.app_version,
+        templateUrl: 'views/pages/billing-add-card.html',
         controller: 'BillingCtrl'
     })
     .state('home', {
         url: '/home',
         parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/home.html?v='+window.app_version,
+        templateUrl: 'views/pages/dashboard/home.html',
         controller: 'HomeCtrl'
     })
     .state('settings', {
         url: '/settings',
         parent: 'dashboard',
-        templateUrl: 'views/pages/settings.html?v='+window.app_version,
+        templateUrl: 'views/pages/settings.html',
         controller: 'SettingsCtrl'
     })
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/blank.html?v='+window.app_version
+        templateUrl: 'views/pages/dashboard/blank.html',
     })
-    .state('profile', {
-        url: '/profile',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/profile.html?v='+window.app_version,
-        controller: 'profileCtrl'
-    })
-    .state('form', {
-        url: '/form',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/form.html?v='+window.app_version,
-        controller: 'formCtrl'
-    }) 
-
-    .state('button', {
-        url: '/ui-elements/button',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/ui-elements/button.html?v='+window.app_version
-    }) 
-    .state('card', {
-        url: '/ui-elements/card',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/ui-elements/card.html?v='+window.app_version,
-        controller: 'cardCtrl'
-    })
-    .state('components', {
-        url: '/ui-elements/components',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/component.html?v='+window.app_version,
-        controller: 'componentCtrl'
-    })
-    .state('chartjs', {
-        url: '/charts/chart.js',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/charts/chartjs.html?v='+window.app_version,
-        controller: 'ChartCtrl'
-    })  
-    .state('c3chart', {
-        url: '/charts/c3chart',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/charts/c3chart.html?v='+window.app_version
-    })      
-    .state('calendar', {
-        url: '/calendar',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/calendar.html?v='+window.app_version,
-        controller: 'calendarCtrl'
-    })
-    .state('invoice', {
-        url: '/invoice',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/invoice.html?v='+window.app_version
-    })
-    .state('inbox', {
-        url: '/mail/inbox',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/mail/inbox.html?v='+window.app_version,
-        controller: 'paperCtrl'
-    })
-    .state('docs', {
-        url: '/docs',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/docs.html?v='+window.app_version,
-        controller: 'docsCtrl'
-    });
 }).run(function($rootScope, SharedPref) {
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 

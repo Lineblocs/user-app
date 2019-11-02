@@ -9,7 +9,7 @@ var $ = require('gulp-load-plugins')();
 // Require plugins
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
-var mergeTemplates = require('./merge-templates');
+var mergeTemplates = require('./merge_templates.js');
 
 
 gulp.task('styles', function() {
@@ -155,22 +155,20 @@ gulp.task('watch', ['connect'], function() {
     $.livereload.listen();
 
 // watch for changes
-gulp.watch([
+    gulp.watch([
     'app/**/*.html',
     '.tmp/styles/**/*.css',
     'app/scripts/**/*.js',
     'app/images/**/*'
     ]).on('change', function() {
-    gulp.start('scripts'); 
-    mergeTemplates().then(function(output) {
-        fs.writeFileSync("./app/templates.html", output);
+        gulp.start('scripts'); 
+        mergeTemplates().then(function(output) {
+            fs.writeFileSync("./app/templates.html", output);
+        });
+        $.livereload.changed();
     });
-    $.livereload.changed();
-    });
-});
-
-gulp.watch('app/styles/**/*.scss', ['styles']);
-gulp.watch('bower.json', ['wiredep']);
+    gulp.watch('app/styles/**/*.scss', ['styles']);
+    gulp.watch('bower.json', ['wiredep']);
 });
 
 gulp.task('builddist', ['jshint', 'html', 'images', 'lang', 'fonts', 'extras', 'styles'],

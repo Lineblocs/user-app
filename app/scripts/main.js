@@ -253,198 +253,134 @@ angular
     .state('register', {
         url: '/register',
         parent: 'base',
-        templateUrl: 'views/pages/register.html?v='+window.app_version,
+        templateUrl: 'views/pages/register.html',
         controller: 'RegisterCtrl'
     })
     .state('forgot', {
         url: '/forgot',
         parent: 'base',
-        templateUrl: 'views/pages/forgot.html?v='+window.app_version,
+        templateUrl: 'views/pages/forgot.html',
         controller: 'ForgotCtrl'
     })
     .state('reset', {
         url: '/reset',
         parent: 'base',
-        templateUrl: 'views/pages/reset.html?v='+window.app_version,
+        templateUrl: 'views/pages/reset.html',
         controller: 'ResetCtrl'
     })
 
     .state('404', {
         url: '/404-page',
         parent: 'base',
-        templateUrl: 'views/pages/404-page.html?v='+window.app_version
+        templateUrl: 'views/pages/404-page.html',
     })
     .state('dashboard', {
         url: '/dashboard',
         parent: 'base',
-        templateUrl: 'views/layouts/dashboard.html?v='+window.app_version,
+        templateUrl: 'views/layouts/dashboard.html',
         controller: 'DashboardCtrl'
     })
     .state('dashboard-user-welcome', {
         url: '/dashboard/welcome',
         parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard-welcome.html?v='+window.app_version,
+        templateUrl: 'views/pages/dashboard-welcome.html',
         controller: 'DashboardWelcomeCtrl'
     })
     .state('my-numbers', {
         url: '/dids/my-numbers',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/my-numbers.html?v='+window.app_version,
+        templateUrl: 'views/pages/did/my-numbers.html',
         controller: 'MyNumbersCtrl'
     })
     .state('my-numbers-edit', {
         url: '/dids/my-numbers/{numberId}/edit',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/my-numbers-edit.html?v='+window.app_version,
+        templateUrl: 'views/pages/did/my-numbers-edit.html',
         controller: 'MyNumbersEditCtrl'
     })
     .state('buy-numbers', {
         url: '/dids/buy-numbers',
         parent: 'dashboard',
-        templateUrl: 'views/pages/did/buy-numbers.html?v='+window.app_version,
+        templateUrl: 'views/pages/did/buy-numbers.html',
         controller: 'BuyNumbersCtrl'
     })
     .state('flows', {
         url: '/flows',
         parent: 'dashboard',
-        templateUrl: 'views/pages/flows.html?v='+window.app_version,
+        templateUrl: 'views/pages/flows.html',
         controller: 'FlowsCtrl'
     })
     .state('flow-editor', {
         url: '/flows/{flowId}',
         parent: 'dashboard',
-        templateUrl: 'views/pages/flow-editor.html?v='+window.app_version,
+        templateUrl: 'views/pages/flow-editor.html',
         controller: 'FlowEditorCtrl'
     })
     .state('extensions', {
         url: '/extensions',
         parent: 'dashboard',
-        templateUrl: 'views/pages/extensions.html?v='+window.app_version,
+        templateUrl: 'views/pages/extensions.html',
         controller: 'ExtensionsCtrl'
     })
     .state('extension-create', {
         url: '/extension/create',
         parent: 'dashboard',
-        templateUrl: 'views/pages/extension-create.html?v='+window.app_version,
+        templateUrl: 'views/pages/extension-create.html',
         controller: 'ExtensionCreateCtrl'
     })
     .state('extension-edit', {
         url: '/extension/{extensionId}/edit',
         parent: 'dashboard',
-        templateUrl: 'views/pages/extension-edit.html?v='+window.app_version,
+        templateUrl: 'views/pages/extension-edit.html',
         controller: 'ExtensionEditCtrl'
     })
     .state('calls', {
         url: '/calls',
         parent: 'dashboard',
-        templateUrl: 'views/pages/calls.html?v='+window.app_version,
+        templateUrl: 'views/pages/calls.html',
         controller: 'CallsCtrl'
     })
     .state('call-view', {
         url: '/call/{callId}/view',
         parent: 'dashboard',
-        templateUrl: 'views/pages/call-view.html?v='+window.app_version,
+        templateUrl: 'views/pages/call-view.html',
         controller: 'CallViewCtrl'
     })
     .state('recordings', {
         url: '/recordings',
         parent: 'dashboard',
-        templateUrl: 'views/pages/recordings.html?v='+window.app_version,
+        templateUrl: 'views/pages/recordings.html',
         controller: 'RecordingsCtrl'
     })
     .state('billing', {
         url: '/billing',
         parent: 'dashboard',
-        templateUrl: 'views/pages/billing.html?v='+window.app_version,
+        templateUrl: 'views/pages/billing.html',
         controller: 'BillingCtrl'
     })
     .state('billing-add-card', {
         url: '/billing/add-card',
         parent: 'dashboard',
-        templateUrl: 'views/pages/billing-add-card.html?v='+window.app_version,
+        templateUrl: 'views/pages/billing-add-card.html',
         controller: 'BillingCtrl'
     })
     .state('home', {
         url: '/home',
         parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/home.html?v='+window.app_version,
+        templateUrl: 'views/pages/dashboard/home.html',
         controller: 'HomeCtrl'
     })
     .state('settings', {
         url: '/settings',
         parent: 'dashboard',
-        templateUrl: 'views/pages/settings.html?v='+window.app_version,
+        templateUrl: 'views/pages/settings.html',
         controller: 'SettingsCtrl'
     })
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/blank.html?v='+window.app_version
+        templateUrl: 'views/pages/dashboard/blank.html',
     })
-    .state('profile', {
-        url: '/profile',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/profile.html?v='+window.app_version,
-        controller: 'profileCtrl'
-    })
-    .state('form', {
-        url: '/form',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/form.html?v='+window.app_version,
-        controller: 'formCtrl'
-    }) 
-
-    .state('button', {
-        url: '/ui-elements/button',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/ui-elements/button.html?v='+window.app_version
-    }) 
-    .state('card', {
-        url: '/ui-elements/card',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/ui-elements/card.html?v='+window.app_version,
-        controller: 'cardCtrl'
-    })
-    .state('components', {
-        url: '/ui-elements/components',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/component.html?v='+window.app_version,
-        controller: 'componentCtrl'
-    })
-    .state('chartjs', {
-        url: '/charts/chart.js',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/charts/chartjs.html?v='+window.app_version,
-        controller: 'ChartCtrl'
-    })  
-    .state('c3chart', {
-        url: '/charts/c3chart',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/charts/c3chart.html?v='+window.app_version
-    })      
-    .state('calendar', {
-        url: '/calendar',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/calendar.html?v='+window.app_version,
-        controller: 'calendarCtrl'
-    })
-    .state('invoice', {
-        url: '/invoice',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/invoice.html?v='+window.app_version
-    })
-    .state('inbox', {
-        url: '/mail/inbox',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/mail/inbox.html?v='+window.app_version,
-        controller: 'paperCtrl'
-    })
-    .state('docs', {
-        url: '/docs',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/dashboard/docs.html?v='+window.app_version,
-        controller: 'docsCtrl'
-    });
 }).run(function($rootScope, SharedPref) {
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
@@ -1181,6 +1117,12 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
     page: 0
   };
   $scope.numbers = [];
+  function sizeTheIframe() {
+    var element = angular.element(".flow-editor-iframe");
+    var windowHeight = angular.element("body").outerHeight();
+    var padding = 5;
+    element.attr("height", windowHeight - padding);
+  }
   var flowUrl;
   var token = SharedPref.getAuthToken();
 
@@ -1192,6 +1134,12 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);
   SharedPref.collapseNavbar();
+
+  var element = angular.element(".flow-editor-iframe");
+  sizeTheIframe();
+  angular.element("window").on("resize.editor", function() {
+    sizeTheIframe();
+  });
 });
 
 
@@ -1420,6 +1368,191 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+	$scope.options1 = {
+	    lineWidth: 12,
+	    scaleColor: false,
+	    size: 120,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+    $scope.line = {
+	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	          data: [
+	      [65, 59, 80, 81, 56, 55, 40],
+	      [28, 48, 40, 19, 86, 27, 90]
+	    ],
+	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+    };
+
+    $scope.bar = {
+	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+		data: [
+		   [65, 59, 80, 81, 56, 55, 40],
+		   [28, 48, 40, 19, 86, 27, 90]
+		],
+		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
+    	
+    };
+
+    $scope.donut = {
+    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data: [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+     $scope.pie = {
+    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data : [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+
+    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
+                       {"x":20,"top-1":100,"top-2":35},
+                       {"x":30,"top-1":15,"top-2":75},
+                       {"x":40,"top-1":50,"top-2":45}];
+    $scope.datacolumns=[{"id":"top-1","type":"spline"},
+                        {"id":"top-2","type":"spline"}];
+    $scope.datax={"id":"x"};
+
+    
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular
+    .module('MaterialApp')
+    .controller('calendarCtrl', function ($scope) {
+    });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+    $scope.rating1 = 3;
+    $scope.rating2 = 2;
+    $scope.rating3 = 4;  
+    var self = this,  j= 0, counter = 0;
+    self.modes = [ ];
+    self.activated = true;
+    self.determinateValue = 30;
+    /**
+    * Turn off or on the 5 themed loaders
+    */
+    self.toggleActivation = function() {
+        if ( !self.activated ) self.modes = [ ];
+        if (  self.activated ) j = counter = 0;
+    };
+    // Iterate every 100ms, non-stop
+    $interval(function() {
+    // Increment the Determinate loader
+        self.determinateValue += 1;
+        if (self.determinateValue > 100) {
+            self.determinateValue = 30;
+        }
+        // Incrementally start animation the five (5) Indeterminate,
+        // themed progress circular bars
+        if ( (j < 5) && !self.modes[j] && self.activated ) {
+            self.modes[j] = 'indeterminate';
+        }
+        if ( counter++ % 4 == 0 ) j++;
+    }, 100, 0, true);
+    var last = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    $scope.demo = {};
+    $scope.toastPosition = angular.extend({},last);
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+        last = angular.extend({},current);
+    }
+    $scope.showCustomToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showSimpleToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showActionToast = function() {
+        var toast = $mdToast.simple()
+        .content('Action Toast!')
+        .action('OK')
+        .highlightAction(false)
+        .position($scope.getToastPosition());
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                alert('You clicked \'OK\'.');
+            }
+        });
+    };
+})
+.controller('ToastCtrl', function($scope, $mdToast) {
+    $scope.closeToast = function() {
+        $mdToast.hide();
+    };
+
+});
 'use strict';
 
 /**
@@ -1795,6 +1928,271 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+});
+
+angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope, $log) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
+
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.pageChanged = function() {
+    $log.log('Page changed to: ' + $scope.currentPage);
+  };
+
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
+	$scope.status = '  ';
+
+	$scope.showAdvanced = function(ev) {
+	    $mdDialog.show({
+	    	controller: DialogController,
+	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
+	      	parent: angular.element(document.body),
+	      	targetEvent: ev,
+	      	clickOutsideToClose:true
+	    });
+	};
+	function DialogController($scope, $mdDialog) {
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+	}
+	
+	$scope.cards = [
+		{
+			name: 'Gary Neville',
+			subject: 'Once a scouse, always a scouse.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Antony Martial',
+			subject: 'Meet up in LA.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Danny Ings',
+			subject: 'Request for loan.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Roberto Firmoni',
+			subject: 'No match time!',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Lewandowski',
+			subject: 'Watch that?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Pep Guardiola',
+			subject: 'When is BR Leaving?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		}
+	];
+
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($scope) {
+   
+    $scope.options1 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#F0AD4E',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options2 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#3CA2E0',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options3 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#D9534F',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('profileCtrl', function ($scope) {
+    $scope.products = [
+ 	{url:'images/portrait1.jpg'}, 
+ 	{url:'images/portrait2.jpg'},         
+ 	{url:'images/portrait3.jpg'},         
+ 	{url: 'images/portrait4.jpg'},
+ 	{url: 'images/portrait5.jpg'},
+ 	{url: 'images/portrait7.jpg'},
+ 	{url: 'images/portrait8.jpg'},
+ 	{url: 'images/portrait9.jpg'}
+ 	];
+   
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
+  $scope.max = 200;
+
+  $scope.random = function() {
+    var value = Math.floor((Math.random() * 100) + 1);
+    var type;
+
+    if (value < 25) {
+      type = 'success';
+    } else if (value < 50) {
+      type = 'info';
+    } else if (value < 75) {
+      type = 'warning';
+    } else {
+      type = 'danger';
+    }
+
+    $scope.showWarning = (type === 'danger' || type === 'warning');
+
+    $scope.dynamic = value;
+    $scope.type = type;
+  };
+  $scope.random();
+
+  $scope.randomStacked = function() {
+    $scope.stacked = [];
+    var types = ['success', 'info', 'warning', 'danger'];
+
+    for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        var index = Math.floor((Math.random() * 4));
+        $scope.stacked.push({
+          value: Math.floor((Math.random() * 30) + 1),
+          type: types[index]
+        });
+    }
+  };
+  $scope.randomStacked();
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
 	  SharedPref.updateTitle("Register");
@@ -2098,3 +2496,138 @@ angular.module('MaterialApp')
 		SharedPref.endIsLoading();
 	});
   });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $location){
+	$scope.selectedMenu = 'dashboard';
+	$scope.collapseVar = 0;
+
+	$scope.check = function(x){
+
+		if(x==$scope.collapseVar)
+			$scope.collapseVar = 0;
+		else
+			$scope.collapseVar = x;
+	};
+	$scope.multiCheck = function(y){
+
+		if(y==$scope.multiCollapseVar)
+			$scope.multiCollapseVar = 0;
+		else
+			$scope.multiCollapseVar = y;
+	};
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('TabsDemoCtrl', function ($scope, $window) {
+  $scope.tabs = [
+    { title:'Dynamic Title 1', content:'Dynamic content 1' },
+    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      $window.alert('You\'ve selected the alert tab!');
+    });
+  };
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope, $log) {
+  $scope.mytime = new Date();
+
+  $scope.hstep = 1;
+  $scope.mstep = 15;
+
+  $scope.options = {
+    hstep: [1, 2, 3],
+    mstep: [1, 5, 10, 15, 25, 30]
+  };
+
+  $scope.ismeridian = true;
+  $scope.toggleMode = function() {
+    $scope.ismeridian = ! $scope.ismeridian;
+  };
+
+  $scope.update = function() {
+    var d = new Date();
+    d.setHours( 14 );
+    d.setMinutes( 0 );
+    $scope.mytime = d;
+  };
+
+  $scope.changed = function () {
+    $log.log('Time changed to: ' + $scope.mytime);
+  };
+
+  $scope.clear = function() {
+    $scope.mytime = null;
+  };
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('todoCtrl', function ($scope) {
+ 	$scope.todos = [
+ 	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
+ 	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         
+ 	{text:'Avengers Age of Ultron.', done:false, id: 'option4'},         
+ 	{text: 'Henna birthday at Mezbaan.', done:false, id: 'option5'}
+ 	];
+ 	function makeid()
+ 	{
+ 		var text = "";
+ 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+ 		for( var i=0; i < 5; i++ )
+ 			text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+ 		return text;
+ 	}
+ 	$scope.addTodo = function () {
+ 		$scope.todos.push({text:$scope.formTodoText, done:false, id:makeid()});
+ 		$scope.formTodoText = '';
+ 	};
+ });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
+  $scope.dynamicTooltip = 'Hello, World!';
+  $scope.dynamicTooltipText = 'dynamic';
+  $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+});

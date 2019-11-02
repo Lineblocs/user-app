@@ -13,6 +13,12 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
     page: 0
   };
   $scope.numbers = [];
+  function sizeTheIframe() {
+    var element = angular.element(".flow-editor-iframe");
+    var windowHeight = angular.element("body").outerHeight();
+    var padding = 5;
+    element.attr("height", windowHeight - padding);
+  }
   var flowUrl;
   var token = SharedPref.getAuthToken();
 
@@ -24,5 +30,11 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);
   SharedPref.collapseNavbar();
+
+  var element = angular.element(".flow-editor-iframe");
+  sizeTheIframe();
+  angular.element("window").on("resize.editor", function() {
+    sizeTheIframe();
+  });
 });
 
