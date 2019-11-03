@@ -38,4 +38,14 @@
       </table>
     </md-table-container>
   </md-card>
+  <div layout="row" layout-align="end">
+
+    <div>
+      <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+    </div>
+  </div>
+ 
 </div>

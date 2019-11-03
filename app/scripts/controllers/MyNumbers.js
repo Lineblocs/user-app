@@ -7,18 +7,19 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
-	  SharedPref.updateTitle("My Numbers");
-  $scope.settings = {
-    page: 0
-  };
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+    SharedPref.updateTitle("My Numbers");
+    $scope.pagination = pagination;
   $scope.numbers = [];
   $scope.load = function() {
       SharedPref.isLoading = true;
-    Backend.get("/did/listNumbers", $scope.settings).then(function(res) {
+      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
       $scope.numbers = res.data.data;
       SharedPref.endIsLoading();
-    })
+    });
   }
   $scope.buyNumber = function() {
     $state.go('buy-numbers', {});

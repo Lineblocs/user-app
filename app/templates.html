@@ -645,6 +645,16 @@
       </table>
     </md-table-container>
   </md-card>
+  <div layout="row" layout-align="end">
+
+    <div>
+      <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+    </div>
+  </div>
+ 
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard-welcome.html">
@@ -831,12 +841,21 @@
       </table>
     </md-table-container>
   </md-card>
+    <div layout="row" layout-align="end">
+
+      <div>
+        <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+        <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      </div>
+    </div
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/flow-editor.html">
               <!-- exact table from live demo -->
 <div class="collapsed-content">
-  <iframe class="flow-editor-iframe" ng-src="{{flowUrl}}" width="100%" height="768"></iframe>
+  <iframe scrolling="yes" class="flow-editor-iframe" ng-src="{{flowUrl}}" width="100%" height="0"></iframe>
 </div>
 <!-- exact 
             </script>
@@ -883,6 +902,15 @@
       </table>
     </md-table-container>
   </md-card>
+    <div layout="row" layout-align="end">
+
+      <div>
+        <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+        <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      </div>
+    </div
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/forgot.html">
@@ -1063,6 +1091,15 @@
       </table>
     </md-table-container>
   </md-card>
+  <div layout="row" layout-align="end">
+
+    <div>
+      <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+    </div>
+  </div>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/register.html">
@@ -1432,6 +1469,583 @@
 <script type="text/ng-template" id="views/pages/dashboard/blank.html">
                
             </script>
+<script type="text/ng-template" id="views/pages/dashboard/calendar.html">
+              <div class="demo-grid-ruler mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col shadow" style="background: white; text-align: center;">
+        <calendar-md flex layout layout-fill
+            calendar-direction="direction"
+            on-prev-month="prevMonth"
+            on-next-month="nextMonth"
+            on-day-click="dayClick"
+            title-format="'MMMM y'"
+            ng-model='selectedDate'
+            week-starts-on="firstDayOfWeek"
+
+            data-start-month="8"
+
+            data-start-year="2014"
+            day-format="'d'"
+            day-label-format="'EEE'"
+            day-label-tooltip-format="'EEEE'"
+            day-tooltip-format="'fullDate'"
+            day-content="setDayContent">
+        </calendar-md>
+    </div>
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/component.html">
+              <div class="mdl-grid bars">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Loading Bars</h5>
+		<p style="margin-top: 10px;">
+		<md-progress-linear md-mode="determinate" value="45"></md-progress-linear>
+		</p>
+		<p style="margin-top: 10px;">
+		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</p>
+		<p style="margin-top: 10px;">
+		<md-progress-linear class="md-warn" md-mode="query" value="30" md-buffer-value="30"></md-progress-linear>
+		</p>		
+	</div>	
+</div>
+<div class="mdl-grid tabs">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Tabs</h5>
+		<md-tabs md-dynamic-height md-border-bottom>
+      		<md-tab label="one">
+		        <md-content class="md-padding">
+		          <h1 class="md-display-2">Tab One</h1>
+		          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+		        </md-content>
+    		</md-tab>
+	   		<md-tab label="two">
+	        	<md-content class="md-padding">
+					<h1 class="md-display-2">Tab Two</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus. Vivamus convallis sodales ante varius gravida. Curabitur a purus vel augue ultrices ultricies id a nisl. Nullam malesuada consequat diam, a facilisis tortor volutpat et. Sed urna dolor, aliquet vitae posuere vulputate, euismod ac lorem. Sed felis risus, pulvinar at interdum quis, vehicula sed odio. Phasellus in enim venenatis, iaculis tortor eu, bibendum ante. Donec ac tellus dictum neque volutpat blandit. Praesent efficitur faucibus risus, ac auctor purus porttitor vitae. Phasellus ornare dui nec orci posuere, nec luctus mauris semper.</p>
+		        </md-content>
+	      	</md-tab>
+			<md-tab label="three">
+				<md-content class="md-padding">
+					<h1 class="md-display-2">Tab Three</h1>
+					<p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+				</md-content>
+			</md-tab>
+    </md-tabs>
+	</div>	
+</div>
+<div class="mdl-grid sliders">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Sliders</h5>			
+		<h3>Rating: {{rating2}}/5 - demo of theming classes</h3>
+			<div layout>
+				<div flex="10" layout layout-align="center center">
+					<span class="md-body-1">default</span>
+				</div>
+				<md-slider flex md-discrete ng-model="rating1" step="1" min="1" max="5" aria-label="rating">
+				</md-slider>
+			</div>
+			<div layout>
+				<div flex="10" layout layout-align="center center">
+					<span class="md-body-1">md-warn</span>
+				</div>
+				<md-slider flex class="md-warn" md-discrete ng-model="rating2" step="1" min="1" max="5" aria-label="rating">
+				</md-slider>
+			</div>
+			<div layout>
+				<div flex="10" layout layout-align="center center">
+					<span class="md-body-1">md-primary</span>
+				</div>
+				<md-slider flex class="md-primary" md-discrete ng-model="rating3" step="1" min="1" max="5" aria-label="rating">
+				</md-slider>
+			</div>
+	</div>	
+</div>
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid spinners">
+	<div class="mdl-cell shadow" flex="33" style="background: white; padding:15px; justify-content: center;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Spinners</h5>	
+		<md-progress-circular md-mode="indeterminate" style="display:inline-block;"></md-progress-circular>
+	</div>	
+	<div class="mdl-cell shadow relative" flex="66" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Tooltips</h5>	
+		<md-button class="md-fab md-fab-top-left left" aria-label="Insert Drive">
+			<md-icon><i class="mdi mdi-file"></i></md-icon>
+			<md-tooltip md-visible="demo.showTooltip">
+			Insert Drive
+			</md-tooltip>
+		</md-button>
+
+	</div>	
+</div>
+<div class="mdl-grid tooltips">
+	<div class="mdl-cell shadow" style="background: white; padding:15px;">
+		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Toasts</h5>	
+		<md-button ng-click="showSimpleToast()">
+		Show Simple
+		</md-button>
+		<md-button class="md-raised" ng-click="showActionToast()">
+		Show With Action
+		</md-button>
+		<md-button ng-click="showCustomToast()">
+		Show Custom
+		</md-button>
+	</div>	
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/docs.html">
+              <div id="installation" class="shadow panel">
+	<h4>Installation</h4>
+	To use the Material Dashboard Theme, you need to make sure you have <code>bower</code>, <code>npm</code> and <code>gulp</code> globally installed. Now navigate to your app directory ($ cd app/) and run the following terminal commands :
+	<ul>		
+		<li> <code>npm install</code> </li>
+		<li> <code>bower install</code> </li>
+		<li> <code>gulp serve</code> </li>
+	</ul>
+</div>
+<div id="features" class="shadow panel">
+       <h4>Features</h4>
+       Material Admin is a lightweight and feature rich admin template which is clean and easy to use. Current release comes with the following features:
+       <ul>
+              <li> Responsive desing based on Material Design Lite</li>
+              <li> Custom elemenrs and plugins including
+                     <ul>
+                            <li>User profile</li>
+                            <li>Inbox</li>
+                            <li>Lightbox Gallery</li>
+                            <li>Customizable in different colors and styles</li>
+                            <li>Login, Register and 404 page</li>
+                     </ul>
+              </li>
+              <li>Angular Material Design and third party plugins and elemnts including
+                     <ul>
+                            <li>Tables</li>
+                            <li>Buttons</li>
+                            <li>Forms with validation</li>
+                            <li>Progressbars and Spinners</li>
+                            <li>Cards</li>
+                            <li>Tabs</li>
+                            <li>Sliders</li>
+                            <li>Badges</li>
+                            <li>Paper Collapse</li>
+                     </ul>
+              </li>                              
+       </ul>
+</div>
+<div id="widgets" class="shadow panel">
+<h4>Widgets</h4>
+                                   The following widgets/plugins have been used in Material Dashboard theme:
+                            <h5>Buttons</h5>
+                           <md-button class="md-raised md-warn">Primary</md-button>
+                            <div class="code-block">
+                                   <code><pre>&lt;md-button class="md-raised md-warn"&gt;Primary&lt;/md-button&gt;</pre></code>
+                            </div>
+                            <h5>Cards</h5>
+                              <md-card flex="50" flex-sm="100">
+                                    <img src="images/material1.jpg" class="md-card-image" alt="Washed Out">
+                                    <md-card-title>
+                                  <md-card-title-text>
+                                          <span class="md-headline">Action buttons</span>
+                                        </md-card-title-text>
+                                    </md-card-title>
+                                    <md-card-content>
+                                     <p>
+                                          The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+                                          two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+                                  </p>
+                                    </md-card-content>
+                                    <md-card-actions layout="row" layout-align="end center">
+                                  <md-button>Action 1</md-button>
+                                  <md-button>Action 2</md-button>
+                                    </md-card-actions>
+                                </md-card>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>
+&lt;md-card flex="50" flex-sm="100"&gt;
+  &lt;img src="images/material1.jpg" class="md-card-image" alt="Washed Out"&gt;
+  &lt;md-card-title&gt;
+    &lt;md-card-title-text&gt;
+      &lt;span class="md-headline"&gt;Action buttons&lt;/span&gt;
+    &lt;/md-card-title-text&gt;
+  &lt;/md-card-title&gt;
+  &lt;md-card-content&gt;
+    &lt;p&gt;
+      The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+      two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+    &lt;/p&gt;
+  &lt;/md-card-content&gt;
+  &lt;md-card-actions layout="row" layout-align="end center"&gt;
+    &lt;md-button&gt;Action 1&lt;/md-button&gt;
+    &lt;md-button&gt;Action 2&lt;/md-button&gt;
+  &lt;/md-card-actions&gt;
+&lt;/md-card&gt;
+                                          </pre>
+                                   </code>
+                            </div>
+                            <h5>Dropdowns</h5>
+                            <md-select placeholder="Pick" ng-model="someVal" style="width: 25%;">
+                                <md-option value="1">One</md-option>
+                                <md-option value="2">Two</md-option>
+                                <md-option value="3">Three</md-option>
+                                <md-option value="4">Four</md-option>
+                            </md-select>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-select placeholder="Pick" ng-model="someVal"&gt;
+    &lt;md-option value="1"&gt;One&lt;/md-option&gt;
+    &lt;md-option value="2"&gt;Two&lt;/md-option&gt;
+    &lt;md-option value="3"&gt;Three&lt;/md-option&gt;
+    &lt;md-option value="4"&gt;Four&lt;/md-option&gt;
+&lt;/md-select&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Slider</h5>
+                            <md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider"></md-slider>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider"&gt;&lt;/md-slider&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Circular Progress</h5>
+                            <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-progress-circular class="md-accent" md-mode="indeterminate"&gt;&lt;/md-progress-circular&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Progress Bars</h5>
+                            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                             <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-progress-linear md-mode="indeterminate"&gt;&lt;/md-progress-linear&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Toast</h5>
+                            <md-button class="md-raised md-accent" ng-click="showActionToast()">Show With Action</md-button>
+                             <div class="code-block">
+                                   <code>
+                                          HTML<pre>
+&lt;md-button class="md-raised md-accent" ng-click="showActionToast()"&gt;
+Show With Action
+&lt;/md-button&gt;
+</pre>
+JavaScript
+<pre>
+ $scope.toastPosition = {
+    bottom: false,
+    top: true,
+    left: false,
+    right: true
+  }
+  $scope.getToastPosition = function() {
+    return Object.keys($scope.toastPosition)
+      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .join(' ');
+  }
+   $scope.showActionToast = function() {
+    var toast = $mdToast.simple()
+          .content('Action Toast!')
+          .action('OK')
+          .highlightAction(false)
+          .hideDelay(9000)
+          .position($scope.getToastPosition());
+    $mdToast.show(toast).then(function() {
+      alert('You clicked \'OK\'.');
+    });
+  };
+</pre>
+                                   </code>
+                            </div>
+                            <h5>Dialogs</h5>
+                             <md-button class="md-primary" ng-click="showAlert($event)">Alert Dialog</md-button>
+                             <div class="code-block">
+                                   <code>
+                                          HTML<pre>&lt;md-button class="md-primary" ng-click="showAlert($event)"&gt;
+Alert Dialog
+&lt;/md-button&gt;</pre>
+JavaScript<pre>
+$scope.alert = '';
+  $scope.showAlert = function(ev) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.body))
+        .title('This is an alert title')
+        .content('You can specify some description text in here. This is your alert body.')
+        .ariaLabel('Alert Dialog Demo')
+        .ok('Got it!')
+        .targetEvent(ev)
+    );
+  };
+</pre>
+                                   </code>
+                            </div>
+                            <h5>Tabs</h5>
+                            <md-content class="md-padding">
+                                  <md-tabs md-dynamic-height md-border-bottom>
+                                    <md-tab label="one">
+                                      <md-content class="md-padding">
+                                        <h1 class="md-display-2">Tab One</h1>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
+                                      </md-content>
+                                    </md-tab>
+                                    <md-tab label="two">
+                                      <md-content class="md-padding">
+                                        <h1 class="md-display-2">Tab Two</h1>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices.</p>                                          
+                                      </md-content>
+                                    </md-tab>
+                                    <md-tab label="three">
+                                      <md-content class="md-padding">
+                                        <h1 class="md-display-2">Tab Three</h1>
+                                        <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi.</p>
+                                      </md-content>
+                                    </md-tab>
+                                  </md-tabs>
+                            </md-content>
+                            <div class="code-block">
+                                   <code>
+                                          <pre>&lt;md-content class="md-padding"&gt;
+&lt;md-tabs md-dynamic-height md-border-bottom&gt;
+    &lt;md-tab label="one"&gt;
+       &lt;md-content class="md-padding"&gt;
+          &lt;h1 class="md-display-2"&gt;Tab One&lt;/h1&gt;
+          &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate.&lt;/p&gt;
+        &lt;/md-content&gt;
+    &lt;/md-tab&gt;
+    &lt;md-tab label="two"&gt;
+        &lt;md-content class="md-padding"&gt;
+          &lt;h1 class="md-display-2"&gt;Tab Two&lt;/h1&gt;
+          &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus. Vivamus convallis sodales ante varius gravida. Curabitur a purus vel augue ultricesPraesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.&lt;/p&gt;
+        &lt;/md-content&gt;
+    &lt;/md-tab&gt;
+    &lt;md-tab label="three"&gt;
+        &lt;md-content class="md-padding"&gt;
+          &lt;h1 class="md-display-2"&gt;Tab Three&lt;/h1&gt;
+          &lt;p&gt;Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum.&lt;/p&gt;
+        &lt;/md-content&gt;
+      &lt;/md-tab&gt;
+  &lt;/md-tabs&gt;
+&lt;/md-content&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Switches and Checkboxes</h5>
+                            <md-switch aria-label="Switch 1">
+                                Switch
+                            </md-switch>
+                            <md-checkbox aria-label="Checkbox 1">
+                                Checkbox
+                            </md-checkbox>   
+                            <div class="code-block">
+                                   <code>
+                                         <pre>&lt;md-switch aria-label="Switch 1"&gt;
+    Switch
+&lt;/md-switch&gt;
+&lt;md-checkbox aria-label="Checkbox 1"&gt;
+       Checkbox
+&lt;/md-checkbox&gt; </pre>
+                                   </code>
+                            </div>
+                            <h5>Form Elements</h5>
+                            <md-input-container flex>
+                                   <label>Name</label>
+                                   <input ng-model="user.firstName">
+                            </md-input-container>
+                            <md-input-container flex>
+                                   <label>Email</label>
+                                   <input ng-model="theMax" type="email">
+                            </md-input-container>
+                             <div class="code-block">
+                                   <code>
+                                         <pre>&lt;md-input-container flex&gt;
+       &lt;label&gt;Name&lt;/label&gt;
+       &lt;input ng-model="user.firstName"&gt;
+&lt;/md-input-container&gt;
+&lt;md-input-container flex&gt;
+       &lt;label&gt;Email&lt;/label&gt;
+       &lt;input ng-model="theMax" type="email"&gt;
+&lt;/md-input-container&gt;</pre>
+                                   </code>
+                            </div>
+
+</div> 
+<div id="plugin" class="shadow panel">
+    <h4>Plugins</h4> 
+    3rd party plugins and elements
+    <h5>ChartJS</h5>
+    <div style="width: 500px;">
+    <canvas id="pie" class="chart chart-pie chart-xs" data="pie.data" labels="pie.labels" colours="pie.colours"></canvas>
+    </div>
+    <div class="code-block">
+                                   <code>
+                                         HTML<pre>&lt;div ng-controller="chartCtrl.js"&gt;
+&lt;canvas id="pie" class="chart chart-pie chart-xs" data="pie.data" labels="pie.labels" colours="pie.colours"&gt;
+&lt;/canvas&gt;
+&lt;/div&gt;</pre>
+JavaScript<pre>
+$scope.pie = {
+    labels : ["Success", "Danger", "Info"],
+    data : [220, 70, 100],
+    colours: ['#a2d19e','#80b1cb','#e8b769','#d57d6d','#06c5ac']
+    };
+}]);    
+</pre>
+                                   </code>
+                            </div>
+                            <h5>C3 Charts</h5>
+                            <div style="width: 500px;">
+                                <c3chart bindto-id="pie-chart">
+                                    <chart-column column-id="data-1" column-values="10" column-type="pie"/>    
+                                    <chart-column column-id="data-2" column-values="30" column-type="pie"/>      
+                                    <chart-column column-id="data-3" column-values="5" column-type="pie"/>  
+                                    <chart-column column-id="data-4" column-values="19" column-type="pie"/>  
+                                    <chart-legend show-legend="false"/>  
+                                    <chart-colors color-pattern="#FF4081,#00D554,#FFA726,#2979FF,#80b1cb"/>  
+                                </c3chart>
+                            </div>
+                            <div class="code-block">
+                                   <code>
+                                         <pre>&lt;c3chart bindto-id="pie-chart"&gt;
+    &lt;chart-column column-id="data-1" column-values="10" column-type="pie"/&gt;    
+    &lt;chart-column column-id="data-2" column-values="30" column-type="pie"/&gt;      
+    &lt;chart-column column-id="data-3" column-values="5" column-type="pie"/&gt;  
+    &lt;chart-legend show-legend="false"/&gt;  
+    &lt;chart-colors color-pattern="#06c5ac,#e8b769,#d57d6d,#a2d19e,#80b1cb"/&gt;  
+    &lt;chart-size chart-height="300" chart-width="400"/&gt;    
+&lt;/c3chart&gt;</pre>
+                                   </code>
+                            </div>
+                            <h5>Stats</h5>
+                            <stats options="options1" percent="45" value="45%" header="Goals Achieved" arrow="up" footer="18% Up this month"></stats>
+                            <div class="code-block">
+                                   <code>
+                                         <pre>&lt;stats options="options1" percent="45" value="45%" header="Goals Achieved" arrow="up" 
+footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
+                                   </code>
+                            </div>
+</div>
+ 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/form.html">
+              <div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
+    <div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+        <div class="panel-header">
+            Normal Form
+        </div>
+        <div class="panel-body forms">
+            <form action="#">
+                <md-input-container md-no-float>
+                    <input ng-model="user.name" type="text" placeholder="Text">
+                </md-input-container>
+                <md-input-container md-no-float>
+                    <input ng-model="user.phone" type="number" placeholder="Number">
+                </md-input-container>            
+            </form>
+            <md-button class="md-raised md-primary"> Submit</md-button>
+        </div>
+    </div>
+    <div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+        <div class="panel-header">
+            Floating Form
+        </div>
+        <div class="panel-body forms">
+            <form action="#">
+                <md-input-container>
+                    <input ng-model="user.name2" type="text" placeholder="Text">
+                </md-input-container>
+                <md-input-container>
+                    <input ng-model="user.phone2" type="number" placeholder="Number">
+                </md-input-container>            
+            </form>
+            <md-button class="md-raised md-primary"> Submit </md-button>
+        </div>
+    </div>
+</div>
+<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:10px;">
+    <div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+        <div class="panel-header">
+            Toggles & switches
+        </div>
+        <div class="panel-body forms">
+            <h5 style="margin-bottom: 0; margin-top: 4px;">Checkbox</h5>
+            <hr>
+            <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+                Checkbox (md-primary): No Ink
+            </md-checkbox> <br />
+             <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                Checkbox : {{ data.cb1 }}
+            </md-checkbox>
+            <h5 style="margin-top:30px;">Radio Button</h5>
+            <hr>
+            <md-radio-group ng-model="data.group1">
+                <md-radio-button value="Apple" class="md-primary">Apple</md-radio-button>
+                <md-radio-button value="Banana"> Banana </md-radio-button>
+                <md-radio-button value="Mango">Mango</md-radio-button>
+            </md-radio-group>
+            <h5 style="margin-top:30px;">Switch</h5>
+            <hr> 
+            <md-switch ng-model="data.switch1" aria-label="Switch 1">
+                Switch 1: {{ data.switch1 }}
+            </md-switch>
+        </div>
+    </div>
+    <div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
+        <div class="panel-header">
+            Others
+        </div>
+        <div class="panel-body forms">
+            <h5 style="margin-bottom: 0; margin-top: 4px;">Dialogs</h5>
+                <hr>
+                <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex flex-md="100">
+                    Alert Dialog
+                </md-button>
+                <md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex flex-md="100">
+                    Confirm Dialog
+                </md-button>
+            <h5 style="margin-bottom: 24px;">Custom Chip</h5>
+                <hr>
+                <md-chips ng-model="roFruitNames" readonly="readonly">
+                    <md-chip-template>
+                        <strong>{{$chip}}</strong>
+                        <em>(fruit)</em>
+                    </md-chip-template>
+                </md-chips>
+            <h5 style="margin-bottom: 24px;">Default Chip</h5>
+                <hr>
+                <md-chips ng-model="fruitNames" readonly="readonly"></md-chips>
+        </div>
+    </div>
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/grid.html">
+              <div class="demo-grid-ruler mdl-grid">
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+<div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
+</div>
+<div class="demo-grid-1 mdl-grid">
+<div class="mdl-cell shadow mdl-cell--4-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--4-col</div>
+<div class="mdl-cell shadow mdl-cell--4-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--4-col</div>
+<div class="mdl-cell shadow mdl-cell--4-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--4-col</div>
+</div>
+<div class="demo-grid-2 mdl-grid">
+<div class="mdl-cell shadow mdl-cell--6-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--6-col</div>
+<div class="mdl-cell shadow mdl-cell--4-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--4-col</div>
+<div class="mdl-cell shadow mdl-cell--2-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--2-col</div>
+</div>
+<div class="demo-grid-3 mdl-grid">
+<div class="mdl-cell shadow mdl-cell--6-col mdl-cell--8-col-tablet" style="background: white; height: 100px; padding: 15px;">mdl-cell--8-col-tablet</div>
+<div class="mdl-cell shadow mdl-cell--4-col mdl-cell--6-col-tablet" style="background: white; height: 100px; padding: 15px;">mdl-cell--6-col-tablet</div>
+<div class="mdl-cell shadow mdl-cell--2-col mdl-cell--4-col-phone" style="background: white; height: 100px; padding: 15px;">mdl-cell--4-col-phone</div>
+</div> 
+            </script>
 <script type="text/ng-template" id="views/pages/dashboard/home.html">
               <div class="layout-row" layout-sm="column" layout-xs="column">
 	<div class="mdl-cell shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
@@ -1443,6 +2057,740 @@
 		</div>
 	</div>
 </div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/invoice.html">
+              <div class="mdl-grid">
+	<div class="mdl-cell mdl-cell--12-col shadow" style="background: white; padding: 20px;">
+	<div class="invoice-logo">
+		Material 
+		<div class="lighter">
+			Dashboard
+		</div>
+	</div>
+	<div class="right name">
+		<strong>#1233219 / 01 Jan 2014 <br>
+		Lorem ipsum dolor sit amet</strong>
+	</div>
+	<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+		<div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100"> 
+			<h5>Client:</h5>
+			<div class="address">
+				<strong>Customer Company, Inc.</strong> <br>
+				1 Infinite Loop <br>
+				Cupertino, CA 95014 <br>
+				P: (123) 456-7890 <br>
+				<strong>E-mail:</strong> info@customer.com
+			</div>
+		</div>
+		<div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100"> 
+			<h5>Payment Details:</h5>
+			<div class="info">
+				<strong>V.A.T Reg #:</strong> 233243444 <br>
+				<strong>Account Name:</strong> Company Ltd <br>
+				<strong>SWIFT code:</strong> 1233F4343ABCDEW <br>
+				<strong>DATE:</strong> 01/01/2014 <br>
+				<strong>DUE:</strong> 11/02/2014
+			</div>
+		</div>
+	</div>
+	<table class="invoice-table" style="width: 100%; margin-top: 15px;">
+		<thead>
+			<tr>
+				<th class="table-header">#</th>
+				<th class="table-header" style="border-left: 1px solid #C7C7CB;">Name</th>
+				<th class="table-header" style="border-left: 1px solid #C7C7CB;">Description</th>
+				<th class="table-header" style="border-left: 1px solid #C7C7CB;">Age</th>
+				<th class="table-header" style="border-left: 1px solid #C7C7CB;">Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="table-data">12</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">John Doe</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">Lorem</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">25</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">$54</td>
+			</tr>
+			<tr>
+				<td class="table-data">13</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">Jane Doe</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">Ipsum</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">32</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">$22</td>
+			</tr>
+			<tr>
+				<td class="table-data">14</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">Jimmy Done</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">Dolor</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">29</td>
+				<td class="table-data" style="border-left: 1px solid #C7C7CB;">$85</td>
+			</tr>
+		</tbody>
+	</table>
+	<div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+		<div>
+			<strong>Sub-Total:</strong> $12,876 <br>
+			<strong>Discount:</strong> 9.9% <br>
+			<strong>VAT:</strong> 22% <br>
+			<strong>Total:</strong> $11,400 <br><br>
+			<md-button class="md-raised md-accent"> Submit</md-button>	
+			<md-button class="md-raised md-accent"> Print</md-button>	
+		</div>
+	</div>
+	</div>
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/panel.html">
+              <pageheader pagename="Panel" subtitle="Bootstrap UI Elements"></pageheader>
+<div class="conter-wrapper">				
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Primary title		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					<div class="panel-btn">
+						<button type="button" class="btn btn-primary pull-right btn-rounded">
+						Click here!</button> 
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-danger img-panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Danger Panel		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<h4>Lorem Ipsum</h4>
+					<img class="img-responsive img-thumbnail pull-right" src="images/dog.jpg" alt="">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+				</div>
+			</div>
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h3 class="panel-title">Header		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Hello World!		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<blockquote>Start by doing what's necessary; then do what's possible; and suddenly you are doing the impossible. <small> Francis of Assisi </small> </blockquote>
+					<blockquote class="pull-right">Don't judge each day by the harvest you reap but by the seeds that you plant.<small>Robert Louis Stevenson</small></blockquote>
+				</div>
+			</div>
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Warning		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Default Header		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/profile.html">
+              <div class="profile-content">
+    <div class="cover-photo">
+        <div class="opacity-overlay relative">
+            <div class="profile-info absolute">
+                <div class="profile-photo">
+                    <img src="images/profile.jpg" alt="">
+                </div>
+                <div class="profile-desc">
+                    Sankhadeep Roy <span class="smaller">&nbsp;  @rishi</span>
+                    <br>
+                    <span class="location"><i class="mdi mdi-map-marker"></i> Liverpool, Merseyside </span>
+                    <br>
+                    <div class="social-icons">
+                        <a href="#"><i class="mdi mdi-facebook-box"></i>&nbsp;</a>
+                        <a href="#"><i class="mdi mdi-twitter-box"></i>&nbsp;</a>
+                        <a href="#"><i class="mdi mdi-instagram"></i>&nbsp;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="numbers absolute">
+                <div class="detail">
+                    29
+                    <br>
+                    <div class="desc">
+                        Photos
+                    </div>
+                </div>
+                <div class="detail">
+                    342
+                    <br>
+                    <div class="desc">
+                        Followers
+                    </div>
+                </div>
+                <div class="detail">
+                    5k
+                    <br>
+                    <div class="desc">
+                        Friends
+                    </div>
+                </div>
+                <div class="detail">
+                    12
+                    <br>
+                    <div class="desc">
+                        Relationships
+                    </div>
+                </div>
+            </div>
+            <div class="buttons absolute">
+               
+                <md-menu md-position-mode="target-right target" >
+                    <md-button class="md-fab" aria-label="Eat cake" id="profile-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon ><i class="mdi mdi-settings"></i> </md-icon>
+                    </md-button>
+                    <md-menu-content width="3" >                    
+                        <md-menu-item>                          
+                            <md-button >Some Action</md-button>
+                        </md-menu-item>
+                        <md-menu-item>                          
+                            <md-button >My Profile</md-button>
+                        </md-menu-item>
+                        <md-menu-item>                          
+                            <md-button >Disabled Action</md-button>
+                        </md-menu-item>
+                        <md-menu-item>                          
+                            <md-button >Yet Another Action</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </div>
+    </div>
+        <div class="profile-body">
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="photos">
+                    <md-content class="md-padding">
+                        <div class="lightbox-container">    
+                            <a ng-repeat="product in products" ng-click="openLightboxModal($index)"><img class="img-thumbnail shadow" ng-src="{{product.url}}" alt=""></a> 
+                        </div>                
+                    </md-content>
+                </md-tab>
+                <md-tab label="info">
+                    <md-content class="md-padding">
+                        <div class="info-container">
+                            <div class="cell">
+                                <table class="mdl-data-table mdl-js-data-table shadow">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-header" colspan="2">Personal <i class="mdi mdi-account left"></i> <i class="mdi mdi-pencil right"></i></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-left">Name</td>
+                                            <td class="table-right">Sankhadeep Roy</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Address</td>
+                                            <td class="table-right">Liverpool, Merseyside</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Relationship status</td>
+                                            <td class="table-right">Single</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Phone</td>
+                                            <td class="table-right">+91 8874122148</td>                                    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cell">
+                                <table class="mdl-data-table mdl-js-data-table shadow">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-header" colspan="2">Work <i class="mdi mdi-briefcase-check left"></i> <i class="mdi mdi-pencil right"></i></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-left">Club</td>
+                                            <td class="table-right">Liverpool FC</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Position</td>
+                                            <td class="table-right">Centre Forward</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Wages</td>
+                                            <td class="table-right">250k</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left">Market Value</td>
+                                            <td class="table-right">$32m</td>                                    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cell">
+                                <table class="mdl-data-table mdl-js-data-table shadow">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-header" colspan="2">Social <i class="mdi mdi-thumb-up-outline left"></i> <i class="mdi mdi-pencil right"></i></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-facebook"></i></td>
+                                            <td class="table-right">Sankhadeep Roy</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-twitter"></i></td>
+                                            <td class="table-right">Liverpool, Merseyside</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-pinterest"></i></td>
+                                            <td class="table-right">Single</td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="table-left"><i class="mdi mdi-instagram"></i></td>
+                                            <td class="table-right">+91 8874122148</td>                                    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+    </div>
+</div>
+         
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/table.html">
+              <pageheader pagename="Table" subtitle="Bootstrap UI Elements"></pageheader>
+<div class="conter-wrapper">				
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Regular Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table ">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr>
+								<td>Andy</td>
+								<td>andygmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr>
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Bordered Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr>
+								<td>Andy</td>
+								<td>andygmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr>
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+						</tbody>
+					</table>	
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">Striped Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr>
+								<td>Andy</td>
+								<td>andygmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr>
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h3 class="panel-title">Hover Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr>
+								<td>Andy</td>
+								<td>andygmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr>
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-danger">
+				<div class="panel-heading">
+					<h3 class="panel-title">Condensed Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr>
+								<td>Andy</td>
+								<td>andygmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr>
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Condensed, Bordered, Striped Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-condensed table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr>
+								<td>Andy</td>
+								<td>andygmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr>
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Coloured Table		  
+						<div class="panel-control pull-right">
+							<a class="panelButton"><i class="fa fa-refresh"></i></a>
+							<a class="panelButton"><i class="fa fa-minus"></i></a>
+							<a class="panelButton"><i class="fa fa-remove"></i></a>
+						</div>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-bordered white">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="success">
+								<td>John</td>
+								<td>john@gmail.com</td>
+								<td>London, UK</td>
+							</tr>
+							<tr class="info">
+								<td>Andy</td>
+								<td>andy@gmail.com</td>
+								<td>Merseyside, UK</td>
+							</tr>
+							<tr class="warning">
+								<td>Frank</td>
+								<td>frank@gmail.com</td>
+								<td>Southampton, UK</td>
+							</tr>
+							<tr class="danger">
+								<td>Rickie</td>
+								<td>rickie@gmail.com</td>
+								<td>Burnley, UK</td>
+							</tr>
+						</tbody>
+					</table>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/tabs.html">
+              <div ng-controller="TabsDemoCtrl">
+    <p>Select a tab by setting active binding to true:</p>
+    <p>
+        <button class="btn btn-default btn-sm" ng-click="tabs[0].active = true">Select second tab</button>
+        <button class="btn btn-default btn-sm" ng-click="tabs[1].active = true">Select third tab</button>
+    </p>
+    <p>
+        <button class="btn btn-default btn-sm" ng-click="tabs[1].disabled = ! tabs[1].disabled">Enable / Disable third tab</button>
+    </p>
+    <hr />
+
+    <tabset>
+        <tab heading="Static title">Static content</tab>
+        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+            {{tab.content}}
+        </tab>
+        <tab select="alertMe()">
+            <tab-heading>
+            <i class="glyphicon glyphicon-bell"></i> Alert!
+        </tab-heading>
+        I've got an HTML heading, and a select callback. Pretty cool!
+    </tab>
+</tabset>
+
+<hr />
+
+<tabset vertical="true" type="pills">
+    <tab heading="Vertical 1">Vertical content 1</tab>
+    <tab heading="Vertical 2">Vertical content 2</tab>
+</tabset>
+
+<hr />
+
+<tabset justified="true">
+    <tab heading="Justified">Justified content</tab>
+    <tab heading="SJ">Short Labeled Justified content</tab>
+    <tab heading="Long Justified">Long Labeled Justified content</tab>
+</tabset>
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/dashboard/typography.html">
+               
             </script>
 <script type="text/ng-template" id="views/pages/did/buy-numbers.html">
               
@@ -1584,42 +2932,55 @@
             </script>
 <script type="text/ng-template" id="views/pages/did/my-numbers.html">
               <!-- exact table from live demo -->
-<md-card md-theme="'default'"" md-theme-watch>
-  <div ng-show="numbers.length === 0" class="no-results">
-    <center>
-      <h5>No numbers listed</h5>
-      <md-button ng-click="buyNumber()" class="md-raised md-primary">Lookup Numbers / Buy Number</md-button>
-    </center>
-  </div>
-  <div ng-show="numbers.length > 0">
-    <md-table-container>
-      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-          <tr md-row>
-            <th md-column md-order-by="nameToLower"><span>Number</span></th>
-            <th md-column>Region</th>
-            <th md-column>Monthly Cost</th>
-            <th md-column>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody md-body>
-          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
-            <td md-cell>{{number.number}}</td>
-            <td md-cell>{{number.region}}</td>
-            <td md-cell>{{number.monthly_cost}}</td>
-            <td md-cell>
-              <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
-              </md-button>
-              <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-              </md-button>
+<div>
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div ng-show="numbers.length === 0" class="no-results">
+      <center>
+        <h5>No numbers listed</h5>
+        <md-button ng-click="buyNumber()" class="md-raised md-primary">Lookup Numbers / Buy Number</md-button>
+      </center>
+    </div>
+    <div ng-show="numbers.length > 0">
+      <md-table-container>
+        <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+          <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+            <tr md-row>
+              <th md-column md-order-by="nameToLower"><span>Number</span></th>
+              <th md-column>Region</th>
+              <th md-column>Monthly Cost</th>
+              <th md-column>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody md-body>
+            <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
+              <td md-cell>{{number.number}}</td>
+              <td md-cell>{{number.region}}</td>
+              <td md-cell>{{number.monthly_cost}}</td>
+              <td md-cell>
+                <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
+                    <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+                </md-button>
+                <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
+                    <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+                </md-button>
 
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </md-table-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </md-table-container>
+
+    </div>
+  </md-card>
+    <div layout="row" layout-align="end">
+
+      <div>
+        <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+        <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      </div>
+    </div>
   </div>
-</md-card> 
+  
             </script>

@@ -7,15 +7,19 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
-	  SharedPref.updateTitle("Calls");
+angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref) {
+    SharedPref.updateTitle("Calls");
+    $scope.pagination = pagination;
   $scope.settings = {
     page: 0
   };
   $scope.calls = [];
   $scope.load = function() {
     SharedPref.isLoading = true;
-    Backend.get("/call/listCalls", $scope.settings).then(function(res) {
+      pagination.changeUrl( "/call/listCalls" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'calls' );
+      pagination.loadData().then(function(res) {
       $scope.calls = res.data.data;
       SharedPref.endIsLoading();
     })

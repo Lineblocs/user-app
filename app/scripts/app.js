@@ -180,6 +180,12 @@ angular
                  });
             });
         }
+        factory.getPagination = function(path, params)
+        {
+            path = path + "?page=" + pagination.settings.currentPage;
+            return factory.get(path, params);
+        }
+
         factory.delete = function(path)
         {
             return $q(function(resolve, reject) {
@@ -201,6 +207,73 @@ angular
                  });
             });
 
+        }
+        return factory;
+    })
+    .factory("pagination", function(Backend,SharedPref, $q) {
+        var factory = this;
+        factory.settings = {
+            currentPage: 1,
+            currentUrl: "",
+            scope: { obj: null, key: '' }
+        };
+        factory.meta = {}; // saved by backend
+        factory.nextPage = function() {
+            factory.settings.currentPage = factory.settings.currentPage + 1;
+            factory.loadData();
+        }
+        factory.prevPage = function() {
+            factory.settings.currentPage = factory.settings.currentPage - 1;
+            factory.loadData();
+        }
+        factory.hasNext = function() {
+            console.log("hasNext meta is ", factory.meta);
+            var current = factory.settings.currentPage;
+            if (current === factory.meta.pagination.total_pages) {
+                return false;
+            }
+            console.log("we have next");
+            return true;
+        }
+        factory.hasPrev = function() {
+            var current = factory.settings.currentPage;
+            if (current === 1) {
+                return false;
+            }
+            return true;
+        }
+
+
+        factory.changePage = function( page ) {
+            factory.settings.currentPage = page;
+        }
+        factory.changeUrl = function( url ) {
+            factory.settings.currentUrl = url;
+        }
+        factory.changeScope = function( obj, key ) {
+            factory.settings.scope = {
+                obj: obj, 
+                key: key
+            }
+        }
+        factory.loadData = function() {
+            var url = factory.settings.currentUrl + "?page=" + factory.settings.currentPage;
+            SharedPref.isCreateLoading = true;
+            return $q(function(resolve, reject) {
+                Backend.get(url).then(function(res) {
+                    var meta = res.data.meta;
+                    factory.meta = meta;
+                    var scopeObj = factory.settings.scope.obj
+                    var key = factory.settings.scope.key;
+                    scopeObj[ key ] = res.data.data;
+                    SharedPref.endIsCreateLoading();
+                    resolve(res);
+                });
+            });
+        }
+        factory.gotoPage = function( page ) {
+            factory.changePage( page );
+            factory.loadData();
         }
         return factory;
     })

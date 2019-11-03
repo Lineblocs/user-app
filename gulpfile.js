@@ -10,6 +10,7 @@ var $ = require('gulp-load-plugins')();
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
 var mergeTemplates = require('./merge_templates.js');
+var fs = require('fs');
 
 
 gulp.task('styles', function() {
@@ -146,20 +147,22 @@ gulp.task('wiredep', function() {
     .pipe(wiredep({exclude: exclude}))
     .pipe(gulp.dest('app'));
 
+    /*
     gulp.src('test/*.js')
     .pipe(wiredep({exclude: exclude, devDependencies: true}))
     .pipe(gulp.dest('test'));
+    */
 });
 
 gulp.task('watch', ['connect'], function() {
     $.livereload.listen();
-
 // watch for changes
     gulp.watch([
     'app/**/*.html',
     '.tmp/styles/**/*.css',
     'app/scripts/**/*.js',
-    'app/images/**/*'
+    'app/images/**/*',
+    '!app/templates.html'
     ]).on('change', function() {
         gulp.start('scripts'); 
         mergeTemplates().then(function(output) {

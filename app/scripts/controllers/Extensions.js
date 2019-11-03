@@ -7,8 +7,9 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
     SharedPref.updateTitle("Extensions");
+    $scope.pagination = pagination;
     
     function DialogController($scope, $mdDialog, extension, SharedPref) {
       $scope.SharedPref = SharedPref;
@@ -23,7 +24,10 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
   $scope.extensions = [];
   $scope.load = function() {
       SharedPref.isLoading = true;
-    Backend.get("/extension/listExtensions", $scope.settings).then(function(res) {
+      pagination.changeUrl( "/extension/listExtensions" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'extensions');
+      pagination.loadData().then(function(res) {
       $scope.extensions = res.data.data;
       SharedPref.endIsLoading();
     })

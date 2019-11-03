@@ -7,15 +7,19 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $sce, SharedPref) {
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref) {
 	  SharedPref.updateTitle("Recordings");
   $scope.settings = {
     page: 0
   };
+  $scope.pagination = pagination;
   $scope.recordings = [];
   $scope.load = function() {
     SharedPref.isLoading = true;
-    Backend.get("/recording/listRecordings", $scope.settings).then(function(res) {
+      pagination.changeUrl( "/recording/listRecordings" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'recordings' );
+      pagination.loadData().then(function(res) {
       var recordings = res.data.data;
       $scope.recordings = recordings.map(function(obj) {
         obj.uri = $sce.trustAsResourceUrl(obj.uri);

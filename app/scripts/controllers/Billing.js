@@ -46,18 +46,20 @@ angular.module('MaterialApp')
 		data['card_id'] = cardId;
 		data['amount'] =  amount;
 		$scope.data.creditAmount.value;
-		SharedPref.isCreateLoading = true;
+		SharedPref.isCreateLoading =true;
 		Backend.post("/credit/addCredit", data).then(function(res) {
 			console.log("added credit amount");
-				$mdToast.show(
-				$mdToast.simple()
-					.textContent('Added credits successfully')
-					.position('top right')
-					.hideDelay(3000)
-				);
-				loadData();
+					loadData(true).then(function() {
+						$mdToast.show(
+						$mdToast.simple()
+							.textContent('Added credits successfully')
+							.position('top right')
+							.hideDelay(3000)
+						);
+
+							})
 				});
-				SharedPref.endIsCreateLoading();
+				//SharedPref.endIsCreateLoading();
 		}
 
 		function stripeRespAddCard(response) {
@@ -67,7 +69,7 @@ angular.module('MaterialApp')
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
-				SharedPref.isCreateLoading = true;
+				SharedPref.isCreateLoading =true;
 				Backend.post("/card/addCard", data).then(function(res) {
 					resolve(res);
 					SharedPref.endIsCreateLoading();
@@ -124,7 +126,7 @@ angular.module('MaterialApp')
 	$scope.addCard = function($event) {
 		function onSuccess(response) {
 			stripeRespAddCard(response).then(function() {
-				loadData();
+				loadData(true);
 			});
 		}
 		function onError() {
@@ -171,16 +173,23 @@ angular.module('MaterialApp')
 					$mdDialog.hide();
 					stripeRespAddCard(response).then(function(res) {
 						var cardId = res.headers('X-Card-ID');
-						submitBilling(cardId, $scope.data.creditAmount.value);
+						$timeout(function() {
+							$scope.$apply();
+							submitBilling(cardId, $scope.data.creditAmount.value);
+						}, 0);
 					})
 				}
 				$timeout(function() {
 					$scope.$apply();
+					submitBilling(cardId, $scope.data.creditAmount.value);
 				}, 0);
 			});
 			return;
 		}
-		submitBilling($scope.data.selectedCard, $scope.data.creditAmount.value);
+		$timeout(function() {
+			$scope.$apply();
+			submitBilling($scope.data.selectedCard, $scope.data.creditAmount.value);
+		}, 0);
 
 	}
 	$scope.addCreditPayPal = function() {
@@ -188,11 +197,12 @@ angular.module('MaterialApp')
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
 		data.amount = $scope.data.creditAmount.value;
-		SharedPref.isCreateLoading = true;
+		SharedPref.isCreateLoading =true;
 		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
 			var data = res.data;
 			//$window.replace(data.url);
 			$window.location.href = data.url;
+			SharedPref.endIsCreateLoading();
 		});
 	}
 
@@ -227,7 +237,7 @@ angular.module('MaterialApp')
 		var recharge = $scope.settings.db.auto_recharge_top_up.value;
 		data['auto_recharge_top_up'] = toCents(recharge);
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
-		SharedPref.isCreateLoading = true;
+		SharedPref.isCreateLoading =true;
 		Backend.post("/changeBillingSettings", data).then(function(res) {
 			$mdToast.show(
 			$mdToast.simple()
@@ -238,34 +248,46 @@ angular.module('MaterialApp')
 			});
 			SharedPref.endIsCreateLoading();
 	}
-	function loadData() {
-		SharedPref.isLoading = true;
-		Backend.get("/billing").then(function(res) {
-			console.log("finished loading..");
-			$scope.billing = res.data[0];
-			$scope.settings.db = res.data[0].info.settings;
-			var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
-			if ($scope.settings.db.auto_recharge_top_up) {
-				for ( var index in $scope.creditAmounts ) {
-					var amount = $scope.creditAmounts[ index ];
-					console.log("comparing amount ", amount, compare);
-					if (amount.value === compare) {
-						$scope.settings.db.auto_recharge_top_up = amount;
+	function loadData(createLoading) {
+		if (createLoading) {
+			SharedPref.isCreateLoading =true;
+		} else {
+			SharedPref.isLoading =true;
+		}
+		return $q(function(resolve, reject) {
+			Backend.get("/billing").then(function(res) {
+				console.log("finished loading..");
+				$scope.billing = res.data[0];
+				$scope.settings.db = res.data[0].info.settings;
+				var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
+
+				if ($scope.settings.db.auto_recharge_top_up) {
+					for ( var index in $scope.creditAmounts ) {
+						var amount = $scope.creditAmounts[ index ];
+						console.log("comparing amount ", amount, compare);
+						if (amount.value === compare) {
+							$scope.settings.db.auto_recharge_top_up = amount;
+						}
 					}
 				}
-			}
-			$scope.cards = res.data[1];
-			$scope.config = res.data[2];
-			$scope.history = res.data[3];
-			console.log("config is ", $scope.config);
-			Stripe.setPublishableKey($scope.config.stripe.key);
-			console.log("billing data is ", $scope.billing);
-			console.log("cards are ", $scope.cards);
-			console.log("settings are ", $scope.settings);
-			$scope.creditAmount = $scope.creditAmounts[0];
-			SharedPref.endIsLoading();
+				$scope.cards = res.data[1];
+				$scope.config = res.data[2];
+				$scope.history = res.data[3];
+				console.log("config is ", $scope.config);
+				Stripe.setPublishableKey($scope.config.stripe.key);
+				console.log("billing data is ", $scope.billing);
+				console.log("cards are ", $scope.cards);
+				console.log("settings are ", $scope.settings);
+				$scope.creditAmount = $scope.creditAmounts[0];
+				if (createLoading) {
+					SharedPref.endIsCreateLoading();
+				} else {
+					SharedPref.endIsLoading();
+				}
+				resolve();
+			}, reject);
 		});
 	}
-	loadData();
+	loadData(false);
   });
