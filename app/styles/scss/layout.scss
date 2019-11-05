@@ -5,19 +5,10 @@ body {
 	position: static !important;
 	background: #F5F5F5;
 }
-body,html {
-    margin: 0;
-    padding: 0;
-}
-* {
-    box-sizing: border-box;
-}
-
 .content-holder {
 	background: $bg;
 	@include transition(.3s);
-	height:100vh;
-
+	min-height:100vh;
 }
 .page-content {
 	/*padding: 15px;*/
