@@ -5,13 +5,20 @@ body {
 	position: static !important;
 	background: #F5F5F5;
 }
+body,html {
+    margin: 0;
+    padding: 0;
+}
+* {
+    box-sizing: border-box;
+}
 
 .content-holder {
 	background: $bg;
 	@include transition(.3s);
-	min-height:100vh;
-}
+	height:100vh;
 
+}
 .page-content {
 	/*padding: 15px;*/
 	padding-top: 85px;
@@ -180,6 +187,7 @@ md-tabs.settings {
 }
 .collapsed-content {
 	margin-left: 80px;
+	position: relative;
 }
 .profile-content {
 	margin-left: 80px;
@@ -193,6 +201,9 @@ md-tabs.settings {
 	border: none;
 	overflow-x: hidden;
 	overflow-y: hidden;
+	height:100vh;
+	padding: 0;
+	margin: 0;
 }
 
 /* Styles for extended layout */

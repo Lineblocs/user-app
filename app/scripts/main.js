@@ -189,7 +189,7 @@ angular
         factory.delete = function(path)
         {
             return $q(function(resolve, reject) {
-                $http.delete(createUrl(path), params).then(resolve,function(err) {
+                $http.delete(createUrl(path)).then(resolve,function(err) {
                     errorHandler();
                     reject(err);
                  });
@@ -1130,7 +1130,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
     SharedPref.updateTitle("Extensions");
     $scope.pagination = pagination;
     
@@ -1150,10 +1150,13 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
       pagination.changeUrl( "/extension/listExtensions" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'extensions');
-      pagination.loadData().then(function(res) {
-      $scope.extensions = res.data.data;
-      SharedPref.endIsLoading();
-    })
+      return $q(function(resolve, reject) {
+        pagination.loadData().then(function(res) {
+        $scope.extensions = res.data.data;
+        SharedPref.endIsLoading();
+        resolve();
+        }, reject);
+      });
   }
   $scope.editExtension = function(extension) {
     $state.go('extension-edit', {extensionId: extension.id});
@@ -1187,14 +1190,16 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
       Backend.delete("/extension/deleteExtension/" + extension.id).then(function() {
+          $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension deleted..')
             .position("top right")
             .hideDelay(3000)
         );
-          $scope.load();
+          });
 
       })
     }, function() {
@@ -1222,9 +1227,9 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   $scope.numbers = [];
   function sizeTheIframe() {
     var element = angular.element(".flow-editor-iframe");
-    var windowHeight = angular.element("body").outerHeight();
-    var padding = 5;
-    element.attr("height", windowHeight - padding);
+    var windowHeight = $(window).outerHeight();
+    var padding = 0;
+    element.attr("height",windowHeight);
   }
   var flowUrl;
   var token = SharedPref.getAuthToken();
@@ -1255,7 +1260,7 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
     SharedPref.updateTitle("Flows");
     $scope.pagination = pagination;
   $scope.settings = {
@@ -1263,14 +1268,17 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
   };
   $scope.flows = [];
   $scope.load = function() {
-    SharedPref.isLoading =true;
-      pagination.changeUrl( "/flow/listFlows" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'flows' );
-      pagination.loadData().then(function(res) {
-      $scope.flows = res.data.data;
-      SharedPref.endIsLoading();
-    })
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading =true;
+        pagination.changeUrl( "/flow/listFlows" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'flows' );
+        pagination.loadData().then(function(res) {
+        $scope.flows = res.data.data;
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject);
+    });
   }
   $scope.editFlow = function(flow) {
     SharedPref.changeRoute('flow-editor', {flowId: flow.id});
@@ -1288,6 +1296,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
       Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
            $mdToast.show(
           $mdToast.simple()
@@ -1295,7 +1304,14 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
             .position("top right")
             .hideDelay(3000)
         );
-          $scope.load();
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Flow deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
 
       })
     }, function() {
@@ -1315,11 +1331,12 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
     SharedPref.updateTitle("My Numbers");
     $scope.pagination = pagination;
   $scope.numbers = [];
   $scope.load = function() {
+    return $q(function(resolve, reject) {
       SharedPref.isLoading = true;
       pagination.changeUrl( "/did/listNumbers" );
       pagination.changePage( 1 );
@@ -1327,7 +1344,9 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
       pagination.loadData().then(function(res) {
       $scope.numbers = res.data.data;
       SharedPref.endIsLoading();
-    });
+      resolve();
+    }, reject);
+  });
   }
   $scope.buyNumber = function() {
     $state.go('buy-numbers', {});
@@ -1345,14 +1364,16 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
       Backend.delete("/did/deleteNumber/" + number.id).then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          $scope.load();
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
 
       })
     }, function() {
@@ -1431,7 +1452,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref) {
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
 	  SharedPref.updateTitle("Recordings");
   $scope.settings = {
     page: 0
@@ -1439,18 +1460,21 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
   $scope.pagination = pagination;
   $scope.recordings = [];
   $scope.load = function() {
-    SharedPref.isLoading = true;
-      pagination.changeUrl( "/recording/listRecordings" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'recordings' );
-      pagination.loadData().then(function(res) {
-      var recordings = res.data.data;
-      $scope.recordings = recordings.map(function(obj) {
-        obj.uri = $sce.trustAsResourceUrl(obj.uri);
-        return obj;
-      });
-      SharedPref.endIsLoading();
-    })
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          return obj;
+        });
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject)
+    });
   }
   $scope.deleteRecording = function($event, recording) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -1462,15 +1486,17 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
       Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
         console.log("deleted recording..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('recording deleted..')
-            .position('top right')
-            .hideDelay(3000)
-        );
-        $scope.load();
+        $scope.load().then(function() {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('recording deleted..')
+              .position('top right')
+              .hideDelay(3000)
+          );
+        })
       });
     }, function() {
     });
@@ -1863,74 +1889,6 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	if ($(window).width()<600) {		
 		$( '.mdl-grid' ).removeAttr('dragula');
 	};
-	$timeout(function () {
-		var color = Chart.helpers.color;
-		SharedPref.isLoading = true;
-		Backend.get("/dashboard").then(function(res) {
-			var graph = res.data[0];
-			SharedPref.billInfo=  res.data[1];
-			SharedPref.userInfo=  res.data[2];
-			console.log("graph data is ", graph);
-			SharedPref.isLoading = false;
-			$timeout(function(){
-				$scope.line = {
-					legend: true,
-					labels: graph.labels,
-						data: [
-					graph.data.inbound,
-					graph.data.outbound
-					//[7, 20, 10, 15, 17, 10, 27],
-					//[6, 9, 22, 11, 13, 20, 27]
-					],
-					series: [
-				'Inbound',
-				'Outbound'
-			],
-					colours: [{ 
-							fillColor: "#2b36ff",
-							strokeColor: "#2b36ff",
-							pointColor: "#2b36ff",
-							pointStrokeColor: "#2b36ff", 
-							pointHighlightFill: "#2b36ff", 
-							pointHighlightStroke: "#2b36ff"
-						},
-						{
-							fillColor: "#ffa01c",
-							strokeColor: "#ffa01c",
-							pointColor: "#ffa01c",
-							pointStrokeColor: "#ffa01c", 
-							pointHighlightFill: "#ffa01c",
-							pointHighlightStroke: "#ffa01c"
-						}
-						],
-	options: {
-			legend: {
-		display: true,
-		position: 'right'
-		},
-						responsive: true,
-							bezierCurve : false,
-							datasetStroke: false,
-							/*
-							legendTemplate: '<ul>'
-					+'<% for (var i=0; i<datasets.length; i++) { %>'
-						+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-						+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-					+'</li>'
-					+'<% } %>'
-				+'</ul>',
-				*/
-							pointDotRadius : 6,
-							showTooltips: false,
-					},
-					onClick: function (points, evt) {
-					console.log(points, evt);
-					}
-
-				};
-			}, 0);
-		});
-	}, 0);
     $scope.line2 = {
 	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
 	          data: [
@@ -1967,7 +1925,82 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	      console.log(points, evt);
 	    }
 
-    };
+	};
+	$scope.load = function() {
+		$timeout(function () {
+			var color = Chart.helpers.color;
+			SharedPref.isLoading = true;
+			Backend.get("/dashboard").then(function(res) {
+				var graph = res.data[0];
+				SharedPref.billInfo=  res.data[1];
+				SharedPref.userInfo=  res.data[2];
+				console.log("graph data is ", graph);
+				SharedPref.isLoading = false;
+				$timeout(function(){
+					$scope.line = {
+						legend: true,
+						labels: graph.labels,
+							data: [
+						graph.data.inbound,
+						graph.data.outbound
+						//[7, 20, 10, 15, 17, 10, 27],
+						//[6, 9, 22, 11, 13, 20, 27]
+						],
+						series: [
+					'Inbound',
+					'Outbound'
+				],
+						colours: [{ 
+								fillColor: "#2b36ff",
+								strokeColor: "#2b36ff",
+								pointColor: "#2b36ff",
+								pointStrokeColor: "#2b36ff", 
+								pointHighlightFill: "#2b36ff", 
+								pointHighlightStroke: "#2b36ff"
+							},
+							{
+								fillColor: "#ffa01c",
+								strokeColor: "#ffa01c",
+								pointColor: "#ffa01c",
+								pointStrokeColor: "#ffa01c", 
+								pointHighlightFill: "#ffa01c",
+								pointHighlightStroke: "#ffa01c"
+							}
+							],
+		options: {
+				legend: {
+			display: true,
+			position: 'right'
+			},
+							responsive: true,
+								bezierCurve : false,
+								datasetStroke: false,
+								/*
+								legendTemplate: '<ul>'
+						+'<% for (var i=0; i<datasets.length; i++) { %>'
+							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+						+'</li>'
+						+'<% } %>'
+					+'</ul>',
+					*/
+								pointDotRadius : 6,
+								showTooltips: false,
+						},
+						onClick: function (points, evt) {
+						console.log(points, evt);
+						}
+
+					};
+				}, 0);
+			});
+		}, 0);
+	}
+	$scope.reloadGraph = function() {
+		console.log("reloadGraph called..");
+		$scope.load();
+	}
+	$scope.load();
 
 }]);
 'use strict';

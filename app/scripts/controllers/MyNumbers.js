@@ -7,11 +7,12 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
     SharedPref.updateTitle("My Numbers");
     $scope.pagination = pagination;
   $scope.numbers = [];
   $scope.load = function() {
+    return $q(function(resolve, reject) {
       SharedPref.isLoading = true;
       pagination.changeUrl( "/did/listNumbers" );
       pagination.changePage( 1 );
@@ -19,7 +20,9 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
       pagination.loadData().then(function(res) {
       $scope.numbers = res.data.data;
       SharedPref.endIsLoading();
-    });
+      resolve();
+    }, reject);
+  });
   }
   $scope.buyNumber = function() {
     $state.go('buy-numbers', {});
@@ -37,14 +40,16 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
       Backend.delete("/did/deleteNumber/" + number.id).then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          $scope.load();
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
 
       })
     }, function() {

@@ -47,74 +47,6 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	if ($(window).width()<600) {		
 		$( '.mdl-grid' ).removeAttr('dragula');
 	};
-	$timeout(function () {
-		var color = Chart.helpers.color;
-		SharedPref.isLoading = true;
-		Backend.get("/dashboard").then(function(res) {
-			var graph = res.data[0];
-			SharedPref.billInfo=  res.data[1];
-			SharedPref.userInfo=  res.data[2];
-			console.log("graph data is ", graph);
-			SharedPref.isLoading = false;
-			$timeout(function(){
-				$scope.line = {
-					legend: true,
-					labels: graph.labels,
-						data: [
-					graph.data.inbound,
-					graph.data.outbound
-					//[7, 20, 10, 15, 17, 10, 27],
-					//[6, 9, 22, 11, 13, 20, 27]
-					],
-					series: [
-				'Inbound',
-				'Outbound'
-			],
-					colours: [{ 
-							fillColor: "#2b36ff",
-							strokeColor: "#2b36ff",
-							pointColor: "#2b36ff",
-							pointStrokeColor: "#2b36ff", 
-							pointHighlightFill: "#2b36ff", 
-							pointHighlightStroke: "#2b36ff"
-						},
-						{
-							fillColor: "#ffa01c",
-							strokeColor: "#ffa01c",
-							pointColor: "#ffa01c",
-							pointStrokeColor: "#ffa01c", 
-							pointHighlightFill: "#ffa01c",
-							pointHighlightStroke: "#ffa01c"
-						}
-						],
-	options: {
-			legend: {
-		display: true,
-		position: 'right'
-		},
-						responsive: true,
-							bezierCurve : false,
-							datasetStroke: false,
-							/*
-							legendTemplate: '<ul>'
-					+'<% for (var i=0; i<datasets.length; i++) { %>'
-						+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-						+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-					+'</li>'
-					+'<% } %>'
-				+'</ul>',
-				*/
-							pointDotRadius : 6,
-							showTooltips: false,
-					},
-					onClick: function (points, evt) {
-					console.log(points, evt);
-					}
-
-				};
-			}, 0);
-		});
-	}, 0);
     $scope.line2 = {
 	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
 	          data: [
@@ -151,6 +83,81 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	      console.log(points, evt);
 	    }
 
-    };
+	};
+	$scope.load = function() {
+		$timeout(function () {
+			var color = Chart.helpers.color;
+			SharedPref.isLoading = true;
+			Backend.get("/dashboard").then(function(res) {
+				var graph = res.data[0];
+				SharedPref.billInfo=  res.data[1];
+				SharedPref.userInfo=  res.data[2];
+				console.log("graph data is ", graph);
+				SharedPref.isLoading = false;
+				$timeout(function(){
+					$scope.line = {
+						legend: true,
+						labels: graph.labels,
+							data: [
+						graph.data.inbound,
+						graph.data.outbound
+						//[7, 20, 10, 15, 17, 10, 27],
+						//[6, 9, 22, 11, 13, 20, 27]
+						],
+						series: [
+					'Inbound',
+					'Outbound'
+				],
+						colours: [{ 
+								fillColor: "#2b36ff",
+								strokeColor: "#2b36ff",
+								pointColor: "#2b36ff",
+								pointStrokeColor: "#2b36ff", 
+								pointHighlightFill: "#2b36ff", 
+								pointHighlightStroke: "#2b36ff"
+							},
+							{
+								fillColor: "#ffa01c",
+								strokeColor: "#ffa01c",
+								pointColor: "#ffa01c",
+								pointStrokeColor: "#ffa01c", 
+								pointHighlightFill: "#ffa01c",
+								pointHighlightStroke: "#ffa01c"
+							}
+							],
+		options: {
+				legend: {
+			display: true,
+			position: 'right'
+			},
+							responsive: true,
+								bezierCurve : false,
+								datasetStroke: false,
+								/*
+								legendTemplate: '<ul>'
+						+'<% for (var i=0; i<datasets.length; i++) { %>'
+							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+						+'</li>'
+						+'<% } %>'
+					+'</ul>',
+					*/
+								pointDotRadius : 6,
+								showTooltips: false,
+						},
+						onClick: function (points, evt) {
+						console.log(points, evt);
+						}
+
+					};
+				}, 0);
+			});
+		}, 0);
+	}
+	$scope.reloadGraph = function() {
+		console.log("reloadGraph called..");
+		$scope.load();
+	}
+	$scope.load();
 
 }]);

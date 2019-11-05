@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
     SharedPref.updateTitle("Extensions");
     $scope.pagination = pagination;
     
@@ -27,10 +27,13 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
       pagination.changeUrl( "/extension/listExtensions" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'extensions');
-      pagination.loadData().then(function(res) {
-      $scope.extensions = res.data.data;
-      SharedPref.endIsLoading();
-    })
+      return $q(function(resolve, reject) {
+        pagination.loadData().then(function(res) {
+        $scope.extensions = res.data.data;
+        SharedPref.endIsLoading();
+        resolve();
+        }, reject);
+      });
   }
   $scope.editExtension = function(extension) {
     $state.go('extension-edit', {extensionId: extension.id});
@@ -64,14 +67,16 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
       Backend.delete("/extension/deleteExtension/" + extension.id).then(function() {
+          $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension deleted..')
             .position("top right")
             .hideDelay(3000)
         );
-          $scope.load();
+          });
 
       })
     }, function() {

@@ -189,7 +189,7 @@ angular
         factory.delete = function(path)
         {
             return $q(function(resolve, reject) {
-                $http.delete(createUrl(path), params).then(resolve,function(err) {
+                $http.delete(createUrl(path)).then(resolve,function(err) {
                     errorHandler();
                     reject(err);
                  });

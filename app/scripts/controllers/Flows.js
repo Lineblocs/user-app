@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
     SharedPref.updateTitle("Flows");
     $scope.pagination = pagination;
   $scope.settings = {
@@ -15,14 +15,17 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
   };
   $scope.flows = [];
   $scope.load = function() {
-    SharedPref.isLoading =true;
-      pagination.changeUrl( "/flow/listFlows" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'flows' );
-      pagination.loadData().then(function(res) {
-      $scope.flows = res.data.data;
-      SharedPref.endIsLoading();
-    })
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading =true;
+        pagination.changeUrl( "/flow/listFlows" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'flows' );
+        pagination.loadData().then(function(res) {
+        $scope.flows = res.data.data;
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject);
+    });
   }
   $scope.editFlow = function(flow) {
     SharedPref.changeRoute('flow-editor', {flowId: flow.id});
@@ -40,6 +43,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
       Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
            $mdToast.show(
           $mdToast.simple()
@@ -47,7 +51,14 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
             .position("top right")
             .hideDelay(3000)
         );
-          $scope.load();
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Flow deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
 
       })
     }, function() {

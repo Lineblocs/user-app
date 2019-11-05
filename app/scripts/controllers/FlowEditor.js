@@ -15,9 +15,9 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   $scope.numbers = [];
   function sizeTheIframe() {
     var element = angular.element(".flow-editor-iframe");
-    var windowHeight = angular.element("body").outerHeight();
-    var padding = 5;
-    element.attr("height", windowHeight - padding);
+    var windowHeight = $(window).outerHeight();
+    var padding = 0;
+    element.attr("height",windowHeight);
   }
   var flowUrl;
   var token = SharedPref.getAuthToken();
