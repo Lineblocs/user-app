@@ -9,10 +9,10 @@
     <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
       <md-input-container>
         <label>Username</label>
-        <input name="username" ng-model="values.username" required="" minlength="5">
+        <input name="username" ng-model="values.username" required="" minlength="1">
         <div ng-show="triedSubmit">
           <div class="box">
-            <div ng-show="extensionForm.username.$error.minlength">Please enter 5 characters or more</div>
+            <div ng-show="extensionForm.username.$error.minlength">Please enter 1 characters or more</div>
             <div ng-show="extensionForm.username.$error.required">This field is required</div>
           </div>
         </div>
