@@ -105,10 +105,16 @@ angular
       console.log("changeRoute called ", arguments);
       var params = params || {};
       var except = ['flow-editor'];
+      if (factory.state && factory.state.name === route) {
+        return;
+      }
       if (!except.includes(route)) {
         factory.isLoading = true;
       }
       $state.go(route, params)
+      $timeout(function() {
+
+      }, 0);
   }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
@@ -465,6 +471,8 @@ angular
     });
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
         // do something
+        console.log("state is changing ", arguments);
+        SharedPref.state = toState;
         SharedPref.showNavbar();
         /*
 		Backend.get("/getBillingInfo").then(function(res) {
@@ -866,9 +874,11 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['monthly_cost'] = number.monthly_cost;
         params['provider'] = number.provider;
         params['country'] = number.country;
+        SharedPref.isCreateLoading = true;
         Backend.post("/did/saveNumber", params).then(function(res) {
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
+              SharedPref.endIsCreateLoading();
               purchaseConfirm($event, number);
           });
         }, function(res) {
@@ -982,7 +992,7 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
 	  SharedPref.updateTitle("Create Extension");
   $scope.values = {
     username: "",
@@ -1039,6 +1049,9 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     //example 25%, 50%, 75%, 100%
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
   }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
 });
 
 

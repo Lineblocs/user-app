@@ -94,9 +94,11 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['monthly_cost'] = number.monthly_cost;
         params['provider'] = number.provider;
         params['country'] = number.country;
+        SharedPref.isCreateLoading = true;
         Backend.post("/did/saveNumber", params).then(function(res) {
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
+              SharedPref.endIsCreateLoading();
               purchaseConfirm($event, number);
           });
         }, function(res) {

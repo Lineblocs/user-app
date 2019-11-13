@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, SharedPref) {
+angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
 	  SharedPref.updateTitle("Create Extension");
   $scope.values = {
     username: "",
@@ -64,5 +64,8 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     //example 25%, 50%, 75%, 100%
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
   }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
 });
 

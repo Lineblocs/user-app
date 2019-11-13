@@ -105,10 +105,16 @@ angular
       console.log("changeRoute called ", arguments);
       var params = params || {};
       var except = ['flow-editor'];
+      if (factory.state && factory.state.name === route) {
+        return;
+      }
       if (!except.includes(route)) {
         factory.isLoading = true;
       }
       $state.go(route, params)
+      $timeout(function() {
+
+      }, 0);
   }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
@@ -465,6 +471,8 @@ angular
     });
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
         // do something
+        console.log("state is changing ", arguments);
+        SharedPref.state = toState;
         SharedPref.showNavbar();
         /*
 		Backend.get("/getBillingInfo").then(function(res) {
