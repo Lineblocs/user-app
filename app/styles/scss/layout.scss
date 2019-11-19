@@ -25,6 +25,9 @@ body {
 .md-button.md-small {
     min-width: 1%;
 }
+md-tabs.md-default-theme.md-primary > md-tabs-wrapper, md-tabs.md-primary > md-tabs-wrapper {
+	background: $primary;
+}
 
 .clearfix:after {
 	display: block;
