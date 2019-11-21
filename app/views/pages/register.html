@@ -14,6 +14,7 @@
 
 	</div>
 	<div class="login-overlay" ng-show="!shouldSplash">
+
 		<div class="form-container shadow" ng-show="step===1">
 				<div class="inner">
 					<center>
@@ -29,6 +30,8 @@
 			</center>
 				<div class="inputs">
 					<form ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
+						        <md-input-container>
+        </md-input-container>
 						<md-input-container>
 							<input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name" required="">
 							<div ng-show="triedSubmit">
@@ -106,14 +109,32 @@
 				<div class="inputs">
 					<div ng-show="!didVerifyCall">
 						<form ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form" novalidate>
-							<md-input-container>
-								<input name="mobile_number" ng-model="verify1.mobile_number" type="text" placeholder="Mobile Number" required="">
-								<div ng-show="triedSubmit">
-									<div class="box">
-										<div ng-show="verify1Form.mobile_number.$error.required">This field is required</div>
-									</div>
+							<div layout="row">
+								<div flex="15">
+          <md-select ng-model="verify1.country" ng-change="changeCountry(verify1.country)" class="margin-10">
+            <md-option><em>None</em></md-option>
+            <md-option ng-value="'US'">
+			  <span class="flag-icon flag-icon-us flag-icon-squared"></span>
+			  +1
+			</md-option>
+			<md-option ng-value="'CA'">
+			  <span class="flag-icon flag-icon-ca flag-icon-squared"></span>
+			  +1
+            </md-option>
+
+          </md-select>
 								</div>
-							</md-input-container>
+								<div flex="85">
+									<md-input-container>
+										<input name="mobile_number" ng-model="verify1.mobile_number" type="text" placeholder="Mobile Number" required="">
+										<div ng-show="triedSubmit">
+											<div class="box">
+												<div ng-show="verify1Form.mobile_number.$error.required">This field is required</div>
+											</div>
+										</div>
+									</md-input-container>
+								</div>
+							</div>
 						<center>
 							<div class="buttons">
 								<div class="link" style="padding-bottom:0;">

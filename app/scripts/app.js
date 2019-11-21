@@ -65,7 +65,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog, $timeout, $q) {
+    .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -155,6 +155,9 @@ angular
             if (text) {
                    factory.title = baseTitle + " - " + text;
             }
+        }
+        factory.scrollTop = function() {
+            $window.scrollTo(0, 0);
         }
         return factory;
     })

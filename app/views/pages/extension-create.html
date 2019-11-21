@@ -8,6 +8,8 @@
     </md-card-title>
     <md-card-content>
       <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
+            <div layout="row">
+             <div flex="95">
         <md-input-container>
           <label>Username</label>
           <input name="username" ng-model="values.username" required="" minlength="1">
@@ -18,7 +20,20 @@
             </div>
           </div>
         </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          The username you will use to login to your extension with
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
+            <div layout="row">
+             <div flex="95">
         <md-input-container>
+
           <label>Caller ID</label>
           <input name="caller_id" ng-model="values.caller_id" required="" minlength="1">
           <div ng-show="triedSubmit">
@@ -28,8 +43,20 @@
             </div>
           </div>
         </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Your Caller ID for outbound calls
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
         <div layout="row" layout-wrap="">
           <div flex="66">
+            <div layout="row">
+              <div flex="95">
             <md-input-container>
               <label>Secret</label>
               <input name="secret" type="{{ui.showSecret ? 'text':'password'}}" required="" minlength="6" ng-model="values.secret">
@@ -40,6 +67,16 @@
                   </div>
                 </div>
             </md-input-container>
+          </div>
+          <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          A secure secret for the extension
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
           </div>
           <div flex="33">
             <md-button ng-click="generateSecret()" class="md-raised">Generate Secret</md-button>

@@ -109,20 +109,20 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 					'Outbound'
 				],
 						colours: [{ 
-								fillColor: "#2b36ff",
-								strokeColor: "#2b36ff",
-								pointColor: "#2b36ff",
-								pointStrokeColor: "#2b36ff", 
-								pointHighlightFill: "#2b36ff", 
-								pointHighlightStroke: "#2b36ff"
+								fillColor: "#3f51b5",
+								strokeColor: "#3f51b5",
+								pointColor: "#3f51b5",
+								pointStrokeColor: "#3f51b5",
+								pointHighlightFill: "#3f51b5",
+								pointHighlightStroke: "#3f51b5"
 							},
 							{
-								fillColor: "#ffa01c",
-								strokeColor: "#ffa01c",
-								pointColor: "#ffa01c",
-								pointStrokeColor: "#ffa01c", 
-								pointHighlightFill: "#ffa01c",
-								pointHighlightStroke: "#ffa01c"
+								fillColor: "#3D3D3D",
+								strokeColor: "#3D3D3D",
+								pointColor: "#3D3D3D",
+								pointStrokeColor: "#3D3D3D",
+								pointHighlightFill: "#3D3D3D",
+								pointHighlightStroke: "#3D3D3D"
 							}
 							],
 		options: {

@@ -690,6 +690,8 @@
     </md-card-title>
     <md-card-content>
       <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
+            <div layout="row">
+             <div flex="95">
         <md-input-container>
           <label>Username</label>
           <input name="username" ng-model="values.username" required="" minlength="1">
@@ -700,7 +702,20 @@
             </div>
           </div>
         </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          The username you will use to login to your extension with
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
+            <div layout="row">
+             <div flex="95">
         <md-input-container>
+
           <label>Caller ID</label>
           <input name="caller_id" ng-model="values.caller_id" required="" minlength="1">
           <div ng-show="triedSubmit">
@@ -710,8 +725,20 @@
             </div>
           </div>
         </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Your Caller ID for outbound calls
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
         <div layout="row" layout-wrap="">
           <div flex="66">
+            <div layout="row">
+              <div flex="95">
             <md-input-container>
               <label>Secret</label>
               <input name="secret" type="{{ui.showSecret ? 'text':'password'}}" required="" minlength="6" ng-model="values.secret">
@@ -722,6 +749,16 @@
                   </div>
                 </div>
             </md-input-container>
+          </div>
+          <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          A secure secret for the extension
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
           </div>
           <div flex="33">
             <md-button ng-click="generateSecret()" class="md-raised">Generate Secret</md-button>
@@ -754,6 +791,8 @@
   </md-card-title>
   <md-card-content>
     <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
+            <div layout="row">
+              <div flex="95">
       <md-input-container>
         <label>Username</label>
         <input name="username" ng-model="values.username" required="" minlength="1">
@@ -764,6 +803,18 @@
           </div>
         </div>
       </md-input-container>
+    </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          The username you will use to login to your extension with
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
+            <div layout="row">
+              <div flex="95">
       <md-input-container>
         <label>Caller ID</label>
         <input name="caller_id" ng-model="values.caller_id" required="" minlength="1">
@@ -774,8 +825,20 @@
           </div>
         </div>
       </md-input-container>
+    </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Your Caller ID for outbound calls
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
       <div layout="row" layout-wrap="">
         <div flex="66">
+            <div layout="row">
+              <div flex="95">
           <md-input-container>
             <label>Secret</label>
             <input name="secret" type="{{ui.showSecret ? 'text':'password'}}" required="" minlength="6" ng-model="values.secret">
@@ -786,6 +849,16 @@
                 </div>
               </div>
           </md-input-container>
+        </div>
+          <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          A secure secret for the extension
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
         </div>
         <div flex="33">
           <md-button ng-click="generateSecret()" class="md-raised">Generate Secret</md-button>
@@ -1140,6 +1213,7 @@
 
 	</div>
 	<div class="login-overlay" ng-show="!shouldSplash">
+
 		<div class="form-container shadow" ng-show="step===1">
 				<div class="inner">
 					<center>
@@ -1155,6 +1229,8 @@
 			</center>
 				<div class="inputs">
 					<form ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
+						        <md-input-container>
+        </md-input-container>
 						<md-input-container>
 							<input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name" required="">
 							<div ng-show="triedSubmit">
@@ -1232,14 +1308,32 @@
 				<div class="inputs">
 					<div ng-show="!didVerifyCall">
 						<form ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form" novalidate>
-							<md-input-container>
-								<input name="mobile_number" ng-model="verify1.mobile_number" type="text" placeholder="Mobile Number" required="">
-								<div ng-show="triedSubmit">
-									<div class="box">
-										<div ng-show="verify1Form.mobile_number.$error.required">This field is required</div>
-									</div>
+							<div layout="row">
+								<div flex="15">
+          <md-select ng-model="verify1.country" ng-change="changeCountry(verify1.country)" class="margin-10">
+            <md-option><em>None</em></md-option>
+            <md-option ng-value="'US'">
+			  <span class="flag-icon flag-icon-us flag-icon-squared"></span>
+			  +1
+			</md-option>
+			<md-option ng-value="'CA'">
+			  <span class="flag-icon flag-icon-ca flag-icon-squared"></span>
+			  +1
+            </md-option>
+
+          </md-select>
 								</div>
-							</md-input-container>
+								<div flex="85">
+									<md-input-container>
+										<input name="mobile_number" ng-model="verify1.mobile_number" type="text" placeholder="Mobile Number" required="">
+										<div ng-show="triedSubmit">
+											<div class="box">
+												<div ng-show="verify1Form.mobile_number.$error.required">This field is required</div>
+											</div>
+										</div>
+									</md-input-container>
+								</div>
+							</div>
 						<center>
 							<div class="buttons">
 								<div class="link" style="padding-bottom:0;">
@@ -2825,26 +2919,40 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
   <md-card-content>
     <form ng-submit="fetch($event,didForm)" name="didForm" novalidate>
 
-    <md-input-container>
-      <label>Country</label>
-      <md-select name="country" ng-model="settings.country" ng-change="changeCountry(settings.country)" required="">
-        <md-option><em>None</em></md-option>
-        <md-option ng-repeat="country in countries" ng-value="country">
-          {{country.name}}
-        </md-option>
-      </md-select>
-      <div ng-show="triedSubmit">
-        <div class="box">
-          <div ng-show="didForm.country.$error.required">This field is required</div>
-        </div>
+    <div layout="row">
+      <div flex="95">
+        <md-input-container>
+          <label>Country</label>
+          <md-select name="country" ng-model="settings.country" ng-change="changeCountry(settings.country)" required="">
+            <md-option><em>None</em></md-option>
+            <md-option ng-repeat="country in countries" ng-value="country">
+              {{country.name}}
+            </md-option>
+          </md-select>
+          <div ng-show="triedSubmit">
+            <div class="box">
+              <div ng-show="didForm.country.$error.required">This field is required</div>
+            </div>
+          </div>
+        </md-input-container>
       </div>
-    </md-input-container>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Please enter a country code OR full country name. e.g: United States or Mexico
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
     <!--
       <md-input-container>
       <label>Region</label>
       <input ng-model="settings.region" placeholder="e.g: Chicago" />
     </md-input-container>
   -->
+    <div layout="row">
+      <div flex="95">
     <md-input-container>
       <label>Region</label>
       <input name="region" ng-model="settings.region" placeholder="" required=""/>
@@ -2855,16 +2963,51 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
         </div>
       </div>
     </md-input-container>
-    <md-input-container ng-show="true">
-      <label>Rate Center</label>
-      <input ng-model="settings.rate_center" placeholder=""/>
-      <small>e.g: Edmonton</small>
-    </md-input-container>
+  </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Please enter a region code in the selected country. e.g: WA
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+</div>
 
-    <md-input-container ng-show="false">
+    <div layout="row">
+      <div flex="95">
+      <md-input-container ng-show="true">
+        <label>Rate Center</label>
+        <input ng-model="settings.rate_center" placeholder=""/>
+        <small>e.g: Edmonton</small>
+      </md-input-container>
+    </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Here you can enter a rate center where you want to purchase numbers from. e.g: BOLIVAR
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+</div>
+<div layout="row" ng-show="false">
+      <div flex="95">
+
+    <md-input-container>
       <label>Pattern</label>
       <input ng-model="settings.pattern" placeholder="e.g: 312" />
     </md-input-container>
+  </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          This lets you choose a pattern to search. this can also be an area code. for example: 416
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
     <md-button type="submit" class="md-raised md-primary">Search</md-button>
   </form>
   </md-card-content>
@@ -2926,12 +3069,26 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
   </md-card-title>
   <md-card-content>
     <form ng-submit="saveNumber()">
-        <md-input-container>
-          <label>Name</label>
-          <input ng-model="number.name">
-        </md-input-container>
+            <div layout="row">
+             <div flex="95">
+              <md-input-container>
+                <label>Name</label>
+                <input ng-model="number.name">
+              </md-input-container>
+            </div>
+            <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          The name of your number. this can also be a tag or an identifier you use to search/filter for the number.
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
         <div layout="row">
           <div flex="66">
+            <div layout="row">
+             <div flex="95">
             <md-input-container>
               <label>Attached Flow</label>
               <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
@@ -2941,6 +3098,16 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
                 </md-option>
               </md-select>
             </md-input-container>
+          </div>
+            <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          The flow your number will use for inbound calling.
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
           </div>
           <div flex="33">
             <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">Edit Flow</md-button>

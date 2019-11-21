@@ -245,8 +245,8 @@ angular.module('MaterialApp')
 				.position("top right")
 				.hideDelay(3000)
 			);
-			});
 			SharedPref.endIsCreateLoading();
+			});
 	}
 
 	function loadData(createLoading) {

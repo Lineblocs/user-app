@@ -78,6 +78,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     });
   }
   $scope.buyNumber = function($event, number) {
+        SharedPref.scrollTop();
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to purchase number "' + number.number + '"?')
@@ -95,6 +96,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['provider'] = number.provider;
         params['country'] = number.country;
         SharedPref.isCreateLoading = true;
+        SharedPref.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;

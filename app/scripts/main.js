@@ -65,7 +65,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog, $timeout, $q) {
+    .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -155,6 +155,9 @@ angular
             if (text) {
                    factory.title = baseTitle + " - " + text;
             }
+        }
+        factory.scrollTop = function() {
+            $window.scrollTo(0, 0);
         }
         return factory;
     })
@@ -731,8 +734,8 @@ angular.module('MaterialApp')
 				.position("top right")
 				.hideDelay(3000)
 			);
-			});
 			SharedPref.endIsCreateLoading();
+			});
 	}
 
 	function loadData(createLoading) {
@@ -858,6 +861,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     });
   }
   $scope.buyNumber = function($event, number) {
+        SharedPref.scrollTop();
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to purchase number "' + number.number + '"?')
@@ -875,6 +879,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['provider'] = number.provider;
         params['country'] = number.country;
         SharedPref.isCreateLoading = true;
+        SharedPref.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
@@ -1964,20 +1969,20 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 					'Outbound'
 				],
 						colours: [{ 
-								fillColor: "#2b36ff",
-								strokeColor: "#2b36ff",
-								pointColor: "#2b36ff",
-								pointStrokeColor: "#2b36ff", 
-								pointHighlightFill: "#2b36ff", 
-								pointHighlightStroke: "#2b36ff"
+								fillColor: "#3f51b5",
+								strokeColor: "#3f51b5",
+								pointColor: "#3f51b5",
+								pointStrokeColor: "#3f51b5",
+								pointHighlightFill: "#3f51b5",
+								pointHighlightStroke: "#3f51b5"
 							},
 							{
-								fillColor: "#ffa01c",
-								strokeColor: "#ffa01c",
-								pointColor: "#ffa01c",
-								pointStrokeColor: "#ffa01c", 
-								pointHighlightFill: "#ffa01c",
-								pointHighlightStroke: "#ffa01c"
+								fillColor: "#3D3D3D",
+								strokeColor: "#3D3D3D",
+								pointColor: "#3D3D3D",
+								pointStrokeColor: "#3D3D3D",
+								pointHighlightFill: "#3D3D3D",
+								pointHighlightStroke: "#3D3D3D"
 							}
 							],
 		options: {
@@ -2354,6 +2359,11 @@ angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
 angular.module('MaterialApp')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
 	  SharedPref.updateTitle("Register");
+
+	  var countryToCode = {
+		  US: "+1",
+		  CA: "+1",
+	  };
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
 	  $scope.shouldSplash = false;
@@ -2371,6 +2381,7 @@ angular.module('MaterialApp')
 		password2: ""
 	};
 	$scope.verify1 = {
+		country: "US",
 		mobile_number: ""
 	};
 	$scope.verify2 = {
@@ -2425,7 +2436,8 @@ angular.module('MaterialApp')
 		console.log("called submitVerify1Form");
 		$scope.triedSubmit = true;
 		if (verify1Form.$valid) {
-			var data = angular.copy( $scope.verify1 );
+			var data = {};
+			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
 			data.userId = $scope.userId;
 			Backend.post("/registerSendVerify", data).then(function( res ) {
 				var data = res.data;

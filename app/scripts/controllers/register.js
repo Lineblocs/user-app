@@ -10,6 +10,11 @@
 angular.module('MaterialApp')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
 	  SharedPref.updateTitle("Register");
+
+	  var countryToCode = {
+		  US: "+1",
+		  CA: "+1",
+	  };
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
 	  $scope.shouldSplash = false;
@@ -27,6 +32,7 @@ angular.module('MaterialApp')
 		password2: ""
 	};
 	$scope.verify1 = {
+		country: "US",
 		mobile_number: ""
 	};
 	$scope.verify2 = {
@@ -81,7 +87,8 @@ angular.module('MaterialApp')
 		console.log("called submitVerify1Form");
 		$scope.triedSubmit = true;
 		if (verify1Form.$valid) {
-			var data = angular.copy( $scope.verify1 );
+			var data = {};
+			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
 			data.userId = $scope.userId;
 			Backend.post("/registerSendVerify", data).then(function( res ) {
 				var data = res.data;

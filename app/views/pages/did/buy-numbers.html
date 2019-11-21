@@ -9,26 +9,40 @@
   <md-card-content>
     <form ng-submit="fetch($event,didForm)" name="didForm" novalidate>
 
-    <md-input-container>
-      <label>Country</label>
-      <md-select name="country" ng-model="settings.country" ng-change="changeCountry(settings.country)" required="">
-        <md-option><em>None</em></md-option>
-        <md-option ng-repeat="country in countries" ng-value="country">
-          {{country.name}}
-        </md-option>
-      </md-select>
-      <div ng-show="triedSubmit">
-        <div class="box">
-          <div ng-show="didForm.country.$error.required">This field is required</div>
-        </div>
+    <div layout="row">
+      <div flex="95">
+        <md-input-container>
+          <label>Country</label>
+          <md-select name="country" ng-model="settings.country" ng-change="changeCountry(settings.country)" required="">
+            <md-option><em>None</em></md-option>
+            <md-option ng-repeat="country in countries" ng-value="country">
+              {{country.name}}
+            </md-option>
+          </md-select>
+          <div ng-show="triedSubmit">
+            <div class="box">
+              <div ng-show="didForm.country.$error.required">This field is required</div>
+            </div>
+          </div>
+        </md-input-container>
       </div>
-    </md-input-container>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Please enter a country code OR full country name. e.g: United States or Mexico
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
     <!--
       <md-input-container>
       <label>Region</label>
       <input ng-model="settings.region" placeholder="e.g: Chicago" />
     </md-input-container>
   -->
+    <div layout="row">
+      <div flex="95">
     <md-input-container>
       <label>Region</label>
       <input name="region" ng-model="settings.region" placeholder="" required=""/>
@@ -39,16 +53,51 @@
         </div>
       </div>
     </md-input-container>
-    <md-input-container ng-show="true">
-      <label>Rate Center</label>
-      <input ng-model="settings.rate_center" placeholder=""/>
-      <small>e.g: Edmonton</small>
-    </md-input-container>
+  </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Please enter a region code in the selected country. e.g: WA
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+</div>
 
-    <md-input-container ng-show="false">
+    <div layout="row">
+      <div flex="95">
+      <md-input-container ng-show="true">
+        <label>Rate Center</label>
+        <input ng-model="settings.rate_center" placeholder=""/>
+        <small>e.g: Edmonton</small>
+      </md-input-container>
+    </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Here you can enter a rate center where you want to purchase numbers from. e.g: BOLIVAR
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+</div>
+<div layout="row" ng-show="false">
+      <div flex="95">
+
+    <md-input-container>
       <label>Pattern</label>
       <input ng-model="settings.pattern" placeholder="e.g: 312" />
     </md-input-container>
+  </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          This lets you choose a pattern to search. this can also be an area code. for example: 416
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
     <md-button type="submit" class="md-raised md-primary">Search</md-button>
   </form>
   </md-card-content>

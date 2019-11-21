@@ -22,6 +22,28 @@ body {
 }
 .clearfix {
 }
+
+.tooltip-icon {
+  left: auto;
+  right: 0px;
+  margin-top: 28px;
+}
+.helper-tooltip {
+  top: 45px;
+  left: -100px;
+  /*width: 128px;*/
+  white-space: inherit;
+    max-width: 500px; // Or whatever you need.
+  width: 500px;
+}
+.margin-10 {
+	margin: 10px 0;
+}
+
+md-tooltip .md-content {
+    height: auto !important;
+}
+
 .md-button.md-small {
     min-width: 1%;
 }
