@@ -219,14 +219,17 @@ angular
         }
         return factory;
     })
-    .factory("pagination", function(Backend,SharedPref, $q) {
+    .factory("pagination", function(Backend,SharedPref, $q, $timeout) {
         var factory = this;
         factory.settings = {
+            search: "",
             currentPage: 1,
             currentUrl: "",
             scope: { obj: null, key: '' }
         };
+        factory.didSearch = false;
         factory.meta = {}; // saved by backend
+        var searchTimer = null;
         factory.nextPage = function() {
             factory.settings.currentPage = factory.settings.currentPage + 1;
             factory.loadData();
@@ -238,7 +241,7 @@ angular
         factory.hasNext = function() {
             console.log("hasNext meta is ", factory.meta);
             var current = factory.settings.currentPage;
-            if (current === factory.meta.pagination.total_pages) {
+            if (current === factory.meta.pagination.total_pages || factory.meta.pagination.total_pages === 0) {
                 return false;
             }
             console.log("we have next");
@@ -267,6 +270,9 @@ angular
         }
         factory.loadData = function() {
             var url = factory.settings.currentUrl + "?page=" + factory.settings.currentPage;
+            if (factory.settings.search !== "") {
+                url += "&search=" + encodeURIComponent(factory.settings.search);
+            }
             SharedPref.isCreateLoading = true;
             return $q(function(resolve, reject) {
                 Backend.get(url).then(function(res) {
@@ -283,6 +289,21 @@ angular
         factory.gotoPage = function( page ) {
             factory.changePage( page );
             factory.loadData();
+        }
+        factory.resetSearch = function() {
+            searchTimer = null;
+            factory.settings.search = "";
+            factory.didSearch = false;
+        }
+        factory.search = function() {
+            factory.didSearch = true;
+            if (searchTimer !== null) {
+                $timeout.cancel(searchTimer);  //clear any running timeout on key up
+            }
+            searchTimer = $timeout(function() { //then give it a second to see if the user is finished
+                    //do .post ajax request //then do the ajax call
+                    factory.loadData();
+            }, 500);
         }
         return factory;
     })

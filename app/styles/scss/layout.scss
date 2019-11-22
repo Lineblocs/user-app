@@ -67,6 +67,19 @@ md-tabs.md-default-theme.md-primary > md-tabs-wrapper, md-tabs.md-primary > md-t
 	color: #FF0000;
 	font-weight: 700;
 }
+md-input-container.search {
+	position: relative;
+	left: -15px;
+	margin: 6px 8px;
+	height: 36px;
+	label {
+		padding: 0 5px;
+	}
+	input {
+		background: #FFFFFF; border-radius: 3px; border:1px solid #ccc; padding: 5px; font-size: 16px;
+
+	}
+}
 .splash {
 	.outer {
 	display: table;

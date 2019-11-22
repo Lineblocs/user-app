@@ -16,6 +16,7 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
   $scope.calls = [];
   $scope.load = function() {
     SharedPref.isLoading = true;
+      pagination.resetSearch();
       pagination.changeUrl( "/call/listCalls" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'calls' );

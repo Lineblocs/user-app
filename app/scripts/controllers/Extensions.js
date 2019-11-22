@@ -24,6 +24,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
   $scope.extensions = [];
   $scope.load = function() {
       SharedPref.isLoading = true;
+      pagination.resetSearch();
       pagination.changeUrl( "/extension/listExtensions" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'extensions');
@@ -36,7 +37,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
       });
   }
   $scope.editExtension = function(extension) {
-    $state.go('extension-edit', {extensionId: extension.id});
+    $state.go('extension-edit', {extensionId: extension.public_id});
   }
   $scope.createExtension = function(extension) {
     $state.go('extension-create', {});

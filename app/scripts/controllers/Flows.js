@@ -17,6 +17,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
   $scope.load = function() {
     return $q(function(resolve, reject) {
       SharedPref.isLoading =true;
+        pagination.resetSearch();
         pagination.changeUrl( "/flow/listFlows" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'flows' );
@@ -28,7 +29,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
     });
   }
   $scope.editFlow = function(flow) {
-    SharedPref.changeRoute('flow-editor', {flowId: flow.id});
+    SharedPref.changeRoute('flow-editor', {flowId: flow.public_id});
   }
   $scope.createFlow = function() {
     SharedPref.changeRoute('flow-editor', {flowId: "new"}); 

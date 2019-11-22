@@ -14,6 +14,7 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
   $scope.load = function() {
     return $q(function(resolve, reject) {
       SharedPref.isLoading = true;
+      pagination.resetSearch();
       pagination.changeUrl( "/did/listNumbers" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
@@ -28,7 +29,8 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
     $state.go('buy-numbers', {});
   }
   $scope.editNumber = function(number) {
-    $state.go('my-numbers-edit', {numberId: number.id});
+
+    $state.go('my-numbers-edit', {numberId: number.public_id});
   }
   $scope.deleteNumber = function($event, number) {
     // Appending dialog to document.body to cover sidenav in docs app

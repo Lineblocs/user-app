@@ -46,7 +46,6 @@
     <md-input-container>
       <label>Region</label>
       <input name="region" ng-model="settings.region" placeholder="" required=""/>
-      <small>2 letter province or state code. e.g: AB</small>
       <div ng-show="triedSubmit">
         <div class="box">
           <div ng-show="didForm.region.$error.required">This field is required</div>
@@ -69,7 +68,6 @@
       <md-input-container ng-show="true">
         <label>Rate Center</label>
         <input ng-model="settings.rate_center" placeholder=""/>
-        <small>e.g: Edmonton</small>
       </md-input-container>
     </div>
       <div flex="5">
@@ -116,7 +114,7 @@
             <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
               <thead md-head md-order="query.order" md-on-reorder="getDesserts">
                 <tr md-row>
-                  <th md-column md-order-by="nameToLower"><span>Number</span></th>
+                  <th md-column><span>Number</span></th>
                   <th md-column>Region</th>
                   <th md-column>Monthly Cost</th>
                   <th md-column>&nbsp;</th>

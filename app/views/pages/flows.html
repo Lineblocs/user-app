@@ -1,5 +1,5 @@
 
-<div ng-show="flows.length === 0">
+<div ng-show="!pagination.didSearch && flows.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
       <center>
@@ -9,8 +9,14 @@
     </div>
   </md-card>
 </div>
-<div ng-show="flows.length > 0">
-  <div layout="row" layout-align="end center">
+<div ng-show="pagination.didSearch || (!pagination.didSearch && flows.length > 0)">
+  <div layout="row side-options" layout-align="end center">
+        <div flex="10">
+                <md-input-container class="search">
+                  <label>Search</label>
+              <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+              </md-input-container>
+          </div>
     <md-button ng-click="createFlow()" class="md-raised md-primary">Create New</md-button>
   </div>
   <!-- exact table from live demo -->
@@ -19,7 +25,7 @@
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
           <tr md-row>
-            <th md-column md-order-by="nameToLower"><span>Name</span></th>
+            <th md-column><span>Name</span></th>
             <th md-column>&nbsp;</th>
           </tr>
         </thead>

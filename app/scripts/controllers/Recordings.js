@@ -17,6 +17,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
   $scope.load = function() {
     return $q(function(resolve, reject) {
       SharedPref.isLoading = true;
+      pagination.resetSearch();
         pagination.changeUrl( "/recording/listRecordings" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'recordings' );
