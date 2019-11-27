@@ -40,6 +40,10 @@ body {
 .margin-10 {
   margin: 10px 0; }
 
+nav.right md-menu {
+  height: 69px;
+  padding: 8px 0; }
+
 md-tooltip .md-content {
   height: auto !important; }
 
