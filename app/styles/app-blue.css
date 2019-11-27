@@ -24,6 +24,31 @@ body {
 .page-content.no-padding {
   padding-top: 0px; }
 
+.tooltip-icon {
+  left: auto;
+  right: 0px;
+  margin-top: 28px; }
+
+.helper-tooltip {
+  top: 45px;
+  left: -100px;
+  /*width: 128px;*/
+  white-space: inherit;
+  max-width: 500px;
+  width: 500px; }
+
+.margin-10 {
+  margin: 10px 0; }
+
+md-tooltip .md-content {
+  height: auto !important; }
+
+.md-button.md-small {
+  min-width: 1%; }
+
+md-tabs.md-default-theme.md-primary > md-tabs-wrapper, md-tabs.md-primary > md-tabs-wrapper {
+  background: #395373; }
+
 .clearfix:after {
   display: block;
   margin: 0;
@@ -38,6 +63,20 @@ body {
 .req-field {
   color: #FF0000;
   font-weight: 700; }
+
+md-input-container.search {
+  position: relative;
+  left: -15px;
+  margin: 6px 8px;
+  height: 36px; }
+  md-input-container.search label {
+    padding: 0 5px; }
+  md-input-container.search input {
+    background: #FFFFFF;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 16px; }
 
 .splash .outer {
   display: table;
@@ -148,9 +187,8 @@ audio.small {
   margin: 10px 0; }
 
 .collapsed-content {
-  margin-left: 80px; 
-
-}
+  margin-left: 80px;
+  position: relative; }
 
 .profile-content {
   margin-left: 80px; }
@@ -163,7 +201,10 @@ audio.small {
 .flow-editor-iframe {
   border: none;
   overflow-x: hidden;
-  overflow-y: hidden; }
+  overflow-y: hidden;
+  height: calc(100vh - 5px);
+  padding: 0;
+  margin: 0; }
 
 /* Styles for extended layout */
 .extended .navbar {
@@ -192,7 +233,7 @@ audio.small {
     width: 200px;
     position: fixed;
     z-index: 999;
-    background-color: #2979ff;
+    background-color: #395373;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -267,7 +308,7 @@ audio.small {
     width: 100%;
     display: block !important;
     overflow: hidden;
-    background: #1069ff;
+    background: #314762;
     transition: all 0.4s cubic-bezier(0.27, 0.63, 0.5, 1.05); }
     .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu.visible {
       opacity: 1;
@@ -276,7 +317,7 @@ audio.small {
       height: 40px;
       min-height: 40px; }
       .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu li:hover {
-        background: #005cf5 !important; }
+        background: #283a51 !important; }
       .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu li a {
         font-size: 15px;
         height: 40px;
@@ -290,12 +331,12 @@ audio.small {
         .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu li a:hover {
           background: initial !important; }
       .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu li.active {
-        border-left: 4px solid #a9c9ff; }
+        border-left: 4px solid #7292b9; }
         .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu li.active a {
           border-left: none !important; }
     .extended .sidebar .dashboard-menu ul.menu-list ul.sub-menu li:before {
       content: "• ";
-      color: #a9c9ff;
+      color: #7292b9;
       position: absolute;
       left: 15px;
       top: -2px;
@@ -424,7 +465,7 @@ audio.small {
   right: 0;
   padding-bottom: 200px;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #F5F5F5;
   -webkit-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.335, 1.05);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.335, 1.05); }
   .login-overlay .logo {
@@ -451,13 +492,15 @@ audio.small {
     .login-overlay .form-container .inner {
       padding: 20px; }
     .login-overlay .form-container .icon {
-      padding-top: 30px; }
+      padding-top: 0px; }
       .login-overlay .form-container .icon .mdi {
-        color: #2979ff;
+        color: #395373;
         font-size: 110px; }
       .login-overlay .form-container .icon .header {
         margin-top: 10px;
         font-size: 20px; }
+        .login-overlay .form-container .icon .header p {
+          font-size: 14px; }
     .login-overlay .form-container .inputs {
       margin-top: 10px; }
       .login-overlay .form-container .inputs .mdl-textfield {
@@ -474,12 +517,12 @@ audio.small {
           margin-top: 15px; }
           .login-overlay .form-container .inputs .buttons .signup a {
             text-decoration: none;
-            color: #2979ff; }
+            color: #395373; }
         .login-overlay .form-container .inputs .buttons .link {
-          padding-top: 40px;
-          padding-bottom: 30px; }
+          padding-top: 0px;
+          padding-bottom: 0px; }
           .login-overlay .form-container .inputs .buttons .link .mdl-button {
-            background: #2979ff;
+            background: #395373;
             color: white;
             width: 25%;
             font-size: 15px; }
@@ -541,7 +584,7 @@ div.not-found {
 .panel-header {
   padding: 15px;
   font-size: 16px;
-  background: #2979ff;
+  background: #395373;
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -681,7 +724,7 @@ md-menu-item > .md-button {
 
 /* Text color */
 .text-primary {
-  color: #2979ff !important; }
+  color: #395373 !important; }
 
 #blue .mdi {
   color: #2979ff; }
@@ -738,7 +781,7 @@ md-card img {
   position: fixed;
   top: 0;
   left: 0;
-  background: #2979ff;
+  background: #395373;
   height: 100vh;
   z-index: 3;
   /*transition: width .3s, left .3s cubic-bezier(.27,.63,.5,1.05);*/ }
@@ -749,7 +792,7 @@ md-card img {
     font-weight: 500;
     position: fixed;
     z-index: 999;
-    background-color: #2979ff;
+    background-color: #395373;
     width: 20px; }
   .sidebar .scrollbar {
     padding-top: 70px; }
@@ -798,7 +841,7 @@ md-card img {
           display: block;
           padding-left: 0; }
         .sidebar .dashboard-menu ul.menu-list li.active a:first-child {
-          border-left: 4px solid #a9c9ff; }
+          border-left: 4px solid #7292b9; }
       .sidebar .dashboard-menu ul.menu-list li a {
         color: white;
         padding-top: 5px; }
@@ -810,7 +853,7 @@ md-card img {
         .sidebar .dashboard-menu ul.menu-list li a .mdi-chevron-down {
           display: none; }
         .sidebar .dashboard-menu ul.menu-list li a:hover {
-          background: #005cf5; }
+          background: #283a51; }
       .sidebar .dashboard-menu ul.menu-list li ul.sub-menu {
         display: none;
         list-style-type: none;
@@ -819,7 +862,7 @@ md-card img {
         left: 80px;
         top: 0;
         width: 210px;
-        background: #2979ff; }
+        background: #395373; }
         .sidebar .dashboard-menu ul.menu-list li ul.sub-menu li {
           background: inherit;
           overflow: hidden; }
@@ -953,7 +996,7 @@ md-card img {
   .thisrtl {
     display: none; }
   .responsive-logo {
-    color: #2979ff;
+    color: #395373;
     display: block;
     position: absolute;
     left: 0;
@@ -1391,10 +1434,10 @@ md-card img {
 
 /* styles for buttons */
 .primary {
-  background: #2979ff !important;
+  background: #395373 !important;
   color: #fff !important; }
   .primary:hover {
-    background-color: #2979ff !important; }
+    background-color: #395373 !important; }
 
 .green {
   background: #00D554 !important;
@@ -1403,7 +1446,7 @@ md-card img {
     background-color: #00D554 !important; }
 
 .primary-flat {
-  color: #2979ff; }
+  color: #395373; }
 
 .green-flat {
   color: #00D554; }
@@ -1412,7 +1455,7 @@ md-card img {
   color: #00D554; }
 
 .md-icon-button.primary-flat .mdi {
-  color: #2979ff; }
+  color: #395373; }
 
 .md-icon-button {
   line-height: 20px !important; }
@@ -1946,7 +1989,7 @@ div.table-container {
 /* styles for invoice */
 .invoice-logo {
   font-weight: 600;
-  color: #2979ff;
+  color: #395373;
   font-size: 25px;
   letter-spacing: 1.2px;
   line-height: 1.1;

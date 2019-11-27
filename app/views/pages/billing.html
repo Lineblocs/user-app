@@ -158,6 +158,23 @@
               balance including charges this month.
             </small>
             <h5>History</h5>
+            <small>Filter Dates</small>
+     <div layout="row">
+        <div>
+          <md-datepicker ng-model="startDate" md-placeholder="Start date"></md-datepicker>
+        </div>
+        <div>
+          <md-datepicker ng-model="endDate" md-placeholder="End date"></md-datepicker>
+        </div>
+        <div>
+          <md-button ng-click="filterBilling()" class="md-raised md-primary">Filter</md-button>
+        </div>
+        <div>
+          <md-button ng-click="downloadBilling()" class="md-raised md-warn">Download</md-button>
+        </div>
+
+      </div>
+
 <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
@@ -201,7 +218,18 @@
               use the following settings to configure your billing according to your needs
             </p>
           -->
-
+            <md-checkbox ng-model="settings.db.invoices_by_email" aria-label="Receive Invoices By Email">
+              Receive Invoices By Email
+            </md-checkbox>
+            <md-input-container>
+              <label>Billing Package</label>
+              <md-select ng-model="settings.db.billing_package" ng-change="changeBillingPackage(settings.db.billing_package)">
+                <md-option ng-repeat="package in SharedPref.billingPackages" ng-value="package">
+                  {{makeNicePackageName(package)}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+            <br/>
             <md-checkbox ng-model="settings.db.auto_recharge" aria-label="Auto Recharge">
               Auto Recharge Account
             </md-checkbox>

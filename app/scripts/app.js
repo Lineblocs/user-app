@@ -14,10 +14,18 @@ function checkExpires(expiresIn)
 {
 
 }
-function getJWTToken() {
+function getJWTTokenObj() {
     var token = localStorage.getItem("AUTH");
     if (token) {
             var parsed = JSON.parse(token);
+            return parsed;
+    }
+    return "";
+}
+
+function getJWTToken() {
+    var parsed = getJWTTokenObj();
+    if (parsed !== "") {
             return "Bearer " + parsed.token;
     }
     return "";
@@ -40,6 +48,14 @@ function generatePassword() {
         retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     return retVal;
+}
+function formatDate(input, addTime) {
+    var format = 'YYYY-MM-DD';
+    addTime = addTime || false;
+    if (addTime) {
+        format += ' HH:mm:ss';
+    }
+    return input ? moment(input).format(format) : '';
 }
 angular
 .module('MaterialApp', [
@@ -83,6 +99,8 @@ angular
        name: 'United States'
     }
   ];
+
+        factory.billingPackages = ['gold', 'silver', 'bronze'];
   var flickerTimeout = 0;
   factory.endIsLoading = function() {
       return $q(function(resolve, reject) {
