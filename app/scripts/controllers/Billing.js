@@ -12,6 +12,8 @@ angular.module('MaterialApp')
 	  SharedPref.updateTitle("Billing");
 	  $scope.SharedPref = SharedPref;
 	  $scope.triedSubmit = false;
+	  $scope.startDate = moment().startOf('month').toDate();
+	  $scope.endDate = moment().endOf('month').toDate();
 	$scope.cards = [];
 	$scope.creditAmounts = [
 		{"name": "$10", "value": 10.00},
@@ -220,6 +222,10 @@ angular.module('MaterialApp')
 			$scope.settings.newCard = false;
 		}
 	}
+  $scope.changeBillingPackage = function(newPackage) {
+    console.log("changeBillingPackage ", newPackage);
+    $scope.settings.billing_package = newPackage;
+  }
 	$scope.changeAmount = function(value) {
 		console.log("changeAmount ", value);
 		$scope.data.creditAmount = value;
@@ -234,6 +240,8 @@ angular.module('MaterialApp')
 	$scope.saveSettings = function() {
 		var data = {};
 		data['auto_recharge'] = $scope.settings.db.auto_recharge;
+		data['invoices_by_email'] = $scope.settings.db.invoices_by_email;
+		data['billing_package'] = $scope.settings.db.billing_package;
 		var recharge = $scope.settings.db.auto_recharge_top_up.value;
 		data['auto_recharge_top_up'] = toCents(recharge);
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
@@ -249,17 +257,44 @@ angular.module('MaterialApp')
 			});
 	}
 
+	function billHistory() {
+		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
+	}
+	$scope.filterBilling = function() {
+		SharedPref.isCreateLoading = true;
+		billHistory().then(function(res) {
+				$scope.history = res.data;
+				SharedPref.endIsCreateLoading();
+		});
+	}
+	$scope.downloadBilling = function() {
+		var token = getJWTTokenObj();
+		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token));
+	}
+	$scope.makeNicePackageName = function(ugly) {
+		var map = {
+			"gold": "Gold Route",
+			"silver": "Silver Route",
+			"bronze": "Bronze Route",
+		};
+		return map[ugly];
+	}
+
 	function loadData(createLoading) {
 		if (createLoading) {
 			SharedPref.isCreateLoading =true;
 		} else {
 			SharedPref.isLoading =true;
 		}
+
 		return $q(function(resolve, reject) {
-			Backend.get("/billing").then(function(res) {
+			$q.all([
+				Backend.get("/billing"),
+				billHistory()
+			]).then(function(res) {
 				console.log("finished loading..");
-				$scope.billing = res.data[0];
-				$scope.settings.db = res.data[0].info.settings;
+				$scope.billing = res[0].data[0];
+				$scope.settings.db = res[0].data[0].info.settings;
 				var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
 				if ($scope.settings.db.auto_recharge_top_up) {
@@ -271,9 +306,9 @@ angular.module('MaterialApp')
 						}
 					}
 				}
-				$scope.cards = res.data[1];
-				$scope.config = res.data[2];
-				$scope.history = res.data[3];
+				$scope.cards = res[0].data[1];
+				$scope.config = res[0].data[2];
+				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
 				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
