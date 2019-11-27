@@ -206,7 +206,8 @@
 			<md-menu>
 				<div class="vert-line"></div>
 			</md-menu>
-			<md-menu md-position-mode="target-right target" >
+			<md-menu class="top-menu" md-position-mode="target-right target" >
+
 				<div class="nav-item balance">
 					<strong>Balance</strong>
 					<br/>
@@ -219,7 +220,7 @@
 
 				</div>
 			</md-menu>
-			<md-menu md-position-mode="target-right target" >
+			<md-menu class="top-menu" md-position-mode="target-right target" >
 				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
 					<i class="mdi mdi-settings"></i>
 				</md-button>
@@ -285,7 +286,7 @@
 		</div>
 		<center>
 			<div ng-show="SharedPref.isLoading">
-				<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 				<small>Please wait..</small>
 			</div>
 		</center>
