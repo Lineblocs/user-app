@@ -81,9 +81,11 @@ md-input-container.search {
 	height: 36px;
 	label {
 		padding: 0 5px;
+		margin-left: 3px;
 	}
 	input {
 		background: #FFFFFF; border-radius: 3px; border:1px solid #ccc; padding: 5px; font-size: 16px;
+		height: 36px;
 
 	}
 }
