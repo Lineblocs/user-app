@@ -69,7 +69,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         SharedPref.isLoading = true;
-      Backend.delete("/extension/deleteExtension/" + extension.id).then(function() {
+      Backend.delete("/extension/deleteExtension/" + extension.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
