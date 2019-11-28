@@ -1111,35 +1111,6 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
-	  SharedPref.updateTitle("Call View");
-  $scope.call = [];
-  $scope.load = function() {
-    SharedPref.isLoading =true;
-    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
-      console.log("call is ", res.data);
-      SharedPref.isLoading =false;
-      var call = res.data;
-      call.recordings = call.recordings.map(function(obj) {
-        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
-        return obj;
-      });
-      $scope.call = call;
-    })
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
 angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref) {
     SharedPref.updateTitle("Calls");
     $scope.pagination = pagination;
@@ -1175,748 +1146,23 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
- angular.module('MaterialApp').controller('DashboardWelcomeCtrl', function ($scope, Backend, SharedPref, $q) {
-      SharedPref.updateTitle("Dashboard");
-	    $q.all([
-            Backend.get("/self"),
-            Backend.get("/getBillingInfo")
-        ]).then(function(res) {
-            SharedPref.userInfo = res[0].data;
-            SharedPref.billInfo = res[1].data; 
-            SharedPref.endIsLoading();
-                });
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Create Extension");
-  $scope.values = {
-    username: "",
-    secret: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
-  }
-  $scope.showSecret = function() {
-    $scope.ui.showSecret = true;
-  }
-  $scope.hideSecret = function() {
-    $scope.ui.showSecret = false;
-  }
-  $scope.submit = function(form) {
-    console.log("submitting extension form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['caller_id'] = $scope.values.caller_id;
-      values['secret'] = $scope.values.secret;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-      Backend.post("/extension/saveExtension", values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
-      });
-    }
-  }
-  $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
-  }
-  $timeout(function() {
-    SharedPref.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref) {
-	  SharedPref.updateTitle("Edit Extension");
-  $scope.values = {
-    username: "",
-    secret: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Call View");
+  $scope.call = [];
   $scope.load = function() {
-    SharedPref.isLoading = true;
-    Backend.get("/extension/extensionData/" + $stateParams['extensionId']).then(function(res) {
-      $scope.extension = res.data;
-      $scope.values = angular.copy( $scope.extension );
-      SharedPref.endIsLoading();
-    });
-  }
-  $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
-  }
-  $scope.showSecret = function() {
-    $scope.ui.showSecret = true;
-  }
-  $scope.hideSecret = function() {
-    $scope.ui.showSecret = false;
-  }
-  $scope.submit = function(form) {
-    console.log("submitting extension form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['secret'] = $scope.values.secret;
-      values['caller_id'] = $scope.values.caller_id;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-      Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Updated extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-      SharedPref.endIsCreateLoading();
+    SharedPref.isLoading =true;
+    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
+      console.log("call is ", res.data);
+      SharedPref.isLoading =false;
+      var call = res.data;
+      call.recordings = call.recordings.map(function(obj) {
+        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        return obj;
       });
-    }
-  }
-  $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
-  }
-  $scope.load();
-});
-
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Extensions");
-    $scope.pagination = pagination;
-    
-    function DialogController($scope, $mdDialog, extension, SharedPref) {
-      $scope.SharedPref = SharedPref;
-      $scope.extension = extension;
-      $scope.close = function() {
-        $mdDialog.hide(); 
-      }
-    }
-  $scope.settings = {
-    page: 0
-  };
-  $scope.extensions = [];
-  $scope.load = function() {
-      SharedPref.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/extension/listExtensions" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'extensions');
-      return $q(function(resolve, reject) {
-        pagination.loadData().then(function(res) {
-        $scope.extensions = res.data.data;
-        SharedPref.endIsLoading();
-        resolve();
-        }, reject);
-      });
-  }
-  $scope.editExtension = function(extension) {
-    $state.go('extension-edit', {extensionId: extension.public_id});
-  }
-  $scope.createExtension = function(extension) {
-    $state.go('extension-create', {});
-  }
-  $scope.connectInfo = function($event, extension) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/extension-connect-info.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        "extension": extension
-      }
+      $scope.call = call;
     })
-    .then(function() {
-    }, function() {
-    });
   }
-  $scope.deleteExtension = function($event, extension) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this extension?')
-          .textContent('This will permantely remove the extension and you will no longer be able to use it')
-          .ariaLabel('Delete extension')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
-      Backend.delete("/extension/deleteExtension/" + extension.id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Extension deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
   $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref, $stateParams, $sce) {
-	  SharedPref.updateTitle("Flow Editor");
-  $scope.settings = {
-    page: 0
-  };
-  $scope.numbers = [];
-  function sizeTheIframe() {
-    var element = angular.element(".flow-editor-iframe");
-    var windowHeight = $(window).outerHeight();
-    var padding = 0;
-    element.attr("height",windowHeight);
-  }
-  var flowUrl;
-  var token = SharedPref.getAuthToken();
-
-  if ($stateParams['flowId'] === "new" ) {
-    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token;
-  } else {
-    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token;
-  }
-  $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
-  console.log("flow url is ", $scope.flowUrl);
-  SharedPref.collapseNavbar();
-
-  var element = angular.element(".flow-editor-iframe");
-  sizeTheIframe();
-  angular.element("window").on("resize.editor", function() {
-    sizeTheIframe();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Flows");
-    $scope.pagination = pagination;
-  $scope.settings = {
-    page: 0
-  };
-  $scope.flows = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      SharedPref.isLoading =true;
-        pagination.resetSearch();
-        pagination.changeUrl( "/flow/listFlows" );
-        pagination.changePage( 1 );
-        pagination.changeScope( $scope, 'flows' );
-        pagination.loadData().then(function(res) {
-        $scope.flows = res.data.data;
-        SharedPref.endIsLoading();
-        resolve();
-      }, reject);
-    });
-  }
-  $scope.editFlow = function(flow) {
-    SharedPref.changeRoute('flow-editor', {flowId: flow.public_id});
-  }
-  $scope.createFlow = function() {
-    SharedPref.changeRoute('flow-editor', {flowId: "new"}); 
-  }
-  $scope.deleteFlow = function($event, flow) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this flow?')
-          .textContent('This will permantely remove the flow and also unset the flow on numbers that have this flow attached to it')
-          .ariaLabel('Delete flow')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
-      Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Flow deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Flow deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("My Numbers");
-    $scope.pagination = pagination;
-  $scope.numbers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/did/listNumbers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'numbers' );
-      pagination.loadData().then(function(res) {
-      $scope.numbers = res.data.data;
-      SharedPref.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-  $scope.buyNumber = function() {
-    $state.go('buy-numbers', {});
-  }
-  $scope.editNumber = function(number) {
-
-    $state.go('my-numbers-edit', {numberId: number.public_id});
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this number?')
-          .textContent('If you delete this number you will not be able to call it anymore')
-          .ariaLabel('Delete number')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
-      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-	  SharedPref.updateTitle("Edit Number");
-  $scope.flows = [];
-  $scope.number = null;
-  $scope.saveNumber = function(number) {
-    var params = {};
-    params['name'] = $scope.number.name;
-    params['flow_id'] = $scope.number.flow_id;
-    var toastPos = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-    var toastPosStr = Object.keys(toastPos)
-      .filter(function(pos) { return toastPos[pos]; })
-      .join(' ');
-    console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
-        console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number updated..')
-            .position(toastPosStr)
-            .hideDelay(3000)
-        );
-        $state.go('my-numbers', {});
-      SharedPref.endIsCreateLoading();
-    });
-  }
-  $scope.changeFlow = function(flow) {
-    $scope.number.flow_id = flow;
-    console.log("changeFlow", flow);
-  }
-  $scope.editFlow = function(flowId) {
-    $state.go('flow-editor', {flowId: flowId});
-  }
-  SharedPref.isLoading = true;
-  $q.all([
-    Backend.get("/flow/listFlows"),
-    Backend.get("/did/numberData/" + $stateParams['numberId'])
-  ]).then(function(res) {
-    $scope.flows = res[0].data.data;
-    $scope.number = res[1].data;
-    SharedPref.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
-	  SharedPref.updateTitle("Recordings");
-  $scope.settings = {
-    page: 0
-  };
-  $scope.pagination = pagination;
-  $scope.recordings = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
-      pagination.resetSearch();
-        pagination.changeUrl( "/recording/listRecordings" );
-        pagination.changePage( 1 );
-        pagination.changeScope( $scope, 'recordings' );
-        pagination.loadData().then(function(res) {
-        var recordings = res.data.data;
-        $scope.recordings = recordings.map(function(obj) {
-          obj.uri = $sce.trustAsResourceUrl(obj.uri);
-          return obj;
-        });
-        SharedPref.endIsLoading();
-        resolve();
-      }, reject)
-    });
-  }
-  $scope.deleteRecording = function($event, recording) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this recording?')
-          .textContent('This will permantely remove the recordings from your storage')
-          .ariaLabel('Delete recording')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
-      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
-        console.log("deleted recording..");
-        $scope.load().then(function() {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('recording deleted..')
-              .position('top right')
-              .hideDelay(3000)
-          );
-        })
-      });
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Verified Caller IDs");
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
-      $scope.error = false;
-      $scope.errorText = "";
-      $scope.data = {
-        step1: {
-          number: ""
-        }, 
-        step2:{
-          code: ""
-        }
-
-      };
-      $scope.step = 1;
-      $scope.postStep1 = function() {
-        var data = angular.copy($scope.data.step1);
-        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
-          $scope.step = 2;           
-        });
-      }
-      $scope.postStep2 = function() {
-        var data = {
-         'code': $scope.data.step2['code'],
-         'number': $scope.data.step1['number']
-        };
-        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
-          var data = res.data;
-          if (data.success) {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number verified')
-            .position("top right")
-            .hideDelay(3000)
-        );
-            $scope.close();
-            onCreated();
-          } else {
-            $scope.error = true;
-            $scope.errorText = "The code was invalid please try again.";
-          }
-        });
-
-      }
-
-      $scope.close = function() {
-        $mdDialog.hide(); 
-      }
-    }
-
-  $scope.numbers = [];
-  $scope.load = function() {
-      SharedPref.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/settings/verifiedCallerids").then(function(res) {
-          $scope.numbers = res.data;
-          SharedPref.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.createNumber = function($event) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/add-callerid.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onCreated: function() {
-          $scope.load();
-        }
-
-      }
-    })
-    .then(function() {
-    }, function() {
-    });
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this number?')
-          .textContent('This will permantely remove the caller ID')
-          .ariaLabel('Delete extension')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
-      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Verified Caller IDs");
-   $scope.values = {
-    secret: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
-  }
-  $scope.showSecret = function() {
-    $scope.ui.showSecret = true;
-  }
-  $scope.hideSecret = function() {
-    $scope.ui.showSecret = false;
-  }
-  $scope.submit = function(form) {
-    console.log("submitting extension form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['caller_id'] = $scope.values.caller_id;
-      values['secret'] = $scope.values.secret;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-      Backend.post("/extension/saveExtension", values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
-      });
-    }
-  }
-  $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
-  }
-  $timeout(function() {
-    SharedPref.endIsLoading();
-  }, 0);
 });
 
 
@@ -2202,6 +1448,380 @@ angular.module('MaterialApp')
 	});
 	
 });	
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('DashboardWelcomeCtrl', function ($scope, Backend, SharedPref, $q) {
+      SharedPref.updateTitle("Dashboard");
+	    $q.all([
+            Backend.get("/self"),
+            Backend.get("/getBillingInfo")
+        ]).then(function(res) {
+            SharedPref.userInfo = res[0].data;
+            SharedPref.billInfo = res[1].data; 
+            SharedPref.endIsLoading();
+                });
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
+	  SharedPref.updateTitle("Create Extension");
+  $scope.values = {
+    username: "",
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
+      values['secret'] = $scope.values.secret;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/saveExtension", values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref) {
+	  SharedPref.updateTitle("Edit Extension");
+  $scope.values = {
+    username: "",
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.load = function() {
+    SharedPref.isLoading = true;
+    Backend.get("/extension/extensionData/" + $stateParams['extensionId']).then(function(res) {
+      $scope.extension = res.data;
+      $scope.values = angular.copy( $scope.extension );
+      SharedPref.endIsLoading();
+    });
+  }
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['secret'] = $scope.values.secret;
+      values['caller_id'] = $scope.values.caller_id;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Updated extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+      SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $scope.load();
+});
+
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("Extensions");
+    $scope.pagination = pagination;
+    
+    function DialogController($scope, $mdDialog, extension, SharedPref) {
+      $scope.SharedPref = SharedPref;
+      $scope.extension = extension;
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+  $scope.settings = {
+    page: 0
+  };
+  $scope.extensions = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/extension/listExtensions" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'extensions');
+      return $q(function(resolve, reject) {
+        pagination.loadData().then(function(res) {
+        $scope.extensions = res.data.data;
+        SharedPref.endIsLoading();
+        resolve();
+        }, reject);
+      });
+  }
+  $scope.editExtension = function(extension) {
+    $state.go('extension-edit', {extensionId: extension.public_id});
+  }
+  $scope.createExtension = function(extension) {
+    $state.go('extension-create', {});
+  }
+  $scope.connectInfo = function($event, extension) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/extension-connect-info.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "extension": extension
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteExtension = function($event, extension) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this extension?')
+          .textContent('This will permantely remove the extension and you will no longer be able to use it')
+          .ariaLabel('Delete extension')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/extension/deleteExtension/" + extension.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Extension deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref, $stateParams, $sce) {
+	  SharedPref.updateTitle("Flow Editor");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.numbers = [];
+  function sizeTheIframe() {
+    var element = angular.element(".flow-editor-iframe");
+    var windowHeight = $(window).outerHeight();
+    var padding = 0;
+    element.attr("height",windowHeight);
+  }
+  var flowUrl;
+  var token = SharedPref.getAuthToken();
+
+  if ($stateParams['flowId'] === "new" ) {
+    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token;
+  } else {
+    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token;
+  }
+  $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
+  console.log("flow url is ", $scope.flowUrl);
+  SharedPref.collapseNavbar();
+
+  var element = angular.element(".flow-editor-iframe");
+  sizeTheIframe();
+  angular.element("window").on("resize.editor", function() {
+    sizeTheIframe();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("Flows");
+    $scope.pagination = pagination;
+  $scope.settings = {
+    page: 0
+  };
+  $scope.flows = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading =true;
+        pagination.resetSearch();
+        pagination.changeUrl( "/flow/listFlows" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'flows' );
+        pagination.loadData().then(function(res) {
+        $scope.flows = res.data.data;
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject);
+    });
+  }
+  $scope.editFlow = function(flow) {
+    SharedPref.changeRoute('flow-editor', {flowId: flow.public_id});
+  }
+  $scope.createFlow = function() {
+    SharedPref.changeRoute('flow-editor', {flowId: "new"}); 
+  }
+  $scope.deleteFlow = function($event, flow) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this flow?')
+          .textContent('This will permantely remove the flow and also unset the flow on numbers that have this flow attached to it')
+          .ariaLabel('Delete flow')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Flow deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Flow deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
 
 'use strict';
 
@@ -2536,6 +2156,129 @@ angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("My Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.buyNumber = function() {
+    $state.go('buy-numbers', {});
+  }
+  $scope.editNumber = function(number) {
+
+    $state.go('my-numbers-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Edit Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.saveNumber = function(number) {
+    var params = {};
+    params['name'] = $scope.number.name;
+    params['flow_id'] = $scope.number.flow_id;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('my-numbers', {});
+      SharedPref.endIsCreateLoading();
+    });
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  SharedPref.isLoading = true;
+  $q.all([
+    Backend.get("/flow/listFlows"),
+    Backend.get("/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
+    SharedPref.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope, $log) {
   $scope.totalItems = 64;
   $scope.currentPage = 4;
@@ -2743,6 +2486,70 @@ angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
   };
   $scope.randomStacked();
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
+	  SharedPref.updateTitle("Recordings");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.pagination = pagination;
+  $scope.recordings = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          return obj;
+        });
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject)
+    });
+  }
+  $scope.deleteRecording = function($event, recording) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this recording?')
+          .textContent('This will permantely remove the recordings from your storage')
+          .ariaLabel('Delete recording')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+        console.log("deleted recording..");
+        $scope.load().then(function() {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('recording deleted..')
+              .position('top right')
+              .hideDelay(3000)
+          );
+        })
+      });
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
 'use strict';
 
 /**
@@ -3197,3 +3004,195 @@ angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
   $scope.dynamicTooltipText = 'dynamic';
   $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Verified Caller IDs");
+    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
+      $scope.SharedPref = SharedPref;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        step1: {
+          number: ""
+        }, 
+        step2:{
+          code: ""
+        }
+
+      };
+      $scope.step = 1;
+      $scope.postStep1 = function() {
+        var data = angular.copy($scope.data.step1);
+        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
+          $scope.step = 2;           
+        });
+      }
+      $scope.postStep2 = function() {
+        var data = {
+         'code': $scope.data.step2['code'],
+         'number': $scope.data.step1['number']
+        };
+        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
+          var data = res.data;
+          if (data.success) {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number verified')
+            .position("top right")
+            .hideDelay(3000)
+        );
+            $scope.close();
+            onCreated();
+          } else {
+            $scope.error = true;
+            $scope.errorText = "The code was invalid please try again.";
+          }
+        });
+
+      }
+
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+
+  $scope.numbers = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/settings/verifiedCallerids").then(function(res) {
+          $scope.numbers = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.createNumber = function($event) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/add-callerid.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('This will permantely remove the caller ID')
+          .ariaLabel('Delete extension')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
+	  SharedPref.updateTitle("Verified Caller IDs");
+   $scope.values = {
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
+      values['secret'] = $scope.values.secret;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/saveExtension", values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
+
