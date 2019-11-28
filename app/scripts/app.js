@@ -497,6 +497,30 @@ angular
         templateUrl: 'views/pages/settings.html',
         controller: 'SettingsCtrl'
     })
+    .state('settings-verified-callerids', {
+        url: '/settings/verified-callerids',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/verified-callerids.html',
+        controller: 'VerifiedCallerIdsCtrl'
+    })
+    .state('settings-verified-callerids-create', {
+        url: '/settings/verified-callerids/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/verified-callerids-create.html',
+        controller: 'VerifiedCallerIdsCreateCtrl'
+    })
+    .state('settings-blocked-numbers', {
+        url: '/settings/blocked-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/blocked-numbers.html',
+        controller: 'BlockedNumbersCtrl'
+    })
+    .state('settings-blocked-numbers-create', {
+        url: '/settings/blocked-numbers/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/blocked-numbers-create.html',
+        controller: 'BlockedNumbersCreateCtrl'
+    })
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',

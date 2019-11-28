@@ -3,6 +3,96 @@
 	<div ui-view />
 </div> 
             </script>
+<script type="text/ng-template" id="views/dialogs/add-blocked-number.html">
+              <md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add Blocked Number</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content class="add-card-form">
+      <div class="md-dialog-content">
+      <md-input-container>
+          <label>Number</label>
+          <input ng-model="data.number"/>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="submit()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+
+  </form>
+</md-dialog> 
+            </script>
+<script type="text/ng-template" id="views/dialogs/add-callerid.html">
+              <md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add Verified Caller ID</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <div ng-show="step===1">
+        <md-dialog-content class="add-card-form">
+          <div class="md-dialog-content">
+          <md-input-container>
+              <label>Number</label>
+              <input ng-model="data.step1.number"/>
+            </md-input-container>
+          </div>
+        </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="postStep1()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+      </div>
+   <div ng-show="step===2">
+        <md-dialog-content class="add-card-form">
+          <div ng-show="error">
+            <span class="red">{{errorText}}</span>
+          </div>
+          <div class="md-dialog-content">
+          <md-input-container>
+              <label>Enter SMS code</label>
+              <input ng-model="data.step2.code"/>
+            </md-input-container>
+          </div>
+        </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="postStep2()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+      </div>
+    </div>
+
+
+  </form>
+</md-dialog> 
+            </script>
 <script type="text/ng-template" id="views/dialogs/add-card.html">
               <md-dialog>
       <md-toolbar>
@@ -274,6 +364,17 @@
 				<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="SharedPref.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('billing')}"><md-button href="" ng-click="SharedPref.changeRoute('billing')" class=""><i class="mdi mdi-credit-card"></i> &nbsp;<span class="text">{{ 'billing' | translate }}</span></md-button></li>
+				<li class="show-subnav">
+					<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
+						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
+						<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+						<span class="text"> {{ 'settings' | translate }}</span>
+					</md-button>
+					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
+						<li ng-class="{active: $state.includes('settings-verified-callerids')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-verified-callerids')" class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('settings-blocked-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-blocked-numbers')" class=""><span class="text">{{ 'blocked-numbers' | translate }}</span></md-button></li>
+					</ul>
+				</li>
 			</ul>
 		</div>
 	</div>

@@ -72,5 +72,9 @@
       "extensions": "Extensions",
       "calls": "Calls",
       "recordings": "Recordings",
-      "billing": "Billing"
+      "billing": "Billing",
+      "did-numbers": "DID Numbers",
+      "settings": "Settings",
+      "verified-caller-ids": "Verified Caller IDs",
+      "blocked-numbers": "Blocked Numbers"
   }

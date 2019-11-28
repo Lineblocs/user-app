@@ -26,7 +26,7 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
     })
   }
   $scope.viewCall= function(call) {
-    $state.go('call-view', {callId: call.id});
+    $state.go('call-view', {callId: call.api_id});
   }
 
   $scope.load();

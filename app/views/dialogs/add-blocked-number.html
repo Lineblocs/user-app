@@ -1,0 +1,30 @@
+<md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add Blocked Number</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content class="add-card-form">
+      <div class="md-dialog-content">
+      <md-input-container>
+          <label>Number</label>
+          <input ng-model="data.number"/>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="submit()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+
+  </form>
+</md-dialog>

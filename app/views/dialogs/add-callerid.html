@@ -1,0 +1,56 @@
+<md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add Verified Caller ID</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <div ng-show="step===1">
+        <md-dialog-content class="add-card-form">
+          <div class="md-dialog-content">
+          <md-input-container>
+              <label>Number</label>
+              <input ng-model="data.step1.number"/>
+            </md-input-container>
+          </div>
+        </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="postStep1()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+      </div>
+   <div ng-show="step===2">
+        <md-dialog-content class="add-card-form">
+          <div ng-show="error">
+            <span class="red">{{errorText}}</span>
+          </div>
+          <div class="md-dialog-content">
+          <md-input-container>
+              <label>Enter SMS code</label>
+              <input ng-model="data.step2.code"/>
+            </md-input-container>
+          </div>
+        </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="postStep2()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+      </div>
+    </div>
+
+
+  </form>
+</md-dialog>
