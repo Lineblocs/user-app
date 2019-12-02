@@ -74,13 +74,15 @@ md-input-container.search {
   margin: 6px 8px;
   height: 36px; }
   md-input-container.search label {
-    padding: 0 5px; }
+    padding: 0 5px;
+    margin-left: 3px; }
   md-input-container.search input {
     background: #FFFFFF;
     border-radius: 3px;
     border: 1px solid #ccc;
     padding: 5px;
-    font-size: 16px; }
+    font-size: 16px;
+    height: 36px; }
 
 .splash .outer {
   display: table;
