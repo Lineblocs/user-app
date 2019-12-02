@@ -137,6 +137,7 @@
 					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
 						<li ng-class="{active: $state.includes('settings-verified-callerids')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-verified-callerids')" class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span></md-button></li>
 						<li ng-class="{active: $state.includes('settings-blocked-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-blocked-numbers')" class=""><span class="text">{{ 'blocked-numbers' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('settings-ip-whitelist')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-ip-whitelist')" class=""><span class="text">{{ 'ip-whitelist' | translate }}</span></md-button></li>
 					</ul>
 				</li>
 			</ul>
