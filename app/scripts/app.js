@@ -81,7 +81,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window) {
+    .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
@@ -139,6 +139,17 @@ angular
             factory.PAGE_CONTENT_NO_PADDING = true;
             $( '.c-hamburger' ).removeClass('is-active');
             $('body').removeClass('extended');
+        }
+        factory.processResult = function() {
+            var params = $location.search();
+            if (params['result'] && params['result'] === 'email-verified') {
+                    $mdToast.show(
+                    $mdToast.simple()
+                        .textContent('Email was verified')
+                        .position("top right")
+                        .hideDelay(3000)
+                    );
+            }
         }
         factory.showNavbar = function() {
             factory.SHOW_NAVBAR = true;
@@ -520,6 +531,12 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/blocked-numbers-create.html',
         controller: 'BlockedNumbersCreateCtrl'
+    })
+    .state('settings-ip-whitelist', {
+        url: '/settings/ip-whitelist',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/ip-whitelist.html',
+        controller: 'IpWhitelistCtrl'
     })
     .state('blank', {
         url: '/blank',

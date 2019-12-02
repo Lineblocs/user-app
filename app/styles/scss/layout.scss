@@ -210,7 +210,14 @@ audio.small {
 	width: 256px;
 }
 
-
+.table-heading {
+	h5 {
+		margin-left: 7px;
+	}
+	button {
+		margin-top: 20px;
+	}
+}
 md-dialog-content.add-card-form md-input-container {
 	//height: 32px;
 	//margin-top: 3px;
@@ -220,6 +227,9 @@ md-dialog-content.add-card-form md-input-container {
 	md-input-container {
 		margin: 10px 0;
 	}
+}
+md-dialog-content.add-trigger-form {
+	width: 480px;
 }
 md-tabs.settings {
 }

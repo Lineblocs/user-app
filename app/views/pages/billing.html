@@ -202,13 +202,41 @@
             </md-tab>
     <md-tab label="Limits">
           <md-content class="md-padding">
-              <h5>Maximum Concurrent Calls: {{billing.info.limits.ports}}</h5>
+              <p><strong>Call Duration:</strong>: {{billing.info.limits.call_duration}}</p>
               <br/>
-              <h5>Extensions: {{billing.info.limits.extensions}}</h5>
-              <br/>
-              <h5>Recording Space: {{billing.info.limits.recording_space}}</h5>
-              <br/>
-              <h5>Numbers: {{billing.info.limits.numbers}}</h5>
+              <p><strong>Recording space:</strong>: {{billing.info.limits.recording_space}}</p>
+              <h5>Usage Triggers</h5>
+                    <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides">Create New</md-button>
+                    <div ng-show="usageTriggers.length===0">
+                        <p>No usage triggers setup..</p>
+                    </div>
+                    <div ng-show="usageTriggers.length>0">
+<md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>Percentage</span></th>
+            <th md-column>Created On</th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="item in usageTriggers">
+            <td md-cell>{{item.percentage}}</td>
+            <td md-cell>{{item.created_at}}</td>
+            <td md-cell>
+              <md-button ng-click="deleteUsageTrigger($event, item)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </div>
+
+
+
             </md-content>
             </md-tab>
         <md-tab label="Settings">

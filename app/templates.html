@@ -175,6 +175,90 @@
   </form>
 </md-dialog> 
             </script>
+<script type="text/ng-template" id="views/dialogs/add-ip-whitelist.html">
+              <md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add IP to whitelist</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content class="add-card-form">
+      <div class="md-dialog-content">
+        <div layout="row">
+          <div>
+            <md-input-container>
+                <label>IP Address</label>
+                <input ng-model="data.ip"/>
+              </md-input-container>
+            </div>
+            <div>
+        <md-select ng-model="data.range" placeholder="Range" class="md-no-underline" required md-no-asterisk="false">
+        <md-option ng-repeat="option in ranges" ng-value="option">{{option}}</md-option>
+      </md-select>
+
+            </div>
+
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="submit()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+
+  </form>
+</md-dialog> 
+            </script>
+<script type="text/ng-template" id="views/dialogs/create-trigger.html">
+              <md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Create Usage Trigger</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+      <md-dialog-content class="add-trigger-form">
+        <div class="md-dialog-content">
+          <p>
+            usage triggers will email you whenever you reach X amount balance. usage triggers can be setup by percentage. for example if you setup a usage triggers
+            of 40% it will remind you when your balance falls to or below 40%.
+          </p>
+
+          <br/>
+          <br/>
+        <label>Trigger Percentage</label>
+        <md-select ng-model="data.percentage" placeholder="Percentage" class="md-no-underline" required md-no-asterisk="false">
+        <md-option ng-repeat="option in percentages" ng-value="option">{{option}}</md-option>
+      </md-select>
+        </div>
+      </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <md-button ng-click="save()">
+      Submit
+    </md-button>
+    <span flex></span>
+    <md-button ng-click="close()">
+      Close
+    </md-button>
+  </md-dialog-actions>
+    
+    </div>
+
+
+  </form>
+</md-dialog> 
+            </script>
 <script type="text/ng-template" id="views/dialogs/extension-connect-info.html">
               <md-dialog aria-label="Mango (Fruit)">
     <md-dialog-content>
@@ -373,6 +457,7 @@
 					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
 						<li ng-class="{active: $state.includes('settings-verified-callerids')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-verified-callerids')" class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span></md-button></li>
 						<li ng-class="{active: $state.includes('settings-blocked-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-blocked-numbers')" class=""><span class="text">{{ 'blocked-numbers' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('settings-ip-whitelist')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-ip-whitelist')" class=""><span class="text">{{ 'ip-whitelist' | translate }}</span></md-button></li>
 					</ul>
 				</li>
 			</ul>
@@ -650,13 +735,41 @@
             </md-tab>
     <md-tab label="Limits">
           <md-content class="md-padding">
-              <h5>Maximum Concurrent Calls: {{billing.info.limits.ports}}</h5>
+              <p><strong>Call Duration:</strong>: {{billing.info.limits.call_duration}}</p>
               <br/>
-              <h5>Extensions: {{billing.info.limits.extensions}}</h5>
-              <br/>
-              <h5>Recording Space: {{billing.info.limits.recording_space}}</h5>
-              <br/>
-              <h5>Numbers: {{billing.info.limits.numbers}}</h5>
+              <p><strong>Recording space:</strong>: {{billing.info.limits.recording_space}}</p>
+              <h5>Usage Triggers</h5>
+                    <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides">Create New</md-button>
+                    <div ng-show="usageTriggers.length===0">
+                        <p>No usage triggers setup..</p>
+                    </div>
+                    <div ng-show="usageTriggers.length>0">
+<md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>Percentage</span></th>
+            <th md-column>Created On</th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="item in usageTriggers">
+            <td md-cell>{{item.percentage}}</td>
+            <td md-cell>{{item.created_at}}</td>
+            <td md-cell>
+              <md-button ng-click="deleteUsageTrigger($event, item)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </div>
+
+
+
             </md-content>
             </md-tab>
         <md-tab label="Settings">

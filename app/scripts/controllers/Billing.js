@@ -40,6 +40,28 @@ angular.module('MaterialApp')
 		expires: "",
 		cvv: ""
 	};
+    function TriggerDialogController($scope, $mdDialog,SharedPref, onCreate) {
+      $scope.SharedPref = SharedPref;
+	  $scope.data = {
+		  percentage: "10%"
+	  };
+	  $scope.percentages = [];
+	  var start = 10;
+	  while (start <= 90) {
+		$scope.percentages.push(start.toString()+"%");
+		start += 10;
+	  }
+      $scope.close = function() {
+        $mdDialog.hide(); 
+	  }
+	  $scope.save = function() {
+		var data = angular.copy($scope.data);
+		Backend.post("/addUsageTrigger", data).then(function(res) {
+			$scope.close();
+			onCreate();
+		});
+	  }
+    }
 	function toCents(dollars) {
 		return dollars * 100;
 	}
@@ -308,12 +330,14 @@ angular.module('MaterialApp')
 				}
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
+				$scope.usageTriggers = res[0].data[4];
 				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
 				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
 				console.log("cards are ", $scope.cards);
 				console.log("settings are ", $scope.settings);
+				console.log("usage triggers are ", $scope.usageTriggers);
 				$scope.creditAmount = $scope.creditAmounts[0];
 				if (createLoading) {
 					SharedPref.endIsCreateLoading();
@@ -323,6 +347,59 @@ angular.module('MaterialApp')
 				resolve();
 			}, reject);
 		});
+	}
+
+	$scope.createTrigger = function($event) {
+		$mdDialog.show({
+		controller: TriggerDialogController,
+		templateUrl: 'views/dialogs/create-trigger.html', 
+		parent: angular.element(document.body),
+		targetEvent: $event,
+		clickOutsideToClose:true,
+		fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+		locals: {
+			"onCreate": function() {
+				loadData(false).then(function() {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Usage trigger create..')
+						.position("top right")
+						.hideDelay(3000)
+					);
+				});
+			}
+		}
+		})
+		.then(function() {
+		}, function() {
+		});
+
+	}
+	$scope.deleteUsageTrigger = function($event, item) {
+	// Appending dialog to document.body to cover sidenav in docs app
+	console.log("deleteUsageTrigger ", item);
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this usage trigger?')
+          .textContent('you will no longer be reminded when this usage trigger\'s conditions are met')
+          .ariaLabel('Delete usage trigger')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/delUsageTrigger/" + item.id).then(function() {
+          loadData(false).then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Usage trigger deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
 	}
 	loadData(false);
   });
