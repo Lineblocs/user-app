@@ -189,8 +189,17 @@ audio.small {
   height: 32px;
   width: 256px; }
 
+.table-heading h5 {
+  margin-left: 7px; }
+
+.table-heading button {
+  margin-top: 20px; }
+
 .inputs md-input-container {
   margin: 10px 0; }
+
+md-dialog-content.add-trigger-form {
+  width: 480px; }
 
 .collapsed-content {
   margin-left: 80px;
