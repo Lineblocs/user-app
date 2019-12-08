@@ -33,13 +33,13 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         SharedPref.isLoading = true;
-      Backend.delete("/workspaceUser/" + user.public_id).then(function() {
+      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
             .textContent('User deleted..')
             .position("top right")
-            .hideDelay(3000)
+            .hideDelay(3000);
         );
           });
 
