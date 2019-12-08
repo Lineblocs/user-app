@@ -2336,7 +2336,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
           $mdToast.simple()
             .textContent('User deleted..')
             .position("top right")
-            .hideDelay(3000);
+            .hideDelay(3000)
         );
           });
 
