@@ -28,7 +28,9 @@ angular.module('MaterialApp')
 				var token = res.data;
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
-				SharedPref.setAuthToken( token );
+				SharedPref.setAuthToken(token);
+				SharedPref.setWorkspace(res.data.workspace);
+
 				Idle.watch();
 		        $state.go('home', {});
 			}).catch(function() {

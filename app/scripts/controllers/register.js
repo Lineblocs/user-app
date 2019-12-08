@@ -48,7 +48,11 @@ angular.module('MaterialApp')
 	Backend.post("/userSpinup", data).then(function( res ) {
 		var data = res.data;
 		if ( data.success ) {
+
 			Idle.watch();
+			SharedPref.setAuthToken($scope.token);
+			SharedPref.setWorkspace(res.data.workspace);
+
 			$state.go('dashboard-user-welcome', {});
 			return;
 		}

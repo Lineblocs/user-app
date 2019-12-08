@@ -1,0 +1,47 @@
+<!-- exact table from live demo -->
+<div>
+  <div ng-show="users.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+      <div ng-show="users.length === 0 && !pagination.didSearch" class="no-results">
+        <center>
+          <h5>No workspace users</h5>
+          <md-button ng-click="createNumber($event)" class="md-raised md-primary">Block Number</md-button>
+        </center>
+      </div>
+    </md-card>
+  </div>
+  <div ng-show="users.length > 0">
+      <div layout="row" layout-align="end center">
+        <div>
+            <md-button ng-click="createUser()" class="md-raised md-primary">Add User</md-button>
+          </div>
+      </div>
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>Email</span></th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="user" md-select-id="email" md-auto-select ng-repeat="user in users">
+            <td md-cell>{{user.email}}</td>
+            <td md-cell>
+              <md-button ng-click="editUser($event, user)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+              </md-button>
+              <md-button ng-click="deleteUser($event, user)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+</div>
+  </div>
+ 

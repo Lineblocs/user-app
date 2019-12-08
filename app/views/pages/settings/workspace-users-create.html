@@ -1,0 +1,102 @@
+<div>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Add Workspace User</span>
+        <span class="md-subhead">add and invite a user to your lineblocs account</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+      <form name="userForm" ng-submit="submit(userForm)" novalidate>
+            <div layout="row">
+             <div flex="95">
+        <md-input-container>
+          <label>First Name</label>
+          <input name="first_name" ng-model="values.user.first_name" required="" minlength="1">
+          <div ng-show="triedSubmit">
+            <div class="box">
+              <div ng-show="extensionForm.first_name.$error.minlength">Please enter 1 characters or more</div>
+              <div ng-show="extensionForm.first_name.$error.required">This field is required</div>
+            </div>
+          </div>
+        </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          User's given name
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
+
+            <div layout="row">
+             <div flex="95">
+        <md-input-container>
+          <label>Last Name</label>
+          <input name="last_name" ng-model="values.user.last_name" required="" minlength="1">
+          <div ng-show="triedSubmit">
+            <div class="box">
+              <div ng-show="extensionForm.last_name.$error.minlength">Please enter 1 characters or more</div>
+              <div ng-show="extensionForm.last_name.$error.required">This field is required</div>
+            </div>
+          </div>
+        </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          User's family name
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
+            <div layout="row">
+             <div flex="95">
+        <md-input-container>
+          <label>Email</label>
+          <input name="email" ng-model="values.user.email" required="" minlength="1">
+          <div ng-show="triedSubmit">
+            <div class="box">
+              <div ng-show="extensionForm.email.$error.minlength">Please enter 1 characters or more</div>
+              <div ng-show="extensionForm.email.$error.required">This field is required</div>
+            </div>
+          </div>
+        </md-input-container>
+      </div>
+      <div flex="5">
+                                              <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                          This email will be invited to your lineblocs account
+                                        </md-tooltip>
+                                    </md-icon>
+      </div>
+    </div>
+        <h5>Workspace Roles</h5>
+        <p>allow or disallow this user to perform certain actions in the workspace</p>
+            <div ng-repeat="role in availableRoles" flex="95">
+              <div layout="row">
+                <div flex="95">
+                    <md-switch ng-model="values.roles[role.id]" aria-label="{{role.name}}" class="md-warn">
+                      {{role.name}}
+                    </md-switch>
+                </div>
+                <div flex="5">
+                  <md-icon class="tooltip-icon">
+                  <i class="mdi mdi-information"></i>
+                  <md-tooltip class="helper-tooltip" md-direction="top">
+                    {{role.info}}
+                  </md-tooltip>
+                  </md-icon>
+                </div>
+              </div>
+    </div>
+        <md-button type="submit" class="md-raised md-primary">Save</md-button>
+      </form>
+      </md-card-content>
+  </md-card>
+</div>
+ 

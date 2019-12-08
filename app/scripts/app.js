@@ -30,8 +30,13 @@ function getJWTToken() {
     }
     return "";
 }
-var href = document.location.href.includes("http://localhost");
-if (href) {
+function getWorkspaceID() {
+    var parsed = JSON.parse(localStorage.getItem("WORKSPACE"));
+    return parsed.id;
+}
+var check1 = document.location.href.includes("http://localhost");
+var check2 = document.location.href.includes("ngrok.io");
+if (check1 || check2) {
     var baseUrl = "https://lineblocs.com/api";
 } else {
     var baseUrl = "/api";
@@ -76,6 +81,11 @@ angular
                 if (token) {
                     config.headers['Authorization'] = getJWTToken(); 
                 }
+                var workspace = localStorage.getItem("WORKSPACE");
+                if (workspace) {
+                    config.headers['X-Workspace-ID'] = getWorkspaceID();
+                }
+
                 console.log("request headers are ", config.headers);
                 return config;
             }
@@ -89,6 +99,7 @@ angular
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.isLoading = true;
+        factory.currentWorkspace = "";
         factory.billingCountries = [
     {
        iso: 'CA',
@@ -167,6 +178,24 @@ angular
         factory.getAuthToken = function() {
             return JSON.parse(localStorage.getItem("AUTH"));
         }
+        factory.setWorkspace= function(workspace) {
+            localStorage.setItem("WORKSPACE", JSON.stringify(workspace));
+        }
+        factory.getWorkspace =  function(workspace) {
+            return JSON.parse(localStorage.getItem("WORKSPACE"));
+        }
+
+        factory.canPerformAction = function(action) {
+            var workspace = factory.getWorkspace();
+            if (workspace.user_info[action]) {
+                return true;
+            }
+            return false;
+        }
+        factory.has = function() {
+            return JSON.parse(localStorage.getItem("WORKSPACE"));
+        }
+
         factory.showError = function(title, msg) {
                 $mdDialog.show(
                 $mdDialog.alert()
@@ -188,6 +217,110 @@ angular
         factory.scrollTop = function() {
             $window.scrollTo(0, 0);
         }
+        factory.makeDefaultWorkspaceRoles = function(addInfo) {
+            if (!addInfo) {
+                return {
+      'manage_users' : false,
+      'manage_extensions' : false,
+      'create_extension' : false,
+      'manage_billing' : false,
+      'manage_workspace' : false,
+      'manage_dids' : false,
+      'create_did' : false,
+      'manage_calls' : false,
+      'manage_recordings' : false,
+      'manage_blocked_numbers' : false,
+      'manage_ip_whitelist' : false,
+      'manage_verified_caller_ids' : false,
+      'create_flow' : false,
+      'manage_flows' : false
+            };
+            }
+            var info = [];
+            info.push({
+                "id": "manage_users",
+                "name": "Manage Users",
+                "info": "Allow this user to create, read, update or delete other users in your workspace"
+            });
+            info.push({
+                "id": "manage_extensions",
+                "name": "Manage Extensions", 
+                "info": "Allow this user to create, read, update or delete other extensions in your workspace"
+            });
+            info.push({
+                "id": "create_extension",
+                "name": "Create Extension", 
+                "info": "Allow this user to create an extension"
+            });
+             info.push({
+                "id": "manage_billing",
+                "name": "Manage Billing",
+                "info": "Allow this user to manage used credit cards, payment options, usage limits and advanced billing settings"
+            });
+             info.push({
+                "id": "manage_workspace",
+                "name": "Manage Workspace",
+                "info": "Allow this user to manage workspace settings"
+            });
+            info.push({
+                "id": "manage_dids",
+                "name": "Manage DIDs",
+                "info": "Allow this user to buy and manage DIDs"
+            });
+            info.push({
+                "id": "create_did",
+                "name": "Create DID",
+                "info": "Allow this user to buy a DID"
+            });
+            info.push({
+                "id": "manage_calls",
+                "name": "Manage Calls",
+                "info": "Allow this user to manage calls"
+            });
+            info.push({
+                "id": "manage_recordings",
+                "name": "Manage Recordings",
+                "info": "Allow this user to manage recordings"
+            });
+            info.push({
+                "id": "manage_blocked_numbers",
+                "name": "Manage Blocked Numbers",
+                "info": "Allow this user to manage blocked numbers"
+            });
+            info.push({
+                "id": "manage_ip_whitelist",
+                "name": "Manage IP Whitelist",
+                "info": "Allow this user to manage IP whitelist"
+            });
+            info.push({
+                "id": "manage_verified_caller_ids",
+                "name": "Manage Verified Caller IDs",
+                "info": "Allow this user to manage verified caller ids"
+            });
+            info.push({
+                "id": "manage_flows",
+                "name": "Manage Flows",
+                "info": "Allow this user to manage flows"
+            });
+            info.push({
+                "id": "create_flow",
+                "name": "Create Flow",
+                "info": "Allow this user to create flows"
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+            return info;
+        }
         return factory;
     })
     .factory("Backend", function($http, $q, SharedPref) {
@@ -202,7 +335,8 @@ angular
             };
             return $q(function(resolve, reject) {
                 $http.post( createUrl( "/jwt/authenticate"), params).then( function(res) {
-                    localStorage.setItem("AUTH", JSON.stringify(res.data));
+                    localStorage.setItem("AUTH", JSON.stringify(res.data.jwt));
+                    localStorage.setItem("WORKSPACE", JSON.stringify(res.data.workspace));
                     resolve();
                 }).catch(function(err) {
                     reject( err );
@@ -537,6 +671,24 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/ip-whitelist.html',
         controller: 'IpWhitelistCtrl'
+    })
+    .state('settings-workspace-users', {
+        url: '/settings/workspace-users',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-users.html',
+        controller: 'WorkspaceUserCtrl'
+    })
+    .state('settings-workspace-users-create', {
+        url: '/settings/workspace-users/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-users-create.html',
+        controller: 'WorkspaceUserCreateCtrl'
+    })
+    .state('settings-workspace-users-edit', {
+        url: '/settings/workspace-users/{userId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-users-edit.html',
+        controller: 'WorkspaceUserEditCtrl'
     })
     .state('blank', {
         url: '/blank',
