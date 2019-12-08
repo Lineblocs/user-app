@@ -32,7 +32,7 @@ function getJWTToken() {
 }
 var href = document.location.href.includes("http://localhost");
 if (href) {
-    var baseUrl = "http://lineblocs.com/api";
+    var baseUrl = "https://lineblocs.com/api";
 } else {
     var baseUrl = "/api";
 }
