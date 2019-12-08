@@ -32,7 +32,7 @@ function getJWTToken() {
 }
 var href = document.location.href.includes("http://localhost");
 if (href) {
-    var baseUrl = "http://lineblocs.com/api";
+    var baseUrl = "https://lineblocs.com/api";
 } else {
     var baseUrl = "/api";
 }
@@ -85,7 +85,7 @@ angular
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.title = baseTitle;
-        factory.FLOW_EDITOR_URL = "http://editor.lineblocs.com";
+        factory.FLOW_EDITOR_URL = "https://editor.lineblocs.com";
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.isLoading = true;
