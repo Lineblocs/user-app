@@ -32,7 +32,7 @@ angular.module('MaterialApp')
 				SharedPref.setWorkspace(res.data.workspace);
 
 				Idle.watch();
-		        $state.go('home', {});
+		        $state.go('dashboard-user-welcome', {});
 			}).catch(function() {
 				$scope.isLoading = false;
 				$scope.couldNotLogin = true;

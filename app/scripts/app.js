@@ -547,7 +547,7 @@ angular
         controller: 'DashboardCtrl'
     })
     .state('dashboard-user-welcome', {
-        url: '/dashboard/welcome',
+        url: '/welcome',
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard-welcome.html',
         controller: 'DashboardWelcomeCtrl'

@@ -18,6 +18,9 @@ angular.module('MaterialApp')
 		password: "",
 		password2: ""
 	};
+	$scope.changeCountry = function(country) {
+		console.log("changeCountry ", country);
+	}
     $scope.submitSettings = function($event, settingsForm) {
 		$scope.triedSubmit = true;
 		if (settingsForm.$valid) {
@@ -25,6 +28,32 @@ angular.module('MaterialApp')
 			data['first_name'] = $scope.user.first_name;
 			data['last_name'] = $scope.user.last_name;
 			data['email'] = $scope.user.email;
+			SharedPref.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					SharedPref.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+   $scope.submitPersonal = function($event, personalForm) {
+		$scope.triedSubmit = true;
+		console.log("submitPersonal ", personalForm);
+		if (personalForm.$valid) {
+			var data = {};
+			data['address_line_1'] =$scope.user.address_line_1;
+			data['address_line_2'] =$scope.user.address_line_2;
+			data['postal_code'] =$scope.user.postal_code;
+			data['state'] =$scope.user.state;
+			data['city'] =$scope.user.city;
+			data['country'] =$scope.user.country;
 			SharedPref.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(

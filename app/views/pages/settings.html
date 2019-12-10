@@ -10,7 +10,7 @@
   <md-card-content>
     <md-content>
     <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true">
-      <md-tab label="Your Info">
+      <md-tab label="Account Info">
         <md-content class="md-padding">
           <form ng-submit="submitSettings($event, settingsForm)" name="settingsForm" novalidate>
                 <md-input-container>
@@ -34,6 +34,71 @@
                   <div ng-show="triedSubmit">
                     <div class="box">
                       <div ng-show="settingsForm.email.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+            <md-button type="submit" class="md-raised md-primary">Save</md-button>
+          </form>
+        </md-content>
+      </md-tab>
+      <md-tab label="Personal Info">
+        <md-content class="md-padding">
+          <form ng-submit="submitPersonal($event, personalForm)" name="personalForm" novalidate>
+
+
+
+                <md-input-container>
+                  <input name="address_line_1" ng-model="user.address_line_1" type="text" placeholder="Address Line 1" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="personalForm.address_line_1.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+
+                <md-input-container>
+                  <input name="address_line_2" ng-model="user.address_line_2" type="text" placeholder="Address Line 2" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="personalForm.address_line_2.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+
+                <md-input-container>
+                  <input name="postal_code" ng-model="user.postal_code" type="text" placeholder="Postal Code" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="personalForm.postal_code.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+                <md-input-container>
+                  <input name="state" ng-model="user.state" type="text" placeholder="State" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="personalForm.state.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+                <md-input-container>
+                  <input name="city" ng-model="user.city" type="text" placeholder="City" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="personalForm.city.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+                <md-input-container>
+                  <label>Country</label>
+                  <md-select ng-model="user.country" ng-change="changeCountry(user.country)" required>
+                    <md-option ng-repeat="country in SharedPref.billingCountries" ng-value="country.iso">
+                      {{country.name}}
+                    </md-option>
+                  </md-select>
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="personalForm.country.$error.required">This field is required</div>
                     </div>
                   </div>
                 </md-input-container>
