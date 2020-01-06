@@ -112,6 +112,19 @@
 		<div class="dashboard-menu">
 			<ul class="menu-list">
 				<li ng-class="{active: $state.includes('home')}"><md-button href="" ng-click="SharedPref.changeRoute('home')" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
+				<li class="show-subnav">
+					<md-button href="" class=" show-menu" ng-click="subnav('ui')">
+						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+						<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+						<span class="text"> {{ 'did-numbers' | translate }}</span>
+					</md-button>
+					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
+
+						<li ng-class="{active: $state.includes('my-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('my-numbers')" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
+						<li ng-class="{active: $state.includes('buy-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('buy-numbers')" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
+					</ul>
+
+				</li>
 				<li ng-class="{active: $state.includes('flows')}"><md-button href="" ng-click="SharedPref.changeRoute('flows')" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('extensions')}" ng-show="SharedPref.canPerformAction('manage_extensions')"><md-button href="" ng-click="SharedPref.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
