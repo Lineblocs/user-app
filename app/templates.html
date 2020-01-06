@@ -432,24 +432,10 @@
 		<div class="dashboard-menu">
 			<ul class="menu-list">
 				<li ng-class="{active: $state.includes('home')}"><md-button href="" ng-click="SharedPref.changeRoute('home')" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
-				<li class="show-subnav" ng-show="SharedPref.canPerformAction('manage_dids')">
-					<md-button href="" class=" show-menu" ng-click="subnav('ui')">
-						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
-						<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-						<span class="text"> {{ 'did-numbers' | translate }}</span>
-					</md-button>
-					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
-						<li ng-class="{active: $state.includes('my-numbers')}"
-						s
-						><md-button href="" ng-click="SharedPref.changeRoute('my-numbers')" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('buy-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('buy-numbers')" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
-					</ul>
-				</li>
 				<li ng-class="{active: $state.includes('flows')}"><md-button href="" ng-click="SharedPref.changeRoute('flows')" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('extensions')}" ng-show="SharedPref.canPerformAction('manage_extensions')"><md-button href="" ng-click="SharedPref.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="SharedPref.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('billing')}" ng-show="SharedPref.canPerformAction('manage_billing')"><md-button href="" ng-click="SharedPref.changeRoute('billing')" class=""><i class="mdi mdi-credit-card"></i> &nbsp;<span class="text">{{ 'billing' | translate }}</span></md-button></li>
 				<li class="show-subnav">
 					<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
 						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
@@ -919,63 +905,16 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard-welcome.html">
-              
-
-<div>
-  <div layout="row" ng-if="userAccountNotCompleted()">
-      <div flex="50">
-        <md-card class="dashboard-block" md-theme="'default'"" md-theme-watch>
-          <md-card-content>
-            <h2>Welcome</h2>
-            <md-list>
-              <md-subheader class="md-no-sticky">Your Account Status</md-subheader>
-              <md-list-item>
-                <p>created lineblocs account</p>
-                <md-checkbox class="md-secondary" ng-model="checklist.created_account" ng-disabled="true"></md-checkbox>
-              </md-list-item>
-              <md-list-item>
-                <p>filled in personal</p>
-                <md-checkbox class="md-secondary" ng-model="checklist.filled_in_personal" ng-disabled="true"></md-checkbox>
-              </md-list-item>
-              <md-list-item>
-                <p>registered DID</p>
-                <md-checkbox class="md-secondary" ng-model="checklist.registered_did" ng-disabled="true"></md-checkbox>
-              </md-list-item>
-              <md-list-item>
-                <p>added billing info</p>
-                <md-checkbox class="md-secondary" ng-model="checklist.added_billing_info" ng-disabled="true"></md-checkbox>
-              </md-list-item>
-              <md-divider></md-divider>
-              </md-list>
-          </md-card-content>
-        </md-card>
+              <div>
+  <div class="layout-row" layout-sm="column" layout-xs="column">
+    <div class="mdl-cell shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
+      <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
+                  <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
+              </md-button></span>
       </div>
-      <div flex="50">
-          <div class="dashboard-block dashboard-block-margin shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
-            <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
-                        <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
-                    </md-button></span>
-            </div>
-            <div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
-            </div>
-        </div>
+      <div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
       </div>
     </div>
-  </div>
-  <div layout="row" ng-if="!userAccountNotCompleted()">
-    <div flex="100">
-      <div class="layout-row" layout-sm="column" layout-xs="column">
-        <div class="mdl-cell shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
-          <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
-                      <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
-                  </md-button></span>
-          </div>
-          <div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/extension-create.html">
@@ -1369,7 +1308,7 @@
 </div>
  
             </script>
-<script type="text/ng-template" id="views/pages/login.html">
+<script type="text/ng-template" id="views/pages/login-copy.html">
               <div>
 	<div class="login-overlay">
 		<center>
@@ -1452,6 +1391,97 @@
 </div>
  
             </script>
+<script type="text/ng-template" id="views/pages/login.html">
+                  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <div class="login-page">
+        <div class="logo">
+
+            <img src="images/logo-blue-small.png">
+        </div>
+        <center>
+            <div ng-show="isLoading">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <p>Logging you in..</p>
+            </div>
+        </center>
+
+        <div class="content">
+            <form class="login-form" ng-submit="submit($event, loginForm)" name="loginForm" novalidate>
+                <div class="top-heading">
+                    <h3>Login</h3>
+                    <div class="box invalid-login">
+
+                        <center>
+                            <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try again.
+                            </div>
+                        </center>
+                    </div>
+                </div>
+                <div class="field-input">
+                    <div class="input-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
+                            <path fill="#317780" fill-rule="nonzero"
+                                d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z" />
+                        </svg>
+
+                        <!-- <input type="text" placeholder="Company Email Address"> -->
+                        <md-input-container>
+                            <input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="loginForm.email.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                </div>
+
+                <div class="field-input password">
+                    <div class="input-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+                            <g fill="#317780" fill-rule="nonzero">
+                                <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
+                                <path
+                                    d="M19.107 16.262a.896.896 0 0 0 .893-.899V12.04c0-1.982-1.602-3.594-3.571-3.594h-1.074V5.277C15.355 2.367 12.952 0 9.998 0S4.641 2.367 4.641 5.277v3.168h-1.07C1.602 8.445 0 10.057 0 12.04v7.367C0 21.388 1.602 23 3.571 23H16.43C18.398 23 20 21.388 20 19.406c0-.496-.4-.898-.893-.898a.896.896 0 0 0-.893.898c0 .991-.8 1.797-1.785 1.797H3.57a1.793 1.793 0 0 1-1.785-1.797V12.04c0-.99.8-1.797 1.785-1.797H16.43c.984 0 1.785.806 1.785 1.797v3.324c0 .496.4.899.893.899zM13.57 8.445H6.427V5.277c0-1.919 1.602-3.48 3.571-3.48 1.97 0 3.572 1.561 3.572 3.48v3.168z" />
+                                <ellipse cx="8.348" cy="15.543" rx="1" ry="1" />
+                                <ellipse cx="5" cy="15.543" rx="1" ry="1" />
+                                <ellipse cx="11.696" cy="15.543" rx="1" ry="1" />
+                            </g>
+                        </svg>
+
+                        <!-- <input type="text" placeholder="Password"> -->
+                        <md-input-container>
+                            <input name="password" ng-model="user.password" type="password" placeholder="Password"
+                                required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="loginForm.password.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <div class="login-btn">
+                    <button>
+                        <span>Login</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="text">
+                <h2>Be Connected!</h2>
+                <p>Register for an account to start using <span>lineblocs!</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/custom.js"></script>
+ 
+            </script>
 <script type="text/ng-template" id="views/pages/recordings.html">
               <div ng-show="!pagination.didSearch && recordings.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
@@ -1515,239 +1545,595 @@
   </div>
 </div> 
             </script>
-<script type="text/ng-template" id="views/pages/register.html">
+<script type="text/ng-template" id="views/pages/register copy.html">
               <div>
-	<div ng-show="shouldSplash">
-		<div class="full-blue splash">
-<div class="outer">
-  <div class="middle">
-    <div class="inner">
-				<img src="/images/logo-blue.png" width="256"/>
-				<p>Setting up your account..</p>
+    <div ng-show="shouldSplash">
+        <div class="full-blue splash">
+            <div class="outer">
+                <div class="middle">
+                    <div class="inner">
+                        <img src="/images/logo-blue.png" width="256" />
+                        <p>Setting up your account..</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
-  </div>
+    <div class="login-overlay" ng-show="!shouldSplash">
+
+        <div class="form-container shadow" ng-show="step===1">
+            <div class="inner">
+                <center>
+                    <div class="icon">
+                        <div class="header">
+                            <img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+                            <h4>Sign Up</h4>
+                            <p>
+                                register for an account to start using LineBlocs today!
+                            </p>
+                        </div>
+                    </div>
+                </center>
+                <div class="inputs">
+                    <form ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
+                        <md-input-container>
+                        </md-input-container>
+                        <md-input-container>
+                            <input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name"
+                                required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="registerForm.first_name.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <input name="last_name" ng-model="user.last_name" type="text" placeholder="Last Name"
+                                required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="registerForm.last_name.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <input name="email" ng-model="user.email" type="email" placeholder="Company Email"
+                                required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="registerForm.email.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <input name="password" ng-model="user.password" type="password" placeholder="Password"
+                                required="" minlength="5">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="registerForm.password.$error.minlength">Please enter 5 characters or
+                                        more</div>
+                                    <div ng-show="registerForm.password.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <input name="password2" ng-model="user.password2" type="password"
+                                placeholder="Confirm Password" required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="passwordsDontMatch">Passwords don't match</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <center>
+                            <div class="buttons">
+                                <div class="link" style="padding-bottom:0;">
+                                    <md-button type="submit" class="md-raised primary">Register</md-button>
+                                </div>
+                                <a ui-sref="login">Login here</a>
+                            </div>
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- step 2 -->
+        <div class="form-container shadow" ng-show="step===2">
+            <div class="inner">
+                <center>
+                    <div class="icon">
+                        <div class="header">
+                            <img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+                            <h4>Verify Your Account</h4>
+                            <p>
+                                please enter your mobile number so that we can call you with your verification code.
+                            </p>
+                        </div>
+                    </div>
+                </center>
+                <div class="box invalid-login">
+                    <center>
+                        <div ng-show="invalidCode" class="red">The code you entered was invalid. <a href="#/register"
+                                ng-click="recall()">Recall with Code</a></div>
+                        <div ng-show="invalidNumber" class="red">The number you entered was invalid.</div>
+                    </center>
+                </div>
+                <div class="inputs">
+                    <div ng-show="!didVerifyCall">
+                        <form ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form" novalidate>
+                            <div layout="row">
+                                <div flex="15">
+                                    <md-select ng-model="verify1.country" ng-change="changeCountry(verify1.country)"
+                                        class="margin-10">
+                                        <md-option><em>None</em></md-option>
+                                        <md-option ng-value="'US'">
+                                            <span class="flag-icon flag-icon-us flag-icon-squared"></span>
+                                            +1
+                                        </md-option>
+                                        <md-option ng-value="'CA'">
+                                            <span class="flag-icon flag-icon-ca flag-icon-squared"></span>
+                                            +1
+                                        </md-option>
+
+                                    </md-select>
+                                </div>
+                                <div flex="85">
+                                    <md-input-container>
+                                        <input name="mobile_number" ng-model="verify1.mobile_number" type="text"
+                                            placeholder="Mobile Number" required="">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="verify1Form.mobile_number.$error.required">This field is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                            <center>
+                                <div class="buttons">
+                                    <div class="link" style="padding-bottom:0;">
+                                        <md-button type="submit" class="md-raised primary">Submit</md-button>
+                                    </div>
+                                    <a ui-sref="login">Login here</a>
+                                </div>
+                            </center>
+
+                        </form>
+                    </div>
+                    <div ng-show="didVerifyCall">
+                        <form ng-submit="submitVerify2Form($event, verify2Form)" name="verify2Form" novalidate>
+                            <md-input-container>
+                                <input name="confirmation_Code" ng-model="verify2.confirmation_code" type="text"
+                                    placeholder="Confirmation Code" required="">
+                                <div ng-show="triedSubmit">
+                                    <div class="box">
+                                        <div ng-show="verify2Form.confirmation_code.$error.required">This field is
+                                            required</div>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                            <center>
+                                <div class="buttons">
+                                    <div class="link" style="padding-bottom:0;">
+                                        <md-button type="submit" class="md-raised primary">Submit</md-button>
+                                    </div>
+                                    <a ui-sref="login">Login here</a>
+                                </div>
+                            </center>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-container shadow" ng-show="step === 3">
+            <div class="inner">
+                <center>
+                    <div class="icon">
+                        <div class="header">
+                            <img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+                            <h4>Enter Workspace Name</h4>
+                            <p>
+                                this will be used to log you into the site.
+                            </p>
+                        </div>
+                    </div>
+                </center>
+                <div class="box invalid-login">
+                    <center>
+                        <div ng-show="invalidWorkspaceTaken" class="red">This workspace name is already taken.</div>
+                    </center>
+                </div>
+                <div class="inputs">
+                    <form ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm" novalidate>
+                        <center>
+                            <div class="clearfix" style="width: 500px;">
+                                <div style="float:left; width: 364px;">
+                                    <md-input-container>
+                                        <input name="workspace" ng-model="workspace" type="text"
+                                            placeholder="e.g: cool-project" required="">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="workspaceForm.workspace.$error.required">This field is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div style="float: left; width: 136px;">
+                                    <h5>.lineblocs.com</h5>
+                                </div>
+                            </div>
+                        </center>
+                        <center>
+                            <div class="buttons">
+                                <div class="link" style="padding-bottom:0;">
+                                    <md-button type="submit" class="md-raised primary">Submit</md-button>
+                                </div>
+                                <a ui-sref="login">Login here</a>
+                            </div>
+                        </center>
+                </div>
+            </div>
+            </form>
+        </div>
+
+        <footer class="login-footer">
+            <div class="left-section">
+                &copy; LineBlocs.com
+            </div>
+
+            <div class="right-section">
+            </div>
+        </footer>
+    </div>
 </div>
+ 
+            </script>
+<script type="text/ng-template" id="views/pages/register.html">
+                  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
-		</div>
-
-	</div>
-	<div class="login-overlay" ng-show="!shouldSplash">
-
-		<div class="form-container shadow" ng-show="step===1">
-				<div class="inner">
-					<center>
-				<div class="icon">
-					<div class="header">
-						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
-						<h4>Sign Up</h4>
-						<p>
-							register for an account to start using LineBlocs today!
-						</p>
-					</div>
-				</div>
-			</center>
-				<div class="inputs">
-					<form ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
-						        <md-input-container>
-        </md-input-container>
-						<md-input-container>
-							<input name="first_name" ng-model="user.first_name" type="text" placeholder="First Name" required="">
-							<div ng-show="triedSubmit">
-								<div class="box">
-									<div ng-show="registerForm.first_name.$error.required">This field is required</div>
-								</div>
-							</div>
-						</md-input-container>
-						<md-input-container>
-							<input name="last_name" ng-model="user.last_name" type="text" placeholder="Last Name" required="">
-							<div ng-show="triedSubmit">
-								<div class="box">
-									<div ng-show="registerForm.last_name.$error.required">This field is required</div>
-								</div>
-							</div>
-						</md-input-container>
-						<md-input-container>
-							<input name="email" ng-model="user.email" type="email" placeholder="Company Email" required="">
-							<div ng-show="triedSubmit">
-								<div class="box">
-									<div ng-show="registerForm.email.$error.required">This field is required</div>
-								</div>
-							</div>
-						</md-input-container>
-						<md-input-container>
-							<input name="password" ng-model="user.password" type="password" placeholder="Password" required="" minlength="5">
-							<div ng-show="triedSubmit">
-								<div class="box">
-									<div ng-show="registerForm.password.$error.minlength">Please enter 5 characters or more</div>
-									<div ng-show="registerForm.password.$error.required">This field is required</div>
-								</div>
-							</div>
-						</md-input-container>
-						<md-input-container>
-							<input name="password2" ng-model="user.password2" type="password" placeholder="Confirm Password" required="">
-							<div ng-show="triedSubmit">
-								<div class="box">
-									<div ng-show="passwordsDontMatch">Passwords don't match</div>
-								</div>
-							</div>
-						</md-input-container>
+    <div ng-show="shouldSplash">
+        <div class="full-blue splash">
+            <div class="outer">
+                <div class="middle">
+                    <div class="inner">
 						<center>
-						<div class="buttons">
-							<div class="link" style="padding-bottom:0;">
-								<md-button type="submit" class="md-raised primary">Register</md-button>
-							</div>
-							<a ui-sref="login">Login here</a>
-						</div>
-					</center>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<!-- step 2 -->
-		<div class="form-container shadow" ng-show="step===2">
-				<div class="inner">
-					<center>
-				<div class="icon">
-					<div class="header">
-						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
-						<h4>Verify Your Account</h4>
-						<p>
-							please enter your mobile number so that we can call you with your verification code.
-						</p>
-					</div>
-				</div>
-			</center>
-			<div class="box invalid-login">
-				<center>
-					<div ng-show="invalidCode" class="red">The code you entered was invalid. <a href="#/register" ng-click="recall()">Recall with Code</a></div>
-					<div ng-show="invalidNumber" class="red">The number you entered was invalid.</div>
-				</center>
-			</div>
-				<div class="inputs">
-					<div ng-show="!didVerifyCall">
-						<form ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form" novalidate>
-							<div layout="row">
-								<div flex="15">
-          <md-select ng-model="verify1.country" ng-change="changeCountry(verify1.country)" class="margin-10">
-            <md-option><em>None</em></md-option>
-            <md-option ng-value="'US'">
-			  <span class="flag-icon flag-icon-us flag-icon-squared"></span>
-			  +1
-			</md-option>
-			<md-option ng-value="'CA'">
-			  <span class="flag-icon flag-icon-ca flag-icon-squared"></span>
-			  +1
-            </md-option>
-
-          </md-select>
-								</div>
-								<div flex="85">
-									<md-input-container>
-										<input name="mobile_number" ng-model="verify1.mobile_number" type="text" placeholder="Mobile Number" required="">
-										<div ng-show="triedSubmit">
-											<div class="box">
-												<div ng-show="verify1Form.mobile_number.$error.required">This field is required</div>
-											</div>
-										</div>
-									</md-input-container>
-								</div>
-							</div>
-						<center>
-							<div class="buttons">
-								<div class="link" style="padding-bottom:0;">
-									<md-button type="submit" class="md-raised primary">Submit</md-button>
-								</div>
-								<a ui-sref="login">Login here</a>
-							</div>
+						<img src="/images/logo-blue.png" width="256" />
+						<p>Setting up your account..</p>
+					<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 						</center>
+                    </div>
+                </div>
+            </div>
 
-						</form>
-					</div>
-					<div ng-show="didVerifyCall">
-						<form ng-submit="submitVerify2Form($event, verify2Form)" name="verify2Form" novalidate>
-							<md-input-container>
-								<input name="confirmation_Code" ng-model="verify2.confirmation_code" type="text" placeholder="Confirmation Code" required="">
-								<div ng-show="triedSubmit">
-									<div class="box">
-										<div ng-show="verify2Form.confirmation_code.$error.required">This field is required</div>
-									</div>
-								</div>
-							</md-input-container>
-						<center>
-							<div class="buttons">
-								<div class="link" style="padding-bottom:0;">
-									<md-button type="submit" class="md-raised primary">Submit</md-button>
-								</div>
-								<a ui-sref="login">Login here</a>
-							</div>
-						</center>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-container shadow" ng-show="step === 3">
-			<div class="inner">
-					<center>
-				<div class="icon">
-					<div class="header">
-						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
-						<h4>Enter Workspace Name</h4>
-						<p>
-							this will be used to log you into the site.
-						</p>
-					</div>
-				</div>
-			</center>
-			<div class="box invalid-login">
-				<center>
-					<div ng-show="invalidWorkspaceTaken" class="red">This workspace name is already taken.</div>
-				</center>
-			</div>
-				<div class="inputs">
-					<form ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm" novalidate>
-						<center>
-							<div class="clearfix" style="width: 500px;">
-								<div style="float:left; width: 364px;">
-									<md-input-container>
-										<input name="workspace" ng-model="workspace" type="text" placeholder="e.g: cool-project" required="">
-										<div ng-show="triedSubmit">
-											<div class="box">
-												<div ng-show="workspaceForm.workspace.$error.required">This field is required</div>
-											</div>
-										</div>
-									</md-input-container>
-								</div>
-								<div style="float: left; width: 136px;">
-									<h5>.lineblocs.com</h5>
-								</div>
-							</div>
-						</center>
-					<center>
-						<div class="buttons">
-							<div class="link" style="padding-bottom:0;">
-								<md-button type="submit" class="md-raised primary">Submit</md-button>
-							</div>
-							<a ui-sref="login">Login here</a>
-						</div>
-					</center>
-				</div>
-				</div>
-			</form>
-		</div>
+        </div>
 
-		<footer class="login-footer">
-			<div class="left-section">
-				&copy; LineBlocs.com
-			</div>
+    </div>
+    <div ng-show="!shouldSplash">
+        <div class="login-page">
 
-			<div class="right-section">
-			</div>
-		</footer>
-	</div>
-</div>
+            <div class="logo">
 
+                <img src="images/logo-blue-small.png">
+            </div>
+            <center>
+                <div ng-show="isLoading">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    <p>Setting up account..</p>
+                </div>
+            </center>
+            <div class="content">
+                <div ng-show="step===1">
+
+                    <form class="login-form" ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
+
+                        <div class="top-heading">
+                            <h3>Register</h3>
+                            <div class="box invalid-login">
+
+                                <center>
+                                    <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
+                                        again.
+                                    </div>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="field-input">
+                            <div layout="row">
+                                <div flex="50">
+                                    <div class="input-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 20 20">
+                                            <path fill="#317780" fill-rule="nonzero"
+                                                d="M19.95 17.138a.781.781 0 1 0-1.53.318.816.816 0 0 1-.166.684.794.794 0 0 1-.625.297H2.371a.794.794 0 0 1-.625-.297.816.816 0 0 1-.166-.684c.811-3.894 4.246-6.739 8.213-6.835a5.36 5.36 0 0 0 .415 0 8.594 8.594 0 0 1 6.94 3.815.781.781 0 1 0 1.299-.87 10.162 10.162 0 0 0-5.266-4.001 5.308 5.308 0 0 0 2.132-4.252A5.319 5.319 0 0 0 10 0a5.319 5.319 0 0 0-5.313 5.313c0 1.738.84 3.284 2.135 4.254-1.187.39-2.3.998-3.274 1.8a10.192 10.192 0 0 0-3.497 5.77A2.372 2.372 0 0 0 2.37 20h15.258c.716 0 1.386-.318 1.837-.874.454-.558.63-1.283.483-1.988zM6.25 5.312A3.754 3.754 0 0 1 10 1.563a3.754 3.754 0 0 1 3.75 3.75 3.755 3.755 0 0 1-3.56 3.746 9.903 9.903 0 0 0-.38 0 3.755 3.755 0 0 1-3.56-3.745z" />
+                                        </svg>
+                                        <md-input-container>
+                                            <input name="first_name" ng-model="user.first_name" type="text"
+                                                placeholder="First Name" required="">
+
+                                            <div ng-show="triedSubmit">
+
+                                                <div class="box">
+                                                    <div ng-show="registerForm.first_name.$error.required">This field is
+                                                        required</div>
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <div flex="50">
+                                    <div class="input-box">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 20 20">
+                                            <path fill="#317780" fill-rule="nonzero"
+                                                d="M19.95 17.138a.781.781 0 1 0-1.53.318.816.816 0 0 1-.166.684.794.794 0 0 1-.625.297H2.371a.794.794 0 0 1-.625-.297.816.816 0 0 1-.166-.684c.811-3.894 4.246-6.739 8.213-6.835a5.36 5.36 0 0 0 .415 0 8.594 8.594 0 0 1 6.94 3.815.781.781 0 1 0 1.299-.87 10.162 10.162 0 0 0-5.266-4.001 5.308 5.308 0 0 0 2.132-4.252A5.319 5.319 0 0 0 10 0a5.319 5.319 0 0 0-5.313 5.313c0 1.738.84 3.284 2.135 4.254-1.187.39-2.3.998-3.274 1.8a10.192 10.192 0 0 0-3.497 5.77A2.372 2.372 0 0 0 2.37 20h15.258c.716 0 1.386-.318 1.837-.874.454-.558.63-1.283.483-1.988zM6.25 5.312A3.754 3.754 0 0 1 10 1.563a3.754 3.754 0 0 1 3.75 3.75 3.755 3.755 0 0 1-3.56 3.746 9.903 9.903 0 0 0-.38 0 3.755 3.755 0 0 1-3.56-3.745z" />
+                                        </svg>
+
+                                        <md-input-container>
+                                            <input name="last_name" ng-model="user.last_name" type="text"
+                                                placeholder="Last Name" required="">
+                                            <div ng-show="triedSubmit">
+                                                <div class="box">
+                                                    <div ng-show="registerForm.last_name.$error.required">This field is
+                                                        required</div>
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="field-input">
+                            <div class="input-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
+                                    <path fill="#317780" fill-rule="nonzero"
+                                        d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z" />
+                                </svg>
+
+                                <!-- <input type="text" placeholder="Password"> -->
+                                <md-input-container>
+                                    <input name="email" ng-model="user.email" type="text"
+                                        placeholder="Company Email Address" required="">
+                                    <div ng-show="triedSubmit">
+                                        <div class="box">
+                                            <div ng-show="registerForm.email.$error.required">This field is
+                                                required</div>
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div class="field-input password">
+
+                            <div class="input-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+                                    <g fill="#317780" fill-rule="nonzero">
+                                        <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
+                                        <path
+                                            d="M19.107 16.262a.896.896 0 0 0 .893-.899V12.04c0-1.982-1.602-3.594-3.571-3.594h-1.074V5.277C15.355 2.367 12.952 0 9.998 0S4.641 2.367 4.641 5.277v3.168h-1.07C1.602 8.445 0 10.057 0 12.04v7.367C0 21.388 1.602 23 3.571 23H16.43C18.398 23 20 21.388 20 19.406c0-.496-.4-.898-.893-.898a.896.896 0 0 0-.893.898c0 .991-.8 1.797-1.785 1.797H3.57a1.793 1.793 0 0 1-1.785-1.797V12.04c0-.99.8-1.797 1.785-1.797H16.43c.984 0 1.785.806 1.785 1.797v3.324c0 .496.4.899.893.899zM13.57 8.445H6.427V5.277c0-1.919 1.602-3.48 3.571-3.48 1.97 0 3.572 1.561 3.572 3.48v3.168z" />
+                                        <ellipse cx="8.348" cy="15.543" rx="1" ry="1" />
+                                        <ellipse cx="5" cy="15.543" rx="1" ry="1" />
+                                        <ellipse cx="11.696" cy="15.543" rx="1" ry="1" />
+                                    </g>
+                                </svg>
+
+                                <!-- <input type="text" placeholder="Password"> -->
+                                <md-input-container>
+                                    <input name="password" ng-model="user.password" type="password"
+                                        placeholder="Password" minlength="5" required="" />
+                                    <div ng-show="triedSubmit">
+                                        <div class="box">
+                                            <div ng-show="registerForm.password.$error.minlength">Please enter 5
+                                                characters
+                                                or
+                                                more
+                                            </div>
+                                            <div ng-show="registerForm.password.$error.required">This
+                                            </div>
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div class="field-input password">
+                            <div class="input-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+                                    <g fill="#317780" fill-rule="nonzero">
+                                        <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
+                                        <path
+                                            d="M19.107 16.262a.896.896 0 0 0 .893-.899V12.04c0-1.982-1.602-3.594-3.571-3.594h-1.074V5.277C15.355 2.367 12.952 0 9.998 0S4.641 2.367 4.641 5.277v3.168h-1.07C1.602 8.445 0 10.057 0 12.04v7.367C0 21.388 1.602 23 3.571 23H16.43C18.398 23 20 21.388 20 19.406c0-.496-.4-.898-.893-.898a.896.896 0 0 0-.893.898c0 .991-.8 1.797-1.785 1.797H3.57a1.793 1.793 0 0 1-1.785-1.797V12.04c0-.99.8-1.797 1.785-1.797H16.43c.984 0 1.785.806 1.785 1.797v3.324c0 .496.4.899.893.899zM13.57 8.445H6.427V5.277c0-1.919 1.602-3.48 3.571-3.48 1.97 0 3.572 1.561 3.572 3.48v3.168z" />
+                                        <ellipse cx="8.348" cy="15.543" rx="1" ry="1" />
+                                        <ellipse cx="5" cy="15.543" rx="1" ry="1" />
+                                        <ellipse cx="11.696" cy="15.543" rx="1" ry="1" />
+                                    </g>
+                                </svg>
+
+                                <!-- <input type="text" placeholder="Password"> -->
+                                <md-input-container>
+                                    <input name="password2" ng-model="user.password2" type="password"
+                                        placeholder="Confirm Password" required="" />
+                                    <div ng-show="triedSubmit">
+                                        <div class="box">
+                                            <div ng-show="passwordsDontMatch">Passwords don't match</div>
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div class="login-btn">
+                            <button>
+                                <span>Sign Up</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div ng-show="step===2">
+                    <div ng-show="!didVerifyCall">
+                        <form class="login-form" ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form"
+                            novalidate>
+
+
+                            <div class="top-heading">
+                                <h3>Verify Your Account</h3>
+                                <p>
+                                    please enter your mobile number so that we can call you with your verification code.
+                                    </7>
+                                    <div class="box invalid-login">
+
+                                        <center>
+                                            <div ng-show="invalidCode" class="red">The code you entered was invalid. <a
+                                                    href="#/register" ng-click="recall()">Recall with Code</a></div>
+                                            <div ng-show="invalidNumber" class="red">The number you entered was invalid.
+                                            </div>
+                                        </center>
+                                    </div>
+                            </div>
+                            <div class="field-input verify">
+                                <div class="input-box">
+                                    <div layout="row" class="width-100">
+                                        <div flex="10">
+                                            <md-select ng-model="verify1.country"
+                                                ng-change="changeCountry(verify1.country)" class="margin-10">
+                                                <md7option><em>None</em></md-option>
+                                                    <md-option ng-value="'US'">
+                                                        <span class="flag-icon flag-icon-us flag-icon-squared"></span>
+                                                        +1
+                                                    </md-option>
+                                                    <md-option ng-value="'CA'">
+                                                        <span class="flag-icon flag-icon-ca flag-icon-squared"></span>
+                                                        +1
+                                                    </md-option>
+
+                                            </md-select>
+                                        </div>
+                                        <div flex="90">
+                                            <md-input-container>
+                                                <input name="mobile_number" ng-model="verify1.mobile_number" type="text"
+                                                    placeholder="Mobile Number" required="">
+                                                <div ng-show="triedSubmit">
+                                                    <div class="box">
+                                                        <div ng-show="verify1Form.mobile_number.$error.required">This
+                                                            field
+                                                            is
+                                                            required</div>
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="login-btn">
+                                <button>
+                                    <span>Send Code</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div ng-show="didVerifyCall">
+                        <form class="login-form" ng-submit="submitVerify2Form($event, verify2Form)" name="verify2Form"
+                            novalidate>
+                            <div class="top-heading">
+                                <h3>Please Enter Confirmation Code</h3>
+                                <div class="box invalid-login">
+
+                                    <center>
+                                        <div ng-show="invalidCode" class="red">The code you entered was invalid. <a
+                                                href="#/register" ng-click="recall()">Recall with Code</a></div>
+                                        <div ng-show="invalidNumber" class="red">The number you entered was invalid.
+                                        </div>
+                                    </center>
+                                </div>
+                            </div>
+
+                            <div class="field-input">
+                                <div class="input-box">
+                                    <md-input-container>
+
+                                        <input name="confirmation_Code" ng-model="verify2.confirmation_code" type="text"
+                                            placeholder="Confirmation Code" required="">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="verify2Form.confirmation_code.$error.required">This field
+                                                    is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                            <div class="login-btn">
+                                <button>
+                                    <span>Confirm</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div ng-show="step===3">
+                    <form class="login-form" ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm"
+                        novalidate>
+                        <div class="inner">
+                            <div class="top-heading">
+                                <h3>Enter Workspace Name</h3>
+                                <p>
+                                    this will be used to log you into the site.
+                                </p>
+                                <div class="box invalid-login">
+                                    <div ng-show="invalidWorkspaceTaken" class="red">This workspace name is already
+                                        taken.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <div class="clearfix" style="width: 500px;">
+                                    <div style="float:left; width: 364px;">
+                                        <md-input-container>
+                                            <input name="workspace" ng-model="workspace" type="text"
+                                                placeholder="e.g: cool-project" required="">
+                                            <div ng-show="triedSubmit">
+                                                <div class="box">
+                                                    <div ng-show="workspaceForm.workspace.$error.required">This field is
+                                                        required</div>
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div style="float: left; width: 136px;">
+                                        <h5>.lineblocs.com</h5>
+                                    </div>
+                                </div>
+
+                                <div class="login-btn">
+                                    <button>
+                                        <span>Sign Up</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="text">
+
+                    <h2>Be Connected!</h2>
+                    <p>Register for an account to start using <span>lineblocs!</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/custom.js"></script>
  
             </script>
 <script type="text/ng-template" id="views/pages/reset.html">

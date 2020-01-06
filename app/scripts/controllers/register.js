@@ -68,6 +68,8 @@ angular.module('MaterialApp')
     $scope.submit = function($event, registerForm) {
 		console.log("called submit");
 		$scope.triedSubmit = true;
+		console.log("data is ", $scope.user);
+		console.log("form ", registerForm);
 		if ($scope.user.password !== $scope.user.password2) {
 			$scope.passwordsDontMatch = true;
 			return;

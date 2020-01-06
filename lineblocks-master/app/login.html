@@ -1,29 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link type="text/css" href="css/custom.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Home</title>
+</head>
+
+<body>
 
     <div class="login-page">
         <div class="logo">
-
-            <img src="images/logo-blue-small.png">
+            <img src="images/logo-blue.png">
         </div>
-        <center>
-            <div ng-show="isLoading">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                <p>Logging you in..</p>
-            </div>
-        </center>
 
         <div class="content">
-            <form class="login-form" ng-submit="submit($event, loginForm)" name="loginForm" novalidate>
-                <div class="top-heading">
-                    <h3>Login</h3>
-                    <div class="box invalid-login">
+            <form class="login-form">
+                <h3>Login</h3>
 
-                        <center>
-                            <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try again.
-                            </div>
-                        </center>
-                    </div>
-                </div>
                 <div class="field-input">
                     <div class="input-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
@@ -32,14 +33,10 @@
                         </svg>
 
                         <!-- <input type="text" placeholder="Company Email Address"> -->
-                        <md-input-container>
-                            <input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
-                            <div ng-show="triedSubmit">
-                                <div class="box">
-                                    <div ng-show="loginForm.email.$error.required">This field is required</div>
-                                </div>
-                            </div>
-                        </md-input-container>
+                        <div class="input-field">
+                            <input id="email" type="text" class="validate">
+                            <label for="email">Company Email Address</label>
+                        </div>
                     </div>
 
                 </div>
@@ -58,22 +55,15 @@
                         </svg>
 
                         <!-- <input type="text" placeholder="Password"> -->
-                        <md-input-container>
-                            <input name="password" ng-model="user.password" type="password" placeholder="Password"
-                                required="">
-                            <div ng-show="triedSubmit">
-                                <div class="box">
-                                    <div ng-show="loginForm.password.$error.required">This field is required</div>
-                                </div>
-                            </div>
-                        </md-input-container>
+                        <div class="input-field">
+                            <input id="password" type="text" class="validate">
+                            <label for="password">Password</label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="login-btn">
-                    <button>
-                        <span>Login</span>
-                    </button>
+                    <span>Login</span>
                 </div>
             </form>
 
@@ -86,3 +76,6 @@
 
     <script src="js/jquery.min.js"></script>
     <script src="js/custom.js"></script>
+</body>
+
+</html>

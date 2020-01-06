@@ -1,0 +1,80 @@
+<div>
+	<div class="login-overlay">
+		<center>
+			<div ng-show="isLoading">
+					<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+					<p>Logging you in..</p>
+			</div>
+		</center>
+				<div class="form-container shadow">
+					<div layout="row" style="max-height: 434px;">
+							<div flex="70">
+
+						<div class="inner">
+							<center>
+						<div class="icon">
+							<div class="header">
+								<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+								<h4>Login</h4>
+								<p>
+									login to the LineBlocs portal!
+								</p>
+							</div>
+						</div>
+					</center>
+						<div class="inputs">
+							<div class="box invalid-login">
+								<center>
+									<div ng-show="couldNotLogin" class="red">User credentials were invalid. please try again.</div>
+								</center>
+							</div>
+							<form ng-submit="submit($event, loginForm)" name="loginForm" novalidate>
+								<md-input-container>
+									<input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
+									<div ng-show="triedSubmit">
+										<div class="box">
+											<div ng-show="loginForm.email.$error.required">This field is required</div>
+										</div>
+									</div>
+								</md-input-container>
+								<md-input-container>
+									<input name="password" ng-model="user.password" type="password" placeholder="Password" required="">
+									<div ng-show="triedSubmit">
+										<div class="box">
+											<div ng-show="loginForm.password.$error.required">This field is required</div>
+										</div>
+									</div>
+								</md-input-container>
+								<center>
+								<div class="buttons">
+									<div class="link" style="padding-bottom:0;">
+										<md-button type="submit" class="md-raised primary">Login</md-button>
+									</div>
+									<a ui-sref="forgot">Forgot Password</a>
+									<br/>
+									<a ui-sref="register">Register here</a>
+								</div>
+							</center>
+							</form>
+
+						</div>
+					</div>
+				</div>
+<div flex="30">
+							<img height="434" width="100%" src="./images/login-right.jpg" />
+						</div>
+					</div>
+				</div>
+				<footer class="login-footer">
+					<div class="left-section">
+						&copy; LineBlocs.com
+					</div>
+
+					<div class="right-section">
+					</div>
+				</footer>
+
+			</div>
+		</div>
+	</div>
+</div>

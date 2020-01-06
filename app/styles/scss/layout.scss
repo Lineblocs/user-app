@@ -5,6 +5,18 @@ body {
 	position: static !important;
 	background: #FFFFFF;
 }
+.width-100 {
+	width: 100%;
+}
+.login-form {
+	md-input-container {
+		margin: 0px;
+	}
+	input {
+		border-bottom: 1px solid #E3E3E3;
+	}
+
+}
 .content-holder {
 	background: $bg;
 	@include transition(.3s);
