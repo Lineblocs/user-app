@@ -66,6 +66,13 @@ p {
     .buttons:hover svg {
       transform: translateX(10px); }
 
+      .login-btn:after {
+        height: 49.2px;
+        clear: both; 
+        content: '';
+        display: block;
+        margin: 0;
+      }
 .header-content {
   display: flex;
   align-items: center;
@@ -369,6 +376,9 @@ table {
           align-items: center;
           width: 100%;
           margin-bottom: 20px; }
+        .login-page .content .login-form .field-input .input-box.no-margin {
+          margin-bottom: 0px;
+        }
           .signup-page .content .signup-form .field-input .input-box .input-field,
           .signup-page .content .login-form .field-input .input-box .input-field,
           .login-page .content .signup-form .field-input .input-box .input-field,
@@ -584,5 +594,12 @@ table {
       .privacy .privacy-content .social-media img {
         margin-left: 20px;
         cursor: pointer; }
+
+        .login-image {
+                      position: absolute;
+            right: 0;
+            max-height: 700px;
+            overflow: hidden;
+        }
 
 /*# sourceMappingURL=custom.css.map */

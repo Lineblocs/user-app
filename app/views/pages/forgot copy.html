@@ -1,0 +1,60 @@
+<div>
+	<div class="login-overlay">
+		<center>
+			<div ng-show="isLoading">
+					<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+					<p>Please wait..</p>
+			</div>
+		</center>
+		<div class="form-container shadow">
+				<div class="inner">
+					<center>
+				<div class="icon">
+					<div class="header">
+						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+						<h4>Forgot Password</h4>
+						<p>
+							request reset password instructions.
+						</p>
+					</div>
+				</div>
+			</center>
+				<div class="inputs">
+					<div class="box invalid-login">
+						<center>
+							<div ng-show="couldNotReset" class="red">User credentials were invalid. please try again.</div>
+						</center>
+					</div>
+					<form ng-submit="submit($event, forgotForm)" name="forgotForm" novalidate>
+						<md-input-container>
+							<input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="forgotForm.email.$error.required">This field is required</div>
+								</div>
+							</div>
+						</md-input-container>
+						<center>
+						<div class="buttons">
+							<div class="link" style="padding-bottom:0;">
+								<md-button type="submit" class="md-raised primary">Send Email</md-button>
+							</div>
+							<a ui-sref="login">Login Here</a>
+							<br/>
+							<a ui-sref="register">Register here</a>
+						</div>
+					</center>
+					</form>
+				</div>
+			</div>
+		</div>
+		<footer class="login-footer">
+			<div class="left-section">
+				&copy; LineBlocs.com
+			</div>
+
+			<div class="right-section">
+			</div>
+		</footer>
+	</div>
+</div>

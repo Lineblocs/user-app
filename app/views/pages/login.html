@@ -15,7 +15,12 @@
         <div class="content">
             <form class="login-form" ng-submit="submit($event, loginForm)" name="loginForm" novalidate>
                 <div class="top-heading">
-                    <h3>Login</h3>
+					<h3>Login</h3>
+                <div layout="row" layout-align="center">
+                    <p>Need an account ?
+                        <a ui-sref="register">Register here</a>
+                    </p>
+                </div>
                     <div class="box invalid-login">
 
                         <center>
@@ -45,7 +50,11 @@
                 </div>
 
                 <div class="field-input password">
-                    <div class="input-box">
+
+                    <div class="input-box no-margin">
+
+
+
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
                             <g fill="#317780" fill-rule="nonzero">
                                 <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
@@ -66,11 +75,14 @@
                                     <div ng-show="loginForm.password.$error.required">This field is required</div>
                                 </div>
                             </div>
-                        </md-input-container>
-                    </div>
-                </div>
+						</md-input-container>
+					</div>
+				</div>
+                    <a ui-sref="forgot">Forgot Password</a>
 
                 <div class="login-btn">
+
+
                     <button>
                         <span>Login</span>
                     </button>
@@ -78,9 +90,9 @@
             </form>
 
             <div class="text">
-                <h2>Be Connected!</h2>
-                <p>Register for an account to start using <span>lineblocs!</span></p>
-            </div>
+				<h2>Your Line</h2>
+                <p><span>login to start configuring your DIDs, and flows!</span></p>
+			</div>
         </div>
     </div>
 
