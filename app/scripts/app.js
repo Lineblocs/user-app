@@ -678,6 +678,13 @@ angular
         templateUrl: 'views/pages/settings/workspace-users.html',
         controller: 'WorkspaceUserCtrl'
     })
+    .state('settings-workspace-params', {
+        url: '/settings/workspace-params',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-params.html',
+        controller: 'WorkspaceParamCtrl'
+    })
+
     .state('settings-workspace-users-create', {
         url: '/settings/workspace-users/create',
         parent: 'dashboard',
