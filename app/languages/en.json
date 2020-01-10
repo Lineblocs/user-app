@@ -76,6 +76,8 @@
       "did-numbers": "DID Numbers",
       "settings": "Settings",
       "verified-caller-ids": "Verified Caller IDs",
+      "workspace-users": "Workspace Users",
+      "workspace-params": "Workspace Params",
       "blocked-numbers": "Blocked Numbers",
       "ip-whitelist": "IP Whitelist"
   }
