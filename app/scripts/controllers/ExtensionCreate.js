@@ -35,6 +35,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
       values['username'] = $scope.values.username;
       values['caller_id'] = $scope.values.caller_id;
       values['secret'] = $scope.values.secret;
+      values['flow_id'] = $scope.values.flow_id;
       var toastPos = {
         bottom: false,
         top: true,
@@ -64,8 +65,18 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     //example 25%, 50%, 75%, 100%
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
   }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
   $timeout(function() {
-    SharedPref.endIsLoading();
+    Backend.get("/flow/listFlows").then(function(res) {
+      $scope.flows = res.data.data;
+        SharedPref.endIsLoading();
+    });
   }, 0);
 });
 

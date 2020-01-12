@@ -1,96 +1,132 @@
 <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
-      <span class="md-headline">Edit Extension {{extension.username}}</span>
-      <span class="md-subhead">create an extension to use with any softphone</span>
+      <span class=" md-headline">Edit Extension {{extension.username}}</span>
+    <span class="md-subhead">create an extension to use with any softphone</span>
     </md-card-title-text>
-  </md-card-title>
-  <md-card-content>
-    <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
+    </md-card-title>
+    <md-card-content>
+        <form name="extensionForm" ng-submit="submit(extensionForm)" novalidate>
             <div layout="row">
-              <div flex="95">
-      <md-input-container>
-        <label>Username</label>
-        <input name="username" ng-model="values.username" required="" minlength="1">
-        <div ng-show="triedSubmit">
-          <div class="box">
-            <div ng-show="extensionForm.username.$error.minlength">Please enter 1 characters or more</div>
-            <div ng-show="extensionForm.username.$error.required">This field is required</div>
-          </div>
-        </div>
-      </md-input-container>
-    </div>
-      <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          The username you will use to login to your extension with
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-            <div layout="row">
-              <div flex="95">
-      <md-input-container>
-        <label>Caller ID</label>
-        <input name="caller_id" ng-model="values.caller_id" required="" minlength="1">
-        <div ng-show="triedSubmit">
-          <div class="box">
-            <div ng-show="extensionForm.caller_id.$error.minlength">Please enter 1 characters or more</div>
-            <div ng-show="extensionForm.caller_id.$error.required">This field is required</div>
-          </div>
-        </div>
-      </md-input-container>
-    </div>
-      <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          Your Caller ID for outbound calls
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-      <div layout="row" layout-wrap="">
-        <div flex="66">
-            <div layout="row">
-              <div flex="95">
-          <md-input-container>
-            <label>Secret</label>
-            <input name="secret" type="{{ui.showSecret ? 'text':'password'}}" required="" minlength="6" ng-model="values.secret">
-              <div ng-show="triedSubmit">
-                <div class="box">
-                  <div ng-show="extensionForm.secret.error.minlength">Please enter 6 characters or more</div>
-                  <div ng-show="extensionForm.secret.$error.required">This field is required</div>
+                <div flex="95">
+                    <md-input-container>
+                        <label>Username</label>
+                        <input name="username" ng-model="values.username" required="" minlength="1">
+                        <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="extensionForm.username.$error.minlength">Please enter 1 characters or more
+                                </div>
+                                <div ng-show="extensionForm.username.$error.required">This field is required</div>
+                            </div>
+                        </div>
+                    </md-input-container>
                 </div>
-              </div>
-          </md-input-container>
-        </div>
-          <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          A secure secret for the extension
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-        </div>
-        <div flex="33">
-          <md-button ng-click="generateSecret()" class="md-raised">Generate Secret</md-button>
-          <md-button ng-show="!ui.showSecret" ng-click="showSecret()" class="md-icon-button" aria-label="Settings">
-            <md-icon>
-            <i class="mdi mdi-eye"></i>
-            </md-icon>
-          </md-button>
-          <md-button ng-show="ui.showSecret" ng-click="hideSecret()" class="md-icon-button" aria-label="Settings">
-            <md-icon>
-              <i class="mdi mdi-eye-off"></i>
-            </md-icon>
-          </md-button>
-        </div>
-      </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            The username you will use to login to your extension with
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
+            <div layout="row">
+                <div flex="95">
+                    <md-input-container>
+                        <label>Caller ID</label>
+                        <input name="caller_id" ng-model="values.caller_id" required="" minlength="1">
+                        <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="extensionForm.caller_id.$error.minlength">Please enter 1 characters or
+                                    more</div>
+                                <div ng-show="extensionForm.caller_id.$error.required">This field is required</div>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            Your Caller ID for outbound calls
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
+            <div layout="row" layout-wrap="">
 
-      <md-button type="submit" class="md-raised md-primary">Save</md-button>
-    </form>
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Secret</label>
+                                <input name="secret" type="{{ui.showSecret ? 'text':'password'}}" required=""
+                                    minlength="6" ng-model="values.secret">
+                                <div ng-show="triedSubmit">
+                                    <div class="box">
+                                        <div ng-show="extensionForm.secret.error.minlength">Please enter 6 characters or
+                                            more</div>
+                                        <div ng-show="extensionForm.secret.$error.required">This field is required</div>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    A secure secret for the extension
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+                <div flex="33">
+                    <md-button ng-click="generateSecret()" class="md-raised">Generate Secret</md-button>
+                    <md-button ng-show="!ui.showSecret" ng-click="showSecret()" class="md-icon-button"
+                        aria-label="Settings">
+                        <md-icon>
+                            <i class="mdi mdi-eye"></i>
+                        </md-icon>
+                    </md-button>
+                    <md-button ng-show="ui.showSecret" ng-click="hideSecret()" class="md-icon-button"
+                        aria-label="Settings">
+                        <md-icon>
+                            <i class="mdi mdi-eye-off"></i>
+                        </md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <div layout="row">
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Attached Flow</label>
+                                <md-select ng-model="values.flow_id" ng-change="changeFlow(values.flow_id)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="flow in flows" ng-value="flow.id">
+                                        {{flow.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your extension will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+                <div flex="33">
+                    <md-button ng-show="values.flow_id" ng-click="editFlow(values.flow_id)" class="md-raised">Edit Flow
+                    </md-button>
+                </div>
+            </div>
+
+            <md-button type="submit" class="md-raised md-primary">Save</md-button>
+        </form>
 </md-card>

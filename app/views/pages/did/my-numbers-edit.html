@@ -2,57 +2,59 @@
 <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
-      <span class="md-headline">{{number.number}}</span>
-      <span class="md-subhead">Below are settings to configure "{{number.number}}"</span>
+      <span class=" md-headline">{{number.number}}</span>
+    <span class="md-subhead">Below are settings to configure "{{number.number}}"</span>
     </md-card-title-text>
-  </md-card-title>
-  <md-card-content>
-    <form ng-submit="saveNumber()">
+    </md-card-title>
+    <md-card-content>
+        <form ng-submit="saveNumber()">
             <div layout="row">
-             <div flex="95">
-              <md-input-container>
-                <label>Name</label>
-                <input ng-model="number.name">
-              </md-input-container>
+                <div flex="95">
+                    <md-input-container>
+                        <label>Name</label>
+                        <input ng-model="number.name">
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            The name of your number. this can also be a tag or an identifier you use to search/filter
+                            for the number.
+                        </md-tooltip>
+                    </md-icon>
+                </div>
             </div>
-            <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          The name of your number. this can also be a tag or an identifier you use to search/filter for the number.
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-        <div layout="row">
-          <div flex="66">
             <div layout="row">
-             <div flex="95">
-            <md-input-container>
-              <label>Attached Flow</label>
-              <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
-                <md-option><em>None</em></md-option>
-                <md-option ng-repeat="flow in flows" ng-value="flow.id">
-                  {{flow.name}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-          </div>
-            <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          The flow your number will use for inbound calling.
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-          </div>
-          <div flex="33">
-            <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">Edit Flow</md-button>
-          </div>
-        </div>
-        <md-button ng-click="saveNumber()" class="md-raised md-primary">Save</md-button>
-    </form>
-  </md-card-content>
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Attached Flow</label>
+                                <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="flow in flows" ng-value="flow.id">
+                                        {{flow.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your number will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+                <div flex="33">
+                    <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">Edit Flow
+                    </md-button>
+                </div>
+            </div>
+            <md-button ng-click="saveNumber()" class="md-raised md-primary">Save</md-button>
+        </form>
+    </md-card-content>
 </md-card>

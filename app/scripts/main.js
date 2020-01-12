@@ -1635,6 +1635,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
       values['username'] = $scope.values.username;
       values['caller_id'] = $scope.values.caller_id;
       values['secret'] = $scope.values.secret;
+      values['flow_id'] = $scope.values.flow_id;
       var toastPos = {
         bottom: false,
         top: true,
@@ -1664,8 +1665,18 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     //example 25%, 50%, 75%, 100%
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
   }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
   $timeout(function() {
-    SharedPref.endIsLoading();
+    Backend.get("/flow/listFlows").then(function(res) {
+      $scope.flows = res.data.data;
+        SharedPref.endIsLoading();
+    });
   }, 0);
 });
 
@@ -1679,11 +1690,12 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref) {
+angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref, $q) {
 	  SharedPref.updateTitle("Edit Extension");
   $scope.values = {
     username: "",
-    secret: ""
+    secret: "",
+    flow_id: ""
   };
   $scope.ui = {
     showSecret: false,
@@ -1691,9 +1703,13 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   }
   $scope.triedSubmit = false;
   $scope.load = function() {
-    SharedPref.isLoading = true;
-    Backend.get("/extension/extensionData/" + $stateParams['extensionId']).then(function(res) {
-      $scope.extension = res.data;
+  SharedPref.isLoading = true;
+   $q.all([
+      Backend.get("/flow/listFlows"),
+      Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
+   ]).then(function(res) {
+      $scope.flows= res[0].data.data;
+      $scope.extension = res[1].data;
       $scope.values = angular.copy( $scope.extension );
       SharedPref.endIsLoading();
     });
@@ -1715,6 +1731,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       values['username'] = $scope.values.username;
       values['secret'] = $scope.values.secret;
       values['caller_id'] = $scope.values.caller_id;
+      values['flow_id'] = $scope.values.flow_id;
       var toastPos = {
         bottom: false,
         top: true,
@@ -1743,6 +1760,13 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
     var passwordRes = zxcvbn($scope.values.secret);
     //example 25%, 50%, 75%, 100%
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
   }
   $scope.load();
 });
