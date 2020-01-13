@@ -697,6 +697,13 @@ angular
         templateUrl: 'views/pages/settings/workspace-users-edit.html',
         controller: 'WorkspaceUserEditCtrl'
     })
+    .state('settings-extension-codes', {
+
+        url: '/settings/extension-codes',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/extension-codes.html',
+        controller: 'ExtensionCodesCtrl'
+    })
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',

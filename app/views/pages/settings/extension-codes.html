@@ -1,0 +1,62 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Edit Extension Codes</span>
+                <span class="md-subhead"></span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="userForm" ng-submit="saveCodes()" novalidate>
+                <div layout="row">
+                    <div flex="95">
+                        <ul id="codes" class="no-list-style">
+                            <li ng-repeat="code in codes">
+                                <div layout="row">
+                                    <div flex="30">
+
+                                        <md-input-container>
+
+                                            <label>Name</label>
+                                            <input name="name" ng-model="code.name" required="" minlength="1">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+
+                                        <md-input-container>
+
+                                            <label>Code</label>
+                                            <input name="code" ng-model="code.code" required="" minlength="1">
+                                        </md-input-container>
+
+                                    </div>
+                                    <div flex="30">
+
+                                        <md-select ng-change="changeFlow($index, $scope.codes[$index])"
+                                            ng-model="code.flow" placeholder="Select Trunk">
+
+                                            <md-option>None</md-option>
+                                            <md-option ng-value="flow"
+                                                ng-repeat="flow in flows track by flow.id">
+                                                {{flow.name}}
+                                            </md-option>
+                                        </md-select>
+                                    </div>
+                                    <div flex="10">
+                                        <div class="remove-code">
+                                            <md-button ng-click="removeCode($index, code)" class="md-raised md-warn">Remove</md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <md-button ng-click="addCode()" type="button" class="md-raised md-primary">Add Code
+                        </md-button>
+                    </div>
+                </div>
+                <md-button type="submit" class="md-raised md-primary">Save</md-button>
+            </form>
+
+        </md-card-content>
+    </md-card>
+</div>
