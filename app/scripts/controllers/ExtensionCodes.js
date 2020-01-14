@@ -10,12 +10,14 @@
 angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
     SharedPref.updateTitle("Extension Codes");
   $scope.users = [];
+
   $scope.load = function() {
       SharedPref.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
-          Backend.get("/flow/listFlows"),
+          Backend.get("/flow/listFlows?all=1"),
           Backend.get("/settings/extensionCodes")
+
         ]).then(function(res) {
         $scope.flows = res[0].data.data;
         var codes = res[1].data;
