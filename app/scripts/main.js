@@ -3685,6 +3685,7 @@ angular.module('MaterialApp')
 		confirmation_code: ""
 	};
   $scope.workspace = "";
+  $scope.selectedTemplate = null;
 
   function doSpinup() {
 	$scope.shouldSplash = true;
@@ -3786,7 +3787,8 @@ angular.module('MaterialApp')
 			Backend.post("/updateWorkspace", data).then(function( res ) {
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
-					doSpinup();
+					//doSpinup();
+					$scope.step = 4;
 					return;
 				}
 				$scope.invalidWorkspaceTaken = true;
@@ -3795,6 +3797,26 @@ angular.module('MaterialApp')
 		return false;
 	}
 
+	$scope.finishSignup = function() {
+		$scope.triedSubmit = true;
+		if (!$scope.selectedTemplate) {
+			      alert = $mdDialog.alert({
+        title: 'Error',
+        textContent: 'Please select a template',
+        ok: 'Close'
+      });
+			return;
+
+		}
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.templateId =  $scope.selectedTemplate.id;
+			Backend.post("/provisionCallSystem", data).then(function( res ) {
+				doSpinup();
+				return;
+			});
+		return false;
+	}
 
 	$scope.recall = function() {
 		var data = angular.copy( $scope.verify1 );
@@ -3824,7 +3846,21 @@ angular.module('MaterialApp')
 
     	return defer.promise;
 
+	}
+	    $scope.useTemplate = function (template) {
+      $scope.selectedTemplate = template;
+    };
+    $scope.isSelected = function (template) {
+      if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {
+        return true;
+      }
+      return false;
     }
+
+	Backend.get("/getCallSystemTemplates").then(function(res) {
+		$scope.templates = res.data;
+
+	});
 
   });
 

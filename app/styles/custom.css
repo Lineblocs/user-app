@@ -45,7 +45,9 @@ p {
   font-size: 18px;
   font-weight: 100;
   color: #666; }
-
+.my-cards {
+  border-radius: 20px;
+}
 .buttons {
   background: #fff;
   border-radius: 8px;
@@ -337,6 +339,14 @@ table {
         font-weight: 600;
         text-align: center;
  }
+   
+ .login-page .content .call-system-picker {
+     width: 800px;
+   }
+
+   .login-page .content .call-system-picker  h3 {
+      text-align: left;
+   }
       .signup-page .content .signup-form .field-input,
       .signup-page .content .login-form .field-input,
       .login-page .content .signup-form .field-input,
@@ -423,6 +433,10 @@ table {
           border-radius: 35px;
           background-color: #395373;
           color: #fff; }
+        .login-page .content .login-form span.disabled {
+          background-color: darkGray;
+          cursor: not-allowed;
+        }
     .signup-page .content .text,
     .login-page .content .text {
       text-align: right;

@@ -5,11 +5,11 @@
             <div class="outer">
                 <div class="middle">
                     <div class="inner">
-						<center>
-						<img src="/images/logo-blue.png" width="256" />
-						<p>Setting up your account..</p>
-					<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-						</center>
+                        <center>
+                            <img src="/images/logo-blue.png" width="256" />
+                            <p>Setting up your account..</p>
+                            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                        </center>
                     </div>
                 </div>
             </div>
@@ -37,11 +37,11 @@
 
                         <div class="top-heading">
                             <h3>Register</h3>
-                <div layout="row" layout-align="center">
-                    <p>Already registered ?
-                        <a ui-sref="login">Login here</a>
-                    </p>
-                </div>
+                            <div layout="row" layout-align="center">
+                                <p>Already registered ?
+                                    <a ui-sref="login">Login here</a>
+                                </p>
+                            </div>
 
                             <div class="box invalid-login">
 
@@ -294,6 +294,7 @@
                     <form class="login-form" ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm"
                         novalidate>
                         <div class="inner">
+
                             <div class="top-heading">
                                 <h3>Enter Workspace Name</h3>
                                 <p>
@@ -329,9 +330,64 @@
                                         <span>Sign Up</span>
                                     </button>
                                 </div>
+
                             </div>
                         </div>
+                    </form>
                 </div>
+
+                <div ng-show="step===4" class="call-system-picker">
+                    <form class="login-form" ng-submit="finishSignup($event, templateForm)" name="templateForm" novalidate>
+                        <div layout="row">
+                        <h3 flex="100">Setup Your Call System</h3>
+                        </div>
+                        <div layout="row">
+
+
+                        <div flex="50" ng-repeat="template in templates">
+
+
+
+                            <md-card class="my-cards">
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">{{template.name}}</span>
+                                        <span class="md-subhead">{{template.description}}</span>
+                                    </md-card-title-text>
+                                    <md-card-title-media>
+                                        <div class="md-media-sm card-media"></div>
+                                    </md-card-title-media>
+                                </md-card-title>
+                                <md-card-actions layout="row" layout-align="end center">
+                                    <div class="login-btn">
+                                        <button
+                                        type="button"
+                                        ng-show="!isSelected(template)"
+                                        ng-click="useTemplate(template)">
+                                        <span>Use Template</span></button>
+
+                                          <button
+                                          type="button"
+                                        ng-show="isSelected(template)">
+                                        
+                                        <span class="disabled">Use Template</span></button>
+
+
+                                    </div>
+                                </md-card-actions>
+                            </md-card>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                                <div class="login-btn">
+                                    <button>
+                                        <span>Next</span>
+                                    </button>
+                                </div>
+                    </form>
+                </div>
+
 
                 <div class="text">
 
