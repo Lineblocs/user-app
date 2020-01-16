@@ -386,6 +386,9 @@ angular
         var factory = this;
         factory.settings = {
             search: "",
+            args: {
+
+            },
             currentPage: 1,
             currentUrl: "",
             scope: { obj: null, key: '' }
@@ -435,6 +438,12 @@ angular
             var url = factory.settings.currentUrl + "?page=" + factory.settings.currentPage;
             if (factory.settings.search !== "") {
                 url += "&search=" + encodeURIComponent(factory.settings.search);
+            }
+            for ( var index in factory.settings.args ) {
+                var arg = factory.settings.args[ index ];
+                if ( arg !== '' && arg ) {
+                    url += "&" + index + "=" + encodeURIComponent(arg);
+                }
             }
             SharedPref.isCreateLoading = true;
             return $q(function(resolve, reject) {
@@ -599,6 +608,18 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/extension-edit.html',
         controller: 'ExtensionEditCtrl'
+    })
+    .state('debugger-logs', {
+        url: '/debugger-logs',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/debugger-logs.html',
+        controller: 'DebuggerLogsCtrl'
+    })
+    .state('debugger-log-view', {
+        url: '/debugger-logs/{logId}/view',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/log-view.html',
+        controller: 'DebuggerLogViewCtrl'
     })
     .state('calls', {
         url: '/calls',

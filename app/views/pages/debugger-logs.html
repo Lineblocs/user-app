@@ -1,0 +1,108 @@
+<div ng-show="!pagination.didSearch && logs.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div class=" no-results">
+        <center>
+            <h5>No logs listed</h5>
+        </center>
+</div>
+</md-card>
+</div>
+<div ng-show="pagination.didSearch || (!pagination.didSearch && logs.length > 0)">
+    <div layout="row side-options" layout-align="end center">
+        <div flex="10">
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+            </md-input-container>
+        </div>
+    </div>
+    <!-- exact table from live demo -->
+    <md-card md-theme="'default'"" md-theme-watch>
+              <md-card-title>
+
+                    <md-card-title-text>
+                      <span class=" md-headline">Logs Filter</span>
+        </md-card-title>
+        <md-content>
+            <div layout="row" layout-margin="">
+
+                <div flex="33">
+
+                    <md-input-container>
+
+                        <label>From</label>
+                        <input ng-keyup="pagination.search()" ng-model="pagination.settings.args.from" type="text">
+                    </md-input-container>
+                </div>
+                <div flex="33">
+                    <md-input-container>
+
+                        <label>To</label>
+                        <input ng-keyup="pagination.search()" ng-model="pagination.settings.args.to" type="text">
+                    </md-input-container>
+                </div>
+                <div flex="33">
+                        <md-input-container>
+                            <label>Flow</label>
+                            <md-select ng-model="pagination.settings.args.flow_id"
+                                ng-change="changeFlow(pagination.settings.args.flow_id)">
+                                <md-option><em>None</em></md-option>
+                                <md-option ng-repeat="flow in flows" ng-value="flow.id">
+                                    {{flow.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                </div>
+
+            </div>
+            <div layout="row" layout-margin="">
+              <md-button class="md-raised md-primary no-margin" ng-click="pagination.search()">Filter</md-button>
+            </div>
+        </md-content>
+    </md-card>
+
+    <!-- exact table from live demo -->
+    <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+            <tr md-row>
+                <th md-column><span>From</span></th>
+                <th md-column>To</th>
+                <th md-column>Title</th>
+                <th md-column>Created At</th>
+                <th md-column>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody md-body>
+            <tr md-row md-select="log" md-select-id="name" md-auto-select ng-repeat="log in logs">
+                <td md-cell>{{log.from}}</td>
+                <td md-cell>{{log.to}}</td>
+                <td md-cell>{{log.title}}</td>
+                <td md-cell>{{log.created_at}}</td>
+
+                <td md-cell>
+                    <md-button ng-click="viewLog(log)" class="md-icon-button" aria-label="View Log">
+                        <md-icon><i class="mdi mdi-eye"></i></md-icon>
+                    </md-button>
+                </td>
+            </tr>
+        </tbody>
+        </table>
+        </md-table-container>
+    </md-card>
+    <div layout="row" layout-align="end">
+
+        <div>
+            <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev
+                Page</md-button>
+            <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()"
+                class="md-raised md-primary">Prev Page</md-button>
+            <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next
+                Page</md-button>
+            <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()"
+                class="md-raised md-primary">Next Page</md-button>
+        </div>
+    </div>
+
+</div>

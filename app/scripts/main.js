@@ -386,6 +386,9 @@ angular
         var factory = this;
         factory.settings = {
             search: "",
+            args: {
+
+            },
             currentPage: 1,
             currentUrl: "",
             scope: { obj: null, key: '' }
@@ -435,6 +438,12 @@ angular
             var url = factory.settings.currentUrl + "?page=" + factory.settings.currentPage;
             if (factory.settings.search !== "") {
                 url += "&search=" + encodeURIComponent(factory.settings.search);
+            }
+            for ( var index in factory.settings.args ) {
+                var arg = factory.settings.args[ index ];
+                if ( arg !== '' && arg ) {
+                    url += "&" + index + "=" + encodeURIComponent(arg);
+                }
             }
             SharedPref.isCreateLoading = true;
             return $q(function(resolve, reject) {
@@ -599,6 +608,18 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/extension-edit.html',
         controller: 'ExtensionEditCtrl'
+    })
+    .state('debugger-logs', {
+        url: '/debugger-logs',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/debugger-logs.html',
+        controller: 'DebuggerLogsCtrl'
+    })
+    .state('debugger-log-view', {
+        url: '/debugger-logs/{logId}/view',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/log-view.html',
+        controller: 'DebuggerLogViewCtrl'
     })
     .state('calls', {
         url: '/calls',
@@ -1614,6 +1635,46 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref, $q) {
+    SharedPref.updateTitle("Debugger Logs");
+    $scope.pagination = pagination;
+  $scope.settings = {
+    page: 0
+  };
+  $scope.logs = [];
+  $scope.load = function() {
+    SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/log/listLogs" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'logs' );
+      $q.all([
+      Backend.get("/flow/listFlows?all=1"),
+      pagination.loadData()
+      ]).then(function(res) {
+        $scope.flows = res[0].data.data;
+        $scope.logs = res[1].data.data;
+        console.log("logs are ", $scope.logs);
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.viewLog= function(log) {
+    $state.go('debugger-log-view', {logId: log.api_id});
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
     SharedPref.updateTitle("Extension Codes");
   $scope.users = [];
@@ -2184,6 +2245,31 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
   $scope.changeDisableState = function($event, value) {
     console.log("changeDisableState ", value);
     $scope.enableWhitelist($event, true);
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Log View");
+  $scope.log = null;
+  $scope.load = function() {
+    SharedPref.isLoading =true;
+    Backend.get("/log/logData/" + $stateParams['logId']).then(function(res) {
+      console.log("log is ", res.data);
+      SharedPref.isLoading =false;
+      var log = res.data;
+      $scope.log = log;
+    })
   }
   $scope.load();
 });

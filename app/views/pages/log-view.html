@@ -1,0 +1,34 @@
+<md-card md-theme="'default'"" md-theme-watch>
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">Log</span>
+      <span class="md-subhead">below is the info associated with your log</span>
+    </md-card-title-text>
+  </md-card-title>
+  <md-card-content>
+    <div layout="row" layout-align="start center">
+      <div flex="10">ID</div>
+      <div flex="90">{{log.api_id}}</div>
+    </div>
+    <div layout="row" layout-align="start center">
+      <div flex="10">From</div>
+      <div flex="90">{{log.from}}</div>
+    </div>
+    <div layout="row" layout-align="start center">
+      <div flex="10">To</div>
+      <div flex="90">{{log.to}}</div>
+    </div>
+    <div layout="row" layout-align="start center">
+      <div flex="10">Flow</div>
+      <div flex="90">{{log.flow_name}}</div>
+    </div>
+    <div layout="row" layout-align="start center">
+      <div flex="10">Title</div>
+      <div flex="90">{{log.title}}</div>
+    </div>
+    <div layout="row" layout-align="start center">
+      <div flex="10">Report</div>
+      <div flex="90">{{log.report}}</div>
+    </div>
+  </md-card-content>
+</md-card>

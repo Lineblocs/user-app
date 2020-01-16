@@ -129,6 +129,7 @@
 				<li ng-class="{active: $state.includes('extensions')}" ng-show="SharedPref.canPerformAction('manage_extensions')"><md-button href="" ng-click="SharedPref.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
 				<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="SharedPref.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
+				<li ng-class="{active: $state.includes('debugger-logs')}"><md-button href="" ng-click="SharedPref.changeRoute('debugger-logs')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'debugger-logs' | translate }}</span></md-button></li>
 				<li class="show-subnav">
 					<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
 						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>

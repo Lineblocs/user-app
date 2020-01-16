@@ -79,5 +79,6 @@
       "workspace-users": "Workspace Users",
       "workspace-params": "Workspace Params",
       "blocked-numbers": "Blocked Numbers",
-      "ip-whitelist": "IP Whitelist"
+      "ip-whitelist": "IP Whitelist",
+      "debugger-logs": "Debugger Logs"
   }
