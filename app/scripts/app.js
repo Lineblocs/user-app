@@ -325,8 +325,15 @@ angular
     })
     .factory("Backend", function($http, $q, SharedPref) {
         var factory = this;
-        function errorHandler(error) {
+        function errorHandler(error, showMsg) {
+            console.log("erroHandler ", arguments);
+            if ( showMsg ) {
+                    error = error || "An error occured.";
+                    SharedPref.showError(error);
+                    return;
+            }
             SharedPref.showError("An error occured.");
+
         }
         factory.getJWTToken = function(email, password) {
             var params = {
@@ -343,11 +350,12 @@ angular
                 });
             });
         }
-        factory.get = function(path, params)
+        factory.get = function(path, params, showMsg)
         {
             return $q(function(resolve, reject) {
                 $http.get(createUrl(path), params).then(resolve,function(err) {
-                    errorHandler();
+                    var message = err.message;
+                    errorHandler(message, showMsg);
                     reject(err);
                  });
             });
@@ -358,28 +366,47 @@ angular
             return factory.get(path, params);
         }
 
-        factory.delete = function(path)
+        factory.delete = function(path, showMsg)
         {
             return $q(function(resolve, reject) {
                 $http.delete(createUrl(path)).then(resolve,function(err) {
-                    errorHandler();
+                    var message = err.message;
+                    errorHandler(message, showMsg);
+
                     reject(err);
                  });
             });
 
         }
-        factory.post = function(path, params, suppressErrDialog)
+        factory.post = function(path, params, suppressErrDialog, showMsg)
         {
             return $q(function(resolve, reject) {
                 $http.post(createUrl(path), params).then(resolve,function(err) {
+                    var message = err.message;
                     if (!suppressErrDialog) {
-                        errorHandler();
+                        errorHandler(message, showMsg);
                     }
                     reject(err);
                  });
             });
 
         }
+        factory.postFiles =  function(url, data, showMsg) {
+            return $q(function(resolve, reject) {
+                $http({
+
+                    url: createUrl(url),
+                    method: "POST",
+                    data: data,
+                    headers: {'Content-Type': undefined}
+                }).then(resolve, function(error) {
+                    console.log("postFiles result ", error);
+                    errorHandler(error.data.message, showMsg);
+                    reject( error );
+                });
+            });
+        }
+
         return factory;
     })
     .factory("pagination", function(Backend,SharedPref, $q, $timeout) {
@@ -578,6 +605,24 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/did/buy-numbers.html',
         controller: 'BuyNumbersCtrl'
+    })
+    .state('ports', {
+        url: '/dids/ports', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/ports/numbers.html',
+        controller: 'PortNumbersCtrl'
+    })
+    .state('port-create', {
+        url: '/dids/ports/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/ports/create-port.html',
+        controller: 'CreatePortCtrl'
+    })
+    .state('port-edit', {
+        url: '/dids/ports/{numberId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/ports/edit-port.html',
+        controller: 'EditPortCtrl'
     })
     .state('flows', {
         url: '/flows',

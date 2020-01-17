@@ -43,15 +43,15 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
       return code;
     });
     var data = {"codes": codes};
+    SharedPref.isCreateLoading = true;
     Backend.post("/settings/extensionCodes", data).then(function(res) {
-          $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension codes updated..')
             .position("top right")
             .hideDelay(3000)
         );
-          });
+        SharedPref.endIsCreateLoading();
     });
   }
  $scope.addCode = function() {
@@ -61,9 +61,10 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
     };
     $scope.codes.push(copy);
   }
-  $scope.changeFlow = function($index, model) {
+  $scope.changeFlow = function($index) {
     console.log("changeFlow called ", arguments);
-    $scope.codes[$index].flow_id = model.id;
+    console.log("codes are ", $scope.codes);
+    $scope.codes[$index].flow_id = $scope.codes[$index].flow.id;
   }
   
   $scope.removeCode = function($index, code) {

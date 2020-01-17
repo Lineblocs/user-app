@@ -325,8 +325,15 @@ angular
     })
     .factory("Backend", function($http, $q, SharedPref) {
         var factory = this;
-        function errorHandler(error) {
+        function errorHandler(error, showMsg) {
+            console.log("erroHandler ", arguments);
+            if ( showMsg ) {
+                    error = error || "An error occured.";
+                    SharedPref.showError(error);
+                    return;
+            }
             SharedPref.showError("An error occured.");
+
         }
         factory.getJWTToken = function(email, password) {
             var params = {
@@ -343,11 +350,12 @@ angular
                 });
             });
         }
-        factory.get = function(path, params)
+        factory.get = function(path, params, showMsg)
         {
             return $q(function(resolve, reject) {
                 $http.get(createUrl(path), params).then(resolve,function(err) {
-                    errorHandler();
+                    var message = err.message;
+                    errorHandler(message, showMsg);
                     reject(err);
                  });
             });
@@ -358,28 +366,47 @@ angular
             return factory.get(path, params);
         }
 
-        factory.delete = function(path)
+        factory.delete = function(path, showMsg)
         {
             return $q(function(resolve, reject) {
                 $http.delete(createUrl(path)).then(resolve,function(err) {
-                    errorHandler();
+                    var message = err.message;
+                    errorHandler(message, showMsg);
+
                     reject(err);
                  });
             });
 
         }
-        factory.post = function(path, params, suppressErrDialog)
+        factory.post = function(path, params, suppressErrDialog, showMsg)
         {
             return $q(function(resolve, reject) {
                 $http.post(createUrl(path), params).then(resolve,function(err) {
+                    var message = err.message;
                     if (!suppressErrDialog) {
-                        errorHandler();
+                        errorHandler(message, showMsg);
                     }
                     reject(err);
                  });
             });
 
         }
+        factory.postFiles =  function(url, data, showMsg) {
+            return $q(function(resolve, reject) {
+                $http({
+
+                    url: createUrl(url),
+                    method: "POST",
+                    data: data,
+                    headers: {'Content-Type': undefined}
+                }).then(resolve, function(error) {
+                    console.log("postFiles result ", error);
+                    errorHandler(error.data.message, showMsg);
+                    reject( error );
+                });
+            });
+        }
+
         return factory;
     })
     .factory("pagination", function(Backend,SharedPref, $q, $timeout) {
@@ -578,6 +605,24 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/did/buy-numbers.html',
         controller: 'BuyNumbersCtrl'
+    })
+    .state('ports', {
+        url: '/dids/ports', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/ports/numbers.html',
+        controller: 'PortNumbersCtrl'
+    })
+    .state('port-create', {
+        url: '/dids/ports/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/ports/create-port.html',
+        controller: 'CreatePortCtrl'
+    })
+    .state('port-edit', {
+        url: '/dids/ports/{numberId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/ports/edit-port.html',
+        controller: 'EditPortCtrl'
     })
     .state('flows', {
         url: '/flows',
@@ -1456,6 +1501,99 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+  SharedPref.updateTitle("Create Number");
+  $scope.flows = [];
+  $scope.number = {
+    "first_name": "",
+    "last_name": "",
+
+    "city": "",
+    "state": "",
+    "zip": "",
+    "country": "",
+    "provider": "",
+    "number": "",
+    "address_line_1": "",
+    "address_line_2": "",
+  }
+  $scope.files = {
+    "noLOA": false,
+    "noCSR": false,
+    "noInvoice": false
+  };
+
+  function checkFile(id, key) {
+    if (angular.element(id).prop("files").length === 0) {
+      $scope.files[key] = true;
+      return false;
+    }
+    $scope.files[key] = false;
+    return true;
+  }
+  $scope.saveNumber = function (form) {
+    console.log("saveNumber");
+    $scope.triedSubmit = true;
+    if (!checkFile("#loa", "noLOA")) {
+      return;
+    }
+    if (!checkFile("#csr", "noCSR")) {
+      return;
+    }
+    if (!checkFile("#invoice", "noInvoice")) {
+      return;
+    }
+
+    if (!form.$valid) {
+      return;
+    }
+    var params = new FormData();
+    params.append("first_name", $scope.number['first_name']);
+    params.append("last_name", $scope.number['last_name']);
+
+    params.append("city", $scope.number['city']);
+    params.append("state", $scope.number['state']);
+    params.append("zip", $scope.number['zip']);
+    params.append("country", $scope.number['country']['iso']);
+    params.append("provider", $scope.number['provider']);
+    params.append("number", $scope.number['number']);
+    params.append("address_line_1", $scope.number['address_line_1']);
+    params.append("address_line_2", $scope.number['address_line_2']);
+    params.append("loa", angular.element("#loa").prop("files")[0]);
+    params.append("csr", angular.element("#csr").prop("files")[0]);
+    params.append("invoice", angular.element("#invoice").prop("files")[0]);
+    SharedPref.isLoading = true;
+    var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
+    Backend.postFiles("/port/saveNumber", params, true).then(function () {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Number port created..')
+          .position("top right")
+          .hideDelay(3000)
+        );
+        $state.go('ports', {});
+      }, function() {
+        SharedPref.endIsLoading();
+      });
+  }
+  $scope.changeCountry = function (country) {
+    console.log("changeCountry ", country);
+    $scope.number.country = country;
+  }
+
+  SharedPref.endIsLoading();
+});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
  angular.module('MaterialApp').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
 	  SharedPref.updateTitle("Dashboard");
 	$scope.options1 = {
@@ -1675,6 +1813,115 @@ angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, B
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+  SharedPref.updateTitle("Edit Port Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.number = {
+    "first_name": "",
+    "last_name": "",
+
+    "city": "",
+    "state": "",
+    "zip": "",
+    "country": "",
+    "provider": "",
+    "number": "",
+    "address_line_1": "",
+    "address_line_2": "",
+  }
+  $scope.files = {
+    "noLOA": false,
+    "noCSR": false,
+    "noInvoice": false
+  };
+
+  function checkFile(id, key) {
+    if (angular.element(id).prop("files").length === 0) {
+      return false;
+    }
+    return true;
+  }
+  $scope.saveNumber = function (form) {
+    console.log("saveNumber");
+    $scope.triedSubmit = true;
+
+    if (!form.$valid) {
+      return;
+    }
+    var params = new FormData();
+    params.append("first_name", $scope.number['first_name']);
+    params.append("last_name", $scope.number['last_name']);
+
+    params.append("city", $scope.number['city']);
+    params.append("state", $scope.number['state']);
+    params.append("zip", $scope.number['zip']);
+    params.append("country", $scope.number['country']['iso']);
+    params.append("provider", $scope.number['provider']);
+    params.append("number", $scope.number['number']);
+    params.append("address_line_1", $scope.number['address_line_1']);
+    params.append("address_line_2", $scope.number['address_line_2']);
+    if (checkFile("#loa", "noLOA")) {
+      params.append("loa", angular.element("#loa").prop("files")[0]);
+    }
+    if (checkFile("#csr", "noCSR")) {
+      params.append("csr", angular.element("#csr").prop("files")[0]);
+      return;
+    }
+    if (checkFile("#invoice", "noInvoice")) {
+      params.append("invoice", angular.element("#invoice").prop("files")[0]);
+      return;
+    }
+    SharedPref.isLoading = true;
+    var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
+    Backend.postFiles("/port/updateNumber/" + $stateParams['numberId'], params, true).then(function () {
+      console.log("updated number..");
+      $mdToast.show(
+        $mdToast.simple()
+        .textContent('Number port created..')
+        .position("top right")
+        .hideDelay(3000)
+      );
+      $state.go('ports', {});
+    }, function() {
+        SharedPref.endIsLoading();
+      });
+  }
+  $scope.changeCountry = function (country) {
+    console.log("changeCountry ", country);
+    $scope.number.country = country;
+  }
+  $scope.documentURL = function (type) {
+    var url;
+    angular.forEach($scope.number.documents, function (document) {
+      if (document.type === type) {
+        url = document.url;
+      }
+    });
+    return url;
+  }
+  SharedPref.isLoading = true;
+  Backend.get("/port/numberData/" + $stateParams['numberId']).then(function (res) {
+    $scope.number = res.data;
+    angular.forEach(SharedPref.billingCountries, function (country) {
+      if (country.iso === $scope.number.country) {
+        $scope.number.country = country;
+      }
+    });
+    $scope.loa =
+      SharedPref.endIsLoading();
+  });
+});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
     SharedPref.updateTitle("Extension Codes");
   $scope.users = [];
@@ -1711,15 +1958,15 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
       return code;
     });
     var data = {"codes": codes};
+    SharedPref.isCreateLoading = true;
     Backend.post("/settings/extensionCodes", data).then(function(res) {
-          $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension codes updated..')
             .position("top right")
             .hideDelay(3000)
         );
-          });
+        SharedPref.endIsCreateLoading();
     });
   }
  $scope.addCode = function() {
@@ -1729,9 +1976,10 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
     };
     $scope.codes.push(copy);
   }
-  $scope.changeFlow = function($index, model) {
+  $scope.changeFlow = function($index) {
     console.log("changeFlow called ", arguments);
-    $scope.codes[$index].flow_id = model.id;
+    console.log("codes are ", $scope.codes);
+    $scope.codes[$index].flow_id = $scope.codes[$index].flow.id;
   }
   
   $scope.removeCode = function($index, code) {
@@ -2395,6 +2643,69 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
     $scope.number = res[1].data;
     SharedPref.endIsLoading();
   });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("Ported Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/port/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.portNumber = function() {
+    $state.go('port-create', {});
+  }
+  $scope.editNumber = function(number) {
+    $state.go('port-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/port/deleteNumber/" + number.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
 });
 
 
