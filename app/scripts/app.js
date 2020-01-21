@@ -70,7 +70,8 @@ angular
     'chart.js',
     'pascalprecht.translate',
     'md.data.table',
-    'ngIdle'
+    'ngIdle',
+    'ngclipboard'
     ])
     .service('JWTHttpInterceptor', function() {
         return {
@@ -743,6 +744,12 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users.html',
         controller: 'WorkspaceUserCtrl'
+    })
+    .state('settings-workspace-api-settings', {
+        url: '/settings/workspace-api-settings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-api-settings.html',
+        controller: 'WorkspaceAPISettingsCtrl'
     })
     .state('settings-workspace-params', {
         url: '/settings/workspace-params',

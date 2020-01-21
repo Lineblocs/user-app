@@ -1,0 +1,44 @@
+<md-card md-theme="'default'"" md-theme-watch>
+  <!--
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">User Settings</span>
+      <span class="md-subhead">edit your settings</span>
+    </md-card-title-text>
+  </md-card-title>
+-->
+  <md-card-content>
+    <md-content>
+    <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+      <md-tab label="API Info">
+        <md-content class="md-padding">
+          <div layout="row">
+
+            <div flex="80">
+
+              <md-input-container>
+
+                <input name="api_token" ng-model="settings.api_token" type="text" placeholder="API Token" required="" readonly="readonly">
+              </md-input-container>
+              </div>
+            <div flex="20">
+
+              <md-button ng-click="promptCopied()" class="md-raised md-primary" ngclipboard data-clipboard-text="{{settings.api_token}}">Copy</md-button>
+            </div>
+          </div>
+          <div layout="row">
+            <div flex="80">
+              <md-input-container>
+                <input name="api_secret" ng-model="settings.api_secret" type="text" placeholder="API Secret" required="" readonly="readonly">
+              </md-input-container>
+            </div>
+            <div flex="20">
+
+              <md-button ng-click="promptCopied()" class="md-raised md-primary" ngclipboard data-clipboard-text="{{settings.api_secret}}">Copy</md-button>
+            </div>
+          </div>
+              <md-button ng-click="refreshTokens($event)" class="md-raised md-primary">Recreate Tokens</md-button>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+</md-card>
