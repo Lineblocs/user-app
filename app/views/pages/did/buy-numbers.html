@@ -1,147 +1,148 @@
-
 <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
-      <span class="md-headline">Buy Numbers</span>
-      <span class="md-subhead">Please use the filters and search below to buy a new number on your account</span>
+      <span class=" md-headline">Buy Numbers</span>
+    <span class="md-subhead">Please use the filters and search below to buy a new number on your account</span>
     </md-card-title-text>
-  </md-card-title>
-  <md-card-content>
-    <form ng-submit="fetch($event,didForm)" name="didForm" novalidate>
+    </md-card-title>
+    <md-card-content>
+        <form ng-submit="fetch($event,didForm)" name="didForm" novalidate>
 
-    <div layout="row">
-      <div flex="95">
-        <md-input-container>
-          <label>Country</label>
-          <md-select name="country" ng-model="settings.country" ng-change="changeCountry(settings.country)" required="">
-            <md-option><em>None</em></md-option>
-            <md-option ng-repeat="country in countries" ng-value="country">
-              {{country.name}}
-            </md-option>
-          </md-select>
-          <div ng-show="triedSubmit">
-            <div class="box">
-              <div ng-show="didForm.country.$error.required">This field is required</div>
+            <div layout="row">
+                <div flex="95">
+                    <md-input-container>
+                        <label>Country</label>
+                        <md-select name="country" ng-model="settings.country"
+                            ng-change="changeCountry(settings.country)" required="">
+                            <md-option><em>None</em></md-option>
+                            <md-option ng-repeat="country in countries" ng-value="country">
+                                {{country.name}}
+                            </md-option>
+                        </md-select>
+                        <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="didForm.country.$error.required">This field is required</div>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            Please enter a country code OR full country name. e.g: United States or Mexico
+                        </md-tooltip>
+                    </md-icon>
+                </div>
             </div>
-          </div>
-        </md-input-container>
-      </div>
-      <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          Please enter a country code OR full country name. e.g: United States or Mexico
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-    <!--
+            <!--
       <md-input-container>
       <label>Region</label>
       <input ng-model="settings.region" placeholder="e.g: Chicago" />
     </md-input-container>
   -->
-    <div layout="row">
-      <div flex="95">
-    <md-input-container>
-      <label>Region</label>
-      <input name="region" ng-model="settings.region" placeholder="" required=""/>
-      <div ng-show="triedSubmit">
-        <div class="box">
-          <div ng-show="didForm.region.$error.required">This field is required</div>
-        </div>
-      </div>
-    </md-input-container>
-  </div>
-      <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          Please enter a region code in the selected country. e.g: WA
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-</div>
+            <div layout="row">
+                <div flex="95">
+                    <md-input-container>
+                        <label>Region</label>
+                        <input name="region" ng-model="settings.region" placeholder="" required="" />
+                        <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="didForm.region.$error.required">This field is required</div>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            Please enter a region code in the selected country. e.g: WA
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
 
-    <div layout="row">
-      <div flex="95">
-      <md-input-container ng-show="true">
-        <label>Rate Center</label>
-        <input ng-model="settings.rate_center" placeholder=""/>
-      </md-input-container>
-    </div>
-      <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          Here you can enter a rate center where you want to purchase numbers from. e.g: BOLIVAR
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-</div>
-<div layout="row" ng-show="false">
-      <div flex="95">
+            <div layout="row">
+                <div flex="95">
+                    <md-input-container ng-show="true">
+                        <label>Rate Center</label>
+                        <input ng-model="settings.rate_center" placeholder="" />
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            Here you can enter a rate center where you want to purchase numbers from. e.g: BOLIVAR
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
+            <div layout="row" ng-show="false">
+                <div flex="95">
 
-    <md-input-container>
-      <label>Pattern</label>
-      <input ng-model="settings.pattern" placeholder="e.g: 312" />
-    </md-input-container>
-  </div>
-      <div flex="5">
-                                              <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-information"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                          This lets you choose a pattern to search. this can also be an area code. for example: 416
-                                        </md-tooltip>
-                                    </md-icon>
-      </div>
-    </div>
-    <md-button type="submit" class="md-raised md-primary">Search</md-button>
-  </form>
-  </md-card-content>
+                    <md-input-container>
+                        <label>Pattern</label>
+                        <input ng-model="settings.pattern" placeholder="e.g: 312" />
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            This lets you choose a pattern to search. this can also be an area code. for example: 416
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
+            <md-button type="submit" class="md-raised md-primary no-margin-sides">Search</md-button>
+        </form>
+    </md-card-content>
 </md-card>
 <div ng-show="didFetch">
-  <md-card md-theme="'default'"" md-theme-watch>
-    <div ng-show="didFetch && numbers.length > 0">
-      <md-card-title>
-        <md-card-title-text>
-          <span class="md-headline">{{numbers.length}} results found</span>
-          <span class="md-subhead">you can use the cart icon to purchase a new number and configure it</span>
-        </md-card-title-text>
-      </md-card-title>
-      <md-card-content>
-          <md-table-container>
-            <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-              <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-                <tr md-row>
-                  <th md-column><span>Number</span></th>
-                  <th md-column>Region</th>
-                  <th md-column>Monthly Cost</th>
-                  <th md-column>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody md-body>
-                <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
-                  <td md-cell>{{number.number}}</td>
-                  <td md-cell>{{number.region}}</td>
-                  <td md-cell>{{number.monthly_cost}}</td>
-                  <td md-cell>
-                    <md-button ng-click="buyNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                        <md-icon ><i class="mdi mdi-cart"></i></md-icon>
-                    </md-button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </md-table-container>
-        </md-card-content>
-      </div>
-      <div ng-show="didFetch && numbers.length === 0">
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div ng-show=" didFetch && numbers.length> 0">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{numbers.length}} results found</span>
+                <span class="md-subhead">you can use the cart icon to purchase a new number and configure it</span>
+            </md-card-title-text>
+        </md-card-title>
         <md-card-content>
-          <center>
-            <h5>No results were found</h5>
-          </center>
+            <md-table-container>
+                <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+                    <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+                        <tr md-row>
+                            <th md-column><span>Number</span></th>
+                            <th md-column>Region</th>
+                            <th md-column>Monthly Cost</th>
+                            <th md-column>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
+                            <td md-cell>{{number.number}}</td>
+                            <td md-cell>{{number.region}}</td>
+                            <td md-cell>{{number.monthly_cost}}</td>
+                            <td md-cell>
+                                <md-button ng-click="buyNumber($event, number)" class="md-icon-button"
+                                    aria-label="Settings">
+                                    <md-icon><i class="mdi mdi-cart"></i></md-icon>
+                                </md-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
         </md-card-content>
-      </div>
-  </md-card>
+</div>
+<div ng-show="didFetch && numbers.length === 0">
+    <md-card-content>
+        <center>
+            <h5>No results were found</h5>
+        </center>
+    </md-card-content>
+</div>
+</md-card>
 </div>

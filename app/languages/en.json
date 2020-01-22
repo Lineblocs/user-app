@@ -80,5 +80,8 @@
       "workspace-params": "Workspace Params",
       "blocked-numbers": "Blocked Numbers",
       "ip-whitelist": "IP Whitelist",
-      "debugger-logs": "Debugger Logs"
+      "debugger-logs": "Debugger Logs",
+      "port-numbers": "Port Nmbers",
+      "extension-codes": "Extension Codes",
+      "workspace-api-settings": "Workspace API Settings"
   }

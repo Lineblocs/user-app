@@ -3,7 +3,7 @@
     <md-card md-theme="'default'"" md-theme-watch>
     <md-card-content>
       <h5>Workspace Params</h5>
-      <md-button class=" md-primary md-raised" ng-click="addParam()">Add Param</md-button>
+      <md-button class=" md-primary md-raised no-margin-sides" ng-click="addParam()">Add Param</md-button>
         <ul>
             <li ng-repeat="param in params">
                 <div layout="row">
@@ -14,13 +14,11 @@
                             <input ng-model="param.key">
                         </md-input-container>
                     </div>
-                    <div 
                     <div flex="40">
                         <md-input-container>
                             <label>Value</label>
                             <input ng-model="param.value">
                         </md-input-container>
-                    </div>
                     <div flex="10">
                         <md-button ng-click="deleteParam($index, param)" class="md-warn">X</md-button>
                     </div>
@@ -28,7 +26,7 @@
             </li>
 
         </ul>
-        <md-button ng-click="saveParams()" class="md-raised md-primary">Save</md-button>
+        <md-button ng-click="saveParams()" class="md-raised md-primary no-margin-sides">Save</md-button>
         </md-card-content>
     </md-card>
 </div>
