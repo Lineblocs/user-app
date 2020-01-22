@@ -4,7 +4,7 @@
     <md-card-content>
       <h5>Workspace Params</h5>
       <md-button class=" md-primary md-raised no-margin-sides" ng-click="addParam()">Add Param</md-button>
-        <ul>
+        <ul class="no-list-style">
             <li ng-repeat="param in params">
                 <div layout="row">
                     <div flex="40">
@@ -16,11 +16,13 @@
                     </div>
                     <div flex="40">
                         <md-input-container>
+
                             <label>Value</label>
                             <input ng-model="param.value">
                         </md-input-container>
+                    </div>
                     <div flex="10">
-                        <md-button ng-click="deleteParam($index, param)" class="md-warn">X</md-button>
+                        <md-button ng-click="deleteParam($index, param)" class="md-raised md-warn">X</md-button>
                     </div>
                 </div>
             </li>
