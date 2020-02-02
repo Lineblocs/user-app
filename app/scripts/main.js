@@ -508,9 +508,9 @@ angular
         }
         return factory;
     })
-    .config(['$httpProvider', function($httpProvider) {
+    .config(['$httpProvider', '$locationProvider', function($httpProvider, $locationProvider) {
          $httpProvider.interceptors.push('JWTHttpInterceptor');
-
+        $locationProvider.html5Mode(true);
     }])
       
     .config(function(IdleProvider, KeepaliveProvider) {
