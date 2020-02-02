@@ -114,7 +114,7 @@ require('http').createServer(app)
 });
 });
 
-gulp.task('serve', ['wiredep', 'connect', 'fonts', 'lang', 'watch'], function() {
+gulp.task('serve', ['connect', 'fonts', 'lang', 'watch'], function() {
     if (argv.open) {
         require('opn')('http://localhost:9000');
     }
@@ -165,13 +165,15 @@ gulp.task('watch', ['connect'], function() {
     '!app/templates.html'
     ]).on('change', function() {
         gulp.start('scripts'); 
+        /*
         mergeTemplates().then(function(output) {
             fs.writeFileSync("./app/templates.html", output);
         });
+        */
         $.livereload.changed();
     });
     gulp.watch('app/styles/**/*.scss', ['styles']);
-    gulp.watch('bower.json', ['wiredep']);
+    //gulp.watch('bower.json', ['wiredep']);
 });
 
 gulp.task('builddist', ['jshint', 'html', 'images', 'lang', 'fonts', 'extras', 'styles'],
