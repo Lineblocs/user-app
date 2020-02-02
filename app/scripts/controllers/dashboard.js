@@ -25,7 +25,7 @@ angular.module('MaterialApp')
 
   	if ($('body').hasClass('extended')) {
 	  	$timeout(function(){
-			$('.sidebar').perfectScrollbar();
+			//$('.sidebar').perfectScrollbar();
 		}, 200);		
   	};
 
@@ -45,7 +45,7 @@ angular.module('MaterialApp')
         $('.sidebar').toggleClass('ps-container');	
         $rootScope.$broadcast('resize');
         $timeout(function(){
-			$('.sidebar').perfectScrollbar();
+			//$('.sidebar').perfectScrollbar();
 			console.log('pfscroll');
 		}, 200);	
 	}	

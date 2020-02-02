@@ -95,6 +95,7 @@ angular
     .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
+        factory.initialLoaded = false;
         factory.title = baseTitle;
         factory.FLOW_EDITOR_URL = "https://editor.lineblocs.com";
         factory.SHOW_NAVBAR = true;
@@ -3284,6 +3285,18 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
 
 /**
  * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BodyCtrl', function ($scope, SharedPref) {
+  $scope.SharedPref = SharedPref;
+});
+'use strict';
+
+/**
+ * @ngdoc function
  * @name MaterialApp.controller:HomeCtrl
  * @description
  * # HomeCtrl
@@ -3492,7 +3505,7 @@ angular.module('MaterialApp')
 
   	if ($('body').hasClass('extended')) {
 	  	$timeout(function(){
-			$('.sidebar').perfectScrollbar();
+			//$('.sidebar').perfectScrollbar();
 		}, 200);		
   	};
 
@@ -3512,7 +3525,7 @@ angular.module('MaterialApp')
         $('.sidebar').toggleClass('ps-container');	
         $rootScope.$broadcast('resize');
         $timeout(function(){
-			$('.sidebar').perfectScrollbar();
+			//$('.sidebar').perfectScrollbar();
 			console.log('pfscroll');
 		}, 200);	
 	}	

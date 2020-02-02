@@ -95,6 +95,7 @@ angular
     .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
+        factory.initialLoaded = false;
         factory.title = baseTitle;
         factory.FLOW_EDITOR_URL = "https://editor.lineblocs.com";
         factory.SHOW_NAVBAR = true;
