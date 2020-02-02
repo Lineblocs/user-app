@@ -1321,6 +1321,18 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('BodyCtrl', function ($scope, SharedPref) {
+  $scope.SharedPref = SharedPref;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
 	  SharedPref.updateTitle("Buy Numbers");
     function DialogController($scope, $mdDialog, number) {
@@ -1445,35 +1457,6 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
-	  SharedPref.updateTitle("Call View");
-  $scope.call = [];
-  $scope.load = function() {
-    SharedPref.isLoading =true;
-    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
-      console.log("call is ", res.data);
-      SharedPref.isLoading =false;
-      var call = res.data;
-      call.recordings = call.recordings.map(function(obj) {
-        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
-        return obj;
-      });
-      $scope.call = call;
-    })
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
 angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref) {
     SharedPref.updateTitle("Calls");
     $scope.pagination = pagination;
@@ -1500,6 +1483,220 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Call View");
+  $scope.call = [];
+  $scope.load = function() {
+    SharedPref.isLoading =true;
+    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
+      console.log("call is ", res.data);
+      SharedPref.isLoading =false;
+      var call = res.data;
+      call.recordings = call.recordings.map(function(obj) {
+        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        return obj;
+      });
+      $scope.call = call;
+    })
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+	$scope.options1 = {
+	    lineWidth: 12,
+	    scaleColor: false,
+	    size: 120,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+    $scope.line = {
+	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	          data: [
+	      [65, 59, 80, 81, 56, 55, 40],
+	      [28, 48, 40, 19, 86, 27, 90]
+	    ],
+	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+    };
+
+    $scope.bar = {
+	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+		data: [
+		   [65, 59, 80, 81, 56, 55, 40],
+		   [28, 48, 40, 19, 86, 27, 90]
+		],
+		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
+    	
+    };
+
+    $scope.donut = {
+    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data: [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+     $scope.pie = {
+    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data : [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+
+    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
+                       {"x":20,"top-1":100,"top-2":35},
+                       {"x":30,"top-1":15,"top-2":75},
+                       {"x":40,"top-1":50,"top-2":45}];
+    $scope.datacolumns=[{"id":"top-1","type":"spline"},
+                        {"id":"top-2","type":"spline"}];
+    $scope.datax={"id":"x"};
+
+    
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular
+    .module('MaterialApp')
+    .controller('calendarCtrl', function ($scope) {
+    });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+    $scope.rating1 = 3;
+    $scope.rating2 = 2;
+    $scope.rating3 = 4;  
+    var self = this,  j= 0, counter = 0;
+    self.modes = [ ];
+    self.activated = true;
+    self.determinateValue = 30;
+    /**
+    * Turn off or on the 5 themed loaders
+    */
+    self.toggleActivation = function() {
+        if ( !self.activated ) self.modes = [ ];
+        if (  self.activated ) j = counter = 0;
+    };
+    // Iterate every 100ms, non-stop
+    $interval(function() {
+    // Increment the Determinate loader
+        self.determinateValue += 1;
+        if (self.determinateValue > 100) {
+            self.determinateValue = 30;
+        }
+        // Incrementally start animation the five (5) Indeterminate,
+        // themed progress circular bars
+        if ( (j < 5) && !self.modes[j] && self.activated ) {
+            self.modes[j] = 'indeterminate';
+        }
+        if ( counter++ % 4 == 0 ) j++;
+    }, 100, 0, true);
+    var last = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    $scope.demo = {};
+    $scope.toastPosition = angular.extend({},last);
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+        last = angular.extend({},current);
+    }
+    $scope.showCustomToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showSimpleToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showActionToast = function() {
+        var toast = $mdToast.simple()
+        .content('Action Toast!')
+        .action('OK')
+        .highlightAction(false)
+        .position($scope.getToastPosition());
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                alert('You clicked \'OK\'.');
+            }
+        });
+    };
+})
+.controller('ToastCtrl', function($scope, $mdToast) {
+    $scope.closeToast = function() {
+        $mdToast.hide();
+    };
+
+});
 'use strict';
 
 /**
@@ -1592,6 +1789,104 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
 
   SharedPref.endIsLoading();
 });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, SharedPref) {
+	$scope.SharedPref = SharedPref;
+  	if ($(window).width()<1450) {
+        $( '.c-hamburger' ).removeClass('is-active');
+        $('body').removeClass('extended');
+    }
+
+  	$scope.$state = $state;
+
+  	$rootScope.$on('$stateChangeSuccess', function(){ 
+		$timeout(function() {
+			$('body').scrollTop(0);
+		}, 200);
+	});
+
+  	if ($('body').hasClass('extended')) {
+	  	$timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+		}, 200);		
+  	};
+
+  	$scope.rtl = function(){
+  		$('body').toggleClass('rtl');
+  	}
+  	$scope.subnav = function(x){
+		if(x==$scope.showingSubNav)
+			$scope.showingSubNav = 0;			
+		else
+			$scope.showingSubNav = x;
+		return false;
+	}
+	$scope.extend = function  () {
+		$( '.c-hamburger' ).toggleClass('is-active');
+        $('body').toggleClass('extended');
+        $('.sidebar').toggleClass('ps-container');	
+        $rootScope.$broadcast('resize');
+        $timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+			console.log('pfscroll');
+		}, 200);	
+	}	
+	
+	
+
+	$scope.changeTheme = function(setTheme){
+
+		$('<link>')
+		  .appendTo('head')
+		  .attr({type : 'text/css', rel : 'stylesheet'})
+		  .attr('href', 'styles/app-'+setTheme+'.css');
+	}
+	
+	var w = angular.element($window);
+  
+	w.bind('resize', function () {
+		/*
+	    if ($(window).width()<1200) {
+            $('.c-hamburger').removeClass('is-active');
+            $('body').removeClass('extended');
+        } 
+        if ($(window).width()>1600) {
+            $('.c-hamburger').addClass('is-active');
+            //$('body').addClass('extended');          
+		};
+		*/
+	});   
+
+	if ($(window).width()<1200) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.c-hamburger' ).removeClass('is-active');
+        	$('body').removeClass('extended');
+		});
+	}
+
+	if ($(window).width()<600) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.mdl-grid' ).removeAttr('dragula');
+		});
+	}
+	
+	$scope.changeLanguage = (function (l) {
+		
+		$translate.use(l);			
+		
+	});
+	
+});	
 
 'use strict';
 
@@ -2386,1205 +2681,6 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("IP Whitelist");
-      $scope.settings = {
-        disabled: false
-      }
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
-      $scope.error = false;
-      $scope.errorText = "";
-      $scope.ranges = [
-        "/8",
-        "/16",
-        "/24",
-        "/32"
-      ];
-      $scope.data = {
-        ip: "",
-        range: "/32",
-      };
-      $scope.submit= function() {
-        var data = angular.copy($scope.data);
-        Backend.post("/settings/ipWhitelist", data).then(function(res) {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('IP added')
-            .position("top right")
-            .hideDelay(3000)
-        );
-            $scope.close();
-            onCreated();
-        });
-      }
-
-      $scope.close = function() {
-        $mdDialog.hide(); 
-      }
-    }
-
-  $scope.ips = [];
-  $scope.load = function() {
-      SharedPref.isLoading = true;
-      return $q(function(resolve, reject) {
-        $q.all([
-          Backend.get("/self"),
-          Backend.get("/settings/ipWhitelist")
-         ]).then(function(res) {
-          $scope.disabled = res[0].data.ip_whitelist_disabled;
-          $scope.settings.disabled = $scope.disabled;
-          $scope.ips = res[1].data;
-          SharedPref.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.createIp = function($event) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/add-ip-whitelist.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onCreated: function() {
-          $scope.load();
-        }
-
-      }
-    })
-    .then(function() {
-    }, function() {
-    });
-  }
-  $scope.deleteIp = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this IP address?')
-          .textContent('This will permantely remove the IP from your whitelist')
-          .ariaLabel('Delete IP')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
-      Backend.delete("/settings/ipWhitelist/" + number.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('IP deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-  $scope.enableWhitelist = function($event, value) {
-      SharedPref.isLoading = true;
-      return $q(function(resolve, reject) {
-        var data = {"ip_whitelist_disabled": value};
-        Backend.post("/updateSelf", data).then(function(res) {
-          $scope.load();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.changeDisableState = function($event, value) {
-    console.log("changeDisableState ", value);
-    $scope.enableWhitelist($event, true);
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
-	  SharedPref.updateTitle("Log View");
-  $scope.log = null;
-  $scope.load = function() {
-    SharedPref.isLoading =true;
-    Backend.get("/log/logData/" + $stateParams['logId']).then(function(res) {
-      console.log("log is ", res.data);
-      SharedPref.isLoading =false;
-      var log = res.data;
-      $scope.log = log;
-    })
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("My Numbers");
-    $scope.pagination = pagination;
-  $scope.numbers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/did/listNumbers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'numbers' );
-      pagination.loadData().then(function(res) {
-      $scope.numbers = res.data.data;
-      SharedPref.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-  $scope.buyNumber = function() {
-    $state.go('buy-numbers', {});
-  }
-  $scope.editNumber = function(number) {
-
-    $state.go('my-numbers-edit', {numberId: number.public_id});
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this number?')
-          .textContent('If you delete this number you will not be able to call it anymore')
-          .ariaLabel('Delete number')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
-      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-	  SharedPref.updateTitle("Edit Number");
-  $scope.flows = [];
-  $scope.number = null;
-  $scope.saveNumber = function(number) {
-    var params = {};
-    params['name'] = $scope.number.name;
-    params['flow_id'] = $scope.number.flow_id;
-    var toastPos = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-    var toastPosStr = Object.keys(toastPos)
-      .filter(function(pos) { return toastPos[pos]; })
-      .join(' ');
-    console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
-        console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number updated..')
-            .position(toastPosStr)
-            .hideDelay(3000)
-        );
-        $state.go('my-numbers', {});
-      SharedPref.endIsCreateLoading();
-    });
-  }
-  $scope.changeFlow = function(flow) {
-    $scope.number.flow_id = flow;
-    console.log("changeFlow", flow);
-  }
-  $scope.editFlow = function(flowId) {
-    $state.go('flow-editor', {flowId: flowId});
-  }
-  SharedPref.isLoading = true;
-  $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-    Backend.get("/did/numberData/" + $stateParams['numberId'])
-  ]).then(function(res) {
-    $scope.flows = res[0].data.data;
-    $scope.number = res[1].data;
-    SharedPref.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Ported Numbers");
-    $scope.pagination = pagination;
-  $scope.numbers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/port/listNumbers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'numbers' );
-      pagination.loadData().then(function(res) {
-      $scope.numbers = res.data.data;
-      SharedPref.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-  $scope.portNumber = function() {
-    $state.go('port-create', {});
-  }
-  $scope.editNumber = function(number) {
-    $state.go('port-edit', {numberId: number.public_id});
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this number?')
-          .textContent('If you delete this number you will not be able to call it anymore')
-          .ariaLabel('Delete number')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
-      Backend.delete("/port/deleteNumber/" + number.id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
-	  SharedPref.updateTitle("Recordings");
-  $scope.settings = {
-    page: 0
-  };
-  $scope.pagination = pagination;
-  $scope.recordings = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
-      pagination.resetSearch();
-        pagination.changeUrl( "/recording/listRecordings" );
-        pagination.changePage( 1 );
-        pagination.changeScope( $scope, 'recordings' );
-        pagination.loadData().then(function(res) {
-        var recordings = res.data.data;
-        $scope.recordings = recordings.map(function(obj) {
-          obj.uri = $sce.trustAsResourceUrl(obj.uri);
-          return obj;
-        });
-        SharedPref.endIsLoading();
-        resolve();
-      }, reject)
-    });
-  }
-  $scope.deleteRecording = function($event, recording) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this recording?')
-          .textContent('This will permantely remove the recordings from your storage')
-          .ariaLabel('Delete recording')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
-      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
-        console.log("deleted recording..");
-        $scope.load().then(function() {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('recording deleted..')
-              .position('top right')
-              .hideDelay(3000)
-          );
-        })
-      });
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Verified Caller IDs");
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
-      $scope.error = false;
-      $scope.errorText = "";
-      $scope.data = {
-        step1: {
-          number: ""
-        }, 
-        step2:{
-          code: ""
-        }
-
-      };
-      $scope.step = 1;
-      $scope.postStep1 = function() {
-        var data = angular.copy($scope.data.step1);
-        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
-          $scope.step = 2;           
-        });
-      }
-      $scope.postStep2 = function() {
-        var data = {
-         'code': $scope.data.step2['code'],
-         'number': $scope.data.step1['number']
-        };
-        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
-          var data = res.data;
-          if (data.success) {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number verified')
-            .position("top right")
-            .hideDelay(3000)
-        );
-            $scope.close();
-            onCreated();
-          } else {
-            $scope.error = true;
-            $scope.errorText = "The code was invalid please try again.";
-          }
-        });
-
-      }
-
-      $scope.close = function() {
-        $mdDialog.hide(); 
-      }
-    }
-
-  $scope.numbers = [];
-  $scope.load = function() {
-      SharedPref.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/settings/verifiedCallerids").then(function(res) {
-          $scope.numbers = res.data;
-          SharedPref.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.createNumber = function($event) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/add-callerid.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onCreated: function() {
-          $scope.load();
-        }
-
-      }
-    })
-    .then(function() {
-    }, function() {
-    });
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this number?')
-          .textContent('This will permantely remove the caller ID')
-          .ariaLabel('Delete extension')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
-      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Verified Caller IDs");
-   $scope.values = {
-    secret: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
-  }
-  $scope.showSecret = function() {
-    $scope.ui.showSecret = true;
-  }
-  $scope.hideSecret = function() {
-    $scope.ui.showSecret = false;
-  }
-  $scope.submit = function(form) {
-    console.log("submitting extension form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['caller_id'] = $scope.values.caller_id;
-      values['secret'] = $scope.values.secret;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-      Backend.post("/extension/saveExtension", values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
-      });
-    }
-  }
-  $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
-  }
-  $timeout(function() {
-    SharedPref.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q) {
-      SharedPref.updateTitle("Workspace API Settings");
-      $scope.settings = {};
-      $scope.load = function () {
-        SharedPref.isLoading = true;
-        return $q(function (resolve, reject) {
-          Backend.get("/getWorkspaceTokens").then(function (res) {
-            $scope.settings = res.data;
-            SharedPref.endIsLoading();
-            resolve();
-          }, function () {
-            reject();
-          });
-        });
-      }
-      $scope.refreshTokens = function ($event) {
-        var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to refresh API tokens?')
-          .textContent('if you are using these API tokens in any code the code will stop working and you will need to replace the API tokens with the new ones you create')
-          .ariaLabel('Refresh tokens')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-        $mdDialog.show(confirm).then(function () {
-            SharedPref.isLoading = true;
-            Backend.get("/refreshWorkspaceTokens").then(function (res) {
-              $scope.load().then(function () {
-                $mdToast.show(
-                  $mdToast.simple()
-                  .textContent('API tokens recreated')
-                  .position("top right")
-                  .hideDelay(3000)
-                );
-              });
-            });
-          });
-        }
-        $scope.promptCopied = function () {
-          $mdToast.show(
-            $mdToast.simple()
-            .textContent('Copied to clipboard!')
-            .position("top right")
-            .hideDelay(3000)
-          );
-
-        }
-        $scope.load();
-      });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Workspace Params");
-  $scope.params = [];
-  $scope.load = function() {
-      SharedPref.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/workspaceParam/listParams").then(function(res) {
-          $scope.params = res.data;
-          SharedPref.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.saveParams = function() {
-      var data = angular.copy($scope.params);
-      Backend.post("/workspaceParam/saveParams", data).then(function() {
-          $mdToast.show(
-          $mdToast.simple()
-            .textContent('Workspace params saved successfully..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-  }
-  $scope.addParam = function() {
-    $scope.params.push({
-      "key": "",
-      "value": ""
-    });
-  }
-  $scope.deleteParam = function(index, param) {
-    $scope.params.splice(index, 1);
-  }
-
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Workspace Users");
-  $scope.users = [];
-  $scope.load = function() {
-      SharedPref.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/workspaceUser/listUsers").then(function(res) {
-          $scope.users = res.data;
-          SharedPref.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.deleteUser = function($event, user) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to remove this user from your workspace ?')
-          .textContent('This will permantely remove the user from your workspace')
-          .ariaLabel('Delete user')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
-      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('User deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-  $scope.editUser = function($event, user) {
-    console.log("edit usr ", user);
-    SharedPref.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
-  }
-  $scope.createUser = function() {
-
-    SharedPref.changeRoute('settings-workspace-users-create', {});
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-    SharedPref.updateTitle("Create Extension");
-    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
-
-  $scope.values = {
-    user: {
-      first_name: "",
-      last_name: "",
-      email: ""
-    },
-    roles: SharedPref.makeDefaultWorkspaceRoles()
-  };
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting workspace user form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {
-        user: angular.copy($scope.values.user),
-        roles: angular.copy($scope.values.roles)
-      };
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-      Backend.post("/workspaceUser/addUser", values).then(function() {
-       console.log("added user..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Added user to workspace')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('settings-workspace-users', {});
-        SharedPref.endIsCreateLoading();
-      });
-    }
-  }
-  $timeout(function() {
-    SharedPref.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, SharedPref ) {
-    SharedPref.updateTitle("Workspace User Edit");
-    var roles = SharedPref.makeDefaultWorkspaceRoles();
-    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
-
-
-  $scope.values = {
-    user: {
-      first_name: "",
-      last_name: "",
-      email: ""
-    },
-    roles: SharedPref.makeDefaultWorkspaceRoles()
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting workspace user form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {
-        user: angular.copy($scope.values.user),
-        roles: angular.copy($scope.values.roles)
-      };
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
-      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
-       console.log("added user..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Added user to workspace')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('settings-workspace-users', {});
-        SharedPref.endIsCreateLoading();
-      });
-    }
-  }
-  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
-      var user = res.data;
-      $scope.values.user['email'] = user.email;
-      $scope.values.user['first_name'] = user.first_name;
-      $scope.values.user['last_name'] = user.last_name;
-      for (var key in roles) {
-        console.log("checking for role ", key);
-        $scope.values.roles[ key ] = user[ key ];
-      }
-      console.log("$scope.values are ", $scope.values);
-    });
-  $timeout(function() {
-    SharedPref.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('BodyCtrl', function ($scope, SharedPref) {
-  $scope.SharedPref = SharedPref;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-	$scope.options1 = {
-	    lineWidth: 12,
-	    scaleColor: false,
-	    size: 120,
-	    lineCap: "square",
-	    barColor: "#fb8c00",
-	    trackColor: "#f9dcb8"
-	};
-	
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-    $scope.line = {
-	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-	          data: [
-	      [65, 59, 80, 81, 56, 55, 40],
-	      [28, 48, 40, 19, 86, 27, 90]
-	    ],
-	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-
-    };
-
-    $scope.bar = {
-	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-		data: [
-		   [65, 59, 80, 81, 56, 55, 40],
-		   [28, 48, 40, 19, 86, 27, 90]
-		],
-		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
-    	
-    };
-
-    $scope.donut = {
-    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data: [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-     $scope.pie = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data : [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-
-    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
-                       {"x":20,"top-1":100,"top-2":35},
-                       {"x":30,"top-1":15,"top-2":75},
-                       {"x":40,"top-1":50,"top-2":45}];
-    $scope.datacolumns=[{"id":"top-1","type":"spline"},
-                        {"id":"top-2","type":"spline"}];
-    $scope.datax={"id":"x"};
-
-    
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular
-    .module('MaterialApp')
-    .controller('calendarCtrl', function ($scope) {
-    });
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
- angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
-    $scope.rating1 = 3;
-    $scope.rating2 = 2;
-    $scope.rating3 = 4;  
-    var self = this,  j= 0, counter = 0;
-    self.modes = [ ];
-    self.activated = true;
-    self.determinateValue = 30;
-    /**
-    * Turn off or on the 5 themed loaders
-    */
-    self.toggleActivation = function() {
-        if ( !self.activated ) self.modes = [ ];
-        if (  self.activated ) j = counter = 0;
-    };
-    // Iterate every 100ms, non-stop
-    $interval(function() {
-    // Increment the Determinate loader
-        self.determinateValue += 1;
-        if (self.determinateValue > 100) {
-            self.determinateValue = 30;
-        }
-        // Incrementally start animation the five (5) Indeterminate,
-        // themed progress circular bars
-        if ( (j < 5) && !self.modes[j] && self.activated ) {
-            self.modes[j] = 'indeterminate';
-        }
-        if ( counter++ % 4 == 0 ) j++;
-    }, 100, 0, true);
-    var last = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-    };
-    $scope.demo = {};
-    $scope.toastPosition = angular.extend({},last);
-    $scope.getToastPosition = function() {
-        sanitizePosition();
-        return Object.keys($scope.toastPosition)
-        .filter(function(pos) { return $scope.toastPosition[pos]; })
-        .join(' ');
-    };
-    function sanitizePosition() {
-        var current = $scope.toastPosition;
-        if ( current.bottom && last.top ) current.top = false;
-        if ( current.top && last.bottom ) current.bottom = false;
-        if ( current.right && last.left ) current.left = false;
-        if ( current.left && last.right ) current.right = false;
-        last = angular.extend({},current);
-    }
-    $scope.showCustomToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showSimpleToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showActionToast = function() {
-        var toast = $mdToast.simple()
-        .content('Action Toast!')
-        .action('OK')
-        .highlightAction(false)
-        .position($scope.getToastPosition());
-        $mdToast.show(toast).then(function(response) {
-            if ( response == 'ok' ) {
-                alert('You clicked \'OK\'.');
-            }
-        });
-    };
-})
-.controller('ToastCtrl', function($scope, $mdToast) {
-    $scope.closeToast = function() {
-        $mdToast.hide();
-    };
-
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp')
-  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, SharedPref) {
-	$scope.SharedPref = SharedPref;
-  	if ($(window).width()<1450) {
-        $( '.c-hamburger' ).removeClass('is-active');
-        $('body').removeClass('extended');
-    }
-
-  	$scope.$state = $state;
-
-  	$rootScope.$on('$stateChangeSuccess', function(){ 
-		$timeout(function() {
-			$('body').scrollTop(0);
-		}, 200);
-	});
-
-  	if ($('body').hasClass('extended')) {
-	  	$timeout(function(){
-			//$('.sidebar').perfectScrollbar();
-		}, 200);		
-  	};
-
-  	$scope.rtl = function(){
-  		$('body').toggleClass('rtl');
-  	}
-  	$scope.subnav = function(x){
-		if(x==$scope.showingSubNav)
-			$scope.showingSubNav = 0;			
-		else
-			$scope.showingSubNav = x;
-		return false;
-	}
-	$scope.extend = function  () {
-		$( '.c-hamburger' ).toggleClass('is-active');
-        $('body').toggleClass('extended');
-        $('.sidebar').toggleClass('ps-container');	
-        $rootScope.$broadcast('resize');
-        $timeout(function(){
-			//$('.sidebar').perfectScrollbar();
-			console.log('pfscroll');
-		}, 200);	
-	}	
-	
-	
-
-	$scope.changeTheme = function(setTheme){
-
-		$('<link>')
-		  .appendTo('head')
-		  .attr({type : 'text/css', rel : 'stylesheet'})
-		  .attr('href', 'styles/app-'+setTheme+'.css');
-	}
-	
-	var w = angular.element($window);
-  
-	w.bind('resize', function () {
-		/*
-	    if ($(window).width()<1200) {
-            $('.c-hamburger').removeClass('is-active');
-            $('body').removeClass('extended');
-        } 
-        if ($(window).width()>1600) {
-            $('.c-hamburger').addClass('is-active');
-            //$('body').addClass('extended');          
-		};
-		*/
-	});   
-
-	if ($(window).width()<1200) {		
-		$rootScope.$on('$stateChangeSuccess', function(){ 
-			$( '.c-hamburger' ).removeClass('is-active');
-        	$('body').removeClass('extended');
-		});
-	}
-
-	if ($(window).width()<600) {		
-		$rootScope.$on('$stateChangeSuccess', function(){ 
-			$( '.mdl-grid' ).removeAttr('dragula');
-		});
-	}
-	
-	$scope.changeLanguage = (function (l) {
-		
-		$translate.use(l);			
-		
-	});
-	
-});	
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
 angular.module('MaterialApp')
   .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
 	  SharedPref.updateTitle("Forgot Password");
@@ -3803,6 +2899,135 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("IP Whitelist");
+      $scope.settings = {
+        disabled: false
+      }
+    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
+      $scope.SharedPref = SharedPref;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.ranges = [
+        "/8",
+        "/16",
+        "/24",
+        "/32"
+      ];
+      $scope.data = {
+        ip: "",
+        range: "/32",
+      };
+      $scope.submit= function() {
+        var data = angular.copy($scope.data);
+        Backend.post("/settings/ipWhitelist", data).then(function(res) {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('IP added')
+            .position("top right")
+            .hideDelay(3000)
+        );
+            $scope.close();
+            onCreated();
+        });
+      }
+
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+
+  $scope.ips = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        $q.all([
+          Backend.get("/self"),
+          Backend.get("/settings/ipWhitelist")
+         ]).then(function(res) {
+          $scope.disabled = res[0].data.ip_whitelist_disabled;
+          $scope.settings.disabled = $scope.disabled;
+          $scope.ips = res[1].data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.createIp = function($event) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/add-ip-whitelist.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteIp = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this IP address?')
+          .textContent('This will permantely remove the IP from your whitelist')
+          .ariaLabel('Delete IP')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/settings/ipWhitelist/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('IP deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.enableWhitelist = function($event, value) {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        var data = {"ip_whitelist_disabled": value};
+        Backend.post("/updateSelf", data).then(function(res) {
+          $scope.load();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.changeDisableState = function($event, value) {
+    console.log("changeDisableState ", value);
+    $scope.enableWhitelist($event, true);
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp')
   .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
 	  SharedPref.updateTitle("Login");
@@ -3842,6 +3067,31 @@ angular.module('MaterialApp')
 	}
 	SharedPref.changingPage = false;
   });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Log View");
+  $scope.log = null;
+  $scope.load = function() {
+    SharedPref.isLoading =true;
+    Backend.get("/log/logData/" + $stateParams['logId']).then(function(res) {
+      console.log("log is ", res.data);
+      SharedPref.isLoading =false;
+      var log = res.data;
+      $scope.log = log;
+    })
+  }
+  $scope.load();
+});
+
 
 'use strict';
 
@@ -3892,6 +3142,129 @@ angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, 
     $modalInstance.dismiss('cancel');
   };
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("My Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.buyNumber = function() {
+    $state.go('buy-numbers', {});
+  }
+  $scope.editNumber = function(number) {
+
+    $state.go('my-numbers-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Edit Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.saveNumber = function(number) {
+    var params = {};
+    params['name'] = $scope.number.name;
+    params['flow_id'] = $scope.number.flow_id;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('my-numbers', {});
+      SharedPref.endIsCreateLoading();
+    });
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  SharedPref.isLoading = true;
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
+    SharedPref.endIsLoading();
+  });
+});
+
+
 'use strict';
 
 /**
@@ -4048,6 +3421,69 @@ angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($s
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("Ported Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/port/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.portNumber = function() {
+    $state.go('port-create', {});
+  }
+  $scope.editNumber = function(number) {
+    $state.go('port-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/port/deleteNumber/" + number.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
  angular.module('MaterialApp').controller('profileCtrl', function ($scope) {
     $scope.products = [
  	{url:'images/portrait1.jpg'}, 
@@ -4108,6 +3544,70 @@ angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
   };
   $scope.randomStacked();
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
+	  SharedPref.updateTitle("Recordings");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.pagination = pagination;
+  $scope.recordings = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          return obj;
+        });
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject)
+    });
+  }
+  $scope.deleteRecording = function($event, recording) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this recording?')
+          .textContent('This will permantely remove the recordings from your storage')
+          .ariaLabel('Delete recording')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+        console.log("deleted recording..");
+        $scope.load().then(function() {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('recording deleted..')
+              .position('top right')
+              .hideDelay(3000)
+          );
+        })
+      });
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
 'use strict';
 
 /**
@@ -4635,3 +4135,502 @@ angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
   $scope.dynamicTooltipText = 'dynamic';
   $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Verified Caller IDs");
+    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
+      $scope.SharedPref = SharedPref;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        step1: {
+          number: ""
+        }, 
+        step2:{
+          code: ""
+        }
+
+      };
+      $scope.step = 1;
+      $scope.postStep1 = function() {
+        var data = angular.copy($scope.data.step1);
+        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
+          $scope.step = 2;           
+        });
+      }
+      $scope.postStep2 = function() {
+        var data = {
+         'code': $scope.data.step2['code'],
+         'number': $scope.data.step1['number']
+        };
+        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
+          var data = res.data;
+          if (data.success) {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number verified')
+            .position("top right")
+            .hideDelay(3000)
+        );
+            $scope.close();
+            onCreated();
+          } else {
+            $scope.error = true;
+            $scope.errorText = "The code was invalid please try again.";
+          }
+        });
+
+      }
+
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+
+  $scope.numbers = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/settings/verifiedCallerids").then(function(res) {
+          $scope.numbers = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.createNumber = function($event) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/add-callerid.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('This will permantely remove the caller ID')
+          .ariaLabel('Delete extension')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
+	  SharedPref.updateTitle("Verified Caller IDs");
+   $scope.values = {
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
+      values['secret'] = $scope.values.secret;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/saveExtension", values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q) {
+      SharedPref.updateTitle("Workspace API Settings");
+      $scope.settings = {};
+      $scope.load = function () {
+        SharedPref.isLoading = true;
+        return $q(function (resolve, reject) {
+          Backend.get("/getWorkspaceTokens").then(function (res) {
+            $scope.settings = res.data;
+            SharedPref.endIsLoading();
+            resolve();
+          }, function () {
+            reject();
+          });
+        });
+      }
+      $scope.refreshTokens = function ($event) {
+        var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to refresh API tokens?')
+          .textContent('if you are using these API tokens in any code the code will stop working and you will need to replace the API tokens with the new ones you create')
+          .ariaLabel('Refresh tokens')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+        $mdDialog.show(confirm).then(function () {
+            SharedPref.isLoading = true;
+            Backend.get("/refreshWorkspaceTokens").then(function (res) {
+              $scope.load().then(function () {
+                $mdToast.show(
+                  $mdToast.simple()
+                  .textContent('API tokens recreated')
+                  .position("top right")
+                  .hideDelay(3000)
+                );
+              });
+            });
+          });
+        }
+        $scope.promptCopied = function () {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Copied to clipboard!')
+            .position("top right")
+            .hideDelay(3000)
+          );
+
+        }
+        $scope.load();
+      });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Workspace Params");
+  $scope.params = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/workspaceParam/listParams").then(function(res) {
+          $scope.params = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.saveParams = function() {
+      var data = angular.copy($scope.params);
+      Backend.post("/workspaceParam/saveParams", data).then(function() {
+          $mdToast.show(
+          $mdToast.simple()
+            .textContent('Workspace params saved successfully..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+  }
+  $scope.addParam = function() {
+    $scope.params.push({
+      "key": "",
+      "value": ""
+    });
+  }
+  $scope.deleteParam = function(index, param) {
+    $scope.params.splice(index, 1);
+  }
+
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Workspace Users");
+  $scope.users = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/workspaceUser/listUsers").then(function(res) {
+          $scope.users = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.deleteUser = function($event, user) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to remove this user from your workspace ?')
+          .textContent('This will permantely remove the user from your workspace')
+          .ariaLabel('Delete user')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('User deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.editUser = function($event, user) {
+    console.log("edit usr ", user);
+    SharedPref.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
+  }
+  $scope.createUser = function() {
+
+    SharedPref.changeRoute('settings-workspace-users-create', {});
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
+    SharedPref.updateTitle("Create Extension");
+    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: SharedPref.makeDefaultWorkspaceRoles()
+  };
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        user: angular.copy($scope.values.user),
+        roles: angular.copy($scope.values.roles)
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/workspaceUser/addUser", values).then(function() {
+       console.log("added user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Added user to workspace')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, SharedPref ) {
+    SharedPref.updateTitle("Workspace User Edit");
+    var roles = SharedPref.makeDefaultWorkspaceRoles();
+    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: SharedPref.makeDefaultWorkspaceRoles()
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        user: angular.copy($scope.values.user),
+        roles: angular.copy($scope.values.roles)
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
+       console.log("added user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Added user to workspace')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
+      var user = res.data;
+      $scope.values.user['email'] = user.email;
+      $scope.values.user['first_name'] = user.first_name;
+      $scope.values.user['last_name'] = user.last_name;
+      for (var key in roles) {
+        console.log("checking for role ", key);
+        $scope.values.roles[ key ] = user[ key ];
+      }
+      console.log("$scope.values are ", $scope.values);
+    });
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
+
