@@ -2643,7 +2643,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
   }
   SharedPref.isLoading = true;
   $q.all([
-    Backend.get("/flow/listFlows"),
+    Backend.get("/flow/listFlows?all=1"),
     Backend.get("/did/numberData/" + $stateParams['numberId'])
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
