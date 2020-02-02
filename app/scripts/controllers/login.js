@@ -40,24 +40,9 @@ angular.module('MaterialApp')
 			return;
 		}
     }
-
-    $scope.authenticate = function() {
-
-    	var defer = $q.defer();
-
-    	$timeout(function(){
-
-    		defer.resolve();
-
-    		$timeout(function(){
-				Idle.watch();
-    		   	$location.path('/dashboard/home');
-    		}, 600);
-
-    	}, 1100);
-
-    	return defer.promise;
-
-    }
-
+	$scope.gotoRegister = function() {
+		SharedPref.changingPage = true;
+    	$state.go('register');
+	}
+	SharedPref.changingPage = false;
   });

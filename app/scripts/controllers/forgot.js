@@ -34,5 +34,9 @@ angular.module('MaterialApp')
 			})
 			return;
 		}
-    }
+	}
+	$scope.gotoLogin= function() {
+		SharedPref.changingPage = true;
+    	$state.go('login');
+	}
   });

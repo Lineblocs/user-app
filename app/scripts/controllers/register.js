@@ -210,10 +210,12 @@ angular.module('MaterialApp')
       }
       return false;
     }
-
+	$scope.gotoLogin= function() {
+		SharedPref.changingPage = true;
+    	$state.go('login');
+	}
 	Backend.get("/getCallSystemTemplates").then(function(res) {
 		$scope.templates = res.data;
-
+		SharedPref.changingPage = false;
 	});
-
   });

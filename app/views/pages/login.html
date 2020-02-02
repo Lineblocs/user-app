@@ -10,6 +10,10 @@
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 <p>Logging you in..</p>
             </div>
+            <div ng-show="changingPage">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <p>Please wait..</p>
+            </div>
         </center>
 
         <div class="content">
@@ -18,7 +22,7 @@
 					<h3>Login</h3>
                 <div layout="row" layout-align="center">
                     <p>Need an account ?
-                        <a ui-sref="register">Register here</a>
+                        <a ng-click="gotoRegister()">Register here</a>
                     </p>
                 </div>
                     <div class="box invalid-login">

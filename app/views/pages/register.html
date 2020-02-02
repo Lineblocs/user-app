@@ -6,10 +6,12 @@
                 <div class="middle">
                     <div class="inner">
                         <center>
+
                             <img src="/images/logo-blue.png" width="256" />
                             <p>Setting up your account..</p>
                             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                         </center>
+
                     </div>
                 </div>
             </div>
@@ -30,6 +32,12 @@
                     <p>Setting up account..</p>
                 </div>
             </center>
+            <center>
+                <div ng-show="changingPage">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    <p>Please wait..</p>
+                </div>
+            </center>
             <div class="content">
                 <div ng-show="step===1">
 
@@ -39,7 +47,7 @@
                             <h3>Register</h3>
                             <div layout="row" layout-align="center">
                                 <p>Already registered ?
-                                    <a ui-sref="login">Login here</a>
+                                    <a ng-click="gotoLogin()">Login here</a>
                                 </p>
                             </div>
 
