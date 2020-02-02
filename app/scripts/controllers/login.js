@@ -42,7 +42,14 @@ angular.module('MaterialApp')
     }
 	$scope.gotoRegister = function() {
 		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
     	$state.go('register');
 	}
+	$scope.gotoForgot = function() {
+		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
+		$state.go('forgot');
+	}
+	
 	SharedPref.changingPage = false;
   });

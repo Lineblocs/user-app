@@ -132,6 +132,9 @@ angular
     });
   }
 
+  factory.scrollToTop = function() {
+      $window.scrollTo(0, 0);
+  }
   factory.changeRoute = function(route, params) {
       console.log("changeRoute called ", arguments);
       var params = params || {};
@@ -2711,8 +2714,10 @@ angular.module('MaterialApp')
 	}
 	$scope.gotoLogin= function() {
 		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
     	$state.go('login');
 	}
+	SharedPref.changingPage = false;
   });
 
 'use strict';
@@ -3063,8 +3068,15 @@ angular.module('MaterialApp')
     }
 	$scope.gotoRegister = function() {
 		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
     	$state.go('register');
 	}
+	$scope.gotoForgot = function() {
+		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
+		$state.go('forgot');
+	}
+	
 	SharedPref.changingPage = false;
   });
 
@@ -3822,6 +3834,7 @@ angular.module('MaterialApp')
     }
 	$scope.gotoLogin= function() {
 		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
     	$state.go('login');
 	}
 	Backend.get("/getCallSystemTemplates").then(function(res) {

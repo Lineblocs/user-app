@@ -212,6 +212,7 @@ angular.module('MaterialApp')
     }
 	$scope.gotoLogin= function() {
 		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
     	$state.go('login');
 	}
 	Backend.get("/getCallSystemTemplates").then(function(res) {

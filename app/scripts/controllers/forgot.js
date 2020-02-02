@@ -37,6 +37,8 @@ angular.module('MaterialApp')
 	}
 	$scope.gotoLogin= function() {
 		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
     	$state.go('login');
 	}
+	SharedPref.changingPage = false;
   });
