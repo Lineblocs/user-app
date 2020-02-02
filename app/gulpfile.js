@@ -12,11 +12,7 @@ var deps = [
 "./bower_components/angular-sanitize/angular-sanitize.js",
 "./bower_components/angular-animate/angular-animate.js",
 "./bower_components/angular-aria/angular-aria.js",
-"./bower_components/angular-messages/angular-messages.js",
 "./bower_components/angular-material/angular-material.js",
-"./bower_components/angular-dragula/dist/angular-dragula.js",
-"./bower_components/angular-growl/build/angular-growl.js",
-"./bower_components/angular-growl-notifications/dist/angular-growl-notifications.js",
 "./bower_components/angular-loading-bar/build/loading-bar.js",
 "./bower_components/angular-ui-sortable/sortable.js",
 "./bower_components/Chart.js/Chart.js",
@@ -24,7 +20,6 @@ var deps = [
 "./bower_components/d3/d3.js",
 "./bower_components/c3/c3.js",
 "./bower_components/c3-angular/c3-angular.min.js",
-"./bower_components/material-calendar/dist/angular-material-calendar.js",
 "./bower_components/perfect-scrollbar/js/perfect-scrollbar.js",
 "./bower_components/angular-ui-router/release/angular-ui-router.js",
 "./bower_components/angular-translate/angular-translate.js",
@@ -32,7 +27,6 @@ var deps = [
 "./bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
 "./bower_components/angular-material-data-table/dist/md-data-table.js",
 "./bower_components/zxcvbn/dist/zxcvbn.js",
-"./bower_components/nickel.minStrength/dist/nickel.minStrength.js",
 "./bower_components/ng-idle/angular-idle.js"
 ];
 var files = deps.concat([
