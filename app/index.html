@@ -86,6 +86,10 @@
     <![endif]-->
     <!-- endbuild -->
     <script>
+        angular.bootstrap(document, ['MaterialApp']);
+        var shared = angular.element("body").scope().SharedPref;
+        shared.initialLoaded = true;
+        /*
         $.get("./templates.html", function(data) {
           console.log("data is ", data);
           $(data).appendTo('body');
@@ -93,6 +97,8 @@
           var shared = angular.element("body").scope().SharedPref;
           shared.initialLoaded = true;
         });
+        */
     </script>
+
   </body>
 </html>
