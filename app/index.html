@@ -5,6 +5,7 @@
     <title ng-bind="SharedPref.title">LineBlocs.com</title>
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="google-signin-client_id" content="1042543492114-5s4kt8q5rksqia1orc3mskcs6vkg3fc1.apps.googleusercontent.com">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.tmp) styles/vendor.css -->
     <!-- bower:css -->
@@ -49,6 +50,7 @@
     <!-- endbuild -->
     <script src="scripts/main.js"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- endbuild -->
     </head>
   <body class="extended" ng-controller='BodyCtrl'>
@@ -72,6 +74,17 @@
     <![endif]-->
     <!-- endbuild -->
     <script>
+
+      function onGoogleSignIn() {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        var ctrl= angular.element("body").scope();
+        ctrl.startThirdPartyLogin( profile.getEmail() profile.getName(), profile.getImageUrl() );
+
+      }
         angular.bootstrap(document, ['MaterialApp']);
         var shared = angular.element("body").scope().SharedPref;
         shared.initialLoaded = true;
@@ -85,6 +98,7 @@
         });
         */
     </script>
+
 
   </body>
 </html>

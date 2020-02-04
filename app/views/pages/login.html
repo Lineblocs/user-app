@@ -19,7 +19,10 @@
         <div class="content">
             <form class="login-form" ng-submit="submit($event, loginForm)" name="loginForm" novalidate>
                 <div class="top-heading">
-					<h3>Login</h3>
+                    <h3>Login</h3>
+                    <div ng-non-bindable>
+                        <div class="g-signin2" data-onsuccess="onGoogleSignIn"></div>
+                    </div>
                 <div layout="row" layout-align="center">
                     <p>Need an account ?
                         <a ng-click="gotoRegister()">Register here</a>

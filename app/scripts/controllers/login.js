@@ -19,6 +19,15 @@ angular.module('MaterialApp')
 		email: "",
 		password: ""
 	};
+
+	function finishLogin(token, workspace) {
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				SharedPref.setAuthToken(token);
+				SharedPref.setWorkspace(workspace);
+				Idle.watch();
+		        $state.go('dashboard-user-welcome', {});
+	}
     $scope.submit = function($event, loginForm) {
 		$scope.triedSubmit = true;
 		if (loginForm.$valid) {
@@ -26,13 +35,7 @@ angular.module('MaterialApp')
 			$scope.isLoading = true;
 			Backend.post("/jwt/authenticate", data).then(function( res ) {
 				var token = res.data;
-				$scope.isLoading = false;
-				$scope.couldNotLogin = false;
-				SharedPref.setAuthToken(token);
-				SharedPref.setWorkspace(res.data.workspace);
-
-				Idle.watch();
-		        $state.go('dashboard-user-welcome', {});
+				finishLogin(token, res.data.workspace);
 			}).catch(function() {
 				$scope.isLoading = false;
 				$scope.couldNotLogin = true;
@@ -50,6 +53,24 @@ angular.module('MaterialApp')
 		SharedPref.scrollToTop();
 		$state.go('forgot');
 	}
-	
+
+	$scope.startThirdPartyLogin(email, name, avatar) {
+		var data = {};
+		data['email'] = email;
+		data['name'] = name;
+		data['avatar'] = avatar;
+
+		Backend.post("/thirdPartyLogin", data).then(function( res ) {
+			if ( res.data.confirmed ) {
+				finishLogin(res.data.token, res.data.workspace);
+				return;
+			}
+    		$state.go('register', {
+				"hasData": "1",
+				"userId": res.data.userId,
+				"token": res.data.token
+			});
+		});
+	}
 	SharedPref.changingPage = false;
   });

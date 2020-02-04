@@ -218,5 +218,10 @@ angular.module('MaterialApp')
 	Backend.get("/getCallSystemTemplates").then(function(res) {
 		$scope.templates = res.data;
 		SharedPref.changingPage = false;
+		if ( $stateParams['hasData'] ) {
+			$scope.token = $stateParams['token'];
+			$scope.userId = $stateParams['userId'];
+			$scope.step = 2;
+		}
 	});
   });
