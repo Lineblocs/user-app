@@ -8,7 +8,7 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle, $stateParams) {
 	  SharedPref.updateTitle("Register");
 
 	  var countryToCode = {
