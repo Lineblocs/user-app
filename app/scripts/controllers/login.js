@@ -19,6 +19,7 @@ angular.module('MaterialApp')
 		email: "",
 		password: ""
 	};
+var clickedGoogSignIn = false;
 
 	function finishLogin(token, workspace) {
 				$scope.isLoading = false;
@@ -78,7 +79,9 @@ angular.module('MaterialApp')
 			return
 		gapi.signin2.render('gSignIn', {
 			onsuccess: function(googleUser) {
-				/*
+				if (!clickedGoogSignIn) {
+					return;
+				}
 				var profile = googleUser.getBasicProfile();
 				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
 				console.log('Name: ' + profile.getName());
@@ -86,13 +89,17 @@ angular.module('MaterialApp')
 				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 				var ctrl= angular.element("body").scope();
 				$scope.startThirdPartyLogin( profile.getEmail(), profile.getName(), profile.getImageUrl() );
-				*/
 			},
 			onerror: function(err) {
 			console.log('Google signIn2.render button err: ' + err)
 			}
 		})
 	}
+
 	SharedPref.changingPage = false;
+	angular.element("#gSignIn").on("click", function() {
+		clickedGoogSignIn = true;
+	});
+
 	renderGoogleButton();
   });
