@@ -72,5 +72,19 @@ angular.module('MaterialApp')
 			});
 		});
 	}
+	function renderGoogleButton() {
+		console.log("rendering google auth ", gapi);
+		if(!gapi)
+			return
+		gapi.signin2.render('gSignIn', {
+			onsuccess: function(user) {
+			onSignIn(user)
+			},
+			onerror: function(err) {
+			console.log('Google signIn2.render button err: ' + err)
+			}
+		})
+	}
 	SharedPref.changingPage = false;
+	renderGoogleButton();
   });
