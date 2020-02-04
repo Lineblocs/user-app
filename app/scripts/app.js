@@ -561,7 +561,12 @@ angular
         url: '/register',
         parent: 'base',
         templateUrl: 'views/pages/register.html',
-        controller: 'RegisterCtrl'
+        controller: 'RegisterCtrl',
+        params: {
+            hasData: null,
+            token: null,
+            userId: null
+        }
     })
     .state('forgot', {
         url: '/forgot',

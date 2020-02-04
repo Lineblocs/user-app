@@ -17,45 +17,53 @@
         </center>
 
         <div class="content">
-            <form class="login-form" ng-submit="submit($event, loginForm)" name="loginForm" novalidate>
-                <div class="top-heading">
-                    <h3>Login</h3>
-                    <div ng-non-bindable>
-                        <div id="gSignIn" class="g-signin2" data-onsuccess="onGoogleSignIn"></div>
-                    </div>
-                <div layout="row" layout-align="center">
-                    <p>Need an account ?
-                        <a ng-click="gotoRegister()">Register here</a>
-                    </p>
-                </div>
-                    <div class="box invalid-login">
+            <div ng-show="step===1">
 
-                        <center>
-                            <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try again.
-                            </div>
-                        </center>
-                    </div>
-                </div>
-                <div class="field-input">
-                    <div class="input-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
-                            <path fill="#317780" fill-rule="nonzero"
-                                d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z" />
-                        </svg>
+                <form class="login-form" ng-submit="submit1($event, login1Form)" name="login1Form" novalidate>
+                    <div class="top-heading">
 
-                        <!-- <input type="text" placeholder="Company Email Address"> -->
-                        <md-input-container>
-                            <input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
-                            <div ng-show="triedSubmit">
-                                <div class="box">
-                                    <div ng-show="loginForm.email.$error.required">This field is required</div>
+                        <h3>Login</h3>
+
+                        <div layout="row" layout-align="center">
+                            <center>
+                                <p>
+                                    <a ng-click="gotoRegister()">Register here</a>
+                                </p>
+                            </center>
+                        </div>
+
+                        <div class="box invalid-login">
+
+                            <center>
+                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
+                                    again.
                                 </div>
-                            </div>
-                        </md-input-container>
+                                <div ng-show="noUserFound" class="red">No user exists.</div>
+                            </center>
+                        </div>
+                    </div>
+                    <small>Login with Email</small>
+                    <div class="field-input">
+                        <div class="input-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
+                                <path fill="#317780" fill-rule="nonzero"
+                                    d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z" />
+                            </svg>
+
+                            <!-- <input type="text" placeholder="Company Email Address"> -->
+                            <md-input-container>
+                                <input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
+                                <div ng-show="triedSubmit">
+                                    <div class="box">
+                                        <div ng-show="loginForm.email.$error.required">This field is required</div>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+
                     </div>
 
-                </div>
-
+                    <!--
                 <div class="field-input password">
 
 
@@ -74,33 +82,114 @@
                             </g>
                         </svg>
 
-                        <!-- <input type="text" placeholder="Password"> -->
-                        <md-input-container>
-                            <input name="password" ng-model="user.password" type="password" placeholder="Password"
-                                required="">
-                            <div ng-show="triedSubmit">
-                                <div class="box">
-                                    <div ng-show="loginForm.password.$error.required">This field is required</div>
+                            <md-input-container>
+                                <input name="password" ng-model="user.password" type="password" placeholder="Password"
+                                    required="">
+                                <div ng-show="triedSubmit">
+                                    <div class="box">
+                                        <div ng-show="loginForm.password.$error.required">This field is required</div>
+                                    </div>
                                 </div>
-                            </div>
-						</md-input-container>
+                            </md-input-container>
 					</div>
                 </div>
                 <br/>
                     <a ng-click="gotoForgot()">Forgot Password</a>
+            -->
 
-                <div class="login-btn">
+                    <div class="login-btn">
 
 
-                    <button>
-                        <span>Login</span>
-                    </button>
-                </div>
-            </form>
 
+                        <button style="width: 100%;">
+                            <span style="padding: 15px 165px;">Continue</span>
+                        </button>
+                    </div>
+                    <div layout="row" layout-align="center">
+                        <small>OR</small>
+                    </div>
+                    <div layout="row" layout-align="center">
+                        <div>
+
+                            <div ng-non-bindable>
+                                <div id="gSignIn"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div ng-show="step===2">
+                <form class="login-form" ng-submit="submit($event, login2Form)" name="login2Form" novalidate>
+                    <div class="top-heading">
+
+
+                        <h3>Login</h3>
+                        <div layout="row" layout-align="center">
+                            <center>
+                                <p>
+                                    Welcome back {{userInfo.name}}
+                                </p>
+                            </center>
+                        </div>
+                        <div class="box invalid-login">
+
+
+                            <center>
+                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
+                                    again.
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="field-input password">
+
+
+                        <div class="input-box no-margin">
+
+
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+                                <g fill="#317780" fill-rule="nonzero">
+                                    <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
+                                    <path
+                                        d="M19.107 16.262a.896.896 0 0 0 .893-.899V12.04c0-1.982-1.602-3.594-3.571-3.594h-1.074V5.277C15.355 2.367 12.952 0 9.998 0S4.641 2.367 4.641 5.277v3.168h-1.07C1.602 8.445 0 10.057 0 12.04v7.367C0 21.388 1.602 23 3.571 23H16.43C18.398 23 20 21.388 20 19.406c0-.496-.4-.898-.893-.898a.896.896 0 0 0-.893.898c0 .991-.8 1.797-1.785 1.797H3.57a1.793 1.793 0 0 1-1.785-1.797V12.04c0-.99.8-1.797 1.785-1.797H16.43c.984 0 1.785.806 1.785 1.797v3.324c0 .496.4.899.893.899zM13.57 8.445H6.427V5.277c0-1.919 1.602-3.48 3.571-3.48 1.97 0 3.572 1.561 3.572 3.48v3.168z" />
+                                    <ellipse cx="8.348" cy="15.543" rx="1" ry="1" />
+                                    <ellipse cx="5" cy="15.543" rx="1" ry="1" />
+                                    <ellipse cx="11.696" cy="15.543" rx="1" ry="1" />
+                                </g>
+                            </svg>
+
+                            <md-input-container>
+                                <input name="password" ng-model="user.password" type="password" placeholder="Password"
+                                    required="">
+                                <div ng-show="triedSubmit">
+                                    <div class="box">
+                                        <div ng-show="loginForm.password.$error.required">This field is required</div>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <br />
+                    <a ng-click="gotoForgot()">Forgot Password</a>
+
+                    <div class="login-btn">
+
+
+
+
+                        <button style="width: 100%;">
+                            <span style="padding: 15px 185px;">Login</span>
+                        </button>
+                    </div>
+                    <div layout="row" layout-align="center">
+                        <a ng-click="backStep1()">Not You?</a>
+                    </div>
+                </form>
+            </div>
             <div class="text">
-				<h2>Your Line</h2>
+                <h2>Your Line</h2>
                 <p><span>login to start configuring your DIDs, and flows!</span></p>
-			</div>
+            </div>
         </div>
     </div>

@@ -561,7 +561,12 @@ angular
         url: '/register',
         parent: 'base',
         templateUrl: 'views/pages/register.html',
-        controller: 'RegisterCtrl'
+        controller: 'RegisterCtrl',
+        params: {
+            hasData: null,
+            token: null,
+            userId: null
+        }
     })
     .state('forgot', {
         url: '/forgot',
@@ -3039,15 +3044,18 @@ angular.module('MaterialApp')
 	  SharedPref.processResult();
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
+	$scope.noUserFound = false;
 	$scope.shouldSplash = false;
 	$scope.isLoading = false;
 	$scope.user = {
 		email: "",
 		password: ""
 	};
+	$scope.step = 1;
 var clickedGoogSignIn = false;
 
 	function finishLogin(token, workspace) {
+		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
 				SharedPref.setAuthToken(token);
@@ -3055,6 +3063,25 @@ var clickedGoogSignIn = false;
 				Idle.watch();
 		        $state.go('dashboard-user-welcome', {});
 	}
+    $scope.submit1 = function($event, loginForm) {
+		$scope.step = 2;
+	}
+    $scope.submit1 = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (loginForm.$valid) {
+			SharedPref.changingPage = true;
+			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
+				SharedPref.changingPage = false;
+				if ( res.data.found ) {
+					$scope.userInfo = res.data.info;
+					$scope.step = 2;
+					return;
+				}
+				$scope.noUserFound = true;
+			});
+		}
+	}
+
     $scope.submit = function($event, loginForm) {
 		$scope.triedSubmit = true;
 		if (loginForm.$valid) {
@@ -3081,30 +3108,39 @@ var clickedGoogSignIn = false;
 		$state.go('forgot');
 	}
 
-	$scope.startThirdPartyLogin = function(email, name, avatar) {
+	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar) {
 		var data = {};
 		data['email'] = email;
-		data['name'] = name;
+		data['first_name'] = firstname;
+		data['last_name'] = lastname;
 		data['avatar'] = avatar;
 
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
-			if ( res.data.confirmed ) {
-				finishLogin(res.data.token, res.data.workspace);
-				return;
-			}
-    		$state.go('register', {
-				"hasData": "1",
-				"userId": res.data.userId,
-				"token": res.data.token
-			});
+			$timeout(function() {
+				$scope.$apply();
+				SharedPref.changingPage = true;
+				SharedPref.scrollToTop();
+
+				if ( res.data.confirmed ) {
+					finishLogin(res.data.info.token, res.data.info.workspace);
+					return;
+				}
+				$state.go('register', {
+					"hasData": true,
+					"userId": res.data.userId,
+					"token": res.data.info.token
+				});
+			}, 0);
 		});
 	}
-	function renderGoogleButton() {
-		console.log("rendering google auth ", gapi);
-		if(!gapi)
-			return
-		gapi.signin2.render('gSignIn', {
-			onsuccess: function(googleUser) {
+	function renderButton() {
+      gapi.signin2.render('gSignIn', {
+        'scope': 'profile email',
+        'width': 400,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+		'onsuccess': function(googleUser) {
 				if (!clickedGoogSignIn) {
 					return;
 				}
@@ -3114,20 +3150,33 @@ var clickedGoogSignIn = false;
 				console.log('Image URL: ' + profile.getImageUrl());
 				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 				var ctrl= angular.element("body").scope();
-				$scope.startThirdPartyLogin( profile.getEmail(), profile.getName(), profile.getImageUrl() );
+				var fullName = profile.getName().split(' '),
+    				firstName = fullName[0],
+    				lastName = fullName[fullName.length - 1];
+				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
 			},
 			onerror: function(err) {
 			console.log('Google signIn2.render button err: ' + err)
-			}
-		})
-	}
+			},
+        'onfailure': function() {
+			console.error("failure ", arguments);
+		}
+	  });
+    }
 
+	$scope.backStep1 = function() {
+		$scope.step = 1;
+	}
 	SharedPref.changingPage = false;
-	angular.element("#gSignIn").on("click", function() {
+	angular.element("#gSignInWrapper").on("click", function() {
 		clickedGoogSignIn = true;
 	});
+	angular.element('#gSignIn span span').text("Sign in with Google");
 
-	renderGoogleButton();
+
+	//renderGoogleButton();
+	//startLogin();
+	renderButton();
   });
 
 'use strict';
