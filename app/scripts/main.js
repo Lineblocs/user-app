@@ -3080,7 +3080,7 @@ angular.module('MaterialApp')
 		$state.go('forgot');
 	}
 
-	$scope.startThirdPartyLogin(email, name, avatar) {
+	$scope.startThirdPartyLogin = function(email, name, avatar) {
 		var data = {};
 		data['email'] = email;
 		data['name'] = name;
