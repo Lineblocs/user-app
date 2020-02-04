@@ -82,7 +82,7 @@
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
         var ctrl= angular.element("body").scope();
-        ctrl.startThirdPartyLogin( profile.getEmail() profile.getName(), profile.getImageUrl() );
+        ctrl.startThirdPartyLogin( profile.getEmail(), profile.getName(), profile.getImageUrl() );
 
       }
         angular.bootstrap(document, ['MaterialApp']);
