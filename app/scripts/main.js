@@ -3168,14 +3168,9 @@ var clickedGoogSignIn = false;
 		$scope.step = 1;
 	}
 	SharedPref.changingPage = false;
-	angular.element("#gSignInWrapper").on("click", function() {
+	angular.element("#gSignIn").on("click", function() {
 		clickedGoogSignIn = true;
 	});
-	angular.element('#gSignIn span span').text("Sign in with Google");
-
-
-	//renderGoogleButton();
-	//startLogin();
 	renderButton();
   });
 
