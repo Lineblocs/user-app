@@ -83,11 +83,10 @@ var clickedGoogSignIn = false;
 		data['first_name'] = firstname;
 		data['last_name'] = lastname;
 		data['avatar'] = avatar;
-
+			SharedPref.changingPage = true;
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
 			$timeout(function() {
 				$scope.$apply();
-				SharedPref.changingPage = true;
 				SharedPref.scrollToTop();
 
 				if ( res.data.confirmed ) {

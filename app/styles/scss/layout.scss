@@ -186,6 +186,15 @@ md-menu {
 #gSignIn .abcRioButton.abcRioButtonBlue {
 	border-radius: 35px;
 }
+.msft-login {
+	width: 400px;
+	height: 50px;
+	border-radius: 35px;
+	background: ##2f2f2f;
+	img {
+		margin: 4.5px 0;
+	}
+}
 .change-page-mask {
 	position: absolute;
 	top: 0px;
