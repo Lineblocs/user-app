@@ -90,7 +90,7 @@ var clickedGoogSignIn = false;
 				SharedPref.scrollToTop();
 
 				if ( res.data.confirmed ) {
-					finishLogin(res.data.info.token, res.data.info.workspace);
+					finishLogin(res.data.info, res.data.info.workspace);
 					return;
 				}
 				$state.go('register', {
