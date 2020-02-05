@@ -80,7 +80,7 @@ angular.module('MaterialApp')
 		if (registerForm.$valid) {
 			var data = angular.copy( $scope.user );
 			Backend.post("/register", data).then(function( res ) {
-				$scope.token = res.data.token;
+				$scope.token = res.data;
 				$scope.userId = res.data.userId;
 				$scope.step = 2;
 			});
