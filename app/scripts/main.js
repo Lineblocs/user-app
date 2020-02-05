@@ -2595,9 +2595,9 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   var workspace = SharedPref.getWorkspace();
 
   if ($stateParams['flowId'] === "new" ) {
-    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.tokenauth + "&workspaceId=" + workspace.id;
+    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token.auth + "&workspaceId=" + workspace.id;
   } else {
-    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token + "&workspaceId="+ workspace.id;
+    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token.auth+ "&workspaceId="+ workspace.id;
   }
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);
