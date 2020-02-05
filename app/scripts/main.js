@@ -567,7 +567,7 @@ angular
         controller: 'RegisterCtrl',
         params: {
             hasData: null,
-            token: null,
+            authData: null,
             userId: null
         }
     })
