@@ -26,7 +26,7 @@ function getJWTTokenObj() {
 function getJWTToken() {
     var parsed = getJWTTokenObj();
     if (parsed !== "") {
-            return "Bearer " + parsed.token;
+            return "Bearer " + parsed.token.auth;
     }
     return "";
 }
