@@ -174,7 +174,7 @@ angular
             $('body').addClass('extended');
         }
         factory.doLogout = function() {
-            localStorage.removeItem("AUTH");
+            factory.purgeSession();
             $state.go('login', {});
         }
         factory.setAuthToken = function(token) {
@@ -189,7 +189,10 @@ angular
         factory.getWorkspace =  function(workspace) {
             return JSON.parse(localStorage.getItem("WORKSPACE"));
         }
-
+        factory.purgeSession =  function() {
+            localStorage.removeItem("WORKSPACE");
+            localStorage.removeItem("AUTH");
+        }
         factory.canPerformAction = function(action) {
             var workspace = factory.getWorkspace();
             if (workspace.user_info[action]) {

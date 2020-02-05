@@ -139,5 +139,6 @@ var clickedGoogSignIn = false;
 	angular.element("#gSignIn").on("click", function() {
 		clickedGoogSignIn = true;
 	});
+
 	renderButton();
   });
