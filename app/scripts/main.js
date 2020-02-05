@@ -2595,7 +2595,7 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   var workspace = SharedPref.getWorkspace();
 
   if ($stateParams['flowId'] === "new" ) {
-    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token + "&workspaceId=" + workspace.id;
+    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.tokenauth + "&workspaceId=" + workspace.id;
   } else {
     flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token + "&workspaceId="+ workspace.id;
   }
