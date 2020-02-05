@@ -223,7 +223,8 @@ angular.module('MaterialApp')
 		SharedPref.changingPage = false;
 		if ( $stateParams['hasData'] ) {
 			console.log("$stateParams data is ", $stateParams);
-			$scope.token = $stateParams['token'];
+			$scope.token = $stateParams['authData'];
+
 			$scope.userId = $stateParams['userId'];
 			$scope.step = 2;
 		}

@@ -3130,7 +3130,7 @@ var clickedGoogSignIn = false;
 				$state.go('register', {
 					"hasData": true,
 					"userId": res.data.userId,
-					"token": res.data.info.token
+					"authData": {"token": res.data.info.token}
 				});
 			}, 0);
 		});
@@ -3942,7 +3942,8 @@ angular.module('MaterialApp')
 		SharedPref.changingPage = false;
 		if ( $stateParams['hasData'] ) {
 			console.log("$stateParams data is ", $stateParams);
-			$scope.token = $stateParams['token'];
+			$scope.token = $stateParams['authData'];
+
 			$scope.userId = $stateParams['userId'];
 			$scope.step = 2;
 		}

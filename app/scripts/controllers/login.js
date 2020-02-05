@@ -96,7 +96,7 @@ var clickedGoogSignIn = false;
 				$state.go('register', {
 					"hasData": true,
 					"userId": res.data.userId,
-					"token": res.data.info.token
+					"authData": {"token": res.data.info.token}
 				});
 			}, 0);
 		});
