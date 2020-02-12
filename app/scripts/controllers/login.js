@@ -16,6 +16,7 @@ angular.module('MaterialApp')
 	$scope.noUserFound = false;
 	$scope.shouldSplash = false;
 	$scope.isLoading = false;
+	$scope.challenge = null;
 	$scope.user = {
 		email: "",
 		password: ""
@@ -55,6 +56,7 @@ var clickedGoogSignIn = false;
 		$scope.triedSubmit = true;
 		if (loginForm.$valid) {
 			var data = angular.copy( $scope.user );
+			data['challenge'] = $scope.challenge;
 			$scope.isLoading = true;
 			Backend.post("/jwt/authenticate", data).then(function( res ) {
 				var token = res.data;
@@ -83,6 +85,7 @@ var clickedGoogSignIn = false;
 		data['first_name'] = firstname;
 		data['last_name'] = lastname;
 		data['avatar'] = avatar;
+		data['challenge'] = $scope.challenge;
 			SharedPref.changingPage = true;
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
 			$timeout(function() {
@@ -139,6 +142,14 @@ var clickedGoogSignIn = false;
 	angular.element("#gSignIn").on("click", function() {
 		clickedGoogSignIn = true;
 	});
+	var full = window.location.host
+	//window.location.host is subdomain.domain.com
+	var parts = full.split('.')
+	var sub = parts[0]
+
+	if (sub !== 'app') {
+		$scope.challenge = sub;
+	}
 
 	renderButton();
   });

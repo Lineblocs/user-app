@@ -46,6 +46,7 @@ angular.module('MaterialApp')
 	SharedPref.setAuthToken( $scope.token );
 	var data = { "userId": $scope.userId };
 	$scope.invalidCode = false;
+	SharedPref.changingPage = true;
 	Backend.post("/userSpinup", data).then(function( res ) {
 		var data = res.data;
 		if ( data.success ) {
@@ -53,8 +54,9 @@ angular.module('MaterialApp')
 			Idle.watch();
 			SharedPref.setAuthToken($scope.token);
 			SharedPref.setWorkspace(res.data.workspace);
-
+			SharedPref.changingPage = false;
 			$state.go('dashboard-user-welcome', {});
+
 			return;
 		}
 		$mdToast.show(
@@ -79,9 +81,16 @@ angular.module('MaterialApp')
 		}
 		if (registerForm.$valid) {
 			var data = angular.copy( $scope.user );
+				SharedPref.changingPage = true;
 			Backend.post("/register", data).then(function( res ) {
-				$scope.token = res.data;
-				$scope.userId = res.data.userId;
+				var data = res.data;
+				if ( !data.success ) {
+					SharedPref.showError("Error", data.message);
+					return;
+				}
+				$scope.token = data; 
+				$scope.userId = data.userId;
+				SharedPref.changingPage = false;
 				$scope.step = 2;
 			});
 			return;
@@ -97,8 +106,10 @@ angular.module('MaterialApp')
 			var data = {};
 			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
 			data.userId = $scope.userId;
+				SharedPref.changingPage = true;
 			Backend.post("/registerSendVerify", data).then(function( res ) {
 				var data = res.data;
+					SharedPref.changingPage = false;
 				if (res.data.valid) {
 					$scope.didVerifyCall = true;
 					$scope.invalidNumber = false;
@@ -118,8 +129,10 @@ angular.module('MaterialApp')
 		if (verify2Form.$valid) {
 			var data = angular.copy( $scope.verify2 );
 			data.userId = $scope.userId;
+				SharedPref.changingPage = true;
 			Backend.post("/registerVerify", data).then(function( res ) {
 				var isValid = res.data.isValid;
+				SharedPref.changingPage = false;
 				if (isValid) {
 					$scope.step = 3;
 				} else {
@@ -138,7 +151,9 @@ angular.module('MaterialApp')
 			var data = {};
 			data["userId"] = $scope.userId;
 			data.workspace = $scope.workspace;
+				SharedPref.changingPage = true;
 			Backend.post("/updateWorkspace", data).then(function( res ) {
+				SharedPref.changingPage = false;
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
 					//doSpinup();
@@ -165,7 +180,9 @@ angular.module('MaterialApp')
 			var data = {};
 			data["userId"] = $scope.userId;
 			data.templateId =  $scope.selectedTemplate.id;
+				SharedPref.changingPage = true;
 			Backend.post("/provisionCallSystem", data).then(function( res ) {
+				SharedPref.changingPage = false;
 				doSpinup();
 				return;
 			});
@@ -175,7 +192,9 @@ angular.module('MaterialApp')
 	$scope.recall = function() {
 		var data = angular.copy( $scope.verify1 );
 		data.userId = $scope.userId;
+				SharedPref.changingPage = true;
 		Backend.post("/registerSendVerify", data).then(function( res ) {
+				SharedPref.changingPage = false;
            $mdToast.show(
           $mdToast.simple()
             .textContent('You will be called shortly.')

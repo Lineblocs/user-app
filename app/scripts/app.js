@@ -205,6 +205,9 @@ angular
         }
 
         factory.showError = function(title, msg) {
+                factory.changingPage = false;
+                factory.endIsCreateLoading();
+                factory.endIsLoading();
                 $mdDialog.show(
                 $mdDialog.alert()
                     .parent(angular.element(document.querySelector('#popupContainer')))
