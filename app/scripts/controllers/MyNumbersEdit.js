@@ -10,11 +10,23 @@
 angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
 	  SharedPref.updateTitle("Edit Number");
   $scope.flows = [];
+  $scope.didActions = [
+    {
+      name: 'Accept Call',
+      value: 'accept-call'
+    },
+    {
+      name: 'Accept Fax',
+      value: 'accept-fax'
+    },
+
+  ]
   $scope.number = null;
   $scope.saveNumber = function(number) {
     var params = {};
     params['name'] = $scope.number.name;
     params['flow_id'] = $scope.number.flow_id;
+    params['did_action'] = $scope.number.did_action;
     var toastPos = {
       bottom: false,
       top: true,
@@ -41,6 +53,10 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
   $scope.changeFlow = function(flow) {
     $scope.number.flow_id = flow;
     console.log("changeFlow", flow);
+  }
+  $scope.changeDIDAction = function(action) {
+    $scope.number.did_action = action;
+    console.log("changeDIDAction", action);
   }
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});

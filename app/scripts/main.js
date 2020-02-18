@@ -3183,8 +3183,8 @@ var clickedGoogSignIn = false;
 	//window.location.host is subdomain.domain.com
 	var parts = full.split('.')
 	var sub = parts[0]
-
-	if (sub !== 'app') {
+	var second = sub.split(":");
+	if (sub !== 'app' && second[0] !== 'localhost') {
 		$scope.challenge = sub;
 	}
 
@@ -3341,11 +3341,23 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
 angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
 	  SharedPref.updateTitle("Edit Number");
   $scope.flows = [];
+  $scope.didActions = [
+    {
+      name: 'Accept Call',
+      value: 'accept-call'
+    },
+    {
+      name: 'Accept Fax',
+      value: 'accept-fax'
+    },
+
+  ]
   $scope.number = null;
   $scope.saveNumber = function(number) {
     var params = {};
     params['name'] = $scope.number.name;
     params['flow_id'] = $scope.number.flow_id;
+    params['did_action'] = $scope.number.did_action;
     var toastPos = {
       bottom: false,
       top: true,
@@ -3372,6 +3384,10 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
   $scope.changeFlow = function(flow) {
     $scope.number.flow_id = flow;
     console.log("changeFlow", flow);
+  }
+  $scope.changeDIDAction = function(action) {
+    $scope.number.did_action = action;
+    console.log("changeDIDAction", action);
   }
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});

@@ -146,8 +146,8 @@ var clickedGoogSignIn = false;
 	//window.location.host is subdomain.domain.com
 	var parts = full.split('.')
 	var sub = parts[0]
-
-	if (sub !== 'app') {
+	var second = sub.split(":");
+	if (sub !== 'app' && second[0] !== 'localhost') {
 		$scope.challenge = sub;
 	}
 

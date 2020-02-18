@@ -30,6 +30,29 @@
                     <div layout="row">
                         <div flex="95">
                             <md-input-container>
+                                <label>DID Action</label>
+                                <md-select ng-model="number.did_action" ng-change="changeDIDAction(number.did_action)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="action in didActions" ng-value="action.value">
+                                        {{action.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your number will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+            <div layout="row">
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
                                 <label>Attached Flow</label>
                                 <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
                                     <md-option><em>None</em></md-option>
