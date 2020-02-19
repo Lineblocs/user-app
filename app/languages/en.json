@@ -83,5 +83,6 @@
       "debugger-logs": "Debugger Logs",
       "port-numbers": "Port Numbers",
       "extension-codes": "Extension Codes",
-      "workspace-api-settings": "Workspace API Settings"
+      "workspace-api-settings": "Workspace API Settings",
+      "faxes": "Fax"
   }

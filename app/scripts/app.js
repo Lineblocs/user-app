@@ -700,6 +700,12 @@ angular
         templateUrl: 'views/pages/recordings.html',
         controller: 'RecordingsCtrl'
     })
+    .state('faxes', {
+        url: '/faxes',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/faxes.html',
+        controller: 'FaxesCtrl'
+    })
     .state('billing', {
         url: '/billing',
         parent: 'dashboard',
