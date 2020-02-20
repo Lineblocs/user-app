@@ -95,6 +95,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['monthly_cost'] = number.monthly_cost;
         params['provider'] = number.provider;
         params['country'] = number.country;
+        params['features'] = number.features.join(",");
         SharedPref.isCreateLoading = true;
         SharedPref.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
