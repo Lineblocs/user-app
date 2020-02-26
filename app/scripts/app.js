@@ -115,6 +115,15 @@ angular
 
         factory.billingPackages = ['gold', 'silver', 'bronze'];
   var flickerTimeout = 0;
+  factory.showToast = function(msg, position) {
+      var position = position || "top right";
+                    $mdToast.show(
+                    $mdToast.simple()
+                        .textContent(msg)
+                        .position(position)
+                        .hideDelay(3000)
+                    );
+  }
   factory.endIsLoading = function() {
       return $q(function(resolve, reject) {
         $timeout(function() {
@@ -797,6 +806,13 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/extension-codes.html',
         controller: 'ExtensionCodesCtrl'
+    })
+    .state('files', {
+
+        url: '/files',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/files.html',
+        controller: 'FilesCtrl'
     })
     .state('blank', {
         url: '/blank',

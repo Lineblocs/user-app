@@ -147,7 +147,7 @@ var clickedGoogSignIn = false;
 	var parts = full.split('.')
 	var sub = parts[0]
 	var second = sub.split(":");
-	if (sub !== 'app' && second[0] !== 'localhost') {
+	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
 		$scope.challenge = sub;
 	}
 

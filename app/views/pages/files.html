@@ -1,0 +1,54 @@
+<!-- exact table from live demo -->
+<div>
+  <div ng-show="files.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+      <div ng-show="files.length === 0 && !pagination.didSearch" class="no-results">
+        <center>
+          <h5>No files added</h5>
+          <md-button ng-click="addFile($event)" class="md-raised md-primary">Add file</md-button>
+        </center>
+      </div>
+    </md-card>
+  </div>
+  <div ng-show="files.length > 0">
+      <div layout="row" layout-align="end center">
+        <div>
+            <md-button ng-click="addFile($event)" class="md-raised md-primary">Add file</md-button>
+          </div>
+      </div>
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>title</span></th>
+            <th md-column><span>URL</span></th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="file" md-select-id="name" md-auto-select ng-repeat="file in files">
+            <td md-cell>{{file.title}}</td>
+            <td md-cell>
+              <div layout="row">
+                <div>
+                     <input value="{{file.public_url}}" class="media-file-url-input" />
+                </div>
+                <div>
+              <md-button ng-click="promptCopied()" class="md-raised md-primary md-small no-margin-top-bottom" ngclipboard data-clipboard-text="{{file.public_url}}">Copy</md-button>
+                </div>
+            </td>
+            <td md-cell>
+              <md-button ng-click="deleteFile($event, file)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+</div>
+  </div>
+ 

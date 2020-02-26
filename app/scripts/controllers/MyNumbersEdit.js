@@ -27,6 +27,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
     params['name'] = $scope.number.name;
     params['flow_id'] = $scope.number.flow_id;
     params['did_action'] = $scope.number.did_action;
+    params['tags'] = $scope.number.tags;
     var toastPos = {
       bottom: false,
       top: true,

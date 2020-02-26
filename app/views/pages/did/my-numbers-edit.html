@@ -48,6 +48,31 @@
                             </md-icon>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div layout="row">
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-chips ng-model="number.tags" name="tags" md-removable="true" md-max-chips="5"
+                                placeholder="Enter a tag..." input-aria-label="Fruit names">
+                                <md-chip-template>
+                                    <strong>{{$chip}}</strong>
+                                    <!--<em>(tag)</em>-->
+                                </md-chip-template>
+                            </md-chips>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    Tags for your DID number
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div layout="row">
                 <div flex="66">
                     <div layout="row">
@@ -73,11 +98,13 @@
                     </div>
                 </div>
                 <div flex="33">
-                    <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">Edit Flow
+                    <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">
+                        Edit Flow
                     </md-button>
                 </div>
             </div>
-            <md-button ng-click="saveNumber()" class="md-raised md-primary no-margin-sides">Save</md-button>
+            <md-button ng-click="saveNumber()" class="md-raised md-primary no-margin-sides">Save
+            </md-button>
         </form>
     </md-card-content>
 </md-card>

@@ -5,7 +5,7 @@
     <title ng-bind="SharedPref.title">LineBlocs.com</title>
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <meta name="google-signin-client_id" content="1042543492114-ubcn99gk9pivl5mmog1bmj4cnktdeq9p.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.tmp) styles/vendor.css -->
     <!-- bower:css -->
@@ -22,6 +22,20 @@
     <link rel="stylesheet" href="styles/app-blue.css">
     <link rel="stylesheet" href="styles/custom.css">
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
+    <script>
+      var google = {
+        // The Browser API key obtained from the Google API Console.
+        // Replace with your own Browser API key, or your own key.
+        developerKey: "AIzaSyBV9cAiNb_yO3G91cBisx1nsO4Z0Yy1hn4",
+
+        // The Client ID obtained from the Google API Console. Replace with your own Client ID.
+        clientId: "1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com",
+
+        // Replace with your own project number from console.developers.google.com.
+        // See "Project number" under "IAM & Admin" > "Settings"
+        appId: "1042543492114"
+      };
+    </script>
     <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -91,7 +105,6 @@
     <![endif]-->
     <!-- endbuild -->
     <script>
-
       function onGoogleSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
