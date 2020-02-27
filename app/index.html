@@ -5,7 +5,7 @@
     <title ng-bind="SharedPref.title">LineBlocs.com</title>
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <meta name="google-signin-client_id" content="1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com"/>
     <script async type="text/javascript" src="https://static.edgeme.sh/client.js" onload="window.edgemesh = new Edgemesh()"></script>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.tmp) styles/vendor.css -->
@@ -106,6 +106,11 @@
     <![endif]-->
     <!-- endbuild -->
     <script>
+var google = {
+  "clientId": "1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com",
+  "developerKey": "AIzaSyBV9cAiNb_yO3G91cBisx1nsO4Z0Yy1hn4",
+  "appId": "1042543492114"
+};
       function onGoogleSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
