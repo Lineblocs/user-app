@@ -169,7 +169,7 @@ gulp.task('watch', ['connect'], function() {
     'app/images/**/*',
     '!app/templates.html'
     ]).on('change', function() {
-        gulp.start('scripts'); 
+        gulp.start('compress-js');
         /*
         mergeTemplates().then(function(output) {
             fs.writeFileSync("./app/templates.html", output);
@@ -177,7 +177,7 @@ gulp.task('watch', ['connect'], function() {
         */
         $.livereload.changed();
     });
-    gulp.watch('app/styles/**/*.scss', ['styles']);
+    gulp.watch('app/styles/**/*.scss', ['compress-css']);
     //gulp.watch('bower.json', ['wiredep']);
 });
 
@@ -227,11 +227,12 @@ var files = deps.concat([
 */
 
 gulp.task('scripts', function() {
+    console.log("starting scripts");
     return gulp.src(files)
         .pipe(concat('main.js'))
-        .pipe(gulp.dest('./app/scripts/'));
+        .pipe(gulp.dest('./app/scripts/'))
 });
-gulp.task('compress-js', function() {
+gulp.task('compress-js', ['scripts'], function() {
   gulp.src([
 './bower_components/angular/angular.js',
 './bower_components/angular-sanitize/angular-sanitize.js',
@@ -259,7 +260,7 @@ gulp.task('compress-js', function() {
         .pipe(gulp.dest('app/scripts/'));
 
 });
-gulp.task('compress-css', function() {
+gulp.task('compress-css', ['styles'], function() {
     console.log("cleaning CSS");
 gulp.src([
 "./bower_components/angular-material/angular-material.css",
@@ -283,7 +284,7 @@ gulp.src([
       cascade: false
   }))
   .pipe(rename({
-      basename: 'main-styles-4',
+      basename: 'app',
       suffix: '.min',
   }))
   .pipe(gulp.dest('app/styles/'))

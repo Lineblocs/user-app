@@ -4678,13 +4678,16 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
         };
         Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
           var data = res.data;
+
           if (data.success) {
+
            $mdToast.show(
           $mdToast.simple()
             .textContent('Number verified')
             .position("top right")
             .hideDelay(3000)
         );
+
             $scope.close();
             onCreated();
           } else {
