@@ -9,7 +9,7 @@
 * Main module of the application.
 */
 window.app_version = 2.0;
-     function loadAddedResources1() {
+     function loadAddedResources2() {
         addScript("https://apis.google.com/js/platform.js");
     }
     function loadAddedResources1() {
@@ -35,8 +35,7 @@ window.app_version = 2.0;
         var script = document.createElement('script');
         script.src = filename;
         script.type = 'text/javascript';
-
-        head.insertBefore(script, document.getElementsByTagName("script")[0]);
+        head.appendChild(script);
     }
 function checkExpires(expiresIn)
 {

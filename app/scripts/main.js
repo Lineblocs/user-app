@@ -9,7 +9,7 @@
 * Main module of the application.
 */
 window.app_version = 2.0;
-     function loadAddedResources1() {
+     function loadAddedResources2() {
         addScript("https://apis.google.com/js/platform.js");
     }
     function loadAddedResources1() {
@@ -35,8 +35,7 @@ window.app_version = 2.0;
         var script = document.createElement('script');
         script.src = filename;
         script.type = 'text/javascript';
-
-        head.insertBefore(script, document.getElementsByTagName("script")[0]);
+        head.appendChild(script);
     }
 function checkExpires(expiresIn)
 {
@@ -1522,6 +1521,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared) {
     $shared.updateTitle("Calls");
     $scope.pagination = pagination;
@@ -1559,6 +1559,10 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  */
 angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
 	  $shared.updateTitle("Call View");
+=======
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Call View");
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
   $scope.call = [];
   $scope.load = function() {
     $shared.isLoading =true;
@@ -1581,187 +1585,37 @@ angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backe
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-	$scope.options1 = {
-	    lineWidth: 12,
-	    scaleColor: false,
-	    size: 120,
-	    lineCap: "square",
-	    barColor: "#fb8c00",
-	    trackColor: "#f9dcb8"
-	};
-	
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
  * @name MaterialApp.controller:MainCtrl
  * @description
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-    $scope.line = {
-	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-	          data: [
-	      [65, 59, 80, 81, 56, 55, 40],
-	      [28, 48, 40, 19, 86, 27, 90]
-	    ],
-	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
+angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref) {
+    SharedPref.updateTitle("Calls");
+    $scope.pagination = pagination;
+  $scope.settings = {
+    page: 0
+  };
+  $scope.calls = [];
+  $scope.load = function() {
+    SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/call/listCalls" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'calls' );
+      pagination.loadData().then(function(res) {
+      $scope.calls = res.data.data;
+      SharedPref.endIsLoading();
+    })
+  }
+  $scope.viewCall= function(call) {
+    $state.go('call-view', {callId: call.api_id});
+  }
 
-    };
-
-    $scope.bar = {
-	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-		data: [
-		   [65, 59, 80, 81, 56, 55, 40],
-		   [28, 48, 40, 19, 86, 27, 90]
-		],
-		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
-    	
-    };
-
-    $scope.donut = {
-    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data: [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-     $scope.pie = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data : [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-
-    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
-                       {"x":20,"top-1":100,"top-2":35},
-                       {"x":30,"top-1":15,"top-2":75},
-                       {"x":40,"top-1":50,"top-2":45}];
-    $scope.datacolumns=[{"id":"top-1","type":"spline"},
-                        {"id":"top-2","type":"spline"}];
-    $scope.datax={"id":"x"};
-
-    
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular
-    .module('MaterialApp')
-    .controller('calendarCtrl', function ($scope) {
-    });
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
- angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
-    $scope.rating1 = 3;
-    $scope.rating2 = 2;
-    $scope.rating3 = 4;  
-    var self = this,  j= 0, counter = 0;
-    self.modes = [ ];
-    self.activated = true;
-    self.determinateValue = 30;
-    /**
-    * Turn off or on the 5 themed loaders
-    */
-    self.toggleActivation = function() {
-        if ( !self.activated ) self.modes = [ ];
-        if (  self.activated ) j = counter = 0;
-    };
-    // Iterate every 100ms, non-stop
-    $interval(function() {
-    // Increment the Determinate loader
-        self.determinateValue += 1;
-        if (self.determinateValue > 100) {
-            self.determinateValue = 30;
-        }
-        // Incrementally start animation the five (5) Indeterminate,
-        // themed progress circular bars
-        if ( (j < 5) && !self.modes[j] && self.activated ) {
-            self.modes[j] = 'indeterminate';
-        }
-        if ( counter++ % 4 == 0 ) j++;
-    }, 100, 0, true);
-    var last = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-    };
-    $scope.demo = {};
-    $scope.toastPosition = angular.extend({},last);
-    $scope.getToastPosition = function() {
-        sanitizePosition();
-        return Object.keys($scope.toastPosition)
-        .filter(function(pos) { return $scope.toastPosition[pos]; })
-        .join(' ');
-    };
-    function sanitizePosition() {
-        var current = $scope.toastPosition;
-        if ( current.bottom && last.top ) current.top = false;
-        if ( current.top && last.bottom ) current.bottom = false;
-        if ( current.right && last.left ) current.left = false;
-        if ( current.left && last.right ) current.right = false;
-        last = angular.extend({},current);
-    }
-    $scope.showCustomToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showSimpleToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showActionToast = function() {
-        var toast = $mdToast.simple()
-        .content('Action Toast!')
-        .action('OK')
-        .highlightAction(false)
-        .position($scope.getToastPosition());
-        $mdToast.show(toast).then(function(response) {
-            if ( response == 'ok' ) {
-                alert('You clicked \'OK\'.');
-            }
-        });
-    };
-})
-.controller('ToastCtrl', function($scope, $mdToast) {
-    $scope.closeToast = function() {
-        $mdToast.hide();
-    };
-
+  $scope.load();
 });
+
+
 'use strict';
 
 /**
@@ -1864,6 +1718,7 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp')
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
 	$scope.$shared = $shared;
@@ -1964,6 +1819,10 @@ angular.module('MaterialApp')
  */
  angular.module('MaterialApp').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
 	  $shared.updateTitle("Dashboard");
+=======
+ angular.module('MaterialApp').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
+	  SharedPref.updateTitle("Dashboard");
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
@@ -3058,6 +2917,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp')
   .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
 	  $shared.updateTitle("Forgot Password");
@@ -3093,6 +2953,127 @@ angular.module('MaterialApp')
 	}
 	$shared.changingPage = false;
   });
+=======
+angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("IP Whitelist");
+      $scope.settings = {
+        disabled: false
+      }
+    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
+      $scope.SharedPref = SharedPref;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.ranges = [
+        "/8",
+        "/16",
+        "/24",
+        "/32"
+      ];
+      $scope.data = {
+        ip: "",
+        range: "/32",
+      };
+      $scope.submit= function() {
+        var data = angular.copy($scope.data);
+        Backend.post("/settings/ipWhitelist", data).then(function(res) {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('IP added')
+            .position("top right")
+            .hideDelay(3000)
+        );
+            $scope.close();
+            onCreated();
+        });
+      }
+
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+
+  $scope.ips = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        $q.all([
+          Backend.get("/self"),
+          Backend.get("/settings/ipWhitelist")
+         ]).then(function(res) {
+          $scope.disabled = res[0].data.ip_whitelist_disabled;
+          $scope.settings.disabled = $scope.disabled;
+          $scope.ips = res[1].data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.createIp = function($event) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/add-ip-whitelist.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteIp = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this IP address?')
+          .textContent('This will permantely remove the IP from your whitelist')
+          .ariaLabel('Delete IP')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/settings/ipWhitelist/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('IP deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.enableWhitelist = function($event, value) {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        var data = {"ip_whitelist_disabled": value};
+        Backend.post("/updateSelf", data).then(function(res) {
+          $scope.load();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.changeDisableState = function($event, value) {
+    console.log("changeDisableState ", value);
+    $scope.enableWhitelist($event, true);
+  }
+  $scope.load();
+});
+
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
 'use strict';
 
@@ -3103,18 +3084,37 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('HeadCtrl', function ($scope, $shared) {
   $scope.$shared = $shared;
+=======
+angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
+	  SharedPref.updateTitle("Log View");
+  $scope.log = null;
+  $scope.load = function() {
+    SharedPref.isLoading =true;
+    Backend.get("/log/logData/" + $stateParams['logId']).then(function(res) {
+      console.log("log is ", res.data);
+      SharedPref.isLoading =false;
+      var log = res.data;
+      $scope.log = log;
+    })
+  }
+  $scope.load();
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 });
+
+
 'use strict';
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
+ * @name MaterialApp.controller:MainCtrl
  * @description
- * # HomeCtrl
+ * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
 	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
@@ -3141,56 +3141,60 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
         barColor: "#F800FC",
         trackColor: "#F5E5F5"
 	};
+=======
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("My Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.buyNumber = function() {
+    $state.go('buy-numbers', {});
+  }
+  $scope.editNumber = function(number) {
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-	$scope.series = ['Series A', 'Series B'];
-	$scope.data = [
-		[65, 59, 80, 81, 56, 55, 40],
-		[28, 48, 40, 19, 86, 27, 90]
-	];
+    $state.go('my-numbers-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
 
-	$scope.onClick = function (points, evt) {
-		console.log(points, evt);
-	};
-	if ($(window).width()<600) {		
-		$( '.mdl-grid' ).removeAttr('dragula');
-	};
-    $scope.line2 = {
-	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
-	          data: [
-	      			[99, 180, 80, 140, 120, 220, 100],
-	      			[50, 145, 200, 75, 50, 100, 50]
-		],
-	    colours: [{ 
-				fillColor: "#2b36ff",
-	            strokeColor: "#C172FF",
-	            pointColor: "#fff",
-	            pointStrokeColor: "#8F00FF",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "#8F00FF"
-        	},
-        	{
-        		fillColor: "#ffa01c",
-	            strokeColor: "#FFB53A",
-	            pointColor: "#fff",
-	            pointStrokeColor: "#FF8300",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "#FF8300"
-        	}
-        	],
-	    options: {
-	    	responsive: true,
-            bezierCurve : false,
-            datasetStroke: false,
-            legendTemplate: false,
-            pointDotRadius : 9,
-            pointDotStrokeWidth : 3,
-            datasetStrokeWidth : 3
-	    },
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
+      })
+    }, function() {
+    });
+  }
 
+<<<<<<< HEAD
 	};
 	$scope.load = function() {
 		$timeout(function () {
@@ -3256,19 +3260,12 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 						onClick: function (points, evt) {
 						console.log(points, evt);
 						}
+=======
+  $scope.load();
+});
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-					};
-				}, 0);
-			});
-		}, 0);
-	}
-	$scope.reloadGraph = function() {
-		console.log("reloadGraph called..");
-		$scope.load();
-	}
-	$scope.load();
 
-}]);
 'use strict';
 
 /**
@@ -3278,6 +3275,7 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("IP Whitelist");
       $scope.settings = {
@@ -3315,9 +3313,90 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
         $mdDialog.hide(); 
       }
     }
+=======
+angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
+	  SharedPref.updateTitle("Edit Number");
+  $scope.flows = [];
+  $scope.didActions = [
+    {
+      name: 'Accept Call',
+      value: 'accept-call'
+    },
+    {
+      name: 'Accept Fax',
+      value: 'accept-fax'
+    },
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-  $scope.ips = [];
+  ]
+  $scope.number = null;
+  $scope.saveNumber = function(number) {
+    var params = {};
+    params['name'] = $scope.number.name;
+    params['flow_id'] = $scope.number.flow_id;
+    params['did_action'] = $scope.number.did_action;
+    params['tags'] = $scope.number.tags;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('my-numbers', {});
+      SharedPref.endIsCreateLoading();
+    });
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.changeDIDAction = function(action) {
+    $scope.number.did_action = action;
+    console.log("changeDIDAction", action);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  SharedPref.isLoading = true;
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
+    SharedPref.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
+    SharedPref.updateTitle("Ported Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
   $scope.load = function() {
+<<<<<<< HEAD
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
@@ -3333,51 +3412,58 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
           reject();
         });
       });
+=======
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/port/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      SharedPref.endIsLoading();
+      resolve();
+    }, reject);
+  });
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
   }
-  $scope.createIp = function($event) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/add-ip-whitelist.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onCreated: function() {
-          $scope.load();
-        }
-
-      }
-    })
-    .then(function() {
-    }, function() {
-    });
+  $scope.portNumber = function() {
+    $state.go('port-create', {});
   }
-  $scope.deleteIp = function($event, number) {
+  $scope.editNumber = function(number) {
+    $state.go('port-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this IP address?')
-          .textContent('This will permantely remove the IP from your whitelist')
-          .ariaLabel('Delete IP')
+          .title('Are you sure you want to delete this number?')
+          .textContent('If you delete this number you will not be able to call it anymore')
+          .ariaLabel('Delete number')
           .targetEvent($event)
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
+<<<<<<< HEAD
         $shared.isLoading = true;
       Backend.delete("/settings/ipWhitelist/" + number.public_id).then(function() {
+=======
+      SharedPref.isLoading = true;
+      Backend.delete("/port/deleteNumber/" + number.id).then(function() {
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
           $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('IP deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
           });
 
       })
     }, function() {
     });
   }
+<<<<<<< HEAD
   $scope.enableWhitelist = function($event, value) {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
@@ -3387,13 +3473,8 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
           resolve();
         }, function() {
           reject();
-        });
-      });
-  }
-  $scope.changeDisableState = function($event, value) {
-    console.log("changeDisableState ", value);
-    $scope.enableWhitelist($event, true);
-  }
+=======
+
   $scope.load();
 });
 
@@ -3407,6 +3488,72 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
+	  SharedPref.updateTitle("Recordings");
+  $scope.settings = {
+    page: 0
+  };
+  $scope.pagination = pagination;
+  $scope.recordings = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      SharedPref.isLoading = true;
+      pagination.resetSearch();
+        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          return obj;
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+        });
+        SharedPref.endIsLoading();
+        resolve();
+      }, reject)
+    });
+  }
+  $scope.deleteRecording = function($event, recording) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this recording?')
+          .textContent('This will permantely remove the recordings from your storage')
+          .ariaLabel('Delete recording')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      SharedPref.isLoading = true;
+      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+        console.log("deleted recording..");
+        $scope.load().then(function() {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('recording deleted..')
+              .position('top right')
+              .hideDelay(3000)
+          );
+        })
+      });
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+<<<<<<< HEAD
 angular.module('MaterialApp')
   .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
 	  $shared.updateTitle("Login");
@@ -3491,50 +3638,49 @@ var clickedGoogSignIn = false;
 			$timeout(function() {
 				$scope.$apply();
 				$shared.scrollToTop();
+=======
+angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Verified Caller IDs");
+    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
+      $scope.SharedPref = SharedPref;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.$mdDialog = $mdDialog;
+      $scope.data = {
+        step1: {
+          number: ""
+        }, 
+        step2:{
+          code: ""
+        }
 
-				if ( res.data.confirmed ) {
-					finishLogin(res.data.info, res.data.info.workspace);
-					return;
-				}
-				$state.go('register', {
-					"hasData": true,
-					"userId": res.data.userId,
-					"authData": {"token": res.data.info.token}
-				});
-			}, 0);
-		});
-	}
-	function renderButton() {
-      gapi.signin2.render('gSignIn', {
-        'scope': 'profile email',
-        'width': 400,
-        'height': 50,
-        'longtitle': true,
-        'theme': 'dark',
-		'onsuccess': function(googleUser) {
-				if (!clickedGoogSignIn) {
-					return;
-				}
-				var profile = googleUser.getBasicProfile();
-				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-				console.log('Name: ' + profile.getName());
-				console.log('Image URL: ' + profile.getImageUrl());
-				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-				var ctrl= angular.element("body").scope();
-				var fullName = profile.getName().split(' '),
-    				firstName = fullName[0],
-    				lastName = fullName[fullName.length - 1];
-				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
-			},
-			onerror: function(err) {
-			console.log('Google signIn2.render button err: ' + err)
-			},
-        'onfailure': function() {
-			console.error("failure ", arguments);
-		}
-	  });
-    }
+      };
+      $scope.step = 1;
+      $scope.postStep1 = function() {
+        var data = angular.copy($scope.data.step1);
+        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
+          $scope.step = 2;           
+        });
+      }
+      $scope.postStep2 = function() {
+        var data = {
+         'code': $scope.data.step2['code'],
+         'number': $scope.data.step1['number']
+        };
+        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
+          var data = res.data;
 
+          if (data.success) {
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number verified')
+            .position("top right")
+            .hideDelay(3000)
+        );
+
+<<<<<<< HEAD
 	$scope.backStep1 = function() {
 		$scope.step = 1;
 	}
@@ -3550,12 +3696,25 @@ var clickedGoogSignIn = false;
 	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
 		$scope.challenge = sub;
 	}
+=======
+            $scope.close();
+            onCreated();
+          } else {
+            $scope.error = true;
+            $scope.errorText = "The code was invalid please try again.";
+          }
+        });
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-	renderButton();
-  });
+      }
 
-'use strict';
+      $scope.close = function() {
+        console.log("closing dialog..");
+        $mdDialog.hide(); 
+      }
+    }
 
+<<<<<<< HEAD
 /**
  * @ngdoc function
  * @name MaterialApp.controller:MainCtrl
@@ -3573,114 +3732,59 @@ angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope
       $shared.isLoading =false;
       var log = res.data;
       $scope.log = log;
-    })
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.open = function (size) {
-
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-});
-
-angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
-    $shared.updateTitle("My Numbers");
-    $scope.pagination = pagination;
+=======
   $scope.numbers = [];
   $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/did/listNumbers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'numbers' );
-      pagination.loadData().then(function(res) {
-      $scope.numbers = res.data.data;
-      $shared.endIsLoading();
-      resolve();
-    }, reject);
-  });
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/settings/verifiedCallerids").then(function(res) {
+          $scope.numbers = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
   }
-  $scope.buyNumber = function() {
-    $state.go('buy-numbers', {});
-  }
-  $scope.editNumber = function(number) {
+  $scope.createNumber = function($event) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/add-callerid.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        }
 
-    $state.go('my-numbers-edit', {numberId: number.public_id});
+      }
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+    })
+    .then(function() {
+    }, function() {
+    });
   }
   $scope.deleteNumber = function($event, number) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete this number?')
-          .textContent('If you delete this number you will not be able to call it anymore')
-          .ariaLabel('Delete number')
+          .textContent('This will permantely remove the caller ID')
+          .ariaLabel('Delete extension')
           .targetEvent($event)
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+        SharedPref.isLoading = true;
+      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
           $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
           });
 
       })
@@ -3701,6 +3805,273 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
+	  SharedPref.updateTitle("Verified Caller IDs");
+   $scope.values = {
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
+      values['secret'] = $scope.values.secret;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/extension/saveExtension", values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+<<<<<<< HEAD
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("My Numbers");
+    $scope.pagination = pagination;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+=======
+angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q) {
+      SharedPref.updateTitle("Workspace API Settings");
+      $scope.settings = {};
+      $scope.load = function () {
+        SharedPref.isLoading = true;
+        return $q(function (resolve, reject) {
+          Backend.get("/getWorkspaceTokens").then(function (res) {
+            $scope.settings = res.data;
+            SharedPref.endIsLoading();
+            resolve();
+          }, function () {
+            reject();
+          });
+        });
+      }
+      $scope.refreshTokens = function ($event) {
+        var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to refresh API tokens?')
+          .textContent('if you are using these API tokens in any code the code will stop working and you will need to replace the API tokens with the new ones you create')
+          .ariaLabel('Refresh tokens')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+        $mdDialog.show(confirm).then(function () {
+            SharedPref.isLoading = true;
+            Backend.get("/refreshWorkspaceTokens").then(function (res) {
+              $scope.load().then(function () {
+                $mdToast.show(
+                  $mdToast.simple()
+                  .textContent('API tokens recreated')
+                  .position("top right")
+                  .hideDelay(3000)
+                );
+              });
+            });
+          });
+        }
+        $scope.promptCopied = function () {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Copied to clipboard!')
+            .position("top right")
+            .hideDelay(3000)
+          );
+
+        }
+        $scope.load();
+      });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Workspace Params");
+  $scope.params = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/workspaceParam/listParams").then(function(res) {
+          $scope.params = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+  }
+  $scope.saveParams = function() {
+      var data = angular.copy($scope.params);
+      Backend.post("/workspaceParam/saveParams", data).then(function() {
+          $mdToast.show(
+          $mdToast.simple()
+            .textContent('Workspace params saved successfully..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+  }
+  $scope.addParam = function() {
+    $scope.params.push({
+      "key": "",
+      "value": ""
+    });
+  }
+  $scope.deleteParam = function(index, param) {
+    $scope.params.splice(index, 1);
+  }
+
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
+    SharedPref.updateTitle("Workspace Users");
+  $scope.users = [];
+  $scope.load = function() {
+      SharedPref.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/workspaceUser/listUsers").then(function(res) {
+          $scope.users = res.data;
+          SharedPref.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.deleteUser = function($event, user) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to remove this user from your workspace ?')
+          .textContent('This will permantely remove the user from your workspace')
+          .ariaLabel('Delete user')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+<<<<<<< HEAD
+      $shared.isLoading = true;
+      Backend.delete("/did/deleteNumber/" + number.id).then(function() {
+=======
+        SharedPref.isLoading = true;
+      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('User deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.editUser = function($event, user) {
+    console.log("edit usr ", user);
+    SharedPref.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
+  }
+  $scope.createUser = function() {
+
+    SharedPref.changeRoute('settings-workspace-users-create', {});
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
 	  $shared.updateTitle("Edit Number");
   $scope.flows = [];
@@ -3735,12 +4106,49 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
       $shared.isCreateLoading = true;
     Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
         console.log("updated number..");
+=======
+angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
+    SharedPref.updateTitle("Create Extension");
+    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: SharedPref.makeDefaultWorkspaceRoles()
+  };
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        user: angular.copy($scope.values.user),
+        roles: angular.copy($scope.values.roles)
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/workspaceUser/addUser", values).then(function() {
+       console.log("added user..");
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Number updated..')
-            .position(toastPosStr)
+            .textContent('Added user to workspace')
+            .position("top right")
             .hideDelay(3000)
         );
+<<<<<<< HEAD
         $state.go('my-numbers', {});
       $shared.endIsCreateLoading();
     });
@@ -3765,6 +4173,16 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
     $scope.number = res[1].data;
     $shared.endIsLoading();
   });
+=======
+        $state.go('settings-workspace-users', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 });
 
 
@@ -3777,21 +4195,85 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope, $log) {
-  $scope.totalItems = 64;
-  $scope.currentPage = 4;
+angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, SharedPref ) {
+    SharedPref.updateTitle("Workspace User Edit");
+    var roles = SharedPref.makeDefaultWorkspaceRoles();
+    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
 
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: SharedPref.makeDefaultWorkspaceRoles()
   };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        user: angular.copy($scope.values.user),
+        roles: angular.copy($scope.values.roles)
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      SharedPref.isCreateLoading = true;
+      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
+       console.log("added user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Added user to workspace')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        SharedPref.endIsCreateLoading();
+      });
+    }
+  }
+  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
+      var user = res.data;
+      $scope.values.user['email'] = user.email;
+      $scope.values.user['first_name'] = user.first_name;
+      $scope.values.user['last_name'] = user.last_name;
+      for (var key in roles) {
+        console.log("checking for role ", key);
+        $scope.values.roles[ key ] = user[ key ];
+      }
+      console.log("$scope.values are ", $scope.values);
+    });
+  $timeout(function() {
+    SharedPref.endIsLoading();
+  }, 0);
+});
 
-  $scope.pageChanged = function() {
-    $log.log('Page changed to: ' + $scope.currentPage);
-  };
 
-  $scope.maxSize = 5;
-  $scope.bigTotalItems = 175;
-  $scope.bigCurrentPage = 1;
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BodyCtrl', function ($scope, SharedPref) {
+  $scope.SharedPref = SharedPref;
 });
 'use strict';
 
@@ -3802,66 +4284,16 @@ angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope,
  * # HomeCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
-	$scope.status = '  ';
-
-	$scope.showAdvanced = function(ev) {
-	    $mdDialog.show({
-	    	controller: DialogController,
-	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
-	      	parent: angular.element(document.body),
-	      	targetEvent: ev,
-	      	clickOutsideToClose:true
-	    });
+angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+	$scope.options1 = {
+	    lineWidth: 12,
+	    scaleColor: false,
+	    size: 120,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
 	};
-	function DialogController($scope, $mdDialog) {
-		$scope.hide = function() {
-			$mdDialog.hide();
-		};
-		$scope.cancel = function() {
-			$mdDialog.cancel();
-		};
-	}
 	
-	$scope.cards = [
-		{
-			name: 'Gary Neville',
-			subject: 'Once a scouse, always a scouse.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Antony Martial',
-			subject: 'Meet up in LA.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Danny Ings',
-			subject: 'Request for loan.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Roberto Firmoni',
-			subject: 'No match time!',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Lewandowski',
-			subject: 'Watch that?',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Pep Guardiola',
-			subject: 'When is BR Leaving?',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		}
-	];
-
 
 }]);
 'use strict';
@@ -3873,47 +4305,52 @@ angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$m
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($scope) {
-   
-    $scope.options1 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#F0AD4E',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
+angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+    $scope.line = {
+	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	          data: [
+	      [65, 59, 80, 81, 56, 55, 40],
+	      [28, 48, 40, 19, 86, 27, 90]
+	    ],
+	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
 
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
     };
-    $scope.options2 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#3CA2E0',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
 
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
+    $scope.bar = {
+	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+		data: [
+		   [65, 59, 80, 81, 56, 55, 40],
+		   [28, 48, 40, 19, 86, 27, 90]
+		],
+		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
+    	
     };
-    $scope.options3 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#D9534F',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
 
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
+    $scope.donut = {
+    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data: [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
     };
+
+     $scope.pie = {
+    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data : [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+
+    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
+                       {"x":20,"top-1":100,"top-2":35},
+                       {"x":30,"top-1":15,"top-2":75},
+                       {"x":40,"top-1":50,"top-2":45}];
+    $scope.datacolumns=[{"id":"top-1","type":"spline"},
+                        {"id":"top-2","type":"spline"}];
+    $scope.datax={"id":"x"};
+
+    
 }]);
 'use strict';
 
@@ -3924,6 +4361,7 @@ angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($s
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("Ported Numbers");
     $scope.pagination = pagination;
@@ -3971,13 +4409,12 @@ angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Ba
 
       })
     }, function() {
+=======
+angular
+    .module('MaterialApp')
+    .controller('calendarCtrl', function ($scope) {
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
     });
-  }
-
-  $scope.load();
-});
-
-
 'use strict';
 
 /**
@@ -3987,68 +4424,124 @@ angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of MaterialApp
  */
- angular.module('MaterialApp').controller('profileCtrl', function ($scope) {
-    $scope.products = [
- 	{url:'images/portrait1.jpg'}, 
- 	{url:'images/portrait2.jpg'},         
- 	{url:'images/portrait3.jpg'},         
- 	{url: 'images/portrait4.jpg'},
- 	{url: 'images/portrait5.jpg'},
- 	{url: 'images/portrait7.jpg'},
- 	{url: 'images/portrait8.jpg'},
- 	{url: 'images/portrait9.jpg'}
- 	];
-   
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
-  $scope.max = 200;
-
-  $scope.random = function() {
-    var value = Math.floor((Math.random() * 100) + 1);
-    var type;
-
-    if (value < 25) {
-      type = 'success';
-    } else if (value < 50) {
-      type = 'info';
-    } else if (value < 75) {
-      type = 'warning';
-    } else {
-      type = 'danger';
+ angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+    $scope.rating1 = 3;
+    $scope.rating2 = 2;
+    $scope.rating3 = 4;  
+    var self = this,  j= 0, counter = 0;
+    self.modes = [ ];
+    self.activated = true;
+    self.determinateValue = 30;
+    /**
+    * Turn off or on the 5 themed loaders
+    */
+    self.toggleActivation = function() {
+        if ( !self.activated ) self.modes = [ ];
+        if (  self.activated ) j = counter = 0;
+    };
+    // Iterate every 100ms, non-stop
+    $interval(function() {
+    // Increment the Determinate loader
+        self.determinateValue += 1;
+        if (self.determinateValue > 100) {
+            self.determinateValue = 30;
+        }
+        // Incrementally start animation the five (5) Indeterminate,
+        // themed progress circular bars
+        if ( (j < 5) && !self.modes[j] && self.activated ) {
+            self.modes[j] = 'indeterminate';
+        }
+        if ( counter++ % 4 == 0 ) j++;
+    }, 100, 0, true);
+    var last = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    $scope.demo = {};
+    $scope.toastPosition = angular.extend({},last);
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+        last = angular.extend({},current);
     }
-
-    $scope.showWarning = (type === 'danger' || type === 'warning');
-
-    $scope.dynamic = value;
-    $scope.type = type;
-  };
-  $scope.random();
-
-  $scope.randomStacked = function() {
-    $scope.stacked = [];
-    var types = ['success', 'info', 'warning', 'danger'];
-
-    for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
-        var index = Math.floor((Math.random() * 4));
-        $scope.stacked.push({
-          value: Math.floor((Math.random() * 30) + 1),
-          type: types[index]
+    $scope.showCustomToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showSimpleToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showActionToast = function() {
+        var toast = $mdToast.simple()
+        .content('Action Toast!')
+        .action('OK')
+        .highlightAction(false)
+        .position($scope.getToastPosition());
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                alert('You clicked \'OK\'.');
+            }
         });
-    }
-  };
-  $scope.randomStacked();
+    };
+})
+.controller('ToastCtrl', function($scope, $mdToast) {
+    $scope.closeToast = function() {
+        $mdToast.hide();
+    };
+
 });
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, SharedPref) {
+	$scope.SharedPref = SharedPref;
+  	if ($(window).width()<1450) {
+        $( '.c-hamburger' ).removeClass('is-active');
+        $('body').removeClass('extended');
+    }
+
+  	$scope.$state = $state;
+
+  	$rootScope.$on('$stateChangeSuccess', function(){ 
+		$timeout(function() {
+			$('body').scrollTop(0);
+		}, 200);
+	});
+
+  	if ($('body').hasClass('extended')) {
+	  	$timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+		}, 200);		
+  	};
+
+<<<<<<< HEAD
 /**
  * @ngdoc function
  * @name MaterialApp.controller:MainCtrl
@@ -4106,10 +4599,74 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
     }, function() {
     });
   }
+=======
+  	$scope.rtl = function(){
+  		$('body').toggleClass('rtl');
+  	}
+  	$scope.subnav = function(x){
+		if(x==$scope.showingSubNav)
+			$scope.showingSubNav = 0;			
+		else
+			$scope.showingSubNav = x;
+		return false;
+	}
+	$scope.extend = function  () {
+		$( '.c-hamburger' ).toggleClass('is-active');
+        $('body').toggleClass('extended');
+        $('.sidebar').toggleClass('ps-container');	
+        $rootScope.$broadcast('resize');
+        $timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+			console.log('pfscroll');
+		}, 200);	
+	}	
+	
+	
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-  $scope.load();
-});
+	$scope.changeTheme = function(setTheme){
 
+		$('<link>')
+		  .appendTo('head')
+		  .attr({type : 'text/css', rel : 'stylesheet'})
+		  .attr('href', 'styles/app-'+setTheme+'.css');
+	}
+	
+	var w = angular.element($window);
+  
+	w.bind('resize', function () {
+		/*
+	    if ($(window).width()<1200) {
+            $('.c-hamburger').removeClass('is-active');
+            $('body').removeClass('extended');
+        } 
+        if ($(window).width()>1600) {
+            $('.c-hamburger').addClass('is-active');
+            //$('body').addClass('extended');          
+		};
+		*/
+	});   
+
+	if ($(window).width()<1200) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.c-hamburger' ).removeClass('is-active');
+        	$('body').removeClass('extended');
+		});
+	}
+
+	if ($(window).width()<600) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.mdl-grid' ).removeAttr('dragula');
+		});
+	}
+	
+	$scope.changeLanguage = (function (l) {
+		
+		$translate.use(l);			
+		
+	});
+	loadAddedResources1();	
+});	
 
 'use strict';
 
@@ -4121,6 +4678,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
+<<<<<<< HEAD
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams) {
 	  $shared.updateTitle("Register");
 
@@ -4137,20 +4695,16 @@ angular.module('MaterialApp')
 	  $scope.token = null;
 	  $scope.invalidCode =false; 
 	  $scope.invalidNumber =false; 
+=======
+  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+	  SharedPref.updateTitle("Forgot Password");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 	$scope.user = {
-		first_name: "",
-		last_name: "",
 		email: "",
-		password: "",
-		password2: ""
 	};
-	$scope.verify1 = {
-		country: "US",
-		mobile_number: ""
-	};
-	$scope.verify2 = {
-		confirmation_code: ""
-	};
+<<<<<<< HEAD
   $scope.workspace = "";
   $scope.selectedTemplate = null;
 
@@ -4183,17 +4737,13 @@ angular.module('MaterialApp')
   }
     $scope.submit = function($event, registerForm) {
 		console.log("called submit");
+=======
+    $scope.submit = function($event, forgotForm) {
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 		$scope.triedSubmit = true;
-		console.log("data is ", $scope.user);
-		console.log("form ", registerForm);
-		if ($scope.user.password !== $scope.user.password2) {
-			$scope.passwordsDontMatch = true;
-			return;
-		} else {
-			$scope.passwordsDontMatch = false;
-		}
-		if (registerForm.$valid) {
+		if (forgotForm.$valid) {
 			var data = angular.copy( $scope.user );
+<<<<<<< HEAD
 				$shared.changingPage = true;
 			Backend.post("/register", data).then(function( res ) {
 				var data = res.data;
@@ -4206,11 +4756,25 @@ angular.module('MaterialApp')
 				$shared.changingPage = false;
 				$scope.step = 2;
 			});
+=======
+			$scope.isLoading = true;
+			Backend.post("/forgot", data).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Reset instructions sent to email..')
+						.position("top right")
+						.hideDelay(3000)
+					);
+			}).catch(function() {
+				$scope.isLoading = false;
+			})
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 			return;
 		}
-      	return false;
-
 	}
+<<<<<<< HEAD
 
 	$scope.submitVerify1Form = function($event, verify1Form) {
 		console.log("called submitVerify1Form");
@@ -4361,6 +4925,14 @@ angular.module('MaterialApp')
 			$scope.step = 2;
 		}
 	});
+=======
+	$scope.gotoLogin= function() {
+		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
+    	$state.go('login');
+	}
+	SharedPref.changingPage = false;
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
   });
 
 'use strict';
@@ -4372,6 +4944,7 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp')
   .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
 	  $shared.updateTitle("Reset");
@@ -4428,15 +5001,21 @@ angular.module('MaterialApp')
     }
   });
 
+=======
+angular.module('MaterialApp').controller('HeadCtrl', function ($scope, SharedPref) {
+  $scope.SharedPref = SharedPref;
+});
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 'use strict';
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name MaterialApp.controller:HomeCtrl
  * @description
- * # MainCtrl
+ * # HomeCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Settings");
@@ -4548,20 +5127,162 @@ angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $locati
 	$scope.collapseVar = 0;
 
 	$scope.check = function(x){
-
-		if(x==$scope.collapseVar)
-			$scope.collapseVar = 0;
-		else
-			$scope.collapseVar = x;
+=======
+angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
+	  SharedPref.updateTitle("Dashboard");
+	$scope.options1 = {
+	    lineWidth: 8,
+	    scaleColor: false,
+	    size: 85,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
 	};
-	$scope.multiCheck = function(y){
-
-		if(y==$scope.multiCollapseVar)
-			$scope.multiCollapseVar = 0;
-		else
-			$scope.multiCollapseVar = y;
+	$scope.options2 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#00D554",
+        trackColor: "#c7f9db"
 	};
-});
+	$scope.options3 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#F800FC",
+        trackColor: "#F5E5F5"
+	};
+
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	$scope.series = ['Series A', 'Series B'];
+	$scope.data = [
+		[65, 59, 80, 81, 56, 55, 40],
+		[28, 48, 40, 19, 86, 27, 90]
+	];
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+
+	$scope.onClick = function (points, evt) {
+		console.log(points, evt);
+	};
+	if ($(window).width()<600) {		
+		$( '.mdl-grid' ).removeAttr('dragula');
+	};
+    $scope.line2 = {
+	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
+	          data: [
+	      			[99, 180, 80, 140, 120, 220, 100],
+	      			[50, 145, 200, 75, 50, 100, 50]
+		],
+	    colours: [{ 
+				fillColor: "#2b36ff",
+	            strokeColor: "#C172FF",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#8F00FF",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#8F00FF"
+        	},
+        	{
+        		fillColor: "#ffa01c",
+	            strokeColor: "#FFB53A",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#FF8300",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#FF8300"
+        	}
+        	],
+	    options: {
+	    	responsive: true,
+            bezierCurve : false,
+            datasetStroke: false,
+            legendTemplate: false,
+            pointDotRadius : 9,
+            pointDotStrokeWidth : 3,
+            datasetStrokeWidth : 3
+	    },
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+	};
+	$scope.load = function() {
+		$timeout(function () {
+			var color = Chart.helpers.color;
+			SharedPref.isLoading = true;
+			Backend.get("/dashboard").then(function(res) {
+				var graph = res.data[0];
+				SharedPref.billInfo=  res.data[1];
+				SharedPref.userInfo=  res.data[2];
+				console.log("graph data is ", graph);
+				SharedPref.isLoading = false;
+				$timeout(function(){
+					$scope.line = {
+						legend: true,
+						labels: graph.labels,
+							data: [
+						graph.data.inbound,
+						graph.data.outbound
+						//[7, 20, 10, 15, 17, 10, 27],
+						//[6, 9, 22, 11, 13, 20, 27]
+						],
+						series: [
+					'Inbound',
+					'Outbound'
+				],
+						colours: [{ 
+								fillColor: "#3f51b5",
+								strokeColor: "#3f51b5",
+								pointColor: "#3f51b5",
+								pointStrokeColor: "#3f51b5",
+								pointHighlightFill: "#3f51b5",
+								pointHighlightStroke: "#3f51b5"
+							},
+							{
+								fillColor: "#3D3D3D",
+								strokeColor: "#3D3D3D",
+								pointColor: "#3D3D3D",
+								pointStrokeColor: "#3D3D3D",
+								pointHighlightFill: "#3D3D3D",
+								pointHighlightStroke: "#3D3D3D"
+							}
+							],
+		options: {
+				legend: {
+			display: true,
+			position: 'right'
+			},
+							responsive: true,
+								bezierCurve : false,
+								datasetStroke: false,
+								/*
+								legendTemplate: '<ul>'
+						+'<% for (var i=0; i<datasets.length; i++) { %>'
+							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+						+'</li>'
+						+'<% } %>'
+					+'</ul>',
+					*/
+								pointDotRadius : 6,
+								showTooltips: false,
+						},
+						onClick: function (points, evt) {
+						console.log(points, evt);
+						}
+
+					};
+				}, 0);
+			});
+		}, 0);
+	}
+	$scope.reloadGraph = function() {
+		console.log("reloadGraph called..");
+		$scope.load();
+	}
+	$scope.load();
+
+}]);
 'use strict';
 
 /**
@@ -4571,56 +5292,200 @@ angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $locati
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('TabsDemoCtrl', function ($scope, $window) {
-  $scope.tabs = [
-    { title:'Dynamic Title 1', content:'Dynamic content 1' },
-    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
-  ];
+angular.module('MaterialApp')
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
+	  SharedPref.updateTitle("Login");
+	  SharedPref.processResult();
+	$scope.triedSubmit = false;
+	$scope.couldNotLogin = false;
+	$scope.noUserFound = false;
+	$scope.shouldSplash = false;
+	$scope.isLoading = false;
+	$scope.challenge = null;
+	$scope.user = {
+		email: "",
+		password: ""
+	};
+	$scope.step = 1;
+var clickedGoogSignIn = false;
 
-  $scope.alertMe = function() {
-    setTimeout(function() {
-      $window.alert('You\'ve selected the alert tab!');
+	function finishLogin(token, workspace) {
+		console.log("finishLogin ", arguments);
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				SharedPref.setAuthToken(token);
+				SharedPref.setWorkspace(workspace);
+				Idle.watch();
+		        $state.go('dashboard-user-welcome', {});
+	}
+    $scope.submit1 = function($event, loginForm) {
+		$scope.step = 2;
+	}
+    $scope.submit1 = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (loginForm.$valid) {
+			SharedPref.changingPage = true;
+			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
+				SharedPref.changingPage = false;
+				if ( res.data.found ) {
+					$scope.userInfo = res.data.info;
+					$scope.step = 2;
+					return;
+				}
+				$scope.noUserFound = true;
+			});
+		}
+	}
+
+    $scope.submit = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (loginForm.$valid) {
+			var data = angular.copy( $scope.user );
+			data['challenge'] = $scope.challenge;
+			$scope.isLoading = true;
+			Backend.post("/jwt/authenticate", data).then(function( res ) {
+				var token = res.data;
+				finishLogin(token, res.data.workspace);
+			}).catch(function() {
+				$scope.isLoading = false;
+				$scope.couldNotLogin = true;
+			})
+			return;
+		}
+    }
+	$scope.gotoRegister = function() {
+		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
+    	$state.go('register');
+	}
+	$scope.gotoForgot = function() {
+		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
+		$state.go('forgot');
+	}
+
+	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar) {
+		var data = {};
+		data['email'] = email;
+		data['first_name'] = firstname;
+		data['last_name'] = lastname;
+		data['avatar'] = avatar;
+		data['challenge'] = $scope.challenge;
+			SharedPref.changingPage = true;
+		Backend.post("/thirdPartyLogin", data).then(function( res ) {
+			$timeout(function() {
+				$scope.$apply();
+				SharedPref.scrollToTop();
+
+				if ( res.data.confirmed ) {
+					finishLogin(res.data.info, res.data.info.workspace);
+					return;
+				}
+				$state.go('register', {
+					"hasData": true,
+					"userId": res.data.userId,
+					"authData": {"token": res.data.info.token}
+				});
+			}, 0);
+		});
+	}
+	function renderButton() {
+      gapi.signin2.render('gSignIn', {
+        'scope': 'profile email',
+        'width': 400,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+		'onsuccess': function(googleUser) {
+				if (!clickedGoogSignIn) {
+					return;
+				}
+				var profile = googleUser.getBasicProfile();
+				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				console.log('Name: ' + profile.getName());
+				console.log('Image URL: ' + profile.getImageUrl());
+				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+				var ctrl= angular.element("body").scope();
+				var fullName = profile.getName().split(' '),
+    				firstName = fullName[0],
+    				lastName = fullName[fullName.length - 1];
+				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
+			},
+			onerror: function(err) {
+			console.log('Google signIn2.render button err: ' + err)
+			},
+        'onfailure': function() {
+			console.error("failure ", arguments);
+		}
+	  });
+    }
+
+	$scope.backStep1 = function() {
+		$scope.step = 1;
+	}
+	SharedPref.changingPage = false;
+	angular.element("#gSignIn").on("click", function() {
+		clickedGoogSignIn = true;
+	});
+	var full = window.location.host
+	//window.location.host is subdomain.domain.com
+	var parts = full.split('.')
+	var sub = parts[0]
+	var second = sub.split(":");
+	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
+		$scope.challenge = sub;
+	}
+
+	renderButton();
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
     });
   };
 });
-'use strict';
 
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope, $log) {
-  $scope.mytime = new Date();
+angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 
-  $scope.hstep = 1;
-  $scope.mstep = 15;
-
-  $scope.options = {
-    hstep: [1, 2, 3],
-    mstep: [1, 5, 10, 15, 25, 30]
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
   };
 
-  $scope.ismeridian = true;
-  $scope.toggleMode = function() {
-    $scope.ismeridian = ! $scope.ismeridian;
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
   };
 
-  $scope.update = function() {
-    var d = new Date();
-    d.setHours( 14 );
-    d.setMinutes( 0 );
-    $scope.mytime = d;
-  };
-
-  $scope.changed = function () {
-    $log.log('Time changed to: ' + $scope.mytime);
-  };
-
-  $scope.clear = function() {
-    $scope.mytime = null;
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
   };
 });
 'use strict';
@@ -4632,51 +5497,32 @@ angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope,
  * # MainCtrl
  * Controller of MaterialApp
  */
- angular.module('MaterialApp').controller('todoCtrl', function ($scope) {
- 	$scope.todos = [
- 	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
- 	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         
- 	{text:'Avengers Age of Ultron.', done:false, id: 'option4'},         
- 	{text: 'Henna birthday at Mezbaan.', done:false, id: 'option5'}
- 	];
- 	function makeid()
- 	{
- 		var text = "";
- 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope, $log) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
 
- 		for( var i=0; i < 5; i++ )
- 			text += possible.charAt(Math.floor(Math.random() * possible.length));
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
 
- 		return text;
- 	}
- 	$scope.addTodo = function () {
- 		$scope.todos.push({text:$scope.formTodoText, done:false, id:makeid()});
- 		$scope.formTodoText = '';
- 	};
- });
-'use strict';
+  $scope.pageChanged = function() {
+    $log.log('Page changed to: ' + $scope.currentPage);
+  };
 
-/**
- * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of MaterialApp
- */
-angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
-  $scope.dynamicTooltip = 'Hello, World!';
-  $scope.dynamicTooltipText = 'dynamic';
-  $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
 });
 'use strict';
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name MaterialApp.controller:HomeCtrl
  * @description
- * # MainCtrl
+ * # HomeCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Verified Caller IDs");
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
@@ -4785,16 +5631,70 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
             .hideDelay(3000)
         );
           });
+=======
+angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
+	$scope.status = '  ';
 
-      })
-    }, function() {
-    });
-  }
+	$scope.showAdvanced = function(ev) {
+	    $mdDialog.show({
+	    	controller: DialogController,
+	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
+	      	parent: angular.element(document.body),
+	      	targetEvent: ev,
+	      	clickOutsideToClose:true
+	    });
+	};
+	function DialogController($scope, $mdDialog) {
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+	}
+	
+	$scope.cards = [
+		{
+			name: 'Gary Neville',
+			subject: 'Once a scouse, always a scouse.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Antony Martial',
+			subject: 'Meet up in LA.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Danny Ings',
+			subject: 'Request for loan.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Roberto Firmoni',
+			subject: 'No match time!',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Lewandowski',
+			subject: 'Watch that?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Pep Guardiola',
+			subject: 'When is BR Leaving?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		}
+	];
 
-  $scope.load();
-});
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-
+}]);
 'use strict';
 
 /**
@@ -4804,25 +5704,195 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($scope) {
+   
+    $scope.options1 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#F0AD4E',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options2 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#3CA2E0',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options3 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#D9534F',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
 	  $shared.updateTitle("Verified Caller IDs");
    $scope.values = {
     secret: ""
+=======
+ angular.module('MaterialApp').controller('profileCtrl', function ($scope) {
+    $scope.products = [
+ 	{url:'images/portrait1.jpg'}, 
+ 	{url:'images/portrait2.jpg'},         
+ 	{url:'images/portrait3.jpg'},         
+ 	{url: 'images/portrait4.jpg'},
+ 	{url: 'images/portrait5.jpg'},
+ 	{url: 'images/portrait7.jpg'},
+ 	{url: 'images/portrait8.jpg'},
+ 	{url: 'images/portrait9.jpg'}
+ 	];
+   
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
+  $scope.max = 200;
+
+  $scope.random = function() {
+    var value = Math.floor((Math.random() * 100) + 1);
+    var type;
+
+    if (value < 25) {
+      type = 'success';
+    } else if (value < 50) {
+      type = 'info';
+    } else if (value < 75) {
+      type = 'warning';
+    } else {
+      type = 'danger';
+    }
+
+    $scope.showWarning = (type === 'danger' || type === 'warning');
+
+    $scope.dynamic = value;
+    $scope.type = type;
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
   };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
+  $scope.random();
+
+  $scope.randomStacked = function() {
+    $scope.stacked = [];
+    var types = ['success', 'info', 'warning', 'danger'];
+
+    for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        var index = Math.floor((Math.random() * 4));
+        $scope.stacked.push({
+          value: Math.floor((Math.random() * 30) + 1),
+          type: types[index]
+        });
+    }
+  };
+  $scope.randomStacked();
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle, $stateParams) {
+	  SharedPref.updateTitle("Register");
+
+	  var countryToCode = {
+		  US: "+1",
+		  CA: "+1",
+	  };
+	  $scope.triedSubmit = false;
+	  $scope.passwordsDontMatch = false;
+	  $scope.shouldSplash = false;
+	  $scope.didVerifyCall = false;
+	  $scope.step = 1;
+	  $scope.userId = null;
+	  $scope.token = null;
+	  $scope.invalidCode =false; 
+	  $scope.invalidNumber =false; 
+	$scope.user = {
+		first_name: "",
+		last_name: "",
+		email: "",
+		password: "",
+		password2: ""
+	};
+	$scope.verify1 = {
+		country: "US",
+		mobile_number: ""
+	};
+	$scope.verify2 = {
+		confirmation_code: ""
+	};
+  $scope.workspace = "";
+  $scope.selectedTemplate = null;
+
+  function doSpinup() {
+	$scope.shouldSplash = true;
+	SharedPref.setAuthToken( $scope.token );
+	var data = { "userId": $scope.userId };
+	$scope.invalidCode = false;
+	SharedPref.changingPage = true;
+	Backend.post("/userSpinup", data).then(function( res ) {
+		var data = res.data;
+		if ( data.success ) {
+
+			Idle.watch();
+			SharedPref.setAuthToken($scope.token);
+			SharedPref.setWorkspace(res.data.workspace);
+			SharedPref.changingPage = false;
+			$state.go('dashboard-user-welcome', {});
+
+			return;
+		}
+		$mdToast.show(
+		$mdToast.simple()
+			.textContent('Error occured while creating your account. please account support')
+			.position("top right")
+			.hideDelay(1000*10)
+		);
+	});
+
   }
-  $scope.triedSubmit = false;
-  $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
-  }
-  $scope.showSecret = function() {
-    $scope.ui.showSecret = true;
-  }
-  $scope.hideSecret = function() {
-    $scope.ui.showSecret = false;
-  }
+<<<<<<< HEAD
   $scope.submit = function(form) {
     console.log("submitting extension form ", arguments);
     $scope.triedSubmit = true;
@@ -4845,10 +5915,141 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
       Backend.post("/extension/saveExtension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
+=======
+    $scope.submit = function($event, registerForm) {
+		console.log("called submit");
+		$scope.triedSubmit = true;
+		console.log("data is ", $scope.user);
+		console.log("form ", registerForm);
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (registerForm.$valid) {
+			var data = angular.copy( $scope.user );
+				SharedPref.changingPage = true;
+			Backend.post("/register", data).then(function( res ) {
+				var data = res.data;
+				if ( !data.success ) {
+					SharedPref.showError("Error", data.message);
+					return;
+				}
+				$scope.token = data; 
+				$scope.userId = data.userId;
+				SharedPref.changingPage = false;
+				$scope.step = 2;
+			});
+			return;
+		}
+      	return false;
+
+	}
+
+	$scope.submitVerify1Form = function($event, verify1Form) {
+		console.log("called submitVerify1Form");
+		$scope.triedSubmit = true;
+		if (verify1Form.$valid) {
+			var data = {};
+			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
+			data.userId = $scope.userId;
+				SharedPref.changingPage = true;
+			Backend.post("/registerSendVerify", data).then(function( res ) {
+				var data = res.data;
+					SharedPref.changingPage = false;
+				if (res.data.valid) {
+					$scope.didVerifyCall = true;
+					$scope.invalidNumber = false;
+					return;
+				}
+				$scope.invalidNumber = true;
+				//$scope.showNumberInvalid = true;
+			});
+			return;
+		}
+		return false;
+	}
+
+	$scope.submitVerify2Form = function($event, verify2Form) {
+		console.log("called submitVerify2Form");
+		$scope.triedSubmit = true;
+		if (verify2Form.$valid) {
+			var data = angular.copy( $scope.verify2 );
+			data.userId = $scope.userId;
+				SharedPref.changingPage = true;
+			Backend.post("/registerVerify", data).then(function( res ) {
+				var isValid = res.data.isValid;
+				SharedPref.changingPage = false;
+				if (isValid) {
+					$scope.step = 3;
+				} else {
+					$scope.invalidCode = true;
+				}
+			});
+			return;
+		}
+		return false;
+	}
+
+	$scope.submitWorkspaceForm = function($event, workspaceForm) {
+		console.log("called submitWorkspaceForm");
+		$scope.triedSubmit = true;
+		if (workspaceForm.$valid) {
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.workspace = $scope.workspace;
+				SharedPref.changingPage = true;
+			Backend.post("/updateWorkspace", data).then(function( res ) {
+				SharedPref.changingPage = false;
+				if (res.data.success) {
+					$scope.invalidWorkspaceTaken = false;
+					//doSpinup();
+					$scope.step = 4;
+					return;
+				}
+				$scope.invalidWorkspaceTaken = true;
+			});
+		}
+		return false;
+	}
+
+	$scope.finishSignup = function() {
+		$scope.triedSubmit = true;
+		if (!$scope.selectedTemplate) {
+			      alert = $mdDialog.alert({
+        title: 'Error',
+        textContent: 'Please select a template',
+        ok: 'Close'
+      });
+			return;
+
+		}
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.templateId =  $scope.selectedTemplate.id;
+				SharedPref.changingPage = true;
+			Backend.post("/provisionCallSystem", data).then(function( res ) {
+				SharedPref.changingPage = false;
+				doSpinup();
+				return;
+			});
+		return false;
+	}
+
+	$scope.recall = function() {
+		var data = angular.copy( $scope.verify1 );
+		data.userId = $scope.userId;
+				SharedPref.changingPage = true;
+		Backend.post("/registerSendVerify", data).then(function( res ) {
+				SharedPref.changingPage = false;
+           $mdToast.show(
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
           $mdToast.simple()
-            .textContent('Created extension')
+            .textContent('You will be called shortly.')
             .position("top right")
             .hideDelay(3000)
+<<<<<<< HEAD
         );
         $state.go('extensions', {});
         $shared.endIsCreateLoading();
@@ -4864,7 +6065,57 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
     $shared.endIsLoading();
   }, 0);
 });
+=======
+		);
+		   });
+	}
+    $scope.authenticate = function() {
 
+    	var defer = $q.defer();
+
+    	$timeout(function(){
+
+    		defer.resolve();
+
+    		$timeout(function(){
+    		   	$location.path('/dashboard/home');
+    		}, 600);
+
+    	}, 1100);
+
+    	return defer.promise;
+
+	}
+	    $scope.useTemplate = function (template) {
+      $scope.selectedTemplate = template;
+    };
+    $scope.isSelected = function (template) {
+      if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {
+        return true;
+      }
+      return false;
+    }
+	$scope.gotoLogin= function() {
+		SharedPref.changingPage = true;
+		SharedPref.scrollToTop();
+    	$state.go('login');
+	}
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+
+
+
+	Backend.get("/getCallSystemTemplates").then(function(res) {
+		$scope.templates = res.data;
+		SharedPref.changingPage = false;
+		if ( $stateParams['hasData'] ) {
+			console.log("$stateParams data is ", $stateParams);
+			$scope.token = $stateParams['authData'];
+
+			$scope.userId = $stateParams['userId'];
+			$scope.step = 2;
+		}
+	});
+  });
 
 'use strict';
 
@@ -4875,6 +6126,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
       $shared.updateTitle("Workspace API Settings");
       $scope.settings = {};
@@ -4919,10 +6171,63 @@ angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($
             .position("top right")
             .hideDelay(3000)
           );
+=======
+angular.module('MaterialApp')
+  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
+	  SharedPref.updateTitle("Reset");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+	$scope.couldNotReset = false;
+	$scope.couldNotResetMsg = "";
+	var token = $location.search()['token'];
+	$scope.user = {
+		email: "",
+		password: "",
+		confirmPassword: "",
+		token: token
+	};
+	console.log("reset params are ", $scope.user);
+    $scope.submit = function($event, resetForm) {
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.confirmPassword) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (resetForm.$valid) {
+			var data = {};
+			data.email = $scope.user.email;
+			data.token = $scope.user.token;
+			data.password = $scope.user.password;
+			data.password_confirmation = $scope.user.confirmPassword;
+			$scope.isLoading = true;
+			console.log("requesting reset ", data);
+			$scope.couldNotReset = false;
+			$scope.couldNotResetMsg = "";
+			Backend.post("/reset", data, true).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Password was reset successfully.')
+						.position("top right")
+						.hideDelay(3000)
+					);
+			
+		        $state.go('login', {});
+			}).catch(function(res) {
+				console.log("error reply is ", res);
+				$scope.couldNotReset = true;
+				$scope.couldNotResetMsg = res.data.message;
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
-        }
-        $scope.load();
-      });
+				$scope.isLoading = false;
+			})
+			return;
+		}
+    }
+  });
 
 'use strict';
 
@@ -4933,6 +6238,7 @@ angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace Params");
   $scope.params = [];
@@ -4968,11 +6274,104 @@ angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope,
   $scope.deleteParam = function(index, param) {
     $scope.params.splice(index, 1);
   }
+=======
+angular.module('MaterialApp')
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast) {
+	  SharedPref.updateTitle("Settings");
+	  $scope.triedSubmit = false;
+	$scope.user = {
+		first_name: "",
+		last_name: "",
+		email: "",
+		password: "",
+		password2: ""
+	};
+	$scope.changeCountry = function(country) {
+		console.log("changeCountry ", country);
+	}
+    $scope.submitSettings = function($event, settingsForm) {
+		$scope.triedSubmit = true;
+		if (settingsForm.$valid) {
+			var data = {};
+			data['first_name'] = $scope.user.first_name;
+			data['last_name'] = $scope.user.last_name;
+			data['email'] = $scope.user.email;
+			SharedPref.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					SharedPref.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
+	}
+   $scope.submitPersonal = function($event, personalForm) {
+		$scope.triedSubmit = true;
+		console.log("submitPersonal ", personalForm);
+		if (personalForm.$valid) {
+			var data = {};
+			data['address_line_1'] =$scope.user.address_line_1;
+			data['address_line_2'] =$scope.user.address_line_2;
+			data['postal_code'] =$scope.user.postal_code;
+			data['state'] =$scope.user.state;
+			data['city'] =$scope.user.city;
+			data['country'] =$scope.user.country;
+			SharedPref.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					SharedPref.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
 
-  $scope.load();
-});
+	}
+    $scope.submitPasswords = function($event, passwordsForm) {
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (passwordsForm.$valid) {
+			var data = {};
+			data['password'] = $scope.user.password;
+			SharedPref.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+				var token = res.data;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your passwords')
+						.position("top right")
+						.hideDelay(3000)
+					);
+				SharedPref.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
 
+	}
+	SharedPref.isLoading = true;
+	Backend.get("/self").then(function(res) {
+		$scope.user = res.data;
+		console.log("user is ", $scope.user);
+		SharedPref.endIsLoading();
+	});
+  });
 
 'use strict';
 
@@ -4983,6 +6382,7 @@ angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope,
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace Users");
   $scope.users = [];
@@ -5031,11 +6431,27 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
 
     $shared.changeRoute('settings-workspace-users-create', {});
   }
+=======
+angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $location){
+	$scope.selectedMenu = 'dashboard';
+	$scope.collapseVar = 0;
 
-  $scope.load();
+	$scope.check = function(x){
+
+		if(x==$scope.collapseVar)
+			$scope.collapseVar = 0;
+		else
+			$scope.collapseVar = x;
+	};
+	$scope.multiCheck = function(y){
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+
+		if(y==$scope.multiCollapseVar)
+			$scope.multiCollapseVar = 0;
+		else
+			$scope.multiCollapseVar = y;
+	};
 });
-
-
 'use strict';
 
 /**
@@ -5045,6 +6461,28 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('TabsDemoCtrl', function ($scope, $window) {
+  $scope.tabs = [
+    { title:'Dynamic Title 1', content:'Dynamic content 1' },
+    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      $window.alert('You\'ve selected the alert tab!');
+    });
+  };
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
     $shared.updateTitle("Create Extension");
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
@@ -5094,8 +6532,39 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
     $shared.endIsLoading();
   }, 0);
 });
+=======
+angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope, $log) {
+  $scope.mytime = new Date();
 
+  $scope.hstep = 1;
+  $scope.mstep = 15;
 
+  $scope.options = {
+    hstep: [1, 2, 3],
+    mstep: [1, 5, 10, 15, 25, 30]
+  };
+
+  $scope.ismeridian = true;
+  $scope.toggleMode = function() {
+    $scope.ismeridian = ! $scope.ismeridian;
+  };
+
+  $scope.update = function() {
+    var d = new Date();
+    d.setHours( 14 );
+    d.setMinutes( 0 );
+    $scope.mytime = d;
+  };
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
+
+  $scope.changed = function () {
+    $log.log('Time changed to: ' + $scope.mytime);
+  };
+
+  $scope.clear = function() {
+    $scope.mytime = null;
+  };
+});
 'use strict';
 
 /**
@@ -5105,12 +6574,29 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
  * # MainCtrl
  * Controller of MaterialApp
  */
+<<<<<<< HEAD
 angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
     $shared.updateTitle("Workspace User Edit");
     var roles = $shared.makeDefaultWorkspaceRoles();
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
+=======
+ angular.module('MaterialApp').controller('todoCtrl', function ($scope) {
+ 	$scope.todos = [
+ 	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
+ 	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         
+ 	{text:'Avengers Age of Ultron.', done:false, id: 'option4'},         
+ 	{text: 'Henna birthday at Mezbaan.', done:false, id: 'option5'}
+ 	];
+ 	function makeid()
+ 	{
+ 		var text = "";
+ 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
+ 		for( var i=0; i < 5; i++ )
+ 			text += possible.charAt(Math.floor(Math.random() * possible.length));
 
+<<<<<<< HEAD
   $scope.values = {
     user: {
       first_name: "",
@@ -5171,4 +6657,26 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
     $shared.endIsLoading();
   }, 0);
 });
+=======
+ 		return text;
+ 	}
+ 	$scope.addTodo = function () {
+ 		$scope.todos.push({text:$scope.formTodoText, done:false, id:makeid()});
+ 		$scope.formTodoText = '';
+ 	};
+ });
+'use strict';
+>>>>>>> 6189acf4baeac28ed9f951ffac771ccaa874aea8
 
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
+  $scope.dynamicTooltip = 'Hello, World!';
+  $scope.dynamicTooltipText = 'dynamic';
+  $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+});
