@@ -93,5 +93,5 @@ angular.module('MaterialApp')
 		$translate.use(l);			
 		
 	});
-	
+	loadAddedResources1();	
 });	

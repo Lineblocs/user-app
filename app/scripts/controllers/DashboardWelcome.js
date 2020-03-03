@@ -176,4 +176,5 @@
         return false;
     }
 	$scope.load();
+	loadAddedResources1();	
 }]);
