@@ -7,13 +7,13 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("IP Whitelist");
+angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("IP Whitelist");
       $scope.settings = {
         disabled: false
       }
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.ranges = [
@@ -47,7 +47,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
 
   $scope.ips = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
           Backend.get("/self"),
@@ -56,7 +56,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
           $scope.disabled = res[0].data.ip_whitelist_disabled;
           $scope.settings.disabled = $scope.disabled;
           $scope.ips = res[1].data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -92,7 +92,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/settings/ipWhitelist/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -108,7 +108,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
     });
   }
   $scope.enableWhitelist = function($event, value) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         var data = {"ip_whitelist_disabled": value};
         Backend.post("/updateSelf", data).then(function(res) {

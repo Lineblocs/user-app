@@ -120,7 +120,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
+    .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.initialLoaded = false;
@@ -371,16 +371,16 @@ angular
         }
         return factory;
     })
-    .factory("Backend", function($http, $q, SharedPref) {
+    .factory("Backend", function($http, $q, $shared) {
         var factory = this;
         function errorHandler(error, showMsg) {
             console.log("erroHandler ", arguments);
             if ( showMsg ) {
                     error = error || "An error occured.";
-                    SharedPref.showError(error);
+                    $shared.showError(error);
                     return;
             }
-            SharedPref.showError("An error occured.");
+            $shared.showError("An error occured.");
 
         }
         factory.getJWTToken = function(email, password) {
@@ -457,7 +457,7 @@ angular
 
         return factory;
     })
-    .factory("pagination", function(Backend,SharedPref, $q, $timeout) {
+    .factory("pagination", function(Backend,$shared, $q, $timeout) {
         var factory = this;
         factory.settings = {
             search: "",
@@ -520,7 +520,7 @@ angular
                     url += "&" + index + "=" + encodeURIComponent(arg);
                 }
             }
-            SharedPref.isCreateLoading = true;
+            $shared.isCreateLoading = true;
             return $q(function(resolve, reject) {
                 Backend.get(url).then(function(res) {
                     var meta = res.data.meta;
@@ -528,7 +528,7 @@ angular
                     var scopeObj = factory.settings.scope.obj
                     var key = factory.settings.scope.key;
                     scopeObj[ key ] = res.data.data;
-                    SharedPref.endIsCreateLoading();
+                    $shared.endIsCreateLoading();
                     resolve(res);
                 });
             });
@@ -847,23 +847,23 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, SharedPref) {
+}).run(function($rootScope, $shared) {
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
         /* Display modal warning or sth */ 
     });
     $rootScope.$on('IdleTimeout', function() { 
         /* Logout user */ 
-        SharedPref.doLogout();
+        $shared.doLogout();
     });
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
         // do something
         console.log("state is changing ", arguments);
-        SharedPref.state = toState;
-        SharedPref.showNavbar();
+        $shared.state = toState;
+        $shared.showNavbar();
         /*
 		Backend.get("/getBillingInfo").then(function(res) {
-            SharedPref.billInfo = res.data;
+            $shared.billInfo = res.data;
         });
         */
     })

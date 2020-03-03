@@ -7,8 +7,8 @@
  * # HomeCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
-	  SharedPref.updateTitle("Dashboard");
+angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
@@ -87,13 +87,13 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	$scope.load = function() {
 		$timeout(function () {
 			var color = Chart.helpers.color;
-			SharedPref.isLoading = true;
+			$shared.isLoading = true;
 			Backend.get("/dashboard").then(function(res) {
 				var graph = res.data[0];
-				SharedPref.billInfo=  res.data[1];
-				SharedPref.userInfo=  res.data[2];
+				$shared.billInfo=  res.data[1];
+				$shared.userInfo=  res.data[2];
 				console.log("graph data is ", graph);
-				SharedPref.isLoading = false;
+				$shared.isLoading = false;
 				$timeout(function(){
 					$scope.line = {
 						legend: true,

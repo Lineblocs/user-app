@@ -8,8 +8,8 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast) {
-	  SharedPref.updateTitle("Settings");
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
+	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
 	$scope.user = {
 		first_name: "",
@@ -28,7 +28,7 @@ angular.module('MaterialApp')
 			data['first_name'] = $scope.user.first_name;
 			data['last_name'] = $scope.user.last_name;
 			data['email'] = $scope.user.email;
-			SharedPref.isCreateLoading = true;
+			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(
 					$mdToast.simple()
@@ -36,7 +36,7 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 			});
 			return;
 		}
@@ -54,7 +54,7 @@ angular.module('MaterialApp')
 			data['state'] =$scope.user.state;
 			data['city'] =$scope.user.city;
 			data['country'] =$scope.user.country;
-			SharedPref.isCreateLoading = true;
+			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(
 					$mdToast.simple()
@@ -62,7 +62,7 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 			});
 			return;
 		}
@@ -80,7 +80,7 @@ angular.module('MaterialApp')
 		if (passwordsForm.$valid) {
 			var data = {};
 			data['password'] = $scope.user.password;
-			SharedPref.isCreateLoading = true;
+			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 				var token = res.data;
 					$mdToast.show(
@@ -89,17 +89,17 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
-				SharedPref.endIsCreateLoading();
+				$shared.endIsCreateLoading();
 			});
 			return;
 		}
       	return false;
 
 	}
-	SharedPref.isLoading = true;
+	$shared.isLoading = true;
 	Backend.get("/self").then(function(res) {
 		$scope.user = res.data;
 		console.log("user is ", $scope.user);
-		SharedPref.endIsLoading();
+		$shared.endIsLoading();
 	});
   });

@@ -23,8 +23,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
-	  SharedPref.updateTitle("Buy Numbers");
+angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared) {
+	  $shared.updateTitle("Buy Numbers");
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
@@ -72,7 +72,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
   };
 
   $scope.load = function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }
   $scope.fetch =  function(event, didForm) {
 		$scope.triedSubmit = true;
@@ -86,11 +86,11 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     //data['prefix'] = $scope.settings['pattern'];
     data['prefix'] = "";
     data['country_iso'] = $scope.settings['country']['iso'];
-    SharedPref.isCreateLoading = true;
+    $shared.isCreateLoading = true;
     Backend.get("/did/available", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
-      SharedPref.endIsCreateLoading();
+      $shared.endIsCreateLoading();
     });
   }
   $scope.buyNumber = function($event, number) {
@@ -119,7 +119,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
           console.log("res is: ", res);
           if (res.status === 400) {
             var data = res.data;
-            SharedPref.showError("Error", data.message);
+            $shared.showError("Error", data.message);
           }
         });
     }, function() {

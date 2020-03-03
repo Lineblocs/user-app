@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Flows");
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("Flows");
     $scope.pagination = pagination;
   $scope.settings = {
     page: 0
@@ -16,23 +16,23 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
   $scope.flows = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading =true;
+      $shared.isLoading =true;
         pagination.resetSearch();
         pagination.changeUrl( "/flow/listFlows" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'flows' );
         pagination.loadData().then(function(res) {
         $scope.flows = res.data.data;
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
       }, reject);
     });
   }
   $scope.editFlow = function(flow) {
-    SharedPref.changeRoute('flow-editor', {flowId: flow.public_id});
+    $shared.changeRoute('flow-editor', {flowId: flow.public_id});
   }
   $scope.createFlow = function() {
-    SharedPref.changeRoute('flow-editor', {flowId: "new"}); 
+    $shared.changeRoute('flow-editor', {flowId: "new"}); 
   }
   $scope.deleteFlow = function($event, flow) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -44,7 +44,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
            $mdToast.show(
           $mdToast.simple()

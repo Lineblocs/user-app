@@ -8,8 +8,8 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
-	  SharedPref.updateTitle("Forgot Password");
+  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Forgot Password");
 	$scope.triedSubmit = false;
 	$scope.isLoading = false;
 	$scope.user = {
@@ -36,9 +36,9 @@ angular.module('MaterialApp')
 		}
 	}
 	$scope.gotoLogin= function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
     	$state.go('login');
 	}
-	SharedPref.changingPage = false;
+	$shared.changingPage = false;
   });

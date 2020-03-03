@@ -175,7 +175,7 @@ request.
                     <md-input-container>
                         <label>Country</label>
                         <md-select name="country" ng-model="number.country" ng-change="changeCountry(number.country)" required="">
-                            <md-option ng-repeat="country in SharedPref.billingCountries" ng-value="country">
+                            <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
                                 {{country.name}}
                             </md-option>
                         </md-select>

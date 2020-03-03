@@ -7,14 +7,14 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
-	  SharedPref.updateTitle("Call View");
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
+	  $shared.updateTitle("Call View");
   $scope.call = [];
   $scope.load = function() {
-    SharedPref.isLoading =true;
+    $shared.isLoading =true;
     Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
       console.log("call is ", res.data);
-      SharedPref.isLoading =false;
+      $shared.isLoading =false;
       var call = res.data;
       call.recordings = call.recordings.map(function(obj) {
         obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);

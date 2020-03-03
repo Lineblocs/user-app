@@ -7,6 +7,6 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('HeadCtrl', function ($scope, SharedPref) {
-  $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('HeadCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
 });

@@ -7,10 +7,10 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Blocked Numbers");
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Blocked Numbers");
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
@@ -37,11 +37,11 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
 
   $scope.numbers = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/settings/blockedNumbers").then(function(res) {
           $scope.numbers = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -77,7 +77,7 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/settings/blockedNumbers/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(

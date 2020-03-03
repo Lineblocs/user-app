@@ -36,7 +36,7 @@
             <md-input-container>
               <label>Country</label>
               <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
-                <md-option ng-repeat="country in SharedPref.billingCountries" ng-value="country">
+                <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
                   {{country.name}}
                 </md-option>
               </md-select>

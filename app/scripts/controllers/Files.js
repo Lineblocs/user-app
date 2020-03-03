@@ -7,16 +7,16 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Extension Codes");
+angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Extension Codes");
   $scope.files = [];
 
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/file/listFiles").then(function(res) {
           $scope.files = res.data.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           //loadPicker();
             resolve();
           }, function() {
@@ -55,7 +55,7 @@ angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/file/deleteFile/" + file.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
@@ -71,8 +71,8 @@ angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend,
     });
   }
 
-function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinished) {
-      $scope.SharedPref = SharedPref;
+function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
@@ -88,15 +88,15 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
         angular.forEach(files, function(file) {
           params.append("file[]", file);
         });
-        SharedPref.isCreateLoading = true;
+        $shared.isCreateLoading = true;
         Backend.postFiles("/file/upload", params, true).then(function(res) {
           var data = res.data;
-          SharedPref.endIsCreateLoading();
+          $shared.endIsCreateLoading();
           if (data.amountFailed > 0) {
               angular.forEach(data.results, function(result) {
                 if ( !result.success ) {
                   var msg = result.name + " failed to upload please check the file type and size";
-                  SharedPref.showToast( msg );
+                  $shared.showToast( msg );
                 }
               });
             }
@@ -110,8 +110,8 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
     }
 
 
-    function DialogSelectController($scope, $mdDialog, Backend, SharedPref, onFinished) {
-      $scope.SharedPref = SharedPref;
+    function DialogSelectController($scope, $mdDialog, Backend, $shared, onFinished) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
@@ -211,15 +211,15 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
           "files": files,
           "accessToken": oauthToken
         };
-        SharedPref.isCreateLoading = true;
+        $shared.isCreateLoading = true;
         Backend.post("/file/uploadByGoogleDrive", data).then(function(res) {
           var data = res.data;
-          SharedPref.endIsCreateLoading();
+          $shared.endIsCreateLoading();
           if (data.amountFailed > 0) {
               angular.forEach(data.results, function(result) {
                 if ( !result.success ) {
                   var msg = result.name + " failed to upload please check the file type and size";
-                  SharedPref.showToast( msg );
+                  $shared.showToast( msg );
                 }
               });
             }

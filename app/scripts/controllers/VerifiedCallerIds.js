@@ -7,10 +7,10 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Verified Caller IDs");
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Verified Caller IDs");
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.$mdDialog = $mdDialog;
@@ -65,11 +65,11 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
 
   $scope.numbers = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/settings/verifiedCallerids").then(function(res) {
           $scope.numbers = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -105,7 +105,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(

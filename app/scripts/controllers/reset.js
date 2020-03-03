@@ -8,8 +8,8 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
-	  SharedPref.updateTitle("Reset");
+  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Reset");
 	$scope.triedSubmit = false;
 	$scope.isLoading = false;
 	$scope.couldNotReset = false;

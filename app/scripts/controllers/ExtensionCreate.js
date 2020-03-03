@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Create Extension");
+angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
     secret: ""
@@ -46,7 +46,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/extension/saveExtension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
@@ -56,7 +56,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
             .hideDelay(3000)
         );
         $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
@@ -75,7 +75,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
   $timeout(function() {
     Backend.get("/flow/listFlows").then(function(res) {
       $scope.flows = res.data.data;
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
     });
   }, 0);
 });

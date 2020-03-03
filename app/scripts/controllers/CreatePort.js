@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-  SharedPref.updateTitle("Create Number");
+angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+  $shared.updateTitle("Create Number");
   $scope.flows = [];
   $scope.number = {
     "first_name": "",
@@ -68,7 +68,7 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
     params.append("loa", angular.element("#loa").prop("files")[0]);
     params.append("csr", angular.element("#csr").prop("files")[0]);
     params.append("invoice", angular.element("#invoice").prop("files")[0]);
-    SharedPref.isLoading = true;
+    $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/saveNumber", params, true).then(function () {
         console.log("updated number..");
@@ -80,7 +80,7 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
         );
         $state.go('ports', {});
       }, function() {
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
       });
   }
   $scope.changeCountry = function (country) {
@@ -88,5 +88,5 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
     $scope.number.country = country;
   }
 
-  SharedPref.endIsLoading();
+  $shared.endIsLoading();
 });

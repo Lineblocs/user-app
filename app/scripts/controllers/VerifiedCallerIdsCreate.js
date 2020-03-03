@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Verified Caller IDs");
+angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Verified Caller IDs");
    $scope.values = {
     secret: ""
   };
@@ -44,7 +44,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/extension/saveExtension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
@@ -54,7 +54,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
             .hideDelay(3000)
         );
         $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
@@ -64,7 +64,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
   }
   $timeout(function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }, 0);
 });
 

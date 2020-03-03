@@ -7,20 +7,20 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("My Numbers");
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("My Numbers");
     $scope.pagination = pagination;
   $scope.numbers = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/did/listNumbers" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
       $scope.numbers = res.data.data;
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
       resolve();
     }, reject);
   });
@@ -42,7 +42,7 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/did/deleteNumber/" + number.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(

@@ -2,7 +2,7 @@
 <html class="no-js">
   <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
-    <title ng-bind="SharedPref.title">LineBlocs.com</title>
+    <title ng-bind="$shared.title">LineBlocs.com</title>
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="google-signin-client_id" content="1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com"/>
@@ -93,11 +93,11 @@
     <![endif]-->
     <!-- Add your site or application content here -->
     <div>
-      <div ng-show="!SharedPref.initialLoaded">
+      <div ng-show="!$shared.initialLoaded">
 			  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         <center><h3>Loading..</h3></center>
       </div>
-      <div ng-show="SharedPref.initialLoaded" ui-view></div>
+      <div ng-show="$shared.initialLoaded" ui-view></div>
     </div>
     <!-- build:js scripts/oldieshim.js -->
     <!--[if lt IE 9]>
@@ -122,14 +122,14 @@ var google = {
 
       }
         angular.bootstrap(document, ['MaterialApp']);
-        var shared = angular.element("body").scope().SharedPref;
+        var shared = angular.element("body").scope().$shared;
         shared.initialLoaded = true;
         /*
         $.get("./templates.html", function(data) {
           console.log("data is ", data);
           $(data).appendTo('body');
           angular.bootstrap(document, ['MaterialApp']);
-          var shared = angular.element("body").scope().SharedPref;
+          var shared = angular.element("body").scope().$shared;
           shared.initialLoaded = true;
         });
         */

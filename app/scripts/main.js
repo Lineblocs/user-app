@@ -120,7 +120,7 @@ angular
             }
         };
     })
-    .factory("SharedPref", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
+    .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
         factory.initialLoaded = false;
@@ -371,16 +371,16 @@ angular
         }
         return factory;
     })
-    .factory("Backend", function($http, $q, SharedPref) {
+    .factory("Backend", function($http, $q, $shared) {
         var factory = this;
         function errorHandler(error, showMsg) {
             console.log("erroHandler ", arguments);
             if ( showMsg ) {
                     error = error || "An error occured.";
-                    SharedPref.showError(error);
+                    $shared.showError(error);
                     return;
             }
-            SharedPref.showError("An error occured.");
+            $shared.showError("An error occured.");
 
         }
         factory.getJWTToken = function(email, password) {
@@ -457,7 +457,7 @@ angular
 
         return factory;
     })
-    .factory("pagination", function(Backend,SharedPref, $q, $timeout) {
+    .factory("pagination", function(Backend,$shared, $q, $timeout) {
         var factory = this;
         factory.settings = {
             search: "",
@@ -520,7 +520,7 @@ angular
                     url += "&" + index + "=" + encodeURIComponent(arg);
                 }
             }
-            SharedPref.isCreateLoading = true;
+            $shared.isCreateLoading = true;
             return $q(function(resolve, reject) {
                 Backend.get(url).then(function(res) {
                     var meta = res.data.meta;
@@ -528,7 +528,7 @@ angular
                     var scopeObj = factory.settings.scope.obj
                     var key = factory.settings.scope.key;
                     scopeObj[ key ] = res.data.data;
-                    SharedPref.endIsCreateLoading();
+                    $shared.endIsCreateLoading();
                     resolve(res);
                 });
             });
@@ -847,23 +847,23 @@ angular
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, SharedPref) {
+}).run(function($rootScope, $shared) {
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
         /* Display modal warning or sth */ 
     });
     $rootScope.$on('IdleTimeout', function() { 
         /* Logout user */ 
-        SharedPref.doLogout();
+        $shared.doLogout();
     });
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
         // do something
         console.log("state is changing ", arguments);
-        SharedPref.state = toState;
-        SharedPref.showNavbar();
+        $shared.state = toState;
+        $shared.showNavbar();
         /*
 		Backend.get("/getBillingInfo").then(function(res) {
-            SharedPref.billInfo = res.data;
+            $shared.billInfo = res.data;
         });
         */
     })
@@ -881,9 +881,9 @@ angular
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog, $window) {
-	  SharedPref.updateTitle("Billing");
-	  $scope.SharedPref = SharedPref;
+  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Billing");
+	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
 	  $scope.startDate = moment().startOf('month').toDate();
 	  $scope.endDate = moment().endOf('month').toDate();
@@ -913,8 +913,8 @@ angular.module('MaterialApp')
 		expires: "",
 		cvv: ""
 	};
-    function TriggerDialogController($scope, $mdDialog,SharedPref, onCreate) {
-      $scope.SharedPref = SharedPref;
+    function TriggerDialogController($scope, $mdDialog,$shared, onCreate) {
+      $scope.$shared = $shared;
 	  $scope.data = {
 		  percentage: "10%"
 	  };
@@ -943,7 +943,7 @@ angular.module('MaterialApp')
 		data['card_id'] = cardId;
 		data['amount'] =  amount;
 		$scope.data.creditAmount.value;
-		SharedPref.isCreateLoading =true;
+		$shared.isCreateLoading =true;
 		Backend.post("/credit/addCredit", data).then(function(res) {
 			console.log("added credit amount");
 					loadData(true).then(function() {
@@ -956,7 +956,7 @@ angular.module('MaterialApp')
 
 							})
 				});
-				//SharedPref.endIsCreateLoading();
+				//$shared.endIsCreateLoading();
 		}
 
 		function stripeRespAddCard(response) {
@@ -966,18 +966,18 @@ angular.module('MaterialApp')
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
-				SharedPref.isCreateLoading =true;
+				$shared.isCreateLoading =true;
 				Backend.post("/card/addCard", data).then(function(res) {
 					resolve(res);
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
 				});
 			});
 		}
 
-	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, SharedPref) {
-		$scope.SharedPref = SharedPref;
+	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
+		$scope.$shared = $shared;
 		$scope.card = {
 			name: "",
 			address: "",
@@ -1094,12 +1094,12 @@ angular.module('MaterialApp')
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
 		data.amount = $scope.data.creditAmount.value;
-		SharedPref.isCreateLoading =true;
+		$shared.isCreateLoading =true;
 		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
 			var data = res.data;
 			//$window.replace(data.url);
 			$window.location.href = data.url;
-			SharedPref.endIsCreateLoading();
+			$shared.endIsCreateLoading();
 		});
 	}
 
@@ -1140,7 +1140,7 @@ angular.module('MaterialApp')
 		var recharge = $scope.settings.db.auto_recharge_top_up.value;
 		data['auto_recharge_top_up'] = toCents(recharge);
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
-		SharedPref.isCreateLoading =true;
+		$shared.isCreateLoading =true;
 		Backend.post("/changeBillingSettings", data).then(function(res) {
 			$mdToast.show(
 			$mdToast.simple()
@@ -1148,7 +1148,7 @@ angular.module('MaterialApp')
 				.position("top right")
 				.hideDelay(3000)
 			);
-			SharedPref.endIsCreateLoading();
+			$shared.endIsCreateLoading();
 			});
 	}
 
@@ -1156,10 +1156,10 @@ angular.module('MaterialApp')
 		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
 	}
 	$scope.filterBilling = function() {
-		SharedPref.isCreateLoading = true;
+		$shared.isCreateLoading = true;
 		billHistory().then(function(res) {
 				$scope.history = res.data;
-				SharedPref.endIsCreateLoading();
+				$shared.endIsCreateLoading();
 		});
 	}
 	$scope.downloadBilling = function() {
@@ -1177,9 +1177,9 @@ angular.module('MaterialApp')
 
 	function loadData(createLoading) {
 		if (createLoading) {
-			SharedPref.isCreateLoading =true;
+			$shared.isCreateLoading =true;
 		} else {
-			SharedPref.isLoading =true;
+			$shared.isLoading =true;
 		}
 
 		return $q(function(resolve, reject) {
@@ -1213,9 +1213,9 @@ angular.module('MaterialApp')
 				console.log("usage triggers are ", $scope.usageTriggers);
 				$scope.creditAmount = $scope.creditAmounts[0];
 				if (createLoading) {
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 				} else {
-					SharedPref.endIsLoading();
+					$shared.endIsLoading();
 				}
 				resolve();
 			}, reject);
@@ -1259,7 +1259,7 @@ angular.module('MaterialApp')
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/delUsageTrigger/" + item.id).then(function() {
           loadData(false).then(function() {
            $mdToast.show(
@@ -1286,10 +1286,10 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Blocked Numbers");
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Blocked Numbers");
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
@@ -1316,11 +1316,11 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
 
   $scope.numbers = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/settings/blockedNumbers").then(function(res) {
           $scope.numbers = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -1356,7 +1356,7 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/settings/blockedNumbers/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -1385,8 +1385,8 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BodyCtrl', function ($scope, SharedPref) {
-  $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('BodyCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
 });
 'use strict';
 
@@ -1397,8 +1397,8 @@ angular.module('MaterialApp').controller('BodyCtrl', function ($scope, SharedPre
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref) {
-	  SharedPref.updateTitle("Buy Numbers");
+angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared) {
+	  $shared.updateTitle("Buy Numbers");
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
@@ -1446,7 +1446,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
   };
 
   $scope.load = function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }
   $scope.fetch =  function(event, didForm) {
 		$scope.triedSubmit = true;
@@ -1460,15 +1460,15 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     //data['prefix'] = $scope.settings['pattern'];
     data['prefix'] = "";
     data['country_iso'] = $scope.settings['country']['iso'];
-    SharedPref.isCreateLoading = true;
+    $shared.isCreateLoading = true;
     Backend.get("/did/available", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
-      SharedPref.endIsCreateLoading();
+      $shared.endIsCreateLoading();
     });
   }
   $scope.buyNumber = function($event, number) {
-        SharedPref.scrollTop();
+        $shared.scrollTop();
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to purchase number "' + number.number + '"?')
@@ -1486,19 +1486,19 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['provider'] = number.provider;
         params['country'] = number.country;
         params['features'] = number.features.join(",");
-        SharedPref.isCreateLoading = true;
-        SharedPref.scrollTop();
+        $shared.isCreateLoading = true;
+        $shared.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
-              SharedPref.endIsCreateLoading();
+              $shared.endIsCreateLoading();
               purchaseConfirm($event, number);
           });
         }, function(res) {
           console.log("res is: ", res);
           if (res.status === 400) {
             var data = res.data;
-            SharedPref.showError("Error", data.message);
+            $shared.showError("Error", data.message);
           }
         });
     }, function() {
@@ -1522,22 +1522,22 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref) {
-    SharedPref.updateTitle("Calls");
+angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared) {
+    $shared.updateTitle("Calls");
     $scope.pagination = pagination;
   $scope.settings = {
     page: 0
   };
   $scope.calls = [];
   $scope.load = function() {
-    SharedPref.isLoading = true;
+    $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/call/listCalls" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'calls' );
       pagination.loadData().then(function(res) {
       $scope.calls = res.data.data;
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
     })
   }
   $scope.viewCall= function(call) {
@@ -1557,14 +1557,14 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
-	  SharedPref.updateTitle("Call View");
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
+	  $shared.updateTitle("Call View");
   $scope.call = [];
   $scope.load = function() {
-    SharedPref.isLoading =true;
+    $shared.isLoading =true;
     Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
       console.log("call is ", res.data);
-      SharedPref.isLoading =false;
+      $shared.isLoading =false;
       var call = res.data;
       call.recordings = call.recordings.map(function(obj) {
         obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
@@ -1771,8 +1771,8 @@ angular
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-  SharedPref.updateTitle("Create Number");
+angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+  $shared.updateTitle("Create Number");
   $scope.flows = [];
   $scope.number = {
     "first_name": "",
@@ -1832,7 +1832,7 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
     params.append("loa", angular.element("#loa").prop("files")[0]);
     params.append("csr", angular.element("#csr").prop("files")[0]);
     params.append("invoice", angular.element("#invoice").prop("files")[0]);
-    SharedPref.isLoading = true;
+    $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/saveNumber", params, true).then(function () {
         console.log("updated number..");
@@ -1844,7 +1844,7 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
         );
         $state.go('ports', {});
       }, function() {
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
       });
   }
   $scope.changeCountry = function (country) {
@@ -1852,7 +1852,7 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
     $scope.number.country = country;
   }
 
-  SharedPref.endIsLoading();
+  $shared.endIsLoading();
 });
 
 'use strict';
@@ -1865,8 +1865,8 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, SharedPref) {
-	$scope.SharedPref = SharedPref;
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
+	$scope.$shared = $shared;
   	if ($(window).width()<1450) {
         $( '.c-hamburger' ).removeClass('is-active');
         $('body').removeClass('extended');
@@ -1962,8 +1962,8 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
- angular.module('MaterialApp').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
-	  SharedPref.updateTitle("Dashboard");
+ angular.module('MaterialApp').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
@@ -2042,14 +2042,14 @@ angular.module('MaterialApp')
 	$scope.load = function() {
 		$timeout(function () {
 			var color = Chart.helpers.color;
-			SharedPref.isLoading = true;
+			$shared.isLoading = true;
 			Backend.get("/dashboard").then(function(res) {
 				var graph = res.data[0];
-				SharedPref.billInfo=  res.data[1];
-                SharedPref.userInfo=  res.data[2];
+				$shared.billInfo=  res.data[1];
+                $shared.userInfo=  res.data[2];
                 $scope.checklist = res.data[3];
 				console.log("graph data is ", graph);
-				SharedPref.isLoading = false;
+				$shared.isLoading = false;
 				$timeout(function(){
 					$scope.line = {
 						legend: true,
@@ -2142,15 +2142,15 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, SharedPref, $q) {
-    SharedPref.updateTitle("Debugger Logs");
+angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared, $q) {
+    $shared.updateTitle("Debugger Logs");
     $scope.pagination = pagination;
   $scope.settings = {
     page: 0
   };
   $scope.logs = [];
   $scope.load = function() {
-    SharedPref.isLoading = true;
+    $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/log/listLogs" );
       pagination.changePage( 1 );
@@ -2162,7 +2162,7 @@ angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, B
         $scope.flows = res[0].data.data;
         $scope.logs = res[1].data.data;
         console.log("logs are ", $scope.logs);
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
     })
   }
   $scope.viewLog= function(log) {
@@ -2182,8 +2182,8 @@ angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, B
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-  SharedPref.updateTitle("Edit Port Number");
+angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+  $shared.updateTitle("Edit Port Number");
   $scope.flows = [];
   $scope.number = null;
   $scope.number = {
@@ -2241,7 +2241,7 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
       params.append("invoice", angular.element("#invoice").prop("files")[0]);
       return;
     }
-    SharedPref.isLoading = true;
+    $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/updateNumber/" + $stateParams['numberId'], params, true).then(function () {
       console.log("updated number..");
@@ -2253,7 +2253,7 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
       );
       $state.go('ports', {});
     }, function() {
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
       });
   }
   $scope.changeCountry = function (country) {
@@ -2269,16 +2269,16 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
     });
     return url;
   }
-  SharedPref.isLoading = true;
+  $shared.isLoading = true;
   Backend.get("/port/numberData/" + $stateParams['numberId']).then(function (res) {
     $scope.number = res.data;
-    angular.forEach(SharedPref.billingCountries, function (country) {
+    angular.forEach($shared.billingCountries, function (country) {
       if (country.iso === $scope.number.country) {
         $scope.number.country = country;
       }
     });
     $scope.loa =
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
   });
 });
 
@@ -2291,12 +2291,12 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Extension Codes");
+angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Extension Codes");
   $scope.users = [];
 
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
           Backend.get("/flow/listFlows?all=1"),
@@ -2314,7 +2314,7 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
          });
          $scope.codes = codes;
 
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -2327,7 +2327,7 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
       return code;
     });
     var data = {"codes": codes};
-    SharedPref.isCreateLoading = true;
+    $shared.isCreateLoading = true;
     Backend.post("/settings/extensionCodes", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
@@ -2335,7 +2335,7 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
             .position("top right")
             .hideDelay(3000)
         );
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
     });
   }
  $scope.addCode = function() {
@@ -2368,8 +2368,8 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Create Extension");
+angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
     secret: ""
@@ -2407,7 +2407,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/extension/saveExtension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
@@ -2417,7 +2417,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
             .hideDelay(3000)
         );
         $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
@@ -2436,7 +2436,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
   $timeout(function() {
     Backend.get("/flow/listFlows").then(function(res) {
       $scope.flows = res.data.data;
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
     });
   }, 0);
 });
@@ -2451,8 +2451,8 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref, $q) {
-	  SharedPref.updateTitle("Edit Extension");
+angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, $shared, $q) {
+	  $shared.updateTitle("Edit Extension");
   $scope.values = {
     username: "",
     secret: "",
@@ -2464,7 +2464,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   }
   $scope.triedSubmit = false;
   $scope.load = function() {
-  SharedPref.isLoading = true;
+  $shared.isLoading = true;
    $q.all([
       Backend.get("/flow/listFlows"),
       Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
@@ -2472,7 +2472,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       $scope.flows= res[0].data.data;
       $scope.extension = res[1].data;
       $scope.values = angular.copy( $scope.extension );
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
     });
   }
   $scope.generateSecret = function() {
@@ -2503,7 +2503,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
@@ -2513,7 +2513,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
             .hideDelay(3000)
         );
         $state.go('extensions', {});
-      SharedPref.endIsCreateLoading();
+      $shared.endIsCreateLoading();
       });
     }
   }
@@ -2543,12 +2543,12 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Extensions");
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("Extensions");
     $scope.pagination = pagination;
     
-    function DialogController($scope, $mdDialog, extension, SharedPref) {
-      $scope.SharedPref = SharedPref;
+    function DialogController($scope, $mdDialog, extension, $shared) {
+      $scope.$shared = $shared;
       $scope.extension = extension;
       $scope.close = function() {
         $mdDialog.hide(); 
@@ -2559,7 +2559,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
   };
   $scope.extensions = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/extension/listExtensions" );
       pagination.changePage( 1 );
@@ -2567,7 +2567,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
       return $q(function(resolve, reject) {
         pagination.loadData().then(function(res) {
         $scope.extensions = res.data.data;
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
         }, reject);
       });
@@ -2604,7 +2604,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/extension/deleteExtension/" + extension.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -2633,8 +2633,8 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
-	  SharedPref.updateTitle("Faxes");
+angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
+	  $shared.updateTitle("Faxes");
   $scope.settings = {
     page: 0
   };
@@ -2642,7 +2642,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
   $scope.faxes = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
         pagination.changeUrl( "/fax/listFaxes" );
         pagination.changePage( 1 );
@@ -2653,7 +2653,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
           obj.uri = $sce.trustAsResourceUrl(obj.uri);
           return obj;
         });
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
       }, reject)
     });
@@ -2668,7 +2668,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/fax/deleteFax/" + fax.id).then(function() {
         console.log("deleted fax..");
         $scope.load().then(function() {
@@ -2697,16 +2697,16 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Extension Codes");
+angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Extension Codes");
   $scope.files = [];
 
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/file/listFiles").then(function(res) {
           $scope.files = res.data.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           //loadPicker();
             resolve();
           }, function() {
@@ -2745,7 +2745,7 @@ angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/file/deleteFile/" + file.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
@@ -2761,8 +2761,8 @@ angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend,
     });
   }
 
-function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinished) {
-      $scope.SharedPref = SharedPref;
+function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
@@ -2778,15 +2778,15 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
         angular.forEach(files, function(file) {
           params.append("file[]", file);
         });
-        SharedPref.isCreateLoading = true;
+        $shared.isCreateLoading = true;
         Backend.postFiles("/file/upload", params, true).then(function(res) {
           var data = res.data;
-          SharedPref.endIsCreateLoading();
+          $shared.endIsCreateLoading();
           if (data.amountFailed > 0) {
               angular.forEach(data.results, function(result) {
                 if ( !result.success ) {
                   var msg = result.name + " failed to upload please check the file type and size";
-                  SharedPref.showToast( msg );
+                  $shared.showToast( msg );
                 }
               });
             }
@@ -2800,8 +2800,8 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
     }
 
 
-    function DialogSelectController($scope, $mdDialog, Backend, SharedPref, onFinished) {
-      $scope.SharedPref = SharedPref;
+    function DialogSelectController($scope, $mdDialog, Backend, $shared, onFinished) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
@@ -2901,15 +2901,15 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
           "files": files,
           "accessToken": oauthToken
         };
-        SharedPref.isCreateLoading = true;
+        $shared.isCreateLoading = true;
         Backend.post("/file/uploadByGoogleDrive", data).then(function(res) {
           var data = res.data;
-          SharedPref.endIsCreateLoading();
+          $shared.endIsCreateLoading();
           if (data.amountFailed > 0) {
               angular.forEach(data.results, function(result) {
                 if ( !result.success ) {
                   var msg = result.name + " failed to upload please check the file type and size";
-                  SharedPref.showToast( msg );
+                  $shared.showToast( msg );
                 }
               });
             }
@@ -2944,8 +2944,8 @@ function DialogUploadController($scope, $mdDialog, Backend, SharedPref, onFinish
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, SharedPref, $stateParams, $sce) {
-	  SharedPref.updateTitle("Flow Editor");
+angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $stateParams, $sce) {
+	  $shared.updateTitle("Flow Editor");
   $scope.settings = {
     page: 0
   };
@@ -2957,17 +2957,17 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
     element.attr("height",windowHeight);
   }
   var flowUrl;
-  var token = SharedPref.getAuthToken();
-  var workspace = SharedPref.getWorkspace();
+  var token = $shared.getAuthToken();
+  var workspace = $shared.getWorkspace();
 
   if ($stateParams['flowId'] === "new" ) {
-    flowUrl = SharedPref.FLOW_EDITOR_URL+"/create?auth="+token.token.auth + "&workspaceId=" + workspace.id;
+    flowUrl = $shared.FLOW_EDITOR_URL+"/create?auth="+token.token.auth + "&workspaceId=" + workspace.id;
   } else {
-    flowUrl = SharedPref.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token.auth+ "&workspaceId="+ workspace.id;
+    flowUrl = $shared.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token.auth+ "&workspaceId="+ workspace.id;
   }
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);
-  SharedPref.collapseNavbar();
+  $shared.collapseNavbar();
 
   var element = angular.element(".flow-editor-iframe");
   sizeTheIframe();
@@ -2986,8 +2986,8 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Flows");
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("Flows");
     $scope.pagination = pagination;
   $scope.settings = {
     page: 0
@@ -2995,23 +2995,23 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
   $scope.flows = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading =true;
+      $shared.isLoading =true;
         pagination.resetSearch();
         pagination.changeUrl( "/flow/listFlows" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'flows' );
         pagination.loadData().then(function(res) {
         $scope.flows = res.data.data;
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
       }, reject);
     });
   }
   $scope.editFlow = function(flow) {
-    SharedPref.changeRoute('flow-editor', {flowId: flow.public_id});
+    $shared.changeRoute('flow-editor', {flowId: flow.public_id});
   }
   $scope.createFlow = function() {
-    SharedPref.changeRoute('flow-editor', {flowId: "new"}); 
+    $shared.changeRoute('flow-editor', {flowId: "new"}); 
   }
   $scope.deleteFlow = function($event, flow) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -3023,7 +3023,7 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
            $mdToast.show(
           $mdToast.simple()
@@ -3059,8 +3059,8 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
-	  SharedPref.updateTitle("Forgot Password");
+  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Forgot Password");
 	$scope.triedSubmit = false;
 	$scope.isLoading = false;
 	$scope.user = {
@@ -3087,11 +3087,11 @@ angular.module('MaterialApp')
 		}
 	}
 	$scope.gotoLogin= function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
     	$state.go('login');
 	}
-	SharedPref.changingPage = false;
+	$shared.changingPage = false;
   });
 
 'use strict';
@@ -3103,8 +3103,8 @@ angular.module('MaterialApp')
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('HeadCtrl', function ($scope, SharedPref) {
-  $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('HeadCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
 });
 'use strict';
 
@@ -3115,8 +3115,8 @@ angular.module('MaterialApp').controller('HeadCtrl', function ($scope, SharedPre
  * # HomeCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', 'SharedPref', '$q', function ($scope, $timeout, Backend, SharedPref, $q) {
-	  SharedPref.updateTitle("Dashboard");
+angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
@@ -3195,13 +3195,13 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 	$scope.load = function() {
 		$timeout(function () {
 			var color = Chart.helpers.color;
-			SharedPref.isLoading = true;
+			$shared.isLoading = true;
 			Backend.get("/dashboard").then(function(res) {
 				var graph = res.data[0];
-				SharedPref.billInfo=  res.data[1];
-				SharedPref.userInfo=  res.data[2];
+				$shared.billInfo=  res.data[1];
+				$shared.userInfo=  res.data[2];
 				console.log("graph data is ", graph);
-				SharedPref.isLoading = false;
+				$shared.isLoading = false;
 				$timeout(function(){
 					$scope.line = {
 						legend: true,
@@ -3278,13 +3278,13 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("IP Whitelist");
+angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("IP Whitelist");
       $scope.settings = {
         disabled: false
       }
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.ranges = [
@@ -3318,7 +3318,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
 
   $scope.ips = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
           Backend.get("/self"),
@@ -3327,7 +3327,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
           $scope.disabled = res[0].data.ip_whitelist_disabled;
           $scope.settings.disabled = $scope.disabled;
           $scope.ips = res[1].data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -3363,7 +3363,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/settings/ipWhitelist/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -3379,7 +3379,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
     });
   }
   $scope.enableWhitelist = function($event, value) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         var data = {"ip_whitelist_disabled": value};
         Backend.post("/updateSelf", data).then(function(res) {
@@ -3408,9 +3408,9 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
-	  SharedPref.updateTitle("Login");
-	  SharedPref.processResult();
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
+	  $shared.updateTitle("Login");
+	  $shared.processResult();
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
 	$scope.noUserFound = false;
@@ -3428,8 +3428,8 @@ var clickedGoogSignIn = false;
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
-				SharedPref.setAuthToken(token);
-				SharedPref.setWorkspace(workspace);
+				$shared.setAuthToken(token);
+				$shared.setWorkspace(workspace);
 				Idle.watch();
 		        $state.go('dashboard-user-welcome', {});
 	}
@@ -3439,9 +3439,9 @@ var clickedGoogSignIn = false;
     $scope.submit1 = function($event, loginForm) {
 		$scope.triedSubmit = true;
 		if (loginForm.$valid) {
-			SharedPref.changingPage = true;
+			$shared.changingPage = true;
 			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
 				if ( res.data.found ) {
 					$scope.userInfo = res.data.info;
 					$scope.step = 2;
@@ -3469,13 +3469,13 @@ var clickedGoogSignIn = false;
 		}
     }
 	$scope.gotoRegister = function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
     	$state.go('register');
 	}
 	$scope.gotoForgot = function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
 		$state.go('forgot');
 	}
 
@@ -3486,11 +3486,11 @@ var clickedGoogSignIn = false;
 		data['last_name'] = lastname;
 		data['avatar'] = avatar;
 		data['challenge'] = $scope.challenge;
-			SharedPref.changingPage = true;
+			$shared.changingPage = true;
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
 			$timeout(function() {
 				$scope.$apply();
-				SharedPref.scrollToTop();
+				$shared.scrollToTop();
 
 				if ( res.data.confirmed ) {
 					finishLogin(res.data.info, res.data.info.workspace);
@@ -3538,7 +3538,7 @@ var clickedGoogSignIn = false;
 	$scope.backStep1 = function() {
 		$scope.step = 1;
 	}
-	SharedPref.changingPage = false;
+	$shared.changingPage = false;
 	angular.element("#gSignIn").on("click", function() {
 		clickedGoogSignIn = true;
 	});
@@ -3563,14 +3563,14 @@ var clickedGoogSignIn = false;
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, SharedPref) {
-	  SharedPref.updateTitle("Log View");
+angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
+	  $shared.updateTitle("Log View");
   $scope.log = null;
   $scope.load = function() {
-    SharedPref.isLoading =true;
+    $shared.isLoading =true;
     Backend.get("/log/logData/" + $stateParams['logId']).then(function(res) {
       console.log("log is ", res.data);
-      SharedPref.isLoading =false;
+      $shared.isLoading =false;
       var log = res.data;
       $scope.log = log;
     })
@@ -3637,20 +3637,20 @@ angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("My Numbers");
+angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("My Numbers");
     $scope.pagination = pagination;
   $scope.numbers = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/did/listNumbers" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
       $scope.numbers = res.data.data;
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
       resolve();
     }, reject);
   });
@@ -3672,7 +3672,7 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/did/deleteNumber/" + number.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
@@ -3701,8 +3701,8 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-	  SharedPref.updateTitle("Edit Number");
+angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit Number");
   $scope.flows = [];
   $scope.didActions = [
     {
@@ -3732,7 +3732,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
       .filter(function(pos) { return toastPos[pos]; })
       .join(' ');
     console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
     Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
         console.log("updated number..");
         $mdToast.show(
@@ -3742,7 +3742,7 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
             .hideDelay(3000)
         );
         $state.go('my-numbers', {});
-      SharedPref.endIsCreateLoading();
+      $shared.endIsCreateLoading();
     });
   }
   $scope.changeFlow = function(flow) {
@@ -3756,14 +3756,14 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});
   }
-  SharedPref.isLoading = true;
+  $shared.isLoading = true;
   $q.all([
     Backend.get("/flow/listFlows?all=1"),
     Backend.get("/did/numberData/" + $stateParams['numberId'])
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
     $scope.number = res[1].data;
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   });
 });
 
@@ -3924,20 +3924,20 @@ angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($s
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Ported Numbers");
+angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("Ported Numbers");
     $scope.pagination = pagination;
   $scope.numbers = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/port/listNumbers" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
       $scope.numbers = res.data.data;
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
       resolve();
     }, reject);
   });
@@ -3958,7 +3958,7 @@ angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Ba
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/port/deleteNumber/" + number.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
@@ -4056,8 +4056,8 @@ angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
-	  SharedPref.updateTitle("Recordings");
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
+	  $shared.updateTitle("Recordings");
   $scope.settings = {
     page: 0
   };
@@ -4065,7 +4065,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
   $scope.recordings = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
         pagination.changeUrl( "/recording/listRecordings" );
         pagination.changePage( 1 );
@@ -4076,7 +4076,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
           obj.uri = $sce.trustAsResourceUrl(obj.uri);
           return obj;
         });
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
       }, reject)
     });
@@ -4091,7 +4091,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
         console.log("deleted recording..");
         $scope.load().then(function() {
@@ -4121,8 +4121,8 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle, $stateParams) {
-	  SharedPref.updateTitle("Register");
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams) {
+	  $shared.updateTitle("Register");
 
 	  var countryToCode = {
 		  US: "+1",
@@ -4156,18 +4156,18 @@ angular.module('MaterialApp')
 
   function doSpinup() {
 	$scope.shouldSplash = true;
-	SharedPref.setAuthToken( $scope.token );
+	$shared.setAuthToken( $scope.token );
 	var data = { "userId": $scope.userId };
 	$scope.invalidCode = false;
-	SharedPref.changingPage = true;
+	$shared.changingPage = true;
 	Backend.post("/userSpinup", data).then(function( res ) {
 		var data = res.data;
 		if ( data.success ) {
 
 			Idle.watch();
-			SharedPref.setAuthToken($scope.token);
-			SharedPref.setWorkspace(res.data.workspace);
-			SharedPref.changingPage = false;
+			$shared.setAuthToken($scope.token);
+			$shared.setWorkspace(res.data.workspace);
+			$shared.changingPage = false;
 			$state.go('dashboard-user-welcome', {});
 
 			return;
@@ -4194,16 +4194,16 @@ angular.module('MaterialApp')
 		}
 		if (registerForm.$valid) {
 			var data = angular.copy( $scope.user );
-				SharedPref.changingPage = true;
+				$shared.changingPage = true;
 			Backend.post("/register", data).then(function( res ) {
 				var data = res.data;
 				if ( !data.success ) {
-					SharedPref.showError("Error", data.message);
+					$shared.showError("Error", data.message);
 					return;
 				}
 				$scope.token = data; 
 				$scope.userId = data.userId;
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
 				$scope.step = 2;
 			});
 			return;
@@ -4219,10 +4219,10 @@ angular.module('MaterialApp')
 			var data = {};
 			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
 			data.userId = $scope.userId;
-				SharedPref.changingPage = true;
+				$shared.changingPage = true;
 			Backend.post("/registerSendVerify", data).then(function( res ) {
 				var data = res.data;
-					SharedPref.changingPage = false;
+					$shared.changingPage = false;
 				if (res.data.valid) {
 					$scope.didVerifyCall = true;
 					$scope.invalidNumber = false;
@@ -4242,10 +4242,10 @@ angular.module('MaterialApp')
 		if (verify2Form.$valid) {
 			var data = angular.copy( $scope.verify2 );
 			data.userId = $scope.userId;
-				SharedPref.changingPage = true;
+				$shared.changingPage = true;
 			Backend.post("/registerVerify", data).then(function( res ) {
 				var isValid = res.data.isValid;
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
 				if (isValid) {
 					$scope.step = 3;
 				} else {
@@ -4264,9 +4264,9 @@ angular.module('MaterialApp')
 			var data = {};
 			data["userId"] = $scope.userId;
 			data.workspace = $scope.workspace;
-				SharedPref.changingPage = true;
+				$shared.changingPage = true;
 			Backend.post("/updateWorkspace", data).then(function( res ) {
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
 					//doSpinup();
@@ -4293,9 +4293,9 @@ angular.module('MaterialApp')
 			var data = {};
 			data["userId"] = $scope.userId;
 			data.templateId =  $scope.selectedTemplate.id;
-				SharedPref.changingPage = true;
+				$shared.changingPage = true;
 			Backend.post("/provisionCallSystem", data).then(function( res ) {
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
 				doSpinup();
 				return;
 			});
@@ -4305,9 +4305,9 @@ angular.module('MaterialApp')
 	$scope.recall = function() {
 		var data = angular.copy( $scope.verify1 );
 		data.userId = $scope.userId;
-				SharedPref.changingPage = true;
+				$shared.changingPage = true;
 		Backend.post("/registerSendVerify", data).then(function( res ) {
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
            $mdToast.show(
           $mdToast.simple()
             .textContent('You will be called shortly.')
@@ -4343,8 +4343,8 @@ angular.module('MaterialApp')
       return false;
     }
 	$scope.gotoLogin= function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
     	$state.go('login');
 	}
 
@@ -4352,7 +4352,7 @@ angular.module('MaterialApp')
 
 	Backend.get("/getCallSystemTemplates").then(function(res) {
 		$scope.templates = res.data;
-		SharedPref.changingPage = false;
+		$shared.changingPage = false;
 		if ( $stateParams['hasData'] ) {
 			console.log("$stateParams data is ", $stateParams);
 			$scope.token = $stateParams['authData'];
@@ -4373,8 +4373,8 @@ angular.module('MaterialApp')
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, Idle) {
-	  SharedPref.updateTitle("Reset");
+  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Reset");
 	$scope.triedSubmit = false;
 	$scope.isLoading = false;
 	$scope.couldNotReset = false;
@@ -4438,8 +4438,8 @@ angular.module('MaterialApp')
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast) {
-	  SharedPref.updateTitle("Settings");
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
+	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
 	$scope.user = {
 		first_name: "",
@@ -4458,7 +4458,7 @@ angular.module('MaterialApp')
 			data['first_name'] = $scope.user.first_name;
 			data['last_name'] = $scope.user.last_name;
 			data['email'] = $scope.user.email;
-			SharedPref.isCreateLoading = true;
+			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(
 					$mdToast.simple()
@@ -4466,7 +4466,7 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 			});
 			return;
 		}
@@ -4484,7 +4484,7 @@ angular.module('MaterialApp')
 			data['state'] =$scope.user.state;
 			data['city'] =$scope.user.city;
 			data['country'] =$scope.user.country;
-			SharedPref.isCreateLoading = true;
+			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(
 					$mdToast.simple()
@@ -4492,7 +4492,7 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 			});
 			return;
 		}
@@ -4510,7 +4510,7 @@ angular.module('MaterialApp')
 		if (passwordsForm.$valid) {
 			var data = {};
 			data['password'] = $scope.user.password;
-			SharedPref.isCreateLoading = true;
+			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 				var token = res.data;
 					$mdToast.show(
@@ -4519,18 +4519,18 @@ angular.module('MaterialApp')
 						.position("top right")
 						.hideDelay(3000)
 					);
-				SharedPref.endIsCreateLoading();
+				$shared.endIsCreateLoading();
 			});
 			return;
 		}
       	return false;
 
 	}
-	SharedPref.isLoading = true;
+	$shared.isLoading = true;
 	Backend.get("/self").then(function(res) {
 		$scope.user = res.data;
 		console.log("user is ", $scope.user);
-		SharedPref.endIsLoading();
+		$shared.endIsLoading();
 	});
   });
 
@@ -4677,10 +4677,10 @@ angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Verified Caller IDs");
-    function DialogController($scope, $mdDialog, Backend, SharedPref, onCreated) {
-      $scope.SharedPref = SharedPref;
+angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Verified Caller IDs");
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.$mdDialog = $mdDialog;
@@ -4735,11 +4735,11 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
 
   $scope.numbers = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/settings/verifiedCallerids").then(function(res) {
           $scope.numbers = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -4775,7 +4775,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -4804,8 +4804,8 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-	  SharedPref.updateTitle("Verified Caller IDs");
+angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Verified Caller IDs");
    $scope.values = {
     secret: ""
   };
@@ -4841,7 +4841,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/extension/saveExtension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
@@ -4851,7 +4851,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
             .hideDelay(3000)
         );
         $state.go('extensions', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
@@ -4861,7 +4861,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
     $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
   }
   $timeout(function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }, 0);
 });
 
@@ -4875,15 +4875,15 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q) {
-      SharedPref.updateTitle("Workspace API Settings");
+angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
+      $shared.updateTitle("Workspace API Settings");
       $scope.settings = {};
       $scope.load = function () {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
         return $q(function (resolve, reject) {
           Backend.get("/getWorkspaceTokens").then(function (res) {
             $scope.settings = res.data;
-            SharedPref.endIsLoading();
+            $shared.endIsLoading();
             resolve();
           }, function () {
             reject();
@@ -4899,7 +4899,7 @@ angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($
           .ok('Yes')
           .cancel('No');
         $mdDialog.show(confirm).then(function () {
-            SharedPref.isLoading = true;
+            $shared.isLoading = true;
             Backend.get("/refreshWorkspaceTokens").then(function (res) {
               $scope.load().then(function () {
                 $mdToast.show(
@@ -4933,15 +4933,15 @@ angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Workspace Params");
+angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Workspace Params");
   $scope.params = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/workspaceParam/listParams").then(function(res) {
           $scope.params = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -4983,15 +4983,15 @@ angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Workspace Users");
+angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Workspace Users");
   $scope.users = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/workspaceUser/listUsers").then(function(res) {
           $scope.users = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -5008,7 +5008,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -5025,11 +5025,11 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
   }
   $scope.editUser = function($event, user) {
     console.log("edit usr ", user);
-    SharedPref.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
+    $shared.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
   }
   $scope.createUser = function() {
 
-    SharedPref.changeRoute('settings-workspace-users-create', {});
+    $shared.changeRoute('settings-workspace-users-create', {});
   }
 
   $scope.load();
@@ -5045,9 +5045,9 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-    SharedPref.updateTitle("Create Extension");
-    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+    $shared.updateTitle("Create Extension");
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
   $scope.values = {
     user: {
@@ -5055,7 +5055,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
       last_name: "",
       email: ""
     },
-    roles: SharedPref.makeDefaultWorkspaceRoles()
+    roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.triedSubmit = false;
   $scope.submit = function(form) {
@@ -5076,7 +5076,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/workspaceUser/addUser", values).then(function() {
        console.log("added user..");
         $mdToast.show(
@@ -5086,12 +5086,12 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
             .hideDelay(3000)
         );
         $state.go('settings-workspace-users', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
   $timeout(function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }, 0);
 });
 
@@ -5105,10 +5105,10 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, SharedPref ) {
-    SharedPref.updateTitle("Workspace User Edit");
-    var roles = SharedPref.makeDefaultWorkspaceRoles();
-    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
+    $shared.updateTitle("Workspace User Edit");
+    var roles = $shared.makeDefaultWorkspaceRoles();
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
 
   $scope.values = {
@@ -5117,7 +5117,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
       last_name: "",
       email: ""
     },
-    roles: SharedPref.makeDefaultWorkspaceRoles()
+    roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.ui = {
     showSecret: false,
@@ -5142,7 +5142,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
        console.log("added user..");
         $mdToast.show(
@@ -5152,7 +5152,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
             .hideDelay(3000)
         );
         $state.go('settings-workspace-users', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
@@ -5168,7 +5168,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
       console.log("$scope.values are ", $scope.values);
     });
   $timeout(function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }, 0);
 });
 

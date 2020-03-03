@@ -7,15 +7,15 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Workspace Params");
+angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Workspace Params");
   $scope.params = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/workspaceParam/listParams").then(function(res) {
           $scope.params = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();

@@ -86,7 +86,7 @@
                                         <md-input-container>
                                           <label>Country</label>
                                           <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
-                                            <md-option ng-repeat="country in SharedPref.billingCountries" ng-value="country">
+                                            <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
                                               {{country.name}}
                                             </md-option>
                                           </md-select>
@@ -252,7 +252,7 @@
             <md-input-container>
               <label>Billing Package</label>
               <md-select ng-model="settings.db.billing_package" ng-change="changeBillingPackage(settings.db.billing_package)">
-                <md-option ng-repeat="package in SharedPref.billingPackages" ng-value="package">
+                <md-option ng-repeat="package in $shared.billingPackages" ng-value="package">
                   {{makeNicePackageName(package)}}
                 </md-option>
               </md-select>

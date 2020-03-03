@@ -8,9 +8,9 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, $mdToast, $mdDialog, $window) {
-	  SharedPref.updateTitle("Billing");
-	  $scope.SharedPref = SharedPref;
+  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Billing");
+	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
 	  $scope.startDate = moment().startOf('month').toDate();
 	  $scope.endDate = moment().endOf('month').toDate();
@@ -40,8 +40,8 @@ angular.module('MaterialApp')
 		expires: "",
 		cvv: ""
 	};
-    function TriggerDialogController($scope, $mdDialog,SharedPref, onCreate) {
-      $scope.SharedPref = SharedPref;
+    function TriggerDialogController($scope, $mdDialog,$shared, onCreate) {
+      $scope.$shared = $shared;
 	  $scope.data = {
 		  percentage: "10%"
 	  };
@@ -70,7 +70,7 @@ angular.module('MaterialApp')
 		data['card_id'] = cardId;
 		data['amount'] =  amount;
 		$scope.data.creditAmount.value;
-		SharedPref.isCreateLoading =true;
+		$shared.isCreateLoading =true;
 		Backend.post("/credit/addCredit", data).then(function(res) {
 			console.log("added credit amount");
 					loadData(true).then(function() {
@@ -83,7 +83,7 @@ angular.module('MaterialApp')
 
 							})
 				});
-				//SharedPref.endIsCreateLoading();
+				//$shared.endIsCreateLoading();
 		}
 
 		function stripeRespAddCard(response) {
@@ -93,18 +93,18 @@ angular.module('MaterialApp')
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
-				SharedPref.isCreateLoading =true;
+				$shared.isCreateLoading =true;
 				Backend.post("/card/addCard", data).then(function(res) {
 					resolve(res);
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
 				});
 			});
 		}
 
-	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, SharedPref) {
-		$scope.SharedPref = SharedPref;
+	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
+		$scope.$shared = $shared;
 		$scope.card = {
 			name: "",
 			address: "",
@@ -221,12 +221,12 @@ angular.module('MaterialApp')
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
 		data.amount = $scope.data.creditAmount.value;
-		SharedPref.isCreateLoading =true;
+		$shared.isCreateLoading =true;
 		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
 			var data = res.data;
 			//$window.replace(data.url);
 			$window.location.href = data.url;
-			SharedPref.endIsCreateLoading();
+			$shared.endIsCreateLoading();
 		});
 	}
 
@@ -267,7 +267,7 @@ angular.module('MaterialApp')
 		var recharge = $scope.settings.db.auto_recharge_top_up.value;
 		data['auto_recharge_top_up'] = toCents(recharge);
 		console.log("recharge in cents is ", data['auto_recharge_top_up']);
-		SharedPref.isCreateLoading =true;
+		$shared.isCreateLoading =true;
 		Backend.post("/changeBillingSettings", data).then(function(res) {
 			$mdToast.show(
 			$mdToast.simple()
@@ -275,7 +275,7 @@ angular.module('MaterialApp')
 				.position("top right")
 				.hideDelay(3000)
 			);
-			SharedPref.endIsCreateLoading();
+			$shared.endIsCreateLoading();
 			});
 	}
 
@@ -283,10 +283,10 @@ angular.module('MaterialApp')
 		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
 	}
 	$scope.filterBilling = function() {
-		SharedPref.isCreateLoading = true;
+		$shared.isCreateLoading = true;
 		billHistory().then(function(res) {
 				$scope.history = res.data;
-				SharedPref.endIsCreateLoading();
+				$shared.endIsCreateLoading();
 		});
 	}
 	$scope.downloadBilling = function() {
@@ -304,9 +304,9 @@ angular.module('MaterialApp')
 
 	function loadData(createLoading) {
 		if (createLoading) {
-			SharedPref.isCreateLoading =true;
+			$shared.isCreateLoading =true;
 		} else {
-			SharedPref.isLoading =true;
+			$shared.isLoading =true;
 		}
 
 		return $q(function(resolve, reject) {
@@ -340,9 +340,9 @@ angular.module('MaterialApp')
 				console.log("usage triggers are ", $scope.usageTriggers);
 				$scope.creditAmount = $scope.creditAmounts[0];
 				if (createLoading) {
-					SharedPref.endIsCreateLoading();
+					$shared.endIsCreateLoading();
 				} else {
-					SharedPref.endIsLoading();
+					$shared.endIsLoading();
 				}
 				resolve();
 			}, reject);
@@ -386,7 +386,7 @@ angular.module('MaterialApp')
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/delUsageTrigger/" + item.id).then(function() {
           loadData(false).then(function() {
            $mdToast.show(

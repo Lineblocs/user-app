@@ -7,9 +7,9 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref ) {
-    SharedPref.updateTitle("Create Extension");
-    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+    $shared.updateTitle("Create Extension");
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
   $scope.values = {
     user: {
@@ -17,7 +17,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
       last_name: "",
       email: ""
     },
-    roles: SharedPref.makeDefaultWorkspaceRoles()
+    roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.triedSubmit = false;
   $scope.submit = function(form) {
@@ -38,7 +38,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/workspaceUser/addUser", values).then(function() {
        console.log("added user..");
         $mdToast.show(
@@ -48,12 +48,12 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
             .hideDelay(3000)
         );
         $state.go('settings-workspace-users', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
   $timeout(function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }, 0);
 });
 

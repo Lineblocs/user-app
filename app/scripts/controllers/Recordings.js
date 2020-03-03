@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
-	  SharedPref.updateTitle("Recordings");
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
+	  $shared.updateTitle("Recordings");
   $scope.settings = {
     page: 0
   };
@@ -16,7 +16,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
   $scope.recordings = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
         pagination.changeUrl( "/recording/listRecordings" );
         pagination.changePage( 1 );
@@ -27,7 +27,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
           obj.uri = $sce.trustAsResourceUrl(obj.uri);
           return obj;
         });
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
       }, reject)
     });
@@ -42,7 +42,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
         console.log("deleted recording..");
         $scope.load().then(function() {

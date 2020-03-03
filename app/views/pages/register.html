@@ -1,5 +1,5 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
-    <div ng-show="SharedPref.changingPage" class="change-page-mask"></div>
+    <div ng-show="$shared.changingPage" class="change-page-mask"></div>
     <div ng-show="shouldSplash">
         <div class="full-blue splash">
             <div class="outer">
@@ -33,7 +33,7 @@
                 </div>
             </center>
             <center>
-                <div ng-show="SharedPref.changingPage">
+                <div ng-show="$shared.changingPage">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                     <p>Please wait..</p>
                 </div>

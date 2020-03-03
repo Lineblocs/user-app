@@ -7,12 +7,12 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Extension Codes");
+angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Extension Codes");
   $scope.users = [];
 
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
           Backend.get("/flow/listFlows?all=1"),
@@ -30,7 +30,7 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
          });
          $scope.codes = codes;
 
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -43,7 +43,7 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
       return code;
     });
     var data = {"codes": codes};
-    SharedPref.isCreateLoading = true;
+    $shared.isCreateLoading = true;
     Backend.post("/settings/extensionCodes", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
@@ -51,7 +51,7 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
             .position("top right")
             .hideDelay(3000)
         );
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
     });
   }
  $scope.addCode = function() {

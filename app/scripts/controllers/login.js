@@ -8,9 +8,9 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, SharedPref, $state, Idle) {
-	  SharedPref.updateTitle("Login");
-	  SharedPref.processResult();
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
+	  $shared.updateTitle("Login");
+	  $shared.processResult();
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
 	$scope.noUserFound = false;
@@ -28,8 +28,8 @@ var clickedGoogSignIn = false;
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
-				SharedPref.setAuthToken(token);
-				SharedPref.setWorkspace(workspace);
+				$shared.setAuthToken(token);
+				$shared.setWorkspace(workspace);
 				Idle.watch();
 		        $state.go('dashboard-user-welcome', {});
 	}
@@ -39,9 +39,9 @@ var clickedGoogSignIn = false;
     $scope.submit1 = function($event, loginForm) {
 		$scope.triedSubmit = true;
 		if (loginForm.$valid) {
-			SharedPref.changingPage = true;
+			$shared.changingPage = true;
 			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
-				SharedPref.changingPage = false;
+				$shared.changingPage = false;
 				if ( res.data.found ) {
 					$scope.userInfo = res.data.info;
 					$scope.step = 2;
@@ -69,13 +69,13 @@ var clickedGoogSignIn = false;
 		}
     }
 	$scope.gotoRegister = function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
     	$state.go('register');
 	}
 	$scope.gotoForgot = function() {
-		SharedPref.changingPage = true;
-		SharedPref.scrollToTop();
+		$shared.changingPage = true;
+		$shared.scrollToTop();
 		$state.go('forgot');
 	}
 
@@ -86,11 +86,11 @@ var clickedGoogSignIn = false;
 		data['last_name'] = lastname;
 		data['avatar'] = avatar;
 		data['challenge'] = $scope.challenge;
-			SharedPref.changingPage = true;
+			$shared.changingPage = true;
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
 			$timeout(function() {
 				$scope.$apply();
-				SharedPref.scrollToTop();
+				$shared.scrollToTop();
 
 				if ( res.data.confirmed ) {
 					finishLogin(res.data.info, res.data.info.workspace);
@@ -138,7 +138,7 @@ var clickedGoogSignIn = false;
 	$scope.backStep1 = function() {
 		$scope.step = 1;
 	}
-	SharedPref.changingPage = false;
+	$shared.changingPage = false;
 	angular.element("#gSignIn").on("click", function() {
 		clickedGoogSignIn = true;
 	});

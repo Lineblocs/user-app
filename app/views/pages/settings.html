@@ -92,7 +92,7 @@
                 <md-input-container>
                   <label>Country</label>
                   <md-select ng-model="user.country" ng-change="changeCountry(user.country)" required>
-                    <md-option ng-repeat="country in SharedPref.billingCountries" ng-value="country.iso">
+                    <md-option ng-repeat="country in $shared.billingCountries" ng-value="country.iso">
                       {{country.name}}
                     </md-option>
                   </md-select>

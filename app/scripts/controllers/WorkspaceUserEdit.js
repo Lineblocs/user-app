@@ -7,10 +7,10 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, SharedPref ) {
-    SharedPref.updateTitle("Workspace User Edit");
-    var roles = SharedPref.makeDefaultWorkspaceRoles();
-    $scope.availableRoles = SharedPref.makeDefaultWorkspaceRoles(true);
+angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
+    $shared.updateTitle("Workspace User Edit");
+    var roles = $shared.makeDefaultWorkspaceRoles();
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
 
   $scope.values = {
@@ -19,7 +19,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
       last_name: "",
       email: ""
     },
-    roles: SharedPref.makeDefaultWorkspaceRoles()
+    roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.ui = {
     showSecret: false,
@@ -44,7 +44,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
        console.log("added user..");
         $mdToast.show(
@@ -54,7 +54,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
             .hideDelay(3000)
         );
         $state.go('settings-workspace-users', {});
-        SharedPref.endIsCreateLoading();
+        $shared.endIsCreateLoading();
       });
     }
   }
@@ -70,7 +70,7 @@ angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($sco
       console.log("$scope.values are ", $scope.values);
     });
   $timeout(function() {
-    SharedPref.endIsLoading();
+    $shared.endIsLoading();
   }, 0);
 });
 

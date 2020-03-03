@@ -7,15 +7,15 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q ) {
-    SharedPref.updateTitle("Workspace Users");
+angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Workspace Users");
   $scope.users = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       return $q(function(resolve, reject) {
         Backend.get("/workspaceUser/listUsers").then(function(res) {
           $scope.users = res.data;
-          SharedPref.endIsLoading();
+          $shared.endIsLoading();
           resolve();
         }, function() {
           reject();
@@ -32,7 +32,7 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
@@ -49,11 +49,11 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
   }
   $scope.editUser = function($event, user) {
     console.log("edit usr ", user);
-    SharedPref.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
+    $shared.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
   }
   $scope.createUser = function() {
 
-    SharedPref.changeRoute('settings-workspace-users-create', {});
+    $shared.changeRoute('settings-workspace-users-create', {});
   }
 
   $scope.load();

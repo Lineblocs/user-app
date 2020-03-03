@@ -7,15 +7,15 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, SharedPref, $q) {
-      SharedPref.updateTitle("Workspace API Settings");
+angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
+      $shared.updateTitle("Workspace API Settings");
       $scope.settings = {};
       $scope.load = function () {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
         return $q(function (resolve, reject) {
           Backend.get("/getWorkspaceTokens").then(function (res) {
             $scope.settings = res.data;
-            SharedPref.endIsLoading();
+            $shared.endIsLoading();
             resolve();
           }, function () {
             reject();
@@ -31,7 +31,7 @@ angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($
           .ok('Yes')
           .cancel('No');
         $mdDialog.show(confirm).then(function () {
-            SharedPref.isLoading = true;
+            $shared.isLoading = true;
             Backend.get("/refreshWorkspaceTokens").then(function (res) {
               $scope.load().then(function () {
                 $mdToast.show(

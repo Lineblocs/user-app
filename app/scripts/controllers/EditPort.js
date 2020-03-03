@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, SharedPref) {
-  SharedPref.updateTitle("Edit Port Number");
+angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+  $shared.updateTitle("Edit Port Number");
   $scope.flows = [];
   $scope.number = null;
   $scope.number = {
@@ -66,7 +66,7 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
       params.append("invoice", angular.element("#invoice").prop("files")[0]);
       return;
     }
-    SharedPref.isLoading = true;
+    $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/updateNumber/" + $stateParams['numberId'], params, true).then(function () {
       console.log("updated number..");
@@ -78,7 +78,7 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
       );
       $state.go('ports', {});
     }, function() {
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
       });
   }
   $scope.changeCountry = function (country) {
@@ -94,15 +94,15 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
     });
     return url;
   }
-  SharedPref.isLoading = true;
+  $shared.isLoading = true;
   Backend.get("/port/numberData/" + $stateParams['numberId']).then(function (res) {
     $scope.number = res.data;
-    angular.forEach(SharedPref.billingCountries, function (country) {
+    angular.forEach($shared.billingCountries, function (country) {
       if (country.iso === $scope.number.country) {
         $scope.number.country = country;
       }
     });
     $scope.loa =
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
   });
 });

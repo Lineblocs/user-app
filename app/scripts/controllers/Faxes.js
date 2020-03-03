@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, SharedPref, $q, $mdToast) {
-	  SharedPref.updateTitle("Faxes");
+angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
+	  $shared.updateTitle("Faxes");
   $scope.settings = {
     page: 0
   };
@@ -16,7 +16,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
   $scope.faxes = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
         pagination.changeUrl( "/fax/listFaxes" );
         pagination.changePage( 1 );
@@ -27,7 +27,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
           obj.uri = $sce.trustAsResourceUrl(obj.uri);
           return obj;
         });
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
       }, reject)
     });
@@ -42,7 +42,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       Backend.delete("/fax/deleteFax/" + fax.id).then(function() {
         console.log("deleted fax..");
         $scope.load().then(function() {

@@ -7,12 +7,12 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, SharedPref, $q) {
-    SharedPref.updateTitle("Extensions");
+angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("Extensions");
     $scope.pagination = pagination;
     
-    function DialogController($scope, $mdDialog, extension, SharedPref) {
-      $scope.SharedPref = SharedPref;
+    function DialogController($scope, $mdDialog, extension, $shared) {
+      $scope.$shared = $shared;
       $scope.extension = extension;
       $scope.close = function() {
         $mdDialog.hide(); 
@@ -23,7 +23,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
   };
   $scope.extensions = [];
   $scope.load = function() {
-      SharedPref.isLoading = true;
+      $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/extension/listExtensions" );
       pagination.changePage( 1 );
@@ -31,7 +31,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
       return $q(function(resolve, reject) {
         pagination.loadData().then(function(res) {
         $scope.extensions = res.data.data;
-        SharedPref.endIsLoading();
+        $shared.endIsLoading();
         resolve();
         }, reject);
       });
@@ -68,7 +68,7 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
           .ok('Yes')
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
-        SharedPref.isLoading = true;
+        $shared.isLoading = true;
       Backend.delete("/extension/deleteExtension/" + extension.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(

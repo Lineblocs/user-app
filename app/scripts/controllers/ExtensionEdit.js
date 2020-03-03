@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, SharedPref, $q) {
-	  SharedPref.updateTitle("Edit Extension");
+angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, $shared, $q) {
+	  $shared.updateTitle("Edit Extension");
   $scope.values = {
     username: "",
     secret: "",
@@ -20,7 +20,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   }
   $scope.triedSubmit = false;
   $scope.load = function() {
-  SharedPref.isLoading = true;
+  $shared.isLoading = true;
    $q.all([
       Backend.get("/flow/listFlows"),
       Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
@@ -28,7 +28,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       $scope.flows= res[0].data.data;
       $scope.extension = res[1].data;
       $scope.values = angular.copy( $scope.extension );
-      SharedPref.endIsLoading();
+      $shared.endIsLoading();
     });
   }
   $scope.generateSecret = function() {
@@ -59,7 +59,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      SharedPref.isCreateLoading = true;
+      $shared.isCreateLoading = true;
       Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
@@ -69,7 +69,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
             .hideDelay(3000)
         );
         $state.go('extensions', {});
-      SharedPref.endIsCreateLoading();
+      $shared.endIsCreateLoading();
       });
     }
   }
