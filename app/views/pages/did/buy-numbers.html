@@ -45,7 +45,13 @@
                 <div flex="95">
                     <md-input-container>
                         <label>Region</label>
-                        <input name="region" ng-model="settings.region" placeholder="" required="" />
+                        <md-select md-on-open="loadRegions()" name="region" ng-model="settings.region"
+                            ng-change="changeRegion(settings.region)" required="">
+                            <md-option><em>None</em></md-option>
+                            <md-option ng-repeat="region in regions" ng-value="region">
+                                {{region.name}}
+                            </md-option>
+                        </md-select>
                         <div ng-show="triedSubmit">
                             <div class="box">
                                 <div ng-show="didForm.region.$error.required">This field is required</div>
@@ -67,7 +73,14 @@
                 <div flex="95">
                     <md-input-container ng-show="true">
                         <label>Rate Center</label>
-                        <input ng-model="settings.rate_center" placeholder="" />
+                        <md-select md-on-open="loadRateCenters()" name="rate_center" ng-model="settings.rate_center"
+                            ng-change="changeRateCenter(settings.rate_center)" required="">
+                            <md-option><em>None</em></md-option>
+                            <md-option ng-repeat="center in rateCenters" ng-value="center">
+                                {{center}}
+                            </md-option>
+                        </md-select>
+
                     </md-input-container>
                 </div>
                 <div flex="5">

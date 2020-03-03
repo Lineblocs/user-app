@@ -173,7 +173,7 @@ gulp.task('watch', ['connect'], function() {
     'app/images/**/*',
     '!app/templates.html'
     ]).on('change', function() {
-        gulp.start('compress-js');
+        gulp.start('scripts');
         /*
         mergeTemplates().then(function(output) {
             fs.writeFileSync("./app/templates.html", output);
@@ -181,7 +181,7 @@ gulp.task('watch', ['connect'], function() {
         */
         $.livereload.changed();
     });
-    gulp.watch('app/styles/**/*.scss', ['compress-css']);
+    gulp.watch('app/styles/**/*.scss', ['styles']);
     //gulp.watch('bower.json', ['wiredep']);
 });
 

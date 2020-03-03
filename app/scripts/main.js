@@ -1396,8 +1396,9 @@ angular.module('MaterialApp').controller('BodyCtrl', function ($scope, $shared) 
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared) {
-	  $shared.updateTitle("Buy Numbers");
+angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q) {
+    $shared.updateTitle("Buy Numbers");
+    $scope.countries = [];
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
@@ -1408,6 +1409,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         $state.go('my-numbers-edit', { numberId: number.id });
     }
   }
+  /*
   $scope.countries = [
     {
        iso: 'CA',
@@ -1418,6 +1420,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
        name: 'United States'
     }
   ];
+  */
   $scope.settings = {
     country: "",
     region: "",
@@ -1445,7 +1448,9 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
   };
 
   $scope.load = function() {
-    $shared.endIsLoading();
+    $scope.listCountries().then(function() {
+      $shared.endIsLoading();
+    });
   }
   $scope.fetch =  function(event, didForm) {
 		$scope.triedSubmit = true;
@@ -1454,7 +1459,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     }
     var data = {};
     //data['region'] = $scope.settings['region'];
-    data['region'] = $scope.settings['region'];
+    data['region'] = $scope.settings['region']['code'];
     data['rate_center'] = $scope.settings['rate_center'];
     //data['prefix'] = $scope.settings['pattern'];
     data['prefix'] = "";
@@ -1506,7 +1511,45 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
   $scope.changeCountry = function(country) {
     console.log("changeCountry ", country);
     $scope.settings.country = country;
+    $scope.regions = [];
+    $scope.listRegions();
   }
+ $scope.changeRegion = function(region) {
+    console.log("changeRegion ", region);
+    $scope.settings.region = region;
+    $scope.listRateCenters();
+  }
+  $scope.changeRateCenter = function(rateCenter) {
+    console.log("changeRateCenter ", rateCenter);
+    $scope.settings.rate_center = rateCenter;
+  }
+
+$scope.listCountries = function() {
+    return $q(function(resolve, reject) {
+        Backend.get("/getCountries").then(function(res) { 
+        console.log("got countries ", res.data);
+        $scope.countries = res.data;
+        resolve();
+      });
+    });
+
+  }
+
+  $scope.listRegions = function() {
+    Backend.get("/getRegions?country=" + $scope.settings.country.iso).then(function(res) {
+      console.log("got regions ", res.data);
+      $scope.regions = res.data;
+    })
+
+  }
+  $scope.listRateCenters = function() {
+    Backend.get("/getRateCenters?country=" + $scope.settings.country.iso+ "&region=" + $scope.settings.region.code).then(function(res) {
+      console.log("got rate centers ", res.data);
+      $scope.rateCenters = res.data;
+    })
+
+  }
+
 
     $scope.load();
 });
