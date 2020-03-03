@@ -9,14 +9,13 @@
 * Main module of the application.
 */
 window.app_version = 2.0;
- function loadAddedResources1() {
-        addCSS("https://editor.lineblocs.com/app.min.css");
-        addScript("https://editor.lineblocs.com/main.min.js");
- }
-function loadAddedResources2() {
+     function loadAddedResources1() {
         addScript("https://apis.google.com/js/platform.js");
-        addScript("https://matomo.lbackups.com/matomo.js");
- }
+    }
+    function loadAddedResources1() {
+        addScript("https://js.stripe.com/v2/");
+
+    }
 
     // add CSS file
     function addCSS(filename) {
@@ -1951,7 +1950,7 @@ angular.module('MaterialApp')
 		$translate.use(l);			
 		
 	});
-	
+	loadAddedResources1();	
 });	
 
 'use strict';
@@ -2132,6 +2131,7 @@ angular.module('MaterialApp')
         return false;
     }
 	$scope.load();
+	loadAddedResources1();	
 }]);
 'use strict';
 
