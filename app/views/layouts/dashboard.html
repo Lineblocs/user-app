@@ -91,69 +91,71 @@
 	</header>
 <!-- Side bar here -->
 <aside id="" class="sidebar">
-	<div class="top-logo">
-		<img width="60" ng-src="{{'/images/logo-icon-white.png'}}"/>
-	</div>
-	<div class="top-logo-extended">
-		<img width="180" ng-src="{{'/images/logo-white.png'}}"/>
-	</div>
-	<div class="scrollbar" id="scroll">
-		<div class="user-info" ng-show="false">
-			<div class="opacity">
-				<a ui-sref="profile"><img src="images/profile.jpg" alt="" class="sidebar-profile"></a>
-				<div class="info">
-					Sankhadeep Roy <br /> <span class="smaller">Striker at Liverpool FC</span>
-					<div class="pen">
-						<a href="javascript:void(0)" class=""><i class="mdi mdi-border-color"></i></a>
+	<div class="sidebar-content scroll">
+		<div class="top-logo">
+			<img width="60" ng-src="{{'/images/logo-icon-white.png'}}"/>
+		</div>
+		<div class="top-logo-extended">
+			<img width="180" ng-src="{{'/images/logo-white.png'}}"/>
+		</div>
+		<div class="scrollbar" id="scroll">
+			<div class="user-info" ng-show="false">
+				<div class="opacity">
+					<a ui-sref="profile"><img src="images/profile.jpg" alt="" class="sidebar-profile"></a>
+					<div class="info">
+						Sankhadeep Roy <br /> <span class="smaller">Striker at Liverpool FC</span>
+						<div class="pen">
+							<a href="javascript:void(0)" class=""><i class="mdi mdi-border-color"></i></a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="dashboard-menu">
-			<ul class="menu-list">
-				<li ng-class="{active: $state.includes('home')}"><md-button href="" ng-click="SharedPref.changeRoute('home')" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
-				<li class="show-subnav">
-					<md-button href="" class=" show-menu" ng-click="subnav('ui')">
-						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
-						<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-						<span class="text"> {{ 'did-numbers' | translate }}</span>
-					</md-button>
-					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
+			<div class="dashboard-menu">
+				<ul class="menu-list">
+					<li ng-class="{active: $state.includes('home')}"><md-button href="" ng-click="SharedPref.changeRoute('home')" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
+					<li class="show-subnav">
+						<md-button href="" class=" show-menu" ng-click="subnav('ui')">
+							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+							<span class="text"> {{ 'did-numbers' | translate }}</span>
+						</md-button>
+						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
 
-						<li ng-class="{active: $state.includes('my-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('my-numbers')" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('buy-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('buy-numbers')" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('my-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('my-numbers')" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('buy-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('buy-numbers')" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
 
 
-						<li ng-class="{active: $state.includes('ports')}"><md-button href="" ng-click="SharedPref.changeRoute('ports')" class=""><span class="text">{{ 'port-numbers' | translate }}</span></md-button></li>
-					</ul>
+							<li ng-class="{active: $state.includes('ports')}"><md-button href="" ng-click="SharedPref.changeRoute('ports')" class=""><span class="text">{{ 'port-numbers' | translate }}</span></md-button></li>
+						</ul>
 
-				</li>
-				<li ng-class="{active: $state.includes('flows')}"><md-button href="" ng-click="SharedPref.changeRoute('flows')" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('extensions')}" ng-show="SharedPref.canPerformAction('manage_extensions')"><md-button href="" ng-click="SharedPref.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="SharedPref.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('faxes')}"><md-button href="" ng-click="SharedPref.changeRoute('faxes')" class=""><i class="mdi mdi-file-document"></i> &nbsp;<span class="text">{{ 'faxes' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('files')}"><md-button href="" ng-click="SharedPref.changeRoute('files')" class=""><i class="mdi mdi-library-music"></i> &nbsp;<span class="text">{{ 'media-files' | translate }}</span></md-button></li>
-				<li ng-class="{active: $state.includes('debugger-logs')}"><md-button href="" ng-click="SharedPref.changeRoute('debugger-logs')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'debugger-logs' | translate }}</span></md-button></li>
-				<li class="show-subnav">
-					<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
-						<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
-						<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-						<span class="text"> {{ 'settings' | translate }}</span>
-					</md-button>
-					<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
-						<li ng-class="{active: $state.includes('settings-verified-callerids')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-verified-callerids')" class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('settings-blocked-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-blocked-numbers')" class=""><span class="text">{{ 'blocked-numbers' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('settings-ip-whitelist')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-ip-whitelist')" class=""><span class="text">{{ 'ip-whitelist' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('settings-workspace-users')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-workspace-users')" class=""><span class="text">{{ 'workspace-users' | translate }}</span></md-button></li>
+					</li>
+					<li ng-class="{active: $state.includes('flows')}"><md-button href="" ng-click="SharedPref.changeRoute('flows')" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
+					<li ng-class="{active: $state.includes('extensions')}" ng-show="SharedPref.canPerformAction('manage_extensions')"><md-button href="" ng-click="SharedPref.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
+					<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="SharedPref.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
+					<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="SharedPref.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
+					<li ng-class="{active: $state.includes('faxes')}"><md-button href="" ng-click="SharedPref.changeRoute('faxes')" class=""><i class="mdi mdi-file-document"></i> &nbsp;<span class="text">{{ 'faxes' | translate }}</span></md-button></li>
+					<li ng-class="{active: $state.includes('files')}"><md-button href="" ng-click="SharedPref.changeRoute('files')" class=""><i class="mdi mdi-library-music"></i> &nbsp;<span class="text">{{ 'media-files' | translate }}</span></md-button></li>
+					<li ng-class="{active: $state.includes('debugger-logs')}"><md-button href="" ng-click="SharedPref.changeRoute('debugger-logs')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'debugger-logs' | translate }}</span></md-button></li>
+					<li class="show-subnav">
+						<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
+							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
+							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+							<span class="text"> {{ 'settings' | translate }}</span>
+						</md-button>
+						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
+							<li ng-class="{active: $state.includes('settings-verified-callerids')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-verified-callerids')" class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('settings-blocked-numbers')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-blocked-numbers')" class=""><span class="text">{{ 'blocked-numbers' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('settings-ip-whitelist')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-ip-whitelist')" class=""><span class="text">{{ 'ip-whitelist' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('settings-workspace-users')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-workspace-users')" class=""><span class="text">{{ 'workspace-users' | translate }}</span></md-button></li>
 
-						<li ng-class="{active: $state.includes('settings-workspace-params')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-workspace-params')" class=""><span class="text">{{ 'workspace-params' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('settings-extension-codes')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-extension-codes')" class=""><span class="text">{{ 'extension-codes' | translate }}</span></md-button></li>
-						<li ng-class="{active: $state.includes('settings-workspace-api-settings')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-workspace-api-settings')" class=""><span class="text">{{ 'workspace-api-settings' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('settings-workspace-params')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-workspace-params')" class=""><span class="text">{{ 'workspace-params' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('settings-extension-codes')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-extension-codes')" class=""><span class="text">{{ 'extension-codes' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('settings-workspace-api-settings')}"><md-button href="" ng-click="SharedPref.changeRoute('settings-workspace-api-settings')" class=""><span class="text">{{ 'workspace-api-settings' | translate }}</span></md-button></li>
 
-					</ul>
-				</li>
-			</ul>
+						</ul>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </aside>

@@ -9,8 +9,14 @@ var $ = require('gulp-load-plugins')();
 // Require plugins
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
 var mergeTemplates = require('./merge_templates.js');
 var fs = require('fs');
+var cleanCSS = require("gulp-clean-css");
+var sourcemaps  = require("gulp-sourcemaps");
+const autoprefixer = require('gulp-autoprefixer');
+ 
 
 
 gulp.task('styles', function() {
@@ -25,8 +31,7 @@ gulp.task('styles', function() {
     .pipe($.plumber())
     .pipe($.sass())
     .pipe($.autoprefixer({browsers: ['last 1 version']}))
-    .pipe(gulp.dest('dist/styles'))
-    .pipe(gulp.dest('.tmp/styles'));
+    .pipe(gulp.dest('app/styles'));
 });
 
 gulp.task('jshint', function() {
@@ -226,8 +231,61 @@ gulp.task('scripts', function() {
         .pipe(concat('main.js'))
         .pipe(gulp.dest('./app/scripts/'));
 });
-gulp.task('compress', function() {
-  gulp.src(['./app/scripts/main.js'])
-    .pipe(minify())
-    .pipe(gulp.dest('./app/scripts/'))
+gulp.task('compress-js', function() {
+  gulp.src([
+'./bower_components/angular/angular.js',
+'./bower_components/angular-sanitize/angular-sanitize.js',
+'./bower_components/angular-animate/angular-animate.js',
+'./bower_components/angular-aria/angular-aria.js',
+'./bower_components/angular-material/angular-material.js',
+'./bower_components/Chart.js/Chart.js',
+'./bower_components/angular-chart.js/dist/angular-chart.js',
+'./bower_components/angular-ui-router/release/angular-ui-router.js',
+'./bower_components/angular-translate/angular-translate.js',
+'./bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
+'./bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+'./bower_components/angular-material-data-table/dist/md-data-table.js',
+'./bower_components/zxcvbn/dist/zxcvbn.js',
+'./bower_components/ng-idle/angular-idle.js',
+'./bower_components/moment/moment.js',
+'./bower_components/clipboard/dist/clipboard.js',
+'./bower_components/ngclipboard/dist/ngclipboard.js',
+      './app/scripts/main.js'
+    ])
+            .pipe(concat('concat.js'))
+        .pipe(gulp.dest('dist'))
+        .pipe(rename('main.min.js'))
+        .pipe(uglify({ mangle: false }))
+        .pipe(gulp.dest('app/scripts/'));
+
+});
+gulp.task('compress-css', function() {
+    console.log("cleaning CSS");
+gulp.src([
+"./bower_components/angular-material/angular-material.css",
+"./bower_components/angular-chart.js/dist/angular-chart.css",
+"./bower_components/c3/c3.css",
+"./bower_components/angular-material-data-table/dist/md-data-table.css",
+"./bower_components/flag-css/dist/css/flag-css.css",
+"./bower_components/mdi/css/materialdesignicons.css",
+"./bower_components/flag-icon-css/css/flag-icon.min.css",
+"./app/styles/app-blue.css",
+"./app/styles/custom.css"
+  ])
+        .pipe(concat('concat.css'))
+        .pipe(gulp.dest('dist'))
+        .pipe(rename('main.min.css'))
+    .pipe(cleanCSS(
+       {
+    }))
+      .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+  }))
+  .pipe(rename({
+      basename: 'main-styles-4',
+      suffix: '.min',
+  }))
+  .pipe(gulp.dest('app/styles/'))
+
 });

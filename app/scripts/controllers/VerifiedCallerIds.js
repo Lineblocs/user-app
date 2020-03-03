@@ -13,6 +13,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
       $scope.SharedPref = SharedPref;
       $scope.error = false;
       $scope.errorText = "";
+      $scope.$mdDialog = $mdDialog;
       $scope.data = {
         step1: {
           number: ""
@@ -54,6 +55,7 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
       }
 
       $scope.close = function() {
+        console.log("closing dialog..");
         $mdDialog.hide(); 
       }
     }

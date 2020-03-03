@@ -27,21 +27,25 @@
             <th md-column>To</th>
             <th md-column>Direction</th>
             <th md-column>Status</th>
+            <!--
             <th md-column>&nbsp;</th>
+            -->
           </tr>
         </thead>
         <tbody md-body>
           <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="call in calls">
-            <td md-cell>{{call.from}}</td>
+            <td md-cell>
+               <a class="clickable" ng-click="viewCall(call)">{{call.from}}</a></td>
             <td md-cell>{{call.to}}</td>
             <td md-cell>{{call.direction}}</td>
             <td md-cell>{{call.status}}</td>
-
+              <!--
             <td md-cell>
               <md-button ng-click="viewCall(call)" class="md-icon-button" aria-label="View Call">
                   <md-icon ><i class="mdi mdi-eye"></i></md-icon>
               </md-button>
             </td>
+          -->
           </tr>
         </tbody>
       </table>

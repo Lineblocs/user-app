@@ -71,21 +71,24 @@
                 <th md-column>To</th>
                 <th md-column>Title</th>
                 <th md-column>Created At</th>
+                <!--
                 <th md-column>&nbsp;</th>
+                -->
             </tr>
         </thead>
         <tbody md-body>
             <tr md-row md-select="log" md-select-id="name" md-auto-select ng-repeat="log in logs">
-                <td md-cell>{{log.from}}</td>
+                <td md-cell><a ng-click="viewLog(log)"" class="clickable">{{log.from}}</a></td>
                 <td md-cell>{{log.to}}</td>
                 <td md-cell>{{log.title}}</td>
                 <td md-cell>{{log.created_at}}</td>
-
+                <!--
                 <td md-cell>
                     <md-button ng-click="viewLog(log)" class="md-icon-button" aria-label="View Log">
                         <md-icon><i class="mdi mdi-eye"></i></md-icon>
                     </md-button>
                 </td>
+            -->
             </tr>
         </tbody>
         </table>

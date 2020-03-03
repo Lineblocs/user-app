@@ -212,12 +212,12 @@ md-menu {
 }
 .nav-item {
 	height: 45px;
-	margin-top: 8.5px;
+	margin-top: 8.5px
 }
 .no-margin-sides {
 	margin-left: 0;
 	margin-right: 0;
-}
+}e
 .no-margin-top-bottom {
 	margin-top: 0;
 	margin-bottom: 0;
@@ -315,6 +315,19 @@ md-tabs.settings {
 }
 
 /* Styles for extended layout */
+div.scroll::-webkit-scrollbar {width: 7px; height: 0;}
+div.scroll::-webkit-scrollbar-track {margin: 54px 0 53px}
+div.scroll::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.0);
+    border-radius: 10px;
+    box-shadow: rgba(255,255,255,0.3) 0 0 0 1px;
+}
+div.scroll:hover::-webkit-scrollbar-thumb {background: rgba(0,0,0,0.45)}
+div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
+
+.clickable {
+	text-decoration: underline;
+}
 
 .extended {
 	.navbar {
@@ -326,7 +339,11 @@ md-tabs.settings {
 		width: 200px;
 		position: fixed;
 		bottom:0;
-		overflow: hidden; 
+		.sidebar-content {
+			position: relative;
+			overflow-y: auto;
+			height: 800px;
+		}
 		.top-logo {
 			display: none;
 		}
@@ -391,7 +408,7 @@ md-tabs.settings {
 		.dashboard-menu {
         	ul.menu-list {
     			li {  
-    				min-height: 50px;	
+    				min-height: 32px;	
     				float: left;
     				display: block;
     				width: 100%;	

@@ -13,8 +13,9 @@
     "connect-livereload": "^0.5.3",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
-    "gulp-autoprefixer": "^2.1.0",
+    "gulp-autoprefixer": "^2.3.1",
     "gulp-cache": "^0.2.8",
+    "gulp-clean-css": "^4.2.0",
     "gulp-csso": "^1.0.0",
     "gulp-filter": "^2.0.2",
     "gulp-flatten": "^0.0.4",
@@ -30,11 +31,11 @@
     "gulp-ng-annotate": "^0.5.2",
     "gulp-ngdocs": "^0.2.10",
     "gulp-plumber": "^0.6.6",
-    "gulp-rename": "^1.2.0",
+    "gulp-rename": "^1.4.0",
     "gulp-replace": "^0.5.3",
     "gulp-sass": "^3.0.0",
     "gulp-size": "^1.2.1",
-    "gulp-uglify": "^1.1.0",
+    "gulp-uglify": "^1.5.4",
     "gulp-useref": "^1.1.1",
     "jshint-stylish": "^1.0.1",
     "karma": "^4.2.0",
@@ -51,6 +52,7 @@
     "yargs": "^3.3.1"
   },
   "dependencies": {
-    "glob": "^7.1.5"
+    "glob": "^7.1.5",
+    "gulp-sourcemaps": "^2.6.5"
   }
 }
