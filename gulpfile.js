@@ -16,7 +16,11 @@ var fs = require('fs');
 var cleanCSS = require("gulp-clean-css");
 var sourcemaps  = require("gulp-sourcemaps");
 const autoprefixer = require('gulp-autoprefixer');
- 
+const imagemin = require('imagemin');
+const imageminJpegtran = require('imagemin-jpegtran');
+const imageminPngquant = require('imagemin-pngquant');
+
+
 
 
 gulp.task('styles', function() {
@@ -288,5 +292,21 @@ gulp.src([
       suffix: '.min',
   }))
   .pipe(gulp.dest('app/styles/'))
+
+});
+
+gulp.task("images", async function() {
+    const files = await imagemin(['./app/images/*.{jpg,png}'], {
+        destination: 'app/images/',
+        plugins: [
+        imageminJpegtran(),
+        imageminPngquant({
+            quality: [0.6, 0.8]
+        })
+        ]
+    });
+
+    console.log(files);
+    //=> [{data: <Buffer 89 50 4e …>, destinationPath: 'build/images/foo.jpg'}, …]
 
 });
