@@ -1,11 +1,56 @@
 <div>
-  <div class="layout-row" layout-sm="column" layout-xs="column">
-    <div class="mdl-cell shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
-      <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
-                  <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
-              </md-button></span>
+  <div layout="row" ng-if="userAccountNotCompleted()">
+      <div flex="50">
+        <md-card class="dashboard-block" md-theme="'default'"" md-theme-watch>
+          <md-card-content>
+            <h2>Welcome</h2>
+            <md-list>
+              <md-subheader class="md-no-sticky">Your Account Status</md-subheader>
+              <md-list-item>
+                <p>Created Lineblocs Account</p>
+                <md-checkbox class="md-secondary" ng-model="checklist.created_account" ng-disabled="true"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <p>Added location and address</p>
+                <md-checkbox class="md-secondary" ng-model="checklist.filled_in_personal" ng-disabled="true"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <p>Registered DID</p>
+                <md-checkbox class="md-secondary" ng-model="checklist.registered_did" ng-disabled="true"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <p>Added Billing Info</p>
+                <md-checkbox class="md-secondary" ng-model="checklist.added_billing_info" ng-disabled="true"></md-checkbox>
+              </md-list-item>
+              <md-divider></md-divider>
+              </md-list>
+          </md-card-content>
+        </md-card>
       </div>
-      <div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
+      <div flex="50">
+          <div class="dashboard-block dashboard-block-margin shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
+            <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
+                        <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
+                    </md-button></span>
+            </div>
+            <div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
+            </div>
+        </div>
       </div>
     </div>
+  </div>
+  <div layout="row" ng-if="!userAccountNotCompleted()">
+    <div flex="100">
+      <div class="layout-row" layout-sm="column" layout-xs="column">
+        <div class="mdl-cell shadow grid-margin" style="background: white;" flex="100" flex-sm="100">
+          <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
+                      <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
+                  </md-button></span>
+          </div>
+          <div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
