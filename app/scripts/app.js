@@ -640,6 +640,12 @@ angular
         templateUrl: 'views/pages/dashboard-welcome.html',
         controller: 'DashboardWelcomeCtrl'
     })
+    .state('dashboard-redirect', {
+        url: '/dashboard-redirect',
+        parent: 'base',
+        templateUrl: 'views/pages/dashboard-redirect.html',
+        controller: 'DashboardRedirectCtrl'
+    })
     .state('my-numbers', {
         url: '/dids/my-numbers',
         parent: 'dashboard',

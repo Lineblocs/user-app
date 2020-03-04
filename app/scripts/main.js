@@ -640,6 +640,12 @@ angular
         templateUrl: 'views/pages/dashboard-welcome.html',
         controller: 'DashboardWelcomeCtrl'
     })
+    .state('dashboard-redirect', {
+        url: '/dashboard-redirect',
+        parent: 'base',
+        templateUrl: 'views/pages/dashboard-redirect.html',
+        controller: 'DashboardRedirectCtrl'
+    })
     .state('my-numbers', {
         url: '/dids/my-numbers',
         parent: 'dashboard',
@@ -1995,6 +2001,37 @@ angular.module('MaterialApp')
 	loadAddedResources1();	
 });	
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+ angular.module('MaterialApp').controller('DashboardRedirectCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', '$state', function ($scope, $timeout, Backend, $shared, $q, $state) {
+	  $shared.updateTitle("Dashboard");
+		  var urlObj = URI(document.location.href.split("#")[1]);
+          var query = urlObj.query(true);
+
+
+          var token = query.auth;
+		  var workspaceId = query.workspaceId;
+		  console.log("in dashboard redirect");
+		  Backend.post("/internalAppRedirect", {
+			token: token,
+			workspaceId: workspaceId
+
+		  }).then(function(res) {
+			  console.log("received reply ", res);
+			var token =res.data;
+			var workspace =res.data.workspace;
+			$shared.setAuthToken(token);
+			$shared.setWorkspace(workspace);
+			$state.go('dashboard-user-welcome', {});
+		  });
+}]);
 'use strict';
 
 /**
