@@ -75,7 +75,7 @@
                         <label>Rate Center</label>
                         <md-select md-on-open="loadRateCenters()" name="rate_center" ng-model="settings.rate_center"
                             ng-change="changeRateCenter(settings.rate_center)" required="">
-                            <md-option><em>None</em></md-option>
+                            <md-option value=""><em>None</em></md-option>
                             <md-option ng-repeat="center in rateCenters" ng-value="center">
                                 {{center}}
                             </md-option>
