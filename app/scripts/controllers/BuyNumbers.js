@@ -147,14 +147,14 @@ $scope.listCountries = function() {
   }
 
   $scope.listRegions = function() {
-    Backend.get("/getRegions?country=" + $scope.settings.country.iso).then(function(res) {
+    Backend.get("/getRegions?countryId=" + $scope.settings.country.id).then(function(res) {
       console.log("got regions ", res.data);
       $scope.regions = res.data;
     })
 
   }
   $scope.listRateCenters = function() {
-    Backend.get("/getRateCenters?country=" + $scope.settings.country.iso+ "&region=" + $scope.settings.region.code).then(function(res) {
+    Backend.get("/getRateCenters?countryId=" + $scope.settings.country.id+ "&regionId=" + $scope.settings.region.id).then(function(res) {
       console.log("got rate centers ", res.data);
       $scope.rateCenters = res.data;
     })
