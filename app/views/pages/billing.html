@@ -1,279 +1,302 @@
 <div>
 
-  <div layout="row" layout-align="end center" layout-margin>
-      <div>
-        <h5>Remaining Balance</h5>
-        <strong>{{billing.info.remainingBalance}}</strong>
-      </div>
+    <div layout="row" layout-align="end center" layout-margin>
+        <div>
+            <h5>Remaining Balance</h5>
+            <strong>{{billing.info.remainingBalance}}</strong>
+        </div>
     </div>
 
-  <md-card md-theme="'default'"" md-theme-watch>
-    <!--
-    <md-card-title>
-      <md-card-title-text>
-        <span class="md-headline">User Settings</span>
-        <span class="md-subhead">edit your settings</span>
-      </md-card-title-text>
-    </md-card-title>
-  -->
-    <md-card-content>
-      <md-content>
-      <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+    <md-card md-theme="'default'"" md-theme-watch>
+        <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true">
         <md-tab label="Add Credit">
-          <md-content class="md-padding">
-              <div class="bottom-sheet-demo inset no-padding" layout="row" layout-sm="column" layout-align="center" >
-                  <div flex="10">
-                      <h5>Pay With</h5>
-                      <md-button ng-disabled="settings.type==='CARD'" type="button" ng-click="changeType('CARD')" class="md-raised md-primary no-margin-sides">Credit Card</md-button>
-                      <br/>
-                      <md-button ng-disabled="settings.type==='PAYPAL'" type="button" ng-click="changeType('PAYPAL')" class="md-raised md-primary no-margin-sides">PayPal</md-button>
+            <md-content class="md-padding">
+                <div class="bottom-sheet-demo inset no-padding" layout="row" layout-sm="column" layout-align="center">
+                    <div flex="10">
+                        <h5>Pay With</h5>
+                        <md-button ng-disabled="settings.type==='CARD'" type="button" ng-click="changeType('CARD')"
+                            class="md-raised md-primary no-margin-sides">
+                            Credit Card</md-button>
+                        <br />
+                        <md-button ng-disabled="settings.type==='PAYPAL'" type="button" ng-click="changeType('PAYPAL')"
+                            class="md-raised md-primary no-margin-sides">
+                            PayPal</md-button>
                     </div>
-                  <div flex="90" class="line-left">
-                    <div ng-show="settings.type==='CARD'" >
-                        <p>
-                          To add credit please choose a payment option and select the credit amount you wish to
-                          add to your balance.
-                        </p>
+                    <div flex="90" class="line-left">
+                        <div ng-show="settings.type==='CARD'">
+                            <p>
+                                To add credit please choose a payment option and select the credit amount
+                                you wish to
+                                add to your balance.
+                            </p>
 
-                        <div ng-show="cards.length === 0">
-                          <h5>No Cards Added</h5>
-                          <md-button ng-click="addCard($event)" class="md-raised md-primary">Add A Card</md-button>
+                            <div ng-show="cards.length === 0">
+                                <h5>No Cards Added</h5>
+                                <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A
+                                    Card</md-button>
 
-                        </div>
-                        <div ng-show="cards.length > 0">
-                          <h5>Use Existing Card</h5>
-                          <div layout="row">
-                            <div flex="">
-                              <md-radio-group ng-model="data.selectedCard" ng-change="changeCard(data.selectedCard)">
-                                <md-radio-button ng-repeat="card in cards"
-                                                ng-value="card.id"
+                            </div>
+                            <div ng-show="cards.length > 0">
+                                <h5>Use Existing Card</h5>
+                                <div layout="row">
+                                    <div flex="">
+                                        <md-radio-group ng-model="data.selectedCard"
+                                            ng-change="changeCard(data.selectedCard)">
+                                            <md-radio-button ng-repeat="card in cards" ng-value="card.id"
                                                 aria-label="{{createLabel(card)}}">
-                                    <label>{{createLabel(card)}}</label>
-                                    <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
-                                </md-radio-button>
-                                <md-radio-button ng-value="'new'" aria-label="Add New Card">
-                                    <label>Add New Card</label>
-                                    <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
-                                </md-radio-button>
-                              </md-radio-group>
+                                                <label>{{createLabel(card)}}</label>
+                                                <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                            </md-radio-button>
+                                            <md-radio-button ng-value="'new'" aria-label="Add New Card">
+                                                <label>Add New Card</label>
+                                                <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                            </md-radio-button>
+                                        </md-radio-group>
+                                    </div>
+                                </div>
+                                <div ng-show="settings.newCard">
+                                    <form ng-cloak ng-submit="submit()">
+                                        <md-content>
+                                            <md-input-container>
+                                                <label>Your Name</label>
+                                                <input ng-model="card.name" />
+                                            </md-input-container>
+                                            <md-input-container>
+                                                <label>Address</label>
+                                                <input ng-model="card.address" />
+                                            </md-input-container>
+                                            <div layout="row">
+                                                <div flex>
+                                                    <md-input-container>
+                                                        <label>City</label>
+                                                        <input ng-model="card.city" />
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container>
+                                                        <label>Postal Code</label>
+                                                        <input ng-model="card.postal_code" />
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container>
+                                                        <label>Country</label>
+                                                        <md-select ng-model="card.country"
+                                                            ng-change="changeCountry(card.country)">
+                                                            <md-option ng-repeat="country in $shared.billingCountries"
+                                                                ng-value="country">
+                                                                {{country.name}}
+                                                            </md-option>
+                                                        </md-select>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                            <h5>Card Details</h5>
+                                            <div layout="row">
+                                                <div flex>
+                                                    <md-input-container>
+                                                        <label>Number</label>
+                                                        <input ng-model="card.number" />
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container>
+                                                        <label>Expires</label>
+                                                        <input placeholder="MM/YY" ng-model="card.expires" />
+                                                    </md-input-container>
+                                                </div>
+                                                <div flex>
+                                                    <md-input-container>
+                                                        <label>CVV</label>
+                                                        <input ng-model="card.cvv" />
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </md-content>
+                                    </form>
+                                </div>
+                                <md-input-container>
+                                    <label>Add credit Amount</label>
+                                    <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
+                                        <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                            {{amount.name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-button ng-click="addCredit($event)" class="md-raised md-primary no-margin-sides">Add Credit
+                                </md-button>
                             </div>
                           </div>
-                          <div ng-show="settings.newCard">
-                            <form ng-cloak ng-submit="submit()">
-                              <md-content>
-                                  <md-input-container>
-                                      <label>Your Name</label>
-                                      <input ng-model="card.name"/>
-                                    </md-input-container>
-                                    <md-input-container>
-                                      <label>Address</label>
-                                      <input ng-model="card.address"/>
-                                    </md-input-container>
-                                    <div layout="row">
-                                      <div flex>
-                                      <md-input-container>
-                                          <label>City</label>
-                                          <input ng-model="card.city"/>
-                                        </md-input-container>
-                                      </div>
-                                      <div flex>
-                                        <md-input-container>
-                                          <label>Postal Code</label>
-                                          <input ng-model="card.postal_code"/>
-                                        </md-input-container>
-                                      </div>
-                                      <div flex>
-                                        <md-input-container>
-                                          <label>Country</label>
-                                          <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
-                                            <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
-                                              {{country.name}}
-                                            </md-option>
-                                          </md-select>
-                                        </md-input-container>
-                                      </div>
-                                    </div>
-                                    <h5>Card Details</h5>
-                                    <div layout="row">
-                                      <div flex>
-                                      <md-input-container>
-                                          <label>Number</label>
-                                          <input ng-model="card.number"/>
-                                        </md-input-container>
-                                      </div>
-                                      <div flex>
-                                        <md-input-container>
-                                          <label>Expires</label>
-                                          <input placeholder="MM/YY" ng-model="card.expires"/>
-                                        </md-input-container>
-                                      </div>
-                                      <div flex>
-                                        <md-input-container>
-                                          <label>CVV</label>
-                                          <input ng-model="card.cvv" />
-                                        </md-input-container>
-                                      </div>
-                                    </div>
-                              </div>
-                            </md-content>
-                          </form>
+                            <div ng-show="settings.type==='PAYPAL'">
+                                <md-input-container>
+                                    <label>Add credit Amount</label>
+                                    <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
+                                        <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                            {{amount.name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-button ng-click="addCreditPayPal($event)" class="md-raised md-primary no-margin-sides">Add Credit
+                                </md-button>
+                                <p>You will be redirected to PayPal to complete your transaction.</p>
+                            </div>
                         </div>
-                        <md-input-container>
-                          <label>Add credit Amount</label>
-                          <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
-                            <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
-                              {{amount.name}}
-                            </md-option>
-                          </md-select>
-                        </md-input-container>
-                      <md-button ng-click="addCredit($event)" class="md-raised md-primary">Add Credit</md-button>
-                    </div>
-                    <div ng-show="settings.type==='PAYPAL'">
-                      <md-input-container>
-                          <label>Add credit Amount</label>
-                          <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
-                            <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
-                              {{amount.name}}
-                            </md-option>
-                          </md-select>
-                        </md-input-container>
-                      <md-button ng-click="addCreditPayPal($event)" class="md-raised md-primary">Add Credit</md-button>
-                      <p>You will be redirected to PayPal to complete your transaction.</p>
-                    </div>
-                  </div>
-          </md-content>
+                      </div>
+            </md-content>
         </md-tab>
         <md-tab label="History">
-          <md-content class="md-padding">
-            <h5>Account Balance {{billing.info.accountBalance}}</h5>
-            <small>
-              finalized invoices and payments
-            </small>
-            <h5>Charges This Month {{billing.info.chargesThisMonth}}</h5>
-            <small>
-              invoiced {{billing.info.nextInvoiceDue}}
-            </small>
-            <h5>Estimated Balance {{billing.info.estimatedBalance}}</h5>
-            <small>
-              balance including charges this month.
-            </small>
-            <h5>History</h5>
-            <small>Filter Dates</small>
-     <div layout="row">
-        <div>
-          <md-datepicker ng-model="startDate" md-placeholder="Start date"></md-datepicker>
-        </div>
-        <div>
-          <md-datepicker ng-model="endDate" md-placeholder="End date"></md-datepicker>
-        </div>
-        <div>
-          <md-button ng-click="filterBilling()" class="md-raised md-primary">Filter</md-button>
-        </div>
-        <div>
-          <md-button ng-click="downloadBilling()" class="md-raised md-warn">Download</md-button>
-        </div>
-
-      </div>
-
-<md-table-container>
-      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-          <tr md-row>
-            <th md-column><span>Source</span></th>
-            <th md-column>Amount</th>
-            <th md-column>Balance</th>
-            <th md-column>Date/Time</th>
-            <th md-column>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody md-body>
-          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="item in history">
-            <td md-cell>{{item.type}}</td>
-            <td md-cell>{{item.dollars}}</td>
-            <td md-cell>{{item.balance}}</td>
-            <td md-cell>{{item.created_at}}</td>
-            <td md-cell>{{item.status}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </md-table-container>
-
-            </md-content>
-            </md-tab>
-    <md-tab label="Limits">
-          <md-content class="md-padding">
-              <p><strong>Call Duration:</strong>: {{billing.info.limits.call_duration}}</p>
-              <br/>
-              <p><strong>Recording space:</strong>: {{billing.info.limits.recording_space}}</p>
-              <h5>Usage Triggers</h5>
-                    <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides">Create New</md-button>
-                    <div ng-show="usageTriggers.length===0">
-                        <p>No usage triggers setup..</p>
+            <md-content class="md-padding">
+                <h5>Account Balance {{billing.info.accountBalance}}</h5>
+                <small>
+                    finalized invoices and payments
+                </small>
+                <h5>Charges This Month {{billing.info.chargesThisMonth}}</h5>
+                <small>
+                    invoiced {{billing.info.nextInvoiceDue}}
+                </small>
+                <h5>Estimated Balance {{billing.info.estimatedBalance}}</h5>
+                <small>
+                    balance including charges this month.
+                </small>
+                <h5>History</h5>
+                <small>Filter Dates</small>
+                <div layout="row">
+                    <div>
+                        <md-datepicker class="no-datepicker-left-pad" ng-model="startDate" md-placeholder="Start date">
+                        </md-datepicker>
                     </div>
-                    <div ng-show="usageTriggers.length>0">
-<md-table-container>
-      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-          <tr md-row>
-            <th md-column><span>Percentage</span></th>
-            <th md-column>Created On</th>
-            <th md-column>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody md-body>
-          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="item in usageTriggers">
-            <td md-cell>{{item.percentage}}</td>
-            <td md-cell>{{item.created_at}}</td>
-            <td md-cell>
-              <md-button ng-click="deleteUsageTrigger($event, item)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-              </md-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </md-table-container>
-  </div>
+                    <div>
+                        <md-datepicker ng-model="endDate" md-placeholder="End date"></md-datepicker>
+                    </div>
+                    <div>
+                        <md-button ng-click="filterBilling()" class="md-raised md-primary">Filter</md-button>
+                    </div>
+                    <div>
+                        <md-button ng-click="downloadBilling()" class="md-raised md-warn">Download</md-button>
+                    </div>
+
+                </div>
+
+                <md-table-container>
+                    <table class="table-no-pad" md-table md-row-select multiple ng-model="selected"
+                        md-progress="promise">
+                        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+                            <tr md-row>
+                                <th md-column><span>Source</span></th>
+                                <th md-column>Amount</th>
+                                <th md-column>Balance</th>
+                                <th md-column>Date/Time</th>
+                                <th md-column>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row md-select="number" md-select-id="name" md-auto-select
+                                ng-repeat="item in history">
+                                <td md-cell>{{item.type}}</td>
+                                <td md-cell>{{item.dollars}}</td>
+                                <td md-cell>{{item.balance}}</td>
+                                <td md-cell>{{item.created_at}}</td>
+                                <td md-cell>{{item.status}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+
+            </md-content>
+        </md-tab>
+        <md-tab label="Limits">
+            <md-content class="md-padding">
+                <p><strong>Call Duration:</strong> {{billing.info.limits.call_duration}}</p>
+                <br />
+                <p><strong>Recording space:</strong> {{billing.info.limits.recording_space}}</p>
+                <h5>Usage Triggers</h5>
+                <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides">Create New
+                </md-button>
+                <div ng-show="usageTriggers.length===0">
+                    <p>No usage triggers setup..</p>
+                </div>
+                <div ng-show="usageTriggers.length>0">
+                    <md-table-container>
+                        <table class="table-no-pad" md-table md-row-select multiple ng-model="selected"
+                            md-progress="promise">
+                            <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+                                <tr md-row>
+                                    <th md-column><span>Percentage</span></th>
+                                    <th md-column>Created On</th>
+                                    <th md-column>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row md-select="number" md-select-id="name" md-auto-select
+                                    ng-repeat="item in usageTriggers">
+                                    <td md-cell>{{item.percentage}}</td>
+                                    <td md-cell>{{item.created_at}}</td>
+                                    <td md-cell>
+                                        <md-button ng-click="deleteUsageTrigger($event, item)" class="md-icon-button"
+                                            aria-label="Settings">
+                                            <md-icon><i class="mdi mdi-delete"></i></md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </div>
 
 
 
             </md-content>
-            </md-tab>
+        </md-tab>
         <md-tab label="Settings">
-          <md-content class="md-padding">
-            <!--
-            <p>
-              use the following settings to configure your billing according to your needs
-            </p>
-          -->
-            <md-checkbox ng-model="settings.db.invoices_by_email" aria-label="Receive Invoices By Email">
-              Receive Invoices By Email
-            </md-checkbox>
-            <md-input-container>
-              <label>Billing Package</label>
-              <md-select ng-model="settings.db.billing_package" ng-change="changeBillingPackage(settings.db.billing_package)">
-                <md-option ng-repeat="package in $shared.billingPackages" ng-value="package">
-                  {{makeNicePackageName(package)}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <br/>
-            <md-checkbox ng-model="settings.db.auto_recharge" aria-label="Auto Recharge">
-              Auto Recharge Account
-            </md-checkbox>
-            <p>when your account is in negative balance we will automatically add balance for you</p>
-            <div ng-show="settings.db.auto_recharge">
-              <md-input-container>
-                <label>Auto Recharge Amount</label>
-                    <md-select ng-model="settings.db.auto_recharge_top_up" ng-change="changeAutoRechargeAmount(settings.db.auto_recharge_top_up)">
-                      <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
-                        {{amount.name}}
-                      </md-option>
+            <md-content class="md-padding">
+                <md-checkbox ng-model="settings.db.invoices_by_email" aria-label="Receive Invoices By Email">
+                    Receive Invoices By Email
+                </md-checkbox>
+                <md-input-container>
+                    <label>Billing Package</label>
+                    <md-select ng-model="settings.db.billing_package"
+                        ng-change="changeBillingPackage(settings.db.billing_package)">
+                        <md-option ng-repeat="package in $shared.billingPackages" ng-value="package">
+                            {{makeNicePackageName(package)}}
+                        </md-option>
                     </md-select>
-                  </md-input-container>
-              <p>Amount to add when your account is in negative balance</p>
-            </div>
-             <md-button ng-click="saveSettings($event)" class="md-raised md-primary">Save Settings</md-button>
-      </md-tabs>
-  </md-card>
+                </md-input-container>
+                <br />
+                <md-checkbox ng-model="settings.db.auto_recharge" aria-label="Auto Recharge">
+                    Auto Recharge Account
+                </md-checkbox>
+                <div ng-show="settings.db.auto_recharge">
+                    <div layout="row">
+                      <div flex="66">
+                          <div layout="row">
+                              <div flex="95">
+                                  <md-input-container>
+                                      <label>Auto Recharge Amount</label>
+                                      <md-select ng-model="settings.db.auto_recharge_top_up"
+                                          ng-change="changeAutoRechargeAmount(settings.db.auto_recharge_top_up)">
+                                          <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                              {{amount.name}}
+                                          </md-option>
+                                      </md-select>
+                                  </md-input-container>
+                              </div>
+                              <div flex="5">
+                                  <md-icon class="tooltip-icon">
+                                      <i class="mdi mdi-information"></i>
+                                      <md-tooltip class="helper-tooltip" md-direction="top">
+                                          Amount to add when your account is in negative balance
+                                      </md-tooltip>
+                                  </md-icon>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+                <br/>
+                <md-button ng-click="saveSettings($event)" class="md-raised md-primary no-margin-sides">Save Settings
+                </md-button>
+            </md-content>
+        </md-tab>
+        </md-tabs>
+    </md-card>
 </div>

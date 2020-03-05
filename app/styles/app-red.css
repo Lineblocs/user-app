@@ -500,6 +500,15 @@ div.scroll::-webkit-scrollbar-thumb:hover {
   .rtl.extended .navbar {
     margin-right: 210px; } }
 
+.table-no-pad th {
+  padding: 0 !important; }
+
+.table-no-pad td {
+  padding: 0 !important; }
+
+.no-datepicker-left-pad .md-datepicker-button {
+  margin-left: 0px; }
+
 .collapse-card {
   background-color: #fff;
   border: 1px solid #eee;

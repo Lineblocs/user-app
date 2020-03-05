@@ -611,3 +611,16 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 	}
 }
 
+.table-no-pad {
+	th {
+		padding: 0 !important;
+	}
+	td {
+		padding: 0 !important;
+	}
+}
+.no-datepicker-left-pad {
+	.md-datepicker-button {
+		margin-left: 0px;
+	}
+}
