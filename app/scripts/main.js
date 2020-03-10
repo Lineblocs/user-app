@@ -527,6 +527,8 @@ angular
                     var scopeObj = factory.settings.scope.obj
                     var key = factory.settings.scope.key;
                     scopeObj[ key ] = res.data.data;
+                    console.log("loaded data ", scopeObj[key]);
+                    console.log("loaded data meta", meta);
                     $shared.endIsCreateLoading();
                     resolve(res);
                 });
@@ -847,6 +849,101 @@ angular
         templateUrl: 'views/pages/files.html',
         controller: 'FilesCtrl'
     })
+    .state('phones', {
+        url: '/phones',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones.html',
+        controller: 'phonesCtrl'
+    })
+    .state('phones-phones', {
+        url: '/phones/phones',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/phones.html',
+        controller: 'PhonesCtrl'
+    })
+
+    .state('phones-phone-create', {
+        url: '/phones/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/phones-create.html',
+        controller: 'PhoneCreateCtrl'
+    })
+    .state('phones-phone-edit', {
+        url: '/phones/{phoneId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/phones-edit.html',
+        controller: 'PhoneEditCtrl'
+    })
+
+    .state('phones-groups', {
+        url: '/phones/groups',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/groups.html',
+        controller: 'PhoneGroupsCtrl'
+    })
+    .state('phones-groups-create', {
+        url: '/phones/groups/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/groups-create.html',
+        controller: 'PhoneGroupsCreateCtrl'
+    })
+    .state('phones-groups-edit', {
+        url: '/phones/groups/{phoneGroupId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/groups-edit.html',
+        controller: 'PhoneGroupsEditCtrl'
+    })
+    .state('phones-global-settings', {
+        url: '/phones/global-settings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/global-settings.html',
+        controller: 'PhoneGlobalSettingsCtrl'
+    })
+    .state('phones-global-settings-create', {
+        url: '/phones/global-settings/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/global-settings-create.html',
+        controller: 'PhoneGlobalSettingsCreateCtrl'
+    })
+    .state('phones-global-settings-modify', {
+        url: '/phones/global-settings/{phoneSettingId}/modify',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/global-settings-modify.html',
+        controller: 'PhoneGlobalSettingsModifyCtrl'
+    })
+
+    .state('phones-global-settings-modify-category', {
+        url: '/phones/global-settings/{phoneSettingId}/modify/{categoryId}',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/global-settings-modify-category.html',
+        controller: 'PhoneGlobalSettingsModifyCategoryCtrl'
+    })
+    .state('phones-individual-settings', {
+        url: '/phones/individual-settings',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/individual-settings.html',
+        controller: 'PhoneindividualSettingsCtrl'
+    })
+    .state('phones-individual-settings-create', {
+        url: '/phones/individual-settings/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/individual-settings-create.html',
+        controller: 'PhoneindividualSettingsCreateCtrl'
+    })
+    .state('phones-individual-settings-modify', {
+        url: '/phones/individual-settings/modify',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/individual-settings-modify.html',
+        controller: 'PhoneindividualSettingsModifyCtrl'
+    })
+
+    .state('phones-individual-settings-modify-category', {
+        url: '/phones/individual-settings/modify/{categoryId}',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/individual-settings-modify-category.html',
+        controller: 'PhoneindividualSettingsModifyCategoryCtrl'
+    })
+
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',
@@ -3943,6 +4040,656 @@ angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$m
 
 
 }]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+	  $shared.updateTitle("Create Phone");
+  $scope.values = {
+    name: "",
+    phone_type: null,
+    mac_address: "",
+    group_id: null
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting phone form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['name'] = $scope.values.name;
+      values['mac_address'] = $scope.values.mac_address;
+      values['phone_type'] = $scope.values.phone_type;
+      values['group_id'] = $scope.values.group_id;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/phone/savePhone", values).then(function() {
+       console.log("updated phone..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created phone')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('phones-phones', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $scope.changePhoneType = function(phoneType)
+  {
+    console.log("change phone type ", phoneType);
+    $scope.values['phone_type'] = phoneType;
+  }
+  $scope.changePhoneGroup = function(phoneGroup)
+  {
+    console.log("change phone group ", phoneGroup);
+    $scope.values['group_id'] = phoneGroup;
+  }
+  $timeout(function() {
+    $q.all([
+      Backend.get("/phone/phoneDefs"),
+      Backend.get("/phoneGroup/listPhoneGroups?all=1")
+    ]).then(function(res) {
+      $scope.phoneDefs = res[0].data;
+      $scope.phoneGroups = res[1].data.data;
+        $shared.endIsLoading();
+    });
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+	  $shared.updateTitle("Edit Phone");
+  $scope.values = {
+    name: "",
+    phone_type: null,
+    mac_address: "",
+    group_id: null
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting phone form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['name'] = $scope.values.name;
+      values['mac_address'] = $scope.values.mac_address;
+      values['phone_type'] = $scope.values.phone_type;
+      values['group_id'] = $scope.values.group_id;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isEditLoading = true;
+      Backend.post("/phone/updatePhone/" + $stateParams['phoneId'], values).then(function() {
+       console.log("updated phone..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Edited phone')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('phones-phones', {});
+        $shared.endIsEditLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $scope.changePhoneType = function(phoneType)
+  {
+    console.log("change phone type ", phoneType);
+    $scope.values['phone_type'] = phoneType;
+  }
+  $timeout(function() {
+    $q.all([
+      Backend.get("/phone/phoneDefs"),
+      Backend.get("/phoneGroup/listPhoneGroups?all=1"),
+      Backend.get("/phone/phoneData/" + $stateParams['phoneId'])
+    ]).then(function(res) {
+      $scope.phoneDefs = res[0].data;
+      $scope.phoneGroups = res[1].data.data;
+      $scope.values = res[2].data;
+        $shared.endIsLoading();
+    });
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout) {
+    $shared.updateTitle("PhoneGlobalSettings");
+    $scope.settings = [];
+  $scope.load = function() {
+      Backend.get( "/phoneGlobalSetting/listPhoneGlobalSettings" ).then(function(res) {
+          $scope.settings = res.data.data;
+          $shared.endIsLoading();
+      });
+  }
+  $scope.createSettings =  function() {
+    $state.go('phones-global-settings-create');
+  }
+  $scope.modifyPhoneSettings = function($event, phoneSettings) {
+    console.log("edit phone settings ", phoneSettings);
+    $state.go('phones-global-settings-modify', {phoneSettingsId: phoneSettings.public_id});
+  }
+  $scope.deletePhoneSettings = function($event, phoneSettings) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this phone settings group?')
+          .textContent('If you delete this phone setting group it will also delete all related setting templates')
+          .ariaLabel('Delete phone setting')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/phoneGlobalSetting/deletePhoneSetting/" + phone.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Phone deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $timeout(function() {
+    $q.all([
+      Backend.get("/phone/phoneDefs"),
+      Backend.get("/phoneGroup/listPhoneGroups?all=1")
+    ]).then(function(res) {
+      $scope.phoneDefs = res[0].data;
+      $scope.phoneGroups = res[1].data.data;
+        $shared.endIsLoading();
+    });
+  }, 0);
+
+    $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
+    $shared.updateTitle("PhoneGlobalSettings Create");
+    $scope.settings = [];
+    $scope.values = {
+      phone_type: null,
+      group_id: null,
+    };
+    $scope.submit = function(form) {
+      console.log("submitting phone form ", arguments);
+      $scope.triedSubmit = true;
+      if (form.$valid) {
+        var values = {};
+        values['phone_type'] = $scope.values.phone_type;
+        values['phone_group'] = $scope.values.group_id;
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+        console.log("toastPosStr", toastPosStr);
+        $shared.isCreateLoading = true;
+        Backend.post("/phoneGlobalSetting/savePhoneGlobalSetting", values).then(function(res) {
+        console.log("updated phone..");
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Created phone')
+              .position("top right")
+              .hideDelay(3000)
+          );
+          console.log("res is ", res);
+          var id = res.headers("X-GlobalSetting-ID");
+          console.log("global setting id is", id);
+          $state.go('phones-global-settings-modify', {phoneSettingId:id});
+          $shared.endIsCreateLoading();
+        });
+      }
+    }
+
+
+  $scope.changePhoneType = function(phoneType)
+  {
+    console.log("change phone type ", phoneType);
+    $scope.values['phone_type'] = phoneType;
+  }
+  $scope.changePhoneGroup = function(phoneGroup)
+  {
+    console.log("change phone group ", phoneGroup);
+    $scope.values['group_id'] = phoneGroup;
+  }
+  $timeout(function() {
+    $q.all([
+      Backend.get("/phone/phoneDefs"),
+      Backend.get("/phoneGroup/listPhoneGroups?all=1")
+    ]).then(function(res) {
+      $scope.phoneDefs = res[0].data;
+      $scope.phoneGroups = res[1].data.data;
+        $shared.endIsLoading();
+    });
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+    $shared.updateTitle("PhoneGlobalSettings Create");
+    $scope.settings = [];
+    $scope.values = {
+      phone_type: null,
+      group_id: null,
+    };
+    $scope.submit = function(form) {
+      console.log("submitting phone form ", arguments);
+      $scope.triedSubmit = true;
+      if (form.$valid) {
+        var values = {};
+        values['phone_type'] = $scope.values.phone_type;
+        values['phone_group'] = $scope.values.group_id;
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+        console.log("toastPosStr", toastPosStr);
+        $shared.isCreateLoading = true;
+        Backend.post("/phoneGlobalSetting/savePhoneGlobalSetting", values).then(function(res) {
+        console.log("updated phone..");
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Created phone')
+              .position("top right")
+              .hideDelay(3000)
+          );
+          $state.go('phones-global-settings-modify', {phoneSettingId:res.headers("X-GlobalSetting-ID")});
+          $shared.endIsCreateLoading();
+        });
+      }
+    }
+
+
+  $scope.changePhoneType = function(phoneType)
+  {
+    console.log("change phone type ", phoneType);
+    $scope.values['phone_type'] = phoneType;
+  }
+  $scope.changePhoneGroup = function(phoneGroup)
+  {
+    console.log("change phone group ", phoneGroup);
+    $scope.values['group_id'] = phoneGroup;
+  }
+  Backend.get("/phoneGlobalSetting/phoneGlobalSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
+    var item = res.data;
+    var qsMap = {};
+    if (item.phone_type) {
+        qsMap['phoneType'] = item.phone_type;
+    }
+    if (item.group_id) {
+        qsMap['groupId'] = item.group_id;
+    }
+    Backend.get("/getPhoneSettingsByCat", {"params": qsMap}).then(function(res) {
+
+      console.log("settings ", res.data);
+    });
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneGroupsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+	  $shared.updateTitle("Create Phone Group");
+  $scope.values = {
+    number: "",
+    name: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting phone form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['number'] = $scope.values.number;
+      values['name'] = $scope.values.name;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/phoneGroup/savePhoneGroup", values).then(function() {
+       console.log("updated phone..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created phone')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('phones-groups', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  });
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneGroupsEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $stateParams ) {
+	  $shared.updateTitle("Create Phone Group");
+  $scope.values = {
+    number: "",
+    name: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting phone form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['number'] = $scope.values.number;
+      values['name'] = $scope.values.name;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/phoneGroup/updatePhoneGroup/" + $stateParams['phoneGroupId'], values).then(function() {
+       console.log("updated phone..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created phone')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('phones-groups', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+
+
+      Backend.get("/phoneGroup/phoneGroupData/" + $stateParams['phoneGroupId']).then(function(res) {
+        $scope.values = res.data;
+      });
+
+  });
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
+    $shared.updateTitle("PhoneGroups");
+    $scope.phoneGroups = [];
+  $scope.load = function() {
+   $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/phoneGroup/listPhoneGroups" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'phoneGroups' );
+      pagination.loadData().then(function(res) {
+      $scope.calls = res.data.data;
+      $shared.endIsLoading();
+    })
+  }
+  $scope.createPhoneGroup = function() {
+    $state.go('phones-groups-create');
+
+  }
+  $scope.editPhoneGroup = function($event, phoneGroup) {
+    console.log("edit phone group ", phoneGroup);
+    $state.go('phones-groups-edit', {phoneGroupId: phoneGroup.public_id});
+  }
+  $scope.deletePhone = function($event, phone) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this phone group?')
+          .textContent('If you delete this phone group it will also delete all related setting templates')
+          .ariaLabel('Delete phone group')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/did/deletePhone/" + phone.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Phone deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+
+    $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
+    $shared.updateTitle("Phones");
+    $scope.pagination = pagination;
+    $scope.phones = [];
+  $scope.load = function() {
+   $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/phone/listPhones" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'phones' );
+      pagination.loadData().then(function(res) {
+      $scope.calls = res.data.data;
+      $shared.endIsLoading();
+    })
+  }
+  $scope.createPhone = function() {
+    $state.go('phones-phone-create');
+
+  }
+  $scope.editPhone = function($event, phone) {
+    console.log("editPhone ", phone);
+    $state.go('phones-phone-edit', {phoneId: phone.public_id});
+  }
+  $scope.deletePhone = function($event, phone) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this phone?')
+          .textContent('If you delete this phone you will not be able to call it anymore')
+          .ariaLabel('Delete phone')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/did/deletePhone/" + phone.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Phone deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+
+    $scope.load();
+});
+
+
 'use strict';
 
 /**

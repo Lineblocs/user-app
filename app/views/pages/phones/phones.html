@@ -1,0 +1,64 @@
+<!-- exact table from live demo -->
+<div>
+  <div ng-show="phones.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+      <div ng-show="phones.length === 0 && !pagination.didSearch" class="no-results">
+        <center>
+          <h5>No phones create</h5>
+          <md-button ng-click="createPhone($event)" class="md-raised md-primary">Add Phone</md-button>
+        </center>
+      </div>
+    </md-card>
+  </div>
+  <div ng-show="phones.length > 0">
+      <div layout="row" layout-align="end center">
+        <div>
+            <md-button ng-click="createPhone($event)" class="md-raised md-primary">Add Phone</md-button>
+          </div>
+      </div>
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>Name<span></th>
+            <th md-column><span>Mac Address<span></th>
+            <th md-column><span>Group<span></th>
+            <th md-column><span>Model<span></th>
+            <th md-column><span>Needs Provisioning<span></th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="phone" md-select-id="name" md-auto-select ng-repeat="phone in phones">
+            <td md-cell>{{phone.name}}</td>
+            <td md-cell>{{phone.mac_address}}</td>
+            <td md-cell>{{phone.group}}</td>
+            <td md-cell>{{phone.model_friendly}}</td>
+            <td md-cell>{{phone.needs_provisioning_friendly}}</td>
+            <td md-cell>
+              <md-button ng-click="editPhone($event, phone)" class="md-raised md-primary md-small" aria-label="Edit">
+                  Edit
+              </md-button>
+              <md-button ng-click="deletePhone($event, phone)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+    <div layout="row" layout-align="end">
+
+      <div>
+        <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+        <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      </div>
+    </div>
+</div>
+  </div>
+ 

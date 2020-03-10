@@ -141,6 +141,19 @@
 						<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
 							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
 							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+							<span class="text"> {{ 'phones' | translate }}</span>
+						</md-button>
+						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
+							<li ng-class="{active: $state.includes('phones-phones')}"><md-button href="" ng-click="$shared.changeRoute('phones-phones')" class=""><span class="text">{{ 'phones' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('phones-groups')}"><md-button href="" ng-click="$shared.changeRoute('phones-groups')" class=""><span class="text">{{ 'phones-groups' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('phones-global-settings')}"><md-button href="" ng-click="$shared.changeRoute('phones-global-settings')" class=""><span class="text">{{ 'phones-global-settings' | translate }}</span></md-button></li>
+							<li ng-class="{active: $state.includes('phones-individual-settings')}"><md-button href="" ng-click="$shared.changeRoute('phones-invididual')" class=""><span class="text">{{ 'phones-individual-settings' | translate }}</span></md-button></li>
+						</ul>
+					</li>
+					<li class="show-subnav">
+						<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
+							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
+							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
 							<span class="text"> {{ 'settings' | translate }}</span>
 						</md-button>
 						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">

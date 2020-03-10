@@ -1,0 +1,61 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Add Phone Group</span>
+                <span class="md-subhead">add a phone group to provision with your account</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="phoneForm" ng-submit="submit(phoneForm)" novalidate>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Number</label>
+                            <input name="name" ng-model="values.number" required="" minlength="1">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="groupForm.name.$error.minlength">Please enter 1 characters or more
+                                    </div>
+                                    <div ng-show="groupForm.name.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                A unique group number
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Name</label>
+                            <input name="name" ng-model="values.name" required="" minlength="1">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="phoneForm.name.$error.minlength">Please enter 1 characters or more
+                                    </div>
+                                    <div ng-show="phoneForm.name.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                A name for the group. e.g: "Sales Dept"
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+                <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>

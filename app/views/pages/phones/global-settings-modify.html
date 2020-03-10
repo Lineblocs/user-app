@@ -1,0 +1,68 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Add Phone Global Phone Settings</span>
+                <span class="md-subhead">add global phone settings to provision a set of phones</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="phoneForm" ng-submit="submit(phoneForm)" novalidate>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Model</label>
+                            <md-select ng-model="setting.phone_type" ng-change="changePhoneType(setting.phone_type)">
+
+                                <md-option><em>None</em></md-option>
+                                <md-option ng-repeat="def in phoneDefs" ng-value="def.phone_type">
+                                    {{def.manufacturer}} {{def.model}}
+                                </md-option> </md-select> </md-input-container>
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="phoneForm.phone_type.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                The manufacturer/model of the physical phone
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Group</label>
+                            <md-select ng-model="values.group_id" ng-change="changePhoneGroup(values.group_id)">
+
+                                <md-option><em>None</em></md-option>
+                                <md-option ng-repeat="group in phoneGroups" ng-value="group.id">
+                                    {{group.name}}
+                                </md-option>
+                            </md-select>
+                          </md-input-container>
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="phoneForm.phone_type.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                The manufacturer/model of the physical phone
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+
+                <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>

@@ -1,0 +1,49 @@
+<!-- exact table from live demo -->
+<div>
+  <div ng-show="settings.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+      <div ng-show="settings.length === 0 && !pagination.didSearch" class="no-results">
+        <center>
+          <h5>No settings listed</h5>
+          <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Phone Global Phone Settings</md-button>
+        </center>
+      </div>
+    </md-card>
+  </div>
+  <div ng-show="settings.length > 0">
+      <div layout="row" layout-align="end center">
+        <div>
+            <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Global Settings</md-button>
+          </div>
+      </div>
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>Phone Model<span></th>
+            <th md-column><span>Phone Group<span></th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="phone" md-select-id="name" md-auto-select ng-repeat="setting in settings">
+            <td md-cell>{{setting.model}}</td>
+            <td md-cell>{{setting.group}}</td>
+            <td md-cell>
+              <md-button ng-click="modifyPhoneSetting($event, setting)" class="md-raised md-primary md-small" aria-label="Edit">
+                  Modify
+              </md-button>
+              <md-button ng-click="deletePhoneGroup($event, phone)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+</div>
+  </div>
+ 
