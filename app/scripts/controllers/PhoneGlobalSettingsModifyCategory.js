@@ -7,20 +7,20 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
     $shared.updateTitle("PhoneGlobalSettings Create");
+    $scope.$stateParams = $stateParams;
     $scope.settings = [];
-    $scope.values = {
-      phone_type: null,
-      group_id: null,
-    };
+    $scope.fields = [];
     $scope.submit = function(form) {
       console.log("submitting phone form ", arguments);
       $scope.triedSubmit = true;
       if (form.$valid) {
         var values = {};
-        values['phone_type'] = $scope.values.phone_type;
-        values['phone_group'] = $scope.values.group_id;
+        angular.forEach($scope.fields, function(field) {
+          values[ field.setting_variable_name ] = field.value;
+        });
+        console.log("sending result ", values);
         var toastPos = {
           bottom: false,
           top: true,
@@ -32,7 +32,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/phoneGlobalSetting/savePhoneGlobalSetting", values).then(function(res) {
+        Backend.post("/phoneGlobalSetting/updatePhoneGlobalSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
@@ -40,7 +40,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
               .position("top right")
               .hideDelay(3000)
           );
-          $state.go('phones-global-settings-modify', {phoneSettingId:res.headers("X-GlobalSetting-ID")});
+          $state.go('phones-global-settings-modify', {phoneSettingId:$stateParams['phoneSettingId']});
           $shared.endIsCreateLoading();
         });
       }
@@ -63,6 +63,30 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
     console.log("change phone group ", phoneGroup);
     $scope.values['group_id'] = phoneGroup;
   }
+$scope.changeSelectValue = function(field, fieldValue)
+{
+  console.log("changeSelectValue ", arguments);
+  field.value = fieldValue;
+  console.log("fields are now ", $scope.fields);
+}
+$scope.createOptions = function(field) 
+  {
+    var start = 1;
+    var end= 20;
+    var options = [];
+    while (start <= end) {
+      var value = field['setting_option_' + start];
+      var name = field['setting_option_' + start + '_name'];
+      var option = {
+        name: name,
+        value: value
+      };
+      options.push( option );
+      start = start + 1;
+    }
+    return options;
+  }
+
   Backend.get("/phoneGlobalSetting/phoneGlobalSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
@@ -72,10 +96,24 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
     if (item.group_id) {
         qsMap['groupId'] = item.group_id;
     }
-    Backend.get("/getPhoneDefaults", {"params": qsMap}).then(function(res) {
+    qsMap['settingId'] = $stateParams['phoneSettingId'];
+    qsMap['categoryId'] = $stateParams['categoryId'];
+    Backend.get("/getPhoneSettingsByCat", {"params": qsMap}).then(function(res) {
 
       console.log("settings ", res.data);
-      $scope.template = res.data;
+      $scope.template = res.data.settings;
+      $scope.values = res.data.values;
+      angular.forEach($scope.template, function(field) {
+        $scope.fields.push( field );
+      });
+      angular.forEach($scope.values, function(value) {
+        angular.forEach($scope.fields, function(field) {
+          if (field.setting_variable_name === value.setting_variable_name) {
+            field.value = value.setting_option_1;
+          }
+        });
+      });
+
       $shared.endIsLoading();
     });
   });

@@ -509,6 +509,20 @@ div.scroll::-webkit-scrollbar-thumb:hover {
 .no-datepicker-left-pad .md-datepicker-button {
   margin-left: 0px; }
 
+.tmpl-slots li {
+  float: left;
+  width: 33%; }
+
+.tmpl-slots:after {
+  clear: both;
+  width: 100%;
+  margin: 0;
+  content: ''; }
+
+.clickable {
+  cursor: pointer;
+  color: blue; }
+
 .collapse-card {
   background-color: #fff;
   border: 1px solid #eee;
