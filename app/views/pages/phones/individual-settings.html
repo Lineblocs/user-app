@@ -25,6 +25,7 @@
         </thead>
         <tbody md-body>
           <tr md-row md-select="phone" md-select-id="name" md-auto-select ng-repeat="setting in settings">
+            <td md-cell>{{setting.name}}</td>
             <td md-cell>{{setting.manufacturer}} {{setting.model}}</td>
             <td md-cell>{{setting.group}}</td>
             <td md-cell>
