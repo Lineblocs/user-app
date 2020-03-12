@@ -5,16 +5,13 @@
       <div ng-show="settings.length === 0 && !pagination.didSearch" class="no-results">
         <center>
           <h5>No settings listed</h5>
-          <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Phone Global Phone Settings</md-button>
+          <p>please create a phone to edit its individual settings</p>
         </center>
       </div>
     </md-card>
   </div>
   <div ng-show="settings.length > 0">
       <div layout="row" layout-align="end center">
-        <div>
-            <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Global Settings</md-button>
-          </div>
       </div>
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
@@ -33,9 +30,6 @@
             <td md-cell>
               <md-button ng-click="modifyPhoneSetting($event, setting)" class="md-raised md-primary md-small" aria-label="Edit">
                   Modify
-              </md-button>
-              <md-button ng-click="deletePhoneSettings($event, setting)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
               </md-button>
 
             </td>

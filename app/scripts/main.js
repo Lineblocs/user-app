@@ -922,28 +922,28 @@ angular
         url: '/phones/individual-settings',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings.html',
-        controller: 'PhoneindividualSettingsCtrl'
-    })
-    .state('phones-individual-settings-create', {
-        url: '/phones/individual-settings/create',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/phones/individual-settings-create.html',
-        controller: 'PhoneindividualSettingsCreateCtrl'
+        controller: 'PhoneIndividualSettingsCtrl'
     })
     .state('phones-individual-settings-modify', {
-        url: '/phones/individual-settings/modify',
+        url: '/phones/individual-settings/{phoneSettingId}/modify',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings-modify.html',
-        controller: 'PhoneindividualSettingsModifyCtrl'
+        controller: 'PhoneIndividualSettingsModifyCtrl'
     })
+
 
     .state('phones-individual-settings-modify-category', {
-        url: '/phones/individual-settings/modify/{categoryId}',
+        url: '/phones/individual-settings/{phoneSettingId}/modify/{categoryId}',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings-modify-category.html',
-        controller: 'PhoneindividualSettingsModifyCategoryCtrl'
+        controller: 'PhoneIndividualSettingsModifyCategoryCtrl'
     })
-
+    .state('phones-deploy-config', {
+        url: '/phones/deploy', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/deploy.html',
+        controller: 'PhoneDeployCtrl'
+    })
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',
@@ -4148,6 +4148,50 @@ angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of MaterialApp
  */
+angular.module('MaterialApp').controller('PhoneDeployCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast) {
+    $shared.updateTitle("Phone Deploy");
+    $scope.pagination = pagination;
+    $scope.phones = [];
+    $scope.step = 1;
+
+    $scope.start = function() {
+      $shared.isLoading = true;
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Started deployment..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+      Backend.post("/startDeploy").then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Deployment completed..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+            $scope.step = 2;
+            $shared.endIsLoading();
+      });
+    }
+    $shared.isLoading = true;
+
+  Backend.get("/getDeployInfo").then(function(res) {
+    $scope.info = res.data;
+    console.log("got deploy info step is: " + $scope.step);
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
 angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Edit Phone");
   $scope.values = {
@@ -4189,7 +4233,7 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      $shared.isEditLoading = true;
+      $shared.isLoading = true;
       Backend.post("/phone/updatePhone/" + $stateParams['phoneId'], values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
@@ -4220,6 +4264,7 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
     console.log("change phone type ", phoneType);
     $scope.values['phone_type'] = phoneType;
   }
+  $shared.isLoading = true;
   $timeout(function() {
     $q.all([
       Backend.get("/phone/phoneDefs"),
@@ -4244,21 +4289,24 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout) {
+angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
     $shared.updateTitle("PhoneGlobalSettings");
     $scope.settings = [];
   $scope.load = function() {
+    return $q(function(resolve, reject) {
       Backend.get( "/phoneGlobalSetting/listPhoneGlobalSettings" ).then(function(res) {
           $scope.settings = res.data.data;
           $shared.endIsLoading();
+          resolve();
       });
+    });
   }
   $scope.createSettings =  function() {
     $state.go('phones-global-settings-create');
   }
-  $scope.modifyPhoneSettings = function($event, phoneSettings) {
+  $scope.modifyPhoneSetting = function($event, phoneSettings) {
     console.log("edit phone settings ", phoneSettings);
-    $state.go('phones-global-settings-modify', {phoneSettingsId: phoneSettings.public_id});
+    $state.go('phones-global-settings-modify', {phoneSettingId: phoneSettings.public_id});
   }
   $scope.deletePhoneSettings = function($event, phoneSettings) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -4271,7 +4319,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($s
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/phoneGlobalSetting/deletePhoneSetting/" + phone.id).then(function() {
+      Backend.delete("/phoneGlobalSetting/deletePhoneGlobalSetting/" + phoneSettings.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
@@ -4338,7 +4386,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', functi
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
-              .textContent('Created phone')
+              .textContent('Created phone settings')
               .position("top right")
               .hideDelay(3000)
           );
@@ -4363,6 +4411,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', functi
     $scope.values['group_id'] = phoneGroup;
   }
   $timeout(function() {
+    $shared.isLoading = true;
     $q.all([
       Backend.get("/phone/phoneDefs"),
       Backend.get("/phoneGroup/listPhoneGroups?all=1")
@@ -4413,7 +4462,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
-              .textContent('Created phone')
+              .textContent('Updated phone settings')
               .position("top right")
               .hideDelay(3000)
           );
@@ -4440,6 +4489,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
     console.log("change phone group ", phoneGroup);
     $scope.values['group_id'] = phoneGroup;
   }
+    $shared.isLoading = true;
   Backend.get("/phoneGlobalSetting/phoneGlobalSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
@@ -4449,6 +4499,8 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
     if (item.group_id) {
         qsMap['groupId'] = item.group_id;
     }
+
+    $shared.isLoading = true;
     Backend.get("/getPhoneDefaults", {"params": qsMap}).then(function(res) {
 
       console.log("settings ", res.data);
@@ -4492,12 +4544,12 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl'
           .filter(function(pos) { return toastPos[pos]; })
           .join(' ');
         console.log("toastPosStr", toastPosStr);
-        $shared.isCreateLoading = true;
+        $shared.isLoading = true;
         Backend.post("/phoneGlobalSetting/updatePhoneGlobalSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
-              .textContent('Created phone')
+              .textContent('Updated phone settings')
               .position("top right")
               .hideDelay(3000)
           );
@@ -4548,6 +4600,7 @@ $scope.createOptions = function(field)
     return options;
   }
 
+    $shared.isLoading = true;
   Backend.get("/phoneGlobalSetting/phoneGlobalSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
@@ -4623,7 +4676,7 @@ angular.module('MaterialApp').controller('PhoneGroupsCreateCtrl', function ($sco
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Created phone')
+            .textContent('Created phone group')
             .position("top right")
             .hideDelay(3000)
         );
@@ -4677,7 +4730,7 @@ angular.module('MaterialApp').controller('PhoneGroupsEditCtrl', function ($scope
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Created phone')
+            .textContent('Updated phone group')
             .position("top right")
             .hideDelay(3000)
         );
@@ -4726,7 +4779,7 @@ angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Ba
     console.log("edit phone group ", phoneGroup);
     $state.go('phones-groups-edit', {phoneGroupId: phoneGroup.public_id});
   }
-  $scope.deletePhone = function($event, phone) {
+  $scope.deletePhoneGroup = function($event, group) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete this phone group?')
@@ -4737,7 +4790,7 @@ angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Ba
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/did/deletePhone/" + phone.id).then(function() {
+      Backend.delete("/phoneGroup/deletePhoneGroup/" + group.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
@@ -4766,20 +4819,253 @@ angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
+angular.module('MaterialApp').controller('PhoneIndividualSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout) {
+    $shared.updateTitle("PhoneIndividualSettings");
+    $scope.settings = [];
+  $scope.load = function() {
+      Backend.get( "/phoneIndividualSetting/listPhoneIndividualSettings" ).then(function(res) {
+          $scope.settings = res.data.data;
+          $shared.endIsLoading();
+      });
+  }
+  $scope.modifyPhoneSetting = function($event, phoneSettings) {
+    console.log("edit phone settings ", phoneSettings);
+    $state.go('phones-individual-settings-modify', {phoneSettingId: phoneSettings.public_id});
+  }
+  $scope.deletePhoneSettings = function($event, phoneSettings) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this phone settings group?')
+          .textContent('If you delete this phone setting group it will also delete all related setting templates')
+          .ariaLabel('Delete phone setting')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/phoneGlobalSetting/deletePhoneSetting/" + phone.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Phone deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+    $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneIndividualSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+    $shared.updateTitle("PhoneIndividualSettings Create");
+    $scope.settings = [];
+    $scope.values = {
+      phone_type: null,
+      group_id: null,
+    };
+
+    $scope.openCategory = function(category) {
+          $state.go('phones-individual-settings-modify-category', {
+            phoneSettingId:$stateParams['phoneSettingId'],
+            categoryId:category['name']
+          });
+    }
+  $scope.changePhoneType = function(phoneType)
+  {
+    console.log("change phone type ", phoneType);
+    $scope.values['phone_type'] = phoneType;
+  }
+  $scope.changePhoneGroup = function(phoneGroup)
+  {
+    console.log("change phone group ", phoneGroup);
+    $scope.values['group_id'] = phoneGroup;
+  }
+    $shared.isLoading = true;
+  Backend.get("/phoneIndividualSetting/phoneIndividualSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
+    var item = res.data;
+    var qsMap = {};
+    if (item.phone_type) {
+        qsMap['phoneType'] = item.phone_type;
+    }
+    if (item.group_id) {
+        qsMap['groupId'] = item.group_id;
+    }
+
+    $shared.isLoading = true;
+    Backend.get("/getPhoneDefaults", {"params": qsMap}).then(function(res) {
+
+      console.log("settings ", res.data);
+      $scope.template = res.data;
+      $shared.endIsLoading();
+    });
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhoneIndividualSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+    $shared.updateTitle("PhoneIndividualSettings Create");
+    $scope.$stateParams = $stateParams;
+    $scope.settings = [];
+    $scope.fields = [];
+    $scope.submit = function(form) {
+      console.log("submitting phone form ", arguments);
+      $scope.triedSubmit = true;
+      if (form.$valid) {
+        var values = {};
+        angular.forEach($scope.fields, function(field) {
+          values[ field.setting_variable_name ] = field.value;
+        });
+        console.log("sending result ", values);
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+        console.log("toastPosStr", toastPosStr);
+        $shared.isLoading = true;
+        Backend.post("/phoneIndividualSetting/updatePhoneIndividualSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
+        console.log("updated phone..");
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Updated phone settings')
+              .position("top right")
+              .hideDelay(3000)
+          );
+          $state.go('phones-individual-settings-modify', {phoneSettingId:$stateParams['phoneSettingId']});
+          $shared.endIsCreateLoading();
+        });
+      }
+    }
+
+
+    $scope.openCategory = function(category) {
+          $state.go('phones-individual-settings-modify-category', {
+            phoneSettingId:$stateParams['phoneSettingId'],
+            categoryId:category['name']
+          });
+    }
+  $scope.changePhoneType = function(phoneType)
+  {
+    console.log("change phone type ", phoneType);
+    $scope.values['phone_type'] = phoneType;
+  }
+  $scope.changePhoneGroup = function(phoneGroup)
+  {
+    console.log("change phone group ", phoneGroup);
+    $scope.values['group_id'] = phoneGroup;
+  }
+$scope.changeSelectValue = function(field, fieldValue)
+{
+  console.log("changeSelectValue ", arguments);
+  field.value = fieldValue;
+  console.log("fields are now ", $scope.fields);
+}
+$scope.createOptions = function(field) 
+  {
+    var start = 1;
+    var end= 20;
+    var options = [];
+    while (start <= end) {
+      var value = field['setting_option_' + start];
+      var name = field['setting_option_' + start + '_name'];
+      var option = {
+        name: name,
+        value: value
+      };
+      options.push( option );
+      start = start + 1;
+    }
+    return options;
+  }
+
+    $shared.isLoading = true;
+  Backend.get("/phoneIndividualSetting/phoneIndividualSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
+    var item = res.data;
+    var qsMap = {};
+    if (item.phone_type) {
+        qsMap['phoneType'] = item.phone_type;
+    }
+    if (item.group_id) {
+        qsMap['groupId'] = item.group_id;
+    }
+    qsMap['settingId'] = $stateParams['phoneSettingId'];
+    qsMap['categoryId'] = $stateParams['categoryId'];
+    Backend.get("/getPhoneIndividualSettingsByCat", {"params": qsMap}).then(function(res) {
+
+      console.log("settings ", res.data);
+      $scope.template = res.data.settings;
+      $scope.values = res.data.values;
+      angular.forEach($scope.template, function(field) {
+        $scope.fields.push( field );
+      });
+      angular.forEach($scope.values, function(value) {
+        angular.forEach($scope.fields, function(field) {
+          if (field.setting_variable_name === value.setting_variable_name) {
+            field.value = value.setting_option_1;
+          }
+        });
+      });
+
+      $shared.endIsLoading();
+    });
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast) {
     $shared.updateTitle("Phones");
     $scope.pagination = pagination;
     $scope.phones = [];
   $scope.load = function() {
-   $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/phone/listPhones" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'phones' );
-      pagination.loadData().then(function(res) {
-      $scope.calls = res.data.data;
-      $shared.endIsLoading();
-    })
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+          pagination.resetSearch();
+          pagination.changeUrl( "/phone/listPhones" );
+          pagination.changePage( 1 );
+          pagination.changeScope( $scope, 'phones' );
+          pagination.loadData().then(function(res) {
+          $scope.calls = res.data.data;
+          $shared.endIsLoading();
+          resolve();
+        })
+      });
   }
   $scope.createPhone = function() {
     $state.go('phones-phone-create');
@@ -4800,7 +5086,7 @@ angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/did/deletePhone/" + phone.id).then(function() {
+      Backend.delete("/phone/deletePhone/" + phone.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

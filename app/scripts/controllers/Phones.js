@@ -7,20 +7,23 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
+angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast) {
     $shared.updateTitle("Phones");
     $scope.pagination = pagination;
     $scope.phones = [];
   $scope.load = function() {
-   $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/phone/listPhones" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'phones' );
-      pagination.loadData().then(function(res) {
-      $scope.calls = res.data.data;
-      $shared.endIsLoading();
-    })
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+          pagination.resetSearch();
+          pagination.changeUrl( "/phone/listPhones" );
+          pagination.changePage( 1 );
+          pagination.changeScope( $scope, 'phones' );
+          pagination.loadData().then(function(res) {
+          $scope.calls = res.data.data;
+          $shared.endIsLoading();
+          resolve();
+        })
+      });
   }
   $scope.createPhone = function() {
     $state.go('phones-phone-create');
@@ -41,7 +44,7 @@ angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/did/deletePhone/" + phone.id).then(function() {
+      Backend.delete("/phone/deletePhone/" + phone.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

@@ -36,7 +36,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', functi
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
-              .textContent('Created phone')
+              .textContent('Created phone settings')
               .position("top right")
               .hideDelay(3000)
           );
@@ -61,6 +61,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', functi
     $scope.values['group_id'] = phoneGroup;
   }
   $timeout(function() {
+    $shared.isLoading = true;
     $q.all([
       Backend.get("/phone/phoneDefs"),
       Backend.get("/phoneGroup/listPhoneGroups?all=1")

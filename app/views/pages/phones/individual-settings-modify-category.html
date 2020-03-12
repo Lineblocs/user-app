@@ -1,0 +1,65 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Modify Phone Global Setting Template</span>
+                <span class="md-subhead">add global phone settings to provision a set of phones</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+        </md-card-content>
+    </md-card>
+    <md-card>
+        <md-card-content>
+            <form name="tmplForm" ng-submit="submit(tmplForm)" novalidate>
+            <h5>{{$stateParams['categoryId']}}</h5>
+            <div ng-repeat="field in fields" layout="row">
+                <div flex="95" ng-if="field.setting_variable_type==='1'">
+                    <md-input-container>
+                        <label>{{field.setting_name}}</label>
+                        <md-select ng-model="field.value" ng-change="changeSelectValue(field, field.value)">
+
+                            <md-option><em>None</em></md-option>
+                            <md-option ng-if="field.setting_option_1 !== ''" ng-value="field.setting_option_1">{{field.setting_option_1_name}}</md-option>
+                            <md-option ng-if="field.setting_option_2 !== ''" ng-value="field.setting_option_2">{{field.setting_option_2_name}}</md-option>
+                            <md-option ng-if="field.setting_option_3 !== ''" ng-value="field.setting_option_3">{{field.setting_option_3_name}}</md-option>
+                            <md-option ng-if="field.setting_option_4 !== ''" ng-value="field.setting_option_4">{{field.setting_option_4_name}}</md-option>
+                            <md-option ng-if="field.setting_option_5 !== ''" ng-value="field.setting_option_5">{{field.setting_option_5_name}}</md-option>
+                            <md-option ng-if="field.setting_option_6 !== ''" ng-value="field.setting_option_6">{{field.setting_option_6_name}}</md-option>
+                            <md-option ng-if="field.setting_option_7 !== ''" ng-value="field.setting_option_7">{{field.setting_option_7_name}}</md-option>
+                            <md-option ng-if="field.setting_option_8 !== ''" ng-value="field.setting_option_8">{{field.setting_option_8_name}}</md-option>
+                            <md-option ng-if="field.setting_option_9 !== ''" ng-value="field.setting_option_9">{{field.setting_option_9_name}}</md-option>
+                            <md-option ng-if="field.setting_option_10 !== ''" ng-value="field.setting_option_10">{{field.setting_option_10_name}}</md-option>
+                            <md-option ng-if="field.setting_option_11 !== ''" ng-value="field.setting_option_11">{{field.setting_option_11_name}}</md-option>
+                            <md-option ng-if="field.setting_option_12 !== ''" ng-value="field.setting_option_12">{{field.setting_option_12_name}}</md-option>
+                            <md-option ng-if="field.setting_option_13 !== ''" ng-value="field.setting_option_13">{{field.setting_option_13_name}}</md-option>
+                            <md-option ng-if="field.setting_option_14 !== ''" ng-value="field.setting_option_14">{{field.setting_option_14_name}}</md-option>
+                            <md-option ng-if="field.setting_option_15 !== ''" ng-value="field.setting_option_15">{{field.setting_option_15_name}}</md-option>
+                            <md-option ng-if="field.setting_option_16 !== ''" ng-value="field.setting_option_16">{{field.setting_option_16_name}}</md-option>
+                            <md-option ng-if="field.setting_option_17 !== ''" ng-value="field.setting_option_17">{{field.setting_option_17_name}}</md-option>
+                            <md-option ng-if="field.setting_option_18 !== ''" ng-value="field.setting_option_18">{{field.setting_option_18_name}}</md-option>
+                            <md-option ng-if="field.setting_option_19 !== ''" ng-value="field.setting_option_19">{{field.setting_option_19_name}}</md-option>
+                            <md-option ng-if="field.setting_option_20 !== ''" ng-value="field.setting_option_20">{{field.setting_option_20_name}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div flex="95" ng-if="field.setting_variable_type==='2'">
+                    <md-input-container>
+                        <label>{{field.setting_name}}</label>
+                        <input name="name" ng-model="field.value" />
+                    </md-input-container>
+                </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            The manufacturer/model of the physical phone
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
+                <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+        </form>
+        </md-card-content>
+    </md-card>
+</div>

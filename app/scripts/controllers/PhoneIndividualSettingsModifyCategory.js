@@ -7,8 +7,8 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
-    $shared.updateTitle("PhoneGlobalSettings Create");
+angular.module('MaterialApp').controller('PhoneIndividualSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+    $shared.updateTitle("PhoneIndividualSettings Create");
     $scope.$stateParams = $stateParams;
     $scope.settings = [];
     $scope.fields = [];
@@ -32,7 +32,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl'
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isLoading = true;
-        Backend.post("/phoneGlobalSetting/updatePhoneGlobalSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
+        Backend.post("/phoneIndividualSetting/updatePhoneIndividualSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
@@ -40,7 +40,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl'
               .position("top right")
               .hideDelay(3000)
           );
-          $state.go('phones-global-settings-modify', {phoneSettingId:$stateParams['phoneSettingId']});
+          $state.go('phones-individual-settings-modify', {phoneSettingId:$stateParams['phoneSettingId']});
           $shared.endIsCreateLoading();
         });
       }
@@ -48,7 +48,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl'
 
 
     $scope.openCategory = function(category) {
-          $state.go('phones-global-settings-modify-category', {
+          $state.go('phones-individual-settings-modify-category', {
             phoneSettingId:$stateParams['phoneSettingId'],
             categoryId:category['name']
           });
@@ -88,7 +88,7 @@ $scope.createOptions = function(field)
   }
 
     $shared.isLoading = true;
-  Backend.get("/phoneGlobalSetting/phoneGlobalSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
+  Backend.get("/phoneIndividualSetting/phoneIndividualSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
     if (item.phone_type) {
@@ -99,7 +99,7 @@ $scope.createOptions = function(field)
     }
     qsMap['settingId'] = $stateParams['phoneSettingId'];
     qsMap['categoryId'] = $stateParams['categoryId'];
-    Backend.get("/getPhoneSettingsByCat", {"params": qsMap}).then(function(res) {
+    Backend.get("/getPhoneIndividualSettingsByCat", {"params": qsMap}).then(function(res) {
 
       console.log("settings ", res.data);
       $scope.template = res.data.settings;

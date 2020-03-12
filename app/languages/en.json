@@ -85,5 +85,10 @@
       "extension-codes": "Extension Codes",
       "workspace-api-settings": "Workspace API Settings",
       "faxes": "Fax",
-      "media-files": "Media Files"
+      "media-files": "Media Files",
+      "phones": "Phones",
+      "phones-groups": "Groups",
+      "phones-global-settings": "Global Templates",
+      "phones-individual-settings": "Individual Settings",
+      "phones-deploy-config": "Deploy Now"
   }

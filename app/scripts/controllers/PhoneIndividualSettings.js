@@ -7,24 +7,18 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
-    $shared.updateTitle("PhoneGlobalSettings");
+angular.module('MaterialApp').controller('PhoneIndividualSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout) {
+    $shared.updateTitle("PhoneIndividualSettings");
     $scope.settings = [];
   $scope.load = function() {
-    return $q(function(resolve, reject) {
-      Backend.get( "/phoneGlobalSetting/listPhoneGlobalSettings" ).then(function(res) {
+      Backend.get( "/phoneIndividualSetting/listPhoneIndividualSettings" ).then(function(res) {
           $scope.settings = res.data.data;
           $shared.endIsLoading();
-          resolve();
       });
-    });
-  }
-  $scope.createSettings =  function() {
-    $state.go('phones-global-settings-create');
   }
   $scope.modifyPhoneSetting = function($event, phoneSettings) {
     console.log("edit phone settings ", phoneSettings);
-    $state.go('phones-global-settings-modify', {phoneSettingId: phoneSettings.public_id});
+    $state.go('phones-individual-settings-modify', {phoneSettingId: phoneSettings.public_id});
   }
   $scope.deletePhoneSettings = function($event, phoneSettings) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -37,7 +31,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($s
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/phoneGlobalSetting/deletePhoneGlobalSetting/" + phoneSettings.id).then(function() {
+      Backend.delete("/phoneGlobalSetting/deletePhoneSetting/" + phone.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
@@ -51,16 +45,6 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($s
     }, function() {
     });
   }
-  $timeout(function() {
-    $q.all([
-      Backend.get("/phone/phoneDefs"),
-      Backend.get("/phoneGroup/listPhoneGroups?all=1")
-    ]).then(function(res) {
-      $scope.phoneDefs = res[0].data;
-      $scope.phoneGroups = res[1].data.data;
-        $shared.endIsLoading();
-    });
-  }, 0);
 
     $scope.load();
 });

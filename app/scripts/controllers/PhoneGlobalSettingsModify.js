@@ -36,7 +36,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
-              .textContent('Created phone')
+              .textContent('Updated phone settings')
               .position("top right")
               .hideDelay(3000)
           );
@@ -63,6 +63,7 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
     console.log("change phone group ", phoneGroup);
     $scope.values['group_id'] = phoneGroup;
   }
+    $shared.isLoading = true;
   Backend.get("/phoneGlobalSetting/phoneGlobalSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
@@ -72,6 +73,8 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
     if (item.group_id) {
         qsMap['groupId'] = item.group_id;
     }
+
+    $shared.isLoading = true;
     Backend.get("/getPhoneDefaults", {"params": qsMap}).then(function(res) {
 
       console.log("settings ", res.data);

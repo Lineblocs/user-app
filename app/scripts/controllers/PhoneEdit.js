@@ -48,7 +48,7 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
         .filter(function(pos) { return toastPos[pos]; })
         .join(' ');
       console.log("toastPosStr", toastPosStr);
-      $shared.isEditLoading = true;
+      $shared.isLoading = true;
       Backend.post("/phone/updatePhone/" + $stateParams['phoneId'], values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
@@ -79,6 +79,7 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
     console.log("change phone type ", phoneType);
     $scope.values['phone_type'] = phoneType;
   }
+  $shared.isLoading = true;
   $timeout(function() {
     $q.all([
       Backend.get("/phone/phoneDefs"),

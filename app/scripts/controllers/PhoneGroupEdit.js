@@ -40,7 +40,7 @@ angular.module('MaterialApp').controller('PhoneGroupsEditCtrl', function ($scope
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Created phone')
+            .textContent('Updated phone group')
             .position("top right")
             .hideDelay(3000)
         );

@@ -922,28 +922,28 @@ angular
         url: '/phones/individual-settings',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings.html',
-        controller: 'PhoneindividualSettingsCtrl'
-    })
-    .state('phones-individual-settings-create', {
-        url: '/phones/individual-settings/create',
-        parent: 'dashboard',
-        templateUrl: 'views/pages/phones/individual-settings-create.html',
-        controller: 'PhoneindividualSettingsCreateCtrl'
+        controller: 'PhoneIndividualSettingsCtrl'
     })
     .state('phones-individual-settings-modify', {
-        url: '/phones/individual-settings/modify',
+        url: '/phones/individual-settings/{phoneSettingId}/modify',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings-modify.html',
-        controller: 'PhoneindividualSettingsModifyCtrl'
+        controller: 'PhoneIndividualSettingsModifyCtrl'
     })
+
 
     .state('phones-individual-settings-modify-category', {
-        url: '/phones/individual-settings/modify/{categoryId}',
+        url: '/phones/individual-settings/{phoneSettingId}/modify/{categoryId}',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings-modify-category.html',
-        controller: 'PhoneindividualSettingsModifyCategoryCtrl'
+        controller: 'PhoneIndividualSettingsModifyCategoryCtrl'
     })
-
+    .state('phones-deploy-config', {
+        url: '/phones/deploy', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/phones/deploy.html',
+        controller: 'PhoneDeployCtrl'
+    })
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',

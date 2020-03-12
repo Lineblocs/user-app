@@ -1,0 +1,40 @@
+<div>
+    <md-card ng-show="step===1">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Deploy Phones</span>
+                <span class="md-subhead">start deploying the configuration for your phones</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <!--
+                    Local Path: /var/www/html/provisioner_v1
+            -->
+            <small>please ensure your phone's provisioning server Path is set to:</small>
+            <br/>
+            <strong>{{info.remote_path}}</strong>
+
+            <h5>Phones to Provision:</h5> {{info.devices_to_provision}}
+            <br/>
+            <md-button ng-click="start()" type="submit" class="md-raised md-primary md-large no-margin-sides">Begin Deployment</md-button>
+        </md-card-content>
+    </md-card>
+    <md-card ng-show="step===2">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Config Deployed Successfully</span>
+                <span class="md-subhead"></span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+                <p>
+                    please reboot your phones in order for them to download their new configurations
+                </p>
+                <hr/>
+                <h5>Troubleshooting</h5>
+                <p>
+                    for more info on how to troubleshoot please check this article <a href="https://lineblocs.com/quickstarts/troubleshoot-phone-provisioning">Troubleshooting Phone Provisioning</a>
+                </p>
+        </md-card-content>
+    </md-card>
+</div>

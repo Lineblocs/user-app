@@ -29,7 +29,7 @@ angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Ba
     console.log("edit phone group ", phoneGroup);
     $state.go('phones-groups-edit', {phoneGroupId: phoneGroup.public_id});
   }
-  $scope.deletePhone = function($event, phone) {
+  $scope.deletePhoneGroup = function($event, group) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete this phone group?')
@@ -40,7 +40,7 @@ angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Ba
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/did/deletePhone/" + phone.id).then(function() {
+      Backend.delete("/phoneGroup/deletePhoneGroup/" + group.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

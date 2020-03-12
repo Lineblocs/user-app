@@ -519,6 +519,19 @@ div.scroll::-webkit-scrollbar-thumb:hover {
   margin: 0;
   content: ''; }
 
+.tmpl-list li {
+  float: left;
+  width: 33%; }
+  .tmpl-list li md-card {
+    max-height: 128px;
+    min-height: 128px; }
+
+.tmpl-list:after {
+  clear: both;
+  width: 100%;
+  margin: 0;
+  content: ''; }
+
 .clickable {
   cursor: pointer;
   color: blue; }
