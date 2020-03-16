@@ -856,76 +856,76 @@ angular
         controller: 'phonesCtrl'
     })
     .state('phones-phones', {
-        url: '/phones/phones',
+        url: '/provision/phones',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/phones.html',
         controller: 'PhonesCtrl'
     })
 
     .state('phones-phone-create', {
-        url: '/phones/create',
+        url: '/provision/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/phones-create.html',
         controller: 'PhoneCreateCtrl'
     })
     .state('phones-phone-edit', {
-        url: '/phones/{phoneId}/edit',
+        url: '/provision/{phoneId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/phones-edit.html',
         controller: 'PhoneEditCtrl'
     })
 
     .state('phones-groups', {
-        url: '/phones/groups',
+        url: '/provision/groups',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/groups.html',
         controller: 'PhoneGroupsCtrl'
     })
     .state('phones-groups-create', {
-        url: '/phones/groups/create',
+        url: '/provision/groups/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/groups-create.html',
         controller: 'PhoneGroupsCreateCtrl'
     })
     .state('phones-groups-edit', {
-        url: '/phones/groups/{phoneGroupId}/edit',
+        url: '/provision/groups/{phoneGroupId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/groups-edit.html',
         controller: 'PhoneGroupsEditCtrl'
     })
     .state('phones-global-settings', {
-        url: '/phones/global-settings',
+        url: '/provision/global-settings',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/global-settings.html',
         controller: 'PhoneGlobalSettingsCtrl'
     })
     .state('phones-global-settings-create', {
-        url: '/phones/global-settings/create',
+        url: '/provision/global-settings/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/global-settings-create.html',
         controller: 'PhoneGlobalSettingsCreateCtrl'
     })
     .state('phones-global-settings-modify', {
-        url: '/phones/global-settings/{phoneSettingId}/modify',
+        url: '/provision/global-settings/{phoneSettingId}/modify',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/global-settings-modify.html',
         controller: 'PhoneGlobalSettingsModifyCtrl'
     })
 
     .state('phones-global-settings-modify-category', {
-        url: '/phones/global-settings/{phoneSettingId}/modify/{categoryId}',
+        url: '/provision/global-settings/{phoneSettingId}/modify/{categoryId}',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/global-settings-modify-category.html',
         controller: 'PhoneGlobalSettingsModifyCategoryCtrl'
     })
     .state('phones-individual-settings', {
-        url: '/phones/individual-settings',
+        url: '/provision/individual-settings',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings.html',
         controller: 'PhoneIndividualSettingsCtrl'
     })
     .state('phones-individual-settings-modify', {
-        url: '/phones/individual-settings/{phoneSettingId}/modify',
+        url: '/provision/individual-settings/{phoneSettingId}/modify',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings-modify.html',
         controller: 'PhoneIndividualSettingsModifyCtrl'
@@ -933,13 +933,13 @@ angular
 
 
     .state('phones-individual-settings-modify-category', {
-        url: '/phones/individual-settings/{phoneSettingId}/modify/{categoryId}',
+        url: '/provision/individual-settings/{phoneSettingId}/modify/{categoryId}',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/individual-settings-modify-category.html',
         controller: 'PhoneIndividualSettingsModifyCategoryCtrl'
     })
     .state('phones-deploy-config', {
-        url: '/phones/deploy', 
+        url: '/provision/deploy', 
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/deploy.html',
         controller: 'PhoneDeployCtrl'
