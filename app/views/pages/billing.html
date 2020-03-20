@@ -24,12 +24,6 @@
                     </div>
                     <div flex="90" class="line-left">
                         <div ng-show="settings.type==='CARD'">
-                            <p>
-                                To add credit please choose a payment option and select the credit amount
-                                you wish to
-                                add to your balance.
-                            </p>
-
                             <div ng-show="cards.length === 0">
                                 <h5>No Cards Added</h5>
                                 <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A
@@ -123,9 +117,17 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-button ng-click="addCredit($event)" class="md-raised md-primary no-margin-sides">Add Credit
+                                    <md-button ng-click="addCredit($event)" class="md-raised md-primary no-margin-sides">Add Credit
                                 </md-button>
+
                             </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                                <small>Payments Powered By Stripe</small>
+                                <br/>
+                                <img height="32" src="images/stripe.png"></img>
                           </div>
                             <div ng-show="settings.type==='PAYPAL'">
                                 <md-input-container>
@@ -136,9 +138,14 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <!--
                                 <md-button ng-click="addCreditPayPal($event)" class="md-raised md-primary no-margin-sides">Add Credit
-                                </md-button>
-                                <p>You will be redirected to PayPal to complete your transaction.</p>
+                                </md-button>                            <br/>
+                            -->
+                                <!-- PayPal Logo -->
+<a class="clickable" title="How PayPal Works" ng-click="addCreditPayPal($event)"><img
+        src="https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_m.png"
+        alt="Pay with PayPal" /></a>
                             </div>
                         </div>
                       </div>

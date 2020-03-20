@@ -11,6 +11,10 @@
   <form ng-cloak ng-submit="submit()">
     <md-dialog-content class="add-card-form">
       <div class="md-dialog-content">
+<div ng-show="errorMsg" class="error-box">
+      <span class="red"><strong>{{errorMsg}}</strong></span>
+    </div>
+
       <md-input-container>
           <label>Your Name</label>
           <input ng-model="card.name"/>

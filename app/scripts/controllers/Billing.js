@@ -120,7 +120,7 @@ angular.module('MaterialApp')
 				if (response.error) { // Problem!
 					// Show the errors on the form
 					$scope.errorMsg = response.error.message;
-
+					angular.element('.add-card-form').scrollTop(0);
 				} else { // Token was created!
 					// Get the token ID:
 					$mdDialog.hide();

@@ -140,8 +140,117 @@ angular
     }
   ];
 
+  factory.acSearch = {
+      isDisabled: false,
+      noCache:true, 
+      selectedItem: null,
+  };
         factory.billingPackages = ['gold', 'silver', 'bronze'];
   var flickerTimeout = 0;
+
+    function searchModule(text, state, tags, stateParams)
+    {
+        tags = tags || [];
+        stateParams= stateParams || {};
+        return {
+            display: text,
+            state: state,
+            tags: tags,
+            stateParams: stateParams
+        }
+    }
+     var modules = [
+searchModule("Blocked Numbers", "settings-blocked-numbers", ['blocked', 'numbers']),
+searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
+searchModule("IP Whitelist", "settings-ip-whitelist", ['ip', 'whitelist']),
+searchModule("API Settings", "settings-workspace-api-settings", ['api']),
+searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users']),
+searchModule("Workspace Params", "settings-workspace-params", ['workspace', 'params']),
+searchModule("Add Workspace User", "settings-workspace-users-create", ['add', 'workspace', 'user']),
+searchModule("Extension Codes", "settings-extension-codes", ['extension', 'codes']),
+searchModule("Media Files", "files", ['media', 'files', 'media files']),
+searchModule("Phones", "phones-phones", ['provision', 'phones']),
+searchModule("Add Phone", "phones-phone-create", ['add', 'phone']),
+searchModule("Phones Groups", "phones-groups", ['phones', 'groups']),
+searchModule("Add Group", "phones-groups-create", ['add', 'group']),
+searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates']),
+searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings']),
+searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy']),
+searchModule("My Numbers", "my-numbers", ['my', 'numbers']),
+searchModule("Buy Numbers", "buy-numbers", ['buy', 'numbers']),
+searchModule("Port-In Requests", "ports", ['port', 'requests', 'port in', 'dids']),
+searchModule("Create Port Request", "port-create", ['port', 'create', 'dids']),
+searchModule("Flows", "flows", ['flows', 'flow editor']),
+searchModule("Flow Editor", "flow-editor", ['flow editor'], {"flowId": "new"}),
+searchModule("Extensions", "extensions", ['extensions']),
+searchModule('Add Extension', "extension-create", ['add', 'extension']),
+searchModule("Logs", "debugger-logs", ['debugger logs', 'logs', 'debugger']),
+searchModule("Calls", "calls", ['calls']),
+searchModule("Recordings", "recordings", ['recordings']),
+searchModule("Faxes", "faxes", ['fax', 'faxes']),
+searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
+     ];
+
+
+     factory.deleteAllChecked = function(module, items) {
+         var checked = items.filter(function(item) {
+             return item.checked;
+         });
+         var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete all these items?')
+          .ariaLabel('Confirm')
+          .ok('Yes')
+          .cancel('No');
+        $mdDialog.show(confirm).then(function() {
+            factory.isLoading = true;
+            var data = {
+                "module": module,
+                "items": checked
+            };
+            Backend.post("/deleteAll", data).then(function() {
+                console.log("deleted successfully..");
+            })
+        });
+     }
+
+    factory.querySearch  = function(query) {
+        console.log("querySearch query is: " + query);
+        return $q(function(resolve, reject) {
+            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+            var results = [];
+            angular.forEach(modules, function(module) {
+
+                console.log("searching on " + module.display + " agaisnt " + query);
+                var matched = module.display.toLowerCase().match( regexp );
+                if ( matched ) {
+                    results.push(module);
+                }
+            });
+            //tag search
+            angular.forEach(modules, function(module) {
+                if (results.indexOf(module)>-1) {
+                    return;
+                }
+                angular.forEach(module.tags, function(tag) {
+                    console.log("searching on " + tag + " agaisnt " + query);
+                    var matched = tag.toLowerCase().match( regexp );
+                    if ( matched ) {
+                        results.push(module);
+                    }
+                });
+            });
+
+            return resolve(results);
+        });
+    }
+    factory.searchTextChange = function(text) {
+        console.log("searchTextChange");
+    }
+    factory.selectedItemChange = function(item) {
+      console.log('Item changed to ' + JSON.stringify(item));
+      factory.changeRoute(item.state, item.stateParams);
+    }
+
   factory.showToast = function(msg, position) {
       var position = position || "top right";
                     $mdToast.show(
@@ -151,6 +260,9 @@ angular
                         .hideDelay(3000)
                     );
   }
+
+
+
   factory.endIsLoading = function() {
       return $q(function(resolve, reject) {
         $timeout(function() {
@@ -370,7 +482,7 @@ angular
         }
         return factory;
     })
-    .factory("Backend", function($http, $q, $shared) {
+    .factory("Backend", function($http, $q, $shared, $mdDialog, $state) {
         var factory = this;
         function errorHandler(error, showMsg) {
             console.log("erroHandler ", arguments);
@@ -382,6 +494,31 @@ angular
             $shared.showError("An error occured.");
 
         }
+
+         factory.deleteAllChecked = function(module, items) {
+         var checked = items.filter(function(item) {
+             return item.checked;
+         });
+         var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete all these items?')
+          .ariaLabel('Confirm')
+          .ok('Yes')
+          .cancel('No');
+        $mdDialog.show(confirm).then(function() {
+            $shared.isLoading = true;
+            var data = {
+                "module": module,
+                "items": checked
+            };
+            factory.post("/deleteAll", data).then(function() {
+                console.log("deleted successfully..");
+                $shared.isLoading = false;
+                $state.reload();
+            })
+        });
+     }
+
+
         factory.getJWTToken = function(email, password) {
             var params = {
                 email: email,
@@ -1095,7 +1232,7 @@ angular.module('MaterialApp')
 				if (response.error) { // Problem!
 					// Show the errors on the form
 					$scope.errorMsg = response.error.message;
-
+					angular.element('.add-card-form').scrollTop(0);
 				} else { // Token was created!
 					// Get the token ID:
 					$mdDialog.hide();
@@ -3816,6 +3953,7 @@ angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, 
 angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("My Numbers");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
   $scope.numbers = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {

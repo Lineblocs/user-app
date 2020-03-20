@@ -84,6 +84,13 @@ md-tooltip .md-content {
 .md-button.md-small {
     min-width: 1%;
 }
+.md-button.bulk-actions {
+	font-size: 12px;
+	min-height: 32px;
+	min-width: 1%;
+	line-height: 24px;
+}
+
 md-tabs.md-default-theme.md-primary > md-tabs-wrapper, md-tabs.md-primary > md-tabs-wrapper {
 	background: $primary;
 }
@@ -223,7 +230,7 @@ md-menu {
 	margin-bottom: 0;
 }
 .media-file-url-input {
-	margin: 3.5px 0;
+	margin: 9.4px 0;
 }
 
 .no-padding {
@@ -407,37 +414,50 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 		}
 		.dashboard-menu {
         	ul.menu-list {
+				li.active {
+					a {
+
+						padding-left: 0 !important;
+						padding-right: 0 !important;
+						padding-top: 5px !important;
+    					padding-bottom: 5px !important;
+
+					}
+				}
     			li {  
-    				min-height: 32px;	
+    				min-height: 24px;	
     				float: left;
     				display: block;
     				width: 100%;	
-    				height: auto;	
+					height: auto;	
     				a {
-    					display: block;
+						display: block;
+						
     					span.text {
     						display: inline-block;
-    						width: auto;
+							width: auto;
+							font-size: 14px;
+							line-height: 36px;
     					}
     					text-transform: none;
     					color: white;
     					font-weight: 400;
     					text-align: left; 
-    					height: 100%;
-    					font-size: 17px;
-    					padding-top: 6px;
-    					padding-bottom: 8px;
+    					font-size: 12px;
+    					padding-top: 3px;
+    					padding-bottom: 3px;
     					.mdi {
-    						font-size: 20px;
+    						font-size: 16px;
     						margin-left: 10px;
-    						margin-right: 10px;
+							margin-right: 10px;
+							line-height: 36px;
     					}
     					.mdi-chevron-down {
     						float: right;
     						display: inline-block;
     						transition: 0.2s transform linear;
     						position:relative;
-    						top:4px;
+    						top:1px;
     						&.active {
     							transform: rotate(180deg);
     						}
@@ -657,4 +677,28 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 .clickable {
 	cursor: pointer;
 	color: blue;
+}
+.breaker {
+	width: 100%;
+	border: 1px solid #E3E3E3;
+	height: 1px;
+	margin: 10px 0;
+}
+.error-box {
+	border: 1px solid #E3E3E3; 
+	padding: 15px;
+	margin: 10px 0;
+}
+
+#acSearch input[name="autocompleteField"]  {
+    background: url(http://glamourshots-albums.com/assets/themes/default/images/search.icon.png);
+	background-repeat: no-repeat;
+	background-position: 10px center;
+    background-size: 16px 16px;
+	padding: 0px 35px;
+	background-color: #F5F5F5;
+	border-radius: 2px;
+}
+#acSearch .md-whiteframe-z1 {
+	box-shadow: none;
 }

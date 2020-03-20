@@ -10,6 +10,7 @@
 angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("My Numbers");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
   $scope.numbers = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
