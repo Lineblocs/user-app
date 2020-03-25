@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict'; 
 /**
  * @ngdoc function
  * @name MaterialApp.controller:MainCtrl
@@ -7,7 +6,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q) {
+angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
     $shared.updateTitle("Buy Numbers");
     $scope.countries = [];
     $scope.state = "SEARCHING";
@@ -21,6 +20,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
       noCache:true, 
       selectedItem: null,
   };
+
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
@@ -57,7 +57,10 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
   };
   $scope.numbers = [];
   $scope.didFetch = false;
-
+  console.log("state params are ", $stateParams);
+  if ($stateParams['type']) {
+    $scope.settings.number_for= $stateParams['type'];
+  }
   function purchaseConfirm(ev, number) {
     $mdDialog.show({
       controller: DialogController,
@@ -270,10 +273,13 @@ $scope.listCountries = function() {
       $scope.settings.showMoreOptions = true;
     }
     $scope.buyVoiceNumbers = function() {
-      $scope.settings.number_for='voice';
+      //$scope.settings.number_for='voice';
+      console.log("buy voice numbers");
+        $state.go('buy-numbers-select', { type: "voice" });
     }
     $scope.buyFaxNumbers = function() {
-      $scope.settings.number_for='fax';
+      //$scope.settings.number_for='fax';
+        $state.go('buy-numbers-select', { type: "fax" });
     }
     $scope.backToSearch = function() {
       $scope.state = "SEARCHING";

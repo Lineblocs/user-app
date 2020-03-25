@@ -803,6 +803,12 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         templateUrl: 'views/pages/did/buy-numbers.html',
         controller: 'BuyNumbersCtrl'
     })
+    .state('buy-numbers-select', {
+        url: '/dids/buy-numbers/{type}',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/did/buy-numbers.html',
+        controller: 'BuyNumbersCtrl'
+    })
     .state('ports', {
         url: '/dids/ports', 
         parent: 'dashboard',
