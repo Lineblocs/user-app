@@ -1106,9 +1106,10 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         console.log("state is changing ", arguments);
         $shared.state = toState;
         $shared.showNavbar();
-        if (!$shared.billInfo || !$shared.userInfo) {
+        var token = localStorage.getItem("AUTH");
+        if ((!$shared.billInfo || !$shared.userInfo) && token) {
             Backend.get("/dashboard").then(function(res) {
-				var graph = res.data[0];
+                var graph = res.data[0];
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 console.log("updated UI state");
