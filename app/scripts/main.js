@@ -1092,7 +1092,7 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared) {
+}).run(function($rootScope, $shared, Backend) {
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
         /* Display modal warning or sth */ 
@@ -1106,6 +1106,14 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         console.log("state is changing ", arguments);
         $shared.state = toState;
         $shared.showNavbar();
+        if (!$shared.billInfo || !$shared.userInfo) {
+            Backend.get("/dashboard").then(function(res) {
+				var graph = res.data[0];
+				$shared.billInfo=  res.data[1];
+                $shared.userInfo=  res.data[2];
+                console.log("updated UI state");
+            });
+        }
         /*
 		Backend.get("/getBillingInfo").then(function(res) {
             $shared.billInfo = res.data;
