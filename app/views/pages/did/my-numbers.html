@@ -45,6 +45,7 @@
                 <th md-column>Setup Cost</th>
                 <th md-column>Monthly Cost</th>
                 <th md-column>Features</th>
+                <th md-column>Availability</th>
                 <th md-column>&nbsp;</th>
               </tr>
             </thead>
@@ -60,6 +61,7 @@
                 <td md-cell>{{number.region}}</td>
                 <td md-cell>{{number.setup_cost}}</td>
                 <td md-cell>{{number.monthly_cost}}</td>
+
                             <td md-cell>
                                     <md-icon ng-show="number.features.includes('voice')" class="feature-icon">
                                         <i class="mdi mdi-cellphone"></i>
@@ -74,6 +76,10 @@
                                         </md-tooltip>
                                     </md-icon>
                             <td md-cell>
+                <td md-cell>
+
+                    {{number.availability}}
+                </td>
                 <td md-cell>
                   <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
                       <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
