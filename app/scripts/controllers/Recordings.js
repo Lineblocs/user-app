@@ -13,6 +13,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
     page: 0
   };
   $scope.pagination = pagination;
+  $scope.Backend = Backend;
   $scope.recordings = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {

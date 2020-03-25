@@ -9,6 +9,7 @@
  */
 angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Verified Caller IDs");
+  $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;

@@ -12,6 +12,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
       $scope.settings = {
         disabled: false
       }
+      $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;

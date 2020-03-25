@@ -1,59 +1,86 @@
 <!-- exact table from live demo -->
 <div>
-  <div ng-show="disabled" class="no-results">
-    <md-card md-theme="'default'"" md-theme-watch>
-      <div class="no-results">
-        <center>
-          <h5>IP whitelist disabled</h5>
-          <md-button ng-click="enableWhitelist($event, false)" class="md-raised md-primary">Enable Whitelist</md-button>
-        </center>
-      </div>
+    <div ng-show="disabled" class="no-results">
+        <md-card md-theme="'default'"" md-theme-watch>
+      <div class=" no-results">
+            <center>
+                <h5>IP whitelist disabled</h5>
+                <md-button ng-click="enableWhitelist($event, false)" class="md-raised md-primary">Enable Whitelist
+                </md-button>
+            </center>
+    </div>
     </md-card>
-  </div>
-  <div ng-show="!disabled">
-      <div layout="row" layout-align="start center">
+</div>
+<div ng-show="!disabled">
+    <div layout="row" layout-align="start center">
         <div flex="15">
-          <div class="table-heading" layout="row">
-            <h5>IP Whitelist</h5>
-            <md-button ng-click="changeDisableState($event, settings.disabled)" class="md-raised md-primary md-small">Disable</md-button>
-          </div>
+            <div class="table-heading" layout="row">
+                <h5>IP Whitelist</h5>
+                <md-button ng-click="changeDisableState($event, settings.disabled)"
+                    class="md-raised md-primary md-small">Disable</md-button>
+            </div>
         </div>
         <div flex="85">
-            <div layout="row" layout-align="end center">
-              <md-button ng-click="createIp($event)" class="md-raised md-primary">Add IP</md-button>
+            <div layout="row side-options" layout-align="end center">
+                <div>
+                    <md-button ng-click="createIp($event)" class="md-raised md-primary create-new">Add IP</md-button>
+                </div>
+                <div>
+                    <md-menu md-position-mode="target-right target">
+                        <div class="nav-item">
+                            <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
+                                ng-click="$mdOpenMenu($event)">
+                                Actions
+                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                            </md-button>
+                        </div>
+                        <md-menu-content width="3">
+                            <md-menu-item>
+                                <md-button href="" ng-click="Backend.deleteAllChecked('ips', ips)"
+                                    style="display:flex;">
+                                    Delete All</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
             </div>
-          </div>
-      </div>
-  <md-card md-theme="'default'"" md-theme-watch>
-    <div ng-show="ips.length===0">
-      <center><h5>No IPs added</h5></center>
+        </div>
     </div>
-    <div ng-show="ips.length>0">
-      <md-table-container>
-        <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-          <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-            <tr md-row>
-              <th md-column><span>IP</span></th>
-              <th md-column><span>Range</span></th>
-              <th md-column>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody md-body>
-            <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="ip in ips">
-              <td md-cell>{{ip.ip}}</td>
-              <td md-cell>{{ip.range}}</td>
-              <td md-cell>
-                <md-button ng-click="deleteIp($event, ip)" class="md-icon-button" aria-label="Settings">
-                    <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-                </md-button>
-
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </md-table-container>
-    </div>
-  </md-card>
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div ng-show=" ips.length===0">
+        <center>
+            <h5>No IPs added</h5>
+        </center>
 </div>
-  </div>
- 
+<div ng-show="ips.length>0">
+    <md-table-container>
+        <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+            <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+                <tr md-row>
+                    <th md-column>&nbsp;</th>
+                    <th md-column><span>IP</span></th>
+                    <th md-column><span>Range</span></th>
+                    <th md-column>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="ip in ips">
+                    <td md-cell>
+                        <md-checkbox ng-model="ip.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                    </td>
+                    <td md-cell>{{ip.ip}}</td>
+                    <td md-cell>{{ip.range}}</td>
+                    <td md-cell>
+                        <md-button ng-click="deleteIp($event, ip)" class="md-icon-button" aria-label="Settings">
+                            <md-icon><i class="mdi mdi-delete"></i></md-icon>
+                        </md-button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+</div>
+</md-card>
+</div>
+</div>

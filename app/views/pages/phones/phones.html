@@ -11,16 +11,38 @@
     </md-card>
   </div>
   <div ng-show="phones.length > 0">
-      <div layout="row" layout-align="end center">
+   <div layout="row side-options" layout-align="end center">
+        <div flex="10">
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+            </md-input-container>
+        </div>
+        <md-button ng-click="createPhone($event)" class="md-raised md-primary create-new">Add Phone</md-button>
         <div>
-            <md-button ng-click="createPhone($event)" class="md-raised md-primary">Add Phone</md-button>
-          </div>
-      </div>
+            <md-menu md-position-mode="target-right target">
+                <div class="nav-item">
+                    <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
+                        ng-click="$mdOpenMenu($event)">
+                        Actions
+                        <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+                </div>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button href="" ng-click="Backend.deleteAllChecked('phones', phones)" style="display:flex;">
+                            Delete All</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
           <tr md-row>
+            <th md-column>&nbsp;</th>
             <th md-column><span>Name<span></th>
             <th md-column><span>Mac Address<span></th>
             <th md-column><span>Group<span></th>
@@ -31,6 +53,9 @@
         </thead>
         <tbody md-body>
           <tr md-row md-select="phone" md-select-id="name" md-auto-select ng-repeat="phone in phones">
+                <td md-cell>
+                    <md-checkbox ng-model="phone.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                </td>
             <td md-cell>{{phone.name}}</td>
             <td md-cell>{{phone.mac_address}}</td>
             <td md-cell>{{phone.group_friendly}}</td>

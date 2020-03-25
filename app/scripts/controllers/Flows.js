@@ -10,6 +10,7 @@
 angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("Flows");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
   $scope.settings = {
     page: 0
   };

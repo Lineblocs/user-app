@@ -78,6 +78,23 @@ md-tooltip .md-content {
   font-size: 12px;
   min-height: 32px;
   min-width: 1%;
+  line-height: 24px;
+  background-color: #fafafa !important;
+  color: #212121 !important;
+  margin-top: 0px;
+  margin-left: 0px;
+  margin-bottom: 0px; }
+
+.md-button.create-new {
+  font-size: 12px;
+  min-height: 32px;
+  min-width: 1%;
+  line-height: 24px; }
+
+.md-button.more-options {
+  font-size: 11px;
+  min-height: 32px;
+  min-width: 1%;
   line-height: 24px; }
 
 md-tabs.md-default-theme.md-primary > md-tabs-wrapper, md-tabs.md-primary > md-tabs-wrapper {
@@ -110,9 +127,9 @@ md-input-container.search {
     background: #FFFFFF;
     border-radius: 3px;
     border: 1px solid #ccc;
-    padding: 5px;
+    padding: 2px 5px;
     font-size: 16px;
-    height: 36px; }
+    height: 32px; }
 
 .splash .outer {
   display: table;
@@ -199,7 +216,6 @@ md-menu {
   margin-left: 0;
   margin-right: 0; }
 
-e
 .no-margin-top-bottom {
   margin-top: 0;
   margin-bottom: 0; }
@@ -571,6 +587,29 @@ div.scroll::-webkit-scrollbar-thumb:hover {
 
 #acSearch .md-whiteframe-z1 {
   box-shadow: none; }
+
+#rateCenterSearch input[name="rcautocompleteField"] {
+  padding: 0px 10px;
+  border-radius: 2px;
+  border: 1px solid #E3E3E3; }
+
+#rateCenterSearch .md-whiteframe-z1 {
+  box-shadow: none; }
+
+.pattern-input {
+  height: 30px;
+  margin: 15px 0px; }
+
+.more-options-box {
+  padding: 15px 5px; }
+  .more-options-box .hdg {
+    margin: 10px 0px; }
+
+.more-options-hdg {
+  height: 32px; }
+
+.buy-radio {
+  width: 135px; }
 
 .collapse-card {
   background-color: #fff;

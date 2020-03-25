@@ -11,7 +11,8 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
 	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
-    secret: ""
+    secret: "",
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -36,6 +37,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
       values['caller_id'] = $scope.values.caller_id;
       values['secret'] = $scope.values.secret;
       values['flow_id'] = $scope.values.flow_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,

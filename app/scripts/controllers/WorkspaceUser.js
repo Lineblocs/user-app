@@ -10,6 +10,7 @@
 angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace Users");
   $scope.users = [];
+  $scope.Backend = Backend;
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {

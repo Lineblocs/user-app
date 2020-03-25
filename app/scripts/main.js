@@ -1527,6 +1527,7 @@ angular.module('MaterialApp')
  */
 angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Blocked Numbers");
+    $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;
@@ -1639,10 +1640,22 @@ angular.module('MaterialApp').controller('BodyCtrl', function ($scope, $shared) 
 angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q) {
     $shared.updateTitle("Buy Numbers");
     $scope.countries = [];
+    $scope.state = "SEARCHING";
+  $scope.rcSearch = {
+      isDisabled: false,
+      noCache:true, 
+      selectedItem: null,
+  };
+  $scope.rcFaxSearch = {
+      isDisabled: false,
+      noCache:true, 
+      selectedItem: null,
+  };
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
       $mdDialog.cancel();
+
     };
     $scope.gotoSettings = function() {
         $mdDialog.hide("");
@@ -1665,7 +1678,12 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     country: "",
     region: "",
     pattern: "",
-    rate_center: ""
+    rate_center: "",
+      showMoreOptions: false,
+      number_for: "",
+      number_type: "local",
+      vanity_prefix: "8**",
+      vanity_pattern: ""
   };
   $scope.numbers = [];
   $scope.didFetch = false;
@@ -1700,23 +1718,57 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     var data = {};
     //data['region'] = $scope.settings['region'];
     data['region'] = $scope.settings['region']['code'];
-    data['rate_center'] = $scope.settings['rate_center'];
-    //data['prefix'] = $scope.settings['pattern'];
-    data['prefix'] = "";
+    if ( $scope.settings.showMoreOptions ) {
+      data['rate_center'] = $scope.settings['rate_center'];
+    }
+
+    data['prefix'] = $scope.settings['pattern'];
+    //data['prefix'] = "";
     data['country_iso'] = $scope.settings['country']['iso'];
+    data['number_for'] = $scope.settings['number_for'];
+    data['number_type'] = $scope.settings['number_type'];
+    data['vanity_prefix'] = $scope.settings['vanity_prefix'];
+    data['vanity_pattern'] = $scope.settings['vanity_pattern'];
     $shared.isCreateLoading = true;
     Backend.get("/did/available", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
+      $scope.state = "SEARCHED";
       $shared.endIsCreateLoading();
     });
   }
-  $scope.buyNumber = function($event, number) {
-        $shared.scrollTop();
-    // Appending dialog to document.body to cover sidenav in docs app
+
+  $scope.confirmNumberTOS = function(number) {
+    var confirm = $mdDialog.confirm()
+          .title('Vanity Number Notice')
+          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+          .ariaLabel('Agree')
+          .targetEvent($event)
+          .ok('Please Continue')
+          .cancel('Exit');
+
+
+  }
+
+  function buyVanityNumber($event, number) {
+      var confirm = $mdDialog.confirm()
+          .title('Vanity Number Notice')
+          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+          .ariaLabel('Agree')
+          .targetEvent($event)
+          .ok('Please Continue')
+          .cancel('Exit');
+
+        $mdDialog.show(confirm).then(function() {
+          console.log("md dialog show result ", arguments);
+          buyNumber($event, number);
+        });
+  }
+  function buyNumber($event, number) {
+
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to purchase number "' + number.number + '"?')
-          .textContent('this number will cost you ' + number.monthly_cost + ' monthly. you may unrent this number at any time ')
+          .textContent('this number will cost you ' + number.setup_cost + ' to setup then it will cost you ' + number.monthly_cost + ' every month. ')
           .ariaLabel('Buy number')
           .targetEvent($event)
           .ok('Yes')
@@ -1730,6 +1782,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['provider'] = number.provider;
         params['country'] = number.country;
         params['features'] = number.features.join(",");
+        params['type'] = number.type;
         $shared.isCreateLoading = true;
         $shared.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
@@ -1747,6 +1800,15 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         });
     }, function() {
     });
+  }
+  $scope.buyNumber = function($event, number) {
+        $shared.scrollTop();
+    // Appending dialog to document.body to cover sidenav in docs app
+    if ( $scope.settings.number_type === 'vanity' ) {
+      buyVanityNumber($event, number);
+      return;
+    }
+    buyNumber($event, number);
   }
   $scope.changeCountry = function(country) {
     console.log("changeCountry ", country);
@@ -1789,7 +1851,63 @@ $scope.listCountries = function() {
     })
 
   }
-
+    $scope.querySearch  = function(query) {
+        console.log("querySearch query is: " + query);
+        var all = $scope.rateCenters;
+        return $q(function(resolve, reject) {
+            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+            var results = [];
+            angular.forEach(all, function(item) {
+              if ( item.toLowerCase().match( query ) ) {
+                results.push( item );
+              }
+           });
+            return resolve(results);
+        });
+    }
+    $scope.searchTextChange = function(text) {
+        console.log("searchTextChange");
+    }
+    $scope.selectedItemChange = function(item) {
+      console.log('rc Item changed to ' + JSON.stringify(item));
+      $scope.settings['rate_center'] = item;
+    }
+    $scope.queryFaxSearch  = function(query) {
+        console.log("querySearch query is: " + query);
+        var all = $scope.rateCenters;
+        return $q(function(resolve, reject) {
+            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+            var results = [];
+            angular.forEach(all, function(item) {
+              if ( item.toLowerCase().match( query ) ) {
+                results.push( item );
+              }
+           });
+            return resolve(results);
+        });
+    }
+    $scope.searchFaxTextChange = function(text) {
+        console.log("searchTextChange");
+    }
+    $scope.selectedFaxItemChange = function(item) {
+      console.log('rc Item changed to ' + JSON.stringify(item));
+      $scope.settings['rate_center'] = item;
+    }
+    $scope.hideOptions = function() {
+      $scope.settings.showMoreOptions = false;
+    }
+    $scope.showOptions = function() {
+      $scope.settings.showMoreOptions = true;
+    }
+    $scope.buyVoiceNumbers = function() {
+      $scope.settings.number_for='voice';
+    }
+    $scope.buyFaxNumbers = function() {
+      $scope.settings.number_for='fax';
+    }
+    $scope.backToSearch = function() {
+      $scope.state = "SEARCHING";
+    }
 
     $scope.load();
 });
@@ -2685,7 +2803,8 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
 	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
-    secret: ""
+    secret: "",
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -2710,6 +2829,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
       values['caller_id'] = $scope.values.caller_id;
       values['secret'] = $scope.values.secret;
       values['flow_id'] = $scope.values.flow_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,
@@ -2769,7 +2889,8 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   $scope.values = {
     username: "",
     secret: "",
-    flow_id: ""
+    flow_id: "",
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -2806,6 +2927,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       values['secret'] = $scope.values.secret;
       values['caller_id'] = $scope.values.caller_id;
       values['flow_id'] = $scope.values.flow_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,
@@ -2859,6 +2981,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
 angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("Extensions");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
     
     function DialogController($scope, $mdDialog, extension, $shared) {
       $scope.$shared = $shared;
@@ -2947,7 +3070,8 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
  * Controller of MaterialApp
  */
 angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
-	  $shared.updateTitle("Faxes");
+    $shared.updateTitle("Faxes");
+    $scope.Backend = Backend;
   $scope.settings = {
     page: 0
   };
@@ -3013,6 +3137,7 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
 angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Extension Codes");
   $scope.files = [];
+  $scope.Backend = Backend;
 
   $scope.load = function() {
       $shared.isLoading = true;
@@ -3302,6 +3427,7 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
 angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("Flows");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
   $scope.settings = {
     page: 0
   };
@@ -3596,6 +3722,7 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
       $scope.settings = {
         disabled: false
       }
+      $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;
@@ -4193,7 +4320,8 @@ angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Ba
     name: "",
     phone_type: null,
     mac_address: "",
-    group_id: null
+    group_id: null,
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -4218,6 +4346,7 @@ angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Ba
       values['mac_address'] = $scope.values.mac_address;
       values['phone_type'] = $scope.values.phone_type;
       values['group_id'] = $scope.values.group_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,
@@ -4336,7 +4465,8 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
     name: "",
     phone_type: null,
     mac_address: "",
-    group_id: null
+    group_id: null,
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -4361,6 +4491,7 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
       values['mac_address'] = $scope.values.mac_address;
       values['phone_type'] = $scope.values.phone_type;
       values['group_id'] = $scope.values.group_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,
@@ -4898,6 +5029,7 @@ angular.module('MaterialApp').controller('PhoneGroupsEditCtrl', function ($scope
 angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
     $shared.updateTitle("PhoneGroups");
     $scope.phoneGroups = [];
+    $scope.Backend = Backend;
   $scope.load = function() {
    $shared.isLoading = true;
       pagination.resetSearch();
@@ -5190,6 +5322,7 @@ $scope.createOptions = function(field)
 angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast) {
     $shared.updateTitle("Phones");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
     $scope.phones = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
@@ -5442,6 +5575,7 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
     page: 0
   };
   $scope.pagination = pagination;
+  $scope.Backend = Backend;
   $scope.recordings = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
@@ -6059,6 +6193,7 @@ angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
  */
 angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Verified Caller IDs");
+  $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;
@@ -6366,6 +6501,7 @@ angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope,
 angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace Users");
   $scope.users = [];
+  $scope.Backend = Backend;
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {

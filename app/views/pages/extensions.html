@@ -9,27 +9,48 @@
   </md-card>
 </div>
 <div ng-show="pagination.didSearch || (!pagination.didSearch && extensions.length > 0)">
-  <div layout="row side-options" layout-align="end center">
+   <div layout="row side-options" layout-align="end center">
         <div flex="10">
-                <md-input-container class="search">
-                  <label>Search</label>
-              <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
-              </md-input-container>
-          </div>
-    <md-button ng-click="createExtension()" class="md-raised md-primary">Create New</md-button>
-  </div>
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+            </md-input-container>
+        </div>
+        <md-button ng-click="createExtension()" class="md-raised md-primary create-new">Create New</md-button>
+        <div>
+            <md-menu md-position-mode="target-right target">
+                <div class="nav-item">
+                    <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
+                        ng-click="$mdOpenMenu($event)">
+                        Actions
+                        <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+                </div>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button href="" ng-click="Backend.deleteAllChecked('extensions', extensions)" style="display:flex;">
+                            Delete All</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
   <!-- exact table from live demo -->
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
           <tr md-row>
+            <th md-column>&nbsp;</th>
             <th md-column><span>Username</span></th>
             <th md-column>&nbsp;</th>
           </tr>
         </thead>
         <tbody md-body>
           <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="extension in extensions">
+                <td md-cell>
+                    <md-checkbox ng-model="extension.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                </td>
             <td md-cell>{{extension.username}}</td>
             <td md-cell>
               <md-button ng-click="editExtension(extension)" class="md-icon-button" aria-label="Settings">

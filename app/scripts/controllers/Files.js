@@ -10,6 +10,7 @@
 angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Extension Codes");
   $scope.files = [];
+  $scope.Backend = Backend;
 
   $scope.load = function() {
       $shared.isLoading = true;

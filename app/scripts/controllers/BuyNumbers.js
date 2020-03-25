@@ -10,10 +10,22 @@
 angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q) {
     $shared.updateTitle("Buy Numbers");
     $scope.countries = [];
+    $scope.state = "SEARCHING";
+  $scope.rcSearch = {
+      isDisabled: false,
+      noCache:true, 
+      selectedItem: null,
+  };
+  $scope.rcFaxSearch = {
+      isDisabled: false,
+      noCache:true, 
+      selectedItem: null,
+  };
     function DialogController($scope, $mdDialog, number) {
       $scope.number = number;
     $scope.cancel = function() {
       $mdDialog.cancel();
+
     };
     $scope.gotoSettings = function() {
         $mdDialog.hide("");
@@ -36,7 +48,12 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     country: "",
     region: "",
     pattern: "",
-    rate_center: ""
+    rate_center: "",
+      showMoreOptions: false,
+      number_for: "",
+      number_type: "local",
+      vanity_prefix: "8**",
+      vanity_pattern: ""
   };
   $scope.numbers = [];
   $scope.didFetch = false;
@@ -71,23 +88,57 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     var data = {};
     //data['region'] = $scope.settings['region'];
     data['region'] = $scope.settings['region']['code'];
-    data['rate_center'] = $scope.settings['rate_center'];
-    //data['prefix'] = $scope.settings['pattern'];
-    data['prefix'] = "";
+    if ( $scope.settings.showMoreOptions ) {
+      data['rate_center'] = $scope.settings['rate_center'];
+    }
+
+    data['prefix'] = $scope.settings['pattern'];
+    //data['prefix'] = "";
     data['country_iso'] = $scope.settings['country']['iso'];
+    data['number_for'] = $scope.settings['number_for'];
+    data['number_type'] = $scope.settings['number_type'];
+    data['vanity_prefix'] = $scope.settings['vanity_prefix'];
+    data['vanity_pattern'] = $scope.settings['vanity_pattern'];
     $shared.isCreateLoading = true;
     Backend.get("/did/available", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
+      $scope.state = "SEARCHED";
       $shared.endIsCreateLoading();
     });
   }
-  $scope.buyNumber = function($event, number) {
-        $shared.scrollTop();
-    // Appending dialog to document.body to cover sidenav in docs app
+
+  $scope.confirmNumberTOS = function(number) {
+    var confirm = $mdDialog.confirm()
+          .title('Vanity Number Notice')
+          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+          .ariaLabel('Agree')
+          .targetEvent($event)
+          .ok('Please Continue')
+          .cancel('Exit');
+
+
+  }
+
+  function buyVanityNumber($event, number) {
+      var confirm = $mdDialog.confirm()
+          .title('Vanity Number Notice')
+          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+          .ariaLabel('Agree')
+          .targetEvent($event)
+          .ok('Please Continue')
+          .cancel('Exit');
+
+        $mdDialog.show(confirm).then(function() {
+          console.log("md dialog show result ", arguments);
+          buyNumber($event, number);
+        });
+  }
+  function buyNumber($event, number) {
+
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to purchase number "' + number.number + '"?')
-          .textContent('this number will cost you ' + number.monthly_cost + ' monthly. you may unrent this number at any time ')
+          .textContent('this number will cost you ' + number.setup_cost + ' to setup then it will cost you ' + number.monthly_cost + ' every month. ')
           .ariaLabel('Buy number')
           .targetEvent($event)
           .ok('Yes')
@@ -101,6 +152,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['provider'] = number.provider;
         params['country'] = number.country;
         params['features'] = number.features.join(",");
+        params['type'] = number.type;
         $shared.isCreateLoading = true;
         $shared.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
@@ -118,6 +170,15 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         });
     }, function() {
     });
+  }
+  $scope.buyNumber = function($event, number) {
+        $shared.scrollTop();
+    // Appending dialog to document.body to cover sidenav in docs app
+    if ( $scope.settings.number_type === 'vanity' ) {
+      buyVanityNumber($event, number);
+      return;
+    }
+    buyNumber($event, number);
   }
   $scope.changeCountry = function(country) {
     console.log("changeCountry ", country);
@@ -160,7 +221,63 @@ $scope.listCountries = function() {
     })
 
   }
-
+    $scope.querySearch  = function(query) {
+        console.log("querySearch query is: " + query);
+        var all = $scope.rateCenters;
+        return $q(function(resolve, reject) {
+            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+            var results = [];
+            angular.forEach(all, function(item) {
+              if ( item.toLowerCase().match( query ) ) {
+                results.push( item );
+              }
+           });
+            return resolve(results);
+        });
+    }
+    $scope.searchTextChange = function(text) {
+        console.log("searchTextChange");
+    }
+    $scope.selectedItemChange = function(item) {
+      console.log('rc Item changed to ' + JSON.stringify(item));
+      $scope.settings['rate_center'] = item;
+    }
+    $scope.queryFaxSearch  = function(query) {
+        console.log("querySearch query is: " + query);
+        var all = $scope.rateCenters;
+        return $q(function(resolve, reject) {
+            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+            var results = [];
+            angular.forEach(all, function(item) {
+              if ( item.toLowerCase().match( query ) ) {
+                results.push( item );
+              }
+           });
+            return resolve(results);
+        });
+    }
+    $scope.searchFaxTextChange = function(text) {
+        console.log("searchTextChange");
+    }
+    $scope.selectedFaxItemChange = function(item) {
+      console.log('rc Item changed to ' + JSON.stringify(item));
+      $scope.settings['rate_center'] = item;
+    }
+    $scope.hideOptions = function() {
+      $scope.settings.showMoreOptions = false;
+    }
+    $scope.showOptions = function() {
+      $scope.settings.showMoreOptions = true;
+    }
+    $scope.buyVoiceNumbers = function() {
+      $scope.settings.number_for='voice';
+    }
+    $scope.buyFaxNumbers = function() {
+      $scope.settings.number_for='fax';
+    }
+    $scope.backToSearch = function() {
+      $scope.state = "SEARCHING";
+    }
 
     $scope.load();
 });

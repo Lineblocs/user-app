@@ -22,7 +22,7 @@
 				</div>
 				<md-menu-content width="3" >
 					<md-menu-item>
-						<md-button href="" ng-click="Backend.deleteAllChecked('numbers', numbers)" style="display:flex;">Delete All</md-button>
+            <md-button href="" ng-click="Backend.deleteAllChecked('numbers', numbers)" style="display:flex;">Delete All</md-button>
 					</md-menu-item>
 				</md-menu-content>
       </md-menu>
@@ -42,6 +42,7 @@
                 <th md-column>&nbsp;</th>
                 <th md-column><span>Number</span></th>
                 <th md-column>Region</th>
+                <th md-column>Setup Cost</th>
                 <th md-column>Monthly Cost</th>
                 <th md-column>Features</th>
                 <th md-column>&nbsp;</th>
@@ -57,6 +58,7 @@
                 </td>
                 <td md-cell>{{number.number}}</td>
                 <td md-cell>{{number.region}}</td>
+                <td md-cell>{{number.setup_cost}}</td>
                 <td md-cell>{{number.monthly_cost}}</td>
                             <td md-cell>
                                     <md-icon ng-show="number.features.includes('voice')" class="feature-icon">

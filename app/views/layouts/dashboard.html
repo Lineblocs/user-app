@@ -1,40 +1,34 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-	<header ng-show="$shared.SHOW_NAVBAR" class=" navbar shadow">
-		<!-- Hamburger -->
-		<!--
+    <header ng-show="$shared.SHOW_NAVBAR" class=" navbar shadow">
+        <!-- Hamburger -->
+        <!--
 		<button class="c-hamburger c-hamburger--htla is-active" ng-click="extend()">
 			<span>toggle menu</span>
 		</button>
 	-->
-		<div class="responsive-logo">
-			<img width="180" ng-src="{{'/images/logo-white.png'}}"/>
-		</div>
-		<md-menu class="navbar-menu">
-			  <md-autocomplete
-			  id="acSearch"
-			  flex="" required="" md-input-name="autocompleteField"
-			  style="margin: 12px 10px; width: 488px;"
-          ng-disabled="$shared.acSearch.isDisabled"
-		  md-no-cache="$shared.acSearch.noCache"
-          md-selected-item="$shared.acSearch.selectedItem"
-          md-search-text-change="$shared.searchTextChange(ctrl.searchText)"
-          md-search-text="$shared.acSearch.searchText"
-          md-selected-item-change="$shared.selectedItemChange(item)"
-          md-items="item in $shared.querySearch($shared.acSearch.searchText)"
-          md-item-text="item.display"
-          md-min-length="0"
-          placeholder="Search for a category / section">
-        <md-item-template>
-          <span md-highlight-text="$shared.acSearch.searchText" md-highlight-flags="^i">{{item.display}}</span>
-        </md-item-template>
-        <md-not-found>
-          No states matching "{{ctrl.searchText}}" were found.
-          <a ng-click="ctrl.newState($shared.acSearch.searchText)">Create a new one!</a>
-        </md-not-found>
-      </md-autocomplete>	
-		</md-menu>
-		<!-- Left aligned menu below button -->
-		<!--
+        <div class="responsive-logo">
+            <img width="180" ng-src="{{'/images/logo-white.png'}}" />
+        </div>
+        <md-menu class="navbar-menu">
+            <md-autocomplete id="acSearch" flex="" required="" md-input-name="autocompleteField"
+                style="margin: 12px 10px; width: 488px;" ng-disabled="$shared.acSearch.isDisabled"
+                md-no-cache="$shared.acSearch.noCache" md-selected-item="$shared.acSearch.selectedItem"
+                md-search-text-change="$shared.searchTextChange(ctrl.searchText)"
+                md-search-text="$shared.acSearch.searchText" md-selected-item-change="$shared.selectedItemChange(item)"
+                md-items="item in $shared.querySearch($shared.acSearch.searchText)" md-item-text="item.display"
+                md-min-length="0" placeholder="Search for a category / section">
+                <md-item-template>
+                    <span md-highlight-text="$shared.acSearch.searchText"
+                        md-highlight-flags="^i">{{item.display}}</span>
+                </md-item-template>
+                <md-not-found>
+                    No states matching "{{ctrl.searchText}}" were found.
+                    <a ng-click="ctrl.newState($shared.acSearch.searchText)">Create a new one!</a>
+                </md-not-found>
+            </md-autocomplete>
+        </md-menu>
+        <!-- Left aligned menu below button -->
+        <!--
 		<md-menu class="navbar-menu">
 			<md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
 				<i class="mdi mdi-brightness-1 text-primary"></i>
@@ -61,173 +55,273 @@
 			</md-menu-content>
 		</md-menu>
 	-->
-		<nav class="right">
-			<md-menu md-position-mode="target-right target" >
-				<div class="nav-item">
-					<md-button aria-label="Open demo menu" class="md-raised md-primary md-small" ng-click="$mdOpenMenu($event)">
-						<!--<i class="mdi mdi-settings"></i>-->
-						Create
-					</md-button>
-				</div>
-				<md-menu-content width="3" >
-					<md-menu-item>
-						<md-button href="" ng-click="$shared.changeRoute('flow-editor', {flowId: 'new'})" style="display:flex;">New Flow</md-button>
-					</md-menu-item>
-					<md-menu-item ng-show="$shared.canPerformAction('create_extension')">
-						<md-button href="" ng-click="$shared.changeRoute('extension-create', {})" style="display:flex;">New Extension</md-button>
-					</md-menu-item>
-					<md-menu-item ng-show="$shared.canPerformAction('create_did')">
-						<md-button href="" ng-click="$shared.changeRoute('buy-numbers', {})" style="display:flex;">Buy Numbers</md-button>
-					</md-menu-item>
-				</md-menu-content>
-			</md-menu>
-			<md-menu>
-				<div class="vert-line"></div>
-			</md-menu>
-			<md-menu class="top-menu" md-position-mode="target-right target" >
+        <nav class="right">
+            <md-menu md-position-mode="target-right target">
+                <div class="nav-item">
+                    <md-button aria-label="Open demo menu" class="md-raised md-primary md-small"
+                        ng-click="$mdOpenMenu($event)">
+                        <!--<i class="mdi mdi-settings"></i>-->
+                        Create
+                    </md-button>
+                </div>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button href="" ng-click="$shared.changeRoute('flow-editor', {flowId: 'new'})"
+                            style="display:flex;">New Flow</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-show="$shared.canPerformAction('create_extension')">
+                        <md-button href="" ng-click="$shared.changeRoute('extension-create', {})" style="display:flex;">
+                            New Extension</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-show="$shared.canPerformAction('create_did')">
+                        <md-button href="" ng-click="$shared.changeRoute('buy-numbers', {})" style="display:flex;">Buy
+                            Numbers</md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-show="$shared.canPerformAction('create_phone')">
+                        <md-button href="" ng-click="$shared.changeRoute('phones-phone-create', {})"
+                            style="display:flex;">New Phone</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <div class="vert-line"></div>
+            </md-menu>
+            <md-menu class="top-menu" md-position-mode="target-right target">
 
-				<div class="nav-item balance">
-					<strong>Balance</strong>
-					<br/>
-					<span class="account-balance" ng-show="!$shared.billInfo.info.trialMode">
-						{{$shared.billInfo.info.remainingBalance}}
-					</span>
-					<span class="account-balance" ng-show="$shared.billInfo.info.trialMode">
-						{{$shared.billInfo.info.remainingBalance}} (trial)
-					</span>
+                <div class="nav-item balance">
+                    <strong>Balance</strong>
+                    <br />
+                    <span class="account-balance" ng-show="!$shared.billInfo.info.trialMode">
+                        {{$shared.billInfo.info.remainingBalance}}
+                    </span>
+                    <span class="account-balance" ng-show="$shared.billInfo.info.trialMode">
+                        {{$shared.billInfo.info.remainingBalance}} (trial)
+                    </span>
 
-				</div>
-			</md-menu>
-			<md-menu class="top-menu" md-position-mode="target-right target" >
-				<md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
-					<i class="mdi mdi-settings"></i>
-				</md-button>
-				<md-menu-content width="3" >
-					<md-menu-item>
-						<md-button ui-sref="settings" style="display:flex;">Settings</md-button>
-					</md-menu-item>
-					<md-menu-item>
-						<md-button ng-click="$shared.doLogout()" >Logout</md-button>
-					</md-menu-item>
-				</md-menu-content>
-			</md-menu>
-		</nav>
-	</header>
-<!-- Side bar here -->
-<aside id="" class="sidebar">
-	<div class="sidebar-content scroll">
-		<div class="top-logo">
-			<img width="60" ng-src="{{'/images/logo-icon-white.png'}}"/>
-		</div>
-		<div class="top-logo-extended">
-			<img width="180" ng-src="{{'/images/logo-white.png'}}"/>
-		</div>
-		<div class="scrollbar" id="scroll">
-			<div class="user-info" ng-show="false">
-				<div class="opacity">
-					<a ui-sref="profile"><img src="images/profile.jpg" alt="" class="sidebar-profile"></a>
-					<div class="info">
-						Sankhadeep Roy <br /> <span class="smaller">Striker at Liverpool FC</span>
-						<div class="pen">
-							<a href="javascript:void(0)" class=""><i class="mdi mdi-border-color"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="dashboard-menu">
-				<ul class="menu-list">
-					<li ng-class="{active: $state.includes('home')}"><md-button href="" ng-click="$shared.changeRoute('home')" class=""><i class="mdi mdi-home"></i> &nbsp;<span class="text">{{ 'dashboard' | translate }}</span></md-button></li>
-					<li class="show-subnav">
-						<md-button href="" class=" show-menu" ng-click="subnav('ui')">
-							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
-							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-							<span class="text"> {{ 'did-numbers' | translate }}</span>
-						</md-button>
-						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
+                </div>
+            </md-menu>
+            <md-menu class="top-menu" md-position-mode="target-right target">
+                <md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
+                    <i class="mdi mdi-settings"></i>
+                </md-button>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button ui-sref="settings" style="display:flex;">Settings</md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="$shared.doLogout()">Logout</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </nav>
+    </header>
+    <!-- Side bar here -->
+    <aside id="" class="sidebar">
+        <div class="sidebar-content scroll">
+            <div class="top-logo">
+                <img width="60" ng-src="{{'/images/logo-icon-white.png'}}" />
+            </div>
+            <div class="top-logo-extended">
+                <img width="180" ng-src="{{'/images/logo-white.png'}}" />
+            </div>
+            <div class="scrollbar" id="scroll">
+                <div class="user-info" ng-show="false">
+                    <div class="opacity">
+                        <a ui-sref="profile"><img src="images/profile.jpg" alt="" class="sidebar-profile"></a>
+                        <div class="info">
+                            Sankhadeep Roy <br /> <span class="smaller">Striker at Liverpool FC</span>
+                            <div class="pen">
+                                <a href="javascript:void(0)" class=""><i class="mdi mdi-border-color"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-menu">
+                    <ul class="menu-list">
+                        <li ng-class="{active: $state.includes('home')}">
+                            <md-button href="" ng-click="$shared.changeRoute('home')" class=""><i
+                                    class="mdi mdi-home"></i> &nbsp;<span
+                                    class="text">{{ 'dashboard' | translate }}</span></md-button>
+                        </li>
+                        <li class="show-subnav">
+                            <md-button href="" class=" show-menu" ng-click="subnav('ui')">
+                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                                <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+                                <span class="text"> {{ 'did-numbers' | translate }}</span>
+                            </md-button>
+                            <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
 
-							<li ng-class="{active: $state.includes('my-numbers')}"><md-button href="" ng-click="$shared.changeRoute('my-numbers')" class=""><span class="text">{{ 'my-numbers' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('buy-numbers')}"><md-button href="" ng-click="$shared.changeRoute('buy-numbers')" class=""><span class="text">{{ 'buy-numbers' | translate }}</span></md-button></li>
+                                <li ng-class="{active: $state.includes('my-numbers')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('my-numbers')" class=""><span
+                                            class="text">{{ 'my-numbers' | translate }}</span></md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('buy-numbers')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('buy-numbers')" class=""><span
+                                            class="text">{{ 'buy-numbers' | translate }}</span></md-button>
+                                </li>
 
 
-							<li ng-class="{active: $state.includes('ports')}"><md-button href="" ng-click="$shared.changeRoute('ports')" class=""><span class="text">{{ 'port-numbers' | translate }}</span></md-button></li>
-						</ul>
+                                <li ng-class="{active: $state.includes('ports')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('ports')" class=""><span
+                                            class="text">{{ 'port-numbers' | translate }}</span></md-button>
+                                </li>
+                            </ul>
 
-					</li>
-					<li ng-class="{active: $state.includes('flows')}"><md-button href="" ng-click="$shared.changeRoute('flows')" class=""><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text"> {{ 'flows' | translate }}</span></md-button></li>
-					<li ng-class="{active: $state.includes('extensions')}" ng-show="$shared.canPerformAction('manage_extensions')"><md-button href="" ng-click="$shared.changeRoute('extensions')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'extensions' | translate }}</span></md-button></li>
-					<li class="show-subnav">
-						<md-button href="" class=" show-menu" ng-click="subnav('ui-2')">
-							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-2'}"></i>
-							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-							<span class="text"> {{ 'provision' | translate }}</span>
-						</md-button>
-						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-2'}">
-							<li ng-class="{active: $state.includes('phones-phones')}"><md-button href="" ng-click="$shared.changeRoute('phones-phones')" class=""><span class="text">{{ 'phones' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('phones-groups')}"><md-button href="" ng-click="$shared.changeRoute('phones-groups')" class=""><span class="text">{{ 'phones-groups' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('phones-global-settings')}"><md-button href="" ng-click="$shared.changeRoute('phones-global-settings')" class=""><span class="text">{{ 'phones-global-settings' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('phones-individual-settings')}"><md-button href="" ng-click="$shared.changeRoute('phones-individual-settings')" class=""><span class="text">{{ 'phones-individual-settings' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('phones-deploy-config')}"><md-button href="" ng-click="$shared.changeRoute('phones-deploy-config')" class=""><span class="text">{{ 'phones-deploy-config' | translate }}</span></md-button></li>
-						</ul>
-					</li>
-					<li ng-class="{active: $state.includes('calls')}"><md-button href="" ng-click="$shared.changeRoute('calls')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'calls' | translate }}</span></md-button></li>
-					<li ng-class="{active: $state.includes('recordings')}"><md-button href="" ng-click="$shared.changeRoute('recordings')" class=""><i class="mdi mdi-record"></i> &nbsp;<span class="text">{{ 'recordings' | translate }}</span></md-button></li>
-					<li ng-class="{active: $state.includes('faxes')}"><md-button href="" ng-click="$shared.changeRoute('faxes')" class=""><i class="mdi mdi-file-document"></i> &nbsp;<span class="text">{{ 'faxes' | translate }}</span></md-button></li>
-					<li ng-class="{active: $state.includes('files')}"><md-button href="" ng-click="$shared.changeRoute('files')" class=""><i class="mdi mdi-library-music"></i> &nbsp;<span class="text">{{ 'media-files' | translate }}</span></md-button></li>
-					<li ng-class="{active: $state.includes('debugger-logs')}"><md-button href="" ng-click="$shared.changeRoute('debugger-logs')" class=""><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text">{{ 'debugger-logs' | translate }}</span></md-button></li>
-					<li ng-class="{active: $state.includes('billing')}"><md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i class="mdi mdi-credit-card-multiple"></i> &nbsp;<span class="text">{{ 'billing' | translate }}</span></md-button></li>
-					<li class="show-subnav">
-						<md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
-							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
-							<i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
-							<span class="text"> {{ 'settings' | translate }}</span>
-						</md-button>
-						<ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
-							<li ng-class="{active: $state.includes('settings-verified-callerids')}"><md-button href="" ng-click="$shared.changeRoute('settings-verified-callerids')" class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('settings-blocked-numbers')}"><md-button href="" ng-click="$shared.changeRoute('settings-blocked-numbers')" class=""><span class="text">{{ 'blocked-numbers' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('settings-ip-whitelist')}"><md-button href="" ng-click="$shared.changeRoute('settings-ip-whitelist')" class=""><span class="text">{{ 'ip-whitelist' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('settings-workspace-users')}"><md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""><span class="text">{{ 'workspace-users' | translate }}</span></md-button></li>
+                        </li>
+                        <li ng-class="{active: $state.includes('flows')}">
+                            <md-button href="" ng-click="$shared.changeRoute('flows')" class=""><i
+                                    class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text">
+                                    {{ 'flows' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $state.includes('extensions')}"
+                            ng-show="$shared.canPerformAction('manage_extensions')">
+                            <md-button href="" ng-click="$shared.changeRoute('extensions')" class=""><i
+                                    class="mdi mdi-cellphone"></i> &nbsp;<span
+                                    class="text">{{ 'extensions' | translate }}</span></md-button>
+                        </li>
+                        <li class="show-subnav">
+                            <md-button href="" class=" show-menu" ng-click="subnav('ui-2')">
+                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-2'}"></i>
+                                <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+                                <span class="text"> {{ 'provision' | translate }}</span>
+                            </md-button>
+                            <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-2'}">
+                                <li ng-class="{active: $state.includes('phones-phones')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('phones-phones')" class=""><span
+                                            class="text">{{ 'phones' | translate }}</span></md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('phones-groups')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('phones-groups')" class=""><span
+                                            class="text">{{ 'phones-groups' | translate }}</span></md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('phones-global-settings')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('phones-global-settings')"
+                                        class=""><span class="text">{{ 'phones-global-settings' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('phones-individual-settings')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('phones-individual-settings')"
+                                        class=""><span
+                                            class="text">{{ 'phones-individual-settings' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('phones-deploy-config')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('phones-deploy-config')" class="">
+                                        <span class="text">{{ 'phones-deploy-config' | translate }}</span></md-button>
+                                </li>
+                            </ul>
+                        </li>
+                        <li ng-class="{active: $state.includes('calls')}">
+                            <md-button href="" ng-click="$shared.changeRoute('calls')" class=""><i
+                                    class="mdi mdi-cellphone"></i> &nbsp;<span
+                                    class="text">{{ 'calls' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $state.includes('recordings')}">
+                            <md-button href="" ng-click="$shared.changeRoute('recordings')" class=""><i
+                                    class="mdi mdi-record"></i> &nbsp;<span
+                                    class="text">{{ 'recordings' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $state.includes('faxes')}">
+                            <md-button href="" ng-click="$shared.changeRoute('faxes')" class=""><i
+                                    class="mdi mdi-file-document"></i> &nbsp;<span
+                                    class="text">{{ 'faxes' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $state.includes('files')}">
+                            <md-button href="" ng-click="$shared.changeRoute('files')" class=""><i
+                                    class="mdi mdi-library-music"></i> &nbsp;<span
+                                    class="text">{{ 'media-files' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $state.includes('debugger-logs')}">
+                            <md-button href="" ng-click="$shared.changeRoute('debugger-logs')" class=""><i
+                                    class="mdi mdi-cellphone"></i> &nbsp;<span
+                                    class="text">{{ 'debugger-logs' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $state.includes('billing')}">
+                            <md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i
+                                    class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
+                                    class="text">{{ 'billing' | translate }}</span></md-button>
+                        </li>
+                        <li class="show-subnav">
+                            <md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
+                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
+                                <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+                                <span class="text"> {{ 'settings' | translate }}</span>
+                            </md-button>
+                            <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
+                                <li ng-class="{active: $state.includes('settings-verified-callerids')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-verified-callerids')"
+                                        class=""><span class="text">{{ 'verified-caller-ids' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('settings-blocked-numbers')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-blocked-numbers')"
+                                        class=""><span class="text">{{ 'blocked-numbers' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('settings-ip-whitelist')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-ip-whitelist')" class="">
+                                        <span class="text">{{ 'ip-whitelist' | translate }}</span></md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('settings-workspace-users')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')"
+                                        class=""><span class="text">{{ 'workspace-users' | translate }}</span>
+                                    </md-button>
+                                </li>
 
-							<li ng-class="{active: $state.includes('settings-workspace-params')}"><md-button href="" ng-click="$shared.changeRoute('settings-workspace-params')" class=""><span class="text">{{ 'workspace-params' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('settings-extension-codes')}"><md-button href="" ng-click="$shared.changeRoute('settings-extension-codes')" class=""><span class="text">{{ 'extension-codes' | translate }}</span></md-button></li>
-							<li ng-class="{active: $state.includes('settings-workspace-api-settings')}"><md-button href="" ng-click="$shared.changeRoute('settings-workspace-api-settings')" class=""><span class="text">{{ 'workspace-api-settings' | translate }}</span></md-button></li>
+                                <li ng-class="{active: $state.includes('settings-workspace-params')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-workspace-params')"
+                                        class=""><span class="text">{{ 'workspace-params' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('settings-extension-codes')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-extension-codes')"
+                                        class=""><span class="text">{{ 'extension-codes' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('settings-workspace-api-settings')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-workspace-api-settings')"
+                                        class=""><span class="text">{{ 'workspace-api-settings' | translate }}</span>
+                                    </md-button>
+                                </li>
 
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</aside>
-<main class=" content-holder">
-	<div class="page-content remodal-bg animsition" ng-class="{expandedContainer: $state.includes('profile'), 'no-padding': $shared.PAGE_CONTENT_NO_PADDING}" >
-		<!-- Your content goes here -->
-		<div id="loading-bar-container">
-			<!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->
-		</div>
-		<center>
-			<div ng-show="$shared.isLoading">
-				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-				<small>Please wait..</small>
-			</div>
-		</center>
-		<div ng-show="!$shared.isLoading">
-			<div ng-show="$shared.isCreateLoading">
-				<div class="load-mask">
-					<div class="container">
-						<div class="mask">
-							<div class="block"></div>
-						</div>
-						<div class="spinner">
-							<center>
-								<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-								<small>Please wait..</small>
-							</center>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div ui-view ></div>
-			</div>
-	</div>
-</main>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class=" content-holder">
+        <div class="page-content remodal-bg animsition"
+            ng-class="{expandedContainer: $state.includes('profile'), 'no-padding': $shared.PAGE_CONTENT_NO_PADDING}">
+            <!-- Your content goes here -->
+            <div id="loading-bar-container">
+                <!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->
+            </div>
+            <center>
+                <div ng-show="$shared.isLoading">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    <small>Please wait..</small>
+                </div>
+            </center>
+            <div ng-show="!$shared.isLoading">
+                <div ng-show="$shared.isCreateLoading">
+                    <div class="load-mask">
+                        <div class="container">
+                            <div class="mask">
+                                <div class="block"></div>
+                            </div>
+                            <div class="spinner">
+                                <center>
+                                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                                    <small>Please wait..</small>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ui-view></div>
+            </div>
+        </div>
+    </main>
 </div>

@@ -10,6 +10,7 @@
 angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
     $shared.updateTitle("PhoneGroups");
     $scope.phoneGroups = [];
+    $scope.Backend = Backend;
   $scope.load = function() {
    $shared.isLoading = true;
       pagination.resetSearch();

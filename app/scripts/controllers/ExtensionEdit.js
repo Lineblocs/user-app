@@ -12,7 +12,8 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   $scope.values = {
     username: "",
     secret: "",
-    flow_id: ""
+    flow_id: "",
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -49,6 +50,7 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
       values['secret'] = $scope.values.secret;
       values['caller_id'] = $scope.values.caller_id;
       values['flow_id'] = $scope.values.flow_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,

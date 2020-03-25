@@ -8,7 +8,8 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
-	  $shared.updateTitle("Faxes");
+    $shared.updateTitle("Faxes");
+    $scope.Backend = Backend;
   $scope.settings = {
     page: 0
   };

@@ -13,7 +13,8 @@ angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Ba
     name: "",
     phone_type: null,
     mac_address: "",
-    group_id: null
+    group_id: null,
+    tags: []
   };
   $scope.ui = {
     showSecret: false,
@@ -38,6 +39,7 @@ angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Ba
       values['mac_address'] = $scope.values.mac_address;
       values['phone_type'] = $scope.values.phone_type;
       values['group_id'] = $scope.values.group_id;
+      values['tags'] = $scope.values.tags;
       var toastPos = {
         bottom: false,
         top: true,

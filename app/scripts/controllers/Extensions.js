@@ -10,6 +10,7 @@
 angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
     $shared.updateTitle("Extensions");
     $scope.pagination = pagination;
+    $scope.Backend = Backend;
     
     function DialogController($scope, $mdDialog, extension, $shared) {
       $scope.$shared = $shared;
