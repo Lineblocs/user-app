@@ -134,6 +134,9 @@ angular.module('MaterialApp')
 				var isValid = res.data.isValid;
 				$shared.changingPage = false;
 				if (isValid) {
+					var email = $scope.user.email;
+					var splitted = email.split("@");
+					$scope.workspace = splitted[0];
 					$scope.step = 3;
 				} else {
 					$scope.invalidCode = true;
