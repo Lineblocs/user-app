@@ -29,7 +29,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
     };
     $scope.gotoSettings = function() {
         $mdDialog.hide("");
-        $state.go('my-numbers-edit', { numberId: number.id });
+        $state.go('my-numbers-edit', { numberId: number.public_id });
     }
   }
   /*

@@ -1,108 +1,108 @@
 <!-- exact table from live demo -->
 <div>
-  <div ng-show="!pagination.didSearch && numbers.length === 0" class="no-results">
-    <md-card md-theme="'default'"" md-theme-watch>
-      <div ng-show="numbers.length === 0 && !pagination.didSearch" class="no-results">
-        <center>
-          <h5>No numbers listed</h5>
-          <md-button ng-click="buyNumber()" class="md-raised md-primary">Lookup Numbers / Buy Number</md-button>
-        </center>
-      </div>
-    </md-card>
-  </div>
-    <div ng-show="pagination.didSearch || (!pagination.didSearch && numbers.length > 0)">
-      <div layout="row" layout-align="end center">
-        <div>
-			<md-menu md-position-mode="target-right target" >
-				<div class="nav-item">
-					<md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions" ng-click="$mdOpenMenu($event)">
-            Actions
-							<i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
-					</md-button>
-				</div>
-				<md-menu-content width="3" >
-					<md-menu-item>
-            <md-button href="" ng-click="Backend.deleteAllChecked('numbers', numbers)" style="display:flex;">Delete All</md-button>
-					</md-menu-item>
-				</md-menu-content>
-      </md-menu>
+    <div ng-show="!pagination.didSearch && numbers.length === 0" class="no-results">
+        <md-card md-theme="'default'"" md-theme-watch>
+      <div ng-show=" numbers.length===0 && !pagination.didSearch" class="no-results">
+            <center>
+                <h5>No numbers listed</h5>
+                <md-button ng-click="buyNumber()" class="md-raised md-primary">Lookup Numbers / Buy Number</md-button>
+            </center>
     </div>
+    </md-card>
+</div>
+<div ng-show="pagination.didSearch || (!pagination.didSearch && numbers.length > 0)">
+    <div layout="row" layout-align="end center">
+        <div>
+            <md-menu md-position-mode="target-right target">
+                <div class="nav-item">
+                    <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
+                        ng-click="$mdOpenMenu($event)">
+                        Actions
+                        <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+                </div>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button href="" ng-click="Backend.deleteAllChecked('numbers', numbers)"
+                            style="display:flex;">Delete All</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
         <div flex="10">
-                <md-input-container class="search">
-                  <label>Search</label>
-              <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
-              </md-input-container>
-          </div>
-      </div>
-      <md-card md-theme="'default'"" md-theme-watch>
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+            </md-input-container>
+        </div>
+    </div>
+    <md-card md-theme="'default'"" md-theme-watch>
         <md-table-container>
-          <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-            <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-             <tr md-row>
+          <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+            <tr md-row>
                 <th md-column>&nbsp;</th>
                 <th md-column><span>Number</span></th>
                 <th md-column>Region</th>
-                <th md-column>Setup Cost</th>
                 <th md-column>Monthly Cost</th>
                 <th md-column>Features</th>
                 <th md-column>Availability</th>
                 <th md-column>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody md-body>
-              <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
+            </tr>
+        </thead>
+        <tbody md-body>
+            <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
                 <td md-cell>
-                            <md-checkbox
-              ng-model="number.checked"
-              aria-label="Checkbox"
-              class="md-warn md-align-top-left" flex>
+                    <md-checkbox ng-model="number.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
                 </td>
                 <td md-cell>{{number.number}}</td>
                 <td md-cell>{{number.region}}</td>
-                <td md-cell>{{number.setup_cost}}</td>
                 <td md-cell>{{number.monthly_cost}}</td>
 
-                            <td md-cell>
-                                    <md-icon ng-show="number.features.includes('voice')" class="feature-icon">
-                                        <i class="mdi mdi-cellphone"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                            This number supports voice calls
-                                        </md-tooltip>
-                                    </md-icon>
-                                  <md-icon ng-show="number.features.includes('fax')" class="feature-icon">
-                                        <i class="mdi mdi-file-document"></i>
-                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                            This number supports fax
-                                        </md-tooltip>
-                                    </md-icon>
-                            <td md-cell>
+                <td md-cell>
+                    <md-icon ng-show="number.features.includes('voice')" class="feature-icon">
+                        <i class="mdi mdi-cellphone"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            This number supports voice calls
+                        </md-tooltip>
+                    </md-icon>
+                    <md-icon ng-show="number.features.includes('fax')" class="feature-icon">
+                        <i class="mdi mdi-file-document"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            This number supports fax
+                        </md-tooltip>
+                    </md-icon>
+                </td>
                 <td md-cell>
 
                     {{number.availability}}
                 </td>
                 <td md-cell>
-                  <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
-                      <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
-                  </md-button>
-                  <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                      <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-                  </md-button>
+                    <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
+                        <md-icon><i class="mdi mdi-pencil"></i></md-icon>
+                    </md-button>
+                    <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
+                        <md-icon><i class="mdi mdi-delete"></i></md-icon>
+                    </md-button>
 
                 </td>
-              </tr>
-            </tbody>
-          </table>
+            </tr>
+        </tbody>
+        </table>
         </md-table-container>
-      </md-card>
-      <div layout="row" layout-align="end">
+    </md-card>
+    <div layout="row" layout-align="end">
 
         <div>
-          <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
-          <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
-          <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
-          <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+            <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev
+                Page</md-button>
+            <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()"
+                class="md-raised md-primary">Prev Page</md-button>
+            <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next
+                Page</md-button>
+            <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()"
+                class="md-raised md-primary">Next Page</md-button>
         </div>
-      </div>
     </div>
-  </div>
- 
+</div>
+</div>
