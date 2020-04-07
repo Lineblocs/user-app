@@ -159,6 +159,10 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         $shared.isCreateLoading = true;
         $shared.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
+          if (!res.data.success) {
+            $shared.showError( "Purchase Error", res.data.message );
+            return;
+          }
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
               $shared.endIsCreateLoading();

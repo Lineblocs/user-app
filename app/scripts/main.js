@@ -113,6 +113,10 @@ angular
                 if (workspace) {
                     config.headers['X-Workspace-ID'] = getWorkspaceID();
                 }
+                var adminToken = localStorage.getItem("ADMIN_TOKEN");
+                if (adminToken) {
+                    config.headers['X-Admin-Token'] = adminToken;
+                }
 
                 console.log("request headers are ", config.headers);
                 return config;
@@ -213,6 +217,11 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         });
      }
 
+     factory.cleanWorkspaceName = function(name) {
+var changed = name.toLowerCase();
+changed = changed.replace(/[^a-z0-9\-]/g, "");
+return changed;
+}
     factory.querySearch  = function(query) {
         console.log("querySearch query is: " + query);
         return $q(function(resolve, reject) {
@@ -327,6 +336,9 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         }
         factory.setAuthToken = function(token) {
             localStorage.setItem("AUTH", JSON.stringify(token));
+        }
+        factory.setAdminAuthToken = function(token) {
+                localStorage.setItem("ADMIN_TOKEN", token);
         }
         factory.getAuthToken = function() {
             return JSON.parse(localStorage.getItem("AUTH"));
@@ -1804,6 +1816,10 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         $shared.isCreateLoading = true;
         $shared.scrollTop();
         Backend.post("/did/saveNumber", params).then(function(res) {
+          if (!res.data.success) {
+            $shared.showError( "Purchase Error", res.data.message );
+            return;
+          }
           Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
               $shared.endIsCreateLoading();
@@ -2825,7 +2841,8 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
   $scope.values = {
     username: "",
     secret: "",
-    tags: []
+    tags: [],
+    flow_id: ""
   };
   $scope.ui = {
     showSecret: false,
@@ -2888,7 +2905,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     $state.go('flow-editor', {flowId: flowId});
   }
   $timeout(function() {
-    Backend.get("/flow/listFlows").then(function(res) {
+    Backend.get("/flow/listFlows?category=extension").then(function(res) {
       $scope.flows = res.data.data;
         $shared.endIsLoading();
     });
@@ -3889,10 +3906,19 @@ var clickedGoogSignIn = false;
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
+				$shared.isAdmin = token.isAdmin;
+
 				$shared.setAuthToken(token);
 				$shared.setWorkspace(workspace);
-				Idle.watch();
-		        $state.go('dashboard-user-welcome', {});
+				if (!$shared.isAdmin) {
+					Idle.watch();
+					$state.go('dashboard-user-welcome', {});
+					return;
+				}
+				$shared.setAdminAuthToken(token.adminWorkspaceToken);
+				Backend.get("/admin/getWorkspaces").then(function(res) {
+					$shared.workspaces = res.data.data;
+				});
 	}
     $scope.submit1 = function($event, loginForm) {
 		$scope.step = 2;
@@ -5672,6 +5698,7 @@ angular.module('MaterialApp')
 	  $scope.token = null;
 	  $scope.invalidCode =false; 
 	  $scope.invalidNumber =false; 
+	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
 		last_name: "",
@@ -5784,7 +5811,7 @@ angular.module('MaterialApp')
 				if (isValid) {
 					var email = $scope.user.email;
 					var splitted = email.split("@");
-					$scope.workspace = splitted[0];
+					$scope.workspace = $shared.cleanWorkspaceName(splitted[0]);
 					$scope.step = 3;
 				} else {
 					$scope.invalidCode = true;
@@ -5795,9 +5822,22 @@ angular.module('MaterialApp')
 		return false;
 	}
 
+	function checkWorkspaceName(name) {
+		if (name !== name.toLowerCase()) {
+			return false;
+		}
+		if (!name.match(/^[a-z0-9\-]+$/)) {
+			return false;
+		}
+		return true;
+	}
 	$scope.submitWorkspaceForm = function($event, workspaceForm) {
 		console.log("called submitWorkspaceForm");
 		$scope.triedSubmit = true;
+		if (!checkWorkspaceName($scope.workspace)) {
+			$scope.hasWorkspaceNameErr = true;
+			return;
+		}
 		if (workspaceForm.$valid) {
 			var data = {};
 			data["userId"] = $scope.userId;

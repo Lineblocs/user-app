@@ -158,7 +158,7 @@
                                                 <label>Attached Flow</label>
                                                 <md-select ng-model="values.flow_id"
                                                     ng-change="changeFlow(values.flow_id)">
-                                                    <md-option><em>None</em></md-option>
+                                                    <md-option ng-value="''" selected=""><em>Create New Flow for extension</em></md-option>
                                                     <md-option ng-repeat="flow in flows" ng-value="flow.id">
                                                         {{flow.name}}
                                                     </md-option>

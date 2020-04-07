@@ -323,6 +323,9 @@
                                                 <div class="box">
                                                     <div ng-show="workspaceForm.workspace.$error.required">This field is
                                                         required</div>
+                                                    <div ng-show="hasWorkspaceNameErr">
+                                                        Please only use lower case characters, digits or hyphens. No other characters are allowed in workspace name
+                                                    </div>
                                                 </div>
                                             </div>
                                         </md-input-container>

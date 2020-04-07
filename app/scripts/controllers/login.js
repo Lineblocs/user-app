@@ -28,10 +28,19 @@ var clickedGoogSignIn = false;
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
+				$shared.isAdmin = token.isAdmin;
+
 				$shared.setAuthToken(token);
 				$shared.setWorkspace(workspace);
-				Idle.watch();
-		        $state.go('dashboard-user-welcome', {});
+				if (!$shared.isAdmin) {
+					Idle.watch();
+					$state.go('dashboard-user-welcome', {});
+					return;
+				}
+				$shared.setAdminAuthToken(token.adminWorkspaceToken);
+				Backend.get("/admin/getWorkspaces").then(function(res) {
+					$shared.workspaces = res.data.data;
+				});
 	}
     $scope.submit1 = function($event, loginForm) {
 		$scope.step = 2;

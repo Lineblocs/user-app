@@ -113,6 +113,10 @@ angular
                 if (workspace) {
                     config.headers['X-Workspace-ID'] = getWorkspaceID();
                 }
+                var adminToken = localStorage.getItem("ADMIN_TOKEN");
+                if (adminToken) {
+                    config.headers['X-Admin-Token'] = adminToken;
+                }
 
                 console.log("request headers are ", config.headers);
                 return config;
@@ -213,6 +217,11 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         });
      }
 
+     factory.cleanWorkspaceName = function(name) {
+var changed = name.toLowerCase();
+changed = changed.replace(/[^a-z0-9\-]/g, "");
+return changed;
+}
     factory.querySearch  = function(query) {
         console.log("querySearch query is: " + query);
         return $q(function(resolve, reject) {
@@ -327,6 +336,9 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         }
         factory.setAuthToken = function(token) {
             localStorage.setItem("AUTH", JSON.stringify(token));
+        }
+        factory.setAdminAuthToken = function(token) {
+                localStorage.setItem("ADMIN_TOKEN", token);
         }
         factory.getAuthToken = function() {
             return JSON.parse(localStorage.getItem("AUTH"));

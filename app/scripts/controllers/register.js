@@ -24,6 +24,7 @@ angular.module('MaterialApp')
 	  $scope.token = null;
 	  $scope.invalidCode =false; 
 	  $scope.invalidNumber =false; 
+	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
 		last_name: "",
@@ -136,7 +137,7 @@ angular.module('MaterialApp')
 				if (isValid) {
 					var email = $scope.user.email;
 					var splitted = email.split("@");
-					$scope.workspace = splitted[0];
+					$scope.workspace = $shared.cleanWorkspaceName(splitted[0]);
 					$scope.step = 3;
 				} else {
 					$scope.invalidCode = true;
@@ -147,9 +148,22 @@ angular.module('MaterialApp')
 		return false;
 	}
 
+	function checkWorkspaceName(name) {
+		if (name !== name.toLowerCase()) {
+			return false;
+		}
+		if (!name.match(/^[a-z0-9\-]+$/)) {
+			return false;
+		}
+		return true;
+	}
 	$scope.submitWorkspaceForm = function($event, workspaceForm) {
 		console.log("called submitWorkspaceForm");
 		$scope.triedSubmit = true;
+		if (!checkWorkspaceName($scope.workspace)) {
+			$scope.hasWorkspaceNameErr = true;
+			return;
+		}
 		if (workspaceForm.$valid) {
 			var data = {};
 			data["userId"] = $scope.userId;

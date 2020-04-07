@@ -12,7 +12,8 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
   $scope.values = {
     username: "",
     secret: "",
-    tags: []
+    tags: [],
+    flow_id: ""
   };
   $scope.ui = {
     showSecret: false,
@@ -75,7 +76,7 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     $state.go('flow-editor', {flowId: flowId});
   }
   $timeout(function() {
-    Backend.get("/flow/listFlows").then(function(res) {
+    Backend.get("/flow/listFlows?category=extension").then(function(res) {
       $scope.flows = res.data.data;
         $shared.endIsLoading();
     });
