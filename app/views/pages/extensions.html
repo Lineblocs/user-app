@@ -35,7 +35,17 @@
             </md-menu>
         </div>
     </div>
+<div ng-show="pagination.didSearch && extensions.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No extensions found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
   <!-- exact table from live demo -->
+  <div ng-show="extensions.length > 0">
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
@@ -54,13 +64,30 @@
             <td md-cell>{{extension.username}}</td>
             <td md-cell>
               <md-button ng-click="editExtension(extension)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+
+                  <md-icon>
+                    <i class="mdi mdi-pencil"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit this item
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
               <md-button ng-click="deleteExtension($event, extension)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete this item
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
               <md-button ng-click="connectInfo($event, extension)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-information"></i></md-icon>
+                  <md-icon >
+                    <i class="mdi mdi-information"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              View Connection Info
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
             </td>
           </tr>
@@ -76,5 +103,6 @@
         <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
         <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
       </div>
-    </div
+    </div>
+  </div>
 </div>

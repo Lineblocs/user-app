@@ -37,12 +37,24 @@
                 <td md-cell>{{number.provider}}</td>
                 <td md-cell>{{number.status}}</td>
                 <td md-cell>
-                  <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
-                      <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
-                  </md-button>
-                  <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                      <md-icon ><i class="mdi mdi-delete"></i></md-icon>
-                  </md-button>
+              <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Number">
+
+                  <md-icon>
+                    <i class="mdi mdi-pencil"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit port request
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
+              <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Cancel port request
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
 
                 </td>
               </tr>

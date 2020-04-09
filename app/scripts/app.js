@@ -165,7 +165,7 @@ angular
     }
      var modules = [
 searchModule("Blocked Numbers", "settings-blocked-numbers", ['blocked', 'numbers']),
-searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
+//searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
 searchModule("IP Whitelist", "settings-ip-whitelist", ['ip', 'whitelist']),
 searchModule("API Settings", "settings-workspace-api-settings", ['api']),
 searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users']),
@@ -176,7 +176,7 @@ searchModule("Media Files", "files", ['media', 'files', 'media files']),
 searchModule("Phones", "phones-phones", ['provision', 'phones']),
 searchModule("Add Phone", "phones-phone-create", ['add', 'phone']),
 searchModule("Phones Groups", "phones-groups", ['phones', 'groups']),
-searchModule("Add Group", "phones-groups-create", ['add', 'group']),
+searchModule("Add Phone Group", "phones-groups-create", ['add', 'group']),
 searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates']),
 searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings']),
 searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy']),
@@ -200,6 +200,12 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
          var checked = items.filter(function(item) {
              return item.checked;
          });
+         console.log("checked items are ", checked);
+if (checked.length === 0) {
+             factory.showMsg("Error", "Please select one or more items to delete");
+             return;
+         }
+
          var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete all these items?')
           .ariaLabel('Confirm')
@@ -310,9 +316,18 @@ return changed;
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
             factory.PAGE_CONTENT_NO_PADDING = true;
+            factory.COLLAPSED_MODE = false;
             $( '.c-hamburger' ).removeClass('is-active');
             $('body').removeClass('extended');
         }
+        factory.collapseNavbarPadding = function() {
+            factory.SHOW_NAVBAR = true;
+            factory.PAGE_CONTENT_NO_PADDING = false;
+            factory.COLLAPSED_MODE = true;
+            $( '.c-hamburger' ).removeClass('is-active');
+            $('body').removeClass('extended');
+        }
+
         factory.processResult = function() {
             var params = $location.search();
             if (params['result'] && params['result'] === 'email-verified') {
@@ -327,6 +342,7 @@ return changed;
         factory.showNavbar = function() {
             factory.SHOW_NAVBAR = true;
             factory.PAGE_CONTENT_NO_PADDING = false;
+            factory.COLLAPSED_MODE = false;
             $( '.c-hamburger' ).addClass('is-active');
             $('body').addClass('extended');
         }
@@ -363,6 +379,22 @@ return changed;
         factory.has = function() {
             return JSON.parse(localStorage.getItem("WORKSPACE"));
         }
+        factory.showMsg = function(title, msg) {
+                factory.changingPage = false;
+                factory.endIsCreateLoading();
+                factory.endIsLoading();
+                return $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title(title)
+                    .textContent(msg)
+                    .ariaLabel(title)
+                    .ok('Ok')
+                );
+
+        }
+
 
         factory.showError = function(title, msg) {
                 factory.changingPage = false;
@@ -511,6 +543,11 @@ return changed;
          var checked = items.filter(function(item) {
              return item.checked;
          });
+         console.log("checked items are ", checked);
+if (checked.length === 0) {
+             $shared.showMsg("Error", "Please select one or more items to delete");
+             return;
+         }
          var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete all these items?')
           .ariaLabel('Confirm')
@@ -736,6 +773,23 @@ return changed;
 
     $urlRouterProvider.when('/dashboard', '/dashboard/home');
     $urlRouterProvider.otherwise('/dashboard/home');
+        // function to check the authentication //
+    var Auth = ["$q", "$state", "$timeout", function ($q, $state, $timeout) {
+        var deferred =$q.defer();
+        $timeout(function() {
+            var token = getJWTTokenObj();
+            if (token!==''&&token) {
+                return deferred.resolve();
+            } else {
+                console.log("not logged in...");
+                $state.go('login');
+                deferred.reject();
+            }
+        }, 0);
+    }];
+    var resolveParams = {
+                auth: Auth
+        };
 
     $stateProvider
     .state('base', {
@@ -783,13 +837,15 @@ return changed;
         url: '/dashboard',
         parent: 'base',
         templateUrl: 'views/layouts/dashboard.html',
-        controller: 'DashboardCtrl'
+        controller: 'DashboardCtrl',
+        resolve: resolveParams
     })
     .state('dashboard-user-welcome', {
         url: '/welcome',
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard-welcome.html',
-        controller: 'DashboardWelcomeCtrl'
+        controller: 'DashboardWelcomeCtrl',
+        resolve: resolveParams
     })
     .state('dashboard-redirect', {
         url: '/dashboard-redirect',
@@ -1117,11 +1173,14 @@ return changed;
         // do something
         console.log("state is changing ", arguments);
         $shared.state = toState;
-        $shared.showNavbar();
+        if (fromState.name === 'flow-editor') {
+            $shared.showNavbar();
+        }
         var token = localStorage.getItem("AUTH");
         if ((!$shared.billInfo || !$shared.userInfo) && token) {
             Backend.get("/dashboard").then(function(res) {
                 var graph = res.data[0];
+                console.log("GOT state data ", res);
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 console.log("updated UI state");

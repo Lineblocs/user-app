@@ -11,6 +11,10 @@ angular.module('MaterialApp')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
+	  $scope.ui = {
+		  show1Secret: false,
+		  show2Secret: false,
+	  };
 	$scope.user = {
 		first_name: "",
 		last_name: "",
@@ -96,6 +100,19 @@ angular.module('MaterialApp')
       	return false;
 
 	}
+	$scope.show1Secret = function() {
+		$scope.ui.show1Secret = true;
+	}
+	$scope.hide1Secret = function() {
+		$scope.ui.show1Secret = false;
+	}
+	$scope.show2Secret = function() {
+		$scope.ui.show2Secret = true;
+	}
+	$scope.hide2Secret = function() {
+		$scope.ui.show2Secret = false;
+	}
+
 	$shared.isLoading = true;
 	Backend.get("/self").then(function(res) {
 		$scope.user = res.data;

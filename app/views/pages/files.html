@@ -56,12 +56,18 @@
                      <input value="{{file.public_url}}" class="media-file-url-input" />
                 </div>
                 <div>
-              <md-button ng-click="promptCopied()" class="md-raised md-primary md-small no-margin-top-bottom" ngclipboard data-clipboard-text="{{file.public_url}}">Copy</md-button>
+              <md-button ng-click="promptCopied()" class="md-raised md-primary md-small" ngclipboard data-clipboard-text="{{file.public_url}}">Copy</md-button>
                 </div>
             </td>
             <td md-cell>
-              <md-button ng-click="deleteFile($event, file)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deleteFile($event, file)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete file
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
 
             </td>

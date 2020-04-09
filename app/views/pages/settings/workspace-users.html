@@ -51,12 +51,26 @@
                     </td>
             <td md-cell>{{user.email}}</td>
             <td md-cell>
-              <md-button ng-click="editUser($event, user)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+              <md-button ng-click="editUser($event, user)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-pencil"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit workspace user
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
-              <md-button ng-click="deleteUser($event, user)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deleteUser($event, user)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete workspace user
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
+
+
 
             </td>
           </tr>

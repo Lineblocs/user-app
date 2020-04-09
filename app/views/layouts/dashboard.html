@@ -118,6 +118,17 @@
     <!-- Side bar here -->
     <aside id="" class="sidebar">
         <div class="sidebar-content scroll">
+            <div class="toggle" ng-show="!$shared.COLLAPSED_MODE && $shared.state.name !== 'flow-editor'">
+			    <md-button aria-label="Open demo menu" class="md-icon-button md-raised md-primary toggle-btn" ng-click="$shared.collapseNavbarPadding()">
+                    <i class="mdi mdi-chevron-left" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+            </div>
+            <div class="toggle" ng-show="$shared.COLLAPSED_MODE && $shared.state.name !== 'flow-editor'">
+			    <md-button aria-label="Open demo menu" class="md-icon-button md-raised md-primary toggle-btn" ng-click="$shared.showNavbar()">
+                    <i class="mdi mdi-chevron-right" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+            </div>
+
             <div class="top-logo">
                 <img width="60" ng-src="{{'/images/logo-icon-white.png'}}" />
             </div>
@@ -293,7 +304,7 @@
     </aside>
     <main class=" content-holder">
         <div class="page-content remodal-bg animsition"
-            ng-class="{expandedContainer: $state.includes('profile'), 'no-padding': $shared.PAGE_CONTENT_NO_PADDING}">
+            ng-class="{expandedContainer: $state.includes('profile'), 'no-padding': $shared.PAGE_CONTENT_NO_PADDING, 'collapsed-mode': $shared.COLLAPSED_MODE}">
             <!-- Your content goes here -->
             <div id="loading-bar-container">
                 <!--<md-progress-circular md-mode="indeterminate"></md-progress-circular>-->

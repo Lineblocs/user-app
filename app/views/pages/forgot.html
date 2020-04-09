@@ -30,7 +30,12 @@
                     <div class="box invalid-login">
 
                         <center>
-							<div ng-show="couldNotReset" class="red">User credentials were invalid. please try again.</div>
+                            <div ng-show="couldNotReset" class="red">User credentials were invalid. please try again.</div>
+                                <div ng-show="errorMsg !== ''" class="red">
+                                    {{errorMsg}}
+                                </div>
+
+
                         </center>
                     </div>
                 </div>

@@ -86,6 +86,11 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
   $scope.changeCountry = function (country) {
     console.log("changeCountry ", country);
     $scope.number.country = country;
+    $scope.number.address_line_1 = '';
+    $scope.number.address_line_2 = '';
+    $scope.number.city = '';
+    $scope.number.state = '';
+    $scope.number.zip = '';
   }
 
   $shared.endIsLoading();

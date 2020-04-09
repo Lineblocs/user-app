@@ -64,7 +64,6 @@ text-align: left;
   /*width: 128px;*/
   white-space: inherit;
     max-width: 500px; // Or whatever you need.
-  width: 500px;
 }
 .margin-10 {
 	margin: 10px 0;
@@ -84,6 +83,14 @@ md-tooltip .md-content {
 .md-button.md-small {
     min-width: 1%;
 }
+@media screen and (max-width: 1024px) {
+.md-button.md-small {
+	min-width: 50%;
+}
+
+	min-width: 50%;
+}
+
 .md-button.bulk-actions {
 	font-size: 12px;
 	min-height: 32px;
@@ -357,7 +364,26 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 .clickable {
 	text-decoration: underline;
 }
+			.toggle-btn {
 
+				min-height: 24px !important;
+				height: 24px !important;
+				width: 24px !important;
+				padding: 0 !important;
+				z-index: 99999999999;
+			}
+.toggle {
+				position: absolute;
+				top: 75px;
+				right: -16px;
+				i {
+					color: #FFFFFF;
+					font-size: 16px !important;
+				}
+			}
+.collapsed-mode {
+	margin-left: 80px;
+}
 .extended {
 	.navbar {
 		margin-left: 200px;
@@ -369,9 +395,9 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 		position: fixed;
 		bottom:0;
 		.sidebar-content {
-			position: relative;
+			/*position: relative;*/
 			overflow-y: auto;
-			height: 800px;
+			height: 700px;
 		}
 		.top-logo {
 			display: none;
@@ -631,6 +657,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 			margin-right: 80px;
 		}
 	}
+	/*
 	@media screen and (max-width: 839px) {
 		.sidebar {
 			right: -235px;
@@ -651,6 +678,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 			}
 		}
 	}
+	*/
 }
 
 .table-no-pad {
@@ -749,4 +777,34 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 }
 .buy-radio {
 	width: 135px;
+}
+.md-button {
+	span {
+		text-transform: none;
+	}
+}
+
+md-checkbox {
+  .md-icon {
+    transform: scale(.7);
+  }
+  
+  .md-label {
+    margin-left: 35px;
+  }
+}
+.pay-options {
+	padding-right: 15px;
+
+}
+.filter-date {
+	margin-top: 10px;
+}
+.password-icon {
+	margin-top: 18px !important;
+}
+.chart-container {
+	#line {
+		max-width: 100%;
+	}
 }

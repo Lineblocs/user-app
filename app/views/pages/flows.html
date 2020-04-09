@@ -35,7 +35,18 @@
             </md-menu>
         </div>
     </div>
+<div ng-show="pagination.didSearch && flows.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No flows found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
     <!-- exact table from live demo -->
+      <div ng-show="flows.length > 0">
+
     <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
@@ -53,12 +64,24 @@
                 </td>
                 <td md-cell>{{flow.name}}</td>
                 <td md-cell>
-                    <md-button ng-click="editFlow(flow)" class="md-icon-button" aria-label="Settings">
-                        <md-icon><i class="mdi mdi-pencil"></i></md-icon>
-                    </md-button>
-                    <md-button ng-click="deleteFlow($event, flow)" class="md-icon-button" aria-label="Settings">
-                        <md-icon><i class="mdi mdi-delete"></i></md-icon>
-                    </md-button>
+              <md-button ng-click="editFlow(flow)" class="md-icon-button" aria-label="Flow">
+
+                  <md-icon>
+                    <i class="mdi mdi-pencil"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit flow
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
+              <md-button ng-click="deleteFlow($event, flow)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete flow
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
 
                 </td>
             </tr>
@@ -79,4 +102,5 @@
                 class="md-raised md-primary">Next Page</md-button>
         </div>
     </div>
+</div>
 </div>

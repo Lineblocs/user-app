@@ -225,7 +225,8 @@ angular.module('MaterialApp')
 		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
 			var data = res.data;
 			//$window.replace(data.url);
-			$window.location.href = data.url;
+			//$window.location.href = data.url;
+			$window.open(data.url, '_blank');
 			$shared.endIsCreateLoading();
 		});
 	}
@@ -291,7 +292,7 @@ angular.module('MaterialApp')
 	}
 	$scope.downloadBilling = function() {
 		var token = getJWTTokenObj();
-		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token));
+		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token.auth));
 	}
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {

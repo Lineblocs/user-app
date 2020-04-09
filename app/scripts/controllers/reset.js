@@ -43,14 +43,18 @@ angular.module('MaterialApp')
 			Backend.post("/reset", data, true).then(function( res ) {
 				var token = res.data;
 				$scope.isLoading = false;
+				/*
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Password was reset successfully.')
 						.position("top right")
 						.hideDelay(3000)
 					);
-			
-		        $state.go('login', {});
+					*/
+				
+				$shared.showMsg('Password reset', 'You have successfully reset your password.').then(function()  {
+					$state.go('login', {});
+				});
 			}).catch(function(res) {
 				console.log("error reply is ", res);
 				$scope.couldNotReset = true;

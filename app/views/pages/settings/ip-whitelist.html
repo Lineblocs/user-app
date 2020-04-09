@@ -71,9 +71,15 @@
                     <td md-cell>{{ip.ip}}</td>
                     <td md-cell>{{ip.range}}</td>
                     <td md-cell>
-                        <md-button ng-click="deleteIp($event, ip)" class="md-icon-button" aria-label="Settings">
-                            <md-icon><i class="mdi mdi-delete"></i></md-icon>
-                        </md-button>
+              <md-button ng-click="deleteIp($event, ip)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete IP
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
 
                     </td>
                 </tr>

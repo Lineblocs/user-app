@@ -49,5 +49,6 @@ angular.module('MaterialApp').controller('PhoneGroupsCreateCtrl', function ($sco
       });
     }
   }
+  $shared.endIsLoading();
   });
 

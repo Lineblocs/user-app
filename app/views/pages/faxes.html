@@ -33,7 +33,17 @@
             </md-menu>
         </div>
     </div>
+<div ng-show="pagination.didSearch && faxes.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No fax found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
   <!-- exact table from live demo -->
+  <div ng-show="faxes.length>0">
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
@@ -56,8 +66,14 @@
               <a ng-href="{{fax.public_url}}" target="_blank">Open</a>
             </td>
             <td md-cell>
-              <md-button ng-click="deleteFax($event, fax)" class="md-icon-button" aria-label="Delete fax">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deleteFax($event, fax)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete fax
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
             </td>
           </tr>
@@ -74,4 +90,5 @@
       <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
     </div>
   </div>
+</div>
 </div>

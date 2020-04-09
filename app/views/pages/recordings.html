@@ -59,6 +59,16 @@
         </md-content>
     </md-card>
   <!-- exact table from live demo -->
+<div ng-show="pagination.didSearch && recordings.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No recordings found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="recordings.length>0">
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
@@ -88,8 +98,14 @@
               </audio>
             </td>
             <td md-cell>
-              <md-button ng-click="deleteRecording($event, recording)" class="md-icon-button" aria-label="Delete recording">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deleteRecoridng($event, recording)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete recording
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
             </td>
           </tr>
@@ -106,4 +122,5 @@
       <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
     </div>
   </div>
+</div>
 </div>

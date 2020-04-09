@@ -36,6 +36,16 @@
             </md-input-container>
         </div>
     </div>
+<div ng-show="pagination.didSearch && numbers.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No numbers found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+  <div ng-show="numbers.length > 0">
     <md-card md-theme="'default'"" md-theme-watch>
         <md-table-container>
           <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
@@ -78,13 +88,24 @@
                     {{number.availability}}
                 </td>
                 <td md-cell>
-                    <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
-                        <md-icon><i class="mdi mdi-pencil"></i></md-icon>
-                    </md-button>
-                    <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                        <md-icon><i class="mdi mdi-delete"></i></md-icon>
-                    </md-button>
+              <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Number">
 
+                  <md-icon>
+                    <i class="mdi mdi-pencil"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit this item
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
+              <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Unrent number
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
                 </td>
             </tr>
         </tbody>
@@ -104,5 +125,6 @@
                 class="md-raised md-primary">Next Page</md-button>
         </div>
     </div>
+</div>
 </div>
 </div>

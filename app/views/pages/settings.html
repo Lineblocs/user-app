@@ -109,8 +109,10 @@
       <md-tab label="Password">
         <md-content class="md-padding">
           <form ng-submit="submitPasswords($event, passwordsForm)" name="passwordsForm" novalidate>
+            <div layout="row" layout-wrap="">
+                <div flex="66">
                 <md-input-container>
-                  <input name="password" ng-model="user.password" type="password" placeholder="Password" required="" minlength="5">
+                  <input name="password" ng-model="user.password" type="{{ui.show1Secret?'text':'password'}}" placeholder="Password" required="" minlength="5">
                   <small>Type new password to change</small>
                   <div ng-show="triedSubmit">
                     <div class="box">
@@ -119,14 +121,49 @@
                     </div>
                   </div>
                 </md-input-container>
+              </div>
+                <div flex="33">
+                                    <md-button ng-show="!ui.show1Secret" ng-click="show1Secret()" class="md-icon-button password-icon"
+                                        aria-label="Settings">
+                                        <md-icon>
+                                            <i class="mdi mdi-eye"></i>
+                                        </md-icon>
+                                    </md-button>
+                                    <md-button ng-show="ui.show1Secret" ng-click="hide1Secret()" class="md-icon-button password-icon"
+                                        aria-label="Settings">
+                                        <md-icon>
+                                            <i class="mdi mdi-eye-off"></i>
+                                        </md-icon>
+                                    </md-button>
+                </div>
+              </div>
+            <div layout="row" layout-wrap="">
+                <div flex="66">
                 <md-input-container>
-                  <input name="password2" ng-model="user.password2" type="password" placeholder="Confirm Password" required="">
+                  <input name="password2" ng-model="user.password2" type="{{ui.show2Secret?'text':'password'}}" placeholder="Confirm Password" required="">
                   <div ng-show="triedSubmit">
                     <div class="box">
                       <div ng-show="passwordsDontMatch">Passwords don't match</div>
                     </div>
                   </div>
                 </md-input-container>
+              </div>
+<div flex="33">
+                                    <md-button ng-show="!ui.show2Secret" ng-click="show2Secret()" class="md-icon-button password-icon"
+                                        aria-label="Settings">
+                                        <md-icon>
+                                            <i class="mdi mdi-eye"></i>
+                                        </md-icon>
+                                    </md-button>
+                                    <md-button ng-show="ui.show2Secret" ng-click="hide2Secret()" class="md-icon-button password-icon"
+                                        aria-label="Settings">
+                                        <md-icon>
+                                            <i class="mdi mdi-eye-off"></i>
+                                        </md-icon>
+                                    </md-button>
+                </div>
+              </div>
+
             <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
             </form>
           </md-content>

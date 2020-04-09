@@ -34,10 +34,15 @@
               <md-button ng-click="modifyPhoneSetting($event, setting)" class="md-raised md-primary md-small" aria-label="Edit">
                   Modify
               </md-button>
-              <md-button ng-click="deletePhoneSettings($event, setting)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deletePhoneSettings($event, setting)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete phone settings
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
-
             </td>
           </tr>
         </tbody>

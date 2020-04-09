@@ -16,7 +16,16 @@
               </md-input-container>
           </div>
   </div>
-
+<div ng-show="pagination.didSearch && calls.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No calls found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="calls.length>0">
   <!-- exact table from live demo -->
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
@@ -60,5 +69,6 @@
       <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
     </div>
   </div>
+</div>
  
 </div>

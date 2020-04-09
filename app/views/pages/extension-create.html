@@ -75,20 +75,18 @@
                                     <div layout="row">
                                         <div flex="95">
                                             <md-input-container>
-                                                <label>Secret</label>
+                                                <label>Secret Code</label>
                                                 <input name="secret" type="{{ui.showSecret ? 'text':'password'}}"
                                                     required="" minlength="6" ng-model="values.secret">
-                                                <div ng-show="triedSubmit">
+
                                                     <div class="box">
-                                                        <div ng-show="extensionForm.secret.error.minlength">Please enter
-                                                            6
-                                                            characters or more</div>
-                                                        <div ng-show="extensionForm.secret.$error.required">This field
+                                                        <div ng-show="triedSubmit && extensionForm.secret.$error.required">This field
                                                             is
                                                             required
                                                         </div>
+                                                        <div ng-show="values.secret !== '' && extensionForm.secret.$error.minlength">Please enter 6 or more characters
+                                                        </div>
                                                     </div>
-                                                </div>
                                             </md-input-container>
                                         </div>
                                         <div flex="5">
@@ -117,7 +115,10 @@
                                     </md-button>
                                 </div>
                             </div>
-
+                            <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Tags">
 
                             <div layout="row">
                                 <div flex="66">
@@ -131,6 +132,7 @@
                                                     <!--<em>(tag)</em>-->
                                                 </md-chip-template>
                                             </md-chips>
+                                            <small>* type in each tag followed by enter</small>
                                         </div>
                                         <div flex="5">
                                             <md-icon class="tooltip-icon">
@@ -143,8 +145,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
-                        </md-content>
                     </md-tab>
                     <md-tab label="Call Flow">
 

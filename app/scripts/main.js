@@ -165,7 +165,7 @@ angular
     }
      var modules = [
 searchModule("Blocked Numbers", "settings-blocked-numbers", ['blocked', 'numbers']),
-searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
+//searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
 searchModule("IP Whitelist", "settings-ip-whitelist", ['ip', 'whitelist']),
 searchModule("API Settings", "settings-workspace-api-settings", ['api']),
 searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users']),
@@ -176,7 +176,7 @@ searchModule("Media Files", "files", ['media', 'files', 'media files']),
 searchModule("Phones", "phones-phones", ['provision', 'phones']),
 searchModule("Add Phone", "phones-phone-create", ['add', 'phone']),
 searchModule("Phones Groups", "phones-groups", ['phones', 'groups']),
-searchModule("Add Group", "phones-groups-create", ['add', 'group']),
+searchModule("Add Phone Group", "phones-groups-create", ['add', 'group']),
 searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates']),
 searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings']),
 searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy']),
@@ -200,6 +200,12 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
          var checked = items.filter(function(item) {
              return item.checked;
          });
+         console.log("checked items are ", checked);
+if (checked.length === 0) {
+             factory.showMsg("Error", "Please select one or more items to delete");
+             return;
+         }
+
          var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete all these items?')
           .ariaLabel('Confirm')
@@ -310,9 +316,18 @@ return changed;
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
             factory.PAGE_CONTENT_NO_PADDING = true;
+            factory.COLLAPSED_MODE = false;
             $( '.c-hamburger' ).removeClass('is-active');
             $('body').removeClass('extended');
         }
+        factory.collapseNavbarPadding = function() {
+            factory.SHOW_NAVBAR = true;
+            factory.PAGE_CONTENT_NO_PADDING = false;
+            factory.COLLAPSED_MODE = true;
+            $( '.c-hamburger' ).removeClass('is-active');
+            $('body').removeClass('extended');
+        }
+
         factory.processResult = function() {
             var params = $location.search();
             if (params['result'] && params['result'] === 'email-verified') {
@@ -327,6 +342,7 @@ return changed;
         factory.showNavbar = function() {
             factory.SHOW_NAVBAR = true;
             factory.PAGE_CONTENT_NO_PADDING = false;
+            factory.COLLAPSED_MODE = false;
             $( '.c-hamburger' ).addClass('is-active');
             $('body').addClass('extended');
         }
@@ -363,6 +379,22 @@ return changed;
         factory.has = function() {
             return JSON.parse(localStorage.getItem("WORKSPACE"));
         }
+        factory.showMsg = function(title, msg) {
+                factory.changingPage = false;
+                factory.endIsCreateLoading();
+                factory.endIsLoading();
+                return $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title(title)
+                    .textContent(msg)
+                    .ariaLabel(title)
+                    .ok('Ok')
+                );
+
+        }
+
 
         factory.showError = function(title, msg) {
                 factory.changingPage = false;
@@ -511,6 +543,11 @@ return changed;
          var checked = items.filter(function(item) {
              return item.checked;
          });
+         console.log("checked items are ", checked);
+if (checked.length === 0) {
+             $shared.showMsg("Error", "Please select one or more items to delete");
+             return;
+         }
          var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete all these items?')
           .ariaLabel('Confirm')
@@ -736,6 +773,23 @@ return changed;
 
     $urlRouterProvider.when('/dashboard', '/dashboard/home');
     $urlRouterProvider.otherwise('/dashboard/home');
+        // function to check the authentication //
+    var Auth = ["$q", "$state", "$timeout", function ($q, $state, $timeout) {
+        var deferred =$q.defer();
+        $timeout(function() {
+            var token = getJWTTokenObj();
+            if (token!==''&&token) {
+                return deferred.resolve();
+            } else {
+                console.log("not logged in...");
+                $state.go('login');
+                deferred.reject();
+            }
+        }, 0);
+    }];
+    var resolveParams = {
+                auth: Auth
+        };
 
     $stateProvider
     .state('base', {
@@ -783,13 +837,15 @@ return changed;
         url: '/dashboard',
         parent: 'base',
         templateUrl: 'views/layouts/dashboard.html',
-        controller: 'DashboardCtrl'
+        controller: 'DashboardCtrl',
+        resolve: resolveParams
     })
     .state('dashboard-user-welcome', {
         url: '/welcome',
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard-welcome.html',
-        controller: 'DashboardWelcomeCtrl'
+        controller: 'DashboardWelcomeCtrl',
+        resolve: resolveParams
     })
     .state('dashboard-redirect', {
         url: '/dashboard-redirect',
@@ -1117,11 +1173,14 @@ return changed;
         // do something
         console.log("state is changing ", arguments);
         $shared.state = toState;
-        $shared.showNavbar();
+        if (fromState.name === 'flow-editor') {
+            $shared.showNavbar();
+        }
         var token = localStorage.getItem("AUTH");
         if ((!$shared.billInfo || !$shared.userInfo) && token) {
             Backend.get("/dashboard").then(function(res) {
                 var graph = res.data[0];
+                console.log("GOT state data ", res);
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 console.log("updated UI state");
@@ -1364,7 +1423,8 @@ angular.module('MaterialApp')
 		Backend.post("/credit/checkoutWithPayPal", data).then(function(res) {
 			var data = res.data;
 			//$window.replace(data.url);
-			$window.location.href = data.url;
+			//$window.location.href = data.url;
+			$window.open(data.url, '_blank');
 			$shared.endIsCreateLoading();
 		});
 	}
@@ -1430,7 +1490,7 @@ angular.module('MaterialApp')
 	}
 	$scope.downloadBilling = function() {
 		var token = getJWTTokenObj();
-		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token));
+		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token.auth));
 	}
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {
@@ -2287,6 +2347,11 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
   $scope.changeCountry = function (country) {
     console.log("changeCountry ", country);
     $scope.number.country = country;
+    $scope.number.address_line_1 = '';
+    $scope.number.address_line_2 = '';
+    $scope.number.city = '';
+    $scope.number.state = '';
+    $scope.number.zip = '';
   }
 
   $shared.endIsLoading();
@@ -2304,10 +2369,6 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
 angular.module('MaterialApp')
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
 	$scope.$shared = $shared;
-  	if ($(window).width()<1450) {
-        $( '.c-hamburger' ).removeClass('is-active');
-        $('body').removeClass('extended');
-    }
 
   	$scope.$state = $state;
 
@@ -3548,17 +3609,22 @@ angular.module('MaterialApp')
 		if (forgotForm.$valid) {
 			var data = angular.copy( $scope.user );
 			$scope.isLoading = true;
-			Backend.post("/forgot", data).then(function( res ) {
+			var resetMsg = ""
+			Backend.post("/forgot", data, true).then(function( res ) {
 				var token = res.data;
 				$scope.isLoading = false;
+				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');
+/*
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Reset instructions sent to email..')
 						.position("top right")
 						.hideDelay(3000)
 					);
+					*/
 			}).catch(function() {
 				$scope.isLoading = false;
+				$scope.errorMsg = "No such user exists.";
 			})
 			return;
 		}
@@ -3951,7 +4017,7 @@ var clickedGoogSignIn = false;
 			var data = angular.copy( $scope.user );
 			data['challenge'] = $scope.challenge;
 			$scope.isLoading = true;
-			Backend.post("/jwt/authenticate", data).then(function( res ) {
+			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
 				var token = res.data;
 				finishLogin(token, res.data.workspace);
 			}).catch(function() {
@@ -4043,7 +4109,9 @@ var clickedGoogSignIn = false;
 		$scope.challenge = sub;
 	}
 
-	renderButton();
+	$timeout(function() {
+		renderButton();
+	}, 0);
   });
 
 'use strict';
@@ -5006,6 +5074,7 @@ angular.module('MaterialApp').controller('PhoneGroupsCreateCtrl', function ($sco
       });
     }
   }
+  $shared.endIsLoading();
   });
 
 
@@ -5991,14 +6060,18 @@ angular.module('MaterialApp')
 			Backend.post("/reset", data, true).then(function( res ) {
 				var token = res.data;
 				$scope.isLoading = false;
+				/*
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Password was reset successfully.')
 						.position("top right")
 						.hideDelay(3000)
 					);
-			
-		        $state.go('login', {});
+					*/
+				
+				$shared.showMsg('Password reset', 'You have successfully reset your password.').then(function()  {
+					$state.go('login', {});
+				});
 			}).catch(function(res) {
 				console.log("error reply is ", res);
 				$scope.couldNotReset = true;
@@ -6024,6 +6097,10 @@ angular.module('MaterialApp')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
+	  $scope.ui = {
+		  show1Secret: false,
+		  show2Secret: false,
+	  };
 	$scope.user = {
 		first_name: "",
 		last_name: "",
@@ -6109,6 +6186,19 @@ angular.module('MaterialApp')
       	return false;
 
 	}
+	$scope.show1Secret = function() {
+		$scope.ui.show1Secret = true;
+	}
+	$scope.hide1Secret = function() {
+		$scope.ui.show1Secret = false;
+	}
+	$scope.show2Secret = function() {
+		$scope.ui.show2Secret = true;
+	}
+	$scope.hide2Secret = function() {
+		$scope.ui.show2Secret = false;
+	}
+
 	$shared.isLoading = true;
 	Backend.get("/self").then(function(res) {
 		$scope.user = res.data;

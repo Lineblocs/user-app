@@ -73,7 +73,7 @@ var clickedGoogSignIn = false;
 			var data = angular.copy( $scope.user );
 			data['challenge'] = $scope.challenge;
 			$scope.isLoading = true;
-			Backend.post("/jwt/authenticate", data).then(function( res ) {
+			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
 				var token = res.data;
 				finishLogin(token, res.data.workspace);
 			}).catch(function() {
@@ -165,5 +165,7 @@ var clickedGoogSignIn = false;
 		$scope.challenge = sub;
 	}
 
-	renderButton();
+	$timeout(function() {
+		renderButton();
+	}, 0);
   });

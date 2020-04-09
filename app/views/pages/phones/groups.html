@@ -37,6 +37,16 @@
             </md-menu>
         </div>
     </div>
+<div ng-show="pagination.didSearch && groups.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No phone groups found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="groups.length>0">
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
@@ -57,10 +67,15 @@
               <md-button ng-click="editPhoneGroup($event, group)" class="md-raised md-primary md-small" aria-label="Edit">
                   Edit
               </md-button>
-              <md-button ng-click="deletePhoneGroup($event, group)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deletePhoneGroup($event, group)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete phone group
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
-
             </td>
           </tr>
         </tbody>
@@ -69,4 +84,5 @@
   </md-card>
 </div>
   </div>
+</div>
  

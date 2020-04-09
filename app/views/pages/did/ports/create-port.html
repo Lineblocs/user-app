@@ -34,7 +34,7 @@ recent invoice from your provider - an invoice dated no longer than 90 days from
 request.
         </p></p>
         <form name="portForm" ng-submit="saveNumber(portForm)" novalidate>
-            <h2>Start Port Request</h2>
+            <h5>Start Port Request</h5>
             <p>
                 to begin your port request please fill in the form below
             </p>
@@ -68,6 +68,26 @@ request.
                                     characters or
                                     more</div>
                                 <div ng-show="portForm.last_name.$error.required">This field is
+                                    required
+                                </div>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row">
+                <div flex="100">
+                    <md-input-container>
+                        <label>Country</label>
+                        <md-select name="country" ng-model="number.country" ng-change="changeCountry(number.country)" required="">
+                            <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
+                                {{country.name}}
+                            </md-option>
+                        </md-select>
+                        <div ng-show="triedSubmit">
+
+                            <div class="box">
+                                <div ng-show="portForm.country.$error.required">This field is
                                     required
                                 </div>
                             </div>
@@ -167,26 +187,6 @@ request.
                                     characters or
                                     more</div>
                                 <div ng-show="portForm.zip.$error.required">This field is
-                                    required
-                                </div>
-                            </div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>Country</label>
-                        <md-select name="country" ng-model="number.country" ng-change="changeCountry(number.country)" required="">
-                            <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
-                                {{country.name}}
-                            </md-option>
-                        </md-select>
-                        <div ng-show="triedSubmit">
-
-                            <div class="box">
-                                <div ng-show="portForm.country.$error.required">This field is
                                     required
                                 </div>
                             </div>

@@ -20,17 +20,22 @@ angular.module('MaterialApp')
 		if (forgotForm.$valid) {
 			var data = angular.copy( $scope.user );
 			$scope.isLoading = true;
-			Backend.post("/forgot", data).then(function( res ) {
+			var resetMsg = ""
+			Backend.post("/forgot", data, true).then(function( res ) {
 				var token = res.data;
 				$scope.isLoading = false;
+				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');
+/*
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Reset instructions sent to email..')
 						.position("top right")
 						.hideDelay(3000)
 					);
+					*/
 			}).catch(function() {
 				$scope.isLoading = false;
+				$scope.errorMsg = "No such user exists.";
 			})
 			return;
 		}

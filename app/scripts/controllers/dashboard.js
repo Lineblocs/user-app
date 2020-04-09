@@ -10,10 +10,6 @@
 angular.module('MaterialApp')
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
 	$scope.$shared = $shared;
-  	if ($(window).width()<1450) {
-        $( '.c-hamburger' ).removeClass('is-active');
-        $('body').removeClass('extended');
-    }
 
   	$scope.$state = $state;
 

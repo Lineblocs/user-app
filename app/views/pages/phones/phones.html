@@ -37,6 +37,16 @@
             </md-menu>
         </div>
     </div>
+<div ng-show="pagination.didSearch && phones.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No phones found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="phones.length > 0">
   <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
       <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
@@ -65,8 +75,14 @@
               <md-button ng-click="editPhone($event, phone)" class="md-raised md-primary md-small" aria-label="Edit">
                   Edit
               </md-button>
-              <md-button ng-click="deletePhone($event, phone)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deletePhone($event, phone)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete phone
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
 
             </td>
@@ -86,4 +102,5 @@
     </div>
 </div>
   </div>
+</div>
  

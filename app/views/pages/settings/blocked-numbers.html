@@ -50,10 +50,15 @@
                 </td>
             <td md-cell>{{number.number}}</td>
             <td md-cell>
-              <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Flow">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete item
+                          </md-tooltip>
+                  </md-icon>
               </md-button>
-
             </td>
           </tr>
         </tbody>

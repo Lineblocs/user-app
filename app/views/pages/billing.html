@@ -11,8 +11,9 @@
         <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true">
         <md-tab label="Add Credit">
             <md-content class="md-padding">
-                <div class="bottom-sheet-demo inset no-padding" layout="row" layout-sm="column" layout-align="center">
-                    <div flex="10">
+                <div class="bottom-sheet-demo inset no-padding">
+                    <div class="left">
+                        <div class="pay-options">
                         <h5>Pay With</h5>
                         <md-button ng-disabled="settings.type==='CARD'" type="button" ng-click="changeType('CARD')"
                             class="md-raised md-primary no-margin-sides">
@@ -21,8 +22,9 @@
                         <md-button ng-disabled="settings.type==='PAYPAL'" type="button" ng-click="changeType('PAYPAL')"
                             class="md-raised md-primary no-margin-sides">
                             PayPal</md-button>
+                        </div>
                     </div>
-                    <div flex="90" class="line-left">
+                    <div class="left line-left">
                         <div ng-show="settings.type==='CARD'">
                             <div ng-show="cards.length === 0">
                                 <h5>No Cards Added</h5>
@@ -169,11 +171,17 @@
                 <small>Filter Dates</small>
                 <div layout="row">
                     <div>
+                        <input type="date" ng-model="startDate" class="filter-date"/>
+                        <!--
                         <md-datepicker class="no-datepicker-left-pad" ng-model="startDate" md-placeholder="Start date">
                         </md-datepicker>
+                    -->
                     </div>
                     <div>
+                        <input type="date" ng-model="endDate" class="filter-date"/>
+                        <!--
                         <md-datepicker ng-model="endDate" md-placeholder="End date"></md-datepicker>
+                        -->
                     </div>
                     <div>
                         <md-button ng-click="filterBilling()" class="md-raised md-primary">Filter</md-button>
