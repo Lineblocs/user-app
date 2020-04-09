@@ -3925,7 +3925,11 @@ var clickedGoogSignIn = false;
 	}
     $scope.submit1 = function($event, loginForm) {
 		$scope.triedSubmit = true;
-		if (loginForm.$valid) {
+		if (!loginForm.$valid) {
+
+			$scope.errorMsg = "Please enter a valid email";
+			return;
+		}
 			$shared.changingPage = true;
 			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
 				$shared.changingPage = false;
@@ -3936,12 +3940,14 @@ var clickedGoogSignIn = false;
 				}
 				$scope.noUserFound = true;
 			});
-		}
 	}
 
     $scope.submit = function($event, loginForm) {
 		$scope.triedSubmit = true;
-		if (loginForm.$valid) {
+		if (!loginForm.$valid) {
+			return;
+		}
+
 			var data = angular.copy( $scope.user );
 			data['challenge'] = $scope.challenge;
 			$scope.isLoading = true;
@@ -3953,7 +3959,6 @@ var clickedGoogSignIn = false;
 				$scope.couldNotLogin = true;
 			})
 			return;
-		}
     }
 	$scope.gotoRegister = function() {
 		$shared.changingPage = true;
