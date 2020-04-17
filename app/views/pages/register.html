@@ -59,6 +59,9 @@
                                     <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
                                         again.
                                     </div>
+                                    <div ng-show="triedSubmit && didNotAcceptTerms" class="red">You must accept the terms of service to create an account
+                                    </div>
+
                                 </center>
                             </div>
                         </div>
@@ -186,6 +189,9 @@
                                 </md-input-container>
                             </div>
                         </div>
+                         <md-checkbox ng-model="acceptTerms" aria-label="Checkbox 1">
+                                <small>I accept the <a target="_blank" ng-href="https://lineblocs.com/pages/tos">Terms Of Service</a></small>
+                        </md-checkbox>
                         <div class="login-btn">
                             <button>
                                 <span>Sign Up</span>

@@ -15,6 +15,7 @@ angular.module('MaterialApp')
 		  US: "+1",
 		  CA: "+1",
 	  };
+	  $scope.acceptTerms = false;
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
 	  $scope.shouldSplash = false;
@@ -74,6 +75,11 @@ angular.module('MaterialApp')
 		$scope.triedSubmit = true;
 		console.log("data is ", $scope.user);
 		console.log("form ", registerForm);
+		if (!$scope.acceptTerms) {
+			$scope.triedSubmit = true;
+			$scope.didNotAcceptTerms = true;
+			return;
+		}
 		if ($scope.user.password !== $scope.user.password2) {
 			$scope.passwordsDontMatch = true;
 			return;
