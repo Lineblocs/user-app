@@ -37,9 +37,11 @@ var clickedGoogSignIn = false;
 					$state.go('dashboard-user-welcome', {});
 					return;
 				}
+				$shared.isAdmin = true;
 				$shared.setAdminAuthToken(token.adminWorkspaceToken);
 				Backend.get("/admin/getWorkspaces").then(function(res) {
 					$shared.workspaces = res.data.data;
+					$state.go('dashboard-user-welcome', {});
 				});
 	}
     $scope.submit1 = function($event, loginForm) {

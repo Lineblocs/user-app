@@ -147,6 +147,15 @@
                         </div>
                     </div>
                 </div>
+                <div ng-show="$shared.isAdmin && ($shared.state.name !== 'flow-editor' && !$shared.COLLAPSED_MODE)">
+                <br/>
+                <div class="manage-workspace">
+                    <small class="white">Manage Workspace</small>
+                    <select ng-model="$shared.selectedAdminWorkspace" ng-change="$shared.changeAdminWorkspace($shared.selectedAdminWorkspace)" ng-options="workspace.name for workspace in $shared.workspaces">
+                        <option value="">Select Workspace</option>
+                    </select>
+                </div>
+            </div>
                 <div class="dashboard-menu">
                     <ul class="menu-list">
                         <li ng-class="{active: $state.includes('home')}">

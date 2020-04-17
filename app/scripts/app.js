@@ -58,7 +58,12 @@ function getJWTToken() {
     return "";
 }
 function getWorkspaceID() {
-    var parsed = JSON.parse(localStorage.getItem("WORKSPACE"));
+    var workspace =localStorage.getItem("WORKSPACE")
+    if ( !workspace ) {
+        return null;
+    }
+    var parsed = JSON.parse(workspace);
+
     return parsed.id;
 }
 var check1 = document.location.href.includes("http://localhost");
@@ -126,6 +131,7 @@ angular
     .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
+        factory.selectedAdminWorkspace = null;
         factory.initialLoaded = false;
         factory.title = baseTitle;
         factory.FLOW_EDITOR_URL = "https://editor.lineblocs.com";
@@ -195,6 +201,16 @@ searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
      ];
 
+
+     factory.changeAdminWorkspace = function(workspace) {
+         console.log("changeAdminWorkspace ", workspace);
+         factory.setWorkspace( workspace );
+         $state.reload();
+     }
+        factory.changeAdminWorkspace2 = function(workspace) {
+         console.log("changeAdminWorkspace ", workspace);
+         factory.setWorkspace( workspace );
+     }
 
      factory.deleteAllChecked = function(module, items) {
          var checked = items.filter(function(item) {
@@ -797,6 +813,13 @@ if (checked.length === 0) {
         url: '',
         templateUrl: 'views/base.html',
         controller: 'DashboardCtrl'
+
+    })
+    .state('join-workspace', {
+        url: '/join-workspace/:hash',
+        parent: 'base',
+        templateUrl: 'views/pages/join-workspace.html',
+        controller: 'JoinWorkspaceCtrl'
     })
     .state('login', {
         url: '/login',
@@ -1177,6 +1200,28 @@ if (checked.length === 0) {
             $shared.showNavbar();
         }
         var token = localStorage.getItem("AUTH");
+        var admin = localStorage.getItem("ADMIN_TOKEN");
+        var workspaceId = getWorkspaceID();
+        if ( admin ) {
+            Backend.get("/admin/getWorkspaces").then(function(res) {
+                $shared.workspaces = res.data.data;
+                $shared.isAdmin = true;
+                if (!workspaceId) {
+                    $shared.selectedAdminWorkspace = $shared.workspaces[ 0 ];
+                    $shared.changeAdminWorkspace2( $shared.workspaces[ 0 ] );
+                    return;
+                }
+                angular.forEach($shared.workspaces, function( workspace ) {
+                    console.log("checking workspace ", workspace);
+                    if ( workspace.id === workspaceId ) {
+                        console.log("switching to workspace ", workspace);
+                        $shared.selectedAdminWorkspace= workspace;
+                        $shared.changeAdminWorkspace2( workspace );
+                    }
+                });
+
+            });
+        }
         if ((!$shared.billInfo || !$shared.userInfo) && token) {
             Backend.get("/dashboard").then(function(res) {
                 var graph = res.data[0];

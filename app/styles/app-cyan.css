@@ -655,6 +655,12 @@ md-checkbox .md-label {
 .chart-container #line {
   max-width: 100%; }
 
+.white {
+  color: #FFFFFF; }
+
+.manage-workspace {
+  margin-left: 20px; }
+
 .collapse-card {
   background-color: #fff;
   border: 1px solid #eee;
