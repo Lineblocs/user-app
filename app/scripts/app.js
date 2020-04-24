@@ -94,6 +94,27 @@ function formatDate(input, addTime) {
     }
     return input ? moment(input).format(format) : '';
 }
+function continueChangeRoute() {
+    var scope = angular.element(document.getElementById('scopeCtrl')).scope();
+    var info = scope.$shared.pendingRouteData;
+    scope.$shared.changeRoute(info.route, info.params);
+    scope.$apply();
+}
+
+window.addEventListener('message', function(e) {
+    console.log("received window emssage ", arguments);
+    if (event.origin.startsWith('https://editor.lineblocs.com')) { 
+      if ( event.data === 'saved' ) {
+          continueChangeRoute();
+      } else {
+                var confirm = window.confirm("Are you sure any unsaved changes will be lost.");
+                if ( !confirm ) {
+                    return;
+                }
+      }
+
+    }
+});
 angular
 .module('MaterialApp', [
     'ui.router',
@@ -327,11 +348,14 @@ return changed;
       }
       if ( factory.state.name === 'flow-editor' ) {
             var flowEditorFrame = document.getElementById('flowEditorFrame');
-            if ( flowEditorFrame && !flowEditorFrame.contentWindow.checkChangesSaved() ) {
-                var confirm = window.confirm("Are you sure any unsaved changes will be lost.");
-                if ( !confirm ) {
-                    return;
-                }
+            // check if all changes are saved before exiting
+            if ( flowEditorFrame ) {
+                flowEditorFrame.postMessage('check', '*');
+                factory.pendingRouteData = {
+                    route: route,
+                    params: params
+                };
+                return;
             }
       }
       $state.go(route, params)
