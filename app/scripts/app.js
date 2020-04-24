@@ -321,8 +321,18 @@ return changed;
       if (factory.state && factory.state.name === route) {
         return;
       }
+
       if (!except.includes(route)) {
         factory.isLoading = true;
+      }
+      if ( route === 'flow-editor' ) {
+            var flowEditorFrame = document.getElementById('flowEditorFrame').contentWindow;
+            if ( ! flowEditorFrame.checkChangesSaved() ) {
+                var confirm = window.confirm("Are you sure any unsaved changes will be lost.");
+                if ( !confirm ) {
+                    return;
+                }
+            }
       }
       $state.go(route, params)
       $timeout(function() {
