@@ -13,10 +13,12 @@
     <div ng-show="pagination.didSearch || (!pagination.didSearch && numbers.length > 0)">
   <div layout="row side-options" layout-align="end center">
         <div flex="10">
-                <md-input-container class="search">
-                  <label>Search</label>
-              <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
-              </md-input-container>
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text" />
+                <a ng-show="pagination.shouldShowClear()" class="clear-search important-show" ng-click="pagination.clearSearch()">X</a>
+                <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
+            </md-input-container>
           </div>
     <md-button ng-click="portNumber()" class="md-raised md-primary">Create New</md-button>
   </div>

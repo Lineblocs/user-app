@@ -672,6 +672,20 @@ if (checked.length === 0) {
         factory.didSearch = false;
         factory.meta = {}; // saved by backend
         var searchTimer = null;
+        factory.clearSearch = function() {
+            factory.settings.search = "";
+            factory.search();
+        }
+        factory.shouldShowClear = function() {
+            var result = false;
+            if ( factory.settings.search === "" ) {
+                result = false;
+            } else {
+                result = true;
+            }
+            console.log("result ", result);
+            return result;
+        }
         factory.nextPage = function() {
             factory.settings.currentPage = factory.settings.currentPage + 1;
             factory.loadData();
@@ -733,6 +747,9 @@ if (checked.length === 0) {
                     console.log("loaded data meta", meta);
                     $shared.endIsCreateLoading();
                     resolve(res);
+                    $timeout(function() {
+                        scopeObj.$apply();
+                    }, 0);
                 });
             });
         }

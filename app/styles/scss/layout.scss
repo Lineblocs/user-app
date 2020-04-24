@@ -814,3 +814,20 @@ md-checkbox {
 .manage-workspace {
 	margin-left: 20px;
 }
+
+.clear-search {
+	position: absolute;
+	top: 8px;
+	right: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+.relative {
+	position: relative;
+}
+.important-show {
+	display: block !important;
+}
+.important-dont-show {
+	display: none !important;
+}

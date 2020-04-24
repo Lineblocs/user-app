@@ -15,7 +15,9 @@
         <div flex="10">
             <md-input-container class="search">
                 <label>Search</label>
-                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text" />
+                <a ng-show="pagination.shouldShowClear()" class="clear-search important-show" ng-click="pagination.clearSearch()">X</a>
+                <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
             </md-input-container>
         </div>
         <md-button ng-click="createPhoneGroup($event)" class="md-raised md-primary create-new">Add Phone Group</md-button>
