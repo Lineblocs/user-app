@@ -349,11 +349,7 @@ return changed;
       if (factory.state && factory.state.name === route) {
         return;
       }
-
-      if (!except.includes(route)) {
-        factory.isLoading = true;
-      }
-      if ( factory.state.name === 'flow-editor' ) {
+        if ( factory.state.name === 'flow-editor' ) {
             var flowEditorFrame = document.getElementById('flowEditorFrame');
             // check if all changes are saved before exiting
             if ( flowEditorFrame ) {
@@ -364,6 +360,10 @@ return changed;
                 };
                 return;
             }
+      }
+
+      if (!except.includes(route)) {
+        factory.isLoading = true;
       }
     factory.completeChangeRoute(route, params);
   }
