@@ -350,7 +350,7 @@ return changed;
             var flowEditorFrame = document.getElementById('flowEditorFrame');
             // check if all changes are saved before exiting
             if ( flowEditorFrame ) {
-                flowEditorFrame.postMessage('check', '*');
+                flowEditorFrame.contentWindow.postMessage('check', '*');
                 factory.pendingRouteData = {
                     route: route,
                     params: params
