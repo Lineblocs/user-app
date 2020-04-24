@@ -97,7 +97,7 @@ function formatDate(input, addTime) {
 function continueChangeRoute() {
     var scope = angular.element(document.getElementById('scopeCtrl')).scope();
     var info = scope.$shared.pendingRouteData;
-    scope.$shared.changeRoute(info.route, info.params);
+    scope.$shared.completeChangeRoute(info.route, info.params);
     scope.$apply();
 }
 
@@ -335,6 +335,13 @@ return changed;
   factory.scrollToTop = function() {
       $window.scrollTo(0, 0);
   }
+  factory.completeChangeRoute = function(route, params) {
+      $state.go(route, params)
+      $timeout(function() {
+
+      }, 0);
+
+  }
   factory.changeRoute = function(route, params) {
       console.log("changeRoute called ", arguments);
       var params = params || {};
@@ -358,10 +365,7 @@ return changed;
                 return;
             }
       }
-      $state.go(route, params)
-      $timeout(function() {
-
-      }, 0);
+    factory.completeChangeRoute(route, params);
   }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
