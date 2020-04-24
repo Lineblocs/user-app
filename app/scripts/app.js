@@ -325,9 +325,9 @@ return changed;
       if (!except.includes(route)) {
         factory.isLoading = true;
       }
-      if ( route === 'flow-editor' ) {
-            var flowEditorFrame = document.getElementById('flowEditorFrame').contentWindow;
-            if ( ! flowEditorFrame.checkChangesSaved() ) {
+      if ( factory.state.name === 'flow-editor' ) {
+            var flowEditorFrame = document.getElementById('flowEditorFrame');
+            if ( flowEditorFrame && !flowEditorFrame.contentWindow.checkChangesSaved() ) {
                 var confirm = window.confirm("Are you sure any unsaved changes will be lost.");
                 if ( !confirm ) {
                     return;
