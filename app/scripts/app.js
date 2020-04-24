@@ -111,6 +111,7 @@ window.addEventListener('message', function(e) {
                 if ( !confirm ) {
                     return;
                 }
+                continueChangeRoute();
       }
 
     }
