@@ -94,6 +94,28 @@ function formatDate(input, addTime) {
     }
     return input ? moment(input).format(format) : '';
 }
+function continueChangeRoute() {
+    var scope = angular.element(document.getElementById('scopeCtrl')).scope();
+    var info = scope.$shared.pendingRouteData;
+    scope.$shared.completeChangeRoute(info.route, info.params);
+    scope.$apply();
+}
+
+window.addEventListener('message', function(e) {
+    console.log("received window emssage ", arguments);
+    if (event.origin.startsWith('https://editor.lineblocs.com')) { 
+      if ( event.data === 'saved' ) {
+          continueChangeRoute();
+      } else {
+                var confirm = window.confirm("Are you sure any unsaved changes will be lost.");
+                if ( !confirm ) {
+                    return;
+                }
+                continueChangeRoute();
+      }
+
+    }
+});
 angular
 .module('MaterialApp', [
     'ui.router',
@@ -314,6 +336,13 @@ return changed;
   factory.scrollToTop = function() {
       $window.scrollTo(0, 0);
   }
+  factory.completeChangeRoute = function(route, params) {
+      $state.go(route, params)
+      $timeout(function() {
+
+      }, 0);
+
+  }
   factory.changeRoute = function(route, params) {
       console.log("changeRoute called ", arguments);
       var params = params || {};
@@ -321,13 +350,23 @@ return changed;
       if (factory.state && factory.state.name === route) {
         return;
       }
+        if ( factory.state.name === 'flow-editor' ) {
+            var flowEditorFrame = document.getElementById('flowEditorFrame');
+            // check if all changes are saved before exiting
+            if ( flowEditorFrame ) {
+                flowEditorFrame.contentWindow.postMessage('check', '*');
+                factory.pendingRouteData = {
+                    route: route,
+                    params: params
+                };
+                return;
+            }
+      }
+
       if (!except.includes(route)) {
         factory.isLoading = true;
       }
-      $state.go(route, params)
-      $timeout(function() {
-
-      }, 0);
+    factory.completeChangeRoute(route, params);
   }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
@@ -544,14 +583,19 @@ return changed;
     })
     .factory("Backend", function($http, $q, $shared, $mdDialog, $state) {
         var factory = this;
-        function errorHandler(error, showMsg) {
+        function errorHandler(error, codeId, showMsg) {
             console.log("erroHandler ", arguments);
             if ( showMsg ) {
                     error = error || "An error occured.";
                     $shared.showError(error);
                     return;
             }
-            $shared.showError("An error occured.");
+            var message = "An error occured.";
+            if ( codeId !== null) {
+                message += " Error Code ID: " + codeId;
+            }
+
+            $shared.showError(message);
 
         }
 
@@ -602,10 +646,10 @@ if (checked.length === 0) {
         factory.get = function(path, params, showMsg)
         {
             return $q(function(resolve, reject) {
-                $http.get(createUrl(path), params).then(resolve,function(err) {
-                    var message = err.message;
-                    errorHandler(message, showMsg);
-                    reject(err);
+                $http.get(createUrl(path), params).then(resolve,function(res) {
+                   var message = res.data.message;
+                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                    reject(res);
                  });
             });
         }
@@ -618,11 +662,11 @@ if (checked.length === 0) {
         factory.delete = function(path, showMsg)
         {
             return $q(function(resolve, reject) {
-                $http.delete(createUrl(path)).then(resolve,function(err) {
-                    var message = err.message;
-                    errorHandler(message, showMsg);
+                $http.delete(createUrl(path)).then(resolve,function(res) {
+                   var message = res.data.message;
+                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
 
-                    reject(err);
+                    reject(res);
                  });
             });
 
@@ -630,12 +674,13 @@ if (checked.length === 0) {
         factory.post = function(path, params, suppressErrDialog, showMsg)
         {
             return $q(function(resolve, reject) {
-                $http.post(createUrl(path), params).then(resolve,function(err) {
-                    var message = err.message;
+                $http.post(createUrl(path), params).then(resolve,function(res) {
+                   var message = res.data.message;
                     if (!suppressErrDialog) {
-                        errorHandler(message, showMsg);
+                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+
                     }
-                    reject(err);
+                    reject(res);
                  });
             });
 
@@ -648,10 +693,11 @@ if (checked.length === 0) {
                     method: "POST",
                     data: data,
                     headers: {'Content-Type': undefined}
-                }).then(resolve, function(error) {
-                    console.log("postFiles result ", error);
-                    errorHandler(error.data.message, showMsg);
-                    reject( error );
+                }).then(resolve, function(res) {
+                    console.log("postFiles result ", res);
+                   var message = res.data.message;
+                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                    reject( res );
                 });
             });
         }
