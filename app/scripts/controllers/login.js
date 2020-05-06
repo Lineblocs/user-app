@@ -175,9 +175,7 @@ function redirectUser() {
 	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
 		$scope.challenge = sub;
 	}
-	Backend.waitForQueuedReqs().then(function() {
-		$timeout(function() {
-			renderButton();
-		}, 0);
-	});
+	$timeout(function() {
+		renderButton();
+	}, 0);
   });

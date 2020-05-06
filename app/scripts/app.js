@@ -41,6 +41,14 @@ function checkExpires(expiresIn)
 {
 
 }
+function isAlreadyDoingNextRedirect() {
+    var hash = window.location.hash.substr(1);
+    var query = URI( hash ).query( true );
+    if ( query.next ) {
+        return true;
+    }
+    return false;
+}
 function getJWTTokenObj() {
     var token = localStorage.getItem("AUTH");
     if (token) {
@@ -592,7 +600,7 @@ return changed;
 
         function pushToQueue(item) {
             $shared.tempStopErrors = true;
-            factory.queued.push( item );
+            //factory.queued.push( item );
         }
         function errorHandler(error, codeId, showMsg) {
             console.log("erroHandler ", arguments);
@@ -673,6 +681,10 @@ if (checked.length === 0) {
             if ( !auth ) {
                 $shared.tempStopErrors = true;
                 var path = document.location.href.split("/");
+
+                if (isAlreadyDoingNextRedirect()) {
+                    return;
+                }
                 var next = path.slice(4, path.length).join("/");
                 //var next = $state.current.name;
                 console.log("next URL is: ", next);
@@ -681,6 +693,7 @@ if (checked.length === 0) {
                 //$state.go('login');
                 return false;
             }
+            return true;
         }
         factory.get = function(path, params, showMsg)
         {
@@ -711,10 +724,12 @@ if (checked.length === 0) {
         factory.delete = function(path, showMsg)
         {
             var item = $q(function(resolve, reject) {
+                 if (!skip.includes($state.current.name)) {
                     if ( !checkHttpCallPrerequisites() ) {
-                        //resolve();
+                        resolve();
                         return;
                     }
+                }
 
 
                 $http.delete(createUrl(path)).then(resolve,function(res) {
@@ -731,8 +746,13 @@ if (checked.length === 0) {
         factory.post = function(path, params, suppressErrDialog, showMsg)
         {
             var item =  $q(function(resolve, reject) {
-                    if ( !checkHttpCallPrerequisites() ) {
-                        resolve();
+                console.log("factory.post current state is: ", $state.current.name);
+                    if (!skip.includes($state.current.name)) {
+                        if ( !checkHttpCallPrerequisites() ) {
+
+                            resolve();
+                            return;
+                        }
                     }
 
 
@@ -750,9 +770,12 @@ if (checked.length === 0) {
         }
         factory.postFiles =  function(url, data, showMsg) {
             var item =$q(function(resolve, reject) {
+                 if (!skip.includes($state.current.name)) {
                     if ( !checkHttpCallPrerequisites() ) {
                         resolve();
+                        return;
                     }
+                }
 
 
                 $http({
@@ -938,6 +961,9 @@ if (checked.length === 0) {
                 return deferred.resolve();
             } else {
                 console.log("not logged in...");
+                if (isAlreadyDoingNextRedirect()) {
+                    return;
+                }
                 var path = document.location.href.split("/");
                 var next = path.slice(4, path.length).join("/");
                 //var next = $state.current.name;
