@@ -71,8 +71,8 @@ text-align: left;
 nav.right {
 
 	md-menu {
-		height: 69px;
-		padding: 8px 0;
+		/*height: 69px;*/
+		/*padding: 8px 0;*/
 	}
 }
 
@@ -830,4 +830,26 @@ md-checkbox {
 }
 .important-dont-show {
 	display: none !important;
+}
+.left-nav {
+	float: left;
+	width: 70%;
+}
+nav.right {
+	ul {
+		margin: 5px 0;
+		padding: 0;
+
+		li {
+			float: left;
+			margin-right: 10px;
+		}
+	}
+
+	ul:after {
+		clear: both;
+		content: '';
+		margin: 0;
+		display: block;
+	}
 }

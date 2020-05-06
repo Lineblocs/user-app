@@ -64,8 +64,8 @@ body {
   margin: 10px 0; }
 
 nav.right md-menu {
-  height: 69px;
-  padding: 8px 0; }
+  /*height: 69px;*/
+  /*padding: 8px 0;*/ }
 
 md-tooltip .md-content {
   height: auto !important; }
@@ -676,6 +676,23 @@ md-checkbox .md-label {
 
 .important-dont-show {
   display: none !important; }
+
+.left-nav {
+  float: left;
+  width: 70%; }
+
+nav.right ul {
+  margin: 5px 0;
+  padding: 0; }
+  nav.right ul li {
+    float: left;
+    margin-right: 10px; }
+
+nav.right ul:after {
+  clear: both;
+  content: '';
+  margin: 0;
+  display: block; }
 
 .collapse-card {
   background-color: #fff;

@@ -24,6 +24,16 @@ angular.module('MaterialApp')
 	$scope.step = 1;
 var clickedGoogSignIn = false;
 
+function redirectUser() {
+		Idle.watch();
+		var hash = window.location.hash.substr(1);
+		var query = URI(hash).query(true);
+		if ( query.next ) {	
+				window.location.replace("#/" + query.next);
+				return;
+		}
+		$state.go('dashboard-user-welcome', {});
+}
 	function finishLogin(token, workspace) {
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
@@ -33,8 +43,7 @@ var clickedGoogSignIn = false;
 				$shared.setAuthToken(token);
 				$shared.setWorkspace(workspace);
 				if (!$shared.isAdmin) {
-					Idle.watch();
-					$state.go('dashboard-user-welcome', {});
+					redirectUser();
 					return;
 				}
 				$shared.isAdmin = true;
@@ -166,8 +175,9 @@ var clickedGoogSignIn = false;
 	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
 		$scope.challenge = sub;
 	}
-
-	$timeout(function() {
-		renderButton();
-	}, 0);
+	Backend.waitForQueuedReqs().then(function() {
+		$timeout(function() {
+			renderButton();
+		}, 0);
+	});
   });

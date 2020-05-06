@@ -153,6 +153,7 @@ angular
     .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
         var baseTitle = "LineBlocs.com";
+        factory.tempStopErrors = false;
         factory.selectedAdminWorkspace = null;
         factory.initialLoaded = false;
         factory.title = baseTitle;
@@ -223,7 +224,10 @@ searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
      ];
 
-
+        factory.hasAuth = function() {
+            var token = localStorage.getItem("AUTH");
+            return token;
+        }
      factory.changeAdminWorkspace = function(workspace) {
          console.log("changeAdminWorkspace ", workspace);
          factory.setWorkspace( workspace );
@@ -426,7 +430,7 @@ return changed;
         }
         factory.canPerformAction = function(action) {
             var workspace = factory.getWorkspace();
-            if (workspace.user_info[action]) {
+            if (workspace && workspace.user_info[action]) {
                 return true;
             }
             return false;
@@ -581,10 +585,23 @@ return changed;
         }
         return factory;
     })
-    .factory("Backend", function($http, $q, $shared, $mdDialog, $state) {
+    .factory("Backend", function($http, $q, $shared, $mdDialog, $state, $timeout) {
         var factory = this;
+        factory.queued = [];
+        var skip = ['login', 'register', 'forgot', 'reset'];
+
+        function pushToQueue(item) {
+            $shared.tempStopErrors = true;
+            factory.queued.push( item );
+        }
         function errorHandler(error, codeId, showMsg) {
             console.log("erroHandler ", arguments);
+            if ( $shared.tempStopErrors ) {
+                $q.all( factory.queued ).then(function() {
+                    $shared.tempStopErrors = false;
+                });
+                return;
+            }
             if ( showMsg ) {
                     error = error || "An error occured.";
                     $shared.showError(error);
@@ -628,6 +645,13 @@ if (checked.length === 0) {
      }
 
 
+        factory.waitForQueuedReqs = function() {
+            return $q(function(resolve, reject) {
+                 $q.all( factory.queued ).then(function() {
+                     resolve();
+                 });
+                });
+        }
         factory.getJWTToken = function(email, password) {
             var params = {
                 email: email,
@@ -643,16 +667,41 @@ if (checked.length === 0) {
                 });
             });
         }
+
+        function checkHttpCallPrerequisites() {
+            var auth = $shared.hasAuth();
+            if ( !auth ) {
+                $shared.tempStopErrors = true;
+                var path = document.location.href.split("/");
+                var next = path.slice(4, path.length).join("/");
+                //var next = $state.current.name;
+                console.log("next URL is: ", next);
+                console.log("current state is ", $state.current);
+                window.location.replace("/#/login?next=" + next);
+                //$state.go('login');
+                return false;
+            }
+        }
         factory.get = function(path, params, showMsg)
         {
-            return $q(function(resolve, reject) {
-                $http.get(createUrl(path), params).then(resolve,function(res) {
-                   var message = res.data.message;
-                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
-                    reject(res);
-                 });
+            var item = $q(function(resolve, reject) {
+                    if (!skip.includes($state.current.name)) {
+                        if ( !checkHttpCallPrerequisites() ) {
+                            resolve();
+                            return;
+                        }
+
+                    }
+                    $http.get(createUrl(path), params).then(resolve,function(res) {
+                    var message = res.data.message;
+                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        reject(res);
+                    });
             });
+            pushToQueue( item );
+            return item;
         }
+
         factory.getPagination = function(path, params)
         {
             path = path + "?page=" + pagination.settings.currentPage;
@@ -661,7 +710,13 @@ if (checked.length === 0) {
 
         factory.delete = function(path, showMsg)
         {
-            return $q(function(resolve, reject) {
+            var item = $q(function(resolve, reject) {
+                    if ( !checkHttpCallPrerequisites() ) {
+                        //resolve();
+                        return;
+                    }
+
+
                 $http.delete(createUrl(path)).then(resolve,function(res) {
                    var message = res.data.message;
                     errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
@@ -669,11 +724,18 @@ if (checked.length === 0) {
                     reject(res);
                  });
             });
+            pushToQueue(item);
+            return item;
 
         }
         factory.post = function(path, params, suppressErrDialog, showMsg)
         {
-            return $q(function(resolve, reject) {
+            var item =  $q(function(resolve, reject) {
+                    if ( !checkHttpCallPrerequisites() ) {
+                        resolve();
+                    }
+
+
                 $http.post(createUrl(path), params).then(resolve,function(res) {
                    var message = res.data.message;
                     if (!suppressErrDialog) {
@@ -683,10 +745,16 @@ if (checked.length === 0) {
                     reject(res);
                  });
             });
-
+            pushToQueue( item );
+            return item;
         }
         factory.postFiles =  function(url, data, showMsg) {
-            return $q(function(resolve, reject) {
+            var item =$q(function(resolve, reject) {
+                    if ( !checkHttpCallPrerequisites() ) {
+                        resolve();
+                    }
+
+
                 $http({
 
                     url: createUrl(url),
@@ -700,6 +768,8 @@ if (checked.length === 0) {
                     reject( res );
                 });
             });
+            pushToQueue( item );
+            return item;
         }
 
         return factory;
@@ -743,7 +813,7 @@ if (checked.length === 0) {
         factory.hasNext = function() {
             console.log("hasNext meta is ", factory.meta);
             var current = factory.settings.currentPage;
-            if (current === factory.meta.pagination.total_pages || factory.meta.pagination.total_pages === 0) {
+            if (factory.meta && factory.meta.pagination && (current === factory.meta.pagination.total_pages || factory.meta.pagination.total_pages === 0)) {
                 return false;
             }
             console.log("we have next");
@@ -853,15 +923,28 @@ if (checked.length === 0) {
     $urlRouterProvider.when('/dashboard', '/dashboard/home');
     $urlRouterProvider.otherwise('/dashboard/home');
         // function to check the authentication //
-    var Auth = ["$q", "$state", "$timeout", function ($q, $state, $timeout) {
+    var Auth = ["$q", "$state", "$timeout", "$window", "$shared", function ($q, $state, $timeout, $window, $shared) {
         var deferred =$q.defer();
         $timeout(function() {
+            console.log("checking auth token..");
             var token = getJWTTokenObj();
+            var skip = ['login', 'register', 'forgot', 'reset'];
+            $shared.tempStopErrors = true;
+            if (skip.includes($state.current.name)) {
+                return deferred.resolve();
+            }
             if (token!==''&&token) {
+                $shared.tempStopErrors = false;
                 return deferred.resolve();
             } else {
                 console.log("not logged in...");
-                $state.go('login');
+                var path = document.location.href.split("/");
+                var next = path.slice(4, path.length).join("/");
+                //var next = $state.current.name;
+                console.log("next URL is: ", next);
+                console.log("current state is ", $state.current);
+                window.location.replace("/#/login?next=" + next);
+                //$state.go('login', {'next': next});
                 deferred.reject();
             }
         }, 0);

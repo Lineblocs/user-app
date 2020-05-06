@@ -1,4 +1,4 @@
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<div ng-show="$shared.hasAuth()" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header ng-show="$shared.SHOW_NAVBAR" class=" navbar shadow">
         <!-- Hamburger -->
         <!--
@@ -9,7 +9,8 @@
         <div class="responsive-logo">
             <img width="180" ng-src="{{'/images/logo-white.png'}}" />
         </div>
-        <md-menu class="navbar-menu">
+        <div class="left-nav">
+        <div class="search">
             <md-autocomplete id="acSearch" flex="" required="" md-input-name="autocompleteField"
                 style="margin: 12px 10px; width: 488px;" ng-disabled="$shared.acSearch.isDisabled"
                 md-no-cache="$shared.acSearch.noCache" md-selected-item="$shared.acSearch.selectedItem"
@@ -26,7 +27,9 @@
                     <a ng-click="ctrl.newState($shared.acSearch.searchText)">Create a new one!</a>
                 </md-not-found>
             </md-autocomplete>
-        </md-menu>
+            </md-menu-content>
+        </div>
+    </div>
         <!-- Left aligned menu below button -->
         <!--
 		<md-menu class="navbar-menu">
@@ -56,6 +59,8 @@
 		</md-menu>
 	-->
         <nav class="right">
+            <ul>
+                <li>
             <md-menu md-position-mode="target-right target">
                 <div class="nav-item">
                     <md-button aria-label="Open demo menu" class="md-raised md-primary md-small"
@@ -83,23 +88,22 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            <md-menu>
-                <div class="vert-line"></div>
-            </md-menu>
-            <md-menu class="top-menu" md-position-mode="target-right target">
+            <div class="vert-line"></div>
+            </li>
+            <li>
+            <div class="nav-item balance">
+                <strong>Balance</strong>
+                <br />
+                <span class="account-balance" ng-show="!$shared.billInfo.info.trialMode">
+                    {{$shared.billInfo.info.remainingBalance}}
+                </span>
+                <span class="account-balance" ng-show="$shared.billInfo.info.trialMode">
+                    {{$shared.billInfo.info.remainingBalance}} (trial)
+                </span>
 
-                <div class="nav-item balance">
-                    <strong>Balance</strong>
-                    <br />
-                    <span class="account-balance" ng-show="!$shared.billInfo.info.trialMode">
-                        {{$shared.billInfo.info.remainingBalance}}
-                    </span>
-                    <span class="account-balance" ng-show="$shared.billInfo.info.trialMode">
-                        {{$shared.billInfo.info.remainingBalance}} (trial)
-                    </span>
-
-                </div>
-            </md-menu>
+            </div>
+            </li>
+            <li>
             <md-menu class="top-menu" md-position-mode="target-right target">
                 <md-button aria-label="Open demo menu" class="nav-btn" ng-click="$mdOpenMenu($event)">
                     <i class="mdi mdi-settings"></i>
@@ -113,6 +117,8 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
+            </li>
+            </ul>
         </nav>
     </header>
     <!-- Side bar here -->
