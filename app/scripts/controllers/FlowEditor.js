@@ -22,12 +22,16 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   var flowUrl;
   var token = $shared.getAuthToken();
   var workspace = $shared.getWorkspace();
-
   if ($stateParams['flowId'] === "new" ) {
     flowUrl = $shared.FLOW_EDITOR_URL+"/create?auth="+token.token.auth + "&workspaceId=" + workspace.id;
   } else {
     flowUrl = $shared.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token.auth+ "&workspaceId="+ workspace.id;
   }
+  var adminToken = localStorage.getItem("ADMIN_TOKEN");
+  if (adminToken) {
+      flowUrl += "&admin=" +  adminToken;
+  }
+
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);
   $shared.collapseNavbar();
