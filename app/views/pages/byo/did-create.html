@@ -1,0 +1,40 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Create BYO number</span>
+                <span class="md-subhead">add an external Number</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="numberForm" ng-submit="submit(numberForm)" novalidate>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Number</label>
+                            <input name="number" ng-model="values.number" required="" minlength="1">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="numberForm.number.$error.minlength">Please enter 1 characters or more
+                                    </div>
+                                    <div ng-show="numberForm.number.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                A unique number name
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+                <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>
+
+

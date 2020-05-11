@@ -1350,6 +1350,46 @@ if (checked.length === 0) {
         templateUrl: 'views/pages/phones/deploy.html',
         controller: 'PhoneDeployCtrl'
     })
+
+    .state('byo-carriers', {
+        url: '/byo/carriers', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/carriers.html',
+        controller: 'BYOCarriersCtrl'
+    })
+    .state('byo-carrier-create', {
+        url: '/byo/carrier/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/carrier-create.html',
+        controller: 'BYOCarrierCreateCtrl'
+    })
+    .state('byo-carrier-edit', {
+        url: '/byo/carrier/{carrierId}/edit', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/carrier-edit.html',
+        controller: 'BYOCarrierEditCtrl'
+    })
+     .state('byo-did-numbers', {
+        url: '/byo/did-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/dids.html',
+        controller: 'BYODIDNumbersCtrl'
+    })
+     .state('byo-did-number-create', {
+        url: '/byo/did-number/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/did-create.html',
+        controller: 'BYODIDNumberCreateCtrl'
+    })
+     .state('byo-did-number-edit', {
+        url: '/byo/did-number/{numberId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/did-edit.html',
+        controller: 'BYODIDNumberEditCtrl'
+    })
+
+
+
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',

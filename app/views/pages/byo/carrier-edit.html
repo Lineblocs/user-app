@@ -1,0 +1,106 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Create BYO carrier</span>
+                <span class="md-subhead">add an external Carrier</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="carrierForm" ng-submit="submit(carrierForm)" novalidate>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Name</label>
+                            <input name="name" ng-model="carrier.name" required="" minlength="1">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="carrierForm.name.$error.minlength">Please enter 1 characters or more
+                                    </div>
+                                    <div ng-show="carrierForm.name.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                A unique carrier name
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>IP Address</label>
+                            <input name="name" ng-model="carrier.ip_address" required="" minlength="1">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="carrierForm.name.$error.minlength">Please enter 1 characters or more
+                                    </div>
+                                    <div ng-show="carrierForm.name.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                Carrier's terminating IP address
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex="95">
+                        <ul id="routes" class="no-list-style">
+                            <li ng-repeat="route in carrier.routes">
+                                <div layout="row">
+                                    <div flex="30">
+
+                                        <md-input-container>
+
+                                            <label>Prefix</label>
+                                            <input name="name" ng-model="route.prefix" required="" minlength="1">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+
+                                        <md-input-container>
+
+                                            <label>Prepend</label>
+                                            <input name="route" ng-model="route.prepend" required="" minlength="1">
+                                        </md-input-container>
+
+                                    </div>
+                                    <div flex="30">
+
+                                        <md-input-container>
+
+                                            <label>Match</label>
+                                            <input name="route" ng-model="route.match" required="" minlength="1">
+                                        </md-input-container>
+
+                                    </div>
+                                    <div flex="10">
+                                        <div class="remove-route">
+                                            <md-button ng-click="removeRoute($index, route)" class="md-raised md-warn">Remove</md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <md-button ng-click="addRoute()" type="button" class="md-raised md-primary no-margin-sides">Add Route
+                        </md-button>
+                    </div>
+                </div>
+                <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>
+
+

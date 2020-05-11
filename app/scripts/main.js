@@ -1350,6 +1350,46 @@ if (checked.length === 0) {
         templateUrl: 'views/pages/phones/deploy.html',
         controller: 'PhoneDeployCtrl'
     })
+
+    .state('byo-carriers', {
+        url: '/byo/carriers', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/carriers.html',
+        controller: 'BYOCarriersCtrl'
+    })
+    .state('byo-carrier-create', {
+        url: '/byo/carrier/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/carrier-create.html',
+        controller: 'BYOCarrierCreateCtrl'
+    })
+    .state('byo-carrier-edit', {
+        url: '/byo/carrier/{carrierId}/edit', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/carrier-edit.html',
+        controller: 'BYOCarrierEditCtrl'
+    })
+     .state('byo-did-numbers', {
+        url: '/byo/did-numbers',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/dids.html',
+        controller: 'BYODIDNumbersCtrl'
+    })
+     .state('byo-did-number-create', {
+        url: '/byo/did-number/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/did-create.html',
+        controller: 'BYODIDNumberCreateCtrl'
+    })
+     .state('byo-did-number-edit', {
+        url: '/byo/did-number/{numberId}/edit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/byo/did-edit.html',
+        controller: 'BYODIDNumberEditCtrl'
+    })
+
+
+
     .state('blank', {
         url: '/blank',
         parent: 'dashboard',
@@ -2224,6 +2264,369 @@ $scope.listCountries = function() {
     }
 
     $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Create Carrier");
+  $scope.values = {
+    name: "",
+    ip_address: "",
+    routes: []
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting carrier form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['name'] = $scope.values.name;
+      values['ip_address'] = $scope.values.ip_address;
+      values['routes'] = $scope.values.routes;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/byo/carrier/saveCarrier", values).then(function() {
+       console.log("updated carrier..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created carrier')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('byo-carriers', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+   $scope.addRoute = function() {
+     console.log("addRoute called..");
+    var copy = {
+      "prefix": "",
+      "prepend": "",
+      "match": ""
+    };
+    $scope.values.routes.push(copy);
+  }
+  $scope.removeRoute = function($index, route) {
+    $scope.values.routes.splice($index, 1);
+  }
+  $shared.endIsLoading();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit Carrier");
+  $scope.flows = [];
+  $scope.carrier = null;
+  $scope.submit = function(carrier) {
+    var params = {};
+    params['name'] = $scope.carrier.name;
+    params['ip_address'] = $scope.carrier.ip_address;
+    params['routes'] = $scope.carrier.routes;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+    Backend.post("/byo/carrier/updateCarrier/" + $stateParams['carrierId'], params).then(function() {
+        console.log("updated carrier..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Carrier updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('byo-carriers', {});
+      $shared.endIsCreateLoading();
+    });
+  }
+   $scope.addRoute = function() {
+    var copy = {
+      "prefix": "",
+      "prepend": "",
+      "match": ""
+    };
+    $scope.carrier.routes.push(copy);
+  }
+  $scope.removeRoute = function($index, route) {
+    $scope.carrier.routes.splice($index, 1);
+  }
+  $shared.isLoading = true;
+  Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
+    $scope.carrier = res.data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("My Carriers");
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.carriers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'carriers' );
+      pagination.loadData().then(function(res) {
+      $scope.carriers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.editCarrier = function(carrier) {
+
+    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
+  }
+  $scope.createCarrier = function(carrier) {
+
+    $state.go('byo-carrier-create');
+  }
+  $scope.deleteCarrier = function($event, carrier) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this carrier?')
+          .textContent('you will not be able to use this carrier any longer')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Create DIDNumber");
+  $scope.values = {
+    username: "",
+    secret: "",
+    tags: [],
+    flow_id: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting number form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['number'] = $scope.values.number;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/byo/did/saveNumber", values).then(function() {
+       console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created carrier')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('byo-did-numbers', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  $shared.endIsLoading();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit DID Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.submit = function(number) {
+    var params = {};
+    params['number'] = $scope.number.number;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+    Backend.post("/byo/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('DIDNumber updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('byo-did-numbers', {});
+      $shared.endIsCreateLoading();
+    });
+  }
+  $shared.isLoading = true;
+  Backend.get("/byo/did/numberData/" + $stateParams['numberId']).then(function(res) {
+    $scope.number = res.data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+    $shared.updateTitle("My DIDNumbers");
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.createNumber = function() {
+
+    $state.go('byo-did-number-create');
+  }
+  $scope.editNumber = function(number) {
+
+    $state.go('byo-did-number-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this DID number?')
+          .textContent('If you delete this carrier you will not be able to call it anymore')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/did/deleteNumber/" + number.id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
 });
 
 
@@ -3713,12 +4116,16 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
   var flowUrl;
   var token = $shared.getAuthToken();
   var workspace = $shared.getWorkspace();
-
   if ($stateParams['flowId'] === "new" ) {
     flowUrl = $shared.FLOW_EDITOR_URL+"/create?auth="+token.token.auth + "&workspaceId=" + workspace.id;
   } else {
     flowUrl = $shared.FLOW_EDITOR_URL + "/edit?flowId=" + $stateParams['flowId']+"&auth="+token.token.auth+ "&workspaceId="+ workspace.id;
   }
+  var adminToken = localStorage.getItem("ADMIN_TOKEN");
+  if (adminToken) {
+      flowUrl += "&admin=" +  adminToken;
+  }
+
   $scope.flowUrl = $sce.trustAsResourceUrl(flowUrl);
   console.log("flow url is ", $scope.flowUrl);
   $shared.collapseNavbar();

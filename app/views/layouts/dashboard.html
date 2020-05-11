@@ -268,6 +268,25 @@
                                     class="text">{{ 'billing' | translate }}</span></md-button>
                         </li>
                         <li class="show-subnav">
+                            <md-button href="" class=" show-menu" ng-click="subnav('ui-3')">
+                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-3'}"></i>
+                                <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
+                                <span class="text"> {{ 'byo' | translate }}</span>
+                            </md-button>
+                            <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-3'}">
+                                <li ng-class="{active: $state.includes('byo-carriers')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('byo-carriers')"
+                                        class=""><span class="text">{{ 'carriers' | translate }}</span>
+                                    </md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('byo-did-numbers')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('byo-did-numbers')"
+                                        class=""><span class="text">{{ 'did-numbers' | translate }}</span>
+                                    </md-button>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="show-subnav">
                             <md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
                                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
                                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;

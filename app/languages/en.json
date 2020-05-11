@@ -91,5 +91,7 @@
       "phones-groups": "Groups",
       "phones-global-settings": "Global Templates",
       "phones-individual-settings": "Individual Settings",
-      "phones-deploy-config": "Deploy Now"
+      "phones-deploy-config": "Deploy Now",
+      "byo": "BYO",
+      "carriers": "Carriers"
   }
