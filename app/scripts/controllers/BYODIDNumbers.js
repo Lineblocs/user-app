@@ -67,7 +67,7 @@ angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, 
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/byo/did/deleteNumber/" + number.id).then(function() {
+      Backend.delete("/byo/did/deleteNumber/" + number.public_id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
