@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Create DIDNumber");
   $scope.values = {
     username: "",
@@ -26,6 +26,7 @@ angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($sc
     if (form.$valid) {
       var values = {};
       values['number'] = $scope.values.number;
+      values['flow_id'] = $scope.values.flow_id;
       var toastPos = {
         bottom: false,
         top: true,
@@ -50,6 +51,18 @@ angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($sc
       });
     }
   }
-  $shared.endIsLoading();
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $shared.endIsLoading();
+  });
 });
 

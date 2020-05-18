@@ -26,6 +26,28 @@ angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, 
     }, reject);
   });
   }
+
+  $scope.importNumbers = function($event) {
+    console.log("importNumbers called..");
+    $mdDialog.show({
+      controller: DialogImportController,
+      templateUrl: 'views/dialogs/import-byo-numbers.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onAdded: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+
+  }
   $scope.createNumber = function() {
 
     $state.go('byo-did-number-create');
@@ -59,6 +81,37 @@ angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, 
     }, function() {
     });
   }
+
+    function DialogImportController($scope, $mdDialog, Backend, $shared, onAdded) {
+      $scope.$shared = $shared;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        number: ""
+      };
+      $scope.submit= function($event) {
+        var params = new FormData();
+      params.append("file", angular.element("#uploadFile").prop("files")[0]);
+      $shared.isLoading = true;
+    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Imported numbers..')
+          .position("top right")
+          .hideDelay(3000)
+        );
+        $mdDialog.hide(); 
+        $shared.endIsLoading();
+        onAdded();
+      }, function() {
+        $shared.endIsLoading();
+      });
+      }
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
 
   $scope.load();
 });

@@ -18,6 +18,9 @@
                 <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
             </md-input-container>
         </div>
+        <div>
+            <md-button ng-click="importNumbers($event)" class="md-raised md-primary create-new no-margin-sides">Import</md-button>
+          </div>
         <md-button ng-click="createNumber()" class="md-raised md-primary create-new">Create New</md-button>
         <div>
             <md-menu md-position-mode="target-right target">

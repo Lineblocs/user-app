@@ -2470,7 +2470,7 @@ angular.module('MaterialApp').controller('BYOCarriersCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Create DIDNumber");
   $scope.values = {
     username: "",
@@ -2489,6 +2489,7 @@ angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($sc
     if (form.$valid) {
       var values = {};
       values['number'] = $scope.values.number;
+      values['flow_id'] = $scope.values.flow_id;
       var toastPos = {
         bottom: false,
         top: true,
@@ -2513,7 +2514,19 @@ angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($sc
       });
     }
   }
-  $shared.endIsLoading();
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $shared.endIsLoading();
+  });
 });
 
 
@@ -2533,6 +2546,7 @@ angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scop
   $scope.submit = function(number) {
     var params = {};
     params['number'] = $scope.number.number;
+    params['flow_id'] = $scope.number.flow_id;
     var toastPos = {
       bottom: false,
       top: true,
@@ -2556,9 +2570,20 @@ angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scop
       $shared.endIsCreateLoading();
     });
   }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
   $shared.isLoading = true;
-  Backend.get("/byo/did/numberData/" + $stateParams['numberId']).then(function(res) {
-    $scope.number = res.data;
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
     $shared.endIsLoading();
   });
 });
@@ -2591,6 +2616,28 @@ angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, 
       resolve();
     }, reject);
   });
+  }
+
+  $scope.importNumbers = function($event) {
+    console.log("importNumbers called..");
+    $mdDialog.show({
+      controller: DialogImportController,
+      templateUrl: 'views/dialogs/import-byo-numbers.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onAdded: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+
   }
   $scope.createNumber = function() {
 
@@ -2625,6 +2672,37 @@ angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, 
     }, function() {
     });
   }
+
+    function DialogImportController($scope, $mdDialog, Backend, $shared, onAdded) {
+      $scope.$shared = $shared;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        number: ""
+      };
+      $scope.submit= function($event) {
+        var params = new FormData();
+      params.append("file", angular.element("#uploadFile").prop("files")[0]);
+      $shared.isLoading = true;
+    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Imported numbers..')
+          .position("top right")
+          .hideDelay(3000)
+        );
+        $mdDialog.hide(); 
+        $shared.endIsLoading();
+        onAdded();
+      }, function() {
+        $shared.endIsLoading();
+      });
+      }
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
 
   $scope.load();
 });

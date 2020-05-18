@@ -31,6 +31,36 @@
                         </md-icon>
                     </div>
                 </div>
+            <div layout="row">
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Attached Flow</label>
+                                <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="flow in flows" ng-value="flow.id">
+                                        {{flow.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your number will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+                <div flex="33">
+                    <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_public_id)" class="md-raised">
+                        Edit Flow
+                    </md-button>
+                </div>
+            </div>
                 <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
             </form>
         </md-card-content>

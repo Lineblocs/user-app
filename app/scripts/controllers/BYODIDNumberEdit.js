@@ -14,6 +14,7 @@ angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scop
   $scope.submit = function(number) {
     var params = {};
     params['number'] = $scope.number.number;
+    params['flow_id'] = $scope.number.flow_id;
     var toastPos = {
       bottom: false,
       top: true,
@@ -37,9 +38,20 @@ angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scop
       $shared.endIsCreateLoading();
     });
   }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
   $shared.isLoading = true;
-  Backend.get("/byo/did/numberData/" + $stateParams['numberId']).then(function(res) {
-    $scope.number = res.data;
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
     $shared.endIsLoading();
   });
 });
