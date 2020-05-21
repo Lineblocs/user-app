@@ -7,8 +7,11 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
+angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
     $shared.updateTitle("Faxes");
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.$stateParams = $stateParams
     $scope.Backend = Backend;
   $scope.settings = {
     page: 0

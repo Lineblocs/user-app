@@ -231,7 +231,11 @@ searchModule("Recordings", "recordings", ['recordings']),
 searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
      ];
-
+        factory.isInLoadingState = function() {
+            var check = factory.isLoading || factory.isCreateLoading;
+            console.log("checked loading: ", check);
+            return check;
+        }
         factory.hasAuth = function() {
             var token = localStorage.getItem("AUTH");
             return token;
@@ -348,18 +352,20 @@ return changed;
   factory.scrollToTop = function() {
       $window.scrollTo(0, 0);
   }
-  factory.completeChangeRoute = function(route, params) {
-      $state.go(route, params)
+  factory.completeChangeRoute = function(route, params, other) {
+      $state.go(route, params, other);
       $timeout(function() {
 
       }, 0);
 
   }
-  factory.changeRoute = function(route, params) {
+  factory.changeRoute = function(route, params, force, createLoad) {
       console.log("changeRoute called ", arguments);
+      force = force || false;
+      createLoad = createLoad || false;
       var params = params || {};
       var except = ['flow-editor'];
-      if (factory.state && factory.state.name === route) {
+      if ((factory.state && factory.state.name === route) && !force) {
         return;
       }
         if ( factory.state.name === 'flow-editor' ) {
@@ -376,9 +382,13 @@ return changed;
       }
 
       if (!except.includes(route)) {
-        factory.isLoading = true;
+          if ( createLoad ) {
+              factory.isCreateLoading = true;
+          } else {
+                factory.isLoading = true;
+        }
       }
-    factory.completeChangeRoute(route, params);
+    factory.completeChangeRoute(route, params, {"reload": true});
   }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
@@ -435,6 +445,7 @@ return changed;
         factory.purgeSession =  function() {
             localStorage.removeItem("WORKSPACE");
             localStorage.removeItem("AUTH");
+            localStorage.removeItem("ADMIN_TOKEN");
         }
         factory.canPerformAction = function(action) {
             var workspace = factory.getWorkspace();
@@ -717,7 +728,7 @@ if (checked.length === 0) {
 
         factory.getPagination = function(path, params)
         {
-            path = path + "?page=" + pagination.settings.currentPage;
+            path = path + "?page=" + pagination.getCurrentPage();
             return factory.get(path, params);
         }
 
@@ -797,7 +808,7 @@ if (checked.length === 0) {
 
         return factory;
     })
-    .factory("pagination", function(Backend,$shared, $q, $timeout) {
+    .factory("pagination", function(Backend,$shared, $q, $timeout, $location, $stateParams) {
         var factory = this;
         factory.settings = {
             search: "",
@@ -811,9 +822,11 @@ if (checked.length === 0) {
         factory.didSearch = false;
         factory.meta = {}; // saved by backend
         var searchTimer = null;
+        factory.getCurrentPage = function() {
+            return parseInt($stateParams['page']);
+        }
         factory.clearSearch = function() {
-            factory.settings.search = "";
-            factory.search();
+            $shared.changeRoute('.', {'page': 1, 'search': ''}, true /** force */, true);
         }
         factory.shouldShowClear = function() {
             var result = false;
@@ -826,16 +839,16 @@ if (checked.length === 0) {
             return result;
         }
         factory.nextPage = function() {
-            factory.settings.currentPage = factory.settings.currentPage + 1;
-            factory.loadData();
+            var page = factory.getCurrentPage() + 1;
+            $shared.changeRoute('.', {'page': page,"search": $stateParams['search']}, true /** force */, true);
         }
         factory.prevPage = function() {
-            factory.settings.currentPage = factory.settings.currentPage - 1;
-            factory.loadData();
+            var page = factory.getCurrentPage() - 1;
+            $shared.changeRoute('.', {'page': page, "search": $stateParams['search']}, true /** force */, true);
         }
         factory.hasNext = function() {
             console.log("hasNext meta is ", factory.meta);
-            var current = factory.settings.currentPage;
+            var current = factory.getCurrentPage();
             if (factory.meta && factory.meta.pagination && (current === factory.meta.pagination.total_pages || factory.meta.pagination.total_pages === 0)) {
                 return false;
             }
@@ -843,7 +856,7 @@ if (checked.length === 0) {
             return true;
         }
         factory.hasPrev = function() {
-            var current = factory.settings.currentPage;
+            var current = factory.getCurrentPage();
             if (current === 1) {
                 return false;
             }
@@ -851,7 +864,10 @@ if (checked.length === 0) {
         }
 
 
+
+        // NOT USED
         factory.changePage = function( page ) {
+            factory.settings.search = $stateParams['search']||'';
             factory.settings.currentPage = page;
         }
         factory.changeUrl = function( url ) {
@@ -864,7 +880,7 @@ if (checked.length === 0) {
             }
         }
         factory.loadData = function() {
-            var url = factory.settings.currentUrl + "?page=" + factory.settings.currentPage;
+            var url = factory.settings.currentUrl + "?page=" + factory.getCurrentPage();
             if (factory.settings.search !== "") {
                 url += "&search=" + encodeURIComponent(factory.settings.search);
             }
@@ -885,9 +901,10 @@ if (checked.length === 0) {
                     console.log("loaded data ", scopeObj[key]);
                     console.log("loaded data meta", meta);
                     $shared.endIsCreateLoading();
-                    resolve(res);
+                    $shared.endIsLoading();
                     $timeout(function() {
                         scopeObj.$apply();
+                        resolve(res);
                     }, 0);
                 });
             });
@@ -901,6 +918,12 @@ if (checked.length === 0) {
             factory.settings.search = "";
             factory.didSearch = false;
         }
+        factory.checkIfSearched = function() {
+            if ( $stateParams['search'] !== '' ) {
+                return true;
+            }
+            return false;
+        }
         factory.search = function() {
             factory.didSearch = true;
             if (searchTimer !== null) {
@@ -908,14 +931,19 @@ if (checked.length === 0) {
             }
             searchTimer = $timeout(function() { //then give it a second to see if the user is finished
                     //do .post ajax request //then do the ajax call
-                    factory.loadData();
-            }, 500);
+                    //var page = $stateParams['page'];
+                    var page = "1";
+
+                    console.log("SEARCH IS ", factory.settings.search);
+                    $shared.changeRoute('.', {'page': page,"search": factory.settings.search}, true /** force */, true);
+                    //factory.loadData();
+            }, 800);
         }
         return factory;
     })
     .config(['$httpProvider', '$locationProvider', function($httpProvider, $locationProvider) {
          $httpProvider.interceptors.push('JWTHttpInterceptor');
-        //$locationProvider.html5Mode(true);
+      //  $locationProvider.html5Mode(true);
     }])
       
     .config(function(IdleProvider, KeepaliveProvider) {
@@ -978,6 +1006,16 @@ if (checked.length === 0) {
     var resolveParams = {
                 auth: Auth
         };
+    var listPageParams = {
+              page: {
+            value: '1',
+            squash: true
+            },
+            search: {
+            value: '',
+            squash: true
+            }
+    };
 
     $stateProvider
     .state('base', {
@@ -1049,10 +1087,11 @@ if (checked.length === 0) {
         controller: 'DashboardRedirectCtrl'
     })
     .state('my-numbers', {
-        url: '/dids/my-numbers',
+        url: '/dids/my-numbers?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/did/my-numbers.html',
-        controller: 'MyNumbersCtrl'
+        controller: 'MyNumbersCtrl',
+        params:  listPageParams
     })
     .state('my-numbers-edit', {
         url: '/dids/my-numbers/{numberId}/edit',
@@ -1073,10 +1112,11 @@ if (checked.length === 0) {
         controller: 'BuyNumbersCtrl'
     })
     .state('ports', {
-        url: '/dids/ports', 
+        url: '/dids/ports?page&search', 
         parent: 'dashboard',
         templateUrl: 'views/pages/did/ports/numbers.html',
-        controller: 'PortNumbersCtrl'
+        controller: 'PortNumbersCtrl',
+        params:  listPageParams
     })
     .state('port-create', {
         url: '/dids/ports/create', 
@@ -1091,10 +1131,11 @@ if (checked.length === 0) {
         controller: 'EditPortCtrl'
     })
     .state('flows', {
-        url: '/flows',
+        url: '/flows?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/flows.html',
-        controller: 'FlowsCtrl'
+        controller: 'FlowsCtrl',
+        params:  listPageParams
     })
     .state('flow-editor', {
         url: '/flows/{flowId}',
@@ -1103,10 +1144,11 @@ if (checked.length === 0) {
         controller: 'FlowEditorCtrl'
     })
     .state('extensions', {
-        url: '/extensions',
+        url: '/extensions?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/extensions.html',
-        controller: 'ExtensionsCtrl'
+        controller: 'ExtensionsCtrl',
+        params:  listPageParams
     })
     .state('extension-create', {
         url: '/extension/create',
@@ -1121,10 +1163,11 @@ if (checked.length === 0) {
         controller: 'ExtensionEditCtrl'
     })
     .state('debugger-logs', {
-        url: '/debugger-logs',
+        url: '/debugger-logs?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/debugger-logs.html',
-        controller: 'DebuggerLogsCtrl'
+        controller: 'DebuggerLogsCtrl',
+        params:  listPageParams
     })
     .state('debugger-log-view', {
         url: '/debugger-logs/{logId}/view',
@@ -1133,10 +1176,11 @@ if (checked.length === 0) {
         controller: 'DebuggerLogViewCtrl'
     })
     .state('calls', {
-        url: '/calls',
+        url: '/calls?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/calls.html',
-        controller: 'CallsCtrl'
+        controller: 'CallsCtrl',
+        params:  listPageParams
     })
     .state('call-view', {
         url: '/call/{callId}/view',
@@ -1145,16 +1189,19 @@ if (checked.length === 0) {
         controller: 'CallViewCtrl'
     })
     .state('recordings', {
-        url: '/recordings',
+        url: '/recordings?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/recordings.html',
-        controller: 'RecordingsCtrl'
+
+        controller: 'RecordingsCtrl',
+        params:  listPageParams
     })
     .state('faxes', {
-        url: '/faxes',
+        url: '/faxes?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/faxes.html',
-        controller: 'FaxesCtrl'
+        controller: 'FaxesCtrl',
+        params:  listPageParams
     })
     .state('billing', {
         url: '/billing',
@@ -1259,13 +1306,14 @@ if (checked.length === 0) {
         url: '/phones',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones.html',
-        controller: 'phonesCtrl'
+        controller: 'phonesCtrl',
     })
     .state('phones-phones', {
-        url: '/provision/phones',
+        url: '/provision/phones?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/phones.html',
-        controller: 'PhonesCtrl'
+        controller: 'PhonesCtrl',
+        params:  listPageParams
     })
 
     .state('phones-phone-create', {
@@ -1282,10 +1330,11 @@ if (checked.length === 0) {
     })
 
     .state('phones-groups', {
-        url: '/provision/groups',
+        url: '/provision/groups?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/groups.html',
-        controller: 'PhoneGroupsCtrl'
+        controller: 'PhoneGroupsCtrl',
+        params:  listPageParams
     })
     .state('phones-groups-create', {
         url: '/provision/groups/create',
@@ -1352,10 +1401,11 @@ if (checked.length === 0) {
     })
 
     .state('byo-carriers', {
-        url: '/byo/carriers', 
+        url: '/byo/carriers?page&search', 
         parent: 'dashboard',
         templateUrl: 'views/pages/byo/carriers.html',
-        controller: 'BYOCarriersCtrl'
+        controller: 'BYOCarriersCtrl',
+        params:  listPageParams
     })
     .state('byo-carrier-create', {
         url: '/byo/carrier/create', 
@@ -1370,10 +1420,11 @@ if (checked.length === 0) {
         controller: 'BYOCarrierEditCtrl'
     })
      .state('byo-did-numbers', {
-        url: '/byo/did-numbers',
+        url: '/byo/did-numbers?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/byo/dids.html',
-        controller: 'BYODIDNumbersCtrl'
+        controller: 'BYODIDNumbersCtrl',
+        params:  listPageParams
     })
      .state('byo-did-number-create', {
         url: '/byo/did-number/create',

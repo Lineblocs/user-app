@@ -1,4 +1,4 @@
-<div ng-show="!pagination.didSearch && logs.length === 0" class="no-results">
+<div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && logs.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
     <div class=" no-results">
         <center>
@@ -7,7 +7,7 @@
 </div>
 </md-card>
 </div>
-<div ng-show="pagination.didSearch || (!pagination.didSearch && logs.length > 0)">
+<div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && logs.length > 0)">
     <div layout="row side-options" layout-align="end center">
         <div flex="10">
             <md-input-container class="search">
@@ -62,7 +62,16 @@
             </div>
         </md-content>
     </md-card>
-
+<div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && logs.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <center>
+        <h5>No logs found</h5>
+      </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="logs.length>0">
     <!-- exact table from live demo -->
     <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
@@ -109,5 +118,6 @@
                 class="md-raised md-primary">Next Page</md-button>
         </div>
     </div>
+</div>
 
 </div>

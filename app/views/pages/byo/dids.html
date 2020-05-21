@@ -1,4 +1,4 @@
-<div ng-show="!pagination.numberSearch && numbers.length === 0" class="no-results">
+ <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && numbers.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
     <div class=" no-results">
         <center>
@@ -8,7 +8,7 @@
 </div>
 </md-card>
 </div>
-<div ng-show="pagination.numberSearch || (!pagination.numberSearch && numbers.length > 0)">
+<div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && numbers.length > 0)">
     <div layout="row side-options" layout-align="end center">
         <div flex="10">
             <md-input-container class="search">
@@ -40,7 +40,7 @@
             </md-menu>
         </div>
     </div>
-<div ng-show="pagination.numberSearch && numbers.length === 0" class="no-results">
+<div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && numbers.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
       <center>

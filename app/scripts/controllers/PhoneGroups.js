@@ -7,9 +7,12 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination) {
+angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $stateParams) {
     $shared.updateTitle("PhoneGroups");
     $scope.phoneGroups = [];
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
     $scope.Backend = Backend;
   $scope.load = function() {
    $shared.isLoading = true;

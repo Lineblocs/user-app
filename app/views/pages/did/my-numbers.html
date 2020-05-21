@@ -1,6 +1,6 @@
 <!-- exact table from live demo -->
 <div>
-    <div ng-show="!pagination.didSearch && numbers.length === 0" class="no-results">
+    <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && numbers.length === 0" class="no-results">
         <md-card md-theme="'default'"" md-theme-watch>
       <div ng-show=" numbers.length===0 && !pagination.didSearch" class="no-results">
             <center>
@@ -10,7 +10,7 @@
     </div>
     </md-card>
 </div>
-<div ng-show="pagination.didSearch || (!pagination.didSearch && numbers.length > 0)">
+<div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && numbers.length > 0)">
     <div layout="row" layout-align="end center">
         <div>
             <md-menu md-position-mode="target-right target">
@@ -38,7 +38,7 @@
             </md-input-container>
         </div>
     </div>
-<div ng-show="pagination.didSearch && numbers.length === 0" class="no-results">
+<div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && numbers.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
       <center>

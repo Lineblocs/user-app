@@ -7,9 +7,11 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared, $q) {
+angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared, $q, $stateParams) {
     $shared.updateTitle("Debugger Logs");
+    $scope.$shared = $shared;
     $scope.pagination = pagination;
+    $scope.$stateParams = $stateParams
   $scope.settings = {
     page: 0
   };

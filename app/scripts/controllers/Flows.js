@@ -7,8 +7,10 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q) {
+angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Flows");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
     $scope.pagination = pagination;
     $scope.Backend = Backend;
   $scope.settings = {

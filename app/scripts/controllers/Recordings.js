@@ -7,11 +7,15 @@
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast) {
+angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
 	  $shared.updateTitle("Recordings");
   $scope.settings = {
     page: 0
   };
+    $scope.pagination = pagination;
+    $scope.$stateParams = $stateParams;
+
+    $scope.$shared = $shared;
   $scope.pagination = pagination;
   $scope.Backend = Backend;
   $scope.recordings = [];
