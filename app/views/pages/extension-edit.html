@@ -76,14 +76,13 @@
                                         <md-input-container>
                                             <label>Secret Code</label>
                                             <input name="secret" type="{{ui.showSecret ? 'text':'password'}}"
-                                                required="" minlength="6" ng-model="values.secret">
+                                                required="" minlength="6" ng-model="values.secret" ng-keyup="keyupSecret()">
                                                     <div class="box">
                                                         <div ng-show="triedSubmit && extensionForm.secret.$error.required">This field
                                                             is
                                                             required
                                                         </div>
-                                                        <div ng-show="values.secret !== '' && extensionForm.secret.$error.minlength">Please enter 6 or more characters
-                                                        </div>
+                                                        <div ng-show="ui.secretError !== ''">{{ui.secretError}}</div>
                                                     </div>
                                         </md-input-container>
                                     </div>

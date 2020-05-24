@@ -16,6 +16,7 @@ angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope,
     params['name'] = $scope.carrier.name;
     params['ip_address'] = $scope.carrier.ip_address;
     params['routes'] = $scope.carrier.routes;
+    params['auths'] = $scope.carrier.auths;
     var toastPos = {
       bottom: false,
       top: true,
@@ -47,9 +48,21 @@ angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope,
     };
     $scope.carrier.routes.push(copy);
   }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.carrier.auths.push(copy);
+  }
+  $scope.removeAuth = function($index, auth) {
+    $scope.carrier.auths.splice($index, 1);
+  }
   $scope.removeRoute = function($index, route) {
     $scope.carrier.routes.splice($index, 1);
   }
+
   $shared.isLoading = true;
   Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
     $scope.carrier = res.data;

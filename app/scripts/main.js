@@ -180,7 +180,12 @@ angular
        name: 'United States'
     }
   ];
-
+  factory.ranges = [
+        "/8",
+        "/16",
+        "/24",
+        "/32"
+      ];
   factory.acSearch = {
       isDisabled: false,
       noCache:true, 
@@ -2332,7 +2337,8 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
   $scope.values = {
     name: "",
     ip_address: "",
-    routes: []
+    routes: [],
+    auths: [],
   };
   $scope.ui = {
     showSecret: false,
@@ -2347,6 +2353,7 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
       values['name'] = $scope.values.name;
       values['ip_address'] = $scope.values.ip_address;
       values['routes'] = $scope.values.routes;
+      values['auths'] = $scope.values.auths;
       var toastPos = {
         bottom: false,
         top: true,
@@ -2380,9 +2387,21 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
     };
     $scope.values.routes.push(copy);
   }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.values.auths.push(copy);
+  }
   $scope.removeRoute = function($index, route) {
     $scope.values.routes.splice($index, 1);
   }
+  $scope.removeAuth = function($index, auth) {
+    $scope.values.auths.splice($index, 1);
+  }
+
   $shared.endIsLoading();
 });
 
@@ -2405,6 +2424,7 @@ angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope,
     params['name'] = $scope.carrier.name;
     params['ip_address'] = $scope.carrier.ip_address;
     params['routes'] = $scope.carrier.routes;
+    params['auths'] = $scope.carrier.auths;
     var toastPos = {
       bottom: false,
       top: true,
@@ -2436,9 +2456,21 @@ angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope,
     };
     $scope.carrier.routes.push(copy);
   }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.carrier.auths.push(copy);
+  }
+  $scope.removeAuth = function($index, auth) {
+    $scope.carrier.auths.splice($index, 1);
+  }
   $scope.removeRoute = function($index, route) {
     $scope.carrier.routes.splice($index, 1);
   }
+
   $shared.isLoading = true;
   Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
     $scope.carrier = res.data;
@@ -3665,11 +3697,14 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
   };
   $scope.ui = {
     showSecret: false,
-    secretStrength: 0
+    secretStrength: 0,
+    secretError: ""
   }
   $scope.triedSubmit = false;
   $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
+    Backend.get("/generateSecurePassword").then(function(res) {
+    $scope.values.secret = res.data.password;
+    });
   }
   $scope.showSecret = function() {
     $scope.ui.showSecret = true;
@@ -3681,40 +3716,62 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     console.log("submitting extension form ", arguments);
     $scope.triedSubmit = true;
     if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['caller_id'] = $scope.values.caller_id;
-      values['secret'] = $scope.values.secret;
-      values['flow_id'] = $scope.values.flow_id;
-      values['tags'] = $scope.values.tags;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/extension/saveExtension", values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-        $shared.endIsCreateLoading();
+      Backend.post("/verifyPasswordStrength", {
+          'password': $scope.values.secret
+      }).then(function(res) {
+        if ( !res.data.success ) {
+          $scope.ui.secretError = res.data.validationError;
+          console.log($scope.ui);
+          return;
+        }
+        var values = {};
+        values['username'] = $scope.values.username;
+        values['caller_id'] = $scope.values.caller_id;
+        values['secret'] = $scope.values.secret;
+        values['flow_id'] = $scope.values.flow_id;
+        values['tags'] = $scope.values.tags;
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+        console.log("toastPosStr", toastPosStr);
+        $shared.isCreateLoading = true;
+        Backend.post("/extension/saveExtension", values).then(function() {
+        console.log("updated extension..");
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Created extension')
+              .position("top right")
+              .hideDelay(3000)
+          );
+          $state.go('extensions', {});
+          $shared.endIsCreateLoading();
+        });
       });
     }
   }
   $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+    console.log("keyupSecret called..");
+    var secret = $scope.values.secret;
+    console.log("secret is ", secret);
+    if (secret.length < 8) {
+      $scope.ui.secretError = "Password must be 8 or more characters.";
+    } else if (!secret.match(/[0-9]+/g)) {
+      $scope.ui.secretError = "Password include a number";
+    } else if (!secret.match(/[A-Z]+/g)) {
+      $scope.ui.secretError = "Password include an uppercase letter";
+    } else if (!secret.match(/[a-z]+/g)) {
+      $scope.ui.secretError = "Password include an lowercase letter";
+    } else if (!secret.match(/[\'^£$%&*()}{@#~?><>,|=_+¬-]/g)) {
+      $scope.ui.secretError = "Password must include a symbol";
+    } else {
+      $scope.ui.secretError = "";
+    }
   }
   $scope.changeFlow = function(flow) {
     $scope.values.flow_id = flow;
@@ -3751,7 +3808,8 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
   };
   $scope.ui = {
     showSecret: false,
-    secretStrength: 0
+    secretStrength: 0,
+    secretError: ""
   }
   $scope.triedSubmit = false;
   $scope.load = function() {
@@ -3779,40 +3837,62 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
     console.log("submitting extension form ", arguments);
     $scope.triedSubmit = true;
     if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['secret'] = $scope.values.secret;
-      values['caller_id'] = $scope.values.caller_id;
-      values['flow_id'] = $scope.values.flow_id;
-      values['tags'] = $scope.values.tags;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Updated extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-      $shared.endIsCreateLoading();
+      Backend.post("/verifyPasswordStrength", {
+          'password': $scope.values.secret
+      }).then(function(res) {
+        if ( !res.data.success ) {
+          $scope.ui.secretError = res.data.validationError;
+          console.log($scope.ui);
+          return;
+        }
+        var values = {};
+        values['username'] = $scope.values.username;
+        values['secret'] = $scope.values.secret;
+        values['caller_id'] = $scope.values.caller_id;
+        values['flow_id'] = $scope.values.flow_id;
+        values['tags'] = $scope.values.tags;
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+        console.log("toastPosStr", toastPosStr);
+        $shared.isCreateLoading = true;
+        Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
+        console.log("updated extension..");
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Updated extension')
+              .position("top right")
+              .hideDelay(3000)
+          );
+          $state.go('extensions', {});
+        $shared.endIsCreateLoading();
+        });
       });
     }
   }
   $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+    console.log("keyupSecret called..");
+    var secret = $scope.values.secret;
+    console.log("secret is ", secret);
+    if (secret.length < 8) {
+      $scope.ui.secretError = "Password must be 8 or more characters.";
+    } else if (!secret.match(/[0-9]+/g)) {
+      $scope.ui.secretError = "Password include a number";
+    } else if (!secret.match(/[A-Z]+/g)) {
+      $scope.ui.secretError = "Password include an uppercase letter";
+    } else if (!secret.match(/[a-z]+/g)) {
+      $scope.ui.secretError = "Password include an lowercase letter";
+    } else if (!secret.match(/[\'^£$%&*()}{@#~?><>,|=_+¬-]/g)) {
+      $scope.ui.secretError = "Password must include a symbol";
+    } else {
+      $scope.ui.secretError = "";
+    }
   }
   $scope.changeFlow = function(flow) {
     $scope.values.flow_id = flow;

@@ -17,11 +17,14 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
   };
   $scope.ui = {
     showSecret: false,
-    secretStrength: 0
+    secretStrength: 0,
+    secretError: ""
   }
   $scope.triedSubmit = false;
   $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
+    Backend.get("/generateSecurePassword").then(function(res) {
+    $scope.values.secret = res.data.password;
+    });
   }
   $scope.showSecret = function() {
     $scope.ui.showSecret = true;
@@ -33,40 +36,62 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
     console.log("submitting extension form ", arguments);
     $scope.triedSubmit = true;
     if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['caller_id'] = $scope.values.caller_id;
-      values['secret'] = $scope.values.secret;
-      values['flow_id'] = $scope.values.flow_id;
-      values['tags'] = $scope.values.tags;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/extension/saveExtension", values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-        $shared.endIsCreateLoading();
+      Backend.post("/verifyPasswordStrength", {
+          'password': $scope.values.secret
+      }).then(function(res) {
+        if ( !res.data.success ) {
+          $scope.ui.secretError = res.data.validationError;
+          console.log($scope.ui);
+          return;
+        }
+        var values = {};
+        values['username'] = $scope.values.username;
+        values['caller_id'] = $scope.values.caller_id;
+        values['secret'] = $scope.values.secret;
+        values['flow_id'] = $scope.values.flow_id;
+        values['tags'] = $scope.values.tags;
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+        console.log("toastPosStr", toastPosStr);
+        $shared.isCreateLoading = true;
+        Backend.post("/extension/saveExtension", values).then(function() {
+        console.log("updated extension..");
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Created extension')
+              .position("top right")
+              .hideDelay(3000)
+          );
+          $state.go('extensions', {});
+          $shared.endIsCreateLoading();
+        });
       });
     }
   }
   $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+    console.log("keyupSecret called..");
+    var secret = $scope.values.secret;
+    console.log("secret is ", secret);
+    if (secret.length < 8) {
+      $scope.ui.secretError = "Password must be 8 or more characters.";
+    } else if (!secret.match(/[0-9]+/g)) {
+      $scope.ui.secretError = "Password include a number";
+    } else if (!secret.match(/[A-Z]+/g)) {
+      $scope.ui.secretError = "Password include an uppercase letter";
+    } else if (!secret.match(/[a-z]+/g)) {
+      $scope.ui.secretError = "Password include an lowercase letter";
+    } else if (!secret.match(/[\'^£$%&*()}{@#~?><>,|=_+¬-]/g)) {
+      $scope.ui.secretError = "Password must include a symbol";
+    } else {
+      $scope.ui.secretError = "";
+    }
   }
   $scope.changeFlow = function(flow) {
     $scope.values.flow_id = flow;

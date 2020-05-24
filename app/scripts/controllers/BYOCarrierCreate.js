@@ -12,7 +12,8 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
   $scope.values = {
     name: "",
     ip_address: "",
-    routes: []
+    routes: [],
+    auths: [],
   };
   $scope.ui = {
     showSecret: false,
@@ -27,6 +28,7 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
       values['name'] = $scope.values.name;
       values['ip_address'] = $scope.values.ip_address;
       values['routes'] = $scope.values.routes;
+      values['auths'] = $scope.values.auths;
       var toastPos = {
         bottom: false,
         top: true,
@@ -60,9 +62,21 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
     };
     $scope.values.routes.push(copy);
   }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.values.auths.push(copy);
+  }
   $scope.removeRoute = function($index, route) {
     $scope.values.routes.splice($index, 1);
   }
+  $scope.removeAuth = function($index, auth) {
+    $scope.values.auths.splice($index, 1);
+  }
+
   $shared.endIsLoading();
 });
 

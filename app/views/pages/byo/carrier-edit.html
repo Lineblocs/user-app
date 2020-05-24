@@ -54,6 +54,45 @@
                         </md-icon>
                     </div>
                 </div>
+                <h5>IP Authentication List</h5>
+                <div layout="row">
+                    <div flex="95">
+                        <ul id="routes" class="no-list-style">
+                            <li ng-repeat="auth in carrier.auths">
+                                <div layout="row">
+                                    <div flex="45">
+
+                                        <md-input-container>
+
+                                            <label>IP Address</label>
+                                            <input name="name" ng-model="auth.ip">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="45">
+
+                                        <md-input-container>
+
+                                            <label>Range</label>
+                                            <md-select ng-model="auth.range" placeholder="Range" class="md-no-underline" required md-no-asterisk="false">
+                                                <md-option ng-repeat="option in $shared.ranges" ng-value="option">{{option}}</md-option>
+                                            </md-select>
+                                        </md-input-container>
+
+                                    </div>
+                                    <div flex="10">
+                                        <div class="remove-auth">
+                                            <md-button ng-click="removeAuth(index, auth)" class="md-raised md-warn">Remove</md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <md-button ng-click="addAuth()" type="button" class="md-raised md-primary no-margin-sides">Add Auth
+                        </md-button>
+                    </div>
+                </div>
+
+                <h5>Routes</h5>
                 <div layout="row">
                     <div flex="95">
                         <ul id="routes" class="no-list-style">

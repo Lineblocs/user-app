@@ -180,7 +180,12 @@ angular
        name: 'United States'
     }
   ];
-
+  factory.ranges = [
+        "/8",
+        "/16",
+        "/24",
+        "/32"
+      ];
   factory.acSearch = {
       isDisabled: false,
       noCache:true, 
