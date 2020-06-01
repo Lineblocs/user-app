@@ -3,10 +3,13 @@
  <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && phones.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
       <div ng-show="phones.length === 0 && !pagination.didSearch" class="no-results">
+
+      <div class="inner">
         <center>
           <h5>No phones create</h5>
           <md-button ng-click="createPhone($event)" class="md-raised md-primary">Add Phone</md-button>
         </center>
+      </div>
       </div>
     </md-card>
   </div>
@@ -42,9 +45,11 @@
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && phones.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
+      <div class="inner">
       <center>
         <h5>No phones found</h5>
       </center>
+    </div>
     </div>
   </md-card>
 </div>

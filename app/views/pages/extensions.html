@@ -1,10 +1,12 @@
 <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && extensions.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
+      <div class="inner">
       <center>
         <h5>No extensions listed</h5>
         <md-button ng-click="createExtension()" class="md-raised md-primary">Create New Extension</md-button>
       </center>
+    </div>
     </div>
   </md-card>
 </div>
@@ -40,9 +42,11 @@
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && extensions.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
-      <center>
-        <h5>No extensions found</h5>
-      </center>
+      <div class="inner">
+        <center>
+          <h5>No extensions found</h5>
+        </center>
+      </div>
     </div>
   </md-card>
 </div>

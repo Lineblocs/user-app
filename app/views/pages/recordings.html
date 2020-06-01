@@ -1,13 +1,15 @@
 <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && recordings.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
+      <div class="inner">
       <center>
         <h5>No recordings listed</h5>
       </center>
     </div>
+    </div>
   </md-card>
 </div>
-<div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && recording.length > 0)">
+<div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && recordings.length > 0)">
    <div layout="row side-options" layout-align="end center">
         <div flex="10">
             <md-input-container class="search">
@@ -63,9 +65,11 @@
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && recordings.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
+      <div class="inner">
       <center>
         <h5>No recordings found</h5>
       </center>
+    </div>
     </div>
   </md-card>
 </div>

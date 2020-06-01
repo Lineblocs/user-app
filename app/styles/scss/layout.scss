@@ -126,8 +126,13 @@ md-tabs.md-default-theme.md-primary > md-tabs-wrapper, md-tabs.md-primary > md-t
 	content: '';
 	clear: both;
 }
-.no-results {
+.content-box {
 	padding: 20px;
+}
+.no-results {
+	.inner {
+		padding: 20px;
+	}
 	h5 {
 		margin: 0;
 	}
@@ -852,4 +857,21 @@ nav.right {
 		margin: 0;
 		display: block;
 	}
+}
+md-card {
+	border-radius: 20px;
+}
+
+.form-btns {
+
+}
+.form-btns .submit {
+	float: left;
+}
+.form-btns .cancel {
+	float: left;
+	font-size: 14px;
+	margin: 6px 0 6px 10px;
+	position: relative;
+	top: 11px;
 }

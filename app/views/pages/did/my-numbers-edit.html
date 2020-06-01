@@ -104,8 +104,14 @@
                     </md-button>
                 </div>
             </div>
-            <md-button ng-click="saveNumber()" class="md-raised md-primary no-margin-sides">Save
-            </md-button>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button ng-click="saveNumber()" type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
         </form>
     </md-card-content>
 </md-card>

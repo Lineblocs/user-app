@@ -3,10 +3,12 @@
   <div ng-show="files.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
       <div ng-show="files.length === 0 && !pagination.didSearch" class="no-results">
+      <div class="inner">
         <center>
           <h5>No files added</h5>
           <md-button ng-click="addFile($event)" class="md-raised md-primary">Add file</md-button>
         </center>
+      </div>
       </div>
     </md-card>
   </div>

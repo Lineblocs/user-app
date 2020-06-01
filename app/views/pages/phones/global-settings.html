@@ -3,10 +3,12 @@
   <div ng-show="settings.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
       <div ng-show="settings.length === 0 && !pagination.didSearch" class="no-results">
+      <div class="inner">
         <center>
           <h5>No settings listed</h5>
           <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Global Phone Settings</md-button>
         </center>
+      </div>
       </div>
     </md-card>
   </div>

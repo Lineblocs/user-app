@@ -1,9 +1,11 @@
 <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && logs.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
     <div class=" no-results">
+      <div class="inner">
         <center>
             <h5>No logs listed</h5>
         </center>
+    </div>
 </div>
 </md-card>
 </div>
@@ -65,9 +67,11 @@
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && logs.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
+      <div class="inner">
       <center>
         <h5>No logs found</h5>
       </center>
+    </div>
     </div>
   </md-card>
 </div>

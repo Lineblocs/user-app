@@ -26,6 +26,16 @@
       <div flex="10">Status</div>
       <div flex="90">{{call.status}}</div>
     </div>
+   <div layout="row" layout-align="start center" ng-show="call.status==='ended'">
+      <div flex="10">Duration</div>
+      <div flex="90">{{call.duration_ended_human}}</div>
+    </div>
+    <div layout="row" layout-align="start center" ng-show="call.status!=='ended'">
+      <div flex="10">Duration (live)</div>
+      <div flex="90">{{call.duration_live_human}}</div>
+    </div>
+
+
     <h5>Recordings</h5>
     <div layout="row">
       <ul class="call-recordings no-list-style">

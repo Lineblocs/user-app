@@ -237,10 +237,22 @@
                                 </li>
                             </ul>
                         </li>
-                        <li ng-class="{active: $state.includes('calls')}">
-                            <md-button href="" ng-click="$shared.changeRoute('calls')" class=""><i
-                                    class="mdi mdi-cellphone"></i> &nbsp;<span
-                                    class="text">{{ 'calls' | translate }}</span></md-button>
+                        <li class="show-subnav">
+                            <md-button href="" class=" show-menu" ng-click="subnav('ui-4')">
+                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-4'}"></i>
+                                <i class="mdi mdi-cellphone"></i> &nbsp;
+                                <span class="text"> {{ 'calls' | translate }}</span>
+                            </md-button>
+                            <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-4'}">
+                                <li ng-class="{active: $state.includes('calls')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('calls')" class=""><span
+                                            class="text">{{ 'logs' | translate }}</span></md-button>
+                                </li>
+                                <li ng-class="{active: $state.includes('debugger-logs')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('debugger-logs')" class=""><span
+                                            class="text">{{ 'monitor' | translate }}</span></md-button>
+                                </li>
+                            </ul>
                         </li>
                         <li ng-class="{active: $state.includes('recordings')}">
                             <md-button href="" ng-click="$shared.changeRoute('recordings')" class=""><i
@@ -256,11 +268,6 @@
                             <md-button href="" ng-click="$shared.changeRoute('files')" class=""><i
                                     class="mdi mdi-library-music"></i> &nbsp;<span
                                     class="text">{{ 'media-files' | translate }}</span></md-button>
-                        </li>
-                        <li ng-class="{active: $state.includes('debugger-logs')}">
-                            <md-button href="" ng-click="$shared.changeRoute('debugger-logs')" class=""><i
-                                    class="mdi mdi-cellphone"></i> &nbsp;<span
-                                    class="text">{{ 'debugger-logs' | translate }}</span></md-button>
                         </li>
                         <li ng-class="{active: $state.includes('billing')}">
                             <md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i

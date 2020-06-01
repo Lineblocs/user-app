@@ -236,6 +236,7 @@ searchModule("Recordings", "recordings", ['recordings']),
 searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
      ];
+}
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
             console.log("checked loading: ", check);
@@ -244,6 +245,10 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
         factory.hasAuth = function() {
             var token = localStorage.getItem("AUTH");
             return token;
+        }
+
+        factory.cancelForm = function() {
+   $window.history.back();
         }
      factory.changeAdminWorkspace = function(workspace) {
          console.log("changeAdminWorkspace ", workspace);
@@ -393,7 +398,7 @@ return changed;
                 factory.isLoading = true;
         }
       }
-    factory.completeChangeRoute(route, params, {"reload": true});
+    factory.completeChangeRoute(route, params, {"reload": false});
   }
         factory.collapseNavbar = function() {
             factory.SHOW_NAVBAR = false;
@@ -1168,14 +1173,14 @@ if (checked.length === 0) {
         controller: 'ExtensionEditCtrl'
     })
     .state('debugger-logs', {
-        url: '/debugger-logs?page&search',
+        url: '/call-monitor?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/debugger-logs.html',
         controller: 'DebuggerLogsCtrl',
         params:  listPageParams
     })
     .state('debugger-log-view', {
-        url: '/debugger-logs/{logId}/view',
+        url: '/call-monitor/{logId}/view',
         parent: 'dashboard',
         templateUrl: 'views/pages/log-view.html',
         controller: 'DebuggerLogViewCtrl'
