@@ -236,7 +236,6 @@ searchModule("Recordings", "recordings", ['recordings']),
 searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
      ];
-}
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
             console.log("checked loading: ", check);

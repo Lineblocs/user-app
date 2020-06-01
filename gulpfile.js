@@ -262,7 +262,9 @@ gulp.task('compress-js', ['scripts'], function() {
             .pipe(concat('concat.js'))
         .pipe(gulp.dest('dist'))
         .pipe(rename('main.min.js'))
-        .pipe(uglify({ mangle: false }))
+        .pipe(uglify({ mangle: false }) .on('error', function(e){
+            console.log(e);
+         })) 
         .pipe(gulp.dest('app/scripts/'));
 
 });
