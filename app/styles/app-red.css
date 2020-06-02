@@ -711,6 +711,23 @@ md-card {
   position: relative;
   top: 11px; }
 
+.calls-graph.mdl-cell {
+  border-radius: 20px !important; }
+
+.calls-graph {
+  border-radius: 20px !important; }
+
+.calls-graph .panel-header {
+  border-radius: 20px 20px 0px 0px;
+  -moz-border-radius: 20px 20px 0px 0px;
+  -webkit-border-radius: 20px 20px 0px 0px; }
+
+.calls-graph .linechart {
+  border-radius: 0px 0px 20px 20px;
+  -moz-border-radius: 0px 0px 20px 20px;
+  -webkit-border-radius: 0px 0px 20px 20px;
+  border: 0px solid #000000; }
+
 .collapse-card {
   background-color: #fff;
   border: 1px solid #eee;

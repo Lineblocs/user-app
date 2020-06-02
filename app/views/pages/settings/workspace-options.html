@@ -1,0 +1,55 @@
+<md-card md-theme="'default'"" md-theme-watch>
+  <!--
+  <md-card-title>
+    <md-card-title-text>
+      <span class=" md-headline">User Settings</span>
+    <span class="md-subhead">edit your settings</span>
+    </md-card-title-text>
+    </md-card-title>
+    -->
+
+        <form name="settingsForm" ng-submit="submitSettings($event, settingsForm)" novalidate>
+        <md-card-content>
+            <h5>Workspace Options</h5>
+            <div layout="row">
+                <md-checkbox ng-model="workspace.byo_enabled" aria-label="BYO Enabled">
+                    BYO Enabled
+                </md-checkbox>
+            </div>
+            <div layout="row">
+
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Outbound Call Macro</label>
+                                <md-select ng-model="workspace.outbound_macro_id"
+                                    ng-change="changeOutbound(workspace.outbound_macro_id)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="function1 in functions" ng-value="function1.id">
+                                        {{function1.title}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your extension will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+                <div flex="33">
+                    <md-button ng-show="values.flow_id" ng-click="editFlow(values.flow_public_id)" class="md-raised">
+                        Edit Flow
+                    </md-button>
+                </div>
+            </div>
+            <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+        </md-card-content>
+    </form>
+
+</md-card>

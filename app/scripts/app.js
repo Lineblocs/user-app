@@ -1272,6 +1272,12 @@ if (checked.length === 0) {
         templateUrl: 'views/pages/settings/workspace-users.html',
         controller: 'WorkspaceUserCtrl'
     })
+    .state('settings-workspace-options', {
+        url: '/settings/workspace-options',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-options.html',
+        controller: 'WorkspaceOptionsCtrl'
+    })
     .state('settings-workspace-api-settings', {
         url: '/settings/workspace-api-settings',
         parent: 'dashboard',
