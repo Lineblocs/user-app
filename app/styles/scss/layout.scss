@@ -752,7 +752,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
     background-size: 16px 16px;
 	padding: 0px 35px;
 	background-color: #F5F5F5;
-	border-radius: 2px;
+	border-radius: 8px;
 }
 #acSearch .md-whiteframe-z1 {
 	box-shadow: none;
@@ -857,43 +857,4 @@ nav.right {
 		margin: 0;
 		display: block;
 	}
-}
-md-card {
-	border-radius: 20px;
-}
-
-.form-btns {
-
-}
-.form-btns .submit {
-	float: left;
-}
-.form-btns .cancel {
-	float: left;
-	font-size: 14px;
-	margin: 6px 0 6px 10px;
-	position: relative;
-	top: 11px;
-}
-.calls-graph.mdl-cell
-{
-	border-radius: 20px !important;	
-}
-.calls-graph
-{
-	border-radius: 20px !important;	
-}
-
-
-.calls-graph .panel-header {
-border-radius: 20px 20px 0px 0px;
--moz-border-radius: 20px 20px 0px 0px;
--webkit-border-radius: 20px 20px 0px 0px;
-}
-
-.calls-graph .linechart {
-border-radius: 0px 0px 20px 20px;
--moz-border-radius: 0px 0px 20px 20px;
--webkit-border-radius: 0px 0px 20px 20px;
-border: 0px solid #000000;
 }

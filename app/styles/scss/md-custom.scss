@@ -1,0 +1,123 @@
+md-card {
+	border-radius: 20px;
+}
+
+.form-btns {
+
+}
+.form-btns .submit {
+	float: left;
+}
+.form-btns .cancel {
+	float: left;
+	font-size: 14px;
+	margin: 6px 0 6px 10px;
+	position: relative;
+	top: 11px;
+}
+.calls-graph.mdl-cell
+{
+	border-radius: 20px !important;	
+}
+.calls-graph
+{
+	border-radius: 20px !important;	
+}
+
+
+.calls-graph .panel-header {
+border-radius: 20px 20px 0px 0px;
+-moz-border-radius: 20px 20px 0px 0px;
+-webkit-border-radius: 20px 20px 0px 0px;
+}
+
+.calls-graph .linechart {
+border-radius: 0px 0px 20px 20px;
+-moz-border-radius: 0px 0px 20px 20px;
+-webkit-border-radius: 0px 0px 20px 20px;
+border: 0px solid #000000;
+}
+md-tabs-wrapper {
+	-webkit-border-top-left-radius: 20px;
+-webkit-border-top-right-radius: 20px;
+-moz-border-radius-topleft: 20px;
+-moz-border-radius-topright: 20px;
+border-top-left-radius: 20px;
+border-top-right-radius: 20px;
+}
+button.md-button {
+	border-radius: 8px;
+}
+.md-select-menu-container {
+-webkit-border-bottom-left-radius: 20px;
+-webkit-border-bottom-right-radius: 20px;
+-moz-border-radius-topleft: 20px;
+-moz-border-radius-topright: 20px;
+border-bottom-left-radius: 20px;
+border-bottom-right-radius: 20px;
+}
+
+md-select-menu {
+-webkit-border-bottom-left-radius: 20px;
+-webkit-border-bottom-right-radius: 20px;
+-moz-border-radius-topleft: 20px;
+-moz-border-radius-topright: 20px;
+border-bottom-left-radius: 20px;
+border-bottom-right-radius: 20px;
+
+
+}
+md-select-menu md-option {
+	min-height: 32px;
+	height: 32px;
+}
+
+md-input-container.search input {
+	border-radius: 8px;
+}
+
+
+md-input-container.search input {
+	border-radius: 8px;
+}
+
+.md-open-menu-container.md-active md-menu-item {
+	min-height: 32px;
+	height: 32px;
+}
+md-menu-content {
+	border-radius: 8px;
+	position: relative;
+}
+md-dialog {
+	border-radius: 20px;
+}
+
+md-virtual-repeat-container {
+	border-radius: 8px;
+}
+
+/* Styles for extended layout */
+.md-virtual-repeat-scroller::-webkit-scrollbar {width: 10px; height: 0;}
+.md-virtual-repeat-scroller::-webkit-scrollbar-track {margin: 3px 0 3px}
+.md-virtual-repeat-scroller::-webkit-scrollbar-thumb {
+    background: #E3E3E3;
+}
+.md-virtual-repeat-scroller:hover::-webkit-scrollbar-thumb {
+    background: #E3E3E3;
+}
+.md-virtual-repeat-scroller::-webkit-scrollbar-thumb:hover {
+	background: #CCC;
+}
+/* Styles for extended layout */
+md-content::-webkit-scrollbar {width: 10px; height: 0;}
+md-content::-webkit-scrollbar-track {margin: 3px 0 3px}
+md-content::-webkit-scrollbar-thumb {
+    background: #E3E3E3;
+}
+md-content:hover::-webkit-scrollbar-thumb {
+    background: #E3E3E3;
+}
+md-content::-webkit-scrollbar-thumb:hover {
+	background: #CCC;
+}

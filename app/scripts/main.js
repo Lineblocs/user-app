@@ -234,7 +234,9 @@ searchModule("Logs", "debugger-logs", ['debugger logs', 'logs', 'debugger']),
 searchModule("Calls", "calls", ['calls']),
 searchModule("Recordings", "recordings", ['recordings']),
 searchModule("Faxes", "faxes", ['fax', 'faxes']),
-searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
+searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings']),
+searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers']),
+searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers']),
      ];
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;

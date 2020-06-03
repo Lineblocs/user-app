@@ -17,7 +17,7 @@
                 md-search-text-change="$shared.searchTextChange(ctrl.searchText)"
                 md-search-text="$shared.acSearch.searchText" md-selected-item-change="$shared.selectedItemChange(item)"
                 md-items="item in $shared.querySearch($shared.acSearch.searchText)" md-item-text="item.display"
-                md-min-length="0" placeholder="Search for a category / section">
+                md-min-length="0" placeholder="Search for section..">
                 <md-item-template>
                     <span md-highlight-text="$shared.acSearch.searchText"
                         md-highlight-flags="^i">{{item.display}}</span>
@@ -77,10 +77,6 @@
                     <md-menu-item ng-show="$shared.canPerformAction('create_extension')">
                         <md-button href="" ng-click="$shared.changeRoute('extension-create', {})" style="display:flex;">
                             New Extension</md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-show="$shared.canPerformAction('create_did')">
-                        <md-button href="" ng-click="$shared.changeRoute('buy-numbers', {})" style="display:flex;">Buy
-                            Numbers</md-button>
                     </md-menu-item>
                     <md-menu-item ng-show="$shared.canPerformAction('create_phone')">
                         <md-button href="" ng-click="$shared.changeRoute('phones-phone-create', {})"
