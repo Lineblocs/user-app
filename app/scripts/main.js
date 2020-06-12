@@ -81,6 +81,7 @@ if (check1 || check2) {
 } else {
     var baseUrl = "/api";
 }
+
 function createUrl(path) {
     return baseUrl + path;
 }
