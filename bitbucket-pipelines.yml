@@ -31,8 +31,8 @@ pipelines:
           - apk --no-cache add curl
           - load=$(cat ENVIRONMENT_VARIABLES.txt) && echo $load
           - export $(cat ENVIRONMENT_VARIABLES.txt | xargs)
-          - |
-echo '{ "auths":{ "754569496111.dkr.ecr.ca-central-1.amazonaws.com":{ "auth":"'"$aws"'" } }, "HttpHeaders":{ "User-Agent":"Docker-Client/19.03.11 (linux)" } }' > ./creds.json
+          - >
+           echo '{ "auths":{ "754569496111.dkr.ecr.ca-central-1.amazonaws.com":{ "auth":"'"$aws"'" } }, "HttpHeaders":{ "User-Agent":"Docker-Client/19.03.11 (linux)" } }' > ./creds.json
           - curl -sL https://github.com/digitalocean/doctl/releases/download/v1.27.0/doctl-1.27.0-linux-amd64.tar.gz | tar -xzv
           - mv ./doctl /usr/local/bin
           - doctl -t $DOCTL_TOKEN k8s cluster kubeconfig show ${K8S_CLUSTER_NAME} > kubeconfig.yml
