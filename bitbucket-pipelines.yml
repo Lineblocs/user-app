@@ -18,6 +18,8 @@ pipelines:
           - docker build --memory=3072M -t lineblocs-app .
           - docker tag lineblocs-app:latest 754569496111.dkr.ecr.ca-central-1.amazonaws.com/lineblocs-app:latest
           - docker push 754569496111.dkr.ecr.ca-central-1.amazonaws.com/lineblocs-app:latest
+        artifacts: # define the artifacts to be passed to each future step
+          - ENVIRONMENT_VARIABLES.txt
         services:
           - docker
     - step:
