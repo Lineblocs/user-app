@@ -29,20 +29,9 @@ pipelines:
         script:
           # Download and install `doctl` so that we can refresh configs for k8s
           - apk --no-cache add curl
+          - load=$(cat ENVIRONMENT_VARIABLES.txt) && echo $load
           - export $(cat ENVIRONMENT_VARIABLES.txt | xargs)
-          - >
-            tee -a ./creds.json < END
-            {
-               "auths":{
-                  "754569496111.dkr.ecr.ca-central-1.amazonaws.com":{
-                     "auth":"$aws"
-                  }
-               },
-               "HttpHeaders":{
-                  "User-Agent":"Docker-Client/19.03.11 (linux)"
-               }
-            }
-            END
+          - echo '{ "auths":{ "754569496111.dkr.ecr.ca-central-1.amazonaws.com":{ "auth":"'"$aws"'" } }, "HttpHeaders":{ "User-Agent":"Docker-Client/19.03.11 (linux)" } }' > ./creds.json
           - kubectl delete secret lineblocs-regcred
           - kubectl create secret generic lineblocs-regcred  --from-file=.dockerconfigjson=./creds.json  --type=kubernetes.io/dockerconfigjson
           - curl -sL https://github.com/digitalocean/doctl/releases/download/v1.27.0/doctl-1.27.0-linux-amd64.tar.gz | tar -xzv
