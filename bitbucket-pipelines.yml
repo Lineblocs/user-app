@@ -36,7 +36,7 @@ pipelines:
           - mv ./doctl /usr/local/bin
           - doctl -t $DOCTL_TOKEN k8s cluster kubeconfig show ${K8S_CLUSTER_NAME} > kubeconfig.yml
           - kubectl --insecure-skip-tls-verify --kubeconfig=kubeconfig.yml delete secret lineblocs-regcred
-          - kubectl --insecure-skip-tls-verify --kubeconfig=kubeconfig.yml create secret generic lineblocs-regcred  --from-file=.dockerconfigjson=~/.docker/config.json  --type=kubernetes.io/dockerconfigjson
+          - kubectl --insecure-skip-tls-verify --kubeconfig=kubeconfig.yml create secret generic lineblocs-regcred  --from-file=.dockerconfigjson=/root/.docker/config.json  --type=kubernetes.io/dockerconfigjson
           - kubectl --insecure-skip-tls-verify --kubeconfig=kubeconfig.yml patch deployment lineblocs-app -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
         services:
           - docker
