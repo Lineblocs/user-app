@@ -59,7 +59,7 @@
       <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
             <tr md-row>
-                <th md-column>&nbsp;</th>
+                <th md-column><md-checkbox ng-model="selectedAll" ng-change="Backend.selectAll(selectedAll, 'flows', flows)" aria-label="Checkbox" class="md-warn md-align-top-left" flex></th>
                 <th md-column><span>Name</span></th>
                 <th md-column>&nbsp;</th>
             </tr>

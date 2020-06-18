@@ -36,6 +36,7 @@
     </div>
 
 
+
     <h5>Recordings</h5>
     <div layout="row">
       <ul class="call-recordings no-list-style">
@@ -46,5 +47,17 @@
         </li>
       </ul>
     </div>
+<div layout="row" layout-align="start center">
+      <md-input-container>
+        <label>Notes</label>
+  <textarea ng-model="call.notes" placeholder="e.g: Support call at 9:00AM" rows="6"></textarea>
+</md-input-container>
+</div>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button ng-click="saveCall()" type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                            </div>
+
   </md-card-content>
 </md-card>

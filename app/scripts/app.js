@@ -647,6 +647,14 @@ return changed;
 
         }
 
+        factory.selectAll = function(selectedAll, tag, options) {
+            console.log("selectAll", selectedAll);
+            angular.forEach(options, function(option) {
+                option.checked = selectedAll;
+            });
+
+
+        }
          factory.deleteAllChecked = function(module, items) {
          var checked = items.filter(function(item) {
              return item.checked;

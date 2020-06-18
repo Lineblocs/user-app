@@ -647,6 +647,14 @@ return changed;
 
         }
 
+        factory.selectAll = function(selectedAll, tag, options) {
+            console.log("selectAll", selectedAll);
+            angular.forEach(options, function(option) {
+                option.checked = selectedAll;
+            });
+
+
+        }
          factory.deleteAllChecked = function(module, items) {
          var checked = items.filter(function(item) {
              return item.checked;
@@ -2855,7 +2863,7 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
  * # MainCtrl
  * Controller of MaterialApp
  */
-angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
+angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
 	  $shared.updateTitle("Call View");
   $scope.call = [];
   $scope.load = function() {
@@ -2870,6 +2878,22 @@ angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backe
       });
       $scope.call = call;
     })
+  }
+  $scope.saveCall = function() {
+    var data = {
+      notes: $scope.call.notes
+    };
+    Backend.post("/call/updateCall/" + $stateParams['callId'], data).then(function(res) {
+      console.log("call is ", res.data);
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Call updated..')
+            .position('top right')
+            .hideDelay(3000)
+        );
+        $state.go('calls', {});
+    })
+
   }
   $scope.load();
 });
