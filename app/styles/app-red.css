@@ -698,6 +698,9 @@ nav.right ul:after {
   margin: 0;
   display: block; }
 
+.field-small {
+  height: 35px; }
+
 md-card {
   border-radius: 20px; }
 

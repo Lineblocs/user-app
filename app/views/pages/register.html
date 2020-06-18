@@ -164,7 +164,7 @@
                                 </md-input-container>
                             </div>
                         </div>
-                        <div class="field-input password">
+                        <div class="field-input password field-small">
                             <div class="input-box">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
                                     <g fill="#317780" fill-rule="nonzero">
@@ -189,9 +189,12 @@
                                 </md-input-container>
                             </div>
                         </div>
-                         <md-checkbox ng-model="acceptTerms" aria-label="Checkbox 1">
+                         <md-checkbox ng-model="acceptTerms" aria-label="Checkbox 1" style="display: none;">
                                 <small>I accept the <a target="_blank" ng-href="https://lineblocs.com/pages/tos">Terms Of Service</a></small>
                         </md-checkbox>
+                        <small style="font-size: 10px;">By clicking the button below you agree to our <a target="_blank" ng-href="https://lineblocs.com/pages/tos">ToS (Terms Of Service)</a></small>
+                        <br/>
+                        <br/>
                         <div class="login-btn">
                             <button>
                                 <span>Sign Up</span>
