@@ -8,14 +8,14 @@
  * Controller of MaterialApp
  */
 angular.module('MaterialApp')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams) {
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog) {
 	  $shared.updateTitle("Register");
-
+		console.log("STATE ", $stateParams);
 	  var countryToCode = {
 		  US: "+1",
 		  CA: "+1",
 	  };
-	  $scope.acceptTerms = false;
+	  $scope.acceptTerms =true;
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
 	  $scope.shouldSplash = false;
@@ -40,13 +40,20 @@ angular.module('MaterialApp')
 	$scope.verify2 = {
 		confirmation_code: ""
 	};
+	$scope.card = {
+		number: "",
+		cvv: "",
+		expires: "",
+		name: "",
+	};
+
   $scope.workspace = "";
   $scope.selectedTemplate = null;
 
   function doSpinup() {
 	$scope.shouldSplash = true;
 	$shared.setAuthToken( $scope.token );
-	var data = { "userId": $scope.userId };
+	var data = { "userId": $scope.userId, "plan": $stateParams['plan'] };
 	$scope.invalidCode = false;
 	$shared.changingPage = true;
 	Backend.post("/userSpinup", data).then(function( res ) {
@@ -97,6 +104,7 @@ angular.module('MaterialApp')
 				}
 				$scope.token = data; 
 				$scope.userId = data.userId;
+				$scope.workspace = data.workspace;
 				$shared.changingPage = false;
 				$scope.step = 2;
 			});
@@ -163,6 +171,22 @@ angular.module('MaterialApp')
 		}
 		return true;
 	}
+	$scope.submitBillingForm = function($event, billingForm) {
+
+		//setup tokens for workspace access
+		$shared.setAuthToken($scope.token);
+		$shared.setWorkspace($scope.workspace);
+
+
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, stripeResponseHandler);
+	}
 	$scope.submitWorkspaceForm = function($event, workspaceForm) {
 		console.log("called submitWorkspaceForm");
 		$scope.triedSubmit = true;
@@ -173,6 +197,7 @@ angular.module('MaterialApp')
 		if (workspaceForm.$valid) {
 			var data = {};
 			data["userId"] = $scope.userId;
+			data.plan = $stateParams['plan'];
 			data.workspace = $scope.workspace;
 				$shared.changingPage = true;
 			Backend.post("/updateWorkspace", data).then(function( res ) {
@@ -180,10 +205,18 @@ angular.module('MaterialApp')
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
 					//doSpinup();
-					$scope.step = 4;
+					if ($stateParams['plan'] === 'pay-as-you-go') {
+						$scope.step = 5;
+					} else {
+						//need to add card
+						$scope.step = 4;
+					}
+
+					//$scope.step = 4;
 					return;
 				}
 				$scope.invalidWorkspaceTaken = true;
+				$scope.workspace = res.data.workspace;
 			});
 		}
 		return false;
@@ -257,11 +290,44 @@ angular.module('MaterialApp')
 		$shared.scrollToTop();
     	$state.go('login');
 	}
+		function stripeResponseHandler(status, response) {
+			$timeout(function() {
+				$scope.$apply();
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.billErrorMsg = response.error.message;
+					//angular.element('.add-card-form').scrollTop(0);
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					stripeRespAddCard(response).then(function() {
+						$scope.step = 4;	
+					});
+				}
+			}, 0);
+		}
+		function stripeRespAddCard(response) {
+			return $q(function(resolve, reject) {
+				var data = {};
+				data['stripe_token'] = response.id;
+				data['stripe_card'] = response.card.id;
+				data['last_4'] = response.card.last4;
+				data['issuer'] = response.card.brand;
+				$shared.isCreateLoading =true;
+				Backend.post("/card/addCard", data).then(function(res) {
+					resolve(res);
+					$shared.endIsCreateLoading();
+				}, function(err) {
+					console.error("an error occured ", err);
+				});
+			});
+		}
 
-
-
-	Backend.get("/getCallSystemTemplates").then(function(res) {
-		$scope.templates = res.data;
+	$q.all([
+		Backend.get("/getCallSystemTemplates"),
+		Backend.get("/getConfig")
+	]).then(function(res) {
+		$scope.templates = res[0].data;
 		$shared.changingPage = false;
 		if ( $stateParams['hasData'] ) {
 			console.log("$stateParams data is ", $stateParams);
@@ -270,5 +336,9 @@ angular.module('MaterialApp')
 			$scope.userId = $stateParams['userId'];
 			$scope.step = 2;
 		}
+		$scope.config = res[1].data;
+		console.log("config is ", $scope.config);
+		Stripe.setPublishableKey($scope.config.stripe.key);
+
 	});
   });

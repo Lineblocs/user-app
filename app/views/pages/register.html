@@ -22,12 +22,12 @@
     <div ng-show="!shouldSplash">
         <div class="login-page">
 
-        <a href="https://lineblocs.com/">
-            <div class="logo">
+            <a href="https://lineblocs.com/">
+                <div class="logo">
 
-                <img src="images/logo-blue-small.png">
-            </div>
-        </a>
+                    <img src="images/logo-blue-small.png">
+                </div>
+            </a>
             <center>
                 <div ng-show="isLoading">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -59,7 +59,8 @@
                                     <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
                                         again.
                                     </div>
-                                    <div ng-show="triedSubmit && didNotAcceptTerms" class="red">You must accept the terms of service to create an account
+                                    <div ng-show="triedSubmit && didNotAcceptTerms" class="red">You must accept the
+                                        terms of service to create an account
                                     </div>
 
                                 </center>
@@ -158,7 +159,8 @@
                                                 or
                                                 more
                                             </div>
-                                            <div ng-show="registerForm.password.$error.required">This field is required</div>
+                                            <div ng-show="registerForm.password.$error.required">This field is required
+                                            </div>
                                         </div>
                                     </div>
                                 </md-input-container>
@@ -189,12 +191,14 @@
                                 </md-input-container>
                             </div>
                         </div>
-                         <md-checkbox ng-model="acceptTerms" aria-label="Checkbox 1" style="display: none;">
-                                <small>I accept the <a target="_blank" ng-href="https://lineblocs.com/pages/tos">Terms Of Service</a></small>
+                        <md-checkbox ng-model="acceptTerms" aria-label="Checkbox 1" style="display: none;">
+                            <small>I accept the <a target="_blank" ng-href="https://lineblocs.com/pages/tos">Terms Of
+                                    Service</a></small>
                         </md-checkbox>
-                        <small style="font-size: 10px;">By clicking the button below you agree to our <a target="_blank" ng-href="https://lineblocs.com/pages/tos">ToS (Terms Of Service)</a></small>
-                        <br/>
-                        <br/>
+                        <small style="font-size: 10px;">By clicking the button below you agree to our <a target="_blank"
+                                ng-href="https://lineblocs.com/pages/tos">ToS (Terms Of Service)</a></small>
+                        <br />
+                        <br />
                         <div class="login-btn">
                             <button>
                                 <span>Sign Up</span>
@@ -307,7 +311,6 @@
                     </div>
 
                 </div>
-
                 <div ng-show="step===3">
                     <form class="login-form" ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm"
                         novalidate>
@@ -335,7 +338,9 @@
                                                     <div ng-show="workspaceForm.workspace.$error.required">This field is
                                                         required</div>
                                                     <div ng-show="hasWorkspaceNameErr">
-                                                        Please only use lower case characters, digits or hyphens. No other characters are allowed in workspace name
+                                                        Please only use lower case characters, digits or hyphens. No
+                                                        other
+                                                        characters are allowed in workspace name
                                                     </div>
                                                 </div>
                                             </div>
@@ -356,56 +361,137 @@
                         </div>
                     </form>
                 </div>
+                <div ng-show="step===4">
+                    <form class="login-form" ng-submit="submitBillingForm($event, billingForm)" name="billingForm"
+                        novalidate>
+                        <div class="inner">
 
-                <div ng-show="step===4" class="call-system-picker">
-                    <form class="login-form" ng-submit="finishSignup($event, templateForm)" name="templateForm" novalidate>
-                        <div layout="row">
-                        <h3 flex="100">Setup Your Call System</h3>
-                        </div>
-                        <div layout="row">
-
-
-                        <div flex="50" ng-repeat="template in templates">
-
-
-
-                            <md-card class="my-cards">
-                                <md-card-title>
-                                    <md-card-title-text>
-                                        <span class="md-headline">{{template.name}}</span>
-                                        <span class="md-subhead">{{template.description}}</span>
-                                    </md-card-title-text>
-                                    <md-card-title-media>
-                                        <div class="md-media-sm card-media"></div>
-                                    </md-card-title-media>
-                                </md-card-title>
-                                <md-card-actions layout="row" layout-align="end center">
-                                    <div class="login-btn">
-                                        <button
-                                        type="button"
-                                        ng-show="!isSelected(template)"
-                                        ng-click="useTemplate(template)">
-                                        <span>Use Template</span></button>
-
-                                          <button
-                                          type="button"
-                                        ng-show="isSelected(template)">
-                                        
-                                        <span class="disabled">Use Template</span></button>
-
-
-                                    </div>
-                                </md-card-actions>
-                            </md-card>
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                                <div class="login-btn">
-                                    <button>
-                                        <span>Next</span>
-                                    </button>
+                            <div class="top-heading">
+                                <h3>Add A Billing Card</h3>
+                                <p>
+                                    You will not be charged until your free trial ends
+                                </p>
+                            <div ng-show="billErrorMsg" class="error-box">
+                                <span class="red"><strong>{{errorMsg}}</strong></span>
                                 </div>
+                                <div class="box invalid-login">
+                                    <div ng-show="invalidWorkspaceTaken" class="red">This workspace name is already
+                                        taken.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <md-input-container>
+                                    <label>Your Name</label>
+                                    <input ng-model="card.name" />
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Address</label>
+                                    <input ng-model="card.address" />
+                                </md-input-container>
+                                <div layout="row">
+                                    <div flex>
+                                        <md-input-container>
+                                            <label>City</label>
+                                            <input ng-model="card.city" />
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container>
+                                            <label>Postal Code</label>
+                                            <input ng-model="card.postal_code" />
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container>
+                                            <label>Country</label>
+                                            <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
+                                                <md-option ng-repeat="country in $shared.billingCountries"
+                                                    ng-value="country">
+                                                    {{country.name}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <h5>Card Details</h5>
+                                <div layout="row">
+                                    <div flex>
+                                        <md-input-container>
+                                            <label>Number</label>
+                                            <input ng-model="card.number" />
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container>
+                                            <label>Expires</label>
+                                            <input placeholder="MM/YY" ng-model="card.expires" />
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container>
+                                            <label>CVV</label>
+                                            <input ng-model="card.cvv" />
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="login-btn">
+                                <button>
+                                    <span>Submit</span>
+                                </button>
+                            </div>
+                    </form>
+                </div>
+
+
+                <div ng-show="step===5" class="call-system-picker">
+                    <form class="login-form" ng-submit="finishSignup($event, templateForm)" name="templateForm"
+                        novalidate>
+                        <div layout="row">
+                            <h3 flex="100">Setup Your Call System</h3>
+                        </div>
+                        <div layout="row">
+
+
+                            <div flex="50" ng-repeat="template in templates">
+
+
+
+                                <md-card class="my-cards">
+                                    <md-card-title>
+                                        <md-card-title-text>
+                                            <span class="md-headline">{{template.name}}</span>
+                                            <span class="md-subhead">{{template.description}}</span>
+                                        </md-card-title-text>
+                                        <md-card-title-media>
+                                            <div class="md-media-sm card-media"></div>
+                                        </md-card-title-media>
+                                    </md-card-title>
+                                    <md-card-actions layout="row" layout-align="end center">
+                                        <div class="login-btn">
+                                            <button type="button" ng-show="!isSelected(template)"
+                                                ng-click="useTemplate(template)">
+                                                <span>Use Template</span></button>
+
+                                            <button type="button" ng-show="isSelected(template)">
+
+                                                <span class="disabled">Use Template</span></button>
+
+
+                                        </div>
+                                    </md-card-actions>
+                                </md-card>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="login-btn">
+                            <button>
+                                <span>Next</span>
+                            </button>
+                        </div>
                     </form>
                 </div>
 

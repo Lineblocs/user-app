@@ -701,6 +701,9 @@ nav.right ul:after {
 .field-small {
   height: 35px; }
 
+#cards li {
+  margin-bottom: 10px; }
+
 md-card {
   border-radius: 20px; }
 

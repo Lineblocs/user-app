@@ -66,13 +66,19 @@ function getJWTToken() {
     return "";
 }
 function getWorkspaceID() {
+    var workspace =getWorkspace();
+   if ( !workspace ) {
+        return null;
+    }
+    return workspace.id;
+}
+function getWorkspace() {
     var workspace =localStorage.getItem("WORKSPACE")
     if ( !workspace ) {
         return null;
     }
     var parsed = JSON.parse(workspace);
-
-    return parsed.id;
+    return parsed;
 }
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
@@ -260,6 +266,24 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
         factory.changeAdminWorkspace2 = function(workspace) {
          console.log("changeAdminWorkspace ", workspace);
          factory.setWorkspace( workspace );
+     }
+
+     factory.getWorkspace = function() {
+         return getWorkspace();
+     }
+
+     factory.isSettingEnabled = function(option) {
+
+            if ( factory.planInfo ) {
+                if ( factory.planInfo[ option ] ) {
+                    return true;
+                }
+            }
+            return false;
+     }
+     factory.planName = function(option) {
+         var workspace = getWorkspace();
+         return workspace.plan;
      }
 
      factory.deleteAllChecked = function(module, items) {
@@ -825,6 +849,32 @@ if (checked.length === 0) {
             pushToQueue( item );
             return item;
         }
+        factory.put = function(path, params, suppressErrDialog, showMsg)
+        {
+            var item =  $q(function(resolve, reject) {
+                console.log("factory.post current state is: ", $state.current.name);
+                    if (!skip.includes($state.current.name)) {
+                        if ( !checkHttpCallPrerequisites() ) {
+
+                            resolve();
+                            return;
+                        }
+                    }
+
+
+                $http.put(createUrl(path), params).then(resolve,function(res) {
+                   var message = res.data.message;
+                    if (!suppressErrDialog) {
+                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+
+                    }
+                    reject(res);
+                 });
+            });
+            pushToQueue( item );
+            return item;
+        }
+
 
         return factory;
     })
@@ -1036,6 +1086,13 @@ if (checked.length === 0) {
             squash: true
             }
     };
+var regParams = {
+            plan: {
+            value: 'pay-as-you-go',
+            squash: true
+
+            },
+    };
 
     $stateProvider
     .state('base', {
@@ -1058,15 +1115,11 @@ if (checked.length === 0) {
         controller: 'LoginCtrl'
     })
     .state('register', {
-        url: '/register',
+        url: '/register?plan',
         parent: 'base',
         templateUrl: 'views/pages/register.html',
         controller: 'RegisterCtrl',
-        params: {
-            hasData: null,
-            authData: null,
-            userId: null
-        }
+        params: regParams
     })
     .state('forgot', {
         url: '/forgot',
@@ -1511,12 +1564,13 @@ if (checked.length === 0) {
 
             });
         }
-        if ((!$shared.billInfo || !$shared.userInfo) && token) {
+        if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && token) {
             Backend.get("/dashboard").then(function(res) {
                 var graph = res.data[0];
                 console.log("GOT state data ", res);
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
+                $shared.planInfo=  res.data[4];
                 console.log("updated UI state");
             });
         }

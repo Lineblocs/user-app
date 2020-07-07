@@ -78,7 +78,7 @@
                         <md-button href="" ng-click="$shared.changeRoute('extension-create', {})" style="display:flex;">
                             New Extension</md-button>
                     </md-menu-item>
-                    <md-menu-item ng-show="$shared.canPerformAction('create_phone')">
+                    <md-menu-item ng-show="$shared.canPerformAction('create_phone') && $shared.isSettingEnabled('provisioner')">
                         <md-button href="" ng-click="$shared.changeRoute('phones-phone-create', {})"
                             style="display:flex;">New Phone</md-button>
                     </md-menu-item>
@@ -86,7 +86,7 @@
             </md-menu>
             <div class="vert-line"></div>
             </li>
-            <li>
+            <li ng-if="$shared.planName()==='pay-as-you-go'">
             <div class="nav-item balance">
                 <strong>Balance</strong>
                 <br />
@@ -183,7 +183,7 @@
                                 </li>
 
 
-                                <li ng-class="{active: $state.includes('ports')}">
+                                <li ng-class="{active: $state.includes('ports')}" ng-show="$shared.isSettingEnabled('ports')">
                                     <md-button href="" ng-click="$shared.changeRoute('ports')" class=""><span
                                             class="text">{{ 'port-numbers' | translate }}</span></md-button>
                                 </li>
@@ -201,7 +201,7 @@
                                     class="mdi mdi-cellphone"></i> &nbsp;<span
                                     class="text">{{ 'extensions' | translate }}</span></md-button>
                         </li>
-                        <li class="show-subnav">
+                        <li class="show-subnav" ng-show="$shared.isSettingEnabled('provisioner')">
                             <md-button href="" class=" show-menu" ng-click="subnav('ui-2')">
                                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-2'}"></i>
                                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -270,7 +270,8 @@
                                     class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
                                     class="text">{{ 'billing' | translate }}</span></md-button>
                         </li>
-                        <li class="show-subnav">
+                        <li class="show-subnav" ng-show="$shared.isSettingEnabled('bring_carrier')">
+
                             <md-button href="" class=" show-menu" ng-click="subnav('ui-3')">
                                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-3'}"></i>
                                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;

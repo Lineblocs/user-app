@@ -376,6 +376,19 @@ angular.module('MaterialApp')
 		});
 
 	}
+	$scope.setPrimary = function(card)
+	{
+      Backend.put("/card/setPrimary/" + card.id).then(function() {
+				loadData(true).then(function() {
+		 $mdToast.show(
+          $mdToast.simple()
+            .textContent('Set card as primary')
+            .position("top right")
+            .hideDelay(3000)
+		);
+		 });
+          });
+	}
 	$scope.deleteUsageTrigger = function($event, item) {
 	// Appending dialog to document.body to cover sidenav in docs app
 	console.log("deleteUsageTrigger ", item);
@@ -401,6 +414,17 @@ angular.module('MaterialApp')
       })
     }, function() {
     });
+	}
+	$scope.getCardImg = function(card) {
+		var map = {
+			"MasterCard": "mastercard",
+			"Visa": "visa",
+			"AMEX": "amex",
+			"Maestro": "maestro",
+			"JCB": "jcb",
+			"Diners": "diners",
+		};
+	return 	'/images/cards/' + map[ card.issuer ] + '.png'
 	}
 	loadData(false);
   });
