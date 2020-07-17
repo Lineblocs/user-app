@@ -152,6 +152,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['number'] = number.number;
         params['region'] = number.region;
         params['monthly_cost'] = number.monthly_cost;
+        params['setup_cost'] = number.setup_cost;
         params['provider'] = number.provider;
         params['country'] = number.country;
         params['features'] = number.features.join(",");
