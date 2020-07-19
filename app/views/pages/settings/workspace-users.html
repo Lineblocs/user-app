@@ -53,6 +53,10 @@
                     </td>
             <td md-cell>{{user.email}}</td>
             <td md-cell>
+                                <md-button  class="md-raised md-primary md-small resend-invite" ng-click="resendInvite(user)">
+                                    <i class="mdi mdi-email"></i>
+                                    Reinvite
+                                </md-button>
               <md-button ng-click="editUser($event, user)" class="md-icon-button" aria-label="Flow">
                   <md-icon >
                     

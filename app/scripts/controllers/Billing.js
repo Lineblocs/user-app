@@ -51,6 +51,8 @@ angular.module('MaterialApp')
 		$scope.percentages.push(start.toString()+"%");
 		start += 10;
 	  }
+
+	  $scope.triggerTypes = ['Balance'];
       $scope.close = function() {
         $mdDialog.hide(); 
 	  }
@@ -383,6 +385,19 @@ angular.module('MaterialApp')
 		 $mdToast.show(
           $mdToast.simple()
             .textContent('Set card as primary')
+            .position("top right")
+            .hideDelay(3000)
+		);
+		 });
+          });
+	}
+	$scope.deleteCard = function(card)
+	{
+      Backend.delete("/card/deleteCard/" + card.id).then(function() {
+				loadData(true).then(function() {
+		 $mdToast.show(
+          $mdToast.simple()
+            .textContent('Removed card successfully..')
             .position("top right")
             .hideDelay(3000)
 		);

@@ -1,40 +1,47 @@
 <md-dialog>
-      <md-toolbar>
-      <div class="md-toolbar-tools">
-        <h2>Create Usage Trigger</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-      <md-dialog-content class="add-trigger-form">
-        <div class="md-dialog-content">
-          <p>
-            usage triggers will email you whenever you reach X amount balance. usage triggers can be setup by percentage. for example if you setup a usage triggers
-            of 40% it will remind you when your balance falls to or below 40%.
-          </p>
-
-          <br/>
-          <br/>
-        <label>Trigger Percentage</label>
-        <md-select ng-model="data.percentage" placeholder="Percentage" class="md-no-underline" required md-no-asterisk="false">
-        <md-option ng-repeat="option in percentages" ng-value="option">{{option}}</md-option>
-      </md-select>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Create Usage Trigger</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
         </div>
-      </md-dialog-content>
-  <md-dialog-actions layout="row">
-    <md-button ng-click="save()">
-      Submit
-    </md-button>
-    <span flex></span>
-    <md-button ng-click="close()">
-      Close
-    </md-button>
-  </md-dialog-actions>
-    
+    </md-toolbar>
+    <md-dialog-content class="add-trigger-form">
+        <div class="md-dialog-content">
+            <p>
+                usage triggers will email you whenever you reach X amount balance. usage triggers can be setup by
+                percentage. for example if you setup a usage triggers
+                of 40% it will remind you when your balance falls to or below 40%.
+            </p>
+
+            <br />
+            <br />
+            <label>Trigger Type</label>
+            <md-select ng-model="data.type" placeholder="Type" class="md-no-underline" required
+                md-no-asterisk="false">
+                <md-option ng-repeat="option in triggerTypes" ng-value="option">{{option}}</md-option>
+            </md-select>
+            <label>Trigger Percentage</label>
+            <md-select ng-model="data.percentage" placeholder="Percentage" class="md-no-underline" required
+                md-no-asterisk="false">
+                <md-option ng-repeat="option in percentages" ng-value="option">{{option}}</md-option>
+            </md-select>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-click="save()">
+            Submit
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="close()">
+            Close
+        </md-button>
+    </md-dialog-actions>
+
     </div>
 
 
-  </form>
+    </form>
 </md-dialog>

@@ -704,6 +704,12 @@ nav.right ul:after {
 #cards li {
   margin-bottom: 10px; }
 
+.card-primary-opt {
+  width: 82px !important; }
+
+.resend-invite {
+  width: 82px !important; }
+
 md-card {
   border-radius: 20px; }
 

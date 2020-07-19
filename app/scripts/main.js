@@ -1637,6 +1637,8 @@ angular.module('MaterialApp')
 		$scope.percentages.push(start.toString()+"%");
 		start += 10;
 	  }
+
+	  $scope.triggerTypes = ['Balance'];
       $scope.close = function() {
         $mdDialog.hide(); 
 	  }
@@ -1975,6 +1977,19 @@ angular.module('MaterialApp')
 		 });
           });
 	}
+	$scope.deleteCard = function(card)
+	{
+      Backend.delete("/card/deleteCard/" + card.id).then(function() {
+				loadData(true).then(function() {
+		 $mdToast.show(
+          $mdToast.simple()
+            .textContent('Removed card successfully..')
+            .position("top right")
+            .hideDelay(3000)
+		);
+		 });
+          });
+	}
 	$scope.deleteUsageTrigger = function($event, item) {
 	// Appending dialog to document.body to cover sidenav in docs app
 	console.log("deleteUsageTrigger ", item);
@@ -2281,6 +2296,7 @@ angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Bac
         params['number'] = number.number;
         params['region'] = number.region;
         params['monthly_cost'] = number.monthly_cost;
+        params['setup_cost'] = number.setup_cost;
         params['provider'] = number.provider;
         params['country'] = number.country;
         params['features'] = number.features.join(",");
@@ -7895,6 +7911,19 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
       })
     }, function() {
     });
+  }
+  $scope.resendInvite = function(user) {
+    // Appending dialog to document.body to cover sidenav in docs app
+      Backend.post("/workspaceUser/resendInvite/" + user.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Invite email sent..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+        });
   }
   $scope.editUser = function($event, user) {
     console.log("edit usr ", user);

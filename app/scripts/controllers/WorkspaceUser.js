@@ -48,6 +48,19 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
     }, function() {
     });
   }
+  $scope.resendInvite = function(user) {
+    // Appending dialog to document.body to cover sidenav in docs app
+      Backend.post("/workspaceUser/resendInvite/" + user.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Invite email sent..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+        });
+  }
   $scope.editUser = function($event, user) {
     console.log("edit usr ", user);
     $shared.changeRoute('settings-workspace-users-edit', {userId: user.public_id});

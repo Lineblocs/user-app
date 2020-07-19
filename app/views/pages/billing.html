@@ -176,11 +176,20 @@
                                                 </div>
                                                 <div>
                                                     <md-button ng-click="setPrimary(card)" ng-show="card.primary"
-                                                        disabled="" class="md-raised md-small no-margin-top-bottom">Set
+                                                        disabled="" class="md-raised md-small no-margin-top-bottom card-primary-opt">
                                                         Primary</md-button>
                                                     <md-button ng-click="setPrimary(card)" ng-show="!card.primary"
-                                                        class="md-raised md-primary md-small no-margin-top-bottom">Set
-                                                        Primary</md-button>
+                                                        class="md-raised md-primary md-small no-margin-top-bottom card-primary-opt">
+                                                        Set Primary</md-button>
+                                                        <md-button ng-click="deleteCard($event, card)" class="md-icon-button" aria-label="Delete card">
+                                                            <md-icon >
+                                                                
+                                                                <i class="mdi mdi-delete"></i>
+                                                                    <md-tooltip class="helper-tooltip" md-direction="top">
+                                                                        Delete card
+                                                                    </md-tooltip>
+                                                            </md-icon>
+                                                        </md-button>
                                                 </div>
                                             </div>
 
