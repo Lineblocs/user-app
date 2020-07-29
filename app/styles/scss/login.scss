@@ -90,6 +90,10 @@
 	    	}
 	    }
 	}	
+
+	.form-container.rounded {
+		border-radius: 12px;
+	}
 }
 
 h5.four {
@@ -99,7 +103,11 @@ h5.four {
 div.not-found {
 	font-size: 28px;
 	padding-bottom: 50px;
+	.go-back {
+    font-size: 16px !important;
+  }
 }
+
 
 .login-footer {
     position: absolute;

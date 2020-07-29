@@ -1135,9 +1135,10 @@ var regParams = {
     })
 
     .state('404', {
-        url: '/404-page',
+        url: '/404',
         parent: 'base',
         templateUrl: 'views/pages/404-page.html',
+        controller: 'NotFoundCtrl'
     })
     .state('dashboard', {
         url: '/dashboard',
@@ -1145,6 +1146,11 @@ var regParams = {
         templateUrl: 'views/layouts/dashboard.html',
         controller: 'DashboardCtrl',
         resolve: resolveParams
+    })
+    .state('404-dash', {
+        url: '/logged/404',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/404-dash-page.html',
     })
     .state('dashboard-user-welcome', {
         url: '/welcome',
@@ -1526,6 +1532,7 @@ var regParams = {
         templateUrl: 'views/pages/dashboard/blank.html',
     })
 }).run(function($rootScope, $shared, Backend) {
+
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
         /* Display modal warning or sth */ 
@@ -1580,6 +1587,10 @@ var regParams = {
         });
         */
     })
+    $rootScope.$on('$stateChangeError', function(event) {
+        console.log("no page found - 404");
+        $state.go('404');
+     });
 });
 
 
@@ -5397,6 +5408,23 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
   });
 });
 
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('NotFoundCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window, Idle) {
+	  $shared.updateTitle("404 Not Found");
+	  $scope.goBack = function() {
+         $window.history.back();
+	  }
+  });
 
 'use strict';
 

@@ -58,6 +58,7 @@
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
           <tr md-row>
             <th md-column><md-checkbox ng-model="selectedAll" ng-change="Backend.selectAll(selectedAll, 'extensions', extensions)" aria-label="Checkbox" class="md-warn md-align-top-left" flex></th>
+            <th md-column><span>Registered</span></th>
             <th md-column><span>Username</span></th>
             <th md-column>&nbsp;</th>
           </tr>
@@ -67,6 +68,13 @@
                 <td md-cell>
                     <md-checkbox ng-model="extension.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
                 </td>
+            <td md-cell ng-if="extension.registered">
+                  <img ng-src="{{'/images/ext-online.png'}}" width="16" height="16"/>
+            </td>
+          <td md-cell ng-if="!extension.registered">
+                  <img ng-src="{{'/images/ext-offline.png'}}" width="16" height="16"/>
+            </td>
+
             <td md-cell>{{extension.username}}</td>
             <td md-cell>
               <md-button ng-click="editExtension(extension)" class="md-icon-button" aria-label="Settings">

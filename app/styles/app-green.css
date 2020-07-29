@@ -938,6 +938,8 @@ md-content::-webkit-scrollbar-thumb:hover {
             color: white;
             width: 25%;
             font-size: 15px; }
+  .login-overlay .form-container.rounded {
+    border-radius: 12px; }
 
 h5.four {
   font-size: 50px; }
@@ -945,6 +947,8 @@ h5.four {
 div.not-found {
   font-size: 28px;
   padding-bottom: 50px; }
+  div.not-found .go-back {
+    font-size: 16px !important; }
 
 .login-footer {
   position: absolute;
