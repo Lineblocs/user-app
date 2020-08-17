@@ -710,6 +710,25 @@ nav.right ul:after {
 .resend-invite {
   width: 82px !important; }
 
+.bill-info {
+  position: relative;
+  height: 42px; }
+  .bill-info .md-button {
+    position: absolute;
+    right: 0px;
+    bottom: 0px; }
+
+.link {
+  color: darkBlue;
+  cursor: pointer; }
+
+.plan-info {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  .plan-info li {
+    margin-bottom: 5px; }
+
 md-card {
   border-radius: 20px; }
 

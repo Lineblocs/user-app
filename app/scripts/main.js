@@ -245,6 +245,9 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
 searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers']),
 searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers']),
      ];
+     factory.createCardLabel = function(card) {
+        return "**** **** **** " + card.last_4;
+     }
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
             console.log("checked loading: ", check);
@@ -670,7 +673,21 @@ return changed;
             $shared.showError(message);
 
         }
-
+     factory.refreshWorkspaceData = function() {
+         return $q(function(resolve, reject) {
+            factory.get("/dashboard").then(function(res) {
+                var graph = res.data[0];
+                console.log("GOT state data ", res);
+				$shared.billInfo=  res.data[1];
+                $shared.userInfo=  res.data[2];
+                $shared.planInfo=  res.data[4];
+                console.log("updated UI state");
+                resolve(res);
+            }, function(err) {
+                reject(err);
+            });
+        });
+    }
         factory.selectAll = function(selectedAll, tag, options) {
             console.log("selectAll", selectedAll);
             angular.forEach(options, function(option) {
@@ -1294,6 +1311,30 @@ var regParams = {
         templateUrl: 'views/pages/billing-add-card.html',
         controller: 'BillingCtrl'
     })
+    .state('billing-upgrade-plan', {
+        url: '/billing/upgrade-plan',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-upgrade.html',
+        controller: 'BillingUpgradePlanCtrl'
+    })
+    .state('billing-upgrade-submit', {
+        url: '/billing/upgrade-submit?plan',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-upgrade-submit.html',
+        controller: 'BillingUpgradeSubmitCtrl',
+        params: {
+              plan: {
+            value: 'pay-as-you-go',
+            squash: true
+            }
+        }
+    })
+    .state('billing-upgrade-complete', {
+        url: '/billing/upgrade-complete',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-upgrade-complete.html',
+        controller: 'BillingUpgradeCompleteCtrl',
+    })
     .state('home', {
         url: '/home',
         parent: 'dashboard',
@@ -1572,13 +1613,8 @@ var regParams = {
             });
         }
         if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && token) {
-            Backend.get("/dashboard").then(function(res) {
-                var graph = res.data[0];
-                console.log("GOT state data ", res);
-				$shared.billInfo=  res.data[1];
-                $shared.userInfo=  res.data[2];
-                $shared.planInfo=  res.data[4];
-                console.log("updated UI state");
+            Backend.refreshWorkspaceData.then(function(res) {
+                console.log("updated UI data");
             });
         }
         /*
@@ -2027,6 +2063,9 @@ angular.module('MaterialApp')
     }, function() {
     });
 	}
+	$scope.upgradePlan = function() {
+    	$state.go('billing-upgrade-plan', {});
+	}
 	$scope.getCardImg = function(card) {
 		var map = {
 			"MasterCard": "mastercard",
@@ -2039,6 +2078,242 @@ angular.module('MaterialApp')
 	return 	'/images/cards/' + map[ card.issuer ] + '.png'
 	}
 	loadData(false);
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('BillingUpgradeCompleteCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Billing Upgrade Complete");
+	  $scope.plan = null;
+	  $scope.gotoDashboard = function() {
+		  $state.go('dashboard');
+	  }
+		Backend.refreshWorkspaceData().then(function(res) {
+				console.log("updated info");
+						$mdToast.show(
+						$mdToast.simple()
+							.textContent('Plan upgraded')
+							.position('top right')
+							.hideDelay(3000)
+						);
+				$scope.plan = res.data[ 4 ];
+					$shared.endIsCreateLoading();
+            });
+
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('BillingUpgradePlanCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Billing Upgrade");
+	  $scope.$shared = $shared;
+	  $scope.isCurrentPlan = function(name) {
+		if (name==='pay-as-you-go') {
+			return true;
+		}
+		return false;
+	  }
+	$scope.canUpgrade = function(plan) {
+		console.log("canUpgrade ", arguments);
+		var info = $shared.planInfo;
+		//var current = info.key_name;
+		var current = 'pay-as-you-go';
+		var plan1 = 'pay-as-you-go';
+		var plan2 = 'starter';
+		var plan3 = 'pro';
+		var plan4 = 'ultimate';
+		if (current === plan1 && plan === plan1) {
+			return false;
+		}
+		if (current === plan2 && (plan === plan1 || plan === plan2)) {
+			return false;
+		}
+		if (current === plan3 && (plan === plan1 || plan === plan2 || plan === plan3)) {
+			return false;
+		}
+		if (current === plan4 && (plan === plan1 || plan === plan2 || plan === plan3 || plan === plan4)) {
+			return false;
+		}
+
+		return true;
+
+	}
+	$scope.upgradePlan =  function(plan) {
+		$state.go('billing-upgrade-submit', {"plan": plan});
+	}
+
+	  Backend.get("/plans").then(function(res) {
+		console.log("plans ", res.data);
+	  });
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name MaterialApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of MaterialApp
+ */
+angular.module('MaterialApp')
+  .controller('BillingUpgradeSubmitCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Billing Upgrade Submit");
+	$scope.settings = {
+		newCard: false,
+		type: 'CARD'
+	};
+	$scope.data = {
+		selectedCard: null,
+		creditAmount: null
+
+	};
+	$scope.card = {
+		name: "",
+		address: "",
+		city: "",
+		postal_code: "",
+		number: "",
+		expires: "",
+		cvv: ""
+	};
+
+		function submitBilling(cardId, amount) {
+			var data = {};
+		data['card_id'] = cardId;
+		data['plan']=  $stateParams['plan'];
+		$shared.isCreateLoading =true;
+		Backend.post("/upgradePlan", data).then(function(res) {
+			console.log("upgraded plan..");
+    		$state.go('billing-upgrade-complete', {});
+		});
+    	//$state.go('billing-upgrade-complete', {});
+	}
+		function stripeRespAddCard(response) {
+			return $q(function(resolve, reject) {
+				var data = {};
+				data['stripe_token'] = response.id;
+				data['stripe_card'] = response.card.id;
+				data['last_4'] = response.card.last4;
+				data['issuer'] = response.card.brand;
+				$shared.isCreateLoading =true;
+				Backend.post("/card/addCard", data).then(function(res) {
+					resolve(res);
+					$shared.endIsCreateLoading();
+				}, function(err) {
+					console.error("an error occured ", err);
+				});
+			});
+		}
+
+		function loadData(createLoading) {
+		if (createLoading) {
+			$shared.isCreateLoading =true;
+		} else {
+			$shared.isLoading =true;
+		}
+		return $q(function(resolve, reject) {
+			$q.all([
+				Backend.get("/billing")
+			]).then(function(res) {
+				console.log("finished loading..");
+				$scope.billing = res[0].data[0];
+				$scope.cards = res[0].data[1];
+				$scope.config = res[0].data[2];
+				$scope.usageTriggers = res[0].data[4];
+				console.log("config is ", $scope.config);
+				Stripe.setPublishableKey($scope.config.stripe.key);
+				console.log("billing data is ", $scope.billing);
+				console.log("cards are ", $scope.cards);
+				console.log("settings are ", $scope.settings);
+				console.log("usage triggers are ", $scope.usageTriggers);
+				if (createLoading) {
+					$shared.endIsCreateLoading();
+				} else {
+					$shared.endIsLoading();
+				}
+				resolve();
+			}, reject);
+		});
+	}
+	$scope.changeCard = function(value) {
+		console.log("changeCard ", value);
+		$scope.data.selectedCard = value;
+		if (value === 'new') {
+			$scope.settings.newCard = true;
+		} else {
+			$scope.settings.newCard = false;
+		}
+	}
+	$scope.canCheckout = function() {
+		if ($scope.data.selectedCard || $scope.settings.newCard) {
+			return true;
+		}
+		return false;
+
+	}
+	$scope.completeUpgrade = function() {
+		var data = {};
+		console.log("card is ", $scope.data.selectedCard);
+		console.log("amount is ", $scope.data.creditAmount);
+		if (!$scope.data.selectedCard) {
+			return;
+		}
+		if ($scope.data.selectedCard === 'new') {
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, function (status, response) {
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.errorMsg = response.error.message;
+
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					stripeRespAddCard(response).then(function(res) {
+						var cardId = res.headers('X-Card-ID');
+						$timeout(function() {
+							$scope.$apply();
+							submitBilling(cardId);
+						}, 0);
+					})
+				}
+				$timeout(function() {
+					$scope.$apply();
+					submitBilling(cardId);
+				}, 0);
+			});
+			return;
+		}
+		$timeout(function() {
+			$scope.$apply();
+			submitBilling($scope.data.selectedCard);
+		}, 0);
+	}
+	loadData(true).then(function(res) {
+		console.log("plans ", res.data);
+	  });
   });
 
 'use strict';

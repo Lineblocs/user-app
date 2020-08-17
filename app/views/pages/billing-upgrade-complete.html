@@ -1,0 +1,23 @@
+<div>
+    <md-card md-theme="'default'"" md-theme-watch>
+        <md-card-content>
+            <md-content>
+            <h2>Upgrade Complete</h2>
+            <p>
+                You are now subscribed to a {{plan.nice_name}} plan
+            </p>
+            <p>
+                You will now be able to:
+            </p>
+            <ul class="plan-benefits">
+                <li ng-repeat="benefit in plan.benefits">
+                    {{benefit}}
+                </li>
+            </ul>
+                            <md-button  type="button" ng-click="gotoDashboard()"
+                                class="md-raised md-primary no-margin-sides">
+                                Back to Dashboard</md-button>
+            </md-content>
+            </md-card-content>
+    </md-card>
+</div>

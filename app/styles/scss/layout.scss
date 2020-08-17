@@ -873,3 +873,24 @@ height: 35px;
 .resend-invite {
 	width: 82px !important;
 }
+.bill-info {
+	position: relative;
+	height: 42px;
+	.md-button {
+		position: absolute;
+		right: 0px;
+		bottom: 0px;
+	}
+}
+.link {
+	color: darkBlue;
+	cursor: pointer;
+}
+.plan-info {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+		margin-bottom: 5px;
+	}
+}

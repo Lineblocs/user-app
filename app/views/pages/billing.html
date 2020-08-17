@@ -3,7 +3,17 @@
     <div layout="row" layout-align="end center" layout-margin ng-show="$shared.planName()==='pay-as-you-go'">
         <div>
             <h5>Remaining Balance</h5>
+            <div class="bill-info">
             <strong>{{billing.info.remainingBalance}}</strong>
+            </div>
+        </div>
+        <div>
+            <h5>Plan</h5>
+            <!--<strong>{{$shared.planInfo.nice_name}}</strong>-->
+            <div class="bill-info">
+            <strong>Pay As You Go</strong>
+            <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+            </div>
         </div>
     </div>
 
@@ -15,9 +25,9 @@
                     <div class="left">
                         <div class="pay-options">
                             <h5>Pay With</h5>
-                            <md-button ng-disabled="settings.type==='CARD'" type="button" ng-click="changeType('CARD')"
+                            <md-button ng-disabled="settings.type==='card'" type="button" ng-click="changetype('card')"
                                 class="md-raised md-primary no-margin-sides">
-                                Credit Card</md-button>
+                                credit card</md-button>
                             <br />
                             <md-button ng-disabled="settings.type==='PAYPAL'" type="button"
                                 ng-click="changeType('PAYPAL')" class="md-raised md-primary no-margin-sides">
@@ -39,8 +49,8 @@
                                         <md-radio-group ng-model="data.selectedCard"
                                             ng-change="changeCard(data.selectedCard)">
                                             <md-radio-button ng-repeat="card in cards" ng-value="card.id"
-                                                aria-label="{{createLabel(card)}}">
-                                                <label>{{createLabel(card)}}</label>
+                                                aria-label="{{$shared.createCardLabel(card)}}">
+                                                <label>{{$shared.createCardLabel(card)}}</label>
                                                 <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
                                             </md-radio-button>
                                             <md-radio-button ng-value="'new'" aria-label="Add New Card">
@@ -172,7 +182,7 @@
                                                 </div>
 
                                                 <div>
-                                                    {{createLabel(card)}}
+                                                    {{$shared.createCardLabel(card)}}
                                                 </div>
                                                 <div>
                                                     <md-button ng-click="setPrimary(card)" ng-show="card.primary"

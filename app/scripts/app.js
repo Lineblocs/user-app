@@ -245,6 +245,9 @@ searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'])
 searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers']),
 searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers']),
      ];
+     factory.createCardLabel = function(card) {
+        return "**** **** **** " + card.last_4;
+     }
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
             console.log("checked loading: ", check);
@@ -670,7 +673,21 @@ return changed;
             $shared.showError(message);
 
         }
-
+     factory.refreshWorkspaceData = function() {
+         return $q(function(resolve, reject) {
+            factory.get("/dashboard").then(function(res) {
+                var graph = res.data[0];
+                console.log("GOT state data ", res);
+				$shared.billInfo=  res.data[1];
+                $shared.userInfo=  res.data[2];
+                $shared.planInfo=  res.data[4];
+                console.log("updated UI state");
+                resolve(res);
+            }, function(err) {
+                reject(err);
+            });
+        });
+    }
         factory.selectAll = function(selectedAll, tag, options) {
             console.log("selectAll", selectedAll);
             angular.forEach(options, function(option) {
@@ -1294,6 +1311,30 @@ var regParams = {
         templateUrl: 'views/pages/billing-add-card.html',
         controller: 'BillingCtrl'
     })
+    .state('billing-upgrade-plan', {
+        url: '/billing/upgrade-plan',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-upgrade.html',
+        controller: 'BillingUpgradePlanCtrl'
+    })
+    .state('billing-upgrade-submit', {
+        url: '/billing/upgrade-submit?plan',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-upgrade-submit.html',
+        controller: 'BillingUpgradeSubmitCtrl',
+        params: {
+              plan: {
+            value: 'pay-as-you-go',
+            squash: true
+            }
+        }
+    })
+    .state('billing-upgrade-complete', {
+        url: '/billing/upgrade-complete',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-upgrade-complete.html',
+        controller: 'BillingUpgradeCompleteCtrl',
+    })
     .state('home', {
         url: '/home',
         parent: 'dashboard',
@@ -1572,13 +1613,8 @@ var regParams = {
             });
         }
         if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && token) {
-            Backend.get("/dashboard").then(function(res) {
-                var graph = res.data[0];
-                console.log("GOT state data ", res);
-				$shared.billInfo=  res.data[1];
-                $shared.userInfo=  res.data[2];
-                $shared.planInfo=  res.data[4];
-                console.log("updated UI state");
+            Backend.refreshWorkspaceData.then(function(res) {
+                console.log("updated UI data");
             });
         }
         /*

@@ -430,6 +430,9 @@ angular.module('MaterialApp')
     }, function() {
     });
 	}
+	$scope.upgradePlan = function() {
+    	$state.go('billing-upgrade-plan', {});
+	}
 	$scope.getCardImg = function(card) {
 		var map = {
 			"MasterCard": "mastercard",

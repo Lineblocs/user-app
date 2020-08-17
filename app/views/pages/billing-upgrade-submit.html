@@ -1,0 +1,107 @@
+<div>
+    <md-card md-theme="'default'"" md-theme-watch>
+        <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+        <md-tab label="Checkout">
+            <div layout="row">
+                <div flex="66">
+                <md-content class="md-padding">
+                    <div ng-show="cards.length === 0">
+                        <h5>No Cards Added</h5>
+                        <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A
+                            Card</md-button>
+
+                    </div>
+                    <div ng-show="cards.length > 0">
+                        <h5>Select Billing Method</h5>
+                        <div layout="row">
+                            <div flex="">
+                                <md-radio-group ng-model="data.selectedCard" ng-change="changeCard(data.selectedCard)">
+                                    <md-radio-button ng-repeat="card in cards" ng-value="card.id"
+                                        aria-label="{{$shared.createCardLabel(card)}}">
+                                        <label>{{$shared.createCardLabel(card)}}</label>
+                                        <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                    </md-radio-button>
+                                    <md-radio-button ng-value="'new'" aria-label="Add New Card">
+                                        <label>Add New Card</label>
+                                        <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                    </md-radio-button>
+                                </md-radio-group>
+                            </div>
+                        </div>
+                        <div ng-show="settings.newCard">
+                            <form ng-cloak ng-submit="submit()">
+                                <div ng-show="errorMsg" class="red">{{errorMsg}}</div>
+                                <md-content>
+                                    <md-input-container>
+                                        <label>Your Name</label>
+                                        <input ng-model="card.name" />
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Address</label>
+                                        <input ng-model="card.address" />
+                                    </md-input-container>
+                                    <div layout="row">
+                                        <div flex>
+                                            <md-input-container>
+                                                <label>City</label>
+                                                <input ng-model="card.city" />
+                                            </md-input-container>
+                                        </div>
+                                        <div flex>
+                                            <md-input-container>
+                                                <label>Postal Code</label>
+                                                <input ng-model="card.postal_code" />
+                                            </md-input-container>
+                                        </div>
+                                        <div flex>
+                                            <md-input-container>
+                                                <label>Country</label>
+                                                <md-select ng-model="card.country"
+                                                    ng-change="changeCountry(card.country)">
+                                                    <md-option ng-repeat="country in $shared.billingCountries"
+                                                        ng-value="country">
+                                                        {{country.name}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <h5>Card Details</h5>
+                                    <div layout="row">
+                                        <div flex>
+                                            <md-input-container>
+                                                <label>Number</label>
+                                                <input ng-model="card.number" />
+                                            </md-input-container>
+                                        </div>
+                                        <div flex>
+                                            <md-input-container>
+                                                <label>Expires</label>
+                                                <input placeholder="MM/YY" ng-model="card.expires" />
+                                            </md-input-container>
+                                        </div>
+                                        <div flex>
+                                            <md-input-container>
+                                                <label>CVV</label>
+                                                <input ng-model="card.cvv" />
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </md-content>
+                            </form>
+                        </div>
+                    </div>
+                <md-button ng-click="completeUpgrade()" type="submit" class="md-raised md-primary no-margin-sides" ng-disabled="!canCheckout()">
+                    Submit</md-button>
+                </md-content>
+            </div>
+            <div flex="33">
+                <md-content>
+                    <h5>Plan</h5>
+                    <h3>Ultimate</3>
+                </md-content>
+            </div>
+        </md-tab>
+        </md-tabs>
+    </md-card>
+</div>

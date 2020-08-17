@@ -1,0 +1,242 @@
+<div>
+    <center>
+    <h2>Upgrade Plan</h2>
+    </center>
+<div layout="row">
+
+
+    <div flex="25">
+        <md-card class="my-cards">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Pay As You Go <small ng-show="isCurrentPlan('pay-as-you-go')">(Current)</small></span>
+                    <span class="md-subhead">
+                       <h5>$0</h5><small>/user/month** </small>
+                    </span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-content>
+            <md-card-content>
+                <ul class="plan-info">
+                    <small>Includes</small>
+                    <h5 class="no-margin-top-bottom">&nbsp;</h5>
+                    <li>
+<li><i class="mdi mdi-check">
+</i>
+Metered minutes outbound in US or Canada</li>
+
+<li><i class="mdi mdi-check">
+</i>5 extensions</li>
+
+<li><i class="mdi mdi-check">
+</i>1GB Voicemail</li>
+
+<li><i class="mdi mdi-check">
+</i>Metered inbound calling</li>
+
+<li><i class="mdi mdi-check">
+</i>100 Fax per month</li>
+
+<li><i class="mdi mdi-check">
+</i>Number Porting</li>
+
+<li><i class="mdi mdi-check">
+</i>Unlimited Calling between extensions</li>
+
+<li><i class="mdi mdi-check">
+</i>Standard Call Features</li>
+
+<li><i class="mdi mdi-check">
+</i>Voicemail Transcription</li>
+
+                </ul>
+</md-card-content>
+            </md-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-show="canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides">
+                    Select</md-button>
+                <md-button ng-show="!canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides" ng-disabled="true">
+                    Cannot Downgrade</md-button>
+
+            </md-card-actions>
+        </md-card>
+    </div>
+    <div flex="25">
+        <md-card class="my-cards">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Starter <small ng-show="isCurrentPlan('starter')">(Current)</small></span>
+                    <span class="md-subhead">
+                       <h5>$24.99</h5><small>/user/month** </small>
+                    </span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-content>
+            <md-card-content>
+                    <small>Includes</small>
+                    <h5 class="no-margin-top-bottom">&nbsp;</h5>
+                <ul class="plan-info">
+                    <li>
+<li><i class="mdi mdi-check">
+</i>200 minutes outbound free minutes per month in US or Canada</li>
+
+<li><i class="mdi mdi-check">
+</i>5 Extensions</li>
+
+<li><i class="mdi mdi-check">
+</i>2GB Voicemail</li>
+
+<li><i class="mdi mdi-check">
+</i>Unlimited inbound calling</li>
+
+<li><i class="mdi mdi-check">
+</i>Unlimited Fax per month</li>
+
+<li><i class="mdi mdi-check">
+</i>Number Porting</li>
+
+<li><i class="mdi mdi-check">
+</i>Unlimited Calling between extensions</li>
+
+<li><i class="mdi mdi-check">
+</i>IM integrations (slack)</li>
+
+<li><i class="mdi mdi-check">
+</i>Productivity Integrations (gsuite, office 365)</li>
+
+
+
+                </ul>
+</md-card-content>
+            </md-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-show="canUpgrade('starter')" ng-click="upgradePlan('starter')" type="submit" class="md-raised md-primary no-margin-sides">
+                    Select</md-button>
+                <md-button ng-show="!canUpgrade('starter')" ng-click="upgradePlan('starter')" type="submit" class="md-raised md-primary no-margin-sides"
+                disabled="disabled"
+                >
+                    Cannot Downgrade</md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+    <div flex="25">
+        <md-card class="my-cards">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Pro <small ng-show="isCurrentPlan('pro')">(Current)</small></span>
+<span class="md-subhead">
+                       <h5>$49.99</h5><small>/user/month** </small>
+                    </span>
+
+                </md-card-title-text>
+            </md-card-title>
+            <md-content>
+            <md-card-content>
+<small>Includes</small>
+                    <h5 class="no-margin-top-bottom">Everything in Starter, plus:</h5>
+
+                <ul class="plan-info">
+
+<li><i class="mdi mdi-check">
+</i>250 minutes outbound free minutes per month in US or Canada</li>
+
+<li><i class="mdi mdi-check">
+</i>32 Extensions</li>
+
+<li><i class="mdi mdi-check">
+</i>128GB Voicemail</li>
+
+<li><i class="mdi mdi-check">
+</i>Fraud Protection</li>
+
+<li><i class="mdi mdi-check">
+</i>CRM Integrations (salesforce, zoho, zendesk)</li>
+
+<li><i class="mdi mdi-check">
+</i>Phone Provisioner</li>
+
+<li><i class="mdi mdi-check">
+</i>Lineblocs VPN</li>
+
+<li><i class="mdi mdi-check">
+</i>Bring Your Own Carrier</li>
+
+<li><i class="mdi mdi-check">
+</i>Multiple SIP Domains</li>
+
+
+                </ul>
+</md-card-content>
+            </md-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-show="canUpgrade('pro')" ng-click="upgradePlan('pro')" type="submit" class="md-raised md-primary no-margin-sides">
+                    Select</md-button>
+                <md-button ng-show="!canUpgrade('pro')" ng-click="upgradePlan('pro')" type="submit" class="md-raised md-primary no-margin-sides"
+                disabled="disabled"
+                >
+                    Cannot Downgrade</md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+    <div flex="25">
+        <md-card class="my-cards">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Ultimate <small ng-show="isCurrentPlan('ultimate')">(Current)</small></span>
+<span class="md-subhead">
+                       <h5>$69.99</h5><small>/user/month** </small>
+                    </span>
+
+                </md-card-title-text>
+            </md-card-title>
+            <md-content>
+            <md-card-content>
+<small>Includes</small>
+                    <h5 class="no-margin-top-bottom">Everything in Pro, plus:</h5>
+                <ul class="plan-info">
+                    <li>
+<li><i class="mdi mdi-check">
+</i>500 minutes outbound free minutes per month in US or Canada</li>
+
+<li><i class="mdi mdi-check">
+</i>100 Extensions</li>
+
+<li><i class="mdi mdi-check">
+</i>128GB Voicemail</li>
+
+<li><i class="mdi mdi-check">
+</i>Phone Provisioner</li>
+
+<li><i class="mdi mdi-check">
+</i>Call Center Apps</li>
+
+<li><i class="mdi mdi-check">
+</i>24 / 7 Support</li>
+
+<li><i class="mdi mdi-check">
+</i>AI Based call routing</li>
+
+<li><i class="mdi mdi-check">
+</i>Custom Branded SIP Apps</li>
+
+<li><i class="mdi mdi-check">
+</i>Branded Softphone Apps</li>
+
+<li><i class="mdi mdi-check">
+</i>Dedicated Lineblocs Representitive</li>
+
+                </ul>
+</md-card-content>
+            </md-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-show="canUpgrade('ultimate')" ng-click="upgradePlan('ultimate')" type="submit" class="md-raised md-primary no-margin-sides">
+                    Select</md-button>
+                <md-button ng-show="!canUpgrade('ultimate')" ng-click="upgradePlan('ultimate')" type="submit" class="md-raised md-primary no-margin-sides"
+                                disabled="disabled"
+                >
+                    Cannot Downgrade</md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+</div>
+</div>
