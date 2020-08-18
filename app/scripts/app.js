@@ -248,6 +248,18 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
      }
+	factory.getCardImg = function(card) {
+        console.log("getCardImg ", card);
+		var map = {
+			"MasterCard": "mastercard",
+			"Visa": "visa",
+			"AMEX": "amex",
+			"Maestro": "maestro",
+			"JCB": "jcb",
+			"Diners": "diners",
+		};
+	    return 	'/images/cards/' + map[ card.issuer ] + '.png'
+	}
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
             console.log("checked loading: ", check);
@@ -1613,7 +1625,7 @@ var regParams = {
             });
         }
         if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && token) {
-            Backend.refreshWorkspaceData.then(function(res) {
+            Backend.refreshWorkspaceData().then(function(res) {
                 console.log("updated UI data");
             });
         }

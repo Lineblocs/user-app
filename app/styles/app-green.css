@@ -729,6 +729,19 @@ nav.right ul:after {
   .plan-info li {
     margin-bottom: 5px; }
 
+ul.benefits {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  ul.benefits li {
+    margin-bottom: 5px; }
+
+.plan-upgrade-box {
+  border: 1px solid #CCC;
+  padding: 20px;
+  margin: 10px 10px;
+  border-radius: 7px; }
+
 md-card {
   border-radius: 20px; }
 

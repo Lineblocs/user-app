@@ -23,6 +23,7 @@ angular.module('MaterialApp')
 							.hideDelay(3000)
 						);
 				$scope.plan = res.data[ 4 ];
+				$shared.setWorkspace(res.data[ 5 ]);
 					$shared.endIsCreateLoading();
             });
 

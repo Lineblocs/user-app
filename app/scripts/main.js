@@ -248,6 +248,18 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
      }
+	factory.getCardImg = function(card) {
+        console.log("getCardImg ", card);
+		var map = {
+			"MasterCard": "mastercard",
+			"Visa": "visa",
+			"AMEX": "amex",
+			"Maestro": "maestro",
+			"JCB": "jcb",
+			"Diners": "diners",
+		};
+	    return 	'/images/cards/' + map[ card.issuer ] + '.png'
+	}
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
             console.log("checked loading: ", check);
@@ -1613,7 +1625,7 @@ var regParams = {
             });
         }
         if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && token) {
-            Backend.refreshWorkspaceData.then(function(res) {
+            Backend.refreshWorkspaceData().then(function(res) {
                 console.log("updated UI data");
             });
         }
@@ -2066,17 +2078,7 @@ angular.module('MaterialApp')
 	$scope.upgradePlan = function() {
     	$state.go('billing-upgrade-plan', {});
 	}
-	$scope.getCardImg = function(card) {
-		var map = {
-			"MasterCard": "mastercard",
-			"Visa": "visa",
-			"AMEX": "amex",
-			"Maestro": "maestro",
-			"JCB": "jcb",
-			"Diners": "diners",
-		};
-	return 	'/images/cards/' + map[ card.issuer ] + '.png'
-	}
+
 	loadData(false);
   });
 
@@ -2105,6 +2107,7 @@ angular.module('MaterialApp')
 							.hideDelay(3000)
 						);
 				$scope.plan = res.data[ 4 ];
+				$shared.setWorkspace(res.data[ 5 ]);
 					$shared.endIsCreateLoading();
             });
 
@@ -2132,8 +2135,7 @@ angular.module('MaterialApp')
 	$scope.canUpgrade = function(plan) {
 		console.log("canUpgrade ", arguments);
 		var info = $shared.planInfo;
-		//var current = info.key_name;
-		var current = 'pay-as-you-go';
+		var current = info.key_name;
 		var plan1 = 'pay-as-you-go';
 		var plan2 = 'starter';
 		var plan3 = 'pro';
@@ -2181,6 +2183,7 @@ angular.module('MaterialApp')
 	};
 	$scope.data = {
 		selectedCard: null,
+		selectedCardObj: null,
 		creditAmount: null
 
 	};
@@ -2230,13 +2233,15 @@ angular.module('MaterialApp')
 		}
 		return $q(function(resolve, reject) {
 			$q.all([
-				Backend.get("/billing")
+				Backend.get("/billing"),
+				Backend.get("/plans")
 			]).then(function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];
+				$scope.plan = res[1].data[ $stateParams['plan'] ];
 				console.log("config is ", $scope.config);
 				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
@@ -2259,7 +2264,13 @@ angular.module('MaterialApp')
 			$scope.settings.newCard = true;
 		} else {
 			$scope.settings.newCard = false;
+			angular.forEach($scope.cards, function(card) {
+				if ( card.id === value ) {
+					$scope.data.selectedCardObj = card;
+				}
+			});
 		}
+		console.log("selected card ", $scope.data.selectedCardObj);
 	}
 	$scope.canCheckout = function() {
 		if ($scope.data.selectedCard || $scope.settings.newCard) {

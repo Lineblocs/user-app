@@ -16,6 +16,7 @@ angular.module('MaterialApp')
 	};
 	$scope.data = {
 		selectedCard: null,
+		selectedCardObj: null,
 		creditAmount: null
 
 	};
@@ -65,13 +66,15 @@ angular.module('MaterialApp')
 		}
 		return $q(function(resolve, reject) {
 			$q.all([
-				Backend.get("/billing")
+				Backend.get("/billing"),
+				Backend.get("/plans")
 			]).then(function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];
+				$scope.plan = res[1].data[ $stateParams['plan'] ];
 				console.log("config is ", $scope.config);
 				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
@@ -94,7 +97,13 @@ angular.module('MaterialApp')
 			$scope.settings.newCard = true;
 		} else {
 			$scope.settings.newCard = false;
+			angular.forEach($scope.cards, function(card) {
+				if ( card.id === value ) {
+					$scope.data.selectedCardObj = card;
+				}
+			});
 		}
+		console.log("selected card ", $scope.data.selectedCardObj);
 	}
 	$scope.canCheckout = function() {
 		if ($scope.data.selectedCard || $scope.settings.newCard) {

@@ -20,8 +20,7 @@ angular.module('MaterialApp')
 	$scope.canUpgrade = function(plan) {
 		console.log("canUpgrade ", arguments);
 		var info = $shared.planInfo;
-		//var current = info.key_name;
-		var current = 'pay-as-you-go';
+		var current = info.key_name;
 		var plan1 = 'pay-as-you-go';
 		var plan2 = 'starter';
 		var plan3 = 'pro';

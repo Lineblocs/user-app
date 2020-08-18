@@ -9,9 +9,18 @@
         </div>
         <div>
             <h5>Plan</h5>
-            <!--<strong>{{$shared.planInfo.nice_name}}</strong>-->
             <div class="bill-info">
-            <strong>Pay As You Go</strong>
+            <strong>{{$shared.planInfo.nice_name}}</strong>
+            <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+            </div>
+        </div>
+    </div>
+
+    <div layout="row" layout-align="end center" layout-margin ng-show="$shared.planName()!=='pay-as-you-go'">
+        <div>
+            <h5>Plan</h5>
+            <div class="bill-info">
+            <strong>{{$shared.planInfo.nice_name}}</strong>
             <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
             </div>
         </div>
@@ -178,7 +187,7 @@
                                         <li ng-repeat="card in cards">
                                             <div layout="row" layout-align="start start">
                                                 <div>
-                                                    <img ng-src="{{getCardImg(card)}}" height="28"/>
+                                                    <img ng-src="{{$shared.getCardImg(card)}}" height="28"/>
                                                 </div>
 
                                                 <div>

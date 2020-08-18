@@ -433,16 +433,6 @@ angular.module('MaterialApp')
 	$scope.upgradePlan = function() {
     	$state.go('billing-upgrade-plan', {});
 	}
-	$scope.getCardImg = function(card) {
-		var map = {
-			"MasterCard": "mastercard",
-			"Visa": "visa",
-			"AMEX": "amex",
-			"Maestro": "maestro",
-			"JCB": "jcb",
-			"Diners": "diners",
-		};
-	return 	'/images/cards/' + map[ card.issuer ] + '.png'
-	}
+
 	loadData(false);
   });
