@@ -1,11 +1,25 @@
-## Material Dashboard Admin Angular Theme
+## Lineblocs User Portal
 
-Thanks for purchasing the Material Dashboard Admin Angular Theme.
+## Requirements
 
-Follow the documentation to install and get started with the development:
+```
+NPM
+Node
+```
 
-  - Link to documentation: http://material-admin-angular.strapui.com/#/dashboard/docs
-  - Live Demo URL: http://material-admin-angular.strapui.com/
-  - Product URL: http://www.strapui.com/themes/material-dashboard-admin-angular/
+## Install
 
-Happy coding!
+```
+npm install
+npm install -g install gulp@3.9.1
+npm install -g install node-sass@4.13.0 --unsafe-perm
+npm install -g install bower@1.8.8
+```
+
+## Run
+
+```
+gulp serve
+```
+
+To view the app please goto http://localhost:9000/
