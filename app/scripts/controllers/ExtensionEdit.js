@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, $shared, $q) {
+angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, $shared, $q) {
 	  $shared.updateTitle("Edit Extension");
   $scope.values = {
     username: "",

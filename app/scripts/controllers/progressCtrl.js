@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
+angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
   $scope.max = 200;
 
   $scope.random = function() {

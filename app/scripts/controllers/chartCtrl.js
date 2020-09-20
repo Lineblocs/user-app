@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+angular.module('Lineblocs').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
     $scope.line = {
 	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	          data: [

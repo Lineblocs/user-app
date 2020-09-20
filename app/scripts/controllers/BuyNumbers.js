@@ -1,12 +1,12 @@
 'use strict'; 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
     $shared.updateTitle("Buy Numbers");
     $scope.countries = [];
     $scope.state = "SEARCHING";

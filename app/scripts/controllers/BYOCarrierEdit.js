@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
 	  $shared.updateTitle("Edit Carrier");
   $scope.flows = [];
   $scope.carrier = null;

@@ -121,14 +121,14 @@ var google = {
         ctrl.startThirdPartyLogin( profile.getEmail(), profile.getName(), profile.getImageUrl() );
 
       }
-        angular.bootstrap(document, ['MaterialApp']);
+        angular.bootstrap(document, ['Lineblocs']);
         var shared = angular.element("body").scope().$shared;
         shared.initialLoaded = true;
         /*
         $.get("./templates.html", function(data) {
           console.log("data is ", data);
           $(data).appendTo('body');
-          angular.bootstrap(document, ['MaterialApp']);
+          angular.bootstrap(document, ['Lineblocs']);
           var shared = angular.element("body").scope().$shared;
           shared.initialLoaded = true;
         });

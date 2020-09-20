@@ -1,4 +1,4 @@
-angular.module('MaterialApp').directive('relinkEvent', function($rootScope, $timeout) {
+angular.module('Lineblocs').directive('relinkEvent', function($rootScope, $timeout) {
     return {
         transclude: 'element',
         restrict: 'A',

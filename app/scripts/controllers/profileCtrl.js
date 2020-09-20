@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('profileCtrl', function ($scope) {
+ angular.module('Lineblocs').controller('profileCtrl', function ($scope) {
     $scope.products = [
  	{url:'images/portrait1.jpg'}, 
  	{url:'images/portrait2.jpg'},         

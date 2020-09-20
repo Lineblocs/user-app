@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+angular.module('Lineblocs').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
 
   $scope.items = ['item1', 'item2', 'item3'];
 
@@ -32,7 +32,7 @@ angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $mod
   };
 });
 
-angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+angular.module('Lineblocs').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 
   $scope.items = items;
   $scope.selected = {

@@ -14,7 +14,7 @@
 * A simple service to provide incremental values at every fixed interval
 */
 angular
-    .module('MaterialApp')
+    .module('Lineblocs')
     .factory('RandomIncremental', function(){
         return function(){
             var _callbacks = [];

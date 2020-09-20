@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
+ * @name Lineblocs.controller:HomeCtrl
  * @description
  * # HomeCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
+angular.module('Lineblocs').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
 	$scope.status = '  ';
 
 	$scope.showAdvanced = function(ev) {

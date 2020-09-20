@@ -2,9 +2,9 @@
 
 /**
 * @ngdoc overview
-* @name MaterialApp
+* @name Lineblocs
 * @description
-* # MaterialApp
+* # Lineblocs
 *
 * Main module of the application.
 */
@@ -132,7 +132,7 @@ window.addEventListener('message', function(e) {
     }
 });
 angular
-.module('MaterialApp', [
+.module('Lineblocs', [
     'ui.router',
     'ngAnimate',
     'ngMaterial',
@@ -1647,12 +1647,12 @@ var regParams = {
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing");
 	  $scope.$shared = $shared;
@@ -2086,12 +2086,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('BillingUpgradeCompleteCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing Upgrade Complete");
 	  $scope.plan = null;
@@ -2117,12 +2117,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('BillingUpgradePlanCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing Upgrade");
 	  $scope.$shared = $shared;
@@ -2169,12 +2169,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('BillingUpgradeSubmitCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing Upgrade Submit");
 	$scope.settings = {
@@ -2331,12 +2331,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Blocked Numbers");
     $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
@@ -2431,23 +2431,23 @@ angular.module('MaterialApp').controller('BlockedNumbersCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BodyCtrl', function ($scope, $shared) {
+angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
   $scope.$shared = $shared;
 });
 'use strict'; 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
     $shared.updateTitle("Buy Numbers");
     $scope.countries = [];
     $scope.state = "SEARCHING";
@@ -2739,12 +2739,12 @@ $scope.listCountries = function() {
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
 	  $shared.updateTitle("Create Carrier");
   $scope.values = {
     name: "",
@@ -2822,12 +2822,12 @@ angular.module('MaterialApp').controller('BYOCarrierCreateCtrl', function ($scop
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
 	  $shared.updateTitle("Edit Carrier");
   $scope.flows = [];
   $scope.carrier = null;
@@ -2895,12 +2895,12 @@ angular.module('MaterialApp').controller('BYOCarrierEditCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("My Carriers");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
@@ -2962,12 +2962,12 @@ angular.module('MaterialApp').controller('BYOCarriersCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Create DIDNumber");
   $scope.values = {
     username: "",
@@ -3031,12 +3031,12 @@ angular.module('MaterialApp').controller('BYODIDNumberCreateCtrl', function ($sc
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
 	  $shared.updateTitle("Edit DID Number");
   $scope.flows = [];
   $scope.number = null;
@@ -3090,12 +3090,12 @@ angular.module('MaterialApp').controller('BYODIDNumberEditCtrl', function ($scop
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("My DIDNumbers");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
@@ -3211,12 +3211,12 @@ angular.module('MaterialApp').controller('BYODIDNumbersCtrl', function ($scope, 
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $stateParams, $mdDialog, $shared) {
+angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, pagination, $location, $state, $stateParams, $mdDialog, $shared) {
     $shared.updateTitle("Calls");
     console.log("STATE PARAMS ", $stateParams);
     $scope.$shared = $shared;
@@ -3249,12 +3249,12 @@ angular.module('MaterialApp').controller('CallsCtrl', function ($scope, Backend,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
+angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
 	  $shared.updateTitle("Call View");
   $scope.call = [];
   $scope.load = function() {
@@ -3294,12 +3294,12 @@ angular.module('MaterialApp').controller('CallViewCtrl', function ($scope, Backe
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
+ * @name Lineblocs.controller:HomeCtrl
  * @description
  * # HomeCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+angular.module('Lineblocs').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
 	$scope.options1 = {
 	    lineWidth: 12,
 	    scaleColor: false,
@@ -3315,12 +3315,12 @@ angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', func
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+angular.module('Lineblocs').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
     $scope.line = {
 	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	          data: [
@@ -3371,25 +3371,25 @@ angular.module('MaterialApp').controller('ChartCtrl', ['$scope', '$timeout', fun
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
 angular
-    .module('MaterialApp')
+    .module('Lineblocs')
     .controller('calendarCtrl', function ($scope) {
     });
 'use strict';
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+ angular.module('Lineblocs').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
     $scope.rating1 = 3;
     $scope.rating2 = 2;
     $scope.rating3 = 4;  
@@ -3479,12 +3479,12 @@ angular
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
   $shared.updateTitle("Create Number");
   $scope.flows = [];
   $scope.number = {
@@ -3577,12 +3577,12 @@ angular.module('MaterialApp').controller('CreatePortCtrl', function ($scope, Bac
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
 	$scope.$shared = $shared;
 
@@ -3671,12 +3671,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('DashboardRedirectCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', '$state', function ($scope, $timeout, Backend, $shared, $q, $state) {
+ angular.module('Lineblocs').controller('DashboardRedirectCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', '$state', function ($scope, $timeout, Backend, $shared, $q, $state) {
 	  $shared.updateTitle("Dashboard");
 		  var urlObj = URI(document.location.href.split("#")[1]);
           var query = urlObj.query(true);
@@ -3702,12 +3702,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+ angular.module('Lineblocs').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
 	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
@@ -3882,12 +3882,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('DebuggerLogsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $shared, $q, $stateParams) {
     $shared.updateTitle("Debugger Logs");
     $scope.$shared = $shared;
     $scope.pagination = pagination;
@@ -3924,12 +3924,12 @@ angular.module('MaterialApp').controller('DebuggerLogsCtrl', function ($scope, B
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('EditPortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
   $shared.updateTitle("Edit Port Number");
   $scope.flows = [];
   $scope.number = null;
@@ -4033,12 +4033,12 @@ angular.module('MaterialApp').controller('EditPortCtrl', function ($scope, Backe
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Extension Codes");
   $scope.users = [];
 
@@ -4110,12 +4110,12 @@ angular.module('MaterialApp').controller('ExtensionCodesCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
 	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
@@ -4221,12 +4221,12 @@ angular.module('MaterialApp').controller('ExtensionCreateCtrl', function ($scope
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, $shared, $q) {
+angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $stateParams, $shared, $q) {
 	  $shared.updateTitle("Edit Extension");
   $scope.values = {
     username: "",
@@ -4338,12 +4338,12 @@ angular.module('MaterialApp').controller('ExtensionEditCtrl', function ($scope, 
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Extensions");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
@@ -4431,12 +4431,12 @@ angular.module('MaterialApp').controller('ExtensionsCtrl', function ($scope, Bac
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('FaxesCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
     $shared.updateTitle("Faxes");
     $scope.$shared = $shared;
     $scope.pagination = pagination;
@@ -4499,12 +4499,12 @@ angular.module('MaterialApp').controller('FaxesCtrl', function ($scope, Backend,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('FilesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Extension Codes");
   $scope.files = [];
   $scope.Backend = Backend;
@@ -4747,12 +4747,12 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $stateParams, $sce) {
+angular.module('Lineblocs').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $stateParams, $sce) {
 	  $shared.updateTitle("Flow Editor");
   $scope.settings = {
     page: 0
@@ -4793,12 +4793,12 @@ angular.module('MaterialApp').controller('FlowEditorCtrl', function ($scope, Bac
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Flows");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
@@ -4868,12 +4868,12 @@ angular.module('MaterialApp').controller('FlowsCtrl', function ($scope, Backend,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
 	  $shared.updateTitle("Forgot Password");
 	$scope.triedSubmit = false;
@@ -4918,24 +4918,24 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('HeadCtrl', function ($scope, $shared) {
+angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
   $scope.$shared = $shared;
 });
 'use strict';
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
+ * @name Lineblocs.controller:HomeCtrl
  * @description
  * # HomeCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
 	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
@@ -5093,12 +5093,12 @@ angular.module('MaterialApp').controller('HomeCtrl', ['$scope', '$timeout', 'Bac
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("IP Whitelist");
       $scope.settings = {
         disabled: false
@@ -5223,12 +5223,12 @@ angular.module('MaterialApp').controller('IpWhitelistCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('JoinWorkspaceCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, Idle) {
 	  $shared.updateTitle("Join Workspace");
 	  var hash = $stateParams['hash'];
@@ -5299,12 +5299,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
 	  $shared.updateTitle("Login");
 	  $shared.processResult();
@@ -5481,12 +5481,12 @@ function redirectUser() {
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
+angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
 	  $shared.updateTitle("Log View");
   $scope.log = null;
   $scope.load = function() {
@@ -5506,12 +5506,12 @@ angular.module('MaterialApp').controller('DebuggerLogViewCtrl', function ($scope
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+angular.module('Lineblocs').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
 
   $scope.items = ['item1', 'item2', 'item3'];
 
@@ -5536,7 +5536,7 @@ angular.module('MaterialApp').controller('ModalDemoCtrl', function ($scope, $mod
   };
 });
 
-angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+angular.module('Lineblocs').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 
   $scope.items = items;
   $scope.selected = {
@@ -5555,12 +5555,12 @@ angular.module('MaterialApp').controller('ModalInstanceCtrl', function ($scope, 
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('MyNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("My Numbers");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
@@ -5623,12 +5623,12 @@ angular.module('MaterialApp').controller('MyNumbersCtrl', function ($scope, Back
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
 	  $shared.updateTitle("Edit Number");
   $scope.flows = [];
   $scope.didActions = [
@@ -5699,12 +5699,12 @@ angular.module('MaterialApp').controller('MyNumbersEditCtrl', function ($scope, 
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('NotFoundCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window, Idle) {
 	  $shared.updateTitle("404 Not Found");
 	  $scope.goBack = function() {
@@ -5716,12 +5716,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('WorkspaceOptionsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Workspace Options");
 	  $scope.triedSubmit = false;
@@ -5772,12 +5772,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope, $log) {
+angular.module('Lineblocs').controller('PaginationDemoCtrl', function ($scope, $log) {
   $scope.totalItems = 64;
   $scope.currentPage = 4;
 
@@ -5797,12 +5797,12 @@ angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
+ * @name Lineblocs.controller:HomeCtrl
  * @description
  * # HomeCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
+angular.module('Lineblocs').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
 	$scope.status = '  ';
 
 	$scope.showAdvanced = function(ev) {
@@ -5868,12 +5868,12 @@ angular.module('MaterialApp').controller('paperCtrl', ['$scope', '$timeout', '$m
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('PhoneCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Create Phone");
   $scope.values = {
     name: "",
@@ -5969,12 +5969,12 @@ angular.module('MaterialApp').controller('PhoneCreateCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneDeployCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast) {
+angular.module('Lineblocs').controller('PhoneDeployCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast) {
     $shared.updateTitle("Phone Deploy");
     $scope.pagination = pagination;
     $scope.phones = [];
@@ -6013,12 +6013,12 @@ angular.module('MaterialApp').controller('PhoneDeployCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('PhoneEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Edit Phone");
   $scope.values = {
     name: "",
@@ -6112,12 +6112,12 @@ angular.module('MaterialApp').controller('PhoneEditCtrl', function ($scope, Back
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
+angular.module('Lineblocs').controller('PhoneGlobalSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
     $shared.updateTitle("PhoneGlobalSettings");
     $scope.settings = [];
   $scope.load = function() {
@@ -6180,12 +6180,12 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCtrl', function ($s
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
+angular.module('Lineblocs').controller('PhoneGlobalSettingsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast) {
     $shared.updateTitle("PhoneGlobalSettings Create");
     $scope.settings = [];
     $scope.values = {
@@ -6256,12 +6256,12 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsCreateCtrl', functi
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('PhoneGlobalSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
     $shared.updateTitle("PhoneGlobalSettings Create");
     $scope.settings = [];
     $scope.values = {
@@ -6343,12 +6343,12 @@ angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCtrl', functi
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGlobalSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('PhoneGlobalSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
     $shared.updateTitle("PhoneGlobalSettings Create");
     $scope.$stateParams = $stateParams;
     $scope.settings = [];
@@ -6466,12 +6466,12 @@ $scope.createOptions = function(field)
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGroupsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('PhoneGroupsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
 	  $shared.updateTitle("Create Phone Group");
   $scope.values = {
     number: "",
@@ -6521,12 +6521,12 @@ angular.module('MaterialApp').controller('PhoneGroupsCreateCtrl', function ($sco
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGroupsEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $stateParams ) {
+angular.module('Lineblocs').controller('PhoneGroupsEditCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $stateParams ) {
 	  $shared.updateTitle("Create Phone Group");
   $scope.values = {
     number: "",
@@ -6581,12 +6581,12 @@ angular.module('MaterialApp').controller('PhoneGroupsEditCtrl', function ($scope
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $stateParams) {
+angular.module('Lineblocs').controller('PhoneGroupsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $stateParams) {
     $shared.updateTitle("PhoneGroups");
     $scope.phoneGroups = [];
     $scope.$stateParams = $stateParams;
@@ -6647,12 +6647,12 @@ angular.module('MaterialApp').controller('PhoneGroupsCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneIndividualSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout) {
+angular.module('Lineblocs').controller('PhoneIndividualSettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout) {
     $shared.updateTitle("PhoneIndividualSettings");
     $scope.settings = [];
   $scope.load = function() {
@@ -6699,12 +6699,12 @@ angular.module('MaterialApp').controller('PhoneIndividualSettingsCtrl', function
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneIndividualSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('PhoneIndividualSettingsModifyCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
     $shared.updateTitle("PhoneIndividualSettings Create");
     $scope.settings = [];
     $scope.values = {
@@ -6754,12 +6754,12 @@ angular.module('MaterialApp').controller('PhoneIndividualSettingsModifyCtrl', fu
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhoneIndividualSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('PhoneIndividualSettingsModifyCategoryCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $timeout, $mdToast, $stateParams) {
     $shared.updateTitle("PhoneIndividualSettings Create");
     $scope.$stateParams = $stateParams;
     $scope.settings = [];
@@ -6877,12 +6877,12 @@ $scope.createOptions = function(field)
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, pagination, $mdToast, $stateParams) {
     $shared.updateTitle("Phones");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
@@ -6946,12 +6946,12 @@ angular.module('MaterialApp').controller('PhonesCtrl', function ($scope, Backend
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($scope) {
+angular.module('Lineblocs').controller('piechartCtrl', ['$scope', function ($scope) {
    
     $scope.options1 = {
         animate:{
@@ -6997,12 +6997,12 @@ angular.module('MaterialApp').controller('piechartCtrl', ['$scope', function ($s
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Ported Numbers");
 
     $scope.$stateParams = $stateParams;
@@ -7064,12 +7064,12 @@ angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('profileCtrl', function ($scope) {
+ angular.module('Lineblocs').controller('profileCtrl', function ($scope) {
     $scope.products = [
  	{url:'images/portrait1.jpg'}, 
  	{url:'images/portrait2.jpg'},         
@@ -7086,12 +7086,12 @@ angular.module('MaterialApp').controller('PortNumbersCtrl', function ($scope, Ba
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
+angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
   $scope.max = 200;
 
   $scope.random = function() {
@@ -7133,12 +7133,12 @@ angular.module('MaterialApp').controller('ProgressDemoCtrl', function ($scope) {
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
 	  $shared.updateTitle("Recordings");
   $scope.settings = {
     page: 0
@@ -7202,12 +7202,12 @@ angular.module('MaterialApp').controller('RecordingsCtrl', function ($scope, Bac
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog) {
 	  $shared.updateTitle("Register");
 		console.log("STATE ", $stateParams);
@@ -7547,12 +7547,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
 	  $shared.updateTitle("Reset");
 	$scope.triedSubmit = false;
@@ -7616,12 +7616,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
@@ -7739,12 +7739,12 @@ angular.module('MaterialApp')
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $location){
+angular.module('Lineblocs').controller('sidenavCtrl', function($scope, $location){
 	$scope.selectedMenu = 'dashboard';
 	$scope.collapseVar = 0;
 
@@ -7767,12 +7767,12 @@ angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $locati
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('TabsDemoCtrl', function ($scope, $window) {
+angular.module('Lineblocs').controller('TabsDemoCtrl', function ($scope, $window) {
   $scope.tabs = [
     { title:'Dynamic Title 1', content:'Dynamic content 1' },
     { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
@@ -7788,12 +7788,12 @@ angular.module('MaterialApp').controller('TabsDemoCtrl', function ($scope, $wind
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope, $log) {
+angular.module('Lineblocs').controller('TimepickerDemoCtrl', function ($scope, $log) {
   $scope.mytime = new Date();
 
   $scope.hstep = 1;
@@ -7828,12 +7828,12 @@ angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('todoCtrl', function ($scope) {
+ angular.module('Lineblocs').controller('todoCtrl', function ($scope) {
  	$scope.todos = [
  	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
  	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         
@@ -7859,12 +7859,12 @@ angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
+angular.module('Lineblocs').controller('TooltipDemoCtrl', function ($scope) {
   $scope.dynamicTooltip = 'Hello, World!';
   $scope.dynamicTooltipText = 'dynamic';
   $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
@@ -7873,12 +7873,12 @@ angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Verified Caller IDs");
   $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
@@ -8001,12 +8001,12 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCtrl', function ($sco
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
 	  $shared.updateTitle("Verified Caller IDs");
    $scope.values = {
     secret: ""
@@ -8072,12 +8072,12 @@ angular.module('MaterialApp').controller('VerifiedCallerIdsCreateCtrl', function
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
+angular.module('Lineblocs').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
       $shared.updateTitle("Workspace API Settings");
       $scope.settings = {};
       $scope.load = function () {
@@ -8130,12 +8130,12 @@ angular.module('MaterialApp').controller('WorkspaceAPISettingsCtrl', function ($
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace Params");
   $scope.params = [];
   $scope.load = function() {
@@ -8180,12 +8180,12 @@ angular.module('MaterialApp').controller('WorkspaceParamCtrl', function ($scope,
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace Users");
   $scope.users = [];
   $scope.Backend = Backend;
@@ -8256,12 +8256,12 @@ angular.module('MaterialApp').controller('WorkspaceUserCtrl', function ($scope, 
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
     $shared.updateTitle("Create Extension");
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
@@ -8316,12 +8316,12 @@ angular.module('MaterialApp').controller('WorkspaceUserCreateCtrl', function ($s
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
     $shared.updateTitle("Workspace User Edit");
     var roles = $shared.makeDefaultWorkspaceRoles();
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);

@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:HomeCtrl
+ * @name Lineblocs.controller:HomeCtrl
  * @description
  * # HomeCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+angular.module('Lineblocs').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
 	$scope.options1 = {
 	    lineWidth: 12,
 	    scaleColor: false,

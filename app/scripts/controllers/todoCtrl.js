@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('todoCtrl', function ($scope) {
+ angular.module('Lineblocs').controller('todoCtrl', function ($scope) {
  	$scope.todos = [
  	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
  	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         

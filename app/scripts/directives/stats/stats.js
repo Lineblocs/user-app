@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('MaterialApp')
+angular.module('Lineblocs')
 .directive('stats',function(){
     return {
         templateUrl:'scripts/directives/stats/stats.html?v='+window.app_version,

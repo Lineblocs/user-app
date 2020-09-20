@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('HeadCtrl', function ($scope, $shared) {
+angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
   $scope.$shared = $shared;
 });

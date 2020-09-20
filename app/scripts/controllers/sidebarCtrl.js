@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('sidenavCtrl', function($scope, $location){
+angular.module('Lineblocs').controller('sidenavCtrl', function($scope, $location){
 	$scope.selectedMenu = 'dashboard';
 	$scope.collapseVar = 0;
 

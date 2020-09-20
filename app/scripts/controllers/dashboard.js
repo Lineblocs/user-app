@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp')
+angular.module('Lineblocs')
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
 	$scope.$shared = $shared;
 

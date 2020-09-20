@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('PaginationDemoCtrl', function ($scope, $log) {
+angular.module('Lineblocs').controller('PaginationDemoCtrl', function ($scope, $log) {
   $scope.totalItems = 64;
   $scope.currentPage = 4;
 

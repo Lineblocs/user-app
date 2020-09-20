@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
- angular.module('MaterialApp').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+ angular.module('Lineblocs').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
     $scope.rating1 = 3;
     $scope.rating2 = 2;
     $scope.rating3 = 4;  

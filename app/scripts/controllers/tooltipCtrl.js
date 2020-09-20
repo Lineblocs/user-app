@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('TooltipDemoCtrl', function ($scope) {
+angular.module('Lineblocs').controller('TooltipDemoCtrl', function ($scope) {
   $scope.dynamicTooltip = 'Hello, World!';
   $scope.dynamicTooltipText = 'dynamic';
   $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';

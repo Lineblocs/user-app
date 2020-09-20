@@ -2,9 +2,9 @@
 
 /**
 * @ngdoc overview
-* @name MaterialApp
+* @name Lineblocs
 * @description
-* # MaterialApp
+* # Lineblocs
 *
 * Main module of the application.
 */
@@ -132,7 +132,7 @@ window.addEventListener('message', function(e) {
     }
 });
 angular
-.module('MaterialApp', [
+.module('Lineblocs', [
     'ui.router',
     'ngAnimate',
     'ngMaterial',

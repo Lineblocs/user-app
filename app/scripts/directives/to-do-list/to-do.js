@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('MaterialApp')
+angular.module('Lineblocs')
 .directive('todolist',function(){
 		return {
 	    templateUrl:'scripts/directives/to-do-list/to-do.html?v='+window.app_version,

@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name MaterialApp.controller:MainCtrl
+ * @name Lineblocs.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of MaterialApp
+ * Controller of Lineblocs
  */
-angular.module('MaterialApp').controller('TimepickerDemoCtrl', function ($scope, $log) {
+angular.module('Lineblocs').controller('TimepickerDemoCtrl', function ($scope, $log) {
   $scope.mytime = new Date();
 
   $scope.hstep = 1;
