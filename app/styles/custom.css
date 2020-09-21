@@ -896,3 +896,28 @@ button {
 }
 
 /*# sourceMappingURL=custom.css.map */
+
+/* 
+* custom sidebar styles for dashboard for mobile responsiveness
+*/
+/* .sidebar {
+  width: 0px;
+}
+
+.extended .sidebar {
+  width: 200px;
+}
+
+.extended .sidebar .top-logo-extended {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 80px;
+  }
+
+  .extended .sidebar .top-logo-extended {
+    display: block;
+  }
+} */
