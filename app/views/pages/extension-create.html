@@ -182,6 +182,9 @@
                                     </div>
                                 </div>
                                 <div flex="33">
+                                    <md-button ng-show="!values.flow_id" ng-click="setupFlow($event, values)"
+                                        class="md-raised">Setup
+                                    </md-button>
                                     <md-button ng-show="values.flow_id" ng-click="editFlow(values.flow_public_id)"
                                         class="md-raised">Edit Flow
                                     </md-button>

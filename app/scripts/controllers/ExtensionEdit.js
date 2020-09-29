@@ -24,7 +24,7 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
   $scope.load = function() {
   $shared.isLoading = true;
    $q.all([
-      Backend.get("/flow/listFlows"),
+      Backend.get("/flow/listFlows?category=extension"),
       Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
    ]).then(function(res) {
       $scope.flows= res[0].data.data;

@@ -1,0 +1,102 @@
+<md-dialog>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Setup Flow</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content class="margin-content setup-flow-box" ng-show="step===1">
+      <h5>Select Template</h5>
+          <ul class="no-list-style">
+      <li ng-repeat="category in templatesByCategory" ng-show="category.name==='Phone System'">
+        <div style="width: 800px;" class="templates-list">
+          <div style="float: left; width:250px; margin-right: 10px;" ng-repeat="template in category.templates">
+            <md-card>
+
+              <md-card-title>
+                <md-card-title-text>
+                  <span class="md-headline">{{template.name}}</span>
+                  <span class="md-subhead"></span>
+                </md-card-title-text>
+                <md-card-title-media>
+                  <div class="md-media-sm card-media"></div>
+                </md-card-title-media>
+              </md-card-title>
+              <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-show="!isSelected(template)" class="md-raised md-primary"
+                  ng-click="useTemplate(template)">
+                  Use Template</md-button>
+                <md-button ng-show="isSelected(template)" ng-disabled="true" class="md-raised md-primary">Use Template
+                </md-button>
+              </md-card-actions>
+            </md-card>
+          </div>
+        </div>
+        </li>
+    </ul>
+    </md-dialog-content>
+    <md-dialog-content class="margin-content setup-flow-box" ng-show="step===2">
+      <h5>Update Options</h5>
+    <ul id="presets" class="no-list-style">
+      <li ng-repeat="input in presets">
+        <div ng-if="input.data_type==='text'" ng-show="canShowPreset(input)">
+          <md-input-container class="compact-input">
+
+            <label>{{input.screen_name}}</label>
+            <input ng-model="input.value">
+          </md-input-container>
+        </div>
+        <div ng-if="input.data_type==='number'" ng-show="canShowPreset(input)">
+          <md-input-container class="compact-input">
+
+            <label>{{input.screen_name}}</label>
+
+            <input ng-model="input.value" type="number">
+          </md-input-container>
+        </div>
+        <div ng-if="input.data_type==='select'" ng-show="canShowPreset(input)">
+          <md-input-container>
+            <label for="testInput">
+              {{input.screen_name}}
+            </label>
+            <md-select ng-change="changeValues(inputs, presets, preset)" ng-model="input.value">
+              <md-option ng-value="value" ng-repeat="value in input.options">
+                {{value}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+
+        <div ng-if="input.data_type==='multi_select'" ng-show="canShowPreset(input)">
+          <md-input-container>
+            <label for="testInput">
+              {{input.screen_name}}
+            </label>
+            <md-select ng-change="console.log(inputs)" ng-model="input.value" multiple>
+              <md-option ng-value="value" ng-repeat="value in input.options">
+                {{value}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+
+
+      </li>
+    </ul>
+    </md-dialog-content>
+
+
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="save()">
+        Submit
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Close
+      </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -666,12 +666,16 @@ return changed;
         }
         function errorHandler(error, codeId, showMsg) {
             console.log("erroHandler ", arguments);
+            /*
             if ( $shared.tempStopErrors ) {
                 $q.all( factory.queued ).then(function() {
                     $shared.tempStopErrors = false;
                 });
                 return;
             }
+            */
+            $shared.endIsLoading();
+            $shared.endIsCreateLoading();
             if ( showMsg ) {
                     error = error || "An error occured.";
                     $shared.showError(error);
@@ -852,6 +856,12 @@ if (checked.length === 0) {
             pushToQueue( item );
             return item;
         }
+        factory.postCouldError = function(path, params)
+        {
+            $shared.tempStopErrors = false;
+            return factory.post(path, params, false, true);
+        }
+
         factory.postFiles =  function(url, data, showMsg) {
             var item =$q(function(resolve, reject) {
                  if (!skip.includes($state.current.name)) {

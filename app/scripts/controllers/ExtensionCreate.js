@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
 	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
@@ -21,6 +21,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
     secretError: ""
   }
   $scope.triedSubmit = false;
+
   $scope.generateSecret = function() {
     Backend.get("/generateSecurePassword").then(function(res) {
     $scope.values.secret = res.data.password;
@@ -61,7 +62,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/extension/saveExtension", values).then(function() {
+        Backend.postCouldError("/extension/saveExtension", values).then(function() {
         console.log("updated extension..");
           $mdToast.show(
             $mdToast.simple()
@@ -71,7 +72,9 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           );
           $state.go('extensions', {});
           $shared.endIsCreateLoading();
-        });
+          }, function() {
+
+          });
       });
     }
   }
@@ -100,11 +103,55 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});
   }
-  $timeout(function() {
-    Backend.get("/flow/listFlows?category=extension").then(function(res) {
-      $scope.flows = res.data.data;
-        $shared.endIsLoading();
+  $scope.setupFlow = function($event, extension) {
+      var title = "Unititled Flow";
+    if ( $scope.values.username !== '' ) {
+      var title = "Flow for " + $scope.values.username;
+    }
+
+    $mdDialog.show({
+      controller: SetupDialogController,
+      templateUrl: 'views/dialogs/setup-flow.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "title": title,
+        "category": "extension",
+        "onSuccess": function(flowId) {
+          load().then(function() {
+            console.log("setting flow ", flowId);
+            angular.forEach($scope.flows, function(flow) {
+              if ( flow.public_id === flowId) {
+                  $scope.values['flow_id'] = flow.id;
+              }
+            });
+            $mdDialog.hide();
+          } );
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        },
+
+      }
+    })
+    .then(function() {
+    }, function() {
     });
+  }
+
+  function load() {
+    return $q(function(resolve, reject) {
+      Backend.get("/flow/listFlows?category=extension").then(function(res) {
+        $scope.flows = res.data.data;
+          $shared.endIsLoading();
+          resolve();
+      }, reject);
+    });
+  }
+  $timeout(function() {
+    load();
   }, 0);
 });
 

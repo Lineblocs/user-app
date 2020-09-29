@@ -666,12 +666,16 @@ return changed;
         }
         function errorHandler(error, codeId, showMsg) {
             console.log("erroHandler ", arguments);
+            /*
             if ( $shared.tempStopErrors ) {
                 $q.all( factory.queued ).then(function() {
                     $shared.tempStopErrors = false;
                 });
                 return;
             }
+            */
+            $shared.endIsLoading();
+            $shared.endIsCreateLoading();
             if ( showMsg ) {
                     error = error || "An error occured.";
                     $shared.showError(error);
@@ -852,6 +856,12 @@ if (checked.length === 0) {
             pushToQueue( item );
             return item;
         }
+        factory.postCouldError = function(path, params)
+        {
+            $shared.tempStopErrors = false;
+            return factory.post(path, params, false, true);
+        }
+
         factory.postFiles =  function(url, data, showMsg) {
             var item =$q(function(resolve, reject) {
                  if (!skip.includes($state.current.name)) {
@@ -1643,478 +1653,154 @@ var regParams = {
 
 
 
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
-	  $shared.updateTitle("Create Carrier");
-  $scope.values = {
-    name: "",
-    ip_address: "",
-    routes: [],
-    auths: [],
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting carrier form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['name'] = $scope.values.name;
-      values['ip_address'] = $scope.values.ip_address;
-      values['routes'] = $scope.values.routes;
-      values['auths'] = $scope.values.auths;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/byo/carrier/saveCarrier", values).then(function() {
-       console.log("updated carrier..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created carrier')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('byo-carriers', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-   $scope.addRoute = function() {
-     console.log("addRoute called..");
-    var copy = {
-      "prefix": "",
-      "prepend": "",
-      "match": ""
+  function SetupDialogController($scope, $shared, Backend, title, category, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+      name: title,
+      category: category
     };
-    $scope.values.routes.push(copy);
-  }
-   $scope.addAuth= function() {
-     console.log("addAuth called..");
-    var copy = {
-      "ip": "",
-      "range": "/32"
+    $scope.templates = [];
+    $scope.step = 1;
+    $scope.blankTemplate = {
+      "title": "Blank Template",
+      "id": null
     };
-    $scope.values.auths.push(copy);
-  }
-  $scope.removeRoute = function($index, route) {
-    $scope.values.routes.splice($index, 1);
-  }
-  $scope.removeAuth = function($index, auth) {
-    $scope.values.auths.splice($index, 1);
-  }
+    $scope.templates = [];
 
-  $shared.endIsLoading();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
-	  $shared.updateTitle("Edit Carrier");
-  $scope.flows = [];
-  $scope.carrier = null;
-  $scope.submit = function(carrier) {
-    var params = {};
-    params['name'] = $scope.carrier.name;
-    params['ip_address'] = $scope.carrier.ip_address;
-    params['routes'] = $scope.carrier.routes;
-    params['auths'] = $scope.carrier.auths;
-    var toastPos = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-    var toastPosStr = Object.keys(toastPos)
-      .filter(function(pos) { return toastPos[pos]; })
-      .join(' ');
-    console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-    Backend.post("/byo/carrier/updateCarrier/" + $stateParams['carrierId'], params).then(function() {
-        console.log("updated carrier..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Carrier updated..')
-            .position(toastPosStr)
-            .hideDelay(3000)
-        );
-        $state.go('byo-carriers', {});
-      $shared.endIsCreateLoading();
-    });
-  }
-   $scope.addRoute = function() {
-    var copy = {
-      "prefix": "",
-      "prepend": "",
-      "match": ""
-    };
-    $scope.carrier.routes.push(copy);
-  }
-   $scope.addAuth= function() {
-     console.log("addAuth called..");
-    var copy = {
-      "ip": "",
-      "range": "/32"
-    };
-    $scope.carrier.auths.push(copy);
-  }
-  $scope.removeAuth = function($index, auth) {
-    $scope.carrier.auths.splice($index, 1);
-  }
-  $scope.removeRoute = function($index, route) {
-    $scope.carrier.routes.splice($index, 1);
-  }
-
-  $shared.isLoading = true;
-  Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
-    $scope.carrier = res.data;
-    $shared.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
-    $shared.updateTitle("My Carriers");
-    $scope.$stateParams = $stateParams;
-    $scope.$shared = $shared;
-    $scope.pagination = pagination;
-    $scope.Backend = Backend;
-  $scope.carriers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/byo/carrier/listCarriers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'carriers' );
-      pagination.loadData().then(function(res) {
-      $scope.carriers = res.data.data;
-      $shared.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-  $scope.editCarrier = function(carrier) {
-
-    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
-  }
-  $scope.createCarrier = function(carrier) {
-
-    $state.go('byo-carrier-create');
-  }
-  $scope.deleteCarrier = function($event, carrier) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this carrier?')
-          .textContent('you will not be able to use this carrier any longer')
-          .ariaLabel('Delete')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-	  $shared.updateTitle("Create DIDNumber");
-  $scope.values = {
-    username: "",
-    secret: "",
-    tags: [],
-    flow_id: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting number form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['number'] = $scope.values.number;
-      values['flow_id'] = $scope.values.flow_id;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/byo/did/saveNumber", values).then(function() {
-       console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created carrier')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('byo-did-numbers', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-  $scope.changeFlow = function(flow) {
-    $scope.values.flow_id = flow;
-    console.log("changeFlow", flow);
-  }
-  $scope.editFlow = function(flowId) {
-    $state.go('flow-editor', {flowId: flowId});
-  }
-  $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-  ]).then(function(res) {
-    $scope.flows = res[0].data.data;
-    $shared.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
-	  $shared.updateTitle("Edit DID Number");
-  $scope.flows = [];
-  $scope.number = null;
-  $scope.submit = function(number) {
-    var params = {};
-    params['number'] = $scope.number.number;
-    params['flow_id'] = $scope.number.flow_id;
-    var toastPos = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-    var toastPosStr = Object.keys(toastPos)
-      .filter(function(pos) { return toastPos[pos]; })
-      .join(' ');
-    console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-    Backend.post("/byo/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
-        console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('DIDNumber updated..')
-            .position(toastPosStr)
-            .hideDelay(3000)
-        );
-        $state.go('byo-did-numbers', {});
-      $shared.endIsCreateLoading();
-    });
-  }
-  $scope.changeFlow = function(flow) {
-    $scope.number.flow_id = flow;
-    console.log("changeFlow", flow);
-  }
-  $scope.editFlow = function(flowId) {
-    $state.go('flow-editor', {flowId: flowId});
-  }
-  $shared.isLoading = true;
-  $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
-  ]).then(function(res) {
-    $scope.flows = res[0].data.data;
-    $scope.number = res[1].data;
-    $shared.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
-    $shared.updateTitle("My DIDNumbers");
-    $scope.$stateParams = $stateParams;
-    $scope.$shared = $shared;
-    $scope.pagination = pagination;
-    $scope.Backend = Backend;
-  $scope.numbers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/byo/did/listNumbers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'numbers' );
-      pagination.loadData().then(function(res) {
-      $scope.numbers = res.data.data;
-      $shared.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-
-  $scope.importNumbers = function($event) {
-    console.log("importNumbers called..");
-    $mdDialog.show({
-      controller: DialogImportController,
-      templateUrl: 'views/dialogs/import-byo-numbers.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onAdded: function() {
-          $scope.load();
+    $scope.canShowPreset = function(preset) {
+      var show = false;
+      var presets = $scope.presets;
+      if (preset.depends_on_field !== '') {
+        for ( var index in presets ) {
+          var obj = presets[ index ];
+          if ( preset.depends_on_field === obj.var_name ) {
+            if (obj.value === preset.depends_on_value ) {
+              show = true;
+            }
+          }
         }
-
+      } else {
+        show = true;
       }
-    })
-    .then(function() {
-    }, function() {
-    });
-
-  }
-  $scope.createNumber = function() {
-
-    $state.go('byo-did-number-create');
-  }
-  $scope.editNumber = function(number) {
-
-    $state.go('byo-did-number-edit', {numberId: number.public_id});
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this DID number?')
-          .textContent('If you delete this carrier you will not be able to call it anymore')
-          .ariaLabel('Delete')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/byo/did/deleteNumber/" + number.public_id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-    function DialogImportController($scope, $mdDialog, Backend, $shared, onAdded) {
-      $scope.$shared = $shared;
-      $scope.error = false;
-      $scope.errorText = "";
-      $scope.data = {
-        number: ""
-      };
-      $scope.submit= function($event) {
-        var params = new FormData();
-      params.append("file", angular.element("#uploadFile").prop("files")[0]);
-      $shared.isLoading = true;
-    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
-        console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-          .textContent('Imported numbers..')
-          .position("top right")
-          .hideDelay(3000)
-        );
-        $mdDialog.hide(); 
-        $shared.endIsLoading();
-        onAdded();
-      }, function() {
-        $shared.endIsLoading();
-      });
-      }
-      $scope.close = function() {
-        $mdDialog.hide(); 
-      }
+      return show;
+    }
+    $scope.cancel = function() {
+      $mdDialog.hide();
     }
 
-  $scope.load();
-});
 
 
+    function init() {
+      $shared.isLoading = true;
+      var templateByCategory;
+      Backend.get("/flow/listTemplates").then(function (res) {
+        $shared.isLoading = false;
+        console.log("flow templates are ", res.data);
+        var templates = res.data.data;
+        $scope.templates = templates;
+        var templatesByCategory = [];
+        for ( var index in templates ) {
+          var template = templates[ index ];
+          var category = templatesByCategory[ template.category ];
+          var found = false;
+          for (var index1 in templatesByCategory ) {
+              if (templatesByCategory[index1].name === template.category) {
+                found = true;
+                templateByCategory = templatesByCategory[index1];
+              }
+          }
+          if ( !found ) {
+            templatesByCategory.push({
+              "name": template.category,
+              "templates": [template]
+            });
+            continue;
+          }
+          templateByCategory['templates'].push( template );
+        }
+        $scope.templatesByCategory = templatesByCategory;
+        console.log("template ", templatesByCategory);
+      });
+
+    }
+    $scope.save = function() {
+      if ( $scope.step === 1 ) {
+        $scope.saveStep1();
+      } else if ( $scope.step === 2 ) {
+        $scope.saveStep2();
+      }
+    }
+    $scope.saveStep1 = function () {
+      var data = angular.copy($scope.values);
+      var templateByCategory;
+      data['flow_json'] = null;
+      data['template_id'] = null;
+      data['started'] = true;
+      data['category'] = $scope.values['category'];
+      if ($scope.selectedTemplate.name !== 'Blank') {
+        data['template_id'] = $scope.selectedTemplate.id;
+      }
+      $shared.isCreateLoading = true;
+      Backend.post("/flow/saveFlow", data).then(function (res) {
+        $shared.isCreateLoading = false;
+        console.log("response arguments ", arguments);
+        console.log("response headers ", res.headers('X-Flow-ID'));
+        console.log("response body ", res.body);
+        var id = res.headers('X-Flow-ID');
+        $scope.flowId = id;
+        var urlObj = URI(document.location.href);
+        var query = urlObj.query(true);
+        var token = query.auth;
+
+        Backend.get("/getFlowPresets?templateId=" + data['template_id']).then(function (res) {
+          if ( !res.data.has_presets ) {
+            return;
+          } 
+          var url = "/getFlowPresets?templateId=" + data['template_id'];
+          $scope.inputs = {};
+          Backend.get(url).then(function (res) {
+            console.log("presets are ", res.data);
+            $scope.presets = res.data.presets;
+            angular.forEach($scope.presets, function(preset) {
+              preset.value = preset.default;
+            });
+            $scope.step = 2;
+          });
+        });
+
+      });
+    }
+    $scope.useTemplate = function (template) {
+      $scope.selectedTemplate = template;
+    };
+    $scope.isSelected = function (template) {
+      if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {
+        return true;
+      }
+      return false;
+    }
+
+    $scope.saveStep2 = function() {
+        var url = "/saveUpdatedPresets?templateId=" + $scope.selectedTemplate.id + "&flowId=" + $scope.flowId;
+        var presets = angular.copy( $scope.presets );
+
+        var data = presets.map(function(preset) {
+          return {
+            widget: preset.widget,
+            widget_key: preset.widget_key,
+            value: preset.value
+          };
+        });
+
+        $shared.isLoading = true;
+        Backend.post(url, data).then(function (res) {
+          console.log("updated presets..");
+          onSuccess($scope.flowId);
+        });
+    }
+
+    init();
+
+  }
 'use strict';
 
 /**
@@ -2899,6 +2585,18 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
+});
 'use strict'; 
 /**
  * @ngdoc function
@@ -3204,38 +2902,465 @@ $scope.listCountries = function() {
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
-	  $shared.updateTitle("Call View");
-  $scope.call = [];
-  $scope.load = function() {
-    $shared.isLoading =true;
-    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
-      console.log("call is ", res.data);
-      $shared.isLoading =false;
-      var call = res.data;
-      call.recordings = call.recordings.map(function(obj) {
-        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
-        return obj;
-      });
-      $scope.call = call;
-    })
+angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Create Carrier");
+  $scope.values = {
+    name: "",
+    ip_address: "",
+    routes: [],
+    auths: [],
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
   }
-  $scope.saveCall = function() {
-    var data = {
-      notes: $scope.call.notes
-    };
-    Backend.post("/call/updateCall/" + $stateParams['callId'], data).then(function(res) {
-      console.log("call is ", res.data);
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting carrier form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['name'] = $scope.values.name;
+      values['ip_address'] = $scope.values.ip_address;
+      values['routes'] = $scope.values.routes;
+      values['auths'] = $scope.values.auths;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/byo/carrier/saveCarrier", values).then(function() {
+       console.log("updated carrier..");
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Call updated..')
-            .position('top right')
+            .textContent('Created carrier')
+            .position("top right")
             .hideDelay(3000)
         );
-        $state.go('calls', {});
+        $state.go('byo-carriers', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+   $scope.addRoute = function() {
+     console.log("addRoute called..");
+    var copy = {
+      "prefix": "",
+      "prepend": "",
+      "match": ""
+    };
+    $scope.values.routes.push(copy);
+  }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.values.auths.push(copy);
+  }
+  $scope.removeRoute = function($index, route) {
+    $scope.values.routes.splice($index, 1);
+  }
+  $scope.removeAuth = function($index, auth) {
+    $scope.values.auths.splice($index, 1);
+  }
+
+  $shared.endIsLoading();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit Carrier");
+  $scope.flows = [];
+  $scope.carrier = null;
+  $scope.submit = function(carrier) {
+    var params = {};
+    params['name'] = $scope.carrier.name;
+    params['ip_address'] = $scope.carrier.ip_address;
+    params['routes'] = $scope.carrier.routes;
+    params['auths'] = $scope.carrier.auths;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+    Backend.post("/byo/carrier/updateCarrier/" + $stateParams['carrierId'], params).then(function() {
+        console.log("updated carrier..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Carrier updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('byo-carriers', {});
+      $shared.endIsCreateLoading();
+    });
+  }
+   $scope.addRoute = function() {
+    var copy = {
+      "prefix": "",
+      "prepend": "",
+      "match": ""
+    };
+    $scope.carrier.routes.push(copy);
+  }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.carrier.auths.push(copy);
+  }
+  $scope.removeAuth = function($index, auth) {
+    $scope.carrier.auths.splice($index, 1);
+  }
+  $scope.removeRoute = function($index, route) {
+    $scope.carrier.routes.splice($index, 1);
+  }
+
+  $shared.isLoading = true;
+  Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
+    $scope.carrier = res.data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My Carriers");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.carriers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'carriers' );
+      pagination.loadData().then(function(res) {
+      $scope.carriers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.editCarrier = function(carrier) {
+
+    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
+  }
+  $scope.createCarrier = function(carrier) {
+
+    $state.go('byo-carrier-create');
+  }
+  $scope.deleteCarrier = function($event, carrier) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this carrier?')
+          .textContent('you will not be able to use this carrier any longer')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+	  $shared.updateTitle("Create DIDNumber");
+  $scope.values = {
+    username: "",
+    secret: "",
+    tags: [],
+    flow_id: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting number form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['number'] = $scope.values.number;
+      values['flow_id'] = $scope.values.flow_id;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/byo/did/saveNumber", values).then(function() {
+       console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created carrier')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('byo-did-numbers', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit DID Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.submit = function(number) {
+    var params = {};
+    params['number'] = $scope.number.number;
+    params['flow_id'] = $scope.number.flow_id;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+    Backend.post("/byo/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('DIDNumber updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('byo-did-numbers', {});
+      $shared.endIsCreateLoading();
+    });
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $shared.isLoading = true;
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My DIDNumbers");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+
+  $scope.importNumbers = function($event) {
+    console.log("importNumbers called..");
+    $mdDialog.show({
+      controller: DialogImportController,
+      templateUrl: 'views/dialogs/import-byo-numbers.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onAdded: function() {
+          $scope.load();
+        }
+
+      }
     })
+    .then(function() {
+    }, function() {
+    });
 
   }
+  $scope.createNumber = function() {
+
+    $state.go('byo-did-number-create');
+  }
+  $scope.editNumber = function(number) {
+
+    $state.go('byo-did-number-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this DID number?')
+          .textContent('If you delete this carrier you will not be able to call it anymore')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/did/deleteNumber/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+    function DialogImportController($scope, $mdDialog, Backend, $shared, onAdded) {
+      $scope.$shared = $shared;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        number: ""
+      };
+      $scope.submit= function($event) {
+        var params = new FormData();
+      params.append("file", angular.element("#uploadFile").prop("files")[0]);
+      $shared.isLoading = true;
+    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Imported numbers..')
+          .position("top right")
+          .hideDelay(3000)
+        );
+        $mdDialog.hide(); 
+        $shared.endIsLoading();
+        onAdded();
+      }, function() {
+        $shared.endIsLoading();
+      });
+      }
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+
   $scope.load();
 });
 
@@ -3278,6 +3403,236 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
+	  $shared.updateTitle("Call View");
+  $scope.call = [];
+  $scope.load = function() {
+    $shared.isLoading =true;
+    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
+      console.log("call is ", res.data);
+      $shared.isLoading =false;
+      var call = res.data;
+      call.recordings = call.recordings.map(function(obj) {
+        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        return obj;
+      });
+      $scope.call = call;
+    })
+  }
+  $scope.saveCall = function() {
+    var data = {
+      notes: $scope.call.notes
+    };
+    Backend.post("/call/updateCall/" + $stateParams['callId'], data).then(function(res) {
+      console.log("call is ", res.data);
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Call updated..')
+            .position('top right')
+            .hideDelay(3000)
+        );
+        $state.go('calls', {});
+    })
+
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+	$scope.options1 = {
+	    lineWidth: 12,
+	    scaleColor: false,
+	    size: 120,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+    $scope.line = {
+	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	          data: [
+	      [65, 59, 80, 81, 56, 55, 40],
+	      [28, 48, 40, 19, 86, 27, 90]
+	    ],
+	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+    };
+
+    $scope.bar = {
+	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+		data: [
+		   [65, 59, 80, 81, 56, 55, 40],
+		   [28, 48, 40, 19, 86, 27, 90]
+		],
+		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
+    	
+    };
+
+    $scope.donut = {
+    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data: [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+     $scope.pie = {
+    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data : [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+
+    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
+                       {"x":20,"top-1":100,"top-2":35},
+                       {"x":30,"top-1":15,"top-2":75},
+                       {"x":40,"top-1":50,"top-2":45}];
+    $scope.datacolumns=[{"id":"top-1","type":"spline"},
+                        {"id":"top-2","type":"spline"}];
+    $scope.datax={"id":"x"};
+
+    
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular
+    .module('Lineblocs')
+    .controller('calendarCtrl', function ($scope) {
+    });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+ angular.module('Lineblocs').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+    $scope.rating1 = 3;
+    $scope.rating2 = 2;
+    $scope.rating3 = 4;  
+    var self = this,  j= 0, counter = 0;
+    self.modes = [ ];
+    self.activated = true;
+    self.determinateValue = 30;
+    /**
+    * Turn off or on the 5 themed loaders
+    */
+    self.toggleActivation = function() {
+        if ( !self.activated ) self.modes = [ ];
+        if (  self.activated ) j = counter = 0;
+    };
+    // Iterate every 100ms, non-stop
+    $interval(function() {
+    // Increment the Determinate loader
+        self.determinateValue += 1;
+        if (self.determinateValue > 100) {
+            self.determinateValue = 30;
+        }
+        // Incrementally start animation the five (5) Indeterminate,
+        // themed progress circular bars
+        if ( (j < 5) && !self.modes[j] && self.activated ) {
+            self.modes[j] = 'indeterminate';
+        }
+        if ( counter++ % 4 == 0 ) j++;
+    }, 100, 0, true);
+    var last = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    $scope.demo = {};
+    $scope.toastPosition = angular.extend({},last);
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+        last = angular.extend({},current);
+    }
+    $scope.showCustomToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showSimpleToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showActionToast = function() {
+        var toast = $mdToast.simple()
+        .content('Action Toast!')
+        .action('OK')
+        .highlightAction(false)
+        .position($scope.getToastPosition());
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                alert('You clicked \'OK\'.');
+            }
+        });
+    };
+})
+.controller('ToastCtrl', function($scope, $mdToast) {
+    $scope.closeToast = function() {
+        $mdToast.hide();
+    };
+
+});
 'use strict';
 
 /**
@@ -3375,6 +3730,100 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
 
   $shared.endIsLoading();
 });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
+	$scope.$shared = $shared;
+
+  	$scope.$state = $state;
+
+  	$rootScope.$on('$stateChangeSuccess', function(){ 
+		$timeout(function() {
+			$('body').scrollTop(0);
+		}, 200);
+	});
+
+  	if ($('body').hasClass('extended')) {
+	  	$timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+		}, 200);		
+  	};
+
+  	$scope.rtl = function(){
+  		$('body').toggleClass('rtl');
+  	}
+  	$scope.subnav = function(x){
+		if(x==$scope.showingSubNav)
+			$scope.showingSubNav = 0;			
+		else
+			$scope.showingSubNav = x;
+		return false;
+	}
+	$scope.extend = function  () {
+		$( '.c-hamburger' ).toggleClass('is-active');
+        $('body').toggleClass('extended');
+        $('.sidebar').toggleClass('ps-container');	
+        $rootScope.$broadcast('resize');
+        $timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+			console.log('pfscroll');
+		}, 200);	
+	}	
+	
+	
+
+	$scope.changeTheme = function(setTheme){
+
+		$('<link>')
+		  .appendTo('head')
+		  .attr({type : 'text/css', rel : 'stylesheet'})
+		  .attr('href', 'styles/app-'+setTheme+'.css');
+	}
+	
+	var w = angular.element($window);
+  
+	w.bind('resize', function () {
+		/*
+	    if ($(window).width()<1200) {
+            $('.c-hamburger').removeClass('is-active');
+            $('body').removeClass('extended');
+        } 
+        if ($(window).width()>1600) {
+            $('.c-hamburger').addClass('is-active');
+            //$('body').addClass('extended');          
+		};
+		*/
+	});   
+
+	if ($(window).width()<1200) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.c-hamburger' ).removeClass('is-active');
+        	$('body').removeClass('extended');
+		});
+	}
+
+	if ($(window).width()<600) {		
+		$rootScope.$on('$stateChangeSuccess', function(){ 
+			$( '.mdl-grid' ).removeAttr('dragula');
+		});
+	}
+	
+	$scope.changeLanguage = (function (l) {
+		
+		$translate.use(l);			
+		
+	});
+	loadAddedResources1();	
+});	
 
 'use strict';
 
@@ -3824,7 +4273,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
 	  $shared.updateTitle("Create Extension");
   $scope.values = {
     username: "",
@@ -3838,6 +4287,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
     secretError: ""
   }
   $scope.triedSubmit = false;
+
   $scope.generateSecret = function() {
     Backend.get("/generateSecurePassword").then(function(res) {
     $scope.values.secret = res.data.password;
@@ -3878,7 +4328,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/extension/saveExtension", values).then(function() {
+        Backend.postCouldError("/extension/saveExtension", values).then(function() {
         console.log("updated extension..");
           $mdToast.show(
             $mdToast.simple()
@@ -3888,7 +4338,9 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           );
           $state.go('extensions', {});
           $shared.endIsCreateLoading();
-        });
+          }, function() {
+
+          });
       });
     }
   }
@@ -3917,11 +4369,55 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});
   }
-  $timeout(function() {
-    Backend.get("/flow/listFlows?category=extension").then(function(res) {
-      $scope.flows = res.data.data;
-        $shared.endIsLoading();
+  $scope.setupFlow = function($event, extension) {
+      var title = "Unititled Flow";
+    if ( $scope.values.username !== '' ) {
+      var title = "Flow for " + $scope.values.username;
+    }
+
+    $mdDialog.show({
+      controller: SetupDialogController,
+      templateUrl: 'views/dialogs/setup-flow.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "title": title,
+        "category": "extension",
+        "onSuccess": function(flowId) {
+          load().then(function() {
+            console.log("setting flow ", flowId);
+            angular.forEach($scope.flows, function(flow) {
+              if ( flow.public_id === flowId) {
+                  $scope.values['flow_id'] = flow.id;
+              }
+            });
+            $mdDialog.hide();
+          } );
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        },
+
+      }
+    })
+    .then(function() {
+    }, function() {
     });
+  }
+
+  function load() {
+    return $q(function(resolve, reject) {
+      Backend.get("/flow/listFlows?category=extension").then(function(res) {
+        $scope.flows = res.data.data;
+          $shared.endIsLoading();
+          resolve();
+      }, reject);
+    });
+  }
+  $timeout(function() {
+    load();
   }, 0);
 });
 
@@ -3952,7 +4448,7 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
   $scope.load = function() {
   $shared.isLoading = true;
    $q.all([
-      Backend.get("/flow/listFlows"),
+      Backend.get("/flow/listFlows?category=extension"),
       Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
    ]).then(function(res) {
       $scope.flows= res[0].data.data;
@@ -4582,6 +5078,231 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs')
+  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Forgot Password");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+	$scope.user = {
+		email: "",
+	};
+    $scope.submit = function($event, forgotForm) {
+		$scope.triedSubmit = true;
+		if (forgotForm.$valid) {
+			var data = angular.copy( $scope.user );
+			$scope.isLoading = true;
+			var resetMsg = ""
+			Backend.post("/forgot", data, true).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');
+/*
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Reset instructions sent to email..')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					*/
+			}).catch(function() {
+				$scope.isLoading = false;
+				$scope.errorMsg = "No such user exists.";
+			})
+			return;
+		}
+	}
+	$scope.gotoLogin= function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+    	$state.go('login');
+	}
+	$shared.changingPage = false;
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+	  $shared.updateTitle("Dashboard");
+	$scope.options1 = {
+	    lineWidth: 8,
+	    scaleColor: false,
+	    size: 85,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	$scope.options2 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#00D554",
+        trackColor: "#c7f9db"
+	};
+	$scope.options3 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#F800FC",
+        trackColor: "#F5E5F5"
+	};
+
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	$scope.series = ['Series A', 'Series B'];
+	$scope.data = [
+		[65, 59, 80, 81, 56, 55, 40],
+		[28, 48, 40, 19, 86, 27, 90]
+	];
+
+	$scope.onClick = function (points, evt) {
+		console.log(points, evt);
+	};
+	if ($(window).width()<600) {		
+		$( '.mdl-grid' ).removeAttr('dragula');
+	};
+    $scope.line2 = {
+	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
+	          data: [
+	      			[99, 180, 80, 140, 120, 220, 100],
+	      			[50, 145, 200, 75, 50, 100, 50]
+		],
+	    colours: [{ 
+				fillColor: "#2b36ff",
+	            strokeColor: "#C172FF",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#8F00FF",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#8F00FF"
+        	},
+        	{
+        		fillColor: "#ffa01c",
+	            strokeColor: "#FFB53A",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#FF8300",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#FF8300"
+        	}
+        	],
+	    options: {
+	    	responsive: true,
+            bezierCurve : false,
+            datasetStroke: false,
+            legendTemplate: false,
+            pointDotRadius : 9,
+            pointDotStrokeWidth : 3,
+            datasetStrokeWidth : 3
+	    },
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+	};
+	$scope.load = function() {
+		$timeout(function () {
+			var color = Chart.helpers.color;
+			$shared.isLoading = true;
+			Backend.get("/dashboard").then(function(res) {
+				var graph = res.data[0];
+				$shared.billInfo=  res.data[1];
+				$shared.userInfo=  res.data[2];
+				console.log("graph data is ", graph);
+				$shared.isLoading = false;
+				$timeout(function(){
+					$scope.line = {
+						legend: true,
+						labels: graph.labels,
+							data: [
+						graph.data.inbound,
+						graph.data.outbound
+						//[7, 20, 10, 15, 17, 10, 27],
+						//[6, 9, 22, 11, 13, 20, 27]
+						],
+						series: [
+					'Inbound',
+					'Outbound'
+				],
+						colours: [{ 
+								fillColor: "#3f51b5",
+								strokeColor: "#3f51b5",
+								pointColor: "#3f51b5",
+								pointStrokeColor: "#3f51b5",
+								pointHighlightFill: "#3f51b5",
+								pointHighlightStroke: "#3f51b5"
+							},
+							{
+								fillColor: "#3D3D3D",
+								strokeColor: "#3D3D3D",
+								pointColor: "#3D3D3D",
+								pointStrokeColor: "#3D3D3D",
+								pointHighlightFill: "#3D3D3D",
+								pointHighlightStroke: "#3D3D3D"
+							}
+							],
+		options: {
+				legend: {
+			display: true,
+			position: 'right'
+			},
+							responsive: true,
+								bezierCurve : false,
+								datasetStroke: false,
+								/*
+								legendTemplate: '<ul>'
+						+'<% for (var i=0; i<datasets.length; i++) { %>'
+							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+						+'</li>'
+						+'<% } %>'
+					+'</ul>',
+					*/
+								pointDotRadius : 6,
+								showTooltips: false,
+						},
+						onClick: function (points, evt) {
+						console.log(points, evt);
+						}
+
+					};
+				}, 0);
+			});
+		}, 0);
+	}
+	$scope.reloadGraph = function() {
+		console.log("reloadGraph called..");
+		$scope.load();
+	}
+	$scope.load();
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('IpWhitelistCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("IP Whitelist");
       $scope.settings = {
@@ -4712,6 +5433,264 @@ angular.module('Lineblocs').controller('IpWhitelistCtrl', function ($scope, Back
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs')
+  .controller('JoinWorkspaceCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, Idle) {
+	  $shared.updateTitle("Join Workspace");
+	  var hash = $stateParams['hash'];
+	  $scope.passwordSet = false;
+	  $scope.values = {
+		  "first_name": "",
+		  "last_name": "",
+		  "password": "",
+		  "password2": ""
+	  };
+	function finishLogin(token, workspace) {
+		console.log("finishLogin ", arguments);
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				$shared.isAdmin = token.isAdmin;
+
+				$shared.setAuthToken(token);
+				$shared.setWorkspace(workspace);
+				Idle.watch();
+				$state.go('dashboard-user-welcome', {});
+	}
+
+	$scope.submit =function($event, inviteForm) {
+		if (!inviteForm.$valid) {
+			$scope.triedSubmit = true;
+			$scope.errorMsg = "Please fill in all fields below..";
+			return;
+		}
+		if ($scope.values.password !== $scope.values.password2) {
+			$scope.errorMsg = "Passwords don't match";
+			return;
+
+
+		}
+		var data = {
+			"hash": $stateParams['hash'],
+			"first_name": $scope.values['first_name'],
+			"last_name": $scope.values['last_name'],
+			"password": $scope.values['password']
+		};
+		Backend.post("/submitJoinWorkspace", data).then(function(res) {
+			$scope.isLoading = true;
+			var token = res.data;
+			console.log("token is ", token);
+			finishLogin(token, res.data.workspace);
+		});
+	}
+	$scope.acceptInvite = function() {
+			var data = {
+			"hash": $stateParams['hash']
+		};
+			$scope.isLoading = true;
+		Backend.post("/acceptWorkspaceInvite", data).then(function(res) {
+			var token = res.data;
+				finishLogin(token, res.data.workspace);
+		});
+	}
+
+	  Backend.get("/fetchWorkspaceInfo?hash=" +hash).then(function(res) {
+		  $scope.info = res.data;
+		  if ( $scope.info.user.needs_password_set ) {
+			  $scope.passwordSet = true;
+		  }
+	  });
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
+	  $shared.updateTitle("Login");
+	  $shared.processResult();
+	$scope.triedSubmit = false;
+	$scope.couldNotLogin = false;
+	$scope.noUserFound = false;
+	$scope.shouldSplash = false;
+	$scope.isLoading = false;
+	$scope.challenge = null;
+	$scope.user = {
+		email: "",
+		password: ""
+	};
+	$scope.step = 1;
+var clickedGoogSignIn = false;
+
+function redirectUser() {
+		Idle.watch();
+		var hash = window.location.hash.substr(1);
+		var query = URI(hash).query(true);
+		if ( query.next ) {	
+				window.location.replace("#/" + query.next);
+				return;
+		}
+		$state.go('dashboard-user-welcome', {});
+}
+	function finishLogin(token, workspace) {
+		console.log("finishLogin ", arguments);
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				$shared.isAdmin = token.isAdmin;
+
+				$shared.setAuthToken(token);
+				$shared.setWorkspace(workspace);
+				if (!$shared.isAdmin) {
+					redirectUser();
+					return;
+				}
+				$shared.isAdmin = true;
+				$shared.setAdminAuthToken(token.adminWorkspaceToken);
+				Backend.get("/admin/getWorkspaces").then(function(res) {
+					$shared.workspaces = res.data.data;
+					$state.go('dashboard-user-welcome', {});
+				});
+	}
+    $scope.submit1 = function($event, loginForm) {
+		$scope.step = 2;
+	}
+    $scope.submit1 = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (!loginForm.$valid) {
+
+			$scope.errorMsg = "Please enter a valid email";
+			return;
+		}
+			$shared.changingPage = true;
+			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
+				$shared.changingPage = false;
+				if ( res.data.found ) {
+					$scope.userInfo = res.data.info;
+					$scope.step = 2;
+					return;
+				}
+				$scope.noUserFound = true;
+			});
+	}
+
+    $scope.submit = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (!loginForm.$valid) {
+			return;
+		}
+
+			var data = angular.copy( $scope.user );
+			data['challenge'] = $scope.challenge;
+			$scope.isLoading = true;
+			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
+				var token = res.data;
+				finishLogin(token, res.data.workspace);
+			}).catch(function() {
+				$scope.isLoading = false;
+				$scope.couldNotLogin = true;
+			})
+			return;
+    }
+	$scope.gotoRegister = function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+    	$state.go('register');
+	}
+	$scope.gotoForgot = function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+		$state.go('forgot');
+	}
+
+	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar) {
+		var data = {};
+		data['email'] = email;
+		data['first_name'] = firstname;
+		data['last_name'] = lastname;
+		data['avatar'] = avatar;
+		data['challenge'] = $scope.challenge;
+			$shared.changingPage = true;
+		Backend.post("/thirdPartyLogin", data).then(function( res ) {
+			$timeout(function() {
+				$scope.$apply();
+				$shared.scrollToTop();
+
+				if ( res.data.confirmed ) {
+					finishLogin(res.data.info, res.data.info.workspace);
+					return;
+				}
+				$state.go('register', {
+					"hasData": true,
+					"userId": res.data.userId,
+					"authData": {"token": res.data.info.token}
+				});
+			}, 0);
+		});
+	}
+	function renderButton() {
+      gapi.signin2.render('gSignIn', {
+        'scope': 'profile email',
+        'width': 400,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+		'onsuccess': function(googleUser) {
+				if (!clickedGoogSignIn) {
+					return;
+				}
+				var profile = googleUser.getBasicProfile();
+				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				console.log('Name: ' + profile.getName());
+				console.log('Image URL: ' + profile.getImageUrl());
+				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+				var ctrl= angular.element("body").scope();
+				var fullName = profile.getName().split(' '),
+    				firstName = fullName[0],
+    				lastName = fullName[fullName.length - 1];
+				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
+			},
+			onerror: function(err) {
+			console.log('Google signIn2.render button err: ' + err)
+			},
+        'onfailure': function() {
+			console.error("failure ", arguments);
+		}
+	  });
+    }
+
+	$scope.backStep1 = function() {
+		$scope.step = 1;
+	}
+	$shared.changingPage = false;
+	angular.element("#gSignIn").on("click", function() {
+		clickedGoogSignIn = true;
+	});
+	var full = window.location.host
+	//window.location.host is subdomain.domain.com
+	var parts = full.split('.')
+	var sub = parts[0]
+	var second = sub.split(":");
+	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
+		$scope.challenge = sub;
+	}
+	$timeout(function() {
+		renderButton();
+	}, 0);
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
 	  $shared.updateTitle("Log View");
   $scope.log = null;
@@ -4728,6 +5707,55 @@ angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, 
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+});
+
+angular.module('Lineblocs').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
 'use strict';
 
 /**
@@ -4860,6 +5888,45 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});
   }
+
+  $scope.setupFlow = function($event, extension) {
+    $mdDialog.show({
+      controller: SetupDialogController,
+      templateUrl: 'views/dialogs/setup-flow.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "title": "DID flow for " + $scope.number.number,
+        "category": "did",
+        "onSuccess": function(flowId) {
+
+          Backend.get("/flow/listFlows?all=1").then(function(res) {
+            console.log("setting flow ", flowId);
+            $scope.flows = res.data.data;
+            angular.forEach($scope.flows, function(flow) {
+              if ( flow.public_id === flowId) {
+                  $scope.number['flow_id'] = flow.id;
+              }
+            });
+            $shared.endIsLoading();
+            $mdDialog.hide();
+          } );
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        },
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+
+
   $shared.isLoading = true;
   $q.all([
     Backend.get("/flow/listFlows?all=1"),
@@ -4872,6 +5939,175 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('NotFoundCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window, Idle) {
+	  $shared.updateTitle("404 Not Found");
+	  $scope.goBack = function() {
+         $window.history.back();
+	  }
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('WorkspaceOptionsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
+	  $shared.updateTitle("Workspace Options");
+	  $scope.triedSubmit = false;
+	  $scope.ui = {
+	  };
+	$scope.workspace = {
+		byo_enabled: null,
+		outbound_macro_id: null
+	};
+    $scope.submitSettings = function($event, settingsForm) {
+		$scope.triedSubmit = true;
+		console.log("submit ", arguments);
+		if (settingsForm.$valid) {
+			var data = {};
+			data['byo_enabled'] = $scope.workspace.byo_enabled;
+			data['outbound_macro_id'] = $scope.workspace.outbound_macro_id;
+			Backend.post("/updateWorkspace2", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					$shared.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+	$scope.changeOutbound = function(value) {
+		console.log("changeFunction  ", arguments);
+		$scope.workspace.outbound_macro_id = value;
+	}
+	$shared.isLoading = true;
+	$q.all([
+		Backend.get("/workspace"),
+		Backend.get("/function/listFunctions?all=1")
+	]).then(function(res) {
+		$scope.workspace = res[0].data;
+		console.log("workspace is ", $scope.workspace);
+		$scope.functions = res[1].data.data;
+		$shared.endIsLoading();
+	});
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('PaginationDemoCtrl', function ($scope, $log) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
+
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.pageChanged = function() {
+    $log.log('Page changed to: ' + $scope.currentPage);
+  };
+
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
+	$scope.status = '  ';
+
+	$scope.showAdvanced = function(ev) {
+	    $mdDialog.show({
+	    	controller: DialogController,
+	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
+	      	parent: angular.element(document.body),
+	      	targetEvent: ev,
+	      	clickOutsideToClose:true
+	    });
+	};
+	function DialogController($scope, $mdDialog) {
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+	}
+	
+	$scope.cards = [
+		{
+			name: 'Gary Neville',
+			subject: 'Once a scouse, always a scouse.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Antony Martial',
+			subject: 'Meet up in LA.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Danny Ings',
+			subject: 'Request for loan.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Roberto Firmoni',
+			subject: 'No match time!',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Lewandowski',
+			subject: 'Watch that?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Pep Guardiola',
+			subject: 'When is BR Leaving?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		}
+	];
+
+
+}]);
 'use strict';
 
 /**
@@ -5959,6 +7195,57 @@ angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, 
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs').controller('piechartCtrl', ['$scope', function ($scope) {
+   
+    $scope.options1 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#F0AD4E',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options2 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#3CA2E0',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options3 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#D9534F',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Ported Numbers");
 
@@ -6017,1638 +7304,6 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
 });
 
 
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
-	  $shared.updateTitle("Recordings");
-  $scope.settings = {
-    page: 0
-  };
-    $scope.pagination = pagination;
-    $scope.$stateParams = $stateParams;
-
-    $scope.$shared = $shared;
-  $scope.pagination = pagination;
-  $scope.Backend = Backend;
-  $scope.recordings = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-        pagination.changeUrl( "/recording/listRecordings" );
-        pagination.changePage( 1 );
-        pagination.changeScope( $scope, 'recordings' );
-        pagination.loadData().then(function(res) {
-        var recordings = res.data.data;
-        $scope.recordings = recordings.map(function(obj) {
-          obj.uri = $sce.trustAsResourceUrl(obj.uri);
-          return obj;
-        });
-        $shared.endIsLoading();
-        resolve();
-      }, reject)
-    });
-  }
-  $scope.deleteRecording = function($event, recording) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this recording?')
-          .textContent('This will permantely remove the recordings from your storage')
-          .ariaLabel('Delete recording')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
-        console.log("deleted recording..");
-        $scope.load().then(function() {
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('recording deleted..')
-              .position('top right')
-              .hideDelay(3000)
-          );
-        })
-      });
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-    $shared.updateTitle("Verified Caller IDs");
-  $scope.Backend = Backend;
-    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
-      $scope.$shared = $shared;
-      $scope.error = false;
-      $scope.errorText = "";
-      $scope.$mdDialog = $mdDialog;
-      $scope.data = {
-        step1: {
-          number: ""
-        }, 
-        step2:{
-          code: ""
-        }
-
-      };
-      $scope.step = 1;
-      $scope.postStep1 = function() {
-        var data = angular.copy($scope.data.step1);
-        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
-          $scope.step = 2;           
-        });
-      }
-      $scope.postStep2 = function() {
-        var data = {
-         'code': $scope.data.step2['code'],
-         'number': $scope.data.step1['number']
-        };
-        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
-          var data = res.data;
-
-          if (data.success) {
-
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number verified')
-            .position("top right")
-            .hideDelay(3000)
-        );
-
-            $scope.close();
-            onCreated();
-          } else {
-            $scope.error = true;
-            $scope.errorText = "The code was invalid please try again.";
-          }
-        });
-
-      }
-
-      $scope.close = function() {
-        console.log("closing dialog..");
-        $mdDialog.hide(); 
-      }
-    }
-
-  $scope.numbers = [];
-  $scope.load = function() {
-      $shared.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/settings/verifiedCallerids").then(function(res) {
-          $scope.numbers = res.data;
-          $shared.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.createNumber = function($event) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/add-callerid.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onCreated: function() {
-          $scope.load();
-        }
-
-      }
-    })
-    .then(function() {
-    }, function() {
-    });
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this number?')
-          .textContent('This will permantely remove the caller ID')
-          .ariaLabel('Delete extension')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        $shared.isLoading = true;
-      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Number deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
-	  $shared.updateTitle("Verified Caller IDs");
-   $scope.values = {
-    secret: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
-  }
-  $scope.showSecret = function() {
-    $scope.ui.showSecret = true;
-  }
-  $scope.hideSecret = function() {
-    $scope.ui.showSecret = false;
-  }
-  $scope.submit = function(form) {
-    console.log("submitting extension form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['username'] = $scope.values.username;
-      values['caller_id'] = $scope.values.caller_id;
-      values['secret'] = $scope.values.secret;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/extension/saveExtension", values).then(function() {
-       console.log("updated extension..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created extension')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('extensions', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-  $scope.keyupSecret = function() {
-    var passwordRes = zxcvbn($scope.values.secret);
-    //example 25%, 50%, 75%, 100%
-    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
-  }
-  $timeout(function() {
-    $shared.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
-      $shared.updateTitle("Workspace API Settings");
-      $scope.settings = {};
-      $scope.load = function () {
-        $shared.isLoading = true;
-        return $q(function (resolve, reject) {
-          Backend.get("/getWorkspaceTokens").then(function (res) {
-            $scope.settings = res.data;
-            $shared.endIsLoading();
-            resolve();
-          }, function () {
-            reject();
-          });
-        });
-      }
-      $scope.refreshTokens = function ($event) {
-        var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to refresh API tokens?')
-          .textContent('if you are using these API tokens in any code the code will stop working and you will need to replace the API tokens with the new ones you create')
-          .ariaLabel('Refresh tokens')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-        $mdDialog.show(confirm).then(function () {
-            $shared.isLoading = true;
-            Backend.get("/refreshWorkspaceTokens").then(function (res) {
-              $scope.load().then(function () {
-                $mdToast.show(
-                  $mdToast.simple()
-                  .textContent('API tokens recreated')
-                  .position("top right")
-                  .hideDelay(3000)
-                );
-              });
-            });
-          });
-        }
-        $scope.promptCopied = function () {
-          $mdToast.show(
-            $mdToast.simple()
-            .textContent('Copied to clipboard!')
-            .position("top right")
-            .hideDelay(3000)
-          );
-
-        }
-        $scope.load();
-      });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-    $shared.updateTitle("Workspace Params");
-  $scope.params = [];
-  $scope.load = function() {
-      $shared.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/workspaceParam/listParams").then(function(res) {
-          $scope.params = res.data;
-          $shared.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.saveParams = function() {
-      var data = angular.copy($scope.params);
-      Backend.post("/workspaceParam/saveParams", data).then(function() {
-          $mdToast.show(
-          $mdToast.simple()
-            .textContent('Workspace params saved successfully..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-  }
-  $scope.addParam = function() {
-    $scope.params.push({
-      "key": "",
-      "value": ""
-    });
-  }
-  $scope.deleteParam = function(index, param) {
-    $scope.params.splice(index, 1);
-  }
-
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-    $shared.updateTitle("Workspace Users");
-  $scope.users = [];
-  $scope.Backend = Backend;
-  $scope.load = function() {
-      $shared.isLoading = true;
-      return $q(function(resolve, reject) {
-        Backend.get("/workspaceUser/listUsers").then(function(res) {
-          $scope.users = res.data;
-          $shared.endIsLoading();
-          resolve();
-        }, function() {
-          reject();
-        });
-      });
-  }
-  $scope.deleteUser = function($event, user) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to remove this user from your workspace ?')
-          .textContent('This will permantely remove the user from your workspace')
-          .ariaLabel('Delete user')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        $shared.isLoading = true;
-      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('User deleted..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-
-      })
-    }, function() {
-    });
-  }
-  $scope.resendInvite = function(user) {
-    // Appending dialog to document.body to cover sidenav in docs app
-      Backend.post("/workspaceUser/resendInvite/" + user.public_id).then(function() {
-          $scope.load().then(function() {
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('Invite email sent..')
-            .position("top right")
-            .hideDelay(3000)
-        );
-          });
-        });
-  }
-  $scope.editUser = function($event, user) {
-    console.log("edit usr ", user);
-    $shared.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
-  }
-  $scope.createUser = function() {
-
-    $shared.changeRoute('settings-workspace-users-create', {});
-  }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
-    $shared.updateTitle("Create Extension");
-    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
-
-  $scope.values = {
-    user: {
-      first_name: "",
-      last_name: "",
-      email: ""
-    },
-    roles: $shared.makeDefaultWorkspaceRoles()
-  };
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting workspace user form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {
-        user: angular.copy($scope.values.user),
-        roles: angular.copy($scope.values.roles)
-      };
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/addUser", values).then(function() {
-       console.log("added user..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Added user to workspace')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('settings-workspace-users', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-  $timeout(function() {
-    $shared.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
-    $shared.updateTitle("Workspace User Edit");
-    var roles = $shared.makeDefaultWorkspaceRoles();
-    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
-
-
-  $scope.values = {
-    user: {
-      first_name: "",
-      last_name: "",
-      email: ""
-    },
-    roles: $shared.makeDefaultWorkspaceRoles()
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting workspace user form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {
-        user: angular.copy($scope.values.user),
-        roles: angular.copy($scope.values.roles)
-      };
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
-       console.log("added user..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Added user to workspace')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('settings-workspace-users', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
-      var user = res.data;
-      $scope.values.user['email'] = user.email;
-      $scope.values.user['first_name'] = user.first_name;
-      $scope.values.user['last_name'] = user.last_name;
-      for (var key in roles) {
-        console.log("checking for role ", key);
-        $scope.values.roles[ key ] = user[ key ];
-      }
-      console.log("$scope.values are ", $scope.values);
-    });
-  $timeout(function() {
-    $shared.endIsLoading();
-  }, 0);
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
-  $scope.$shared = $shared;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-	$scope.options1 = {
-	    lineWidth: 12,
-	    scaleColor: false,
-	    size: 120,
-	    lineCap: "square",
-	    barColor: "#fb8c00",
-	    trackColor: "#f9dcb8"
-	};
-	
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-    $scope.line = {
-	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-	          data: [
-	      [65, 59, 80, 81, 56, 55, 40],
-	      [28, 48, 40, 19, 86, 27, 90]
-	    ],
-	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-
-    };
-
-    $scope.bar = {
-	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-		data: [
-		   [65, 59, 80, 81, 56, 55, 40],
-		   [28, 48, 40, 19, 86, 27, 90]
-		],
-		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
-    	
-    };
-
-    $scope.donut = {
-    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data: [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-     $scope.pie = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data : [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-
-    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
-                       {"x":20,"top-1":100,"top-2":35},
-                       {"x":30,"top-1":15,"top-2":75},
-                       {"x":40,"top-1":50,"top-2":45}];
-    $scope.datacolumns=[{"id":"top-1","type":"spline"},
-                        {"id":"top-2","type":"spline"}];
-    $scope.datax={"id":"x"};
-
-    
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular
-    .module('Lineblocs')
-    .controller('calendarCtrl', function ($scope) {
-    });
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
- angular.module('Lineblocs').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
-    $scope.rating1 = 3;
-    $scope.rating2 = 2;
-    $scope.rating3 = 4;  
-    var self = this,  j= 0, counter = 0;
-    self.modes = [ ];
-    self.activated = true;
-    self.determinateValue = 30;
-    /**
-    * Turn off or on the 5 themed loaders
-    */
-    self.toggleActivation = function() {
-        if ( !self.activated ) self.modes = [ ];
-        if (  self.activated ) j = counter = 0;
-    };
-    // Iterate every 100ms, non-stop
-    $interval(function() {
-    // Increment the Determinate loader
-        self.determinateValue += 1;
-        if (self.determinateValue > 100) {
-            self.determinateValue = 30;
-        }
-        // Incrementally start animation the five (5) Indeterminate,
-        // themed progress circular bars
-        if ( (j < 5) && !self.modes[j] && self.activated ) {
-            self.modes[j] = 'indeterminate';
-        }
-        if ( counter++ % 4 == 0 ) j++;
-    }, 100, 0, true);
-    var last = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-    };
-    $scope.demo = {};
-    $scope.toastPosition = angular.extend({},last);
-    $scope.getToastPosition = function() {
-        sanitizePosition();
-        return Object.keys($scope.toastPosition)
-        .filter(function(pos) { return $scope.toastPosition[pos]; })
-        .join(' ');
-    };
-    function sanitizePosition() {
-        var current = $scope.toastPosition;
-        if ( current.bottom && last.top ) current.top = false;
-        if ( current.top && last.bottom ) current.bottom = false;
-        if ( current.right && last.left ) current.left = false;
-        if ( current.left && last.right ) current.right = false;
-        last = angular.extend({},current);
-    }
-    $scope.showCustomToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showSimpleToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showActionToast = function() {
-        var toast = $mdToast.simple()
-        .content('Action Toast!')
-        .action('OK')
-        .highlightAction(false)
-        .position($scope.getToastPosition());
-        $mdToast.show(toast).then(function(response) {
-            if ( response == 'ok' ) {
-                alert('You clicked \'OK\'.');
-            }
-        });
-    };
-})
-.controller('ToastCtrl', function($scope, $mdToast) {
-    $scope.closeToast = function() {
-        $mdToast.hide();
-    };
-
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared) {
-	$scope.$shared = $shared;
-
-  	$scope.$state = $state;
-
-  	$rootScope.$on('$stateChangeSuccess', function(){ 
-		$timeout(function() {
-			$('body').scrollTop(0);
-		}, 200);
-	});
-
-  	if ($('body').hasClass('extended')) {
-	  	$timeout(function(){
-			//$('.sidebar').perfectScrollbar();
-		}, 200);		
-  	};
-
-  	$scope.rtl = function(){
-  		$('body').toggleClass('rtl');
-  	}
-  	$scope.subnav = function(x){
-		if(x==$scope.showingSubNav)
-			$scope.showingSubNav = 0;			
-		else
-			$scope.showingSubNav = x;
-		return false;
-	}
-	$scope.extend = function  () {
-		$( '.c-hamburger' ).toggleClass('is-active');
-        $('body').toggleClass('extended');
-        $('.sidebar').toggleClass('ps-container');	
-        $rootScope.$broadcast('resize');
-        $timeout(function(){
-			//$('.sidebar').perfectScrollbar();
-			console.log('pfscroll');
-		}, 200);	
-	}	
-	
-	
-
-	$scope.changeTheme = function(setTheme){
-
-		$('<link>')
-		  .appendTo('head')
-		  .attr({type : 'text/css', rel : 'stylesheet'})
-		  .attr('href', 'styles/app-'+setTheme+'.css');
-	}
-	
-	var w = angular.element($window);
-  
-	w.bind('resize', function () {
-		/*
-	    if ($(window).width()<1200) {
-            $('.c-hamburger').removeClass('is-active');
-            $('body').removeClass('extended');
-        } 
-        if ($(window).width()>1600) {
-            $('.c-hamburger').addClass('is-active');
-            //$('body').addClass('extended');          
-		};
-		*/
-	});   
-
-	if ($(window).width()<1200) {		
-		$rootScope.$on('$stateChangeSuccess', function(){ 
-			$( '.c-hamburger' ).removeClass('is-active');
-        	$('body').removeClass('extended');
-		});
-	}
-
-	if ($(window).width()<600) {		
-		$rootScope.$on('$stateChangeSuccess', function(){ 
-			$( '.mdl-grid' ).removeAttr('dragula');
-		});
-	}
-	
-	$scope.changeLanguage = (function (l) {
-		
-		$translate.use(l);			
-		
-	});
-	loadAddedResources1();	
-});	
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
-	  $shared.updateTitle("Forgot Password");
-	$scope.triedSubmit = false;
-	$scope.isLoading = false;
-	$scope.user = {
-		email: "",
-	};
-    $scope.submit = function($event, forgotForm) {
-		$scope.triedSubmit = true;
-		if (forgotForm.$valid) {
-			var data = angular.copy( $scope.user );
-			$scope.isLoading = true;
-			var resetMsg = ""
-			Backend.post("/forgot", data, true).then(function( res ) {
-				var token = res.data;
-				$scope.isLoading = false;
-				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');
-/*
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Reset instructions sent to email..')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					*/
-			}).catch(function() {
-				$scope.isLoading = false;
-				$scope.errorMsg = "No such user exists.";
-			})
-			return;
-		}
-	}
-	$scope.gotoLogin= function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-    	$state.go('login');
-	}
-	$shared.changingPage = false;
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
-  $scope.$shared = $shared;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
-	  $shared.updateTitle("Dashboard");
-	$scope.options1 = {
-	    lineWidth: 8,
-	    scaleColor: false,
-	    size: 85,
-	    lineCap: "square",
-	    barColor: "#fb8c00",
-	    trackColor: "#f9dcb8"
-	};
-	$scope.options2 = {
-	    lineWidth: 8,
-        scaleColor: false,
-        size: 85,
-        lineCap: "square",
-        barColor: "#00D554",
-        trackColor: "#c7f9db"
-	};
-	$scope.options3 = {
-	    lineWidth: 8,
-        scaleColor: false,
-        size: 85,
-        lineCap: "square",
-        barColor: "#F800FC",
-        trackColor: "#F5E5F5"
-	};
-
-	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-	$scope.series = ['Series A', 'Series B'];
-	$scope.data = [
-		[65, 59, 80, 81, 56, 55, 40],
-		[28, 48, 40, 19, 86, 27, 90]
-	];
-
-	$scope.onClick = function (points, evt) {
-		console.log(points, evt);
-	};
-	if ($(window).width()<600) {		
-		$( '.mdl-grid' ).removeAttr('dragula');
-	};
-    $scope.line2 = {
-	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
-	          data: [
-	      			[99, 180, 80, 140, 120, 220, 100],
-	      			[50, 145, 200, 75, 50, 100, 50]
-		],
-	    colours: [{ 
-				fillColor: "#2b36ff",
-	            strokeColor: "#C172FF",
-	            pointColor: "#fff",
-	            pointStrokeColor: "#8F00FF",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "#8F00FF"
-        	},
-        	{
-        		fillColor: "#ffa01c",
-	            strokeColor: "#FFB53A",
-	            pointColor: "#fff",
-	            pointStrokeColor: "#FF8300",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "#FF8300"
-        	}
-        	],
-	    options: {
-	    	responsive: true,
-            bezierCurve : false,
-            datasetStroke: false,
-            legendTemplate: false,
-            pointDotRadius : 9,
-            pointDotStrokeWidth : 3,
-            datasetStrokeWidth : 3
-	    },
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-
-	};
-	$scope.load = function() {
-		$timeout(function () {
-			var color = Chart.helpers.color;
-			$shared.isLoading = true;
-			Backend.get("/dashboard").then(function(res) {
-				var graph = res.data[0];
-				$shared.billInfo=  res.data[1];
-				$shared.userInfo=  res.data[2];
-				console.log("graph data is ", graph);
-				$shared.isLoading = false;
-				$timeout(function(){
-					$scope.line = {
-						legend: true,
-						labels: graph.labels,
-							data: [
-						graph.data.inbound,
-						graph.data.outbound
-						//[7, 20, 10, 15, 17, 10, 27],
-						//[6, 9, 22, 11, 13, 20, 27]
-						],
-						series: [
-					'Inbound',
-					'Outbound'
-				],
-						colours: [{ 
-								fillColor: "#3f51b5",
-								strokeColor: "#3f51b5",
-								pointColor: "#3f51b5",
-								pointStrokeColor: "#3f51b5",
-								pointHighlightFill: "#3f51b5",
-								pointHighlightStroke: "#3f51b5"
-							},
-							{
-								fillColor: "#3D3D3D",
-								strokeColor: "#3D3D3D",
-								pointColor: "#3D3D3D",
-								pointStrokeColor: "#3D3D3D",
-								pointHighlightFill: "#3D3D3D",
-								pointHighlightStroke: "#3D3D3D"
-							}
-							],
-		options: {
-				legend: {
-			display: true,
-			position: 'right'
-			},
-							responsive: true,
-								bezierCurve : false,
-								datasetStroke: false,
-								/*
-								legendTemplate: '<ul>'
-						+'<% for (var i=0; i<datasets.length; i++) { %>'
-							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-						+'</li>'
-						+'<% } %>'
-					+'</ul>',
-					*/
-								pointDotRadius : 6,
-								showTooltips: false,
-						},
-						onClick: function (points, evt) {
-						console.log(points, evt);
-						}
-
-					};
-				}, 0);
-			});
-		}, 0);
-	}
-	$scope.reloadGraph = function() {
-		console.log("reloadGraph called..");
-		$scope.load();
-	}
-	$scope.load();
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('JoinWorkspaceCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, Idle) {
-	  $shared.updateTitle("Join Workspace");
-	  var hash = $stateParams['hash'];
-	  $scope.passwordSet = false;
-	  $scope.values = {
-		  "first_name": "",
-		  "last_name": "",
-		  "password": "",
-		  "password2": ""
-	  };
-	function finishLogin(token, workspace) {
-		console.log("finishLogin ", arguments);
-				$scope.isLoading = false;
-				$scope.couldNotLogin = false;
-				$shared.isAdmin = token.isAdmin;
-
-				$shared.setAuthToken(token);
-				$shared.setWorkspace(workspace);
-				Idle.watch();
-				$state.go('dashboard-user-welcome', {});
-	}
-
-	$scope.submit =function($event, inviteForm) {
-		if (!inviteForm.$valid) {
-			$scope.triedSubmit = true;
-			$scope.errorMsg = "Please fill in all fields below..";
-			return;
-		}
-		if ($scope.values.password !== $scope.values.password2) {
-			$scope.errorMsg = "Passwords don't match";
-			return;
-
-
-		}
-		var data = {
-			"hash": $stateParams['hash'],
-			"first_name": $scope.values['first_name'],
-			"last_name": $scope.values['last_name'],
-			"password": $scope.values['password']
-		};
-		Backend.post("/submitJoinWorkspace", data).then(function(res) {
-			$scope.isLoading = true;
-			var token = res.data;
-			console.log("token is ", token);
-			finishLogin(token, res.data.workspace);
-		});
-	}
-	$scope.acceptInvite = function() {
-			var data = {
-			"hash": $stateParams['hash']
-		};
-			$scope.isLoading = true;
-		Backend.post("/acceptWorkspaceInvite", data).then(function(res) {
-			var token = res.data;
-				finishLogin(token, res.data.workspace);
-		});
-	}
-
-	  Backend.get("/fetchWorkspaceInfo?hash=" +hash).then(function(res) {
-		  $scope.info = res.data;
-		  if ( $scope.info.user.needs_password_set ) {
-			  $scope.passwordSet = true;
-		  }
-	  });
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
-	  $shared.updateTitle("Login");
-	  $shared.processResult();
-	$scope.triedSubmit = false;
-	$scope.couldNotLogin = false;
-	$scope.noUserFound = false;
-	$scope.shouldSplash = false;
-	$scope.isLoading = false;
-	$scope.challenge = null;
-	$scope.user = {
-		email: "",
-		password: ""
-	};
-	$scope.step = 1;
-var clickedGoogSignIn = false;
-
-function redirectUser() {
-		Idle.watch();
-		var hash = window.location.hash.substr(1);
-		var query = URI(hash).query(true);
-		if ( query.next ) {	
-				window.location.replace("#/" + query.next);
-				return;
-		}
-		$state.go('dashboard-user-welcome', {});
-}
-	function finishLogin(token, workspace) {
-		console.log("finishLogin ", arguments);
-				$scope.isLoading = false;
-				$scope.couldNotLogin = false;
-				$shared.isAdmin = token.isAdmin;
-
-				$shared.setAuthToken(token);
-				$shared.setWorkspace(workspace);
-				if (!$shared.isAdmin) {
-					redirectUser();
-					return;
-				}
-				$shared.isAdmin = true;
-				$shared.setAdminAuthToken(token.adminWorkspaceToken);
-				Backend.get("/admin/getWorkspaces").then(function(res) {
-					$shared.workspaces = res.data.data;
-					$state.go('dashboard-user-welcome', {});
-				});
-	}
-    $scope.submit1 = function($event, loginForm) {
-		$scope.step = 2;
-	}
-    $scope.submit1 = function($event, loginForm) {
-		$scope.triedSubmit = true;
-		if (!loginForm.$valid) {
-
-			$scope.errorMsg = "Please enter a valid email";
-			return;
-		}
-			$shared.changingPage = true;
-			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
-				$shared.changingPage = false;
-				if ( res.data.found ) {
-					$scope.userInfo = res.data.info;
-					$scope.step = 2;
-					return;
-				}
-				$scope.noUserFound = true;
-			});
-	}
-
-    $scope.submit = function($event, loginForm) {
-		$scope.triedSubmit = true;
-		if (!loginForm.$valid) {
-			return;
-		}
-
-			var data = angular.copy( $scope.user );
-			data['challenge'] = $scope.challenge;
-			$scope.isLoading = true;
-			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
-				var token = res.data;
-				finishLogin(token, res.data.workspace);
-			}).catch(function() {
-				$scope.isLoading = false;
-				$scope.couldNotLogin = true;
-			})
-			return;
-    }
-	$scope.gotoRegister = function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-    	$state.go('register');
-	}
-	$scope.gotoForgot = function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-		$state.go('forgot');
-	}
-
-	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar) {
-		var data = {};
-		data['email'] = email;
-		data['first_name'] = firstname;
-		data['last_name'] = lastname;
-		data['avatar'] = avatar;
-		data['challenge'] = $scope.challenge;
-			$shared.changingPage = true;
-		Backend.post("/thirdPartyLogin", data).then(function( res ) {
-			$timeout(function() {
-				$scope.$apply();
-				$shared.scrollToTop();
-
-				if ( res.data.confirmed ) {
-					finishLogin(res.data.info, res.data.info.workspace);
-					return;
-				}
-				$state.go('register', {
-					"hasData": true,
-					"userId": res.data.userId,
-					"authData": {"token": res.data.info.token}
-				});
-			}, 0);
-		});
-	}
-	function renderButton() {
-      gapi.signin2.render('gSignIn', {
-        'scope': 'profile email',
-        'width': 400,
-        'height': 50,
-        'longtitle': true,
-        'theme': 'dark',
-		'onsuccess': function(googleUser) {
-				if (!clickedGoogSignIn) {
-					return;
-				}
-				var profile = googleUser.getBasicProfile();
-				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-				console.log('Name: ' + profile.getName());
-				console.log('Image URL: ' + profile.getImageUrl());
-				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-				var ctrl= angular.element("body").scope();
-				var fullName = profile.getName().split(' '),
-    				firstName = fullName[0],
-    				lastName = fullName[fullName.length - 1];
-				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
-			},
-			onerror: function(err) {
-			console.log('Google signIn2.render button err: ' + err)
-			},
-        'onfailure': function() {
-			console.error("failure ", arguments);
-		}
-	  });
-    }
-
-	$scope.backStep1 = function() {
-		$scope.step = 1;
-	}
-	$shared.changingPage = false;
-	angular.element("#gSignIn").on("click", function() {
-		clickedGoogSignIn = true;
-	});
-	var full = window.location.host
-	//window.location.host is subdomain.domain.com
-	var parts = full.split('.')
-	var sub = parts[0]
-	var second = sub.split(":");
-	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
-		$scope.challenge = sub;
-	}
-	$timeout(function() {
-		renderButton();
-	}, 0);
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.open = function (size) {
-
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-});
-
-angular.module('Lineblocs').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('NotFoundCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window, Idle) {
-	  $shared.updateTitle("404 Not Found");
-	  $scope.goBack = function() {
-         $window.history.back();
-	  }
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('WorkspaceOptionsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
-	  $shared.updateTitle("Workspace Options");
-	  $scope.triedSubmit = false;
-	  $scope.ui = {
-	  };
-	$scope.workspace = {
-		byo_enabled: null,
-		outbound_macro_id: null
-	};
-    $scope.submitSettings = function($event, settingsForm) {
-		$scope.triedSubmit = true;
-		console.log("submit ", arguments);
-		if (settingsForm.$valid) {
-			var data = {};
-			data['byo_enabled'] = $scope.workspace.byo_enabled;
-			data['outbound_macro_id'] = $scope.workspace.outbound_macro_id;
-			Backend.post("/updateWorkspace2", data).then(function( res ) {
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Updated your info')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					$shared.endIsCreateLoading();
-			});
-			return;
-		}
-      	return false;
-
-	}
-	$scope.changeOutbound = function(value) {
-		console.log("changeFunction  ", arguments);
-		$scope.workspace.outbound_macro_id = value;
-	}
-	$shared.isLoading = true;
-	$q.all([
-		Backend.get("/workspace"),
-		Backend.get("/function/listFunctions?all=1")
-	]).then(function(res) {
-		$scope.workspace = res[0].data;
-		console.log("workspace is ", $scope.workspace);
-		$scope.functions = res[1].data.data;
-		$shared.endIsLoading();
-	});
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('PaginationDemoCtrl', function ($scope, $log) {
-  $scope.totalItems = 64;
-  $scope.currentPage = 4;
-
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-
-  $scope.pageChanged = function() {
-    $log.log('Page changed to: ' + $scope.currentPage);
-  };
-
-  $scope.maxSize = 5;
-  $scope.bigTotalItems = 175;
-  $scope.bigCurrentPage = 1;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
-	$scope.status = '  ';
-
-	$scope.showAdvanced = function(ev) {
-	    $mdDialog.show({
-	    	controller: DialogController,
-	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
-	      	parent: angular.element(document.body),
-	      	targetEvent: ev,
-	      	clickOutsideToClose:true
-	    });
-	};
-	function DialogController($scope, $mdDialog) {
-		$scope.hide = function() {
-			$mdDialog.hide();
-		};
-		$scope.cancel = function() {
-			$mdDialog.cancel();
-		};
-	}
-	
-	$scope.cards = [
-		{
-			name: 'Gary Neville',
-			subject: 'Once a scouse, always a scouse.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Antony Martial',
-			subject: 'Meet up in LA.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Danny Ings',
-			subject: 'Request for loan.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Roberto Firmoni',
-			subject: 'No match time!',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Lewandowski',
-			subject: 'Watch that?',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Pep Guardiola',
-			subject: 'When is BR Leaving?',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		}
-	];
-
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('piechartCtrl', ['$scope', function ($scope) {
-   
-    $scope.options1 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#F0AD4E',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
-
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
-    };
-    $scope.options2 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#3CA2E0',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
-
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
-    };
-    $scope.options3 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#D9534F',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
-
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
-    };
-}]);
 'use strict';
 
 /**
@@ -7718,6 +7373,75 @@ angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
   };
   $scope.randomStacked();
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
+	  $shared.updateTitle("Recordings");
+  $scope.settings = {
+    page: 0
+  };
+    $scope.pagination = pagination;
+    $scope.$stateParams = $stateParams;
+
+    $scope.$shared = $shared;
+  $scope.pagination = pagination;
+  $scope.Backend = Backend;
+  $scope.recordings = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          return obj;
+        });
+        $shared.endIsLoading();
+        resolve();
+      }, reject)
+    });
+  }
+  $scope.deleteRecording = function($event, recording) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this recording?')
+          .textContent('This will permantely remove the recordings from your storage')
+          .ariaLabel('Delete recording')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+        console.log("deleted recording..");
+        $scope.load().then(function() {
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('recording deleted..')
+              .position('top right')
+              .hideDelay(3000)
+          );
+        })
+      });
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
 'use strict';
 
 /**
@@ -8389,3 +8113,522 @@ angular.module('Lineblocs').controller('TooltipDemoCtrl', function ($scope) {
   $scope.dynamicTooltipText = 'dynamic';
   $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
 });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Verified Caller IDs");
+  $scope.Backend = Backend;
+    function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
+      $scope.$shared = $shared;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.$mdDialog = $mdDialog;
+      $scope.data = {
+        step1: {
+          number: ""
+        }, 
+        step2:{
+          code: ""
+        }
+
+      };
+      $scope.step = 1;
+      $scope.postStep1 = function() {
+        var data = angular.copy($scope.data.step1);
+        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
+          $scope.step = 2;           
+        });
+      }
+      $scope.postStep2 = function() {
+        var data = {
+         'code': $scope.data.step2['code'],
+         'number': $scope.data.step1['number']
+        };
+        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
+          var data = res.data;
+
+          if (data.success) {
+
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number verified')
+            .position("top right")
+            .hideDelay(3000)
+        );
+
+            $scope.close();
+            onCreated();
+          } else {
+            $scope.error = true;
+            $scope.errorText = "The code was invalid please try again.";
+          }
+        });
+
+      }
+
+      $scope.close = function() {
+        console.log("closing dialog..");
+        $mdDialog.hide(); 
+      }
+    }
+
+  $scope.numbers = [];
+  $scope.load = function() {
+      $shared.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/settings/verifiedCallerids").then(function(res) {
+          $scope.numbers = res.data;
+          $shared.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.createNumber = function($event) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'views/dialogs/add-callerid.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        }
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this number?')
+          .textContent('This will permantely remove the caller ID')
+          .ariaLabel('Delete extension')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        $shared.isLoading = true;
+      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Number deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('VerifiedCallerIdsCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Verified Caller IDs");
+   $scope.values = {
+    secret: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.generateSecret = function() {
+    $scope.values.secret = generatePassword();
+  }
+  $scope.showSecret = function() {
+    $scope.ui.showSecret = true;
+  }
+  $scope.hideSecret = function() {
+    $scope.ui.showSecret = false;
+  }
+  $scope.submit = function(form) {
+    console.log("submitting extension form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['username'] = $scope.values.username;
+      values['caller_id'] = $scope.values.caller_id;
+      values['secret'] = $scope.values.secret;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/extension/saveExtension", values).then(function() {
+       console.log("updated extension..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created extension')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('extensions', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.keyupSecret = function() {
+    var passwordRes = zxcvbn($scope.values.secret);
+    //example 25%, 50%, 75%, 100%
+    $scope.ui.secretStrength = ((passwordRes.score*25)).toString()+'%';
+  }
+  $timeout(function() {
+    $shared.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceAPISettingsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
+      $shared.updateTitle("Workspace API Settings");
+      $scope.settings = {};
+      $scope.load = function () {
+        $shared.isLoading = true;
+        return $q(function (resolve, reject) {
+          Backend.get("/getWorkspaceTokens").then(function (res) {
+            $scope.settings = res.data;
+            $shared.endIsLoading();
+            resolve();
+          }, function () {
+            reject();
+          });
+        });
+      }
+      $scope.refreshTokens = function ($event) {
+        var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to refresh API tokens?')
+          .textContent('if you are using these API tokens in any code the code will stop working and you will need to replace the API tokens with the new ones you create')
+          .ariaLabel('Refresh tokens')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+        $mdDialog.show(confirm).then(function () {
+            $shared.isLoading = true;
+            Backend.get("/refreshWorkspaceTokens").then(function (res) {
+              $scope.load().then(function () {
+                $mdToast.show(
+                  $mdToast.simple()
+                  .textContent('API tokens recreated')
+                  .position("top right")
+                  .hideDelay(3000)
+                );
+              });
+            });
+          });
+        }
+        $scope.promptCopied = function () {
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Copied to clipboard!')
+            .position("top right")
+            .hideDelay(3000)
+          );
+
+        }
+        $scope.load();
+      });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Workspace Params");
+  $scope.params = [];
+  $scope.load = function() {
+      $shared.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/workspaceParam/listParams").then(function(res) {
+          $scope.params = res.data;
+          $shared.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.saveParams = function() {
+      var data = angular.copy($scope.params);
+      Backend.post("/workspaceParam/saveParams", data).then(function() {
+          $mdToast.show(
+          $mdToast.simple()
+            .textContent('Workspace params saved successfully..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+  }
+  $scope.addParam = function() {
+    $scope.params.push({
+      "key": "",
+      "value": ""
+    });
+  }
+  $scope.deleteParam = function(index, param) {
+    $scope.params.splice(index, 1);
+  }
+
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+    $shared.updateTitle("Workspace Users");
+  $scope.users = [];
+  $scope.Backend = Backend;
+  $scope.load = function() {
+      $shared.isLoading = true;
+      return $q(function(resolve, reject) {
+        Backend.get("/workspaceUser/listUsers").then(function(res) {
+          $scope.users = res.data;
+          $shared.endIsLoading();
+          resolve();
+        }, function() {
+          reject();
+        });
+      });
+  }
+  $scope.deleteUser = function($event, user) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to remove this user from your workspace ?')
+          .textContent('This will permantely remove the user from your workspace')
+          .ariaLabel('Delete user')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        $shared.isLoading = true;
+      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('User deleted..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.resendInvite = function(user) {
+    // Appending dialog to document.body to cover sidenav in docs app
+      Backend.post("/workspaceUser/resendInvite/" + user.public_id).then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Invite email sent..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+        });
+  }
+  $scope.editUser = function($event, user) {
+    console.log("edit usr ", user);
+    $shared.changeRoute('settings-workspace-users-edit', {userId: user.public_id});
+  }
+  $scope.createUser = function() {
+
+    $shared.changeRoute('settings-workspace-users-create', {});
+  }
+
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+    $shared.updateTitle("Create Extension");
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: $shared.makeDefaultWorkspaceRoles()
+  };
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        user: angular.copy($scope.values.user),
+        roles: angular.copy($scope.values.roles)
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/workspaceUser/addUser", values).then(function() {
+       console.log("added user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Added user to workspace')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  $timeout(function() {
+    $shared.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
+    $shared.updateTitle("Workspace User Edit");
+    var roles = $shared.makeDefaultWorkspaceRoles();
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
+
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: $shared.makeDefaultWorkspaceRoles()
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        user: angular.copy($scope.values.user),
+        roles: angular.copy($scope.values.roles)
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
+       console.log("added user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Added user to workspace')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
+      var user = res.data;
+      $scope.values.user['email'] = user.email;
+      $scope.values.user['first_name'] = user.first_name;
+      $scope.values.user['last_name'] = user.last_name;
+      for (var key in roles) {
+        console.log("checking for role ", key);
+        $scope.values.roles[ key ] = user[ key ];
+      }
+      console.log("$scope.values are ", $scope.values);
+    });
+  $timeout(function() {
+    $shared.endIsLoading();
+  }, 0);
+});
+
