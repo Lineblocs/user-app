@@ -1,0 +1,84 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Assignment Extension, and DID</span>
+                <span class="md-subhead">optionally assign an extension, and DID to your workspace user</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="userForm" ng-submit="submit(userForm)" novalidate>
+                <div layout="row">
+                    <div flex="66">
+                        <div layout="row">
+                            <div flex="95">
+                                <md-input-container>
+                                    <label>Assigned Extension</label>
+                                    <md-select ng-model="values.extension_id" ng-change="changeExtension(values.extension_id)">
+                                        <md-option><em>None</em></md-option>
+                                        <md-option ng-repeat="extension in extensions" ng-value="extension.id">
+                                            {{extension.username}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div flex="5">
+                                <md-icon class="tooltip-icon">
+                                    <i class="mdi mdi-information"></i>
+                                    <md-tooltip class="helper-tooltip" md-direction="top">
+                                      Extension assigned to user
+                                    </md-tooltip>
+                                </md-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex="33">
+                        <md-button ng-show="!values.extension_id" ng-click="setupExtension($event, values)" class="md-raised">
+                            Setup
+                        </md-button>
+                    </div>
+                </div>
+
+                <div layout="row">
+                    <div flex="66">
+                        <div layout="row">
+                            <div flex="95">
+                                <md-input-container>
+                                    <label>Assigned DID</label>
+                                    <md-select ng-model="values.number_id" ng-change="changeNumber(values.number_id)">
+                                        <md-option><em>None</em></md-option>
+                                        <md-option ng-repeat="number in numbers" ng-value="number.id">
+                                            {{number.number}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div flex="5">
+                                <md-icon class="tooltip-icon">
+                                    <i class="mdi mdi-information"></i>
+                                    <md-tooltip class="helper-tooltip" md-direction="top">
+                                      Number assigned to user
+                                    </md-tooltip>
+                                </md-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex="33">
+                        <md-button ng-show="!values.number_id" ng-click="setupNumber($event, values)" class="md-raised">
+                            Setup
+                        </md-button>
+                    </div>
+                </div>
+
+                <div class="form-btns">
+                    <div class="submit">
+                        <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                    </div>
+                    <div class="cancel">
+                        <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>

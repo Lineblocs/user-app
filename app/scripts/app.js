@@ -1436,6 +1436,13 @@ var regParams = {
         templateUrl: 'views/pages/settings/workspace-users-edit.html',
         controller: 'WorkspaceUserEditCtrl'
     })
+
+    .state('settings-workspace-users-assign', {
+        url: '/settings/workspace-users/{userId}/assign',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-users-assign.html',
+        controller: 'WorkspaceUserAssignCtrl'
+    })
     .state('settings-extension-codes', {
 
         url: '/settings/extension-codes',

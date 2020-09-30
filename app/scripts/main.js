@@ -1436,6 +1436,13 @@ var regParams = {
         templateUrl: 'views/pages/settings/workspace-users-edit.html',
         controller: 'WorkspaceUserEditCtrl'
     })
+
+    .state('settings-workspace-users-assign', {
+        url: '/settings/workspace-users/{userId}/assign',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-users-assign.html',
+        controller: 'WorkspaceUserAssignCtrl'
+    })
     .state('settings-extension-codes', {
 
         url: '/settings/extension-codes',
@@ -1799,6 +1806,29 @@ var regParams = {
     }
 
     init();
+
+  }
+
+  function SetupExtDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+    };
+            $scope.$on("Created", function(id) {
+              console.log("setup created fired.." , arguments);
+              $shared.endIsLoading();
+              $shared.endIsCreateLoading();
+              onSuccess(id);
+            });
+
+  }
+  function SetupNumberDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+    };
+            $scope.$on("Created", function(id) {
+              console.log("setup created fired.." , arguments);
+              $shared.endIsLoading();
+              $shared.endIsCreateLoading();
+              onSuccess(id);
+            });
 
   }
 'use strict';
@@ -2597,7 +2627,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
 angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
   $scope.$shared = $shared;
 });
-'use strict'; 
+'use strict';
 /**
  * @ngdoc function
  * @name Lineblocs.controller:MainCtrl
@@ -2606,91 +2636,96 @@ angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
  * Controller of Lineblocs
  */
 angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
-    $shared.updateTitle("Buy Numbers");
-    $scope.countries = [];
-    $scope.state = "SEARCHING";
+  $shared.updateTitle("Buy Numbers");
+  $scope.countries = [];
+  $scope.state = "SEARCHING";
+  $scope.inDialog = false;
   $scope.rcSearch = {
-      isDisabled: false,
-      noCache:true, 
-      selectedItem: null,
+    isDisabled: false,
+    noCache: true,
+    selectedItem: null,
   };
   $scope.rcFaxSearch = {
-      isDisabled: false,
-      noCache:true, 
-      selectedItem: null,
+    isDisabled: false,
+    noCache: true,
+    selectedItem: null,
   };
 
-    function DialogController($scope, $mdDialog, number) {
-      $scope.number = number;
-    $scope.cancel = function() {
+  function DialogController($scope, inDialog, onSuccess, onError, $mdDialog, number) {
+    $scope.number = number;
+    $scope.cancel = function () {
       $mdDialog.cancel();
 
     };
-    $scope.gotoSettings = function() {
-        $mdDialog.hide("");
-        $state.go('my-numbers-edit', { numberId: number.public_id });
+    $scope.gotoSettings = function () {
+      $mdDialog.hide("");
+      $state.go('my-numbers-edit', {
+        numberId: number.public_id
+      });
     }
   }
-  /*
-  $scope.countries = [
-    {
-       iso: 'CA',
-       name: 'Canada'
-    },
-    {
-       iso: 'US',
-       name: 'United States'
-    }
-  ];
-  */
+
   $scope.settings = {
     country: "",
     region: "",
     pattern: "",
     rate_center: "",
-      showMoreOptions: false,
-      number_for: "",
-      number_type: "local",
-      vanity_prefix: "8**",
-      vanity_pattern: ""
+    showMoreOptions: false,
+    number_for: "",
+    number_type: "local",
+    vanity_prefix: "8**",
+    vanity_pattern: ""
   };
   $scope.numbers = [];
   $scope.didFetch = false;
   console.log("state params are ", $stateParams);
   if ($stateParams['type']) {
-    $scope.settings.number_for= $stateParams['type'];
+    $scope.settings.number_for = $stateParams['type'];
   }
+
   function purchaseConfirm(ev, number) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/purchase-did-confirm.html',
-      parent: angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        "number": number
+    if ($scope.inDialog) {
+      var confirm = window.confirm("Are you sure ?");
+      if (confirm) {
+        $scope.$emit("Created", id)
+        onSuccess(id);
+        return;
       }
-    })
-    .then(function() {
-    }, function() {
-    });
+      return;
+    }
+    $mdDialog.show({
+        controller: DialogController,
+        templateUrl: 'views/dialogs/purchase-did-confirm.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        skipHide: true,
+        fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+        locals: {
+          "number": number,
+          "inDialog": $scope.inDialog,
+          "onSuccess": function (id) {
+            $scope.$emit("Created", id)
+          }
+        }
+      })
+      .then(function () {}, function () {});
   };
 
-  $scope.load = function() {
-    $scope.listCountries().then(function() {
+  $scope.load = function () {
+    $scope.listCountries().then(function () {
       $shared.endIsLoading();
     });
   }
-  $scope.fetch =  function(event, didForm) {
-		$scope.triedSubmit = true;
-		if (!didForm.$valid) {
-        return;
+  $scope.fetch = function (event, didForm) {
+    $scope.triedSubmit = true;
+    if (!didForm.$valid) {
+      return;
     }
     var data = {};
     //data['region'] = $scope.settings['region'];
     data['region'] = $scope.settings['region']['code'];
-    if ( $scope.settings.showMoreOptions ) {
+    if ($scope.settings.showMoreOptions) {
       data['rate_center'] = $scope.settings['rate_center'];
     }
 
@@ -2702,7 +2737,9 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
     data['vanity_prefix'] = $scope.settings['vanity_prefix'];
     data['vanity_pattern'] = $scope.settings['vanity_pattern'];
     $shared.isCreateLoading = true;
-    Backend.get("/did/available", { "params": data }).then(function(res) {
+    Backend.get("/did/available", {
+      "params": data
+    }).then(function (res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
       $scope.state = "SEARCHED";
@@ -2710,102 +2747,122 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
     });
   }
 
-  $scope.confirmNumberTOS = function(number) {
+  $scope.confirmNumberTOS = function (number) {
     var confirm = $mdDialog.confirm()
-          .title('Vanity Number Notice')
-          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
-          .ariaLabel('Agree')
-          .targetEvent($event)
-          .ok('Please Continue')
-          .cancel('Exit');
+      .title('Vanity Number Notice')
+      .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+      .ariaLabel('Agree')
+      .targetEvent($event)
+      .ok('Please Continue')
+      .cancel('Exit');
 
 
   }
 
   function buyVanityNumber($event, number) {
-      var confirm = $mdDialog.confirm()
-          .title('Vanity Number Notice')
-          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
-          .ariaLabel('Agree')
-          .targetEvent($event)
-          .ok('Please Continue')
-          .cancel('Exit');
-
-        $mdDialog.show(confirm).then(function() {
-          console.log("md dialog show result ", arguments);
-          buyNumber($event, number);
-        });
-  }
-  function buyNumber($event, number) {
-
     var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to purchase number "' + number.number + '"?')
-          .textContent('this number will cost you ' + number.setup_cost + ' to setup then it will cost you ' + number.monthly_cost + ' every month. ')
-          .ariaLabel('Buy number')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        var params = {};
-        params['api_number'] = number.api_number;
-        params['number'] = number.number;
-        params['region'] = number.region;
-        params['monthly_cost'] = number.monthly_cost;
-        params['setup_cost'] = number.setup_cost;
-        params['provider'] = number.provider;
-        params['country'] = number.country;
-        params['features'] = number.features.join(",");
-        params['type'] = number.type;
-        $shared.isCreateLoading = true;
-        $shared.scrollTop();
-        Backend.post("/did/saveNumber", params).then(function(res) {
-          if (!res.data.success) {
-            $shared.showError( "Purchase Error", res.data.message );
-            return;
-          }
-          Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
-              var number = res.data;
-              $shared.endIsCreateLoading();
-              purchaseConfirm($event, number);
-          });
-        }, function(res) {
-          console.log("res is: ", res);
-          if (res.status === 400) {
-            var data = res.data;
-            $shared.showError("Error", data.message);
-          }
-        });
-    }, function() {
+      .title('Vanity Number Notice')
+      .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+      .ariaLabel('Agree')
+      .targetEvent($event)
+      .ok('Please Continue')
+      .cancel('Exit');
+
+    $mdDialog.show(confirm).then(function () {
+      console.log("md dialog show result ", arguments);
+      buyNumber($event, number);
     });
   }
-  $scope.buyNumber = function($event, number) {
-        $shared.scrollTop();
+
+  function completeBuy(number) {
+    return $q(function(resolve, reject) {
+      var params = {};
+      params['api_number'] = number.api_number;
+      params['number'] = number.number;
+      params['region'] = number.region;
+      params['monthly_cost'] = number.monthly_cost;
+      params['setup_cost'] = number.setup_cost;
+      params['provider'] = number.provider;
+      params['country'] = number.country;
+      params['features'] = number.features.join(",");
+      params['type'] = number.type;
+      $shared.isCreateLoading = true;
+      Backend.post("/did/saveNumber", params).then(function (res) {
+        if (!res.data.success) {
+          $shared.showError("Purchase Error", res.data.message);
+          return;
+        }
+        Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function (res) {
+          var number = res.data;
+          $shared.endIsCreateLoading();
+          resolve();
+        });
+      }, function (res) {
+        console.log("res is: ", res);
+        if (res.status === 400) {
+          var data = res.data;
+          $shared.showError("Error", data.message);
+        }
+      });
+    });
+  }
+
+  function buyNumber($event, number) {
+    console.log("dialog ", $scope.inDialog);
+    if ($scope.inDialog) {
+      var confirm = window.confirm("Are you sure ?");
+      console.log("confirmed ", confirm);
+      if (confirm) {
+        completeBuy(number).then(function() {
+          $scope.$emit("Created", id)
+        });
+        return;
+      }
+      return;
+    }
+      $shared.scrollTop();
+    var confirm = $mdDialog.confirm()
+      .title('Are you sure you want to purchase number "' + number.number + '"?')
+      .textContent('this number will cost you ' + number.setup_cost + ' to setup then it will cost you ' + number.monthly_cost + ' every month. ')
+      .ariaLabel('Buy number')
+      .targetEvent($event)
+      .ok('Yes')
+      .cancel('No');
+    confirm.then(function() {
+      completeBuy(number).then(function() {
+          $shared.endIsCreateLoading();
+          purchaseConfirm($event, number);
+      });
+    });
+  }
+  $scope.buyNumber = function ($event, number) {
+    $shared.scrollTop();
     // Appending dialog to document.body to cover sidenav in docs app
-    if ( $scope.settings.number_type === 'vanity' ) {
+    if ($scope.settings.number_type === 'vanity') {
       buyVanityNumber($event, number);
       return;
     }
     buyNumber($event, number);
   }
-  $scope.changeCountry = function(country) {
+  $scope.changeCountry = function (country) {
     console.log("changeCountry ", country);
     $scope.settings.country = country;
     $scope.regions = [];
     $scope.listRegions();
   }
- $scope.changeRegion = function(region) {
+  $scope.changeRegion = function (region) {
     console.log("changeRegion ", region);
     $scope.settings.region = region;
     $scope.listRateCenters();
   }
-  $scope.changeRateCenter = function(rateCenter) {
+  $scope.changeRateCenter = function (rateCenter) {
     console.log("changeRateCenter ", rateCenter);
     $scope.settings.rate_center = rateCenter;
   }
 
-$scope.listCountries = function() {
-    return $q(function(resolve, reject) {
-        Backend.get("/getCountries").then(function(res) { 
+  $scope.listCountries = function () {
+    return $q(function (resolve, reject) {
+      Backend.get("/getCountries").then(function (res) {
         console.log("got countries ", res.data);
         $scope.countries = res.data;
         resolve();
@@ -2814,84 +2871,93 @@ $scope.listCountries = function() {
 
   }
 
-  $scope.listRegions = function() {
-    Backend.get("/getRegions?countryId=" + $scope.settings.country.id).then(function(res) {
+  $scope.listRegions = function () {
+    Backend.get("/getRegions?countryId=" + $scope.settings.country.id).then(function (res) {
       console.log("got regions ", res.data);
       $scope.regions = res.data;
     })
 
   }
-  $scope.listRateCenters = function() {
-    Backend.get("/getRateCenters?countryId=" + $scope.settings.country.id+ "&regionId=" + $scope.settings.region.id).then(function(res) {
+  $scope.listRateCenters = function () {
+    Backend.get("/getRateCenters?countryId=" + $scope.settings.country.id + "&regionId=" + $scope.settings.region.id).then(function (res) {
       console.log("got rate centers ", res.data);
       $scope.rateCenters = res.data;
     })
 
   }
-    $scope.querySearch  = function(query) {
-        console.log("querySearch query is: " + query);
-        var all = $scope.rateCenters;
-        return $q(function(resolve, reject) {
-            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
-            var results = [];
-            angular.forEach(all, function(item) {
-              if ( item.toLowerCase().match( query ) ) {
-                results.push( item );
-              }
-           });
-            return resolve(results);
-        });
-    }
-    $scope.searchTextChange = function(text) {
-        console.log("searchTextChange");
-    }
-    $scope.selectedItemChange = function(item) {
-      console.log('rc Item changed to ' + JSON.stringify(item));
-      $scope.settings['rate_center'] = item;
-    }
-    $scope.queryFaxSearch  = function(query) {
-        console.log("querySearch query is: " + query);
-        var all = $scope.rateCenters;
-        return $q(function(resolve, reject) {
-            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
-            var results = [];
-            angular.forEach(all, function(item) {
-              if ( item.toLowerCase().match( query ) ) {
-                results.push( item );
-              }
-           });
-            return resolve(results);
-        });
-    }
-    $scope.searchFaxTextChange = function(text) {
-        console.log("searchTextChange");
-    }
-    $scope.selectedFaxItemChange = function(item) {
-      console.log('rc Item changed to ' + JSON.stringify(item));
-      $scope.settings['rate_center'] = item;
-    }
-    $scope.hideOptions = function() {
-      $scope.settings.showMoreOptions = false;
-    }
-    $scope.showOptions = function() {
-      $scope.settings.showMoreOptions = true;
-    }
-    $scope.buyVoiceNumbers = function() {
-      //$scope.settings.number_for='voice';
-      console.log("buy voice numbers");
-        $state.go('buy-numbers-select', { type: "voice" });
-    }
-    $scope.buyFaxNumbers = function() {
-      //$scope.settings.number_for='fax';
-        $state.go('buy-numbers-select', { type: "fax" });
-    }
-    $scope.backToSearch = function() {
-      $scope.state = "SEARCHING";
-    }
+  $scope.querySearch = function (query) {
+    console.log("querySearch query is: " + query);
+    var all = $scope.rateCenters;
+    return $q(function (resolve, reject) {
+      var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+      var results = [];
+      angular.forEach(all, function (item) {
+        if (item.toLowerCase().match(query)) {
+          results.push(item);
+        }
+      });
+      return resolve(results);
+    });
+  }
+  $scope.searchTextChange = function (text) {
+    console.log("searchTextChange");
+  }
+  $scope.selectedItemChange = function (item) {
+    console.log('rc Item changed to ' + JSON.stringify(item));
+    $scope.settings['rate_center'] = item;
+  }
+  $scope.queryFaxSearch = function (query) {
+    console.log("querySearch query is: " + query);
+    var all = $scope.rateCenters;
+    return $q(function (resolve, reject) {
+      var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+      var results = [];
+      angular.forEach(all, function (item) {
+        if (item.toLowerCase().match(query)) {
+          results.push(item);
+        }
+      });
+      return resolve(results);
+    });
+  }
+  $scope.searchFaxTextChange = function (text) {
+    console.log("searchTextChange");
+  }
+  $scope.selectedFaxItemChange = function (item) {
+    console.log('rc Item changed to ' + JSON.stringify(item));
+    $scope.settings['rate_center'] = item;
+  }
+  $scope.hideOptions = function () {
+    $scope.settings.showMoreOptions = false;
+  }
+  $scope.showOptions = function () {
+    $scope.settings.showMoreOptions = true;
+  }
+  $scope.buyVoiceNumbers = function () {
+    //$scope.settings.number_for='voice';
+    console.log("buy voice numbers");
+    $state.go('buy-numbers-select', {
+      type: "voice"
+    });
+  }
+  $scope.buyFaxNumbers = function () {
+    //$scope.settings.number_for='fax';
+    $state.go('buy-numbers-select', {
+      type: "fax"
+    });
+  }
+  $scope.backToSearch = function () {
+    $scope.state = "SEARCHING";
+  }
 
-    $scope.load();
+  $scope.init = function (inDialog, type) {
+    $scope.inDialog = inDialog;
+    $scope.settings.number_for = type;
+    console.log("init ", arguments);
+  }
+
+  $scope.load();
 });
-
 
 'use strict';
 
@@ -4274,7 +4340,8 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
  * Controller of Lineblocs
  */
 angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
-	  $shared.updateTitle("Create Extension");
+    $shared.updateTitle("Create Extension");
+    $scope.isDialog = false;
   $scope.values = {
     username: "",
     secret: "",
@@ -4328,16 +4395,28 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.postCouldError("/extension/saveExtension", values).then(function() {
+        Backend.postCouldError("/extension/saveExtension", values).then(function(res) {
         console.log("updated extension..");
+        console.log("save ext ", res);
+        var id = res.headers("x-extension-id");
           $mdToast.show(
             $mdToast.simple()
               .textContent('Created extension')
               .position("top right")
               .hideDelay(3000)
           );
-          $state.go('extensions', {});
-          $shared.endIsCreateLoading();
+          console.log("isDialog ", $scope.isDialog);
+
+          if ( !$scope.isDialog ) {
+            $state.go('extensions', {});
+            $shared.endIsCreateLoading();
+          } else {
+            console.log("calling emit ", id);
+            $scope.$emit("Created", id)
+            $mdDialog.hide();
+          }
+
+
           }, function() {
 
           });
@@ -4381,6 +4460,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
       parent: angular.element(document.body),
       targetEvent: $event,
       clickOutsideToClose:true,
+      skipHide: true,
       fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
       locals: {
         "title": title,
@@ -4405,6 +4485,9 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
     .then(function() {
     }, function() {
     });
+  }
+  $scope.init = function(isDialog) {
+    $scope.isDialog = isDialog;
   }
 
   function load() {
@@ -8505,7 +8588,145 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $stateParams ) {
+    $shared.updateTitle("Create Extension");
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: $shared.makeDefaultWorkspaceRoles()
+  };
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        assign: {
+          "extension_id": $scope.values.extension_id,
+          "number_id": $scope.values.number_id
+        }
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
+       console.log("updated user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Assigned user settings.')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+
+  $scope.setupExtension = function($event) {
+    $mdDialog.show({
+      controller: SetupExtDialogController,
+      templateUrl: 'views/dialogs/setup-ext.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(extId) {
+          console.log("new extension is ", extId);
+          $scope.extId = extId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+  $scope.setupNumber = function($event) {
+    $mdDialog.show({
+      controller: SetupNumberDialogController,
+      templateUrl: 'views/dialogs/setup-number.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(numberId) {
+          console.log("new number is ", numberId);
+          $scope.numberId = numberId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+  function load() {
+    $q.all([
+      Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1")
+      ]).then(function(res) {
+        var user = res.data;
+        $scope.extensions = res[1].data.data;
+        $scope.numbers = res[2].data.data;
+          console.log("$scope.values are ", $scope.values);
+        angular.forEach($scope.extensions, function(ext) {
+          if ( $scope.extId && $scope.extId === ext.public_id ) {
+            $scope.values.extension_id = ext.id;
+          }
+        });
+        angular.forEach($scope.numbers, function(number) {
+          if ( $scope.numberId && $scope.numberId === number.public_id ) {
+            $scope.values.number_id = number.id;
+          }
+        });
+
+        console.log("values are ", $scope.values);
+      });
+    }
+
+  load();
+
+  $timeout(function() {
+    $shared.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Create Extension");
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
@@ -8537,22 +8758,34 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/addUser", values).then(function() {
+      Backend.post("/workspaceUser/addUser", values).then(function(res) {
        console.log("added user..");
+       var id = res.headers('X-WorkspaceUser-ID');
         $mdToast.show(
           $mdToast.simple()
             .textContent('Added user to workspace')
             .position("top right")
             .hideDelay(3000)
         );
-        $state.go('settings-workspace-users', {});
+      $state.go('settings-workspace-users-assign', {
+          userId: id
+      });
         $shared.endIsCreateLoading();
       });
     }
   }
   $timeout(function() {
-    $shared.endIsLoading();
+    $q.all([
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1"),
+    ]).then(function(res) {
+      $shared.endIsLoading();
+      $scope.extensions = res[0].data.data;
+      $scope.numbers  = res[1].data.data;
+      console.log("data ", res);
+    });
   }, 0);
+
 });
 
 
@@ -8565,7 +8798,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace User Edit");
     var roles = $shared.makeDefaultWorkspaceRoles();
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
@@ -8588,9 +8821,15 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     console.log("submitting workspace user form ", arguments);
     $scope.triedSubmit = true;
     if (form.$valid) {
+      var user = angular.copy($scope.values.user);
+      // add assignment data
+      var assign = {};
+      assign['extension_id'] = $scope.values['extension_id'];
+      assign['number_id'] = $scope.values['number_id'];
       var values = {
-        user: angular.copy($scope.values.user),
-        roles: angular.copy($scope.values.roles)
+        user: user,
+        roles: angular.copy($scope.values.roles),
+        assign: assign
       };
       var toastPos = {
         bottom: false,
@@ -8615,18 +8854,90 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
         $shared.endIsCreateLoading();
       });
     }
-  }
-  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
-      var user = res.data;
-      $scope.values.user['email'] = user.email;
-      $scope.values.user['first_name'] = user.first_name;
-      $scope.values.user['last_name'] = user.last_name;
-      for (var key in roles) {
-        console.log("checking for role ", key);
-        $scope.values.roles[ key ] = user[ key ];
+  }  
+  
+  $scope.setupExtension = function($event) {
+    $mdDialog.show({
+      controller: SetupExtDialogController,
+      templateUrl: 'views/dialogs/setup-ext.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(extId) {
+          console.log("new extension is ", extId);
+          $scope.extId = extId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
       }
-      console.log("$scope.values are ", $scope.values);
+    })
+    .then(function() {
+    }, function() {
     });
+  }
+
+  $scope.setupNumber = function($event) {
+    $mdDialog.show({
+      controller: SetupNumberDialogController,
+      templateUrl: 'views/dialogs/setup-number.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(numberId) {
+          console.log("new number is ", numberId);
+          $scope.numberId = numberId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+  function load() {
+    $q.all([
+      Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1")
+      ]).then(function(res) {
+        $scope.values.user = res[0].data;
+        for ( var index in $scope.values.roles ) {
+          if ( $scope.values.user[ index ] ) {
+            $scope.values.roles [ index ] = true;
+          }
+        }
+        $scope.values.extension_id = $scope.values.user.extension_id;
+        $scope.values.number_id = $scope.values.user.number_id;
+        $scope.extensions = res[1].data.data;
+        $scope.numbers = res[2].data.data;
+          console.log("$scope.values are ", $scope.values);
+        angular.forEach($scope.extensions, function(ext) {
+          if ( $scope.extId && $scope.extId === ext.public_id ) {
+            $scope.values.extension_id = ext.id;
+          }
+        });
+        angular.forEach($scope.numbers, function(number) {
+          if ( $scope.numberId && $scope.numberId === number.public_id ) {
+            $scope.values.number_id = number.id;
+          }
+        });
+
+        console.log("values are ", $scope.values);
+      });
+    }
+
+  load();
+
   $timeout(function() {
     $shared.endIsLoading();
   }, 0);

@@ -146,3 +146,26 @@
     init();
 
   }
+
+  function SetupExtDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+    };
+            $scope.$on("Created", function(id) {
+              console.log("setup created fired.." , arguments);
+              $shared.endIsLoading();
+              $shared.endIsCreateLoading();
+              onSuccess(id);
+            });
+
+  }
+  function SetupNumberDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+    };
+            $scope.$on("Created", function(id) {
+              console.log("setup created fired.." , arguments);
+              $shared.endIsLoading();
+              $shared.endIsCreateLoading();
+              onSuccess(id);
+            });
+
+  }

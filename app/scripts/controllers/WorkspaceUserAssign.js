@@ -7,11 +7,9 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-    $shared.updateTitle("Workspace User Edit");
-    var roles = $shared.makeDefaultWorkspaceRoles();
+angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $stateParams ) {
+    $shared.updateTitle("Create Extension");
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
-
 
   $scope.values = {
     user: {
@@ -21,24 +19,16 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     },
     roles: $shared.makeDefaultWorkspaceRoles()
   };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
   $scope.triedSubmit = false;
   $scope.submit = function(form) {
     console.log("submitting workspace user form ", arguments);
     $scope.triedSubmit = true;
     if (form.$valid) {
-      var user = angular.copy($scope.values.user);
-      // add assignment data
-      var assign = {};
-      assign['extension_id'] = $scope.values['extension_id'];
-      assign['number_id'] = $scope.values['number_id'];
       var values = {
-        user: user,
-        roles: angular.copy($scope.values.roles),
-        assign: assign
+        assign: {
+          "extension_id": $scope.values.extension_id,
+          "number_id": $scope.values.number_id
+        }
       };
       var toastPos = {
         bottom: false,
@@ -52,10 +42,10 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
       Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
-       console.log("added user..");
+       console.log("updated user..");
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Added user to workspace')
+            .textContent('Assigned user settings.')
             .position("top right")
             .hideDelay(3000)
         );
@@ -63,8 +53,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
         $shared.endIsCreateLoading();
       });
     }
-  }  
-  
+  }
+
   $scope.setupExtension = function($event) {
     $mdDialog.show({
       controller: SetupExtDialogController,
@@ -119,14 +109,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       Backend.get("/extension/listExtensions?all=1"),
       Backend.get("/did/listNumbers?all=1")
       ]).then(function(res) {
-        $scope.values.user = res[0].data;
-        for ( var index in $scope.values.roles ) {
-          if ( $scope.values.user[ index ] ) {
-            $scope.values.roles [ index ] = true;
-          }
-        }
-        $scope.values.extension_id = $scope.values.user.extension_id;
-        $scope.values.number_id = $scope.values.user.number_id;
+        var user = res.data;
         $scope.extensions = res[1].data.data;
         $scope.numbers = res[2].data.data;
           console.log("$scope.values are ", $scope.values);

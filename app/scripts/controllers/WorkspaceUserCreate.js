@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Create Extension");
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
@@ -39,21 +39,33 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/addUser", values).then(function() {
+      Backend.post("/workspaceUser/addUser", values).then(function(res) {
        console.log("added user..");
+       var id = res.headers('X-WorkspaceUser-ID');
         $mdToast.show(
           $mdToast.simple()
             .textContent('Added user to workspace')
             .position("top right")
             .hideDelay(3000)
         );
-        $state.go('settings-workspace-users', {});
+      $state.go('settings-workspace-users-assign', {
+          userId: id
+      });
         $shared.endIsCreateLoading();
       });
     }
   }
   $timeout(function() {
-    $shared.endIsLoading();
+    $q.all([
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1"),
+    ]).then(function(res) {
+      $shared.endIsLoading();
+      $scope.extensions = res[0].data.data;
+      $scope.numbers  = res[1].data.data;
+      console.log("data ", res);
+    });
   }, 0);
+
 });
 

@@ -8,7 +8,8 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
-	  $shared.updateTitle("Create Extension");
+    $shared.updateTitle("Create Extension");
+    $scope.isDialog = false;
   $scope.values = {
     username: "",
     secret: "",
@@ -62,16 +63,28 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.postCouldError("/extension/saveExtension", values).then(function() {
+        Backend.postCouldError("/extension/saveExtension", values).then(function(res) {
         console.log("updated extension..");
+        console.log("save ext ", res);
+        var id = res.headers("x-extension-id");
           $mdToast.show(
             $mdToast.simple()
               .textContent('Created extension')
               .position("top right")
               .hideDelay(3000)
           );
-          $state.go('extensions', {});
-          $shared.endIsCreateLoading();
+          console.log("isDialog ", $scope.isDialog);
+
+          if ( !$scope.isDialog ) {
+            $state.go('extensions', {});
+            $shared.endIsCreateLoading();
+          } else {
+            console.log("calling emit ", id);
+            $scope.$emit("Created", id)
+            $mdDialog.hide();
+          }
+
+
           }, function() {
 
           });
@@ -115,6 +128,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
       parent: angular.element(document.body),
       targetEvent: $event,
       clickOutsideToClose:true,
+      skipHide: true,
       fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
       locals: {
         "title": title,
@@ -139,6 +153,9 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
     .then(function() {
     }, function() {
     });
+  }
+  $scope.init = function(isDialog) {
+    $scope.isDialog = isDialog;
   }
 
   function load() {
