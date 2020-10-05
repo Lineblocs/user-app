@@ -2828,7 +2828,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
       .targetEvent($event)
       .ok('Yes')
       .cancel('No');
-    confirm.then(function() {
+    $mdDialog.show(confirm).then(function() {
       completeBuy(number).then(function() {
           $shared.endIsCreateLoading();
           purchaseConfirm($event, number);
