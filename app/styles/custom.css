@@ -587,7 +587,8 @@ button {
 .login-page .content .signup-form .login-btn span,
 .login-page .content .login-form .signup-btn span,
 .login-page .content .login-form .login-btn span {
-  padding: 15px 40px;
+  /* padding: 15px 40px; */
+  padding: 15px 18px;
   border-radius: 35px;
   background-color: #395373;
   color: #fff;
@@ -658,9 +659,9 @@ button {
   transform: translateX(-44%);
 }
 
-.login-page .content .login-form .login-btn span {
+/* .login-page .content .login-form .login-btn span {
   padding: 15px 70px !important;
-}
+} */
 
 .login-page .content .login-form #gSignIn .abcRioButtonBlue {
   width: 100% !important;
@@ -697,9 +698,9 @@ button {
     width: 400px;
   }
 
-  .login-page .content .login-form .login-btn span {
+  /* .login-page .content .login-form .login-btn span {
     padding: 15px 165px !important;
-  }
+  } */
 
   .login-page .content .login-form #gSignIn .abcRioButtonBlue {
     width: 400px !important;
