@@ -466,16 +466,6 @@ button {
   padding: 50px;
 }
 
-.signup-page .content .signup-form {
-  width: 316px;
-}
-
-@media (min-width: 768px) {
-  .signup-page .content .signup-form {
-    width: initial;
-  }
-}
-
 .signup-page .content .signup-form h3,
 .signup-page .content .login-form h3,
 .login-page .content .signup-form h3,
@@ -668,16 +658,8 @@ button {
   transform: translateX(-44%);
 }
 
-.login-page .content .login-form {
-  width: 316px;
-}
-
 .login-page .content .login-form .login-btn span {
   padding: 15px 70px !important;
-}
-
-.login-page .content .password-reset-form .login-btn span {
-  padding: 15px 40px !important;
 }
 
 .login-page .content .login-form #gSignIn .abcRioButtonBlue {
@@ -709,10 +691,6 @@ button {
 
   .login-page .content .text h2::after {
     transform: none;
-  }
-
-  .login-page .content .login-form {
-    width: initial;
   }
 
   .login-page .content .login-form .field-input {

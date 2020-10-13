@@ -1,10 +1,10 @@
 <script type="text/ng-template" id="views/base.html">
-    <div class="ui-base" ng-class="{'rtl': rightToLeft};">
+              <div class="ui-base" ng-class="{'rtl': rightToLeft};">
 	<div ui-view />
 </div> 
             </script>
 <script type="text/ng-template" id="views/dialogs/add-blocked-number.html">
-    <md-dialog>
+              <md-dialog>
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Add Blocked Number</h2>
@@ -36,7 +36,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/dialogs/add-callerid.html">
-    <md-dialog>
+              <md-dialog>
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Add Verified Caller ID</h2>
@@ -94,7 +94,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/dialogs/add-card.html">
-    <md-dialog>
+              <md-dialog>
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Add Card</h2>
@@ -176,7 +176,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/dialogs/add-ip-whitelist.html">
-    <md-dialog>
+              <md-dialog>
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Add IP to whitelist</h2>
@@ -218,7 +218,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/dialogs/create-trigger.html">
-    <md-dialog>
+              <md-dialog>
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Create Usage Trigger</h2>
@@ -260,7 +260,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/dialogs/extension-connect-info.html">
-    <md-dialog aria-label="Mango (Fruit)">
+              <md-dialog aria-label="Mango (Fruit)">
     <md-dialog-content>
       <div class="md-dialog-content">
         <h2>How to Connect</h2>
@@ -284,7 +284,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/dialogs/purchase-did-confirm.html">
-    <md-dialog aria-label="Mango (Fruit)">
+              <md-dialog aria-label="Mango (Fruit)">
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -318,7 +318,7 @@
 </md-dialog> 
             </script>
 <script type="text/ng-template" id="views/layouts/dashboard.html">
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+              <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 	<header ng-show="$shared.SHOW_NAVBAR" class=" navbar shadow">
 		<!-- Hamburger -->
 		<!--
@@ -510,7 +510,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/404-page.html">
-    <div class="login-overlay">
+              <div class="login-overlay">
 	<div class="logo">
 		Material <br> <span class="smaller">Dashboard</span>
 	</div>
@@ -542,7 +542,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/billing.html">
-    <div>
+              <div>
 
   <div layout="row" layout-align="end center" layout-margin>
       <div>
@@ -823,7 +823,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/call-view.html">
-    <md-card md-theme="'default'"" md-theme-watch>
+              <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
       <span class="md-headline">Call</span>
@@ -865,7 +865,7 @@
 </md-card> 
             </script>
 <script type="text/ng-template" id="views/pages/calls.html">
-    <div ng-show="!pagination.didSearch && calls.length === 0" class="no-results">
+              <div ng-show="!pagination.didSearch && calls.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
       <center>
@@ -927,7 +927,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard-welcome.html">
-    <div>
+              <div>
   <div class="layout-row" layout-sm="column" layout-xs="column">
     <div class="mdl-cell shadow grid-margin calls-graph" style="background: white;" flex="100" flex-sm="100">
       <div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
@@ -940,7 +940,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/debugger-logs.html">
-    <div ng-show="!pagination.didSearch && logs.length === 0" class="no-results">
+              <div ng-show="!pagination.didSearch && logs.length === 0" class="no-results">
     <md-card md-theme="'default'"" md-theme-watch>
     <div class=" no-results">
         <center>
@@ -1051,7 +1051,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/extension-create.html">
-    <div>
+              <div>
     <md-card>
 
         <md-card-title>
@@ -1220,7 +1220,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/extension-edit.html">
-    <md-card md-theme="'default'"" md-theme-watch>
+              <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
       <span class=" md-headline">Edit Extension {{extension.username}}</span>
@@ -1382,7 +1382,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/extensions.html">
-    <div ng-show="!pagination.didSearch && extensions.length === 0" class="no-results">
+              <div ng-show="!pagination.didSearch && extensions.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
       <center>
@@ -1443,12 +1443,11 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/flow-editor.html">
-    <!-- exact table from live demo -->
-    <div class="collapsed-content">
-        <iframe border="0" scrolling="yes" class="flow-editor-iframe" ng-src="{{flowUrl}}" width="100%"
-                height="0"></iframe>
-    </div>
-    <!-- exact 
+              <!-- exact table from live demo -->
+<div class="collapsed-content">
+  <iframe border="0" scrolling="yes" class="flow-editor-iframe" ng-src="{{flowUrl}}" width="100%" height="0"></iframe>
+</div>
+<!-- exact 
             </script>
 <script type="text/ng-template" id="views/pages/flows.html">
               
@@ -1473,110 +1472,108 @@
     <md-button ng-click="createFlow()" class="md-raised md-primary">Create New</md-button>
   </div>
   <!-- exact table from live demo -->
-    <md-card md-theme="'default'"" md-theme-watch>
+  <md-card md-theme="'default'"" md-theme-watch>
     <md-table-container>
-      <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-            <tr md-row>
-                <th md-column><span>Name</span></th>
-                <th md-column>&nbsp;</th>
-            </tr>
+          <tr md-row>
+            <th md-column><span>Name</span></th>
+            <th md-column>&nbsp;</th>
+          </tr>
         </thead>
         <tbody md-body>
-            <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="flow in flows">
-                <td md-cell>{{flow.name}}</td>
-                <td md-cell>
-                    <md-button ng-click="editFlow(flow)" class="md-icon-button" aria-label="Settings">
-                        <md-icon><i class="mdi mdi-pencil"></i></md-icon>
-                    </md-button>
-                    <md-button ng-click="deleteFlow($event, flow)" class="md-icon-button" aria-label="Settings">
-                        <md-icon><i class="mdi mdi-delete"></i></md-icon>
-                    </md-button>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="flow in flows">
+            <td md-cell>{{flow.name}}</td>
+            <td md-cell>
+              <md-button ng-click="editFlow(flow)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+              </md-button>
+              <md-button ng-click="deleteFlow($event, flow)" class="md-icon-button" aria-label="Settings">
+                  <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+              </md-button>
 
-                </td>
-            </tr>
+            </td>
+          </tr>
         </tbody>
-        </table>
-        </md-table-container>
-    </md-card>
+      </table>
+    </md-table-container>
+  </md-card>
     <div layout="row" layout-align="end">
 
-        <div>
-            <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev
-                Page</md-button>
-            <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()"
-                       class="md-raised md-primary">Prev Page</md-button>
-            <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next
-                Page</md-button>
-            <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()"
-                       class="md-raised md-primary">Next Page</md-button>
-        </div>
-    </div </div> </script> <script type="text/ng-template" id="views/pages/forgot copy.html">
-    <div>
-        <div class="login-overlay">
-            <center>
-                <div ng-show="isLoading">
-                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                    <p>Please wait..</p>
-                </div>
-            </center>
-            <div class="form-container shadow">
-                <div class="inner">
-                    <center>
-                        <div class="icon">
-                            <div class="header">
-                                <img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
-                                <h4>Forgot Password</h4>
-                                <p>
-                                    request reset password instructions.
-                                </p>
-                            </div>
-                        </div>
-                    </center>
-                    <div class="inputs">
-                        <div class="box invalid-login">
-                            <center>
-                                <div ng-show="couldNotReset" class="red">User credentials were invalid. please try
-                                    again.</div>
-                            </center>
-                        </div>
-                        <form ng-submit="submit($event, forgotForm)" name="forgotForm" novalidate>
-                            <md-input-container>
-                                <input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
-                                <div ng-show="triedSubmit">
-                                    <div class="box">
-                                        <div ng-show="forgotForm.email.$error.required">This field is required</div>
-                                    </div>
-                                </div>
-                            </md-input-container>
-                            <center>
-                                <div class="buttons">
-                                    <div class="link" style="padding-bottom:0;">
-                                        <md-button type="submit" class="md-raised primary">Send Email</md-button>
-                                    </div>
-                                    <a ui-sref="login">Login Here</a>
-                                    <br />
-                                    <a ui-sref="register">Register here</a>
-                                </div>
-                            </center>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <footer class="login-footer">
-                <div class="left-section">
-                    &copy; LineBlocs.com
-                </div>
+      <div>
+        <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+        <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      </div>
+    </div
+</div> 
+            </script>
+<script type="text/ng-template" id="views/pages/forgot copy.html">
+              <div>
+	<div class="login-overlay">
+		<center>
+			<div ng-show="isLoading">
+					<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+					<p>Please wait..</p>
+			</div>
+		</center>
+		<div class="form-container shadow">
+				<div class="inner">
+					<center>
+				<div class="icon">
+					<div class="header">
+						<img class="login-logo" ng-src="{{'/images/logo-blue.png'}}" width="200" />
+						<h4>Forgot Password</h4>
+						<p>
+							request reset password instructions.
+						</p>
+					</div>
+				</div>
+			</center>
+				<div class="inputs">
+					<div class="box invalid-login">
+						<center>
+							<div ng-show="couldNotReset" class="red">User credentials were invalid. please try again.</div>
+						</center>
+					</div>
+					<form ng-submit="submit($event, forgotForm)" name="forgotForm" novalidate>
+						<md-input-container>
+							<input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
+							<div ng-show="triedSubmit">
+								<div class="box">
+									<div ng-show="forgotForm.email.$error.required">This field is required</div>
+								</div>
+							</div>
+						</md-input-container>
+						<center>
+						<div class="buttons">
+							<div class="link" style="padding-bottom:0;">
+								<md-button type="submit" class="md-raised primary">Send Email</md-button>
+							</div>
+							<a ui-sref="login">Login Here</a>
+							<br/>
+							<a ui-sref="register">Register here</a>
+						</div>
+					</center>
+					</form>
+				</div>
+			</div>
+		</div>
+		<footer class="login-footer">
+			<div class="left-section">
+				&copy; LineBlocs.com
+			</div>
 
-                <div class="right-section">
-                </div>
-            </footer>
-        </div>
-    </div>
-
-</script>
+			<div class="right-section">
+			</div>
+		</footer>
+	</div>
+</div>
+ 
+            </script>
 <script type="text/ng-template" id="views/pages/forgot.html">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+                  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
     <div class="login-page">
         <div class="logo">
@@ -1595,7 +1592,7 @@
             </div>
         </center>
 
-        <div class="content password-reset-form">
+        <div class="content">
             <form class="login-form" ng-submit="submit($event, forgotForm)" name="forgotForm" novalidate>
                 <div class="top-heading">
 					<h3>Forgot Password</h3>
@@ -1647,7 +1644,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/log-view.html">
-    <md-card md-theme="'default'"" md-theme-watch>
+              <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
       <span class="md-headline">Log</span>
@@ -1683,7 +1680,7 @@
 </md-card> 
             </script>
 <script type="text/ng-template" id="views/pages/login-copy.html">
-    <div>
+              <div>
 	<div class="login-overlay">
 		<center>
 			<div ng-show="isLoading">
@@ -1766,7 +1763,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/login.html">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+                  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
     <div class="login-page">
         <div class="logo">
@@ -1869,7 +1866,7 @@
     </div> 
             </script>
 <script type="text/ng-template" id="views/pages/recordings.html">
-    <div ng-show="!pagination.didSearch && recordings.length === 0" class="no-results">
+              <div ng-show="!pagination.didSearch && recordings.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>
     <div class="no-results">
       <center>
@@ -1960,7 +1957,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/register copy.html">
-    <div>
+              <div>
     <div ng-show="shouldSplash">
         <div class="full-blue splash">
             <div class="outer">
@@ -2208,7 +2205,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/register.html">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+                  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
     <div ng-show="shouldSplash">
         <div class="full-blue splash">
@@ -2617,7 +2614,7 @@
     </div> 
             </script>
 <script type="text/ng-template" id="views/pages/reset-copy.html">
-    <div>
+              <div>
 	<div class="login-overlay">
 		<center>
 			<div ng-show="isLoading">
@@ -2696,7 +2693,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/reset.html">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+                  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
     <div class="login-page">
         <div class="logo">
@@ -2812,7 +2809,7 @@
  
             </script>
 <script type="text/ng-template" id="views/pages/settings.html">
-    <md-card md-theme="'default'"" md-theme-watch>
+              <md-card md-theme="'default'"" md-theme-watch>
   <!--
   <md-card-title>
     <md-card-title-text>
@@ -2948,10 +2945,10 @@
 </md-card> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/blank.html">
-
-</script>
+               
+            </script>
 <script type="text/ng-template" id="views/pages/dashboard/calendar.html">
-    <div class="demo-grid-ruler mdl-grid">
+              <div class="demo-grid-ruler mdl-grid">
     <div class="mdl-cell mdl-cell--12-col shadow" style="background: white; text-align: center;">
         <calendar-md flex layout layout-fill
             calendar-direction="direction"
@@ -2975,7 +2972,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/component.html">
-    <div class="mdl-grid bars">
+              <div class="mdl-grid bars">
 	<div class="mdl-cell shadow" style="background: white; padding:15px;">
 		<h5 style="margin-bottom: 30px; padding-left: 15px; margin-top: 15px;">Loading Bars</h5>
 		<p style="margin-top: 10px;">
@@ -3073,7 +3070,7 @@
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/docs.html">
-    <div id="installation" class="shadow panel">
+              <div id="installation" class="shadow panel">
 	<h4>Installation</h4>
 	To use the Material Dashboard Theme, you need to make sure you have <code>bower</code>, <code>npm</code> and <code>gulp</code> globally installed. Now navigate to your app directory ($ cd app/) and run the following terminal commands :
 	<ul>		
@@ -3406,7 +3403,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
  
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/form.html">
-    <div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
+              <div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-top:15px;">
     <div class="mdl-cell" flex="50" flex-sm="100" flex-xs="100" style="background: white;">
         <div class="panel-header">
             Normal Form
@@ -3497,7 +3494,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/grid.html">
-    <div class="demo-grid-ruler mdl-grid">
+              <div class="demo-grid-ruler mdl-grid">
 <div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
 <div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
 <div class="mdl-cell shadow mdl-cell--1-col" style="background: white; height: 100px; padding: 15px;">mdl-cell--1-col</div>
@@ -3528,7 +3525,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/home.html">
-    <div class="layout-row" layout-sm="column" layout-xs="column">
+              <div class="layout-row" layout-sm="column" layout-xs="column">
 	<div class="mdl-cell shadow grid-margin calls-graph" style="background: white;" flex="100" flex-sm="100">
 		<div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
                 <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
@@ -3540,7 +3537,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/invoice.html">
-    <div class="mdl-grid">
+              <div class="mdl-grid">
 	<div class="mdl-cell mdl-cell--12-col shadow" style="background: white; padding: 20px;">
 	<div class="invoice-logo">
 		Material 
@@ -3622,7 +3619,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/panel.html">
-    <pageheader pagename="Panel" subtitle="Bootstrap UI Elements"></pageheader>
+              <pageheader pagename="Panel" subtitle="Bootstrap UI Elements"></pageheader>
 <div class="conter-wrapper">				
 	<div class="row">
 		<div class="col-md-6">
@@ -3749,7 +3746,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/profile.html">
-    <div class="profile-content">
+              <div class="profile-content">
     <div class="cover-photo">
         <div class="opacity-overlay relative">
             <div class="profile-info absolute">
@@ -3924,7 +3921,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
          
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/table.html">
-    <pageheader pagename="Table" subtitle="Bootstrap UI Elements"></pageheader>
+              <pageheader pagename="Table" subtitle="Bootstrap UI Elements"></pageheader>
 <div class="conter-wrapper">				
 	<div class="row">
 		<div class="col-md-6">
@@ -4230,7 +4227,7 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/tabs.html">
-    <div ng-controller="TabsDemoCtrl">
+              <div ng-controller="TabsDemoCtrl">
     <p>Select a tab by setting active binding to true:</p>
     <p>
         <button class="btn btn-default btn-sm" ng-click="tabs[0].active = true">Select second tab</button>
@@ -4271,10 +4268,10 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
 </div> 
             </script>
 <script type="text/ng-template" id="views/pages/dashboard/typography.html">
-
-</script>
+               
+            </script>
 <script type="text/ng-template" id="views/pages/did/buy-numbers.html">
-    <md-card md-theme="'default'"" md-theme-watch>
+              <md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
       <span class=" md-headline">Buy Numbers</span>
@@ -4425,137 +4422,130 @@ footer="18% Up this month"&gt;&lt;/stats&gt;</pre>
  
             </script>
 <script type="text/ng-template" id="views/pages/did/my-numbers-edit.html">
-    <!-- exact table from live demo -->
-    <md-card md-theme="'default'"" md-theme-watch>
+              <!-- exact table from live demo -->
+<md-card md-theme="'default'"" md-theme-watch>
   <md-card-title>
     <md-card-title-text>
       <span class=" md-headline">{{number.number}}</span>
-        <span class="md-subhead">Below are settings to configure "{{number.number}}"</span>
-        </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-            <form ng-submit="saveNumber()">
-                <div layout="row">
-                    <div flex="95">
-                        <md-input-container>
-                            <label>Name</label>
-                            <input ng-model="number.name">
-                        </md-input-container>
-                    </div>
-                    <div flex="5">
-                        <md-icon class="tooltip-icon">
-                            <i class="mdi mdi-information"></i>
-                            <md-tooltip class="helper-tooltip" md-direction="top">
-                                The name of your number. this can also be a tag or an identifier you use to
-                                search/filter
-                                for the number.
-                            </md-tooltip>
-                        </md-icon>
-                    </div>
+    <span class="md-subhead">Below are settings to configure "{{number.number}}"</span>
+    </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+        <form ng-submit="saveNumber()">
+            <div layout="row">
+                <div flex="95">
+                    <md-input-container>
+                        <label>Name</label>
+                        <input ng-model="number.name">
+                    </md-input-container>
                 </div>
-                <div layout="row">
-                    <div flex="66">
-                        <div layout="row">
-                            <div flex="95">
-                                <md-input-container>
-                                    <label>Attached Flow</label>
-                                    <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
-                                        <md-option><em>None</em></md-option>
-                                        <md-option ng-repeat="flow in flows" ng-value="flow.id">
-                                            {{flow.name}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                            </div>
-                            <div flex="5">
-                                <md-icon class="tooltip-icon">
-                                    <i class="mdi mdi-information"></i>
-                                    <md-tooltip class="helper-tooltip" md-direction="top">
-                                        The flow your number will use for inbound calling.
-                                    </md-tooltip>
-                                </md-icon>
-                            </div>
+                <div flex="5">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            The name of your number. this can also be a tag or an identifier you use to search/filter
+                            for the number.
+                        </md-tooltip>
+                    </md-icon>
+                </div>
+            </div>
+            <div layout="row">
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Attached Flow</label>
+                                <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="flow in flows" ng-value="flow.id">
+                                        {{flow.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your number will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
                         </div>
                     </div>
-                    <div flex="33">
-                        <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">Edit
-                            Flow
-                        </md-button>
-                    </div>
                 </div>
-                <md-button ng-click="saveNumber()" class="md-raised md-primary no-margin-sides">Save</md-button>
-            </form>
-        </md-card-content>
-    </md-card>
-
-</script>
-<script type="text/ng-template" id="views/pages/did/my-numbers.html">
-    <!-- exact table from live demo -->
-    <div>
-        <div ng-show="!pagination.didSearch && numbers.length === 0" class="no-results">
-            <md-card md-theme="'default'"" md-theme-watch>
-      <div ng-show=" numbers.length===0 && !pagination.didSearch" class="no-results">
-                <center>
-                    <h5>No numbers listed</h5>
-                    <md-button ng-click="buyNumber()" class="md-raised md-primary">Lookup Numbers / Buy Number
+                <div flex="33">
+                    <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_id)" class="md-raised">Edit Flow
                     </md-button>
-                </center>
-        </div>
-        </md-card>
-    </div>
-    <div ng-show="pagination.didSearch || (!pagination.didSearch && numbers.length > 0)">
-        <div layout="row" layout-align="end center">
-            <div flex="10">
-                <md-input-container class="search">
-                    <label>Search</label>
-                    <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
-                </md-input-container>
+                </div>
             </div>
-        </div>
-        <md-card md-theme="'default'"" md-theme-watch>
+            <md-button ng-click="saveNumber()" class="md-raised md-primary no-margin-sides">Save</md-button>
+        </form>
+    </md-card-content>
+</md-card>
+ 
+            </script>
+<script type="text/ng-template" id="views/pages/did/my-numbers.html">
+              <!-- exact table from live demo -->
+<div>
+  <div ng-show="!pagination.didSearch && numbers.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+      <div ng-show="numbers.length === 0 && !pagination.didSearch" class="no-results">
+        <center>
+          <h5>No numbers listed</h5>
+          <md-button ng-click="buyNumber()" class="md-raised md-primary">Lookup Numbers / Buy Number</md-button>
+        </center>
+      </div>
+    </md-card>
+  </div>
+    <div ng-show="pagination.didSearch || (!pagination.didSearch && numbers.length > 0)">
+      <div layout="row" layout-align="end center">
+        <div flex="10">
+                <md-input-container class="search">
+                  <label>Search</label>
+              <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text">
+              </md-input-container>
+          </div>
+      </div>
+      <md-card md-theme="'default'"" md-theme-watch>
         <md-table-container>
-          <table md-table md-row-select multiple ng-model=" selected" md-progress="promise">
+          <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
             <thead md-head md-order="query.order" md-on-reorder="getDesserts">
-                <tr md-row>
-                    <th md-column><span>Number</span></th>
-                    <th md-column>Region</th>
-                    <th md-column>Monthly Cost</th>
-                    <th md-column>&nbsp;</th>
-                </tr>
+             <tr md-row>
+                <th md-column><span>Number</span></th>
+                <th md-column>Region</th>
+                <th md-column>Monthly Cost</th>
+                <th md-column>&nbsp;</th>
+              </tr>
             </thead>
             <tbody md-body>
-                <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
-                    <td md-cell>{{number.number}}</td>
-                    <td md-cell>{{number.region}}</td>
-                    <td md-cell>{{number.monthly_cost}}</td>
-                    <td md-cell>
-                        <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
-                            <md-icon><i class="mdi mdi-pencil"></i></md-icon>
-                        </md-button>
-                        <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
-                            <md-icon><i class="mdi mdi-delete"></i></md-icon>
-                        </md-button>
+              <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="number in numbers">
+                <td md-cell>{{number.number}}</td>
+                <td md-cell>{{number.region}}</td>
+                <td md-cell>{{number.monthly_cost}}</td>
+                <td md-cell>
+                  <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Settings">
+                      <md-icon ><i class="mdi mdi-pencil"></i></md-icon>
+                  </md-button>
+                  <md-button ng-click="deleteNumber($event, number)" class="md-icon-button" aria-label="Settings">
+                      <md-icon ><i class="mdi mdi-delete"></i></md-icon>
+                  </md-button>
 
-                    </td>
-                </tr>
+                </td>
+              </tr>
             </tbody>
-            </table>
-            </md-table-container>
-        </md-card>
-        <div layout="row" layout-align="end">
+          </table>
+        </md-table-container>
+      </md-card>
+      <div layout="row" layout-align="end">
 
-            <div>
-                <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">
-                    Prev Page</md-button>
-                <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()"
-                           class="md-raised md-primary">Prev Page</md-button>
-                <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">
-                    Next Page</md-button>
-                <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()"
-                           class="md-raised md-primary">Next Page</md-button>
-            </div>
+        <div>
+          <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+          <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+          <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+          <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
         </div>
+      </div>
     </div>
-    </div>
-
-</script>
+  </div>
+  
+            </script>
