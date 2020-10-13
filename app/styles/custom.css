@@ -21,8 +21,8 @@
 }
 
 body {
-  font-family: "Poppins", sans-serif;
-  color: #0a1247;
+  font-family: 'Poppins', sans-serif;
+  color: #0A1247;
 }
 
 li {
@@ -66,7 +66,7 @@ p {
 .buttons {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 14px #0a124720;
+  box-shadow: 0 2px 14px #0A124720;
   padding: 12px 30px;
   display: flex;
   align-items: center;
@@ -85,7 +85,7 @@ p {
 }
 
 .buttons:hover {
-  box-shadow: 0 2px 20px #0a124730;
+  box-shadow: 0 2px 20px #0A124730;
 }
 
 .buttons:hover svg {
@@ -95,7 +95,7 @@ p {
 .login-btn:after {
   height: 49.2px;
   clear: both;
-  content: "";
+  content: '';
   display: block;
   margin: 0;
 }
@@ -106,7 +106,7 @@ p {
   justify-content: space-between;
   padding: 25px 40px;
   width: 100%;
-  background: #e9edef;
+  background: #E9EDEF;
   z-index: 1;
   transition: 1s;
 }
@@ -122,16 +122,16 @@ p {
 
 .header-content .menu ul li a {
   position: relative;
-  color: #0a1247;
+  color: #0A1247;
 }
 
 .header-content .menu ul li a::after {
-  content: "";
+  content: '';
   position: absolute;
   height: 2px;
   width: 100%;
   transform: scale(0);
-  background: #0a1247;
+  background: #0A1247;
   bottom: -5px;
   left: 0;
   transition: all 0.5s ease;
@@ -142,11 +142,11 @@ p {
 }
 
 .header-content.color-header {
-  background: #ebfcfc;
+  background: #EBFCFC;
 }
 
 .header-content.fixed-header {
-  background: #ebfcfc;
+  background: #EBFCFC;
   padding: 20px 40px;
   -webkit-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
@@ -158,11 +158,11 @@ p {
 }
 
 .heading::after {
-  content: "";
+  content: '';
   position: absolute;
   height: 3px;
   width: 180px;
-  background-color: #0a1247;
+  background-color: #0A1247;
   bottom: -10px;
   border-radius: 8px;
   left: -40px;
@@ -179,7 +179,7 @@ p {
 
 .hero-content .hero-text .desc {
   margin-top: 40px;
-  color: #0a1247;
+  color: #0A1247;
 }
 
 .hero-content .hero-text .buttons {
@@ -274,7 +274,7 @@ table {
 }
 
 table thead td {
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 1px solid #D9D9D9;
   padding: 20px 0;
 }
 
@@ -329,8 +329,7 @@ table tbody tr td:nth-child(1) {
 }
 
 .pbx-section {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-    url(../images/pbx-section.png);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(../images/pbx-section.png);
   background-size: cover;
   padding: 100px 0;
 }
@@ -431,6 +430,7 @@ table tbody tr td:nth-child(1) {
 /***** Signup ******/
 .signup-page,
 .login-page {
+
   background-image: linear-gradient(235deg, #f7f7f7, #ffffff 68%, #ffffff);
 }
 
@@ -522,7 +522,7 @@ button {
   font-size: 16px;
   color: #a0abae;
   margin: 0;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom: 1px solid #E3E3E3;
 }
 
 .signup-page .content .signup-form .field-input .fname,
@@ -563,65 +563,17 @@ button {
   border-left: 2px dotted #f4f2f2;
 }
 
-.signup-page
-  .content
-  .signup-form
-  .field-input
-  .input-box
-  .input-field.lname
-  label,
-.signup-page
-  .content
-  .login-form
-  .field-input
-  .input-box
-  .input-field.lname
-  label,
-.login-page
-  .content
-  .signup-form
-  .field-input
-  .input-box
-  .input-field.lname
-  label,
-.login-page
-  .content
-  .login-form
-  .field-input
-  .input-box
-  .input-field.lname
-  label {
+.signup-page .content .signup-form .field-input .input-box .input-field.lname label,
+.signup-page .content .login-form .field-input .input-box .input-field.lname label,
+.login-page .content .signup-form .field-input .input-box .input-field.lname label,
+.login-page .content .login-form .field-input .input-box .input-field.lname label {
   padding-left: 20px;
 }
 
-.signup-page
-  .content
-  .signup-form
-  .field-input
-  .input-box
-  .input-field
-  .validate,
-.signup-page
-  .content
-  .login-form
-  .field-input
-  .input-box
-  .input-field
-  .validate,
-.login-page
-  .content
-  .signup-form
-  .field-input
-  .input-box
-  .input-field
-  .validate,
-.login-page
-  .content
-  .login-form
-  .field-input
-  .input-box
-  .input-field
-  .validate {
+.signup-page .content .signup-form .field-input .input-box .input-field .validate,
+.signup-page .content .login-form .field-input .input-box .input-field .validate,
+.login-page .content .signup-form .field-input .input-box .input-field .validate,
+.login-page .content .login-form .field-input .input-box .input-field .validate {
   border-bottom: solid 1px #f4f2f2;
 }
 
@@ -674,7 +626,7 @@ button {
 .login-page .content .text h2::after {
   position: absolute;
   right: 0;
-  content: "";
+  content: '';
   width: 180px;
   height: 4px;
   background: #395373;
@@ -721,26 +673,11 @@ button {
 }
 
 .login-page .content .login-form .login-btn span {
-  padding: 15px 70px;
-}
-.login-page .content .login-form .login-btn {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.login-page .content .login-form .login-btn span {
-  padding: 15px 40px;
+  padding: 15px 70px !important;
 }
 
 .login-page .content .password-reset-form .login-btn span {
   padding: 15px 40px !important;
-}
-.login-btn .login-button-custom {
-  padding: 15px 70px !important;
-}
-
-.login-btn .login-custom {
-  padding: 15px 70px !important;
 }
 
 .login-page .content .login-form #gSignIn .abcRioButtonBlue {
@@ -759,7 +696,8 @@ button {
   margin: 3px 0 0 0;
 }
 
-@media (min-width: 864px) {
+@media (min-width: 768px) {
+
   .login-page .content {
     flex-direction: row;
   }
@@ -823,7 +761,7 @@ button {
 .verification-page .content .text h2::after {
   position: absolute;
   left: 0;
-  content: "";
+  content: '';
   width: 180px;
   height: 4px;
   background: #395373;
@@ -878,13 +816,7 @@ button {
   margin-left: 25px;
 }
 
-.verification-page
-  .content
-  .text
-  .verify-form
-  .details
-  .input-field.separator
-  label {
+.verification-page .content .text .verify-form .details .input-field.separator label {
   padding-left: 25px;
 }
 
@@ -911,7 +843,7 @@ button {
 .footer {
   padding: 50px 0;
   margin-top: 120px;
-  background: #ebfcfc;
+  background: #EBFCFC;
   position: relative;
   background-image: url("../images/footer-bg-img.png");
   background-repeat: no-repeat;
@@ -934,16 +866,16 @@ button {
 
 .footer .footer-menu ul li a {
   position: relative;
-  color: #0a1247;
+  color: #0A1247;
 }
 
 .footer .footer-menu ul li a::after {
-  content: "";
+  content: '';
   position: absolute;
   height: 2px;
   width: 100%;
   transform: scale(0);
-  background: #0a1247;
+  background: #0A1247;
   bottom: -5px;
   left: 0;
   transition: all 0.5s ease;
@@ -954,7 +886,7 @@ button {
 }
 
 .privacy {
-  background: #0a1247;
+  background: #0A1247;
   padding: 20px 0;
 }
 
