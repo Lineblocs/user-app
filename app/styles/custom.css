@@ -781,10 +781,6 @@ button {
     width: 400px;
   }
 
-  .login-page .content .login-form .login-btn span {
-    padding: 15px 165px !important;
-  }
-
   .login-page .content .login-form #gSignIn .abcRioButtonBlue {
     width: 400px !important;
   }
