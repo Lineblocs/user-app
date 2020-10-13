@@ -735,9 +735,9 @@ button {
 .login-page .content .password-reset-form .login-btn span {
   padding: 15px 40px !important;
 }
-.login-btn .login-button-custom {
+/* .login-btn .login-button-custom {
   padding: 15px 70px !important;
-}
+} */
 
 .login-btn .login-custom {
   padding: 15px 70px !important;
