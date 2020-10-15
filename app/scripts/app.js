@@ -1601,7 +1601,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, Backend) {
+}).run(function($rootScope, $shared, $state, Backend) {
 
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
