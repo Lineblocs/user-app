@@ -1400,7 +1400,7 @@ var regParams = {
         controller: 'IpWhitelistCtrl'
     })
     .state('settings-workspace-users', {
-        url: '/settings/workspace-users',
+        url: '/users',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users.html',
         controller: 'WorkspaceUserCtrl'
@@ -1425,13 +1425,13 @@ var regParams = {
     })
 
     .state('settings-workspace-users-create', {
-        url: '/settings/workspace-users/create',
+        url: '/users/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users-create.html',
         controller: 'WorkspaceUserCreateCtrl'
     })
     .state('settings-workspace-users-edit', {
-        url: '/settings/workspace-users/{userId}/edit',
+        url: '/users/{userId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users-edit.html',
         controller: 'WorkspaceUserEditCtrl'

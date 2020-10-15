@@ -17,7 +17,8 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
       last_name: "",
       email: ""
     },
-    roles: $shared.makeDefaultWorkspaceRoles()
+    roles: $shared.makeDefaultWorkspaceRoles(),
+    preferred_pop: null
   };
   $scope.triedSubmit = false;
   $scope.submit = function(form) {
@@ -27,7 +28,8 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
       var values = {
         assign: {
           "extension_id": $scope.values.extension_id,
-          "number_id": $scope.values.number_id
+          "number_id": $scope.values.number_id,
+          "preferred_pop": $scope.values.preferred_pop
         }
       };
       var toastPos = {
@@ -107,11 +109,13 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
     $q.all([
       Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
       Backend.get("/extension/listExtensions?all=1"),
-      Backend.get("/did/listNumbers?all=1")
+      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/getPOPs")
       ]).then(function(res) {
         var user = res.data;
         $scope.extensions = res[1].data.data;
         $scope.numbers = res[2].data.data;
+        $scope.pops = res[3].data;
           console.log("$scope.values are ", $scope.values);
         angular.forEach($scope.extensions, function(ext) {
           if ( $scope.extId && $scope.extId === ext.public_id ) {

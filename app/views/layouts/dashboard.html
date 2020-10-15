@@ -274,6 +274,11 @@
                                    class="mdi mdi-library-music"></i> &nbsp;<span
                                       class="text">{{ 'media-files' | translate }}</span></md-button>
                         </li>
+                        <li ng-class="{active: $state.includes('settings-workspace-users')}">
+                            <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""><i
+                                   class="mdi mdi-account"></i> &nbsp;<span
+                                      class="text">{{ 'users' | translate }}</span></md-button>
+                        </li>
                         <li ng-class="{active: $state.includes('billing')}">
                             <md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i
                                    class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
@@ -321,12 +326,6 @@
                                     <md-button href="" ng-click="$shared.changeRoute('settings-ip-whitelist')" class="">
                                         <span class="text">{{ 'ip-whitelist' | translate }}</span></md-button>
                                 </li>
-                                <li ng-class="{active: $state.includes('settings-workspace-users')}">
-                                    <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')"
-                                               class=""><span class="text">{{ 'workspace-users' | translate }}</span>
-                                    </md-button>
-                                </li>
-
                                 <li ng-class="{active: $state.includes('settings-workspace-params')}">
                                     <md-button href="" ng-click="$shared.changeRoute('settings-workspace-params')"
                                                class=""><span class="text">{{ 'workspace-params' | translate }}</span>

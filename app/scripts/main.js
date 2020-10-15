@@ -1400,7 +1400,7 @@ var regParams = {
         controller: 'IpWhitelistCtrl'
     })
     .state('settings-workspace-users', {
-        url: '/settings/workspace-users',
+        url: '/users',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users.html',
         controller: 'WorkspaceUserCtrl'
@@ -1425,13 +1425,13 @@ var regParams = {
     })
 
     .state('settings-workspace-users-create', {
-        url: '/settings/workspace-users/create',
+        url: '/users/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users-create.html',
         controller: 'WorkspaceUserCreateCtrl'
     })
     .state('settings-workspace-users-edit', {
-        url: '/settings/workspace-users/{userId}/edit',
+        url: '/users/{userId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users-edit.html',
         controller: 'WorkspaceUserEditCtrl'
@@ -8598,7 +8598,8 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
       last_name: "",
       email: ""
     },
-    roles: $shared.makeDefaultWorkspaceRoles()
+    roles: $shared.makeDefaultWorkspaceRoles(),
+    preferred_pop: null
   };
   $scope.triedSubmit = false;
   $scope.submit = function(form) {
@@ -8608,7 +8609,8 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
       var values = {
         assign: {
           "extension_id": $scope.values.extension_id,
-          "number_id": $scope.values.number_id
+          "number_id": $scope.values.number_id,
+          "preferred_pop": $scope.values.preferred_pop
         }
       };
       var toastPos = {
@@ -8688,11 +8690,13 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
     $q.all([
       Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
       Backend.get("/extension/listExtensions?all=1"),
-      Backend.get("/did/listNumbers?all=1")
+      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/getPOPs")
       ]).then(function(res) {
         var user = res.data;
         $scope.extensions = res[1].data.data;
         $scope.numbers = res[2].data.data;
+        $scope.pops = res[3].data;
           console.log("$scope.values are ", $scope.values);
         angular.forEach($scope.extensions, function(ext) {
           if ( $scope.extId && $scope.extId === ext.public_id ) {
@@ -8810,6 +8814,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       last_name: "",
       email: ""
     },
+    preferred_pop: null,
     roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.ui = {
@@ -8908,7 +8913,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     $q.all([
       Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
       Backend.get("/extension/listExtensions?all=1"),
-      Backend.get("/did/listNumbers?all=1")
+      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/getPOPs")
       ]).then(function(res) {
         $scope.values.user = res[0].data;
         for ( var index in $scope.values.roles ) {
@@ -8916,11 +8922,14 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
             $scope.values.roles [ index ] = true;
           }
         }
+        $scope.pops = res[3].data;
         $scope.values.extension_id = $scope.values.user.extension_id;
         $scope.values.number_id = $scope.values.user.number_id;
+        $scope.values.preferred_pop = $scope.values.user.preferred_pop;
         $scope.extensions = res[1].data.data;
         $scope.numbers = res[2].data.data;
           console.log("$scope.values are ", $scope.values);
+          console.log("$scope.extensions are ", $scope.extensions);
         angular.forEach($scope.extensions, function(ext) {
           if ( $scope.extId && $scope.extId === ext.public_id ) {
             $scope.values.extension_id = ext.id;
