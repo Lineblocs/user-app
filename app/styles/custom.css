@@ -735,9 +735,9 @@ button {
 .login-page .content .password-reset-form .login-btn span {
   padding: 15px 40px !important;
 }
-.login-btn .login-button-custom {
+/* .login-btn .login-button-custom {
   padding: 15px 70px !important;
-}
+} */
 
 .login-btn .login-custom {
   padding: 15px 70px !important;
@@ -779,10 +779,6 @@ button {
 
   .login-page .content .login-form .field-input {
     width: 400px;
-  }
-
-  .login-page .content .login-form .login-btn span {
-    padding: 15px 165px !important;
   }
 
   .login-page .content .login-form #gSignIn .abcRioButtonBlue {
