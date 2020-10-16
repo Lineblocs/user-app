@@ -201,15 +201,19 @@ angular
         factory.billingPackages = ['gold', 'silver', 'bronze'];
   var flickerTimeout = 0;
 
-    function searchModule(text, state, tags, stateParams)
+    function searchModule(text, state, tags, stateParams, perms, setting)
     {
         tags = tags || [];
         stateParams= stateParams || {};
+        perms = perms || [];
+        setting = setting || null;
         return {
             display: text,
             state: state,
             tags: tags,
-            stateParams: stateParams
+            stateParams: stateParams,
+            perms: perms,
+            setting: setting
         }
     }
      var modules = [
@@ -217,34 +221,97 @@ searchModule("Blocked Numbers", "settings-blocked-numbers", ['blocked', 'numbers
 //searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
 searchModule("IP Whitelist", "settings-ip-whitelist", ['ip', 'whitelist']),
 searchModule("API Settings", "settings-workspace-api-settings", ['api']),
-searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users']),
+searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users'], [], ['manage_users']),
 searchModule("Workspace Params", "settings-workspace-params", ['workspace', 'params']),
 searchModule("Add Workspace User", "settings-workspace-users-create", ['add', 'workspace', 'user']),
 searchModule("Extension Codes", "settings-extension-codes", ['extension', 'codes']),
 searchModule("Media Files", "files", ['media', 'files', 'media files']),
-searchModule("Phones", "phones-phones", ['provision', 'phones']),
-searchModule("Add Phone", "phones-phone-create", ['add', 'phone']),
-searchModule("Phones Groups", "phones-groups", ['phones', 'groups']),
-searchModule("Add Phone Group", "phones-groups-create", ['add', 'group']),
-searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates']),
-searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings']),
-searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy']),
-searchModule("My Numbers", "my-numbers", ['my', 'numbers']),
-searchModule("Buy Numbers", "buy-numbers", ['buy', 'numbers']),
-searchModule("Port-In Requests", "ports", ['port', 'requests', 'port in', 'dids']),
-searchModule("Create Port Request", "port-create", ['port', 'create', 'dids']),
-searchModule("Flows", "flows", ['flows', 'flow editor']),
-searchModule("Flow Editor", "flow-editor", ['flow editor'], {"flowId": "new"}),
-searchModule("Extensions", "extensions", ['extensions']),
-searchModule('Add Extension', "extension-create", ['add', 'extension']),
+searchModule("Phones", "phones-phones", ['provision', 'phones'], [], ['manage_phones']),
+searchModule("Add Phone", "phones-phone-create", ['add', 'phone'], [], ['manage_phones']),
+searchModule("Phones Groups", "phones-groups", ['phones', 'groups'], [], ['manage_phonegroups']),
+searchModule("Add Phone Group", "phones-groups-create", ['add', 'group'], [], ['create_phonegroup']),
+searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates'], [], ['manage_phoneglobalsettings']),
+searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings'],[], ['manage_phoneindividualsetting']),
+searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy'], [], ['manage_phones']),
+searchModule("My Numbers", "my-numbers", ['my', 'numbers'], [], ['manage_dids']),
+searchModule("Buy Numbers", "buy-numbers", ['buy', 'numbers'], [], ['manage_dids']),
+searchModule("Port-In Requests", "ports", ['port', 'requests', 'port in', 'dids'], [], ['manage_ports']),
+searchModule("Create Port Request", "port-create", ['port', 'create', 'dids'], [], ['manage_ports']),
+searchModule("Flows", "flows", ['flows', 'flow editor'], [], ['manage_flows']),
+searchModule("Flow Editor", "flow-editor", ['flow editor'], {"flowId": "new"}, ['create_flow']),
+searchModule("Extensions", "extensions", ['extensions'],[], ['manage_extensions']),
+searchModule('Add Extension', "extension-create", ['add', 'extension'], [], ['create_extensions']),
 searchModule("Logs", "debugger-logs", ['debugger logs', 'logs', 'debugger']),
-searchModule("Calls", "calls", ['calls']),
-searchModule("Recordings", "recordings", ['recordings']),
+searchModule("Calls", "calls", ['calls'], [], ['manage_calls']),
+searchModule("Recordings", "recordings", ['recordings'], [], ['manage_recordings']),
 searchModule("Faxes", "faxes", ['fax', 'faxes']),
-searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings']),
-searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers']),
-searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers']),
+searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'], [], ['manage_billing']),
+searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers'], [], ['manage_byo_carriers'], 'bring_carrier'),
+searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers'], [], ['manage_byo_did_numbers'], 'bring_carrier'),
      ];
+
+     factory.isSectionActive = function(area) {
+         var current = factory.state.name;
+         var maps = {
+            'my-numbers': [
+                'my-numbers',
+                'my-numbers-edit',
+            ],
+            'buy-numbers': [
+                'buy-numbers',
+                'buy-numbers-select',
+            ],
+            'buy-numbers': [
+                'buy-numbers',
+                'buy-numbers-select',
+            ],
+            'ports': [
+                'port-create',
+                'port-edit',
+            ],
+            'flows': [
+                'flows',
+                'flow-editor'
+            ],
+            'flows': [
+                'flows',
+                'flow-editor'
+            ],
+            'extensions': [
+                'extensions',
+                'extension-create',
+                'extension-edit'
+            ],
+            'recordings': [
+                'recordings'
+            ],
+            'faxes': [
+                'faxes'
+            ],
+            'files': [
+                'files'
+            ],
+            'settings-workspace-users': [
+                'settings-workspace-users',
+                'settings-workspace-users-create',
+                'settings-workspace-users-edit',
+                'settings-workspace-users-assign',
+            ],
+            'billing': [
+                'billing',
+                'billing-add-card',
+                'billing-upgrade-submit',
+                'billing-upgrade-complete',
+                'billing-upgrade-plan'
+            ],
+
+
+         }
+         var item = maps[area];
+         if ( item.includes( current ) ) {
+             return true;
+         }
+     }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
      }
@@ -289,8 +356,19 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
      factory.isSettingEnabled = function(option) {
 
+        console.log("is setting enabled ", option);
+        console.log("is setting enabled ", factory.planInfo);
             if ( factory.planInfo ) {
                 if ( factory.planInfo[ option ] ) {
+                    return true;
+                }
+            }
+            return false;
+     }
+     factory.hasPermission = function(option) {
+        console.log("hasPermission", option);
+            if ( factory.workspaceInfo ) {
+                if ( factory.workspaceInfo.user_info[option] ) {
                     return true;
                 }
             }
@@ -341,6 +419,25 @@ return changed;
             angular.forEach(modules, function(module) {
 
                 console.log("searching on " + module.display + " agaisnt " + query);
+                var hasPerms = true;
+
+
+                var perms = module.perms;
+                console.log("checking perms ", perms);
+                angular.forEach(perms, function(perm) {
+                    if (!factory.hasPermission(perm)) {
+                        hasPerms = false;
+                    }
+                });
+                if (!hasPerms) {
+                    return;
+                }
+
+                //check for setting
+                var setting = module.setting;
+                if (setting !== null && !factory.isSettingEnabled(setting)) {
+                    return false;
+                }
                 var matched = module.display.toLowerCase().match( regexp );
                 if ( matched ) {
                     results.push(module);
@@ -350,6 +447,26 @@ return changed;
             angular.forEach(modules, function(module) {
                 if (results.indexOf(module)>-1) {
                     return;
+                }
+
+                var hasPerms = true;
+
+
+                var perms = module.perms;
+                console.log("checking perms ", perms);
+                angular.forEach(perms, function(perm) {
+                    if (!factory.hasPermission(perm)) {
+                        hasPerms = false;
+                    }
+                });
+                if (!hasPerms) {
+                    return;
+                }
+
+                //check for setting
+                var setting = module.setting;
+                if (setting !== null && !factory.isSettingEnabled(setting)) {
+                    return false;
                 }
                 angular.forEach(module.tags, function(tag) {
                     console.log("searching on " + tag + " agaisnt " + query);
@@ -500,7 +617,7 @@ return changed;
         }
         factory.canPerformAction = function(action) {
             var workspace = factory.getWorkspace();
-            if (workspace && workspace.user_info[action]) {
+            if (workspace && workspace.user_info && workspace.user_info[action]) {
                 return true;
             }
             return false;
@@ -697,6 +814,7 @@ return changed;
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 $shared.planInfo=  res.data[4];
+                $shared.workspaceInfo=  res.data[5];
                 console.log("updated UI state");
                 resolve(res);
             }, function(err) {
