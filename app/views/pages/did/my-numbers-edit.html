@@ -99,6 +99,9 @@
                     </div>
                 </div>
                 <div flex="33">
+                <md-button ng-show="!number.flow_id" ng-click="setupFlow($event, values)"
+                    class="md-raised">Setup
+                </md-button>
                     <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_public_id)" class="md-raised">
                         Edit Flow
                     </md-button>

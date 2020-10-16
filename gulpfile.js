@@ -222,6 +222,7 @@ var deps = [
 ];
 var files = [
 './app/scripts/app.js',
+'./app/scripts/helpers.js',
 './app/scripts/controllers/*.js'
 ];
 /*

@@ -53,7 +53,7 @@
                     </td>
             <td md-cell>{{user.email}}</td>
             <td md-cell>
-                                <md-button  class="md-raised md-primary md-small resend-invite" ng-click="resendInvite(user)">
+                                <md-button  ng-show="!user.accepted" class="md-raised md-primary md-small resend-invite" ng-click="resendInvite(user)">
                                     <i class="mdi mdi-email"></i>
                                     Reinvite
                                 </md-button>

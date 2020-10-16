@@ -29,6 +29,7 @@ var deps = [
 ];
 var files = deps.concat([
 './scripts/app.js',
+'./scripts/helpers.js',
 './scripts/controllers/*.js'
 ]);
 

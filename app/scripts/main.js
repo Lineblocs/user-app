@@ -201,15 +201,19 @@ angular
         factory.billingPackages = ['gold', 'silver', 'bronze'];
   var flickerTimeout = 0;
 
-    function searchModule(text, state, tags, stateParams)
+    function searchModule(text, state, tags, stateParams, perms, setting)
     {
         tags = tags || [];
         stateParams= stateParams || {};
+        perms = perms || [];
+        setting = setting || null;
         return {
             display: text,
             state: state,
             tags: tags,
-            stateParams: stateParams
+            stateParams: stateParams,
+            perms: perms,
+            setting: setting
         }
     }
      var modules = [
@@ -217,34 +221,97 @@ searchModule("Blocked Numbers", "settings-blocked-numbers", ['blocked', 'numbers
 //searchModule("Add Blocked Number", "settings-blocked-numbers-create", ['add', 'blocked', 'number']),
 searchModule("IP Whitelist", "settings-ip-whitelist", ['ip', 'whitelist']),
 searchModule("API Settings", "settings-workspace-api-settings", ['api']),
-searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users']),
+searchModule("Workspace Users", "settings-workspace-users", ['workspace', 'users'], [], ['manage_users']),
 searchModule("Workspace Params", "settings-workspace-params", ['workspace', 'params']),
 searchModule("Add Workspace User", "settings-workspace-users-create", ['add', 'workspace', 'user']),
 searchModule("Extension Codes", "settings-extension-codes", ['extension', 'codes']),
 searchModule("Media Files", "files", ['media', 'files', 'media files']),
-searchModule("Phones", "phones-phones", ['provision', 'phones']),
-searchModule("Add Phone", "phones-phone-create", ['add', 'phone']),
-searchModule("Phones Groups", "phones-groups", ['phones', 'groups']),
-searchModule("Add Phone Group", "phones-groups-create", ['add', 'group']),
-searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates']),
-searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings']),
-searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy']),
-searchModule("My Numbers", "my-numbers", ['my', 'numbers']),
-searchModule("Buy Numbers", "buy-numbers", ['buy', 'numbers']),
-searchModule("Port-In Requests", "ports", ['port', 'requests', 'port in', 'dids']),
-searchModule("Create Port Request", "port-create", ['port', 'create', 'dids']),
-searchModule("Flows", "flows", ['flows', 'flow editor']),
-searchModule("Flow Editor", "flow-editor", ['flow editor'], {"flowId": "new"}),
-searchModule("Extensions", "extensions", ['extensions']),
-searchModule('Add Extension', "extension-create", ['add', 'extension']),
+searchModule("Phones", "phones-phones", ['provision', 'phones'], [], ['manage_phones']),
+searchModule("Add Phone", "phones-phone-create", ['add', 'phone'], [], ['manage_phones']),
+searchModule("Phones Groups", "phones-groups", ['phones', 'groups'], [], ['manage_phonegroups']),
+searchModule("Add Phone Group", "phones-groups-create", ['add', 'group'], [], ['create_phonegroup']),
+searchModule("Phone Global Templates", "phones-global-settings", ['phones', 'global', 'templates'], [], ['manage_phoneglobalsettings']),
+searchModule("Phone Individual Settings", "phones-individual-settings", ['phones', 'individual', 'settings'],[], ['manage_phoneindividualsetting']),
+searchModule("Deploy Phone Config", "phones-deploy-config", ['provision', 'phone', 'config', 'deploy'], [], ['manage_phones']),
+searchModule("My Numbers", "my-numbers", ['my', 'numbers'], [], ['manage_dids']),
+searchModule("Buy Numbers", "buy-numbers", ['buy', 'numbers'], [], ['manage_dids']),
+searchModule("Port-In Requests", "ports", ['port', 'requests', 'port in', 'dids'], [], ['manage_ports']),
+searchModule("Create Port Request", "port-create", ['port', 'create', 'dids'], [], ['manage_ports']),
+searchModule("Flows", "flows", ['flows', 'flow editor'], [], ['manage_flows']),
+searchModule("Flow Editor", "flow-editor", ['flow editor'], {"flowId": "new"}, ['create_flow']),
+searchModule("Extensions", "extensions", ['extensions'],[], ['manage_extensions']),
+searchModule('Add Extension', "extension-create", ['add', 'extension'], [], ['create_extensions']),
 searchModule("Logs", "debugger-logs", ['debugger logs', 'logs', 'debugger']),
-searchModule("Calls", "calls", ['calls']),
-searchModule("Recordings", "recordings", ['recordings']),
+searchModule("Calls", "calls", ['calls'], [], ['manage_calls']),
+searchModule("Recordings", "recordings", ['recordings'], [], ['manage_recordings']),
 searchModule("Faxes", "faxes", ['fax', 'faxes']),
-searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings']),
-searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers']),
-searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers']),
+searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'], [], ['manage_billing']),
+searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers'], [], ['manage_byo_carriers'], 'bring_carrier'),
+searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers'], [], ['manage_byo_did_numbers'], 'bring_carrier'),
      ];
+
+     factory.isSectionActive = function(area) {
+         var current = factory.state.name;
+         var maps = {
+            'my-numbers': [
+                'my-numbers',
+                'my-numbers-edit',
+            ],
+            'buy-numbers': [
+                'buy-numbers',
+                'buy-numbers-select',
+            ],
+            'buy-numbers': [
+                'buy-numbers',
+                'buy-numbers-select',
+            ],
+            'ports': [
+                'port-create',
+                'port-edit',
+            ],
+            'flows': [
+                'flows',
+                'flow-editor'
+            ],
+            'flows': [
+                'flows',
+                'flow-editor'
+            ],
+            'extensions': [
+                'extensions',
+                'extension-create',
+                'extension-edit'
+            ],
+            'recordings': [
+                'recordings'
+            ],
+            'faxes': [
+                'faxes'
+            ],
+            'files': [
+                'files'
+            ],
+            'settings-workspace-users': [
+                'settings-workspace-users',
+                'settings-workspace-users-create',
+                'settings-workspace-users-edit',
+                'settings-workspace-users-assign',
+            ],
+            'billing': [
+                'billing',
+                'billing-add-card',
+                'billing-upgrade-submit',
+                'billing-upgrade-complete',
+                'billing-upgrade-plan'
+            ],
+
+
+         }
+         var item = maps[area];
+         if ( item.includes( current ) ) {
+             return true;
+         }
+     }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
      }
@@ -289,8 +356,19 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
      factory.isSettingEnabled = function(option) {
 
+        console.log("is setting enabled ", option);
+        console.log("is setting enabled ", factory.planInfo);
             if ( factory.planInfo ) {
                 if ( factory.planInfo[ option ] ) {
+                    return true;
+                }
+            }
+            return false;
+     }
+     factory.hasPermission = function(option) {
+        console.log("hasPermission", option);
+            if ( factory.workspaceInfo ) {
+                if ( factory.workspaceInfo.user_info[option] ) {
                     return true;
                 }
             }
@@ -341,6 +419,25 @@ return changed;
             angular.forEach(modules, function(module) {
 
                 console.log("searching on " + module.display + " agaisnt " + query);
+                var hasPerms = true;
+
+
+                var perms = module.perms;
+                console.log("checking perms ", perms);
+                angular.forEach(perms, function(perm) {
+                    if (!factory.hasPermission(perm)) {
+                        hasPerms = false;
+                    }
+                });
+                if (!hasPerms) {
+                    return;
+                }
+
+                //check for setting
+                var setting = module.setting;
+                if (setting !== null && !factory.isSettingEnabled(setting)) {
+                    return false;
+                }
                 var matched = module.display.toLowerCase().match( regexp );
                 if ( matched ) {
                     results.push(module);
@@ -350,6 +447,26 @@ return changed;
             angular.forEach(modules, function(module) {
                 if (results.indexOf(module)>-1) {
                     return;
+                }
+
+                var hasPerms = true;
+
+
+                var perms = module.perms;
+                console.log("checking perms ", perms);
+                angular.forEach(perms, function(perm) {
+                    if (!factory.hasPermission(perm)) {
+                        hasPerms = false;
+                    }
+                });
+                if (!hasPerms) {
+                    return;
+                }
+
+                //check for setting
+                var setting = module.setting;
+                if (setting !== null && !factory.isSettingEnabled(setting)) {
+                    return false;
                 }
                 angular.forEach(module.tags, function(tag) {
                     console.log("searching on " + tag + " agaisnt " + query);
@@ -500,7 +617,7 @@ return changed;
         }
         factory.canPerformAction = function(action) {
             var workspace = factory.getWorkspace();
-            if (workspace && workspace.user_info[action]) {
+            if (workspace && workspace.user_info && workspace.user_info[action]) {
                 return true;
             }
             return false;
@@ -666,12 +783,16 @@ return changed;
         }
         function errorHandler(error, codeId, showMsg) {
             console.log("erroHandler ", arguments);
+            /*
             if ( $shared.tempStopErrors ) {
                 $q.all( factory.queued ).then(function() {
                     $shared.tempStopErrors = false;
                 });
                 return;
             }
+            */
+            $shared.endIsLoading();
+            $shared.endIsCreateLoading();
             if ( showMsg ) {
                     error = error || "An error occured.";
                     $shared.showError(error);
@@ -693,6 +814,7 @@ return changed;
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 $shared.planInfo=  res.data[4];
+                $shared.workspaceInfo=  res.data[5];
                 console.log("updated UI state");
                 resolve(res);
             }, function(err) {
@@ -852,6 +974,12 @@ if (checked.length === 0) {
             pushToQueue( item );
             return item;
         }
+        factory.postCouldError = function(path, params)
+        {
+            $shared.tempStopErrors = false;
+            return factory.post(path, params, false, true);
+        }
+
         factory.postFiles =  function(url, data, showMsg) {
             var item =$q(function(resolve, reject) {
                  if (!skip.includes($state.current.name)) {
@@ -1390,7 +1518,7 @@ var regParams = {
         controller: 'IpWhitelistCtrl'
     })
     .state('settings-workspace-users', {
-        url: '/settings/workspace-users',
+        url: '/users',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users.html',
         controller: 'WorkspaceUserCtrl'
@@ -1415,16 +1543,23 @@ var regParams = {
     })
 
     .state('settings-workspace-users-create', {
-        url: '/settings/workspace-users/create',
+        url: '/users/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users-create.html',
         controller: 'WorkspaceUserCreateCtrl'
     })
     .state('settings-workspace-users-edit', {
-        url: '/settings/workspace-users/{userId}/edit',
+        url: '/users/{userId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/settings/workspace-users-edit.html',
         controller: 'WorkspaceUserEditCtrl'
+    })
+
+    .state('settings-workspace-users-assign', {
+        url: '/settings/workspace-users/{userId}/assign',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/settings/workspace-users-assign.html',
+        controller: 'WorkspaceUserAssignCtrl'
     })
     .state('settings-extension-codes', {
 
@@ -1584,7 +1719,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, Backend) {
+}).run(function($rootScope, $shared, $state, Backend) {
 
       //Idle.watch();
     $rootScope.$on('IdleStart', function() { 
@@ -1643,6 +1778,177 @@ var regParams = {
 
 
 
+  function SetupDialogController($scope, $shared, Backend, title, category, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+      name: title,
+      category: category
+    };
+    $scope.templates = [];
+    $scope.step = 1;
+    $scope.blankTemplate = {
+      "title": "Blank Template",
+      "id": null
+    };
+    $scope.templates = [];
+
+    $scope.canShowPreset = function(preset) {
+      var show = false;
+      var presets = $scope.presets;
+      if (preset.depends_on_field !== '') {
+        for ( var index in presets ) {
+          var obj = presets[ index ];
+          if ( preset.depends_on_field === obj.var_name ) {
+            if (obj.value === preset.depends_on_value ) {
+              show = true;
+            }
+          }
+        }
+      } else {
+        show = true;
+      }
+      return show;
+    }
+    $scope.cancel = function() {
+      $mdDialog.hide();
+    }
+
+
+
+    function init() {
+      $shared.isLoading = true;
+      var templateByCategory;
+      Backend.get("/flow/listTemplates").then(function (res) {
+        $shared.isLoading = false;
+        console.log("flow templates are ", res.data);
+        var templates = res.data.data;
+        $scope.templates = templates;
+        var templatesByCategory = [];
+        for ( var index in templates ) {
+          var template = templates[ index ];
+          var category = templatesByCategory[ template.category ];
+          var found = false;
+          for (var index1 in templatesByCategory ) {
+              if (templatesByCategory[index1].name === template.category) {
+                found = true;
+                templateByCategory = templatesByCategory[index1];
+              }
+          }
+          if ( !found ) {
+            templatesByCategory.push({
+              "name": template.category,
+              "templates": [template]
+            });
+            continue;
+          }
+          templateByCategory['templates'].push( template );
+        }
+        $scope.templatesByCategory = templatesByCategory;
+        console.log("template ", templatesByCategory);
+      });
+
+    }
+    $scope.save = function() {
+      if ( $scope.step === 1 ) {
+        $scope.saveStep1();
+      } else if ( $scope.step === 2 ) {
+        $scope.saveStep2();
+      }
+    }
+    $scope.saveStep1 = function () {
+      var data = angular.copy($scope.values);
+      var templateByCategory;
+      data['flow_json'] = null;
+      data['template_id'] = null;
+      data['started'] = true;
+      data['category'] = $scope.values['category'];
+      if ($scope.selectedTemplate.name !== 'Blank') {
+        data['template_id'] = $scope.selectedTemplate.id;
+      }
+      $shared.isCreateLoading = true;
+      Backend.post("/flow/saveFlow", data).then(function (res) {
+        $shared.isCreateLoading = false;
+        console.log("response arguments ", arguments);
+        console.log("response headers ", res.headers('X-Flow-ID'));
+        console.log("response body ", res.body);
+        var id = res.headers('X-Flow-ID');
+        $scope.flowId = id;
+        var urlObj = URI(document.location.href);
+        var query = urlObj.query(true);
+        var token = query.auth;
+
+        Backend.get("/getFlowPresets?templateId=" + data['template_id']).then(function (res) {
+          if ( !res.data.has_presets ) {
+            return;
+          } 
+          var url = "/getFlowPresets?templateId=" + data['template_id'];
+          $scope.inputs = {};
+          Backend.get(url).then(function (res) {
+            console.log("presets are ", res.data);
+            $scope.presets = res.data.presets;
+            angular.forEach($scope.presets, function(preset) {
+              preset.value = preset.default;
+            });
+            $scope.step = 2;
+          });
+        });
+
+      });
+    }
+    $scope.useTemplate = function (template) {
+      $scope.selectedTemplate = template;
+    };
+    $scope.isSelected = function (template) {
+      if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {
+        return true;
+      }
+      return false;
+    }
+
+    $scope.saveStep2 = function() {
+        var url = "/saveUpdatedPresets?templateId=" + $scope.selectedTemplate.id + "&flowId=" + $scope.flowId;
+        var presets = angular.copy( $scope.presets );
+
+        var data = presets.map(function(preset) {
+          return {
+            widget: preset.widget,
+            widget_key: preset.widget_key,
+            value: preset.value
+          };
+        });
+
+        $shared.isLoading = true;
+        Backend.post(url, data).then(function (res) {
+          console.log("updated presets..");
+          onSuccess($scope.flowId);
+        });
+    }
+
+    init();
+
+  }
+
+  function SetupExtDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+    };
+            $scope.$on("Created", function(id) {
+              console.log("setup created fired.." , arguments);
+              $shared.endIsLoading();
+              $shared.endIsCreateLoading();
+              onSuccess(id);
+            });
+
+  }
+  function SetupNumberDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
+        $scope.values = {
+    };
+            $scope.$on("Created", function(id) {
+              console.log("setup created fired.." , arguments);
+              $shared.endIsLoading();
+              $shared.endIsCreateLoading();
+              onSuccess(id);
+            });
+
+  }
 'use strict';
 
 /**
@@ -2253,9 +2559,52 @@ angular.module('Lineblocs')
 				} else {
 					$shared.endIsLoading();
 				}
-				resolve();
+				resolve(res);
 			}, reject);
 		});
+	}
+
+
+	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
+		$scope.$shared = $shared;
+		$scope.card = {
+			name: "",
+			address: "",
+			city: "",
+			postal_code: "",
+			number: "",
+			expires: "",
+			cvv: ""
+		};
+		function stripeResponseHandler(status, response) {
+			$timeout(function() {
+				$scope.$apply();
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.errorMsg = response.error.message;
+					angular.element('.add-card-form').scrollTop(0);
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					onSuccess(response);
+				}
+			}, 0);
+		}
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		}
+		$scope.submit = function() {
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, stripeResponseHandler);
+
+		}
 	}
 	$scope.changeCard = function(value) {
 		console.log("changeCard ", value);
@@ -2322,6 +2671,35 @@ angular.module('Lineblocs')
 			submitBilling($scope.data.selectedCard);
 		}, 0);
 	}
+
+
+	$scope.addCard = function($event) {
+		function onSuccess(response) {
+			stripeRespAddCard(response).then(function() {
+				loadData(true);
+			});
+		}
+		function onError() {
+
+		}
+		$mdDialog.show({
+			controller: DialogController,
+			templateUrl: '/views/dialogs/add-card.html',
+			parent: angular.element(document.body),
+			targetEvent: $event,
+			clickOutsideToClose:true,
+			locals: {
+				onSuccess: onSuccess,
+				onError: onError
+			}
+		}).then(function(answer) {
+			$scope.status = 'You said the information was "' + answer + '".';
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+
+	}
+	
 	loadData(true).then(function(res) {
 		console.log("plans ", res.data);
 	  });
@@ -2439,7 +2817,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
 angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
   $scope.$shared = $shared;
 });
-'use strict'; 
+'use strict';
 /**
  * @ngdoc function
  * @name Lineblocs.controller:MainCtrl
@@ -2448,91 +2826,96 @@ angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
  * Controller of Lineblocs
  */
 angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $q, $stateParams) {
-    $shared.updateTitle("Buy Numbers");
-    $scope.countries = [];
-    $scope.state = "SEARCHING";
+  $shared.updateTitle("Buy Numbers");
+  $scope.countries = [];
+  $scope.state = "SEARCHING";
+  $scope.inDialog = false;
   $scope.rcSearch = {
-      isDisabled: false,
-      noCache:true, 
-      selectedItem: null,
+    isDisabled: false,
+    noCache: true,
+    selectedItem: null,
   };
   $scope.rcFaxSearch = {
-      isDisabled: false,
-      noCache:true, 
-      selectedItem: null,
+    isDisabled: false,
+    noCache: true,
+    selectedItem: null,
   };
 
-    function DialogController($scope, $mdDialog, number) {
-      $scope.number = number;
-    $scope.cancel = function() {
+  function DialogController($scope, inDialog, onSuccess, onError, $mdDialog, number) {
+    $scope.number = number;
+    $scope.cancel = function () {
       $mdDialog.cancel();
 
     };
-    $scope.gotoSettings = function() {
-        $mdDialog.hide("");
-        $state.go('my-numbers-edit', { numberId: number.public_id });
+    $scope.gotoSettings = function () {
+      $mdDialog.hide("");
+      $state.go('my-numbers-edit', {
+        numberId: number.public_id
+      });
     }
   }
-  /*
-  $scope.countries = [
-    {
-       iso: 'CA',
-       name: 'Canada'
-    },
-    {
-       iso: 'US',
-       name: 'United States'
-    }
-  ];
-  */
+
   $scope.settings = {
     country: "",
     region: "",
     pattern: "",
     rate_center: "",
-      showMoreOptions: false,
-      number_for: "",
-      number_type: "local",
-      vanity_prefix: "8**",
-      vanity_pattern: ""
+    showMoreOptions: false,
+    number_for: "",
+    number_type: "local",
+    vanity_prefix: "8**",
+    vanity_pattern: ""
   };
   $scope.numbers = [];
   $scope.didFetch = false;
   console.log("state params are ", $stateParams);
   if ($stateParams['type']) {
-    $scope.settings.number_for= $stateParams['type'];
+    $scope.settings.number_for = $stateParams['type'];
   }
+
   function purchaseConfirm(ev, number) {
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'views/dialogs/purchase-did-confirm.html',
-      parent: angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        "number": number
+    if ($scope.inDialog) {
+      var confirm = window.confirm("Are you sure ?");
+      if (confirm) {
+        $scope.$emit("Created", id)
+        onSuccess(id);
+        return;
       }
-    })
-    .then(function() {
-    }, function() {
-    });
+      return;
+    }
+    $mdDialog.show({
+        controller: DialogController,
+        templateUrl: 'views/dialogs/purchase-did-confirm.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        skipHide: true,
+        fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+        locals: {
+          "number": number,
+          "inDialog": $scope.inDialog,
+          "onSuccess": function (id) {
+            $scope.$emit("Created", id)
+          }
+        }
+      })
+      .then(function () {}, function () {});
   };
 
-  $scope.load = function() {
-    $scope.listCountries().then(function() {
+  $scope.load = function () {
+    $scope.listCountries().then(function () {
       $shared.endIsLoading();
     });
   }
-  $scope.fetch =  function(event, didForm) {
-		$scope.triedSubmit = true;
-		if (!didForm.$valid) {
-        return;
+  $scope.fetch = function (event, didForm) {
+    $scope.triedSubmit = true;
+    if (!didForm.$valid) {
+      return;
     }
     var data = {};
     //data['region'] = $scope.settings['region'];
     data['region'] = $scope.settings['region']['code'];
-    if ( $scope.settings.showMoreOptions ) {
+    if ($scope.settings.showMoreOptions) {
       data['rate_center'] = $scope.settings['rate_center'];
     }
 
@@ -2544,7 +2927,9 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
     data['vanity_prefix'] = $scope.settings['vanity_prefix'];
     data['vanity_pattern'] = $scope.settings['vanity_pattern'];
     $shared.isCreateLoading = true;
-    Backend.get("/did/available", { "params": data }).then(function(res) {
+    Backend.get("/did/available", {
+      "params": data
+    }).then(function (res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
       $scope.state = "SEARCHED";
@@ -2552,102 +2937,122 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
     });
   }
 
-  $scope.confirmNumberTOS = function(number) {
+  $scope.confirmNumberTOS = function (number) {
     var confirm = $mdDialog.confirm()
-          .title('Vanity Number Notice')
-          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
-          .ariaLabel('Agree')
-          .targetEvent($event)
-          .ok('Please Continue')
-          .cancel('Exit');
+      .title('Vanity Number Notice')
+      .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+      .ariaLabel('Agree')
+      .targetEvent($event)
+      .ok('Please Continue')
+      .cancel('Exit');
 
 
   }
 
   function buyVanityNumber($event, number) {
-      var confirm = $mdDialog.confirm()
-          .title('Vanity Number Notice')
-          .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
-          .ariaLabel('Agree')
-          .targetEvent($event)
-          .ok('Please Continue')
-          .cancel('Exit');
-
-        $mdDialog.show(confirm).then(function() {
-          console.log("md dialog show result ", arguments);
-          buyNumber($event, number);
-        });
-  }
-  function buyNumber($event, number) {
-
     var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to purchase number "' + number.number + '"?')
-          .textContent('this number will cost you ' + number.setup_cost + ' to setup then it will cost you ' + number.monthly_cost + ' every month. ')
-          .ariaLabel('Buy number')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-        var params = {};
-        params['api_number'] = number.api_number;
-        params['number'] = number.number;
-        params['region'] = number.region;
-        params['monthly_cost'] = number.monthly_cost;
-        params['setup_cost'] = number.setup_cost;
-        params['provider'] = number.provider;
-        params['country'] = number.country;
-        params['features'] = number.features.join(",");
-        params['type'] = number.type;
-        $shared.isCreateLoading = true;
-        $shared.scrollTop();
-        Backend.post("/did/saveNumber", params).then(function(res) {
-          if (!res.data.success) {
-            $shared.showError( "Purchase Error", res.data.message );
-            return;
-          }
-          Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
-              var number = res.data;
-              $shared.endIsCreateLoading();
-              purchaseConfirm($event, number);
-          });
-        }, function(res) {
-          console.log("res is: ", res);
-          if (res.status === 400) {
-            var data = res.data;
-            $shared.showError("Error", data.message);
-          }
-        });
-    }, function() {
+      .title('Vanity Number Notice')
+      .textContent("Please note that because this is a vanity number it won't be available right away. This number will be listed on your account after you buy it however it will not be available for use until our upstream carrier fulfills the request")
+      .ariaLabel('Agree')
+      .targetEvent($event)
+      .ok('Please Continue')
+      .cancel('Exit');
+
+    $mdDialog.show(confirm).then(function () {
+      console.log("md dialog show result ", arguments);
+      buyNumber($event, number);
     });
   }
-  $scope.buyNumber = function($event, number) {
-        $shared.scrollTop();
+
+  function completeBuy(number) {
+    return $q(function(resolve, reject) {
+      var params = {};
+      params['api_number'] = number.api_number;
+      params['number'] = number.number;
+      params['region'] = number.region;
+      params['monthly_cost'] = number.monthly_cost;
+      params['setup_cost'] = number.setup_cost;
+      params['provider'] = number.provider;
+      params['country'] = number.country;
+      params['features'] = number.features.join(",");
+      params['type'] = number.type;
+      $shared.isCreateLoading = true;
+      Backend.post("/did/saveNumber", params).then(function (res) {
+        if (!res.data.success) {
+          $shared.showError("Purchase Error", res.data.message);
+          return;
+        }
+        Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function (res) {
+          var number = res.data;
+          $shared.endIsCreateLoading();
+          resolve();
+        });
+      }, function (res) {
+        console.log("res is: ", res);
+        if (res.status === 400) {
+          var data = res.data;
+          $shared.showError("Error", data.message);
+        }
+      });
+    });
+  }
+
+  function buyNumber($event, number) {
+    console.log("dialog ", $scope.inDialog);
+    if ($scope.inDialog) {
+      var confirm = window.confirm("Are you sure ?");
+      console.log("confirmed ", confirm);
+      if (confirm) {
+        completeBuy(number).then(function() {
+          $scope.$emit("Created", id)
+        });
+        return;
+      }
+      return;
+    }
+      $shared.scrollTop();
+    var confirm = $mdDialog.confirm()
+      .title('Are you sure you want to purchase number "' + number.number + '"?')
+      .textContent('this number will cost you ' + number.setup_cost + ' to setup then it will cost you ' + number.monthly_cost + ' every month. ')
+      .ariaLabel('Buy number')
+      .targetEvent($event)
+      .ok('Yes')
+      .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      completeBuy(number).then(function() {
+          $shared.endIsCreateLoading();
+          purchaseConfirm($event, number);
+      });
+    });
+  }
+  $scope.buyNumber = function ($event, number) {
+    $shared.scrollTop();
     // Appending dialog to document.body to cover sidenav in docs app
-    if ( $scope.settings.number_type === 'vanity' ) {
+    if ($scope.settings.number_type === 'vanity') {
       buyVanityNumber($event, number);
       return;
     }
     buyNumber($event, number);
   }
-  $scope.changeCountry = function(country) {
+  $scope.changeCountry = function (country) {
     console.log("changeCountry ", country);
     $scope.settings.country = country;
     $scope.regions = [];
     $scope.listRegions();
   }
- $scope.changeRegion = function(region) {
+  $scope.changeRegion = function (region) {
     console.log("changeRegion ", region);
     $scope.settings.region = region;
     $scope.listRateCenters();
   }
-  $scope.changeRateCenter = function(rateCenter) {
+  $scope.changeRateCenter = function (rateCenter) {
     console.log("changeRateCenter ", rateCenter);
     $scope.settings.rate_center = rateCenter;
   }
 
-$scope.listCountries = function() {
-    return $q(function(resolve, reject) {
-        Backend.get("/getCountries").then(function(res) { 
+  $scope.listCountries = function () {
+    return $q(function (resolve, reject) {
+      Backend.get("/getCountries").then(function (res) {
         console.log("got countries ", res.data);
         $scope.countries = res.data;
         resolve();
@@ -2656,84 +3061,93 @@ $scope.listCountries = function() {
 
   }
 
-  $scope.listRegions = function() {
-    Backend.get("/getRegions?countryId=" + $scope.settings.country.id).then(function(res) {
+  $scope.listRegions = function () {
+    Backend.get("/getRegions?countryId=" + $scope.settings.country.id).then(function (res) {
       console.log("got regions ", res.data);
       $scope.regions = res.data;
     })
 
   }
-  $scope.listRateCenters = function() {
-    Backend.get("/getRateCenters?countryId=" + $scope.settings.country.id+ "&regionId=" + $scope.settings.region.id).then(function(res) {
+  $scope.listRateCenters = function () {
+    Backend.get("/getRateCenters?countryId=" + $scope.settings.country.id + "&regionId=" + $scope.settings.region.id).then(function (res) {
       console.log("got rate centers ", res.data);
       $scope.rateCenters = res.data;
     })
 
   }
-    $scope.querySearch  = function(query) {
-        console.log("querySearch query is: " + query);
-        var all = $scope.rateCenters;
-        return $q(function(resolve, reject) {
-            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
-            var results = [];
-            angular.forEach(all, function(item) {
-              if ( item.toLowerCase().match( query ) ) {
-                results.push( item );
-              }
-           });
-            return resolve(results);
-        });
-    }
-    $scope.searchTextChange = function(text) {
-        console.log("searchTextChange");
-    }
-    $scope.selectedItemChange = function(item) {
-      console.log('rc Item changed to ' + JSON.stringify(item));
-      $scope.settings['rate_center'] = item;
-    }
-    $scope.queryFaxSearch  = function(query) {
-        console.log("querySearch query is: " + query);
-        var all = $scope.rateCenters;
-        return $q(function(resolve, reject) {
-            var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
-            var results = [];
-            angular.forEach(all, function(item) {
-              if ( item.toLowerCase().match( query ) ) {
-                results.push( item );
-              }
-           });
-            return resolve(results);
-        });
-    }
-    $scope.searchFaxTextChange = function(text) {
-        console.log("searchTextChange");
-    }
-    $scope.selectedFaxItemChange = function(item) {
-      console.log('rc Item changed to ' + JSON.stringify(item));
-      $scope.settings['rate_center'] = item;
-    }
-    $scope.hideOptions = function() {
-      $scope.settings.showMoreOptions = false;
-    }
-    $scope.showOptions = function() {
-      $scope.settings.showMoreOptions = true;
-    }
-    $scope.buyVoiceNumbers = function() {
-      //$scope.settings.number_for='voice';
-      console.log("buy voice numbers");
-        $state.go('buy-numbers-select', { type: "voice" });
-    }
-    $scope.buyFaxNumbers = function() {
-      //$scope.settings.number_for='fax';
-        $state.go('buy-numbers-select', { type: "fax" });
-    }
-    $scope.backToSearch = function() {
-      $scope.state = "SEARCHING";
-    }
+  $scope.querySearch = function (query) {
+    console.log("querySearch query is: " + query);
+    var all = $scope.rateCenters;
+    return $q(function (resolve, reject) {
+      var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+      var results = [];
+      angular.forEach(all, function (item) {
+        if (item.toLowerCase().match(query)) {
+          results.push(item);
+        }
+      });
+      return resolve(results);
+    });
+  }
+  $scope.searchTextChange = function (text) {
+    console.log("searchTextChange");
+  }
+  $scope.selectedItemChange = function (item) {
+    console.log('rc Item changed to ' + JSON.stringify(item));
+    $scope.settings['rate_center'] = item;
+  }
+  $scope.queryFaxSearch = function (query) {
+    console.log("querySearch query is: " + query);
+    var all = $scope.rateCenters;
+    return $q(function (resolve, reject) {
+      var regexp = new RegExp(".*" + query.toLowerCase() + ".*");
+      var results = [];
+      angular.forEach(all, function (item) {
+        if (item.toLowerCase().match(query)) {
+          results.push(item);
+        }
+      });
+      return resolve(results);
+    });
+  }
+  $scope.searchFaxTextChange = function (text) {
+    console.log("searchTextChange");
+  }
+  $scope.selectedFaxItemChange = function (item) {
+    console.log('rc Item changed to ' + JSON.stringify(item));
+    $scope.settings['rate_center'] = item;
+  }
+  $scope.hideOptions = function () {
+    $scope.settings.showMoreOptions = false;
+  }
+  $scope.showOptions = function () {
+    $scope.settings.showMoreOptions = true;
+  }
+  $scope.buyVoiceNumbers = function () {
+    //$scope.settings.number_for='voice';
+    console.log("buy voice numbers");
+    $state.go('buy-numbers-select', {
+      type: "voice"
+    });
+  }
+  $scope.buyFaxNumbers = function () {
+    //$scope.settings.number_for='fax';
+    $state.go('buy-numbers-select', {
+      type: "fax"
+    });
+  }
+  $scope.backToSearch = function () {
+    $scope.state = "SEARCHING";
+  }
 
-    $scope.load();
+  $scope.init = function (inDialog, type) {
+    $scope.inDialog = inDialog;
+    $scope.settings.number_for = type;
+    console.log("init ", arguments);
+  }
+
+  $scope.load();
 });
-
 
 'use strict';
 
@@ -4115,8 +4529,9 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
-	  $shared.updateTitle("Create Extension");
+angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q) {
+    $shared.updateTitle("Create Extension");
+    $scope.isDialog = false;
   $scope.values = {
     username: "",
     secret: "",
@@ -4129,6 +4544,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
     secretError: ""
   }
   $scope.triedSubmit = false;
+
   $scope.generateSecret = function() {
     Backend.get("/generateSecurePassword").then(function(res) {
     $scope.values.secret = res.data.password;
@@ -4169,17 +4585,31 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/extension/saveExtension", values).then(function() {
+        Backend.postCouldError("/extension/saveExtension", values).then(function(res) {
         console.log("updated extension..");
+        console.log("save ext ", res);
+        var id = res.headers("x-extension-id");
           $mdToast.show(
             $mdToast.simple()
               .textContent('Created extension')
               .position("top right")
               .hideDelay(3000)
           );
-          $state.go('extensions', {});
-          $shared.endIsCreateLoading();
-        });
+          console.log("isDialog ", $scope.isDialog);
+
+          if ( !$scope.isDialog ) {
+            $state.go('extensions', {});
+            $shared.endIsCreateLoading();
+          } else {
+            console.log("calling emit ", id);
+            $scope.$emit("Created", id)
+            $mdDialog.hide();
+          }
+
+
+          }, function() {
+
+          });
       });
     }
   }
@@ -4208,11 +4638,59 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});
   }
-  $timeout(function() {
-    Backend.get("/flow/listFlows?category=extension").then(function(res) {
-      $scope.flows = res.data.data;
-        $shared.endIsLoading();
+  $scope.setupFlow = function($event, extension) {
+      var title = "Unititled Flow";
+    if ( $scope.values.username !== '' ) {
+      var title = "Flow for " + $scope.values.username;
+    }
+
+    $mdDialog.show({
+      controller: SetupDialogController,
+      templateUrl: 'views/dialogs/setup-flow.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      skipHide: true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "title": title,
+        "category": "extension",
+        "onSuccess": function(flowId) {
+          load().then(function() {
+            console.log("setting flow ", flowId);
+            angular.forEach($scope.flows, function(flow) {
+              if ( flow.public_id === flowId) {
+                  $scope.values['flow_id'] = flow.id;
+              }
+            });
+            $mdDialog.hide();
+          } );
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        },
+
+      }
+    })
+    .then(function() {
+    }, function() {
     });
+  }
+  $scope.init = function(isDialog) {
+    $scope.isDialog = isDialog;
+  }
+
+  function load() {
+    return $q(function(resolve, reject) {
+      Backend.get("/flow/listFlows?category=extension").then(function(res) {
+        $scope.flows = res.data.data;
+          $shared.endIsLoading();
+          resolve();
+      }, reject);
+    });
+  }
+  $timeout(function() {
+    load();
   }, 0);
 });
 
@@ -4243,7 +4721,7 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
   $scope.load = function() {
   $shared.isLoading = true;
    $q.all([
-      Backend.get("/flow/listFlows"),
+      Backend.get("/flow/listFlows?category=extension"),
       Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
    ]).then(function(res) {
       $scope.flows= res[0].data.data;
@@ -5683,6 +6161,45 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
   $scope.editFlow = function(flowId) {
     $state.go('flow-editor', {flowId: flowId});
   }
+
+  $scope.setupFlow = function($event, extension) {
+    $mdDialog.show({
+      controller: SetupDialogController,
+      templateUrl: 'views/dialogs/setup-flow.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "title": "DID flow for " + $scope.number.number,
+        "category": "did",
+        "onSuccess": function(flowId) {
+
+          Backend.get("/flow/listFlows?all=1").then(function(res) {
+            console.log("setting flow ", flowId);
+            $scope.flows = res.data.data;
+            angular.forEach($scope.flows, function(flow) {
+              if ( flow.public_id === flowId) {
+                  $scope.number['flow_id'] = flow.id;
+              }
+            });
+            $shared.endIsLoading();
+            $mdDialog.hide();
+          } );
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        },
+
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+
+
   $shared.isLoading = true;
   $q.all([
     Backend.get("/flow/listFlows?all=1"),
@@ -7225,6 +7742,7 @@ angular.module('Lineblocs')
 	  $scope.token = null;
 	  $scope.invalidCode =false; 
 	  $scope.invalidNumber =false; 
+	  $scope.planInfo = null;
 	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
@@ -7304,7 +7822,7 @@ angular.module('Lineblocs')
 				}
 				$scope.token = data; 
 				$scope.userId = data.userId;
-				$scope.workspace = data.workspace;
+				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
 				$scope.step = 2;
 			});
@@ -7514,8 +8032,10 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				Backend.post("/card/addCard", data).then(function(res) {
-					resolve(res);
+				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspaceInfo.id;
+				Backend.post("/addCard" + qs, data).then(function(res) {
+					$scope.step = 5;
+					//resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
@@ -7525,10 +8045,18 @@ angular.module('Lineblocs')
 
 	$q.all([
 		Backend.get("/getCallSystemTemplates"),
-		Backend.get("/getConfig")
+		Backend.get("/getConfig"),
+		Backend.get("/plans"),
 	]).then(function(res) {
 		$scope.templates = res[0].data;
+		$scope.plans = res[2].data;
 		$shared.changingPage = false;
+		console.log("plans ", $scope.plans);
+		console.log("user selected plan is ", $stateParams['plan'] );
+		if ( $stateParams['plan'] ) {
+			$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
+		}
+		console.log("plan info is ", $scope.planInfo);
 		if ( $stateParams['hasData'] ) {
 			console.log("$stateParams data is ", $stateParams);
 			$scope.token = $stateParams['authData'];
@@ -8261,7 +8789,149 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $stateParams ) {
+    $shared.updateTitle("Create Extension");
+    $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
+
+  $scope.values = {
+    user: {
+      first_name: "",
+      last_name: "",
+      email: ""
+    },
+    roles: $shared.makeDefaultWorkspaceRoles(),
+    preferred_pop: null
+  };
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting workspace user form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {
+        assign: {
+          "extension_id": $scope.values.extension_id,
+          "number_id": $scope.values.number_id,
+          "preferred_pop": $scope.values.preferred_pop
+        }
+      };
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
+       console.log("updated user..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Assigned user settings.')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('settings-workspace-users', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+
+  $scope.setupExtension = function($event) {
+    $mdDialog.show({
+      controller: SetupExtDialogController,
+      templateUrl: 'views/dialogs/setup-ext.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(extId) {
+          console.log("new extension is ", extId);
+          $scope.extId = extId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+  $scope.setupNumber = function($event) {
+    $mdDialog.show({
+      controller: SetupNumberDialogController,
+      templateUrl: 'views/dialogs/setup-number.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(numberId) {
+          console.log("new number is ", numberId);
+          $scope.numberId = numberId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+  function load() {
+    $q.all([
+      Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/getPOPs")
+      ]).then(function(res) {
+        var user = res.data;
+        $scope.extensions = res[1].data.data;
+        $scope.numbers = res[2].data.data;
+        $scope.pops = res[3].data;
+          console.log("$scope.values are ", $scope.values);
+        angular.forEach($scope.extensions, function(ext) {
+          if ( $scope.extId && $scope.extId === ext.public_id ) {
+            $scope.values.extension_id = ext.id;
+          }
+        });
+        angular.forEach($scope.numbers, function(number) {
+          if ( $scope.numberId && $scope.numberId === number.public_id ) {
+            $scope.values.number_id = number.id;
+          }
+        });
+
+        console.log("values are ", $scope.values);
+      });
+    }
+
+  load();
+
+  $timeout(function() {
+    $shared.endIsLoading();
+  }, 0);
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Create Extension");
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
 
@@ -8293,22 +8963,34 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/addUser", values).then(function() {
+      Backend.post("/workspaceUser/addUser", values).then(function(res) {
        console.log("added user..");
+       var id = res.headers('X-WorkspaceUser-ID');
         $mdToast.show(
           $mdToast.simple()
             .textContent('Added user to workspace')
             .position("top right")
             .hideDelay(3000)
         );
-        $state.go('settings-workspace-users', {});
+      $state.go('settings-workspace-users-assign', {
+          userId: id
+      });
         $shared.endIsCreateLoading();
       });
     }
   }
   $timeout(function() {
-    $shared.endIsLoading();
+    $q.all([
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1"),
+    ]).then(function(res) {
+      $shared.endIsLoading();
+      $scope.extensions = res[0].data.data;
+      $scope.numbers  = res[1].data.data;
+      console.log("data ", res);
+    });
   }, 0);
+
 });
 
 
@@ -8321,7 +9003,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared ) {
+angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Workspace User Edit");
     var roles = $shared.makeDefaultWorkspaceRoles();
     $scope.availableRoles = $shared.makeDefaultWorkspaceRoles(true);
@@ -8333,6 +9015,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       last_name: "",
       email: ""
     },
+    preferred_pop: null,
     roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.ui = {
@@ -8344,9 +9027,15 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     console.log("submitting workspace user form ", arguments);
     $scope.triedSubmit = true;
     if (form.$valid) {
+      var user = angular.copy($scope.values.user);
+      // add assignment data
+      var assign = {};
+      assign['extension_id'] = $scope.values['extension_id'];
+      assign['number_id'] = $scope.values['number_id'];
       var values = {
-        user: angular.copy($scope.values.user),
-        roles: angular.copy($scope.values.roles)
+        user: user,
+        roles: angular.copy($scope.values.roles),
+        assign: assign
       };
       var toastPos = {
         bottom: false,
@@ -8371,18 +9060,94 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
         $shared.endIsCreateLoading();
       });
     }
-  }
-  Backend.get("/workspaceUser/userData/" + $stateParams['userId']).then(function(res) {
-      var user = res.data;
-      $scope.values.user['email'] = user.email;
-      $scope.values.user['first_name'] = user.first_name;
-      $scope.values.user['last_name'] = user.last_name;
-      for (var key in roles) {
-        console.log("checking for role ", key);
-        $scope.values.roles[ key ] = user[ key ];
+  }  
+  
+  $scope.setupExtension = function($event) {
+    $mdDialog.show({
+      controller: SetupExtDialogController,
+      templateUrl: 'views/dialogs/setup-ext.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(extId) {
+          console.log("new extension is ", extId);
+          $scope.extId = extId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
       }
-      console.log("$scope.values are ", $scope.values);
+    })
+    .then(function() {
+    }, function() {
     });
+  }
+
+  $scope.setupNumber = function($event) {
+    $mdDialog.show({
+      controller: SetupNumberDialogController,
+      templateUrl: 'views/dialogs/setup-number.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        "onSuccess": function(numberId) {
+          console.log("new number is ", numberId);
+          $scope.numberId = numberId;
+          load();
+        },
+        "onError": function(flowId) {
+          console.error("error occured..");
+        }
+      }
+    })
+    .then(function() {
+    }, function() {
+    });
+  }
+
+  function load() {
+    $q.all([
+      Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
+      Backend.get("/extension/listExtensions?all=1"),
+      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/getPOPs")
+      ]).then(function(res) {
+        $scope.values.user = res[0].data;
+        for ( var index in $scope.values.roles ) {
+          if ( $scope.values.user[ index ] ) {
+            $scope.values.roles [ index ] = true;
+          }
+        }
+        $scope.pops = res[3].data;
+        $scope.values.extension_id = $scope.values.user.extension_id;
+        $scope.values.number_id = $scope.values.user.number_id;
+        $scope.values.preferred_pop = $scope.values.user.preferred_pop;
+        $scope.extensions = res[1].data.data;
+        $scope.numbers = res[2].data.data;
+          console.log("$scope.values are ", $scope.values);
+          console.log("$scope.extensions are ", $scope.extensions);
+        angular.forEach($scope.extensions, function(ext) {
+          if ( $scope.extId && $scope.extId === ext.public_id ) {
+            $scope.values.extension_id = ext.id;
+          }
+        });
+        angular.forEach($scope.numbers, function(number) {
+          if ( $scope.numberId && $scope.numberId === number.public_id ) {
+            $scope.values.number_id = number.id;
+          }
+        });
+
+        console.log("values are ", $scope.values);
+      });
+    }
+
+  load();
+
   $timeout(function() {
     $shared.endIsLoading();
   }, 0);

@@ -173,29 +173,29 @@
                             </md-button>
                             <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui'}">
 
-                                <li ng-class="{active: $state.includes('my-numbers')}">
+                                <li ng-class="{active: $shared.isSectionActive('my-numbers')}">
                                     <md-button href="" ng-click="$shared.changeRoute('my-numbers')" class=""><span
                                             class="text">{{ 'my-numbers' | translate }}</span></md-button>
                                 </li>
-                                <li ng-class="{active: $state.includes('buy-numbers')}">
+                                <li ng-class="{active: $shared.isSectionActive('buy-numbers')}">
                                     <md-button href="" ng-click="$shared.changeRoute('buy-numbers')" class=""><span
                                             class="text">{{ 'buy-numbers' | translate }}</span></md-button>
                                 </li>
 
 
-                                <li ng-class="{active: $state.includes('ports')}" ng-show="$shared.isSettingEnabled('ports')">
+                                <li ng-class="{active: $shared.isSectionActive('ports')}" ng-show="$shared.isSettingEnabled('ports')">
                                     <md-button href="" ng-click="$shared.changeRoute('ports')" class=""><span
                                             class="text">{{ 'port-numbers' | translate }}</span></md-button>
                                 </li>
                             </ul>
 
                         </li>
-                        <li ng-class="{active: $state.includes('flows')}">
+                        <li ng-class="{active: $shared.isSectionActive('flows')}">
                             <md-button href="" ng-click="$shared.changeRoute('flows')" class=""><i
                                     class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text">
                                     {{ 'flows' | translate }}</span></md-button>
                         </li>
-                        <li ng-class="{active: $state.includes('extensions')}"
+                        <li ng-class="{active: $shared.isSectionActive('extensions')}"
                             ng-show="$shared.canPerformAction('manage_extensions')">
                             <md-button href="" ng-click="$shared.changeRoute('extensions')" class=""><i
                                     class="mdi mdi-cellphone"></i> &nbsp;<span
@@ -250,22 +250,27 @@
                                 </li>
                             </ul>
                         </li>
-                        <li ng-class="{active: $state.includes('recordings')}">
+                        <li ng-class="{active: $shared.isSectionActive('recordings')}">
                             <md-button href="" ng-click="$shared.changeRoute('recordings')" class=""><i
                                     class="mdi mdi-record"></i> &nbsp;<span
                                     class="text">{{ 'recordings' | translate }}</span></md-button>
                         </li>
-                        <li ng-class="{active: $state.includes('faxes')}">
+                        <li ng-class="{active: $shared.isSectionActive('faxes')}">
                             <md-button href="" ng-click="$shared.changeRoute('faxes')" class=""><i
                                     class="mdi mdi-file-document"></i> &nbsp;<span
                                     class="text">{{ 'faxes' | translate }}</span></md-button>
                         </li>
-                        <li ng-class="{active: $state.includes('files')}">
+                        <li ng-class="{active: $shared.isSectionActive('files')}">
                             <md-button href="" ng-click="$shared.changeRoute('files')" class=""><i
                                     class="mdi mdi-library-music"></i> &nbsp;<span
                                     class="text">{{ 'media-files' | translate }}</span></md-button>
                         </li>
-                        <li ng-class="{active: $state.includes('billing')}">
+                        <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}">
+                            <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""><i
+                                   class="mdi mdi-account"></i> &nbsp;<span
+                                      class="text">{{ 'users' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $shared.isSectionActive('billing')}">
                             <md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i
                                     class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
                                     class="text">{{ 'billing' | translate }}</span></md-button>
@@ -311,12 +316,6 @@
                                     <md-button href="" ng-click="$shared.changeRoute('settings-ip-whitelist')" class="">
                                         <span class="text">{{ 'ip-whitelist' | translate }}</span></md-button>
                                 </li>
-                                <li ng-class="{active: $state.includes('settings-workspace-users')}">
-                                    <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')"
-                                        class=""><span class="text">{{ 'workspace-users' | translate }}</span>
-                                    </md-button>
-                                </li>
-
                                 <li ng-class="{active: $state.includes('settings-workspace-params')}">
                                     <md-button href="" ng-click="$shared.changeRoute('settings-workspace-params')"
                                         class=""><span class="text">{{ 'workspace-params' | translate }}</span>

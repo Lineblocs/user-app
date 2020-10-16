@@ -108,7 +108,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div ng-show="data.selectedCardObj && !settings.newCard">
+                        <div ng-if="data.selectedCardObj && !settings.newCard">
                             <h5>You will be checking out with {{data.selectedCardObj.issuer}} <img ng-src="{{$shared.getCardImg(data.selectedCardObj)}}" width="16" height="16" /> card ending in {{data.selectedCardObj.last_4}}</h5>
                         </div>
 
