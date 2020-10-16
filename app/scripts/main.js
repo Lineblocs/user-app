@@ -7822,7 +7822,7 @@ angular.module('Lineblocs')
 				}
 				$scope.token = data; 
 				$scope.userId = data.userId;
-				$scope.workspace = data.workspace;
+				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
 				$scope.step = 2;
 			});
@@ -8032,9 +8032,10 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspace.id;
-				Backend.post("/register/addCard" + qs, data).then(function(res) {
-					resolve(res);
+				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspaceInfo.id;
+				Backend.post("/addCard" + qs, data).then(function(res) {
+					$scope.step = 5;
+					//resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
