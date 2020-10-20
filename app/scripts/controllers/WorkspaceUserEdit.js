@@ -19,6 +19,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       last_name: "",
       email: ""
     },
+    preferred_pop: null,
     roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.ui = {
@@ -117,7 +118,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     $q.all([
       Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
       Backend.get("/extension/listExtensions?all=1"),
-      Backend.get("/did/listNumbers?all=1")
+      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/getPOPs")
       ]).then(function(res) {
         $scope.values.user = res[0].data;
         for ( var index in $scope.values.roles ) {
@@ -125,11 +127,14 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
             $scope.values.roles [ index ] = true;
           }
         }
+        $scope.pops = res[3].data;
         $scope.values.extension_id = $scope.values.user.extension_id;
         $scope.values.number_id = $scope.values.user.number_id;
+        $scope.values.preferred_pop = $scope.values.user.preferred_pop;
         $scope.extensions = res[1].data.data;
         $scope.numbers = res[2].data.data;
           console.log("$scope.values are ", $scope.values);
+          console.log("$scope.extensions are ", $scope.extensions);
         angular.forEach($scope.extensions, function(ext) {
           if ( $scope.extId && $scope.extId === ext.public_id ) {
             $scope.values.extension_id = ext.id;

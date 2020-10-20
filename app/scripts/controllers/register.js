@@ -25,6 +25,7 @@ angular.module('Lineblocs')
 	  $scope.token = null;
 	  $scope.invalidCode =false; 
 	  $scope.invalidNumber =false; 
+	  $scope.planInfo = null;
 	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
@@ -104,7 +105,7 @@ angular.module('Lineblocs')
 				}
 				$scope.token = data; 
 				$scope.userId = data.userId;
-				$scope.workspace = data.workspace;
+				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
 				$scope.step = 2;
 			});
@@ -314,8 +315,10 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				Backend.post("/card/addCard", data).then(function(res) {
-					resolve(res);
+				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspaceInfo.id;
+				Backend.post("/addCard" + qs, data).then(function(res) {
+					$scope.step = 5t ;
+					//resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
@@ -325,10 +328,18 @@ angular.module('Lineblocs')
 
 	$q.all([
 		Backend.get("/getCallSystemTemplates"),
-		Backend.get("/getConfig")
+		Backend.get("/getConfig"),
+		Backend.get("/plans"),
 	]).then(function(res) {
 		$scope.templates = res[0].data;
+		$scope.plans = res[2].data;
 		$shared.changingPage = false;
+		console.log("plans ", $scope.plans);
+		console.log("user selected plan is ", $stateParams['plan'] );
+		if ( $stateParams['plan'] ) {
+			$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
+		}
+		console.log("plan info is ", $scope.planInfo);
 		if ( $stateParams['hasData'] ) {
 			console.log("$stateParams data is ", $stateParams);
 			$scope.token = $stateParams['authData'];

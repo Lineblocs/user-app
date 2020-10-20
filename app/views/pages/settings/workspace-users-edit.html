@@ -141,6 +141,40 @@
                         </md-button>
                     </div>
                 </div>
+                <div layout="row">
+                    <div flex="66">
+                        <div layout="row">
+                            <div flex="95">
+                                <md-input-container>
+                                    <label>Preferred PoP</label>
+                                    <md-select ng-model="values.preferred_pop" ng-change="changePreferredPOP(values.preferred_pop)">
+                                        <md-option><em>None</em></md-option>
+                                        <md-option ng-repeat="pop in pops" ng-value="pop.aws_code">
+                                            {{pop.name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div flex="5">
+                                <md-icon class="tooltip-icon">
+                                    <i class="mdi mdi-information"></i>
+                                    <md-tooltip class="helper-tooltip" md-direction="top">
+                                      Extension assigned to user
+                                    </md-tooltip>
+                                </md-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex="33">
+                        <md-button ng-show="!values.extension_id" ng-click="setupExtension($event, values)" class="md-raised">
+                            Setup
+                        </md-button>
+                    </div>
+                </div>
+
+
+
+
                 <h5>Workspace Roles</h5>
                 <p>allow or disallow this user to perform certain actions in the workspace</p>
                 <div ng-repeat="role in availableRoles" flex="95">

@@ -96,5 +96,6 @@
       "phones-individual-settings": "Individual Settings",
       "phones-deploy-config": "Deploy Now",
       "byo": "BYO",
-      "carriers": "Carriers"
+      "carriers": "Carriers",
+      "users": "Users"
   }

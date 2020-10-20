@@ -367,17 +367,12 @@
                         <div class="inner">
 
                             <div class="top-heading">
-                                <h3>Add A Billing Card</h3>
-                                <p>
-                                    You will not be charged until your free trial ends
-                                </p>
-                            <div ng-show="billErrorMsg" class="error-box">
-                                <span class="red"><strong>{{errorMsg}}</strong></span>
-                                </div>
-                                <div class="box invalid-login">
-                                    <div ng-show="invalidWorkspaceTaken" class="red">This workspace name is already
-                                        taken.
-                                    </div>
+                                <h3>Plan Billing Settings</h3>
+                                <center>
+                                    <h5>Plan: <strong>{{planInfo.nice_name}}</strong></h5>
+                                </center>
+                                <div ng-show="billErrorMsg" class="error-box">
+                                    <span class="red"><strong>{{billErrorMsg}}</strong></span>
                                 </div>
                             </div>
                             <div class="inputs">
@@ -437,11 +432,17 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="login-btn">
-                                <button>
-                                    <span>Submit</span>
-                                </button>
-                            </div>
+                        <div class="login-btn">
+                            <button>
+                                <span>Submit</span>
+                            </button>
+                        </div>
+                        <p>
+                            <small>
+                                * You will not be charged until your free trial ends
+                            </small>
+                        </p>
+
                     </form>
                 </div>
 

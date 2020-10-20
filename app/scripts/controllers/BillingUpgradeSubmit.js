@@ -86,9 +86,52 @@ angular.module('Lineblocs')
 				} else {
 					$shared.endIsLoading();
 				}
-				resolve();
+				resolve(res);
 			}, reject);
 		});
+	}
+
+
+	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
+		$scope.$shared = $shared;
+		$scope.card = {
+			name: "",
+			address: "",
+			city: "",
+			postal_code: "",
+			number: "",
+			expires: "",
+			cvv: ""
+		};
+		function stripeResponseHandler(status, response) {
+			$timeout(function() {
+				$scope.$apply();
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.errorMsg = response.error.message;
+					angular.element('.add-card-form').scrollTop(0);
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					onSuccess(response);
+				}
+			}, 0);
+		}
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		}
+		$scope.submit = function() {
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, stripeResponseHandler);
+
+		}
 	}
 	$scope.changeCard = function(value) {
 		console.log("changeCard ", value);
@@ -155,6 +198,35 @@ angular.module('Lineblocs')
 			submitBilling($scope.data.selectedCard);
 		}, 0);
 	}
+
+
+	$scope.addCard = function($event) {
+		function onSuccess(response) {
+			stripeRespAddCard(response).then(function() {
+				loadData(true);
+			});
+		}
+		function onError() {
+
+		}
+		$mdDialog.show({
+			controller: DialogController,
+			templateUrl: '/views/dialogs/add-card.html',
+			parent: angular.element(document.body),
+			targetEvent: $event,
+			clickOutsideToClose:true,
+			locals: {
+				onSuccess: onSuccess,
+				onError: onError
+			}
+		}).then(function(answer) {
+			$scope.status = 'You said the information was "' + answer + '".';
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+
+	}
+	
 	loadData(true).then(function(res) {
 		console.log("plans ", res.data);
 	  });

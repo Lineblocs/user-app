@@ -1436,6 +1436,7 @@ md-card img {
   font-size: 0;
   text-indent: -9999px;
   -webkit-appearance: none;
+     -moz-appearance: none;
           appearance: none;
   box-shadow: none;
   border-radius: none;
