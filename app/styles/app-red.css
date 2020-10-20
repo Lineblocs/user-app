@@ -742,6 +742,15 @@ ul.benefits {
   margin: 10px 10px;
   border-radius: 7px; }
 
+.templates-list {
+  width: 800px; }
+
+.margin-content {
+  margin: 8px; }
+
+.setup-flow-box {
+  width: 800px; }
+
 md-card {
   border-radius: 20px; }
 
