@@ -85,7 +85,7 @@ var check2 = document.location.href.includes("ngrok.io");
 if (check1 || check2) {
     var baseUrl = "https://lineblocs.com/api";
 } else {
-    var baseUrl = "/api";
+    var baseUrl = "https://lineblocs.com/api";
 }
 
 function createUrl(path) {
