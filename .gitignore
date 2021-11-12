@@ -4,4 +4,5 @@ app/bower_components/
 .tmp/
 dist/
 gen/
+main.min.js
 
