@@ -645,6 +645,7 @@ button {
 .login-page .content .signup-form .login-btn span,
 .login-page .content .login-form .signup-btn span,
 .login-page .content .login-form .login-btn span {
+  width: 100%;
   padding: 15px 40px;
   border-radius: 35px;
   background-color: #395373;
@@ -735,9 +736,10 @@ button {
 .login-page .content .password-reset-form .login-btn span {
   padding: 15px 40px !important;
 }
-/* .login-btn .login-button-custom {
-  padding: 15px 70px !important;
-} */
+.login-btn .login-button-custom {
+  width: 100%;
+  /*padding: 15px 70px !important;*/
+}
 
 .login-btn .login-custom {
   padding: 15px 70px !important;
@@ -1009,4 +1011,11 @@ button {
 } */
 .logo img{
   max-width: 300px;
+}
+button.custom {
+  width: 100%;
+    padding: 15px 40px;
+    border-radius: 35px;
+    background-color: #395373;
+    color: #fff;
 }
