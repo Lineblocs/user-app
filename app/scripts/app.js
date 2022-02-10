@@ -200,6 +200,10 @@ angular
       selectedItem: null,
   };
         factory.billingPackages = ['gold', 'silver', 'bronze'];
+        factory.customizations = {
+
+
+        };
   var flickerTimeout = 0;
 
     function searchModule(text, state, tags, stateParams, perms, setting)
@@ -312,6 +316,28 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
          if ( item.includes( current ) ) {
              return true;
          }
+     }
+
+     factory.getAppLogo = function() {
+        var logo = factory.customizations['app_logo'];
+        if ( !logo || logo === '' ) {
+                return '/images/new-logo-blue.png';
+        }
+        return logo;
+     }
+     factory.getAppIcon = function() {
+        var icon = factory.customizations['app_icon'];
+        if ( !icon || icon === '' ) {
+                return '/images/logo-icon-white.png';
+        }
+        return logo;
+     }
+     factory.getAltAppLogo = function() {
+        var logo = factory.customizations['alt_app_logo'];
+        if ( !logo || logo === '' ) {
+                return '/images/new-logo-blue.png';
+        }
+        return logo;
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
@@ -1775,6 +1801,12 @@ var regParams = {
         console.log("no page found - 404");
         $state.go('404');
      });
+     // get settings & customizations
+    Backend.get("/getAllSettings").then(function(res) {
+            var data = res.data;
+                $shared.customizations = data['customizations'];
+    });
+
 });
 
 

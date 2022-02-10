@@ -7,7 +7,7 @@
 		</button>
 	-->
         <div class="responsive-logo">
-            <img width="180" ng-src="{{'/images/new-logo-light.png'}}" />
+            <img width="180" ng-src="{{$shared.getAppLogo()}}" />
         </div>
         <div class="left-nav">
         <div class="search">
@@ -132,10 +132,10 @@
             </div>
 
             <div class="top-logo">
-                <img width="60" ng-src="{{'/images/logo-icon-white.png'}}" />
+                <img width="60" ng-src="{{$shared.getAppIcon()}}" />
             </div>
             <div class="top-logo-extended">
-                <img width="180" ng-src="{{'/images/new-logo-light.png'}}" />
+                <img width="180" ng-src="{{$shared.getAppLogo()}}" />
             </div>
             <div class="scrollbar" id="scroll">
                 <div class="user-info" ng-show="false">
