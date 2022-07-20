@@ -132,10 +132,10 @@
             </div>
 
             <div class="top-logo">
-                <img width="60" ng-src="{{$shared.getAppIcon()}}" />
+                <img width="60" height="60" ng-src="{{$shared.getAppIcon()}}" />
             </div>
             <div class="top-logo-extended">
-                <img width="180" ng-src="{{$shared.getAppLogo()}}" />
+                <img width="180" height="60" ng-src="{{$shared.getAppLogo()}}" />
             </div>
             <div class="scrollbar" id="scroll">
                 <div class="user-info" ng-show="false">
@@ -275,6 +275,13 @@
                                     class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
                                     class="text">{{ 'billing' | translate }}</span></md-button>
                         </li>
+
+                        <li ng-class="{active: $shared.isSectionActive('hosted-trunks')}">
+                            <md-button href="" ng-click="$shared.changeRoute('hosted-trunks')" class=""><i
+                                    class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
+                                    class="text">{{ 'hosted-trunks' | translate }}</span></md-button>
+                        </li>
+
                         <li class="show-subnav" ng-show="$shared.isSettingEnabled('bring_carrier')">
 
                             <md-button href="" class=" show-menu" ng-click="subnav('ui-3')">

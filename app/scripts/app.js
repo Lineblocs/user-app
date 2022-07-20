@@ -118,7 +118,6 @@ function continueChangeRoute() {
 }
 
 window.addEventListener('message', function(e) {
-    console.log("received window emssage ", arguments);
     if (event.origin.startsWith('https://editor.lineblocs.com')) { 
       if ( event.data === 'saved' ) {
           continueChangeRoute();
@@ -161,7 +160,6 @@ angular
                     config.headers['X-Admin-Token'] = adminToken;
                 }
 
-                console.log("request headers are ", config.headers);
                 return config;
             }
         };
@@ -313,7 +311,7 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
          }
          var item = maps[area];
-         if ( item.includes( current ) ) {
+         if ( item && item.includes( current ) ) {
              return true;
          }
      }
@@ -327,10 +325,12 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
      }
      factory.getAppIcon = function() {
         var icon = factory.customizations['app_icon'];
+        console.log('loading icon ', icon)
+
         if ( !icon || icon === '' ) {
                 return '/images/logo-icon-white.png';
         }
-        return logo;
+        return icon;
      }
      factory.getAltAppLogo = function() {
         var logo = factory.customizations['alt_app_logo'];
@@ -383,8 +383,6 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
      factory.isSettingEnabled = function(option) {
 
-        console.log("is setting enabled ", option);
-        console.log("is setting enabled ", factory.planInfo);
             if ( factory.planInfo ) {
                 if ( factory.planInfo[ option ] ) {
                     return true;
@@ -931,7 +929,7 @@ if (checked.length === 0) {
         factory.get = function(path, params, showMsg)
         {
             var item = $q(function(resolve, reject) {
-                    if (!skip.includes($state.current.name)) {
+                    if (!skip.includes($state.current.name) && $state.current_name) {
                         if ( !checkHttpCallPrerequisites() ) {
                             resolve();
                             return;
@@ -1738,6 +1736,25 @@ var regParams = {
         templateUrl: 'views/pages/byo/did-edit.html',
         controller: 'BYODIDNumberEditCtrl'
     })
+    .state('hosted-trunks', {
+        url: '/hosted-trunks/?page&search', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/trunks.html',
+        controller: 'HostedTrunksCtrl',
+        params:  listPageParams
+    })
+    .state('hosted-trunks-create', {
+        url: '/hosted-trunks/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/create.html',
+        controller: 'HostedTrunksCreateCtrl'
+    })
+    .state('hosted-trunks-edit', {
+        url: '/hosted-trunks/{trunkId}/edit', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/edit.html',
+        controller: 'HostedTrunksEditCtrl'
+    })
 
 
 
@@ -1802,9 +1819,13 @@ var regParams = {
         $state.go('404');
      });
      // get settings & customizations
+
+     console.log("getting all settings...")
     Backend.get("/getAllSettings").then(function(res) {
+            console.log('state is currently', $state.current.name);
             var data = res.data;
                 $shared.customizations = data['customizations'];
+            console.log('customizations are ', $shared.customizations);
     });
 
 });

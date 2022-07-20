@@ -118,7 +118,6 @@ function continueChangeRoute() {
 }
 
 window.addEventListener('message', function(e) {
-    console.log("received window emssage ", arguments);
     if (event.origin.startsWith('https://editor.lineblocs.com')) { 
       if ( event.data === 'saved' ) {
           continueChangeRoute();
@@ -161,7 +160,6 @@ angular
                     config.headers['X-Admin-Token'] = adminToken;
                 }
 
-                console.log("request headers are ", config.headers);
                 return config;
             }
         };
@@ -200,6 +198,10 @@ angular
       selectedItem: null,
   };
         factory.billingPackages = ['gold', 'silver', 'bronze'];
+        factory.customizations = {
+
+
+        };
   var flickerTimeout = 0;
 
     function searchModule(text, state, tags, stateParams, perms, setting)
@@ -309,9 +311,33 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
          }
          var item = maps[area];
-         if ( item.includes( current ) ) {
+         if ( item && item.includes( current ) ) {
              return true;
          }
+     }
+
+     factory.getAppLogo = function() {
+        var logo = factory.customizations['app_logo'];
+        if ( !logo || logo === '' ) {
+                return '/images/new-logo-blue.png';
+        }
+        return logo;
+     }
+     factory.getAppIcon = function() {
+        var icon = factory.customizations['app_icon'];
+        console.log('loading icon ', icon)
+
+        if ( !icon || icon === '' ) {
+                return '/images/logo-icon-white.png';
+        }
+        return icon;
+     }
+     factory.getAltAppLogo = function() {
+        var logo = factory.customizations['alt_app_logo'];
+        if ( !logo || logo === '' ) {
+                return '/images/new-logo-blue.png';
+        }
+        return logo;
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
@@ -357,8 +383,6 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
      factory.isSettingEnabled = function(option) {
 
-        console.log("is setting enabled ", option);
-        console.log("is setting enabled ", factory.planInfo);
             if ( factory.planInfo ) {
                 if ( factory.planInfo[ option ] ) {
                     return true;
@@ -905,7 +929,7 @@ if (checked.length === 0) {
         factory.get = function(path, params, showMsg)
         {
             var item = $q(function(resolve, reject) {
-                    if (!skip.includes($state.current.name)) {
+                    if (!skip.includes($state.current.name) && $state.current_name) {
                         if ( !checkHttpCallPrerequisites() ) {
                             resolve();
                             return;
@@ -1712,6 +1736,25 @@ var regParams = {
         templateUrl: 'views/pages/byo/did-edit.html',
         controller: 'BYODIDNumberEditCtrl'
     })
+    .state('hosted-trunks', {
+        url: '/hosted-trunks/?page&search', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/trunks.html',
+        controller: 'HostedTrunksCtrl',
+        params:  listPageParams
+    })
+    .state('hosted-trunks-create', {
+        url: '/hosted-trunks/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/create.html',
+        controller: 'HostedTrunksCreateCtrl'
+    })
+    .state('hosted-trunks-edit', {
+        url: '/hosted-trunks/{trunkId}/edit', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/edit.html',
+        controller: 'HostedTrunksEditCtrl'
+    })
 
 
 
@@ -1775,6 +1818,16 @@ var regParams = {
         console.log("no page found - 404");
         $state.go('404');
      });
+     // get settings & customizations
+
+     console.log("getting all settings...")
+    Backend.get("/getAllSettings").then(function(res) {
+            console.log('state is currently', $state.current.name);
+            var data = res.data;
+                $shared.customizations = data['customizations'];
+            console.log('customizations are ', $shared.customizations);
+    });
+
 });
 
 
@@ -5571,6 +5624,206 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 	$scope.load();
 
 }]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('HostedTrunksCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("Hosted Trunks");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.trunks = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/trunk/list" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'trunks' );
+      pagination.loadData().then(function(res) {
+      $scope.trunks = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.editTrunk = function(trunk) {
+
+    $state.go('hosted-trunks-edit', {trunkId: trunk.public_id});
+  }
+  $scope.createTrunk = function(trunk) {
+    $state.go('hosted-trunks-create');
+  }
+  $scope.deleteTrunk = function($event, trunk) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this trunk?')
+          .textContent('you will not be able to use this trunk any longer')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/trunk/deleteTrunk/" + trunk.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My Carriers");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.carriers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'carriers' );
+      pagination.loadData().then(function(res) {
+      $scope.carriers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.editCarrier = function(carrier) {
+
+    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
+  }
+  $scope.createCarrier = function(carrier) {
+
+    $state.go('byo-carrier-create');
+  }
+  $scope.deleteCarrier = function($event, carrier) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this carrier?')
+          .textContent('you will not be able to use this carrier any longer')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My Carriers");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.carriers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'carriers' );
+      pagination.loadData().then(function(res) {
+      $scope.carriers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.editCarrier = function(carrier) {
+
+    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
+  }
+  $scope.createCarrier = function(carrier) {
+
+    $state.go('byo-carrier-create');
+  }
+  $scope.deleteCarrier = function($event, carrier) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this carrier?')
+          .textContent('you will not be able to use this carrier any longer')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.load();
+});
+
+
 'use strict';
 
 /**
