@@ -7,60 +7,54 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
-    $shared.updateTitle("My Carriers");
+angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My Trunks");
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
     $scope.pagination = pagination;
     $scope.Backend = Backend;
-  $scope.carriers = [];
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+  $scope.values = {};
   $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/byo/carrier/listCarriers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'carriers' );
-      pagination.loadData().then(function(res) {
-      $scope.carriers = res.data.data;
       $shared.endIsLoading();
-      resolve();
-    }, reject);
-  });
   }
-  $scope.editCarrier = function(carrier) {
+  $scope.saveTrunk = function(trunk) {
+    console.log('save trunk called...');
+    var params = angular.copy( $scope.values );
+    params['record'] = params.record||false;
+    params['orig_settings'] = {
+      recovery_sip_uri: params.recovery_sip_uri
+    };
+   params['orig_endpoints'] = [{
+      sip_uri: params.sip_uri
+   }];
+   //todo need to integrate with frontend
+   params['term_acls'] = [];
+   params['term_creds'] = [];
+   params['term_settings'] = {
+      sip_addr: params.termination_sip_uri
+   };
 
-    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
-  }
-  $scope.createCarrier = function(carrier) {
-
-    $state.go('byo-carrier-create');
-  }
-  $scope.deleteCarrier = function($event, carrier) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this carrier?')
-          .textContent('you will not be able to use this carrier any longer')
-          .ariaLabel('Delete')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
+   console.log('saveTrunk params are ', params);
+    Backend.post("/trunk", params).then(function() {
+        console.log("created trunk..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('created trunk')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('hosted-trunks', {});
+      $shared.endIsCreateLoading();
     });
   }
+
   $scope.load();
 });
 

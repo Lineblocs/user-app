@@ -937,6 +937,7 @@ if (checked.length === 0) {
 
                     }
                     $http.get(createUrl(path), params).then(resolve,function(res) {
+                        console.log('received reply ', res);
                     var message = res.data.message;
                         errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
                         reject(res);
@@ -1746,13 +1747,13 @@ var regParams = {
     .state('hosted-trunks-create', {
         url: '/hosted-trunks/create', 
         parent: 'dashboard',
-        templateUrl: 'views/pages/trunks/create.html',
+        templateUrl: 'views/pages/trunks/trunk-create.html',
         controller: 'HostedTrunksCreateCtrl'
     })
     .state('hosted-trunks-edit', {
         url: '/hosted-trunks/{trunkId}/edit', 
         parent: 'dashboard',
-        templateUrl: 'views/pages/trunks/edit.html',
+        templateUrl: 'views/pages/trunks/trunk-edit.html',
         controller: 'HostedTrunksEditCtrl'
     })
 
