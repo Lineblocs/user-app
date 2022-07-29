@@ -23,10 +23,14 @@ angular.module('Lineblocs').controller('HostedTrunksEditCtrl', function ($scope,
   $scope.values = {};
   $scope.load = function() {
       var url ='/trunk/' + $stateParams['trunkId'];
-    Backend.get(url).then(function(res) {
-        console.log("trunk data ", res);
 
-        var data = res.data;
+      $q.all([
+        Backend.get("/did/listNumbers?all=1").then((res) =>  {
+        Backend.get(url)
+        ]).then(function(res) {
+        console.log("trunk data ", res);
+        var numbers = res[0].data.data;
+        var data = res[1].data;
         $scope.values = angular.copy( data );
 
         $scope.values['recovery_sip_uri'] = data['orig_settings']['recovery_sip_uri'];

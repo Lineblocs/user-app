@@ -5705,6 +5705,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
     $scope.$stateParams = $stateParams;
     $scope.$shared = $shared;
     $scope.pagination = pagination;
+    $scope.numbers = [];
     $scope.Backend = Backend;
         var toastPos = {
           bottom: false,
@@ -5715,7 +5716,10 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
         var toastPosStr = Object.keys(toastPos)
   $scope.values = {};
   $scope.load = function() {
+    Backend.get("/did/listNumbers?all=1").then((res) =>  {
+      numbers = res.data.data;
       $shared.endIsLoading();
+    });
   }
   $scope.saveTrunk = function(trunk) {
     console.log('save trunk called...');
@@ -5777,10 +5781,14 @@ angular.module('Lineblocs').controller('HostedTrunksEditCtrl', function ($scope,
   $scope.values = {};
   $scope.load = function() {
       var url ='/trunk/' + $stateParams['trunkId'];
-    Backend.get(url).then(function(res) {
-        console.log("trunk data ", res);
 
-        var data = res.data;
+      $q.all([
+        Backend.get("/did/listNumbers?all=1").then((res) =>  {
+        Backend.get(url)
+        ]).then(function(res) {
+        console.log("trunk data ", res);
+        var numbers = res[0].data.data;
+        var data = res[1].data;
         $scope.values = angular.copy( data );
 
         $scope.values['recovery_sip_uri'] = data['orig_settings']['recovery_sip_uri'];

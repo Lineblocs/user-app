@@ -188,9 +188,9 @@
                             <strong>Note:</strong> if the DID is already setup with a call flow it will be greyed out, and you will need to unlink the flow before you can link it to your trunk
                         </p>
                             <ul class="no-styling">
-                                <li>
-                                    <md-checkbox ng-model="number.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
-                                        +1020202
+                                <li ng-repeat="number in numbers">
+                                    <md-checkbox ng-if="number.available" ng-model="number.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                                        {{number.number}}
                                 </li>
                             </ul>
                             <div class="form-btns">
