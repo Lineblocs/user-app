@@ -189,7 +189,7 @@
                         </p>
                             <ul class="no-styling">
                                 <li ng-repeat="number in numbers">
-                                    <md-checkbox ng-if="number.available" ng-model="number.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                                    <md-checkbox ng-disabled="number.is_already_integrated && number.integrated_with !== 'trunk'" ng-model="number.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
                                         {{number.number}}
                                 </li>
                             </ul>

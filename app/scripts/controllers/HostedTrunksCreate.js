@@ -45,6 +45,9 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
       sip_addr: params.termination_sip_uri
    };
 
+   params['did_numbers'] =$scope.numbers.filter( function( number ) {
+    return number.checked;
+   });
    console.log('saveTrunk params are ', params);
     Backend.post("/trunk", params).then(function() {
         console.log("created trunk..");

@@ -23,14 +23,25 @@ angular.module('Lineblocs').controller('HostedTrunksEditCtrl', function ($scope,
   $scope.values = {};
   $scope.load = function() {
       var url ='/trunk/' + $stateParams['trunkId'];
-
       $q.all([
-        Backend.get("/did/listNumbers?all=1").then((res) =>  {
+        Backend.get("/did/listNumbers?all=1"),
         Backend.get(url)
-        ]).then(function(res) {
+     ]).then(function(res) {
         console.log("trunk data ", res);
-        var numbers = res[0].data.data;
         var data = res[1].data;
+        var trunkId = data.id;
+        var numbers = res[0].data.data.map( function( item ) {
+            var copied = angular.copy( item );
+            copied.checked = false;
+            
+            if ( item.trunk_id === trunkId ) {
+
+                copied.checked = true;
+            }
+            return copied;
+        });
+        console.log('NUMBERS ARE ', numbers);
+        $scope.numbers = numbers;
         $scope.values = angular.copy( data );
 
         $scope.values['recovery_sip_uri'] = data['orig_settings']['recovery_sip_uri'];
@@ -57,6 +68,9 @@ angular.module('Lineblocs').controller('HostedTrunksEditCtrl', function ($scope,
    params['term_settings'] = {
       sip_addr: params.termination_sip_uri
    };
+   params['did_numbers'] =$scope.numbers.filter( function( number ) {
+    return number.checked;
+   });
 
    console.log('saveTrunk params are ', params);
     Backend.post("/trunk/" + $stateParams['trunkId'], params).then(function() {
