@@ -990,6 +990,7 @@ if (checked.length === 0) {
 
                 $http.post(createUrl(path), params).then(resolve,function(res) {
                    var message = res.data.message;
+                   console.log('ERR MSG = ', message)
                     if (!suppressErrDialog) {
                         errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
 
