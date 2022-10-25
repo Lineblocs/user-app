@@ -73,7 +73,7 @@ angular.module('Lineblocs').controller('HostedTrunksEditCtrl', function ($scope,
    });
 
    console.log('saveTrunk params are ', params);
-    Backend.post"/trunk/" + $stateParams['trunkId'], params).then(function() {
+    Backend.post("/trunk/" + $stateParams['trunkId'], params).then(function() {
         console.log("updated trunk..");
         $mdToast.show(
           $mdToast.simple()
