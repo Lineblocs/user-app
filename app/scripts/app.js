@@ -806,7 +806,11 @@ return changed;
             $shared.tempStopErrors = true;
             //factory.queued.push( item );
         }
-        function errorHandler(error, codeId, showMsg) {
+        function errorHandler(res, codeId, showMsg) {
+            var error = null;
+            if ( res.data ) {
+                error = res.data.message||null;
+            }
             console.log("erroHandler ", arguments);
             /*
             if ( $shared.tempStopErrors ) {
@@ -938,8 +942,7 @@ if (checked.length === 0) {
                     }
                     $http.get(createUrl(path), params).then(resolve,function(res) {
                         console.log('received reply ', res);
-                    var message = res.data.message;
-                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
                         reject(res);
                     });
             });
@@ -965,8 +968,7 @@ if (checked.length === 0) {
 
 
                 $http.delete(createUrl(path)).then(resolve,function(res) {
-                   var message = res.data.message;
-                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                    errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     reject(res);
                  });
@@ -989,10 +991,8 @@ if (checked.length === 0) {
 
 
                 $http.post(createUrl(path), params).then(resolve,function(res) {
-                   var message = res.data.message;
-                   console.log('ERR MSG = ', message)
                     if (!suppressErrDialog) {
-                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     }
                     reject(res);
@@ -1025,8 +1025,7 @@ if (checked.length === 0) {
                     headers: {'Content-Type': undefined}
                 }).then(resolve, function(res) {
                     console.log("postFiles result ", res);
-                   var message = res.data.message;
-                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                    errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
                     reject( res );
                 });
             });
@@ -1047,9 +1046,8 @@ if (checked.length === 0) {
 
 
                 $http.put(createUrl(path), params).then(resolve,function(res) {
-                   var message = res.data.message;
                     if (!suppressErrDialog) {
-                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     }
                     reject(res);
