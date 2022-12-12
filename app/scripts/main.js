@@ -5672,7 +5672,7 @@ angular.module('Lineblocs').controller('HostedTrunksCtrl', function ($scope, Bac
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/trunk/deleteTrunk/" + trunk.public_id).then(function() {
+      Backend.delete("/trunk/" + trunk.public_id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
