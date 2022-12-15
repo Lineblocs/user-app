@@ -1,0 +1,77 @@
+<div>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Create Trunk</span>
+                <span class="md-subhead">add SIP trunk</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form name="trunkForm" ng-submit="submit(trunkForm)" novalidate>
+                <div layout="row">
+                    <div flex="95">
+                        <md-input-container>
+                            <label>Number</label>
+                            <input name="number" ng-model="values.number" required="" minlength="1">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
+                                    <div ng-show="trunkForm.number.$error.minlength">Please enter 1 characters or more
+                                    </div>
+                                    <div ng-show="trunkForm.number.$error.required">This field is required</div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="5">
+                        <md-icon class="tooltip-icon">
+                            <i class="mdi mdi-information"></i>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                A unique number name
+                            </md-tooltip>
+                        </md-icon>
+                    </div>
+                </div>
+            <div layout="row">
+                <div flex="66">
+                    <div layout="row">
+                        <div flex="95">
+                            <md-input-container>
+                                <label>Attached Flow</label>
+                                <md-select ng-model="number.flow_id" ng-change="changeFlow(number.flow_id)">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="flow in flows" ng-value="flow.id">
+                                        {{flow.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div flex="5">
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-information"></i>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    The flow your number will use for inbound calling.
+                                </md-tooltip>
+                            </md-icon>
+                        </div>
+                    </div>
+                </div>
+                <div flex="33">
+                    <md-button ng-show="number.flow_id" ng-click="editFlow(number.flow_public_id)" class="md-raised">
+                        Edit Flow
+                    </md-button>
+                </div>
+            </div>
+                                        <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>
+
+

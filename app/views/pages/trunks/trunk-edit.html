@@ -1,0 +1,212 @@
+
+<div>
+    <md-card>
+
+        <md-card-title>
+
+            <md-card-title-text>
+                <span class="md-headline">Edit Trunk</span>
+                <span class="md-subhead"></span>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+
+            <form name="trunkForm" ng-submit="editTrunk(trunkForm)" novalidate>
+                <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+
+                    <md-tab label="Details">
+
+
+                        <md-content class="md-padding">
+                            <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+                                        <label>Name</label>
+                                        <input name="username" ng-model="values.name" required="" minlength="1">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                    required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            The username you will use to login to your trunk with
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+                            </div>
+                        <div layout="row">
+                            <div flex="95">
+                                <md-switch ng-default="false" ng-model="values.record" aria-label="Record calls" class="md-warn">
+                                    Record calls
+                                </md-switch>
+                            </div>
+                        </div>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Origination">
+                        <md-content class="md-padding">
+                           <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+                                        <label>SIP URI</label>
+                                        <input name="sip_uri" ng-model="values.sip_uri" required="" minlength="1">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                    required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            Incoming calls will be routed to SIP URI and this must be a FQDN and include SIP protocol. <br/>or example: if your SIP infrastructure is located at example.org use:
+                                            <br/>
+                                            sip:example.org:5060
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+                            </div>
+                           <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+                                        <label>Recovery SIP URI</label>
+                                        <input name="recovery_sip_uri" ng-model="values.recovery_sip_uri" required="" minlength="1">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                    required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            Incoming calls will be routed to SIP URI and this must be a FQDN and include SIP protocol. <br/>or example: if your SIP infrastructure is located at example.org use:
+                                            <br/>
+                                            sip:example.org:5060
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+                            </div>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
+                            </md-content>
+                    </md-tab>
+                    <md-tab label="Termination">
+
+                        <md-content class="md-padding">
+                           <div layout="row">
+                                <div flex="80">
+                                    <md-input-container>
+                                        <label>Termination SIP URI</label>
+                                        <input name="sip_uri" ng-model="values.termination_sip_uri" required="" minlength="1" disabled>
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                    required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="15">
+                                    <md-input-container>
+                                        <input name="sip_uri" value=".pstn.{{$shared.getDomain()}}" required="" minlength="1" disabled>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            Set the domain name for routing calls from your SIP infrastructure to Lineblocs gateway.
+                                            <br/>
+                                            The chosen name will be used in the domain and included in the prefix of the FQDN. For example,<br/>if you use 'trunk' then your SIP URI will be:
+                                            <br/>
+                                            {your-trunk-name}.pstn.{{$shared.getDomain()}} 
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+                            </div>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="DID Numbers">
+                        <md-content class="md-padding">
+
+                        <p>
+                            Select the DID numbers that you want to connect with your trunk
+                            <br/>
+                            <br/>
+                            <strong>Note:</strong> if the DID is already setup with a call flow it will be greyed out, and you will need to unlink the flow before you can link it to your trunk
+                        </p>
+                            <ul class="no-styling">
+                                <li ng-repeat="number in numbers">
+                                    <md-checkbox ng-disabled="number.is_already_integrated && number.integrated_with !== 'trunk'" ng-model="number.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                                        {{number.number}}
+                                </li>
+                            </ul>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
+                            </md-content>
+
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-card-content>
+
+    </md-card>
+</div>

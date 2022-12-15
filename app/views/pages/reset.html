@@ -1,10 +1,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
     <div class="login-page">
-        <a href="https://lineblocs.com/">
+        <a href="{{$shared.getHomeLink()}}">
         <div class="logo">
 
-            <img src="images/logo-blue-small.png">
+            <img src="{{$shared.getAltAppLogo()}}" width="256"/>
         </div>
     </a>
         <center>
@@ -101,7 +101,7 @@
                 <div class="login-btn">
 
 
-                    <button>
+                    <button type="submit" class="custom">
                         <span>Reset</span>
                     </button>
                 </div>

@@ -41,6 +41,13 @@ function checkExpires(expiresIn)
 {
 
 }
+
+function createBaseTitle() {
+    return DEPLOYMENT_DOMAIN;
+}
+function getEditorPath() {
+        return  "https://editor." + DEPLOYMENT_DOMAIN;
+}
 function isAlreadyDoingNextRedirect() {
     var hash = window.location.hash.substr(1);
     var query = URI( hash ).query( true );
@@ -83,9 +90,10 @@ function getWorkspace() {
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
 if (check1 || check2) {
-    var baseUrl = "https://lineblocs.com/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
 } else {
-    var baseUrl = "/api";
+    //var baseUrl = "/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
 }
 
 function createUrl(path) {
@@ -117,8 +125,8 @@ function continueChangeRoute() {
 }
 
 window.addEventListener('message', function(e) {
-    console.log("received window emssage ", arguments);
-    if (event.origin.startsWith('https://editor.lineblocs.com')) { 
+    var editorUrl = getEditorPath();
+    if (event.origin.startsWith(editorUrl)) {
       if ( event.data === 'saved' ) {
           continueChangeRoute();
       } else {
@@ -160,19 +168,18 @@ angular
                     config.headers['X-Admin-Token'] = adminToken;
                 }
 
-                console.log("request headers are ", config.headers);
                 return config;
             }
         };
     })
     .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
-        var baseTitle = "LineBlocs.com";
+        var baseTitle = createBaseTitle();
         factory.tempStopErrors = false;
         factory.selectedAdminWorkspace = null;
         factory.initialLoaded = false;
         factory.title = baseTitle;
-        factory.FLOW_EDITOR_URL = "https://editor.lineblocs.com";
+        factory.FLOW_EDITOR_URL = getEditorPath();
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.isLoading = true;
@@ -199,6 +206,10 @@ angular
       selectedItem: null,
   };
         factory.billingPackages = ['gold', 'silver', 'bronze'];
+        factory.customizations = {
+
+
+        };
   var flickerTimeout = 0;
 
     function searchModule(text, state, tags, stateParams, perms, setting)
@@ -308,9 +319,44 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
          }
          var item = maps[area];
-         if ( item.includes( current ) ) {
+         if ( item && item.includes( current ) ) {
              return true;
          }
+     }
+    factory.getDomain = function() {
+            return  DEPLOYMENT_DOMAIN;
+    }
+    factory.getHomeLink = function() {
+            return  "https://" + DEPLOYMENT_DOMAIN + "/";
+    }
+    factory.getEditorResource = function(path) {
+            return  getEditorPath() + "/" + path;
+    }
+    factory.createDomainLink = function(path) {
+            return  factory.getHomeLink() + path;
+    }
+     factory.getAppLogo = function() {
+        var logo = factory.customizations['app_logo'];
+        if ( !logo || logo === '' ) {
+                return '/images/new-logo-blue.png';
+        }
+        return logo;
+     }
+     factory.getAppIcon = function() {
+        var icon = factory.customizations['app_icon'];
+        console.log('loading icon ', icon)
+
+        if ( !icon || icon === '' ) {
+                return '/images/logo-icon-white.png';
+        }
+        return icon;
+     }
+     factory.getAltAppLogo = function() {
+        var logo = factory.customizations['alt_app_logo'];
+        if ( !logo || logo === '' ) {
+                return '/images/new-logo-blue.png';
+        }
+        return logo;
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
@@ -356,8 +402,6 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 
      factory.isSettingEnabled = function(option) {
 
-        console.log("is setting enabled ", option);
-        console.log("is setting enabled ", factory.planInfo);
             if ( factory.planInfo ) {
                 if ( factory.planInfo[ option ] ) {
                     return true;
@@ -781,7 +825,11 @@ return changed;
             $shared.tempStopErrors = true;
             //factory.queued.push( item );
         }
-        function errorHandler(error, codeId, showMsg) {
+        function errorHandler(res, codeId, showMsg) {
+            var error = null;
+            if ( res.data ) {
+                error = res.data.message||null;
+            }
             console.log("erroHandler ", arguments);
             /*
             if ( $shared.tempStopErrors ) {
@@ -904,7 +952,7 @@ if (checked.length === 0) {
         factory.get = function(path, params, showMsg)
         {
             var item = $q(function(resolve, reject) {
-                    if (!skip.includes($state.current.name)) {
+                    if (!skip.includes($state.current.name) && $state.current_name) {
                         if ( !checkHttpCallPrerequisites() ) {
                             resolve();
                             return;
@@ -912,8 +960,8 @@ if (checked.length === 0) {
 
                     }
                     $http.get(createUrl(path), params).then(resolve,function(res) {
-                    var message = res.data.message;
-                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        console.log('received reply ', res);
+                        errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
                         reject(res);
                     });
             });
@@ -939,8 +987,7 @@ if (checked.length === 0) {
 
 
                 $http.delete(createUrl(path)).then(resolve,function(res) {
-                   var message = res.data.message;
-                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                    errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     reject(res);
                  });
@@ -963,9 +1010,8 @@ if (checked.length === 0) {
 
 
                 $http.post(createUrl(path), params).then(resolve,function(res) {
-                   var message = res.data.message;
                     if (!suppressErrDialog) {
-                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     }
                     reject(res);
@@ -998,8 +1044,7 @@ if (checked.length === 0) {
                     headers: {'Content-Type': undefined}
                 }).then(resolve, function(res) {
                     console.log("postFiles result ", res);
-                   var message = res.data.message;
-                    errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                    errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
                     reject( res );
                 });
             });
@@ -1020,9 +1065,8 @@ if (checked.length === 0) {
 
 
                 $http.put(createUrl(path), params).then(resolve,function(res) {
-                   var message = res.data.message;
                     if (!suppressErrDialog) {
-                        errorHandler(message, res.headers('X-ErrorCode-ID'), showMsg);
+                        errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     }
                     reject(res);
@@ -1711,6 +1755,25 @@ var regParams = {
         templateUrl: 'views/pages/byo/did-edit.html',
         controller: 'BYODIDNumberEditCtrl'
     })
+    .state('hosted-trunks', {
+        url: '/hosted-trunks/?page&search', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/trunks.html',
+        controller: 'HostedTrunksCtrl',
+        params:  listPageParams
+    })
+    .state('hosted-trunks-create', {
+        url: '/hosted-trunks/create', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/trunk-create.html',
+        controller: 'HostedTrunksCreateCtrl'
+    })
+    .state('hosted-trunks-edit', {
+        url: '/hosted-trunks/{trunkId}/edit', 
+        parent: 'dashboard',
+        templateUrl: 'views/pages/trunks/trunk-edit.html',
+        controller: 'HostedTrunksEditCtrl'
+    })
 
 
 
@@ -1774,6 +1837,16 @@ var regParams = {
         console.log("no page found - 404");
         $state.go('404');
      });
+     // get settings & customizations
+
+     console.log("getting all settings...")
+    Backend.get("/getAllSettings").then(function(res) {
+            console.log('state is currently', $state.current.name);
+            var data = res.data;
+                $shared.customizations = data['customizations'];
+            console.log('customizations are ', $shared.customizations);
+    });
+
 });
 
 

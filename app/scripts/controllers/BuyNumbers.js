@@ -77,6 +77,9 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
           "inDialog": $scope.inDialog,
           "onSuccess": function (id) {
             $scope.$emit("Created", id)
+          },
+          "onError": function () {
+            $shared.showError("Purchase Error");
           }
         }
       })
@@ -166,7 +169,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
         Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function (res) {
           var number = res.data;
           $shared.endIsCreateLoading();
-          resolve();
+          resolve(number);
         });
       }, function (res) {
         console.log("res is: ", res);
@@ -184,7 +187,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
       var confirm = window.confirm("Are you sure ?");
       console.log("confirmed ", confirm);
       if (confirm) {
-        completeBuy(number).then(function() {
+        completeBuy(number).then(function(didNumber) {
           $scope.$emit("Created", id)
         });
         return;
@@ -200,9 +203,9 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
       .ok('Yes')
       .cancel('No');
     $mdDialog.show(confirm).then(function() {
-      completeBuy(number).then(function() {
+      completeBuy(number).then(function(didNumber) {
           $shared.endIsCreateLoading();
-          purchaseConfirm($event, number);
+          purchaseConfirm($event, didNumber);
       });
     });
   }

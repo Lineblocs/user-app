@@ -21,8 +21,8 @@ angular.module('Lineblocs').controller('PhoneGroupsCtrl', function ($scope, Back
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'phoneGroups' );
       pagination.loadData().then(function(res) {
-      $scope.calls = res.data.data;
-      $shared.endIsLoading();
+        $scope.phoneGroups= res.data.data;
+        $shared.endIsLoading();
     })
   }
   $scope.createPhoneGroup = function() {

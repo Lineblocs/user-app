@@ -260,12 +260,9 @@ gulp.task('compress-js', ['scripts'], function() {
 './bower_components/urijs/src/URI.min.js',
       './app/scripts/main.js'
     ])
-            .pipe(concat('concat.js'))
+            .pipe(concat('main.min.js'))
         .pipe(gulp.dest('dist'))
         .pipe(rename('main.min.js'))
-        .pipe(uglify({ mangle: false }) .on('error', function(e){
-            console.log(e);
-         })) 
         .pipe(gulp.dest('app/scripts/'));
 
 });

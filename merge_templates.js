@@ -51,4 +51,3 @@ function doMerge() {
   });
 }
 module.exports = doMerge;
-

@@ -1,10 +1,10 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
     <div ng-show="$shared.changingPage" class="change-page-mask"></div>
     <div class="login-page">
-        <a href="https://lineblocs.com/">
+        <a href="{{$shared.getHomeLink()}}">
         <div class="logo">
 
-            <img src="images/logo-blue-small.png">
+            <img src="{{$shared.getAltAppLogo()}}"/>
         </div>
         </a>
         <center>
@@ -105,9 +105,7 @@
 
                     <div class="login-btn">
 
-
-
-                        <button style="width: 100%;">
+                        <button type="submit" class="custom">
                             <span class="login-button-custom" >Continue</span>
                         </button>
                     </div>
@@ -186,7 +184,7 @@
 
 
 
-                        <button style="width: 100%;">
+                        <button type="submit" class="custom">
                             <span class="login-custom">Login</span>
                         </button>
                     </div>

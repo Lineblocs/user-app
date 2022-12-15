@@ -1,9 +1,10 @@
 <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && calls.length === 0" class="no-results">
-  <md-card md-theme="'default'"" md-theme-watch>
-    <div class="no-results">
-      <center>
-        <h5>No calls listed</h5>
-      </center>
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div class=" no-results">
+      <div class="inner">
+        <center>
+            <h5>No calls found</h5>
+        </center>
     </div>
   </md-card>
 </div>
@@ -19,13 +20,14 @@
           </div>
   </div>
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && calls.length === 0" class="no-results">
-  <md-card md-theme="'default'"" md-theme-watch>
-    <div class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div class=" no-results">
       <div class="inner">
         <center>
-          <h5>No calls found</h5>
+            <h5>No calls found</h5>
+            <md-button ng-click="createFlow()" class="md-raised md-primary">Create New Flow</md-button>
+
         </center>
-      </div>
     </div>
   </md-card>
 </div>

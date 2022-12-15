@@ -317,8 +317,7 @@ angular.module('Lineblocs')
 				$shared.isCreateLoading =true;
 				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspaceInfo.id;
 				Backend.post("/addCard" + qs, data).then(function(res) {
-					$scope.step = 5t ;
-					//resolve(res);
+					resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
 					console.error("an error occured ", err);
