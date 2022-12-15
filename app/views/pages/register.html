@@ -22,7 +22,7 @@
     <div ng-show="!shouldSplash">
         <div class="login-page">
 
-            <a href="https://lineblocs.com/">
+            <a href="{{$shared.getHomeLink()}}">
                 <div class="logo">
                     <img src="{{$shared.getAltAppLogo()}}" />
                 </div>
@@ -191,11 +191,11 @@
                             </div>
                         </div>
                         <md-checkbox ng-model="acceptTerms" aria-label="Checkbox 1" style="display: none;">
-                            <small>I accept the <a target="_blank" ng-href="https://lineblocs.com/pages/tos">Terms Of
+                            <small>I accept the <a target="_blank" ng-href="{{$shared,createDomainLink('pages/tos')}}">Terms Of
                                     Service</a></small>
                         </md-checkbox>
                         <small style="font-size: 10px;">By clicking the button below you agree to our <a target="_blank"
-                                ng-href="https://lineblocs.com/pages/tos">ToS (Terms Of Service)</a></small>
+                                ng-href="{{$shared,createDomainLink('pages/tos')}}">ToS (Terms Of Service)</a></small>
                         <br />
                         <br />
                         <div class="login-btn">
@@ -346,7 +346,7 @@
                                         </md-input-container>
                                     </div>
                                     <div style="float: left; width: 136px;">
-                                        <h5>.lineblocs.com</h5>
+                                        <h5>{{$shared.getDomain()}}</h5>
                                     </div>
                                 </div>
 

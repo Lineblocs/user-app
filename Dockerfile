@@ -13,4 +13,4 @@ RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm install -g install no
 RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm install -g install bower@1.8.8
 RUN ./deploy_docker.sh
 COPY apache.conf /usr/local/apache2/conf/httpd.conf
-ENTRYPOINT ["./run_it.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

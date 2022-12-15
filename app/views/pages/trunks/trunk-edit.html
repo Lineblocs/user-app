@@ -152,7 +152,7 @@
                                 </div>
                                 <div flex="15">
                                     <md-input-container>
-                                        <input name="sip_uri" value=".pstn.lineblocs.com" required="" minlength="1" disabled>
+                                        <input name="sip_uri" value=".pstn.{{$shared.getDomain()}}" required="" minlength="1" disabled>
                                     </md-input-container>
                                 </div>
                                 <div flex="5">
@@ -163,7 +163,7 @@
                                             <br/>
                                             The chosen name will be used in the domain and included in the prefix of the FQDN. For example,<br/>if you use 'trunk' then your SIP URI will be:
                                             <br/>
-                                            trunk.pstn.sip.lineblocs.com
+                                            {your-trunk-name}.pstn.{{$shared.getDomain()}} 
                                         </md-tooltip>
                                     </md-icon>
                                 </div>
