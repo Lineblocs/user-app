@@ -1,5 +1,6 @@
 ## Lineblocs User Portal
 
+[![Alt text](https://github.com/Lineblocs/user-app/actions/workflows/ci.yml/badge.svg)](https://github.com/Lineblocs/user-app/actions/workflows/ci.yml/badge.svg)
 ## Requirements
 
 ```
