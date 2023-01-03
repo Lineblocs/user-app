@@ -78,6 +78,15 @@ angular.module('Lineblocs')
 	});
 
   }
+
+  	$scope.gotoVerificationFlow = function() {
+				var verficationWorkflow = $shared.customizations['verification_workflow'];
+				if ( verficationWorkflow === 'sms' ) {
+					$scope.step = 2;
+				} else {
+					$scope.step = 3;
+				}
+	}
     $scope.submit = function($event, registerForm) {
 		console.log("called submit");
 		$scope.triedSubmit = true;
@@ -107,7 +116,7 @@ angular.module('Lineblocs')
 				$scope.userId = data.userId;
 				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
-				$scope.step = 2;
+				$scope.gotoVerificationFlow();
 			});
 			return;
 		}
@@ -344,7 +353,7 @@ angular.module('Lineblocs')
 			$scope.token = $stateParams['authData'];
 
 			$scope.userId = $stateParams['userId'];
-			$scope.step = 2;
+			$scope.gotoVerificationFlow();
 		}
 		$scope.config = res[1].data;
 		console.log("config is ", $scope.config);
