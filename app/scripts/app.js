@@ -41,6 +41,13 @@ function checkExpires(expiresIn)
 {
 
 }
+
+function createBaseTitle() {
+    return DEPLOYMENT_DOMAIN;
+}
+function getEditorPath() {
+        return  "https://editor." + DEPLOYMENT_DOMAIN;
+}
 function isAlreadyDoingNextRedirect() {
     var hash = window.location.hash.substr(1);
     var query = URI( hash ).query( true );
@@ -83,10 +90,10 @@ function getWorkspace() {
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
 if (check1 || check2) {
-    var baseUrl = "https://lineblocs.com/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
 } else {
     //var baseUrl = "/api";
-    var baseUrl = "https://lineblocs.com/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
 }
 
 function createUrl(path) {
@@ -118,7 +125,8 @@ function continueChangeRoute() {
 }
 
 window.addEventListener('message', function(e) {
-    if (event.origin.startsWith('https://editor.lineblocs.com')) { 
+    var editorUrl = getEditorPath();
+    if (event.origin.startsWith(editorUrl)) {
       if ( event.data === 'saved' ) {
           continueChangeRoute();
       } else {
@@ -166,12 +174,12 @@ angular
     })
     .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
         var factory = this;
-        var baseTitle = "LineBlocs.com";
+        var baseTitle = createBaseTitle();
         factory.tempStopErrors = false;
         factory.selectedAdminWorkspace = null;
         factory.initialLoaded = false;
         factory.title = baseTitle;
-        factory.FLOW_EDITOR_URL = "https://editor.lineblocs.com";
+        factory.FLOW_EDITOR_URL = getEditorPath();
         factory.SHOW_NAVBAR = true;
         factory.PAGE_CONTENT_NO_PADDING = false; 
         factory.isLoading = true;
@@ -315,7 +323,18 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
              return true;
          }
      }
-
+    factory.getDomain = function() {
+            return  DEPLOYMENT_DOMAIN;
+    }
+    factory.getHomeLink = function() {
+            return  "https://" + DEPLOYMENT_DOMAIN + "/";
+    }
+    factory.getEditorResource = function(path) {
+            return  getEditorPath() + "/" + path;
+    }
+    factory.createDomainLink = function(path) {
+            return  factory.getHomeLink() + path;
+    }
      factory.getAppLogo = function() {
         var logo = factory.customizations['app_logo'];
         if ( !logo || logo === '' ) {

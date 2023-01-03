@@ -2,14 +2,14 @@
 <html class="no-js">
   <head ng-controller="HeadCtrl">
     <meta charset="utf-8">
-    <title ng-bind="$shared.title">LineBlocs.com</title>
+    <title ng-bind="$shared.title"></title>
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="google-signin-client_id" content="1042543492114-j1vtsh1qe2gkhsmc6t7i2m1vfndr5tav.apps.googleusercontent.com"/>
     <link rel="stylesheet" href="styles/app.min.css">
     <link rel="shortcut icon" type="image/png" href="/images/favicon-new.png"/>
-    <link rel="preload" href="https://editor.lineblocs.com/app.min.css" as="style">
-    <link rel="preload" href="https://editor.lineblocs.com/main.min.js" as="script">
+    <link rel="preload" ng-href="{{$shared.getEditorResource('app.min.css')}}" as="style">
+    <link rel="preload" ng-href="{{$shared.getEditorResource('main.min.js')}}" as="script">
 
     </head>
   <body class="extended" ng-controller='BodyCtrl'>
@@ -52,6 +52,10 @@
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
+  <script>
+      // some global settings used throughout the app
+      var DEPLOYMENT_DOMAIN = 'CONFIUGRED_DEPLOYMENT_DOMAIN';
+  </script>
     <script src="scripts/main.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
   <!-- Matomo -->

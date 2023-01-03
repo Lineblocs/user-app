@@ -1,7 +1,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
     <div ng-show="$shared.changingPage" class="change-page-mask"></div>
     <div class="login-page">
-        <a href="https://lineblocs.com/">
+        <a ng-href="{{$shared.getHomeLink()}}">
             <div class="logo">
 
                 <img src="{{$shared.getAltAppLogo()}}" />
