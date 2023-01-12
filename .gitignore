@@ -5,4 +5,5 @@ app/bower_components/
 dist/
 gen/
 main.min.js
+.env
 
