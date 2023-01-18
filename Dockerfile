@@ -15,4 +15,5 @@ RUN ./deploy_docker.sh
 
 COPY ports.conf /etc/apache2/ports.conf
 COPY apache.conf /usr/local/apache2/conf/httpd.conf
+EXPOSE 8001
 ENTRYPOINT ["./entrypoint.sh"]
