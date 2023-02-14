@@ -45,7 +45,7 @@
 	    	}
 	    	.info {
 	    		display: none;
-    			opacity: 0;  			
+    			opacity: 0;
 				@include transition(.1s);
 	    	}
     	}
@@ -54,28 +54,28 @@
         ul.menu-list {
             padding-left: 0;
             li {
-                height: 43px;  
+                height: 43px;
                 display: block;
                 width: 100%;
-                float: left;              
+                float: left;
                 .md-button {
                     margin: 0;
                     min-width: 0;
                     width: 100%;
                     border-radius: 0;
-                }                   
+                }
                 &.show-subnav {
                     &:hover {
                         ul.sub-menu {
                             display: block;
-                        }                        
+                        }
                     }
                 }
                 position: relative;
                 &.active {
                     overflow: hidden;
                     a {
-                        border-radius: 0;      
+                        border-radius: 0;
                         padding: 5px;
                         display: block;
                         padding-left: 0;
@@ -114,9 +114,9 @@
                         background: inherit;
                         overflow: hidden;
                         a {
-                            width: 100%;                           
+                            width: 100%;
                             font-weight: 300;
-                            text-align: left; 
+                            text-align: left;
                             span.text {
                                 display: inherit;
                             }
@@ -130,15 +130,12 @@
                     }
                 }
             }
-        }        
+        }
     }
 }
 
 
 @media screen and (max-width: 839px) {
-    .sidebar {
-        width: 210px !important;
-    }
     .page-content {
         //padding-left: 15px !important;
     }
