@@ -1333,8 +1333,6 @@ md-card img {
             padding-left: 8px; }
 
 @media screen and (max-width: 839px) {
-  .sidebar {
-    width: 210px !important; }
   .mdl-layout__header-row {
     padding-left: 2px !important; }
   .profile-content {
