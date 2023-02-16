@@ -399,6 +399,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 		width: 200px;
 		position: fixed;
 		bottom:0;
+    z-index: 5;
 		.sidebar-content {
 			/*position: relative;*/
 			overflow-y: auto;
