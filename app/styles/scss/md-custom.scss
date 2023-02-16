@@ -17,11 +17,11 @@ md-card {
 }
 .calls-graph.mdl-cell
 {
-	border-radius: 20px !important;	
+	border-radius: 20px !important;
 }
 .calls-graph
 {
-	border-radius: 20px !important;	
+	border-radius: 20px !important;
 }
 
 
@@ -120,4 +120,35 @@ md-content:hover::-webkit-scrollbar-thumb {
 }
 md-content::-webkit-scrollbar-thumb:hover {
 	background: #CCC;
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-media-file-block{
+  border-radius: 8px;
+  .content-title{
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    padding: 16px 0px 24px 0px;
+  }
+  .add-file-button-block{
+    padding: 0 24px 24px 24px;
+    @extend .flex-center;
+    .action-btn{
+      width: 150px;
+      @extend .flex-center;
+      span{
+        @extend .flex-center;
+        md-icon{
+          font-size: 16px;
+          @extend .flex-center;
+        }
+      }
+    }
+  }
+
 }

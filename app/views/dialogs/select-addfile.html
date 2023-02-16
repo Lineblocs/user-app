@@ -1,31 +1,46 @@
-<md-dialog>
+<md-dialog class="add-media-file-block">
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Add File</h2>
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        <md-button class="md-icon-button" ng-click="close()">
+            <md-icon >
+                <i class="mdi mdi-close"></i>
+              </md-icon>
         </md-button>
       </div>
     </md-toolbar>
     <md-dialog-content>
       <center>
-        <h3>Please select an option</h3>
-        <md-button class="md-raised md-primary" ng-click="clickUpload($event)">
-          Upload File
-        </md-button>
-        <br/>
-        <md-button class="md-raised md-primary" ng-click="clickGoogle($event)">
-          Use Google Drive
-        </md-button>
+        <h3 class="content-title">Please select an option</h3>
+        <div class="add-file-button-block">
+            <md-button class="md-raised md-primary action-btn" ng-click="clickUpload($event)">
+                <span>
+                    <md-icon >
+                        <i class="mdi mdi-upload"></i>
+                    </md-icon>
+                  Upload File
+                </span>
+
+            </md-button>
+            <md-button class="md-raised md-primary action-btn" ng-click="clickGoogle($event)">
+                <span>
+                    <md-icon >
+                        <i class="mdi  mdi-google-drive"></i>
+                    </md-icon>
+                Google Drive
+                </span>
+            </md-button>
+        </div>
+
       </center>
 
       </md-dialog-content>
-  <md-dialog-actions layout="row">
+  <!-- <md-dialog-actions layout="row">
     <span flex></span>
     <md-button ng-click="close()">
       Close
     </md-button>
-  </md-dialog-actions>
-    
+  </md-dialog-actions> -->
+
 </md-dialog>
