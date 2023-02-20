@@ -7,16 +7,16 @@
             <img src="{{$shared.getAltAppLogo()}}"/>
         </div>
         </a>
-        <center>
+        <div style="display: flex; align-items: center; justify-content: center; position: absolute; width: 100%;">
             <div ng-show="isLoading">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <md-progress-circular md-mode="indeterminate" style="margin: 0 auto;"></md-progress-circular>
                 <p>Logging you in..</p>
             </div>
             <div ng-show="$shared.changingPage">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <md-progress-circular md-mode="indeterminate" style="margin: 0 auto;"></md-progress-circular>
                 <p>Please wait..</p>
             </div>
-        </center>
+        </div>
 
         <div class="content">
             <div ng-show="step===1">
@@ -185,7 +185,7 @@
 
 
                         <button type="submit" class="custom">
-                            <span class="login-custom">Login</span>
+                            <span>Login</span>
                         </button>
                     </div>
                     <div layout="row" layout-align="center">

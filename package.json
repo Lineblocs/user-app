@@ -4,7 +4,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "start": "gulp compress-css && gulp scripts && gulp compress-js && gulp serve"
   },
   "devDependencies": {
     "apache-server-configs": "^2.11.0",
