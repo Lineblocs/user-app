@@ -1,14 +1,13 @@
-<div>
-
-    <div layout="row" layout-align="end center" layout-margin ng-show="$shared.planName()==='pay-as-you-go'">
-        <div>
+<div class="billing-container">
+    <div layout="row" layout-align="end center" class="billing-title-container" layout-margin ng-show="$shared.planName()==='pay-as-you-go'">
+        <div class="title-block">
             <h5>Remaining Balance</h5>
             <div class="bill-info">
             <strong>{{billing.info.remainingBalance}}</strong>
             </div>
         </div>
-        <div>
-            <h5>Plan</h5>
+        <div class="title-block">
+            <h5>Plan:</h5>
             <div class="bill-info">
             <strong>{{$shared.planInfo.nice_name}}</strong>
             <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
@@ -16,17 +15,17 @@
         </div>
     </div>
 
-    <div layout="row" layout-align="end center" layout-margin ng-show="$shared.planName()!=='pay-as-you-go'">
-        <div>
-            <h5>Plan</h5>
-            <div class="bill-info">
-            <strong>{{$shared.planInfo.nice_name}}</strong>
+    <div layout="row" layout-align="end center"  class="billing-title-container" layout-margin ng-show="$shared.planName()!=='pay-as-you-go'">
+        <div class="title-block">
+            <h5 class="title-text">Plan:</h5>
+            <div class="bill-info sub-title-text">
+            {{$shared.planInfo.nice_name}}
             <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
             </div>
         </div>
     </div>
 
-    <md-card md-theme="'default'"" md-theme-watch>
+    <md-card md-theme="'default'"" md-theme-watch class="card-radius">
         <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true">
         <md-tab label="Add Credit" ng-if="$shared.planName()==='pay-as-you-go'">
             <md-content class="md-padding">
@@ -169,12 +168,21 @@
         <md-tab label="Billing Methods" ng-if="$shared.planName()!=='pay-as-you-go'">
             <md-content class="md-padding">
                 <div class="bottom-sheet-demo inset no-padding">
-                    <div>
-                        <div ng-show="cards.length === 0">
-                            <h5>No Cards Added</h5>
-                            <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A
-                                Card</md-button>
-
+                    <div class="data-container">
+                        <div ng-show="cards.length === 0" class="no-card-block">
+                            <h5 class="title-text">No Cards Added</h5>
+                            <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides tooltip-icon ">
+                                <span>
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-credit-card"></i>
+                                    </md-icon>
+                                    Add A
+                                    Card
+                                </span>
+                                <md-tooltip class="helper-tooltip" md-direction="top">
+                                    Add Card
+                                </md-tooltip>
+                            </md-button>
                         </div>
                         <div ng-show="cards.length > 0">
                             <h5>Existing Cards</h5>
@@ -202,7 +210,6 @@
                                                         Set Primary</md-button>
                                                         <md-button ng-click="deleteCard($event, card)" class="md-icon-button" aria-label="Delete card">
                                                             <md-icon >
-                                                                
                                                                 <i class="mdi mdi-delete"></i>
                                                                     <md-tooltip class="helper-tooltip" md-direction="top">
                                                                         Delete card
@@ -286,39 +293,82 @@
         </md-tab>
         <md-tab label="History">
             <md-content class="md-padding">
-                <h5>Account Balance {{billing.info.accountBalance}}</h5>
+                <div class="content-data-block">
+                    <div class="data-block">
+                        <h5 class="sub-title-text">Account Balance </h5>
+                        <span class="title-text">{{billing.info.accountBalance}}</span>
+                    </div>
+                    <small class="info-text">finalized invoices and payments</small>
+                </div>
+
+                <div class="content-data-block">
+                    <div class="data-block">
+                        <h5 class="sub-title-text">Charges This Month</h5>
+                        <span class="title-text">{{billing.info.chargesThisMonth}}</span>
+                    </div>
+                    <small class="info-text">invoiced {{billing.info.nextInvoiceDue}}</small>
+                </div>
+
+                <div class="content-data-block">
+                    <div class="data-block">
+                        <h5 class="sub-title-text">Estimated Balance</h5>
+                        <span class="title-text">{{billing.info.estimatedBalance}}</span>
+                    </div>
+                    <small class="info-text">balance including charges this month.</small>
+                </div>
+                <!-- <h5>Account Balance {{billing.info.accountBalance}}</h5>
                 <small>
                     finalized invoices and payments
-                </small>
-                <h5>Charges This Month {{billing.info.chargesThisMonth}}</h5>
+                </small> -->
+                <!-- <h5>Charges This Month {{billing.info.chargesThisMonth}}</h5>
                 <small>
                     invoiced {{billing.info.nextInvoiceDue}}
-                </small>
-                <h5>Estimated Balance {{billing.info.estimatedBalance}}</h5>
+                </small> -->
+                <!-- <h5>Estimated Balance {{billing.info.estimatedBalance}}</h5>
                 <small>
                     balance including charges this month.
-                </small>
-                <h5>History</h5>
+                </small> -->
+                <h5 class="title-text">History</h5>
                 <small>Filter Dates</small>
-                <div layout="row">
+                <div layout="row" class="filter-row">
                     <div>
-                        <input type="date" ng-model="startDate" class="filter-date" />
+                        <input type="date" ng-model="startDate" class="start-date" />
                         <!--
                         <md-datepicker class="no-datepicker-left-pad" ng-model="startDate" md-placeholder="Start date">
                         </md-datepicker>
                     -->
                     </div>
                     <div>
-                        <input type="date" ng-model="endDate" class="filter-date" />
+                        <input type="date" ng-model="endDate" class="end-date" />
                         <!--
                         <md-datepicker ng-model="endDate" md-placeholder="End date"></md-datepicker>
                         -->
                     </div>
-                    <div>
-                        <md-button ng-click="filterBilling()" class="md-raised md-primary">Filter</md-button>
+                    <div class="m-lr-16">
+                        <md-button ng-click="filterBilling()" class="md-raised md-primary">
+                            <span>
+                                <md-icon class="tooltip-icon">
+                                    <i class="mdi mdi-filter-variant"></i>
+                                </md-icon>
+                                Filter
+                            </span>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                Filter
+                            </md-tooltip>
+                        </md-button>
                     </div>
                     <div>
-                        <md-button ng-click="downloadBilling()" class="md-raised md-warn">Download</md-button>
+                        <md-button ng-click="downloadBilling()" class="md-raised md-warn">
+                            <span>
+                                <md-icon class="tooltip-icon">
+                                    <i class="mdi mdi-download"></i>
+                                </md-icon>
+                                Download
+                            </span>
+                            <md-tooltip class="helper-tooltip" md-direction="top">
+                                Download
+                            </md-tooltip>
+                        </md-button>
                     </div>
 
                 </div>
@@ -352,14 +402,27 @@
         </md-tab>
         <md-tab label="Limits">
             <md-content class="md-padding">
-                <p><strong>Call Duration:</strong> {{billing.info.limits.call_duration}}</p>
-                <br />
-                <p><strong>Recording space:</strong> {{billing.info.limits.recording_space}}</p>
-                <h5>Usage Triggers</h5>
+                <div class="content-data-block">
+                    <div class="data-block">
+                        <h5 class="sub-title-text">Call Duration</h5>
+                        <span class="title-text">{{billing.info.limits.call_duration}}</span>
+                    </div>
+                </div>
+
+                <div class="content-data-block">
+                    <div class="data-block">
+                        <h5 class="sub-title-text">Recording space</h5>
+                        <span class="title-text"> {{billing.info.limits.recording_space}}</span>
+                    </div>
+                </div>
+                <!-- <p><strong>Call Duration:</strong> {{billing.info.limits.call_duration}}</p>
+                <br /> -->
+                <!-- <p><strong>Recording space:</strong> {{billing.info.limits.recording_space}}</p> -->
+                <h5 class="title-text">Usage Triggers</h5>
                 <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides">Create New
                 </md-button>
                 <div ng-show="usageTriggers.length===0">
-                    <p>No usage triggers setup..</p>
+                    <p class="sub-title-text">No usage triggers setup..</p>
                 </div>
                 <div ng-show="usageTriggers.length>0">
                     <md-table-container>
