@@ -344,132 +344,6 @@ table {
      width: 800px;
    }
 
-<<<<<<< HEAD
-   .login-page .content .call-system-picker  h3 {
-      text-align: left;
-   }
-      .signup-page .content .signup-form .field-input,
-      .signup-page .content .login-form .field-input,
-      .login-page .content .signup-form .field-input,
-      .login-page .content .login-form .field-input {
-        display: flex;
-        padding: 10px 0; }
-        .signup-page .content .signup-form .field-input svg,
-        .signup-page .content .login-form .field-input svg,
-        .login-page .content .signup-form .field-input svg,
-        .login-page .content .login-form .field-input svg {
-          margin-right: 20px; }
-        .login-page .content .login-form .field-input md-input-container {
-          max-height: 30px;
-        }
-        .signup-page .content .signup-form .field-input input,
-        .signup-page .content .login-form .field-input input,
-        .login-page .content .signup-form .field-input input,
-        .login-page .content .login-form .field-input input {
-          border: none;
-          width: 100%;
-          font-size: 16px;
-          color: #a0abae;
-          margin: 0;
-          border-bottom: 1px solid #E3E3E3;
-        }
-        .signup-page .content .signup-form .field-input .fname,
-        .signup-page .content .login-form .field-input .fname,
-        .login-page .content .signup-form .field-input .fname,
-        .login-page .content .login-form .field-input .fname {
-          display: flex;
-          margin-right: 10px; }
-        .signup-page .content .signup-form .field-input .input-box,
-        .signup-page .content .login-form .field-input .input-box,
-        .login-page .content .signup-form .field-input .input-box,
-        .login-page .content .login-form .field-input .input-box {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          margin-bottom: 20px; }
-        .login-page .content .login-form .field-input .input-box.no-margin {
-          margin-bottom: 0px;
-        }
-          .signup-page .content .signup-form .field-input .input-box .input-field,
-          .signup-page .content .login-form .field-input .input-box .input-field,
-          .login-page .content .signup-form .field-input .input-box .input-field,
-          .login-page .content .login-form .field-input .input-box .input-field {
-            width: 100%;
-            margin: 0; }
-            .signup-page .content .signup-form .field-input .input-box .input-field.lname,
-            .signup-page .content .login-form .field-input .input-box .input-field.lname,
-            .login-page .content .signup-form .field-input .input-box .input-field.lname,
-            .login-page .content .login-form .field-input .input-box .input-field.lname {
-              padding-left: 20px;
-              border-left: 2px dotted #f4f2f2; }
-              .signup-page .content .signup-form .field-input .input-box .input-field.lname label,
-              .signup-page .content .login-form .field-input .input-box .input-field.lname label,
-              .login-page .content .signup-form .field-input .input-box .input-field.lname label,
-              .login-page .content .login-form .field-input .input-box .input-field.lname label {
-                padding-left: 20px; }
-            .signup-page .content .signup-form .field-input .input-box .input-field .validate,
-            .signup-page .content .login-form .field-input .input-box .input-field .validate,
-            .login-page .content .signup-form .field-input .input-box .input-field .validate,
-            .login-page .content .login-form .field-input .input-box .input-field .validate {
-              border-bottom: solid 1px #f4f2f2; }
-      .signup-page .content .signup-form .signup-btn,
-      .signup-page .content .signup-form .login-btn,
-      .signup-page .content .login-form .signup-btn,
-      .signup-page .content .login-form .login-btn,
-      .login-page .content .signup-form .signup-btn,
-      .login-page .content .signup-form .login-btn,
-      .login-page .content .login-form .signup-btn,
-      .login-page .content .login-form .login-btn {
-        display: flex;
-        justify-content: flex-end; }
-        .signup-page .content .signup-form .signup-btn span,
-        .signup-page .content .signup-form .login-btn span,
-        .signup-page .content .login-form .signup-btn span,
-        .signup-page .content .login-form .login-btn span,
-        .login-page .content .signup-form .signup-btn span,
-        .login-page .content .signup-form .login-btn span,
-        .login-page .content .login-form .signup-btn span,
-        .login-page .content .login-form .login-btn span {
-          padding: 15px 40px;
-          border-radius: 35px;
-          background-color: #395373;
-          color: #fff; }
-        .login-page .content .login-form span.disabled {
-          background-color: darkGray;
-          cursor: not-allowed;
-        }
-    .signup-page .content .text,
-    .login-page .content .text {
-      text-align: right;
-      max-width: 342px; }
-      .signup-page .content .text h2,
-      .login-page .content .text h2 {
-        color: #395373;
-        font-size: 36px;
-        font-weight: bold;
-        position: relative; }
-        .signup-page .content .text h2::after,
-        .login-page .content .text h2::after {
-          position: absolute;
-          right: 0;
-          content: '';
-          width: 180px;
-          height: 4px;
-          background: #395373;
-          border-radius: 2px;
-          overflow: hidden;
-          bottom: -10px; }
-      .signup-page .content .text p,
-      .login-page .content .text p {
-        color: #666666;
-        font-size: 18px;
-        font-weight: 500;
-        margin-top: 30px;
-        margin-left: 10px; }
-        .signup-page .content .text p span,
-        .login-page .content .text p span {
-          color: #395373; }
-=======
 .signup-page .content .signup-form h3,
 .signup-page .content .login-form h3,
 .login-page .content .signup-form h3,
@@ -691,25 +565,10 @@ table {
 .login-page .content .text p span {
   color: #395373;
 }
->>>>>>> 13b27574d4a7d039fb98b1443c2a4fc62f854b94
 
 /****** Login ********/
-.login-page .logo {
-  padding-top: 80px; }
-
-.login-page .content {
-<<<<<<< HEAD
-  padding: 120px 0; }
-  .login-page .content .login-form .field-input {
-    width: 400px; }
-=======
-  padding: 120px 0;
-  flex-direction: column-reverse;
-}
-
-.login-page .content .text {
-  margin-bottom: 50px;
-  text-align: center;
+.login-page .content .login-form .field-input {
+  width: 400px;
 }
 
 .login-page .content .text h2::after {
@@ -752,7 +611,6 @@ table {
   width: 100%;
 }
 
->>>>>>> 13b27574d4a7d039fb98b1443c2a4fc62f854b94
 .login-page .content .login-form .field-input.verify {
     width: 100%; }
 .login-page .field-input.verify md-select {
@@ -892,9 +750,7 @@ table {
             overflow: hidden;
         }
 
-<<<<<<< HEAD
-/*# sourceMappingURL=custom.css.map */
-=======
+
 .privacy .privacy-content p {
   color: #fff;
   font-size: 14px;
@@ -958,4 +814,3 @@ ul.no-styling {
   padding: 0;
   list-style: none;
 }
->>>>>>> 13b27574d4a7d039fb98b1443c2a4fc62f854b94
