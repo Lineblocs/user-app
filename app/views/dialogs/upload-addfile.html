@@ -1,25 +1,29 @@
-<md-dialog>
+<md-dialog class="card-mode-radius">
       <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Upload File</h2>
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        <md-button class="md-icon-button" ng-click="close()">
+            <md-icon >
+                <i class="mdi mdi-close"></i>
+              </md-icon>
         </md-button>
       </div>
     </md-toolbar>
-    <md-dialog-content>
-      <input type="file" id="uploadFile"/>
+    <md-dialog-content class="padding16">
+        <label for="uploadFile" class="choose-file">
+            <input type="file" id="uploadFile"/>
+        </label>
     </md-dialog-content>
   <md-dialog-actions layout="row">
-    <md-button  class="md-raised md-primary" ng-click="submit()">
+    <md-button  class="md-raised md-primary m0" ng-click="submit()">
       Upload
     </md-button>
 
-    <span flex></span>
-    <md-button ng-click="close()">
+    <!-- <span flex></span> -->
+    <!-- <md-button ng-click="close()">
       Close
-    </md-button>
+    </md-button> -->
   </md-dialog-actions>
-    
+
 </md-dialog>
