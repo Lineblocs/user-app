@@ -960,4 +960,147 @@ ul.benefits {
   .page-content{
     padding-top: 150px;
   }
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-center-between{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.title-text{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.sub-title-text{
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.info-text{
+    color: #7a7a7a;
+    font-size: 14px;
+}
+
+.m-lr-16{
+    margin: 0 16px;
+}
+
+.custom-input{
+    height: 32px;
+    border: 2px solid #dfdcdc40;
+    background: #f5f5f5;
+    padding: 0px 8px;
+}
+.card-radius{
+    border-radius: 8px !important;
+    md-tabs-wrapper{
+        border-radius: 8px 8px 0 0px !important;
+    }
+    md-pagination-wrapper{
+        margin: 0 !important;
+    }
+}
+.billing-container{
+    button{
+        margin: 0;
+        padding: 0;
+        padding: 0px 16px;
+        font-size: 14px;
+        span{
+            @extend .flex-center;
+            md-icon{
+                @extend .flex-center;
+                margin: 0;
+            }
+        }
+    }
+
+    .billing-title-container{
+        display: flex;
+        justify-content: start;
+        margin: 0;
+        margin: 0px 8px 0 8px;
+        border-bottom: solid 2px #cecdcd;
+
+        .title-block{
+            display: flex;
+            align-items: center;
+            h5{
+                margin: 0;
+            }
+            .bill-info{
+                height: auto;
+                margin-left: 8px;
+                height: auto !important;
+            }
+        }
+    }
+
+    .bottom-sheet-demo{
+        height: 350px;
+
+        .data-container{
+            height: 100%;
+
+            .no-card-block{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 100%;
+
+                h5{
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+                button{
+                    margin: 0;
+                    padding: 0;
+                    padding: 0px 16px;
+                    font-size: 14px;
+                    span{
+                        @extend .flex-center;
+                        md-icon{
+                            @extend .flex-center;
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .content-data-block{
+        margin-bottom: 16px;
+        .data-block{
+            @extend .flex-center-between;
+            width: 350px;
+            h5{
+                margin: 0;
+            }
+
+        }
+    }
+
+    .filter-row{
+        display: flex;
+        align-items: center;
+        height: 53px;
+
+        .start-date{
+            @extend .custom-input;
+            border-radius: 4px 0px 0px 4px;
+        }
+
+        .end-date{
+            @extend .custom-input;
+            border-radius: 0px 4px 4px 0px;
+        }
+    }
+}
 }
