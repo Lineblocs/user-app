@@ -70,7 +70,7 @@ p {
 
       .login-btn:after {
         height: 49.2px;
-        clear: both; 
+        clear: both;
         content: '';
         display: block;
         margin: 0;
@@ -339,7 +339,7 @@ table {
         font-weight: 600;
         text-align: center;
  }
-   
+
  .login-page .content .call-system-picker {
      width: 800px;
    }
@@ -774,7 +774,7 @@ table {
 
 /*# sourceMappingURL=custom.css.map */
 
-/* 
+/*
 * custom sidebar styles for dashboard for mobile responsiveness
 */
 /* .sidebar {
@@ -813,4 +813,12 @@ ul.no-styling {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.m-16{
+  margin: 16px !important;
+}
+
+.p-16{
+  padding: 16px !important;
 }
