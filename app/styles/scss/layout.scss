@@ -399,6 +399,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 		width: 200px;
 		position: fixed;
 		bottom:0;
+    z-index: 5;
 		.sidebar-content {
 			/*position: relative;*/
 			overflow-y: auto;
@@ -918,6 +919,47 @@ ul.benefits {
 	width: 800px;
 }
 
+
+// new Css main header block
+.navbar{
+  height: auto !important;
+  min-height: 70px;
+}
+.main-header-block{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .search-section{
+    min-width: 50%;
+    width: calc(100% - 175px);
+    padding: 16px;
+    md-autocomplete{
+      width: 100% !important;
+      margin: 0 !important;
+    }
+  }
+
+  .action-buttons{
+
+  }
+}
+
+@media only screen and (max-width: 670px) {
+  .main-header-block{
+    flex-direction: column;
+    .search-section{
+      width: 100%;
+    }
+    .right{
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .page-content{
+    padding-top: 150px;
+  }
 .flex-center{
     display: flex;
     align-items: center;
@@ -1060,4 +1102,5 @@ ul.benefits {
             border-radius: 0px 4px 4px 0px;
         }
     }
+}
 }

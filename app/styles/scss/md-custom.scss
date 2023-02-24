@@ -127,8 +127,62 @@ md-content::-webkit-scrollbar-thumb:hover {
   align-items: center;
   justify-content: center;
 }
-.add-media-file-block{
+
+.card-mode-radius{
   border-radius: 8px;
+}
+
+.padding16{
+  padding: 16px;
+}
+
+.p0{
+  padding: 0 !important;
+}
+
+.m0{
+  margin: 0 !important;
+}
+
+.choose-file {
+  input[type=file] {
+    width: 350px;
+    max-width: 100%;
+    color: #444;
+    padding: 5px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #555;
+  }
+
+  input[type=file]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: #3f51b5;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+  }
+
+  input[type=file]::file-selector-button:hover {
+    background: #0d45a5;
+  }
+}
+
+
+
+.drop-title {
+  color: #444;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  transition: color .2s ease-in-out;
+}
+
+.add-media-file-block{
+  @extend .card-mode-radius;
   .content-title{
     font-size: 20px;
     font-weight: 600;
