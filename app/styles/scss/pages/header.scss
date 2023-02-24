@@ -8,6 +8,12 @@
     .mobile-header-logo{
         display: none;
     }
+
+}
+@media only screen and (min-width: 670px) {
+    .toggle-mobile{
+        display: none;
+    }
 }
 @media only screen and (max-width: 670px) {
     .header-section-container{
@@ -145,6 +151,8 @@
         top: 0;
         right: 16px;
         top: 16px;
+        display: block;
+
         button{
             background: transparent !important;
             box-shadow: none !important;
