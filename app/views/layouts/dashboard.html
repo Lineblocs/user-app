@@ -1,14 +1,23 @@
-<div ng-show="$shared.hasAuth()" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header ng-show="$shared.SHOW_NAVBAR" class=" navbar shadow">
+<div ng-show="$shared.hasAuth()" class="mdl-layout mdl-js-layout mdl-layout--fixed-header ">
+    <header ng-show="$shared.SHOW_NAVBAR" class=" navbar shadow header-section-container">
         <!-- Hamburger -->
         <!--
 		<button class="c-hamburger c-hamburger--htla is-active" ng-click="extend()">
 			<span>toggle menu</span>
 		</button>
 	-->
-        <div class="responsive-logo">
-            <img width="180" ng-src="{{$shared.getAppLogo()}}" />
+
+        <div class="mobile-header-logo">
+            <img width="180" height="60" ng-src="{{$shared.getAppLogo()}}" />
+            <div class="header-menu-logo">
+                <span ng-click="$shared.showNavbar()" class="menu-icon">
+                    <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-menu"></i>
+                    </md-icon>
+                </span>
+            </div>
         </div>
+
         <div class="left-nav main-header-block">
             <div class="search search-section">
                 <md-autocomplete id="acSearch" flex="" required="" md-input-name="autocompleteField"
@@ -31,8 +40,8 @@
             </div>
 
             <nav class="right">
-                <ul>
-                    <li>
+                <ul class="mobile-flex">
+                    <li class="mobile-flex">
                 <md-menu md-position-mode="target-right target">
                     <div class="nav-item">
                         <md-button aria-label="Open demo menu" class="md-raised md-primary md-small"
@@ -125,6 +134,11 @@
             <div class="toggle" ng-show="!$shared.COLLAPSED_MODE && $shared.state.name !== 'flow-editor'">
 			    <md-button aria-label="Open demo menu" class="md-icon-button md-raised md-primary toggle-btn" ng-click="$shared.collapseNavbarPadding()">
                     <i class="mdi mdi-chevron-left" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+            </div>
+            <div class="toggle-mobile" ng-show="!$shared.COLLAPSED_MODE && $shared.state.name !== 'flow-editor'">
+			    <md-button aria-label="Open demo menu" class="md-icon-button md-raised md-primary toggle-btn" ng-click="$shared.collapseNavbarPadding()">
+                    <i class="mdi mdi-keyboard-backspace" ng-class="{'active': showingSubNav=='ui'}"></i>
                     </md-button>
             </div>
             <div class="toggle" ng-show="$shared.COLLAPSED_MODE && $shared.state.name !== 'flow-editor'">
