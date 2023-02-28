@@ -28,7 +28,7 @@ function redirectUser() {
 		Idle.watch();
 		var hash = window.location.hash.substr(1);
 		var query = URI(hash).query(true);
-		if ( query.next ) {	
+		if ( query.next ) {
 				window.location.replace("#/" + query.next);
 				return;
 		}
@@ -86,6 +86,7 @@ function redirectUser() {
 			$scope.isLoading = true;
 			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
 				var token = res.data;
+        $shared.showNavbar();
 				finishLogin(token, res.data.workspace);
 			}).catch(function() {
 				$scope.isLoading = false;
