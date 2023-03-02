@@ -346,6 +346,11 @@ table {
     padding: 10%;
 }
 
+.login-page-content .login-block {
+  width: 100%;
+  max-width: 400px;
+}
+
 
 
 .signup-page,
@@ -622,7 +627,7 @@ table {
 }
 
 .login-page .content .login-form {
-  width: 316px;
+  /* width: 316px; */
 }
 
 .login-page .content .login-form .login-btn span {

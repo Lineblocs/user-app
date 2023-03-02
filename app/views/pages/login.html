@@ -19,7 +19,7 @@
         </div>
 
         <div class="content login-page-content">
-            <div ng-show="step===1">
+            <div ng-show="step===1" class="login-block">
 
                 <form class="login-form" ng-submit="submit1($event, login1Form)" name="login1Form" novalidate>
                     <div class="top-heading">
@@ -112,16 +112,8 @@
                     <div layout="row" layout-align="center">
                         <small>OR</small>
                     </div>
-                    <div layout="row" layout-align="center">
-
-                        <div>
-
-
-
-                            <div ng-non-bindable>
-                                <div id="gSignIn"></div>
-                            </div>
-                        </div>
+                    <div layout="row" layout-align="center" ng-non-bindable>
+                        <div id="gSignIn"></div>
                     </div>
                 </form>
             </div>
