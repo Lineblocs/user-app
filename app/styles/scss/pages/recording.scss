@@ -1,0 +1,63 @@
+.recording-screen-block{
+    .search{
+        label{
+            padding-left: 12px;
+        }
+        input{
+            padding: 12px;
+        }
+    }
+
+    .filte-block{
+      display: flex;
+      justify-content: space-between;
+      .tag-block{
+        width: 50%;
+        padding-right: 10%;
+      }
+
+      .from-to-text{
+        margin-right: 4px;
+        input{
+          width: 100px;
+        }
+      }
+
+      md-input-container{
+        display: flex;
+        label{
+          padding-left: 10px;
+        }
+      }
+    }
+    .filter-row{
+      display: flex;
+      align-items: center;
+      height: 53px;
+
+      .start-date{
+          @extend .custom-input;
+          border-radius: 4px 0px 0px 4px;
+      }
+
+      .end-date{
+          @extend .custom-input;
+          border-radius: 0px 4px 4px 0px;
+      }
+
+      button{
+        margin: 0;
+        padding: 0;
+        padding: 0px 16px;
+        font-size: 14px;
+        span{
+            @extend .flex-center;
+            md-icon{
+                @extend .flex-center;
+                margin: 0;
+            }
+        }
+    }
+  }
+
+}

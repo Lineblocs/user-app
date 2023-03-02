@@ -4,7 +4,7 @@
 *:focus {
   outline: none;
   box-shadow: none; }
-
+  
 .clearfix:after {
   content: "";
   display: table;
@@ -864,4 +864,12 @@ ul.no-styling {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.m-16{
+  margin: 16px !important;
+}
+
+.p-16{
+  padding: 16px !important;
 }
