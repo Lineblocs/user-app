@@ -4,7 +4,7 @@
 *:focus {
   outline: none;
   box-shadow: none; }
-  
+
 .clearfix:after {
   content: "";
   display: table;
@@ -872,4 +872,24 @@ ul.no-styling {
 
 .p-16{
   padding: 16px !important;
+}
+
+.microsoft-login-btn {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+  border-radius: 50px;
+}
+.microsoft-login-btn .login-button-custom {
+  flex-grow: 1;
+}
+
+.microsoft-login-btn .icon-block {
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

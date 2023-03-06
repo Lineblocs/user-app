@@ -28,7 +28,7 @@ function redirectUser() {
 		Idle.watch();
 		var hash = window.location.hash.substr(1);
 		var query = URI(hash).query(true);
-		if ( query.next ) {	
+		if ( query.next ) {
 				window.location.replace("#/" + query.next);
 				return;
 		}
@@ -53,6 +53,65 @@ function redirectUser() {
 					$state.go('dashboard-user-welcome', {});
 				});
 	}
+
+
+  // Microsoft login ===========================================================
+  $scope.loginWithMicrosoft = function () {
+
+    const msalConfig = {
+      auth: {
+          // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
+          clientId: "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
+          authority: "https://login.microsoftonline.com/common",
+          // Full redirect URL, in form of http://localhost:3000
+          redirectUri: "http://localhost:9000/",
+      },
+      cache: {
+          cacheLocation: "sessionStorage", // This configures where your cache will be stored
+          storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+      },
+      system: {
+          loggerOptions: {
+              loggerCallback: (level, message, containsPii) => {
+                console.log("loggerCallback", level);
+                  if (containsPii) {
+                      return;
+                  }
+                  switch (level) {
+                      case msal?.LogLevel?.Error:
+                          console.error(message);
+                          return;
+                      case msal?.LogLevel?.Info:
+                          console.info(message);
+                          return;
+                      case msal?.LogLevel?.Verbose:
+                          console.debug(message);
+                          return;
+                      case msal?.LogLevel?.Warning:
+                          console.warn(message);
+                          return;
+                  }
+              }
+          }
+      }
+    };
+
+    const myMSALObj = new msal.PublicClientApplication(msalConfig);
+    myMSALObj.loginPopup({scopes: ["User.Read"]}).then(handleResponse)
+      .catch(error => {
+          console.error(error);
+      });
+  }
+
+  function handleResponse(response) {
+    console.log("response ===>", response)
+    if (response !== null) return;
+    username = response.account.username;
+    showWelcomeMessage(username);
+  }
+
+
     $scope.submit1 = function($event, loginForm) {
 		$scope.step = 2;
 	}
