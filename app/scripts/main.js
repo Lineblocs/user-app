@@ -8361,10 +8361,13 @@ function redirectUser() {
   }
 
   function handleResponse(response) {
-    console.log("response ===>", response)
-    if (response !== null) return;
-    username = response.account.username;
-    showWelcomeMessage(username);
+    if (response === null) return;
+    const loginOption = {
+      provider    : 'microsoft',
+      id_token    : response.idToken,
+      access_token: response.accessToken,
+    };
+    $scope.startThirdPartyLogin( response.account.userName, response.account.name, '', '', loginOption);
   }
 
 
@@ -8419,13 +8422,20 @@ function redirectUser() {
 		$state.go('forgot');
 	}
 
-	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar) {
+  // Sample object for login option
+  // const loginOption = {
+  //   provider: 'google',
+  //   id_token,
+  //   access_token,
+  // }
+	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar, loginOption) {
 		var data = {};
 		data['email'] = email;
 		data['first_name'] = firstname;
 		data['last_name'] = lastname;
 		data['avatar'] = avatar;
 		data['challenge'] = $scope.challenge;
+    data['login_option'] = loginOption;
 			$shared.changingPage = true;
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
 			$timeout(function() {
@@ -8451,11 +8461,11 @@ function redirectUser() {
         'height': 50,
         'longtitle': true,
         'theme': 'dark',
-		'onsuccess': function(googleUser) {
+		'onsuccess': function(googleLoginResponse) {
 				if (!clickedGoogSignIn) {
 					return;
 				}
-				var profile = googleUser.getBasicProfile();
+				var profile = googleLoginResponse.getBasicProfile();
 				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
 				console.log('Name: ' + profile.getName());
 				console.log('Image URL: ' + profile.getImageUrl());
@@ -8464,7 +8474,13 @@ function redirectUser() {
 				var fullName = profile.getName().split(' '),
     				firstName = fullName[0],
     				lastName = fullName[fullName.length - 1];
-				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
+        const { id_token, access_token } = googleLoginResponse.getAuthResponse();
+        const loginOption = {
+          provider: 'google',
+          id_token,
+          access_token,
+        }
+				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl(), loginOption);
 			},
 			onerror: function(err) {
 			console.log('Google signIn2.render button err: ' + err)
