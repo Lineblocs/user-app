@@ -4,7 +4,7 @@
 *:focus {
   outline: none;
   box-shadow: none; }
-  
+
 .clearfix:after {
   content: "";
   display: table;
@@ -346,12 +346,10 @@ table {
     padding: 10%;
 }
 
-.login-page-content .login-block {
+.login-page-content .login-block, .login-page-content .password-reset-form {
   width: 100%;
   max-width: 400px;
 }
-
-
 
 .signup-page,
 .login-page {
@@ -565,7 +563,7 @@ table {
 .login-page .content .login-form .signup-btn span,
 .login-page .content .login-form .login-btn span {
   width: 100%;
-  padding: 15px 40px;
+  /* padding: 15px 40px; */
   border-radius: 35px;
   background-color: #395373;
   color: #fff;
@@ -630,21 +628,11 @@ table {
   /* width: 316px; */
 }
 
-.login-page .content .login-form .login-btn span {
-  padding: 15px 70px;
-}
 .login-page .content .login-form .login-btn {
   display: flex;
   justify-content: flex-start;
 }
 
-.login-page .content .login-form .login-btn span {
-  padding: 15px 40px;
-}
-
-.login-page .content .password-reset-form .login-btn span {
-  padding: 15px 40px !important;
-}
 .login-btn .login-button-custom {
   width: 100%;
   /*padding: 15px 70px !important;*/
