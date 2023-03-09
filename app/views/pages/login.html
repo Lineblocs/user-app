@@ -115,6 +115,12 @@
                     <div layout="row" layout-align="center" ng-non-bindable>
                         <div id="gSignIn"></div>
                     </div>
+                    <button type="button" ng-click="loginWithMicrosoft()" class="microsoft-login-btn">
+                        <div class="icon-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11.55 21H3v-8.55h8.55V21zM21 21h-8.55v-8.55H21V21zm-9.45-9.45H3V3h8.55v8.55zm9.45 0h-8.55V3H21v8.55z"></path></svg>
+                        </div>
+                        <div class="login-button-custom" style="padding:0;">Sign in with Microsoft</div>
+                    </button>
                 </form>
             </div>
             <div ng-show="step===2" class="login-block">
