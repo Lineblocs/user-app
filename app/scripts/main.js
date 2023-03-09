@@ -8280,6 +8280,33 @@ angular.module('Lineblocs')
 	$scope.step = 1;
 var clickedGoogSignIn = false;
 
+const code = $location.search().code;
+if (code) {
+  fetch('https://appleid.apple.com/auth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code: code,
+      client_id: 'your-client-id',
+      client_secret: 'your-client-secret',
+      redirect_uri: 'https://your-app.com/callback',
+    }),
+  }).then(response => response.json()).then(data => {
+    const loginOption = {
+      provider    : 'apple',
+      id_token    : data.access_token,
+      access_token: data.access_token,
+    };
+    $scope.startThirdPartyLogin( user.email, user.displayName, '', '', loginOption);
+  })
+  .catch(error => {
+    // Handle the error
+  });
+}
+
 function redirectUser() {
 		Idle.watch();
 		var hash = window.location.hash.substr(1);
@@ -8309,6 +8336,12 @@ function redirectUser() {
 					$state.go('dashboard-user-welcome', {});
 				});
 	}
+
+  // Apple Login ==============================================================
+  $scope.loginWithApple = function () {
+    console.log("loginWithApple", AppleID);
+    AppleID.auth.signIn();
+  }
 
 
   // Microsoft login ===========================================================
