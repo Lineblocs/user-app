@@ -301,10 +301,61 @@ table {
       color: #666666; }
 
 /***** Signup ******/
+
+
+@media only screen and (max-width: 760px) {
+  .login-page-block {
+    height: 100vh;
+    background-size: 100% 100%;
+  }
+  .login-page-content{
+    justify-content: center !important;
+  }
+  .login-text{
+    display: none;
+  }
+}
+
+.login-page-block{
+  background: url(../images/login-bg.png);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  /* height: 100vh; */
+  min-height: 650px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-size: 100% 100%;
+}
+
+.logo-link{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  min-height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-page-content{
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10%;
+}
+
+.login-page-content .login-block, .login-page-content .password-reset-form {
+  width: 100%;
+  max-width: 400px;
+}
+
 .signup-page,
 .login-page {
 
-  background-image: linear-gradient(235deg, #f7f7f7, #ffffff 68%, #ffffff); }
+  /* background-image: linear-gradient(235deg, #f7f7f7, #ffffff 68%, #ffffff);  */
+}
   button {
     border: 0;
      background: transparent;
@@ -312,16 +363,14 @@ table {
   .signup-page .logo,
   .login-page .logo {
     text-align: center;
-    padding-top: 40px; }
+  }
   .signup-page .content,
   .login-page .content {
-    padding: 60px 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: url(../images/login-bg.png);
-    background-repeat: no-repeat;
-    background-position: bottom; }
+
+    /* background: url(../images/login-bg.png); */
+    /* background-repeat: no-repeat; */
+    /* background-position: bottom; */
+   }
     .signup-page .content .signup-form,
     .signup-page .content .login-form,
     .login-page .content .signup-form,
@@ -514,7 +563,7 @@ table {
 .login-page .content .login-form .signup-btn span,
 .login-page .content .login-form .login-btn span {
   width: 100%;
-  padding: 15px 40px;
+  /* padding: 15px 40px; */
   border-radius: 35px;
   background-color: #395373;
   color: #fff;
@@ -576,24 +625,14 @@ table {
 }
 
 .login-page .content .login-form {
-  width: 316px;
+  /* width: 316px; */
 }
 
-.login-page .content .login-form .login-btn span {
-  padding: 15px 70px;
-}
 .login-page .content .login-form .login-btn {
   display: flex;
   justify-content: flex-start;
 }
 
-.login-page .content .login-form .login-btn span {
-  padding: 15px 40px;
-}
-
-.login-page .content .password-reset-form .login-btn span {
-  padding: 15px 40px !important;
-}
 .login-btn .login-button-custom {
   width: 100%;
   /*padding: 15px 70px !important;*/
@@ -821,4 +860,24 @@ ul.no-styling {
 
 .p-16{
   padding: 16px !important;
+}
+
+.microsoft-login-btn {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+  border-radius: 50px;
+}
+.microsoft-login-btn .login-button-custom {
+  flex-grow: 1;
+}
+
+.microsoft-login-btn .icon-block {
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

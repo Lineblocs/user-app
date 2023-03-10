@@ -8280,11 +8280,38 @@ angular.module('Lineblocs')
 	$scope.step = 1;
 var clickedGoogSignIn = false;
 
+const code = $location.search().code;
+if (code) {
+  fetch('https://appleid.apple.com/auth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code: code,
+      client_id: 'your-client-id',
+      client_secret: 'your-client-secret',
+      redirect_uri: 'https://your-app.com/callback',
+    }),
+  }).then(response => response.json()).then(data => {
+    const loginOption = {
+      provider    : 'apple',
+      id_token    : data.access_token,
+      access_token: data.access_token,
+    };
+    $scope.startThirdPartyLogin( user.email, user.displayName, '', '', loginOption);
+  })
+  .catch(error => {
+    // Handle the error
+  });
+}
+
 function redirectUser() {
 		Idle.watch();
 		var hash = window.location.hash.substr(1);
 		var query = URI(hash).query(true);
-		if ( query.next ) {	
+		if ( query.next ) {
 				window.location.replace("#/" + query.next);
 				return;
 		}
@@ -8309,6 +8336,74 @@ function redirectUser() {
 					$state.go('dashboard-user-welcome', {});
 				});
 	}
+
+  // Apple Login ==============================================================
+  $scope.loginWithApple = function () {
+    console.log("loginWithApple", AppleID);
+    AppleID.auth.signIn();
+  }
+
+
+  // Microsoft login ===========================================================
+  $scope.loginWithMicrosoft = function () {
+
+    const msalConfig = {
+      auth: {
+          // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
+          clientId: "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
+          authority: "https://login.microsoftonline.com/common",
+          // Full redirect URL, in form of http://localhost:3000
+          redirectUri: "http://localhost:9000/",
+      },
+      cache: {
+          cacheLocation: "sessionStorage", // This configures where your cache will be stored
+          storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+      },
+      system: {
+          loggerOptions: {
+              loggerCallback: (level, message, containsPii) => {
+                console.log("loggerCallback", level);
+                  if (containsPii) {
+                      return;
+                  }
+                  switch (level) {
+                      case msal?.LogLevel?.Error:
+                          console.error(message);
+                          return;
+                      case msal?.LogLevel?.Info:
+                          console.info(message);
+                          return;
+                      case msal?.LogLevel?.Verbose:
+                          console.debug(message);
+                          return;
+                      case msal?.LogLevel?.Warning:
+                          console.warn(message);
+                          return;
+                  }
+              }
+          }
+      }
+    };
+
+    const myMSALObj = new msal.PublicClientApplication(msalConfig);
+    myMSALObj.loginPopup({scopes: ["User.Read"]}).then(handleResponse)
+      .catch(error => {
+          console.error(error);
+      });
+  }
+
+  function handleResponse(response) {
+    if (response === null) return;
+    const loginOption = {
+      provider    : 'microsoft',
+      id_token    : response.idToken,
+      access_token: response.accessToken,
+    };
+    $scope.startThirdPartyLogin( response.account.userName, response.account.name, '', '', loginOption);
+  }
+
+
     $scope.submit1 = function($event, loginForm) {
 		$scope.step = 2;
 	}
@@ -8360,13 +8455,20 @@ function redirectUser() {
 		$state.go('forgot');
 	}
 
-	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar) {
+  // Sample object for login option
+  // const loginOption = {
+  //   provider: 'google',
+  //   id_token,
+  //   access_token,
+  // }
+	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar, loginOption) {
 		var data = {};
 		data['email'] = email;
 		data['first_name'] = firstname;
 		data['last_name'] = lastname;
 		data['avatar'] = avatar;
 		data['challenge'] = $scope.challenge;
+    data['login_option'] = loginOption;
 			$shared.changingPage = true;
 		Backend.post("/thirdPartyLogin", data).then(function( res ) {
 			$timeout(function() {
@@ -8392,11 +8494,11 @@ function redirectUser() {
         'height': 50,
         'longtitle': true,
         'theme': 'dark',
-		'onsuccess': function(googleUser) {
+		'onsuccess': function(googleLoginResponse) {
 				if (!clickedGoogSignIn) {
 					return;
 				}
-				var profile = googleUser.getBasicProfile();
+				var profile = googleLoginResponse.getBasicProfile();
 				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
 				console.log('Name: ' + profile.getName());
 				console.log('Image URL: ' + profile.getImageUrl());
@@ -8405,7 +8507,13 @@ function redirectUser() {
 				var fullName = profile.getName().split(' '),
     				firstName = fullName[0],
     				lastName = fullName[fullName.length - 1];
-				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl() );
+        const { id_token, access_token } = googleLoginResponse.getAuthResponse();
+        const loginOption = {
+          provider: 'google',
+          id_token,
+          access_token,
+        }
+				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl(), loginOption);
 			},
 			onerror: function(err) {
 			console.log('Google signIn2.render button err: ' + err)

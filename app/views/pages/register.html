@@ -20,9 +20,9 @@
 
     </div>
     <div ng-show="!shouldSplash">
-        <div class="login-page">
+        <div class="login-page login-page-block">
 
-            <a href="{{$shared.getHomeLink()}}">
+            <a href="{{$shared.getHomeLink()}}" class="logo-link">
                 <div class="logo">
                     <img src="{{$shared.getAltAppLogo()}}" />
                 </div>
@@ -39,7 +39,7 @@
                     <p>Please wait..</p>
                 </div>
             </center>
-            <div class="content">
+            <div class="content login-page-content">
                 <div ng-show="step===1">
 
                     <form class="login-form" ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
@@ -496,7 +496,7 @@
                 </div>
 
 
-                <div class="text">
+                <div class="text login-text">
 
                     <h2>Be Connected!</h2>
                     <p>Register for an account to start using <span>lineblocs!</span></p>
