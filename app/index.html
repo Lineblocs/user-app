@@ -52,8 +52,14 @@
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
+
+  <!-- Microsoft Login Script -->
   <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.0.0-beta.0/js/msal-browser.js" integrity=
 "sha384-r7Qxfs6PYHyfoBR6zG62DGzptfLBxnREThAlcJyEfzJ4dq5rqExc1Xj3TPFE/9TH" crossorigin="anonymous"></script>
+
+    <!-- Apple login script -->
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
   <script>
       // some global settings used throughout the app
       var DEPLOYMENT_DOMAIN = 'CONFIGURED_DEPLOYMENT_DOMAIN';
@@ -81,6 +87,15 @@
         var shared = angular.element("body").scope().$shared;
         shared.initialLoaded = true;
 
+  </script>
+
+  <script>
+    AppleID.auth.init({
+        clientId: 'your-client-id',
+        scope: 'email',
+        redirectURI: 'http://localhost:9000/',
+        usePopup: true, // Optional parameter to open the sign-in window as a popup
+    });
   </script>
   </body>
 </html>
