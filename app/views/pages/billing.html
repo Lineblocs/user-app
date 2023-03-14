@@ -504,8 +504,12 @@
                     </div>
                 </div>
                 <br />
-                <md-button ng-click="saveSettings($event)" class="md-raised md-primary no-margin-sides">Save Settings
-                </md-button>
+                <div>
+                    <md-button ng-click="saveSettings($event)" class="md-raised md-primary no-margin-sides">Save Settings
+                    </md-button>
+                    <md-button ng-click="cancelSubscription($event)" class="md-raised md-danger no-margin-sides">Cancel Subscription
+                    </md-button>
+                </div>
             </md-content>
         </md-tab>
         </md-tabs>

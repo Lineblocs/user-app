@@ -2550,7 +2550,7 @@ angular.module('Lineblocs')
 
 	  $scope.triggerTypes = ['Balance'];
       $scope.close = function() {
-        $mdDialog.hide(); 
+        $mdDialog.hide();
 	  }
 	  $scope.save = function() {
 		var data = angular.copy($scope.data);
@@ -2778,6 +2778,22 @@ angular.module('Lineblocs')
 			});
 	}
 
+  $scope.cancelSubscription = function() {
+    const confirmation = window.confirm("Are you sure you want to cancel your subscription?");
+    if (confirmation) {
+      $shared.isCreateLoading =true;
+      Backend.post("/cancelSubscription").then(function(res) {
+        $mdToast.show(
+        $mdToast.simple()
+          .textContent('Subscription cancelled')
+          .position("top right")
+          .hideDelay(3000)
+        );
+        $shared.endIsCreateLoading();
+        });
+    }
+  }
+
 	function billHistory() {
 		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
 	}
@@ -2851,7 +2867,7 @@ angular.module('Lineblocs')
 	$scope.createTrigger = function($event) {
 		$mdDialog.show({
 		controller: TriggerDialogController,
-		templateUrl: 'views/dialogs/create-trigger.html', 
+		templateUrl: 'views/dialogs/create-trigger.html',
 		parent: angular.element(document.body),
 		targetEvent: $event,
 		clickOutsideToClose:true,
