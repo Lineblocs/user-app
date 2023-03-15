@@ -1,0 +1,20 @@
+<div class="cancel-subscription-block">
+    <div class="cancel-subscription-header">
+        We're sorry to see you go!
+    </div>
+    <div class="cancel-subscription-description">
+        Your monthly subscription will be cancelled. You will still have access to your account.
+    </div>
+    <div layout="row" class="cancel-subscription-note">
+        <i class="mdi mdi-information"></i>
+        <div class="info-cancel">if you cancel your membership you will lose access to any premium features you purchased. Also, any
+        billing fees related to your current membership will be accrued until {1st_day_of_next_month}. For full details
+        on billing cancellation, please refer to our guide:
+        <a href='https://lineblocs.com/resources/billing-and-pricing/cancelling-memberships'
+            target="_blank">https://lineblocs.com/resources/billing-and-pricing/cancelling-memberships</a></div>
+    </div>
+    <div class="confirm-cancel">
+        <md-button ng-click="confirm(false)" class="md-raised">Dismiss</md-button>
+        <md-button ng-click="confirm(true)" class="md-raised md-warn no-margin-sides confirm-button">Confirm Cancellation</md-button>
+    </div>
+</div>

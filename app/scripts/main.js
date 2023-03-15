@@ -2778,20 +2778,36 @@ angular.module('Lineblocs')
 			});
 	}
 
-  $scope.cancelSubscription = function() {
-    const confirmation = window.confirm("Are you sure you want to cancel your subscription?");
-    if (confirmation) {
-      $shared.isCreateLoading =true;
-      Backend.post("/cancelSubscription").then(function(res) {
-        $mdToast.show(
-        $mdToast.simple()
-          .textContent('Subscription cancelled')
-          .position("top right")
-          .hideDelay(3000)
-        );
-        $shared.endIsCreateLoading();
-        });
+
+    function CancelSubscriptionController($scope, $mdDialog, $shared) {
+      $scope.confirm = function (event) {
+        $mdDialog.hide(event);
+      }
     }
+
+  $scope.cancelSubscription = function($event) {
+
+    $mdDialog.show({
+      controller: CancelSubscriptionController,
+      templateUrl: 'views/pages/subscription.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope
+    }).then(function(confirmation) {
+      if (confirmation) {
+        $shared.isCreateLoading =true;
+        Backend.post("/billing/discontinue").then(function(res) {
+            $mdToast.show(
+            $mdToast.simple()
+              .textContent('Subscription cancelled')
+              .position("top right")
+              .hideDelay(3000)
+            );
+            $shared.endIsCreateLoading();
+        });
+      }
+    })
   }
 
 	function billHistory() {
