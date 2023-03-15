@@ -1,0 +1,11 @@
+version: "3"
+services:
+  app:
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      DEPLOYMENT_DOMAIN: lineblocs.com
+    ports:
+      - "9000:9000"

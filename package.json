@@ -5,7 +5,8 @@
   },
   "scripts": {
     "test": "gulp test",
-    "start": "gulp compress-css && gulp scripts && gulp compress-js && gulp serve"
+    "start": "gulp compress-css && gulp scripts && gulp compress-js && gulp serve",
+    "docker": "docker-compose up"
   },
   "devDependencies": {
     "apache-server-configs": "^2.11.0",
