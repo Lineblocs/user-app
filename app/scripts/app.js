@@ -99,7 +99,7 @@ if (check1 || check2) {
 function createUrl(path) {
     return baseUrl + path;
 }
-        
+
 function generatePassword() {
     var length = 32,
         charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -157,7 +157,7 @@ angular
                 // do something on success
                 var token = localStorage.getItem("AUTH");
                 if (token) {
-                    config.headers['Authorization'] = getJWTToken(); 
+                    config.headers['Authorization'] = getJWTToken();
                 }
                 var workspace = localStorage.getItem("WORKSPACE");
                 if (workspace) {
@@ -181,7 +181,7 @@ angular
         factory.title = baseTitle;
         factory.FLOW_EDITOR_URL = getEditorPath();
         factory.SHOW_NAVBAR = true;
-        factory.PAGE_CONTENT_NO_PADDING = false; 
+        factory.PAGE_CONTENT_NO_PADDING = false;
         factory.isLoading = true;
         factory.currentWorkspace = "";
         factory.billingCountries = [
@@ -202,7 +202,7 @@ angular
       ];
   factory.acSearch = {
       isDisabled: false,
-      noCache:true, 
+      noCache:true,
       selectedItem: null,
   };
         factory.billingPackages = ['gold', 'silver', 'bronze'];
@@ -737,12 +737,12 @@ return changed;
             });
             info.push({
                 "id": "manage_extensions",
-                "name": "Manage Extensions", 
+                "name": "Manage Extensions",
                 "info": "Allow this user to create, read, update or delete other extensions in your workspace"
             });
             info.push({
                 "id": "create_extension",
-                "name": "Create Extension", 
+                "name": "Create Extension",
                 "info": "Allow this user to create an extension"
             });
              info.push({
@@ -1146,7 +1146,7 @@ if (checked.length === 0) {
         }
         factory.changeScope = function( obj, key ) {
             factory.settings.scope = {
-                obj: obj, 
+                obj: obj,
                 key: key
             }
         }
@@ -1216,7 +1216,7 @@ if (checked.length === 0) {
          $httpProvider.interceptors.push('JWTHttpInterceptor');
       //  $locationProvider.html5Mode(true);
     }])
-      
+
     .config(function(IdleProvider, KeepaliveProvider) {
         IdleProvider.idle(900); // 15 min
         IdleProvider.timeout(60);
@@ -1227,7 +1227,7 @@ if (checked.length === 0) {
             url: createUrl('/jwt/heartbeat'),
             headers: {
                 "Authorization": getJWTToken
-            } 
+            }
         }); // URL that makes sure session is alive
         */
     })
@@ -1237,7 +1237,7 @@ if (checked.length === 0) {
           suffix: '.json'
         });
         $translateProvider.useSanitizeValueStrategy(null);
-        $translateProvider.preferredLanguage('en');       
+        $translateProvider.preferredLanguage('en');
     })
 
     .config(function($stateProvider, $urlRouterProvider) {
@@ -1392,14 +1392,14 @@ var regParams = {
         controller: 'BuyNumbersCtrl'
     })
     .state('ports', {
-        url: '/dids/ports?page&search', 
+        url: '/dids/ports?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/did/ports/numbers.html',
         controller: 'PortNumbersCtrl',
         params:  listPageParams
     })
     .state('port-create', {
-        url: '/dids/ports/create', 
+        url: '/dids/ports/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/did/ports/create-port.html',
         controller: 'CreatePortCtrl'
@@ -1711,27 +1711,27 @@ var regParams = {
         controller: 'PhoneIndividualSettingsModifyCategoryCtrl'
     })
     .state('phones-deploy-config', {
-        url: '/provision/deploy', 
+        url: '/provision/deploy',
         parent: 'dashboard',
         templateUrl: 'views/pages/phones/deploy.html',
         controller: 'PhoneDeployCtrl'
     })
 
     .state('byo-carriers', {
-        url: '/byo/carriers?page&search', 
+        url: '/byo/carriers?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/byo/carriers.html',
         controller: 'BYOCarriersCtrl',
         params:  listPageParams
     })
     .state('byo-carrier-create', {
-        url: '/byo/carrier/create', 
+        url: '/byo/carrier/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/byo/carrier-create.html',
         controller: 'BYOCarrierCreateCtrl'
     })
     .state('byo-carrier-edit', {
-        url: '/byo/carrier/{carrierId}/edit', 
+        url: '/byo/carrier/{carrierId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/byo/carrier-edit.html',
         controller: 'BYOCarrierEditCtrl'
@@ -1756,20 +1756,20 @@ var regParams = {
         controller: 'BYODIDNumberEditCtrl'
     })
     .state('hosted-trunks', {
-        url: '/hosted-trunks/?page&search', 
+        url: '/hosted-trunks/?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/trunks/trunks.html',
         controller: 'HostedTrunksCtrl',
         params:  listPageParams
     })
     .state('hosted-trunks-create', {
-        url: '/hosted-trunks/create', 
+        url: '/hosted-trunks/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/trunks/trunk-create.html',
         controller: 'HostedTrunksCreateCtrl'
     })
     .state('hosted-trunks-edit', {
-        url: '/hosted-trunks/{trunkId}/edit', 
+        url: '/hosted-trunks/{trunkId}/edit',
         parent: 'dashboard',
         templateUrl: 'views/pages/trunks/trunk-edit.html',
         controller: 'HostedTrunksEditCtrl'
@@ -1785,14 +1785,14 @@ var regParams = {
 }).run(function($rootScope, $shared, $state, Backend) {
 
       //Idle.watch();
-    $rootScope.$on('IdleStart', function() { 
-        /* Display modal warning or sth */ 
+    $rootScope.$on('IdleStart', function() {
+        /* Display modal warning or sth */
     });
-    $rootScope.$on('IdleTimeout', function() { 
-        /* Logout user */ 
+    $rootScope.$on('IdleTimeout', function() {
+        /* Logout user */
         $shared.doLogout();
     });
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         // do something
         console.log("state is changing ", arguments);
         $shared.state = toState;
@@ -1845,7 +1845,28 @@ var regParams = {
             var data = res.data;
                 $shared.customizations = data['customizations'];
             console.log('customizations are ', $shared.customizations);
+          addSocialLoginScript();
     });
+
+    function addSocialLoginScript() {
+      if ($shared.customizations.enable_msft_signin) addScript('https://alcdn.msauth.net/browser/2.17.0/js/msal-browser.min.js');
+      if ($shared.customizations.enable_apple_signin) {
+        addScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js');
+        setTimeout(function() {
+          appleSignInInit();
+        }, 1000)
+      }
+      if ($shared.customizations.enable_google_signin) addScript('https://apis.google.com/js/platform.js');
+    }
+
+    function appleSignInInit() {
+      AppleID.auth.init({
+        clientId: $shared.customizations.apple_signin_client_id,
+        scope: 'email',
+        redirectURI: 'http://localhost:9000/',
+        usePopup: true, // Optional parameter to open the sign-in window as a popup
+      });
+    }
 
 });
 

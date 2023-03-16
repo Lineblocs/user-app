@@ -94,7 +94,7 @@ function redirectUser() {
     const msalConfig = {
       auth: {
           // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
-          clientId: "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          clientId: $shared.customizations.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
           // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
           authority: "https://login.microsoftonline.com/common",
           // Full redirect URL, in form of http://localhost:3000
