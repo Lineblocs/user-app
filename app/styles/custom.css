@@ -881,3 +881,48 @@ ul.no-styling {
   align-items: center;
   justify-content: center;
 }
+
+.cancel-subscription-block {
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.cancel-subscription-block .cancel-subscription-note {
+  background-color: #3a53732b;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.cancel-subscription-block .cancel-subscription-header {
+  font-size: 20px;
+  padding: 0px 0px 20px;
+}
+
+.cancel-subscription-block .cancel-subscription-description {
+  font-size: 14px;
+  padding: 0px 0px 20px;
+}
+
+.confirm-cancel .confirm-button{
+  padding: 0px 10px 0px 10px;
+}
+
+.delete-subscription{
+  padding: 0px 4px 0px 0px;
+  font-size: 18px;
+}
+
+.cancel-subscription-block .confirm-cancel{
+  padding: 10px 0px 0px;
+  text-align: right;
+}
+
+.cancel-subscription-block .cancel-subscription-note .info-cancel{
+  padding: 0px 0px 0px 6px;
+}
+
+span.spacer {
+  flex: 1 1 auto;
+}

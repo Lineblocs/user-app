@@ -9,8 +9,8 @@
         <div class="title-block">
             <h5>Plan:</h5>
             <div class="bill-info">
-            <strong>{{$shared.planInfo.nice_name}}</strong>
-            <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+                <strong>{{$shared.planInfo.nice_name}}</strong>
+                <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
             </div>
         </div>
     </div>
@@ -23,6 +23,8 @@
             <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
             </div>
         </div>
+        <span class="spacer"></span>
+        <md-button layout="row" ng-click="cancelSubscription($event)" class="md-raised md-warn no-margin-sides"><i class="mdi mdi-delete-forever delete-subscription"></i>Cancel Subscription</md-button>
     </div>
 
     <md-card md-theme="'default'"" md-theme-watch class="card-radius">
