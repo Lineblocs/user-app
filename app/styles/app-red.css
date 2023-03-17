@@ -347,7 +347,8 @@ div.scroll::-webkit-scrollbar-thumb:hover {
 .extended .sidebar {
   width: 200px;
   position: fixed;
-  bottom: 0; }
+  bottom: 0;
+  z-index: 5; }
   .extended .sidebar .sidebar-content {
     /*position: relative;*/
     overflow-y: auto;
@@ -497,7 +498,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {
 		}
 		.navbar {
 			margin-right: 0;
-		}		
+		}
 		.page-content {
 		    padding-right: 15px;
 		}
@@ -751,6 +752,132 @@ ul.benefits {
 .setup-flow-box {
   width: 800px; }
 
+.flex-center, .billing-container button span, .billing-container button span md-icon, .billing-container .bottom-sheet-demo .data-container .no-card-block button span, .billing-container .bottom-sheet-demo .data-container .no-card-block button span md-icon, .add-media-file-block .add-file-button-block, .add-media-file-block .add-file-button-block .action-btn, .add-media-file-block .add-file-button-block .action-btn span, .add-media-file-block .add-file-button-block .action-btn span md-icon, .recording-screen-block .filter-row button span, .recording-screen-block .filter-row button span md-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.flex-center-between, .billing-container .content-data-block .data-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; }
+
+.title-text {
+  font-size: 18px;
+  font-weight: 600; }
+
+.sub-title-text {
+  font-size: 16px;
+  font-weight: 500; }
+
+.info-text {
+  color: #7a7a7a;
+  font-size: 14px; }
+
+.m-lr-16 {
+  margin: 0 16px; }
+
+.custom-input, .billing-container .filter-row .start-date, .billing-container .filter-row .end-date, .recording-screen-block .filter-row .start-date, .recording-screen-block .filter-row .end-date {
+  height: 32px;
+  border: 2px solid #dfdcdc40;
+  background: #f5f5f5;
+  padding: 0px 8px; }
+
+.card-radius {
+  border-radius: 8px !important; }
+  .card-radius md-tabs-wrapper {
+    border-radius: 8px 8px 0 0px !important; }
+  .card-radius md-pagination-wrapper {
+    margin: 0 !important; }
+
+.billing-container button {
+  margin: 0;
+  padding: 0;
+  padding: 0px 16px;
+  font-size: 14px; }
+  .billing-container button span md-icon {
+    margin: 0; }
+
+.billing-container .billing-title-container {
+  display: flex;
+  justify-content: start;
+  margin: 0;
+  margin: 0px 8px 0 8px;
+  border-bottom: solid 2px #cecdcd; }
+  .billing-container .billing-title-container .title-block {
+    display: flex;
+    align-items: center; }
+    .billing-container .billing-title-container .title-block h5 {
+      margin: 0; }
+    .billing-container .billing-title-container .title-block .bill-info {
+      height: auto;
+      margin-left: 8px;
+      height: auto !important; }
+
+.billing-container .bottom-sheet-demo {
+  height: 350px; }
+  .billing-container .bottom-sheet-demo .data-container {
+    height: 100%; }
+    .billing-container .bottom-sheet-demo .data-container .no-card-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 100%; }
+      .billing-container .bottom-sheet-demo .data-container .no-card-block h5 {
+        font-size: 18px;
+        font-weight: 600; }
+      .billing-container .bottom-sheet-demo .data-container .no-card-block button {
+        margin: 0;
+        padding: 0;
+        padding: 0px 16px;
+        font-size: 14px; }
+        .billing-container .bottom-sheet-demo .data-container .no-card-block button span md-icon {
+          margin: 0; }
+
+.billing-container .content-data-block {
+  margin-bottom: 16px; }
+  .billing-container .content-data-block .data-block {
+    width: 350px; }
+    .billing-container .content-data-block .data-block h5 {
+      margin: 0; }
+
+.billing-container .filter-row {
+  display: flex;
+  align-items: center;
+  height: 53px; }
+  .billing-container .filter-row .start-date {
+    border-radius: 4px 0px 0px 4px; }
+  .billing-container .filter-row .end-date {
+    border-radius: 0px 4px 4px 0px; }
+
+.navbar {
+  height: auto !important;
+  min-height: 70px; }
+
+.main-header-block {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; }
+  .main-header-block .search-section {
+    min-width: 50%;
+    width: calc(100% - 175px);
+    padding: 16px; }
+    .main-header-block .search-section md-autocomplete {
+      width: 100% !important;
+      margin: 0 !important; }
+
+@media only screen and (max-width: 670px) {
+  .main-header-block {
+    flex-direction: column; }
+    .main-header-block .search-section {
+      width: 100%; }
+    .main-header-block .right {
+      display: flex;
+      justify-content: center; }
+  .page-content {
+    padding-top: 150px; } }
+
 md-card {
   border-radius: 20px; }
 
@@ -865,6 +992,65 @@ md-content:hover::-webkit-scrollbar-thumb {
 
 md-content::-webkit-scrollbar-thumb:hover {
   background: #CCC; }
+
+.flex-center, .billing-container button span, .billing-container button span md-icon, .billing-container .bottom-sheet-demo .data-container .no-card-block button span, .billing-container .bottom-sheet-demo .data-container .no-card-block button span md-icon, .add-media-file-block .add-file-button-block, .add-media-file-block .add-file-button-block .action-btn, .add-media-file-block .add-file-button-block .action-btn span, .add-media-file-block .add-file-button-block .action-btn span md-icon, .recording-screen-block .filter-row button span, .recording-screen-block .filter-row button span md-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.card-mode-radius, .add-media-file-block {
+  border-radius: 8px; }
+
+.padding16 {
+  padding: 16px; }
+
+.p0 {
+  padding: 0 !important; }
+
+.m0 {
+  margin: 0 !important; }
+
+.choose-file input[type=file] {
+  width: 350px;
+  max-width: 100%;
+  color: #444;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #555; }
+
+.choose-file input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out; }
+
+.choose-file input[type=file]::file-selector-button:hover {
+  background: #0d45a5; }
+
+.drop-title {
+  color: #444;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  transition: color .2s ease-in-out; }
+
+.add-media-file-block .content-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  padding: 16px 0px 24px 0px; }
+
+.add-media-file-block .add-file-button-block {
+  padding: 0 24px 24px 24px; }
+  .add-media-file-block .add-file-button-block .action-btn {
+    width: 150px; }
+    .add-media-file-block .add-file-button-block .action-btn span md-icon {
+      font-size: 16px; }
 
 .collapse-card {
   background-color: #fff;
@@ -1239,7 +1425,7 @@ md-card img {
   left: 0;
   background: #C54033;
   height: 100vh;
-  z-index: 3;
+  z-index: 5;
   /*transition: width .3s, left .3s cubic-bezier(.27,.63,.5,1.05);*/ }
   .sidebar .top-logo {
     color: white;
@@ -2405,3 +2591,40 @@ code {
     margin-top: 0; }
   .code-block code {
     color: #2FC53F; }
+
+.recording-screen-block .search label {
+  padding-left: 12px; }
+
+.recording-screen-block .search input {
+  padding: 12px; }
+
+.recording-screen-block .filte-block {
+  display: flex;
+  justify-content: space-between; }
+  .recording-screen-block .filte-block .tag-block {
+    width: 50%;
+    padding-right: 10%; }
+  .recording-screen-block .filte-block .from-to-text {
+    margin-right: 4px; }
+    .recording-screen-block .filte-block .from-to-text input {
+      width: 100px; }
+  .recording-screen-block .filte-block md-input-container {
+    display: flex; }
+    .recording-screen-block .filte-block md-input-container label {
+      padding-left: 10px; }
+
+.recording-screen-block .filter-row {
+  display: flex;
+  align-items: center;
+  height: 53px; }
+  .recording-screen-block .filter-row .start-date {
+    border-radius: 4px 0px 0px 4px; }
+  .recording-screen-block .filter-row .end-date {
+    border-radius: 0px 4px 4px 0px; }
+  .recording-screen-block .filter-row button {
+    margin: 0;
+    padding: 0;
+    padding: 0px 16px;
+    font-size: 14px; }
+    .recording-screen-block .filter-row button span md-icon {
+      margin: 0; }

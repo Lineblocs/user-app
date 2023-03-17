@@ -1077,7 +1077,7 @@ md-bottom-sheet {
           }
         }
       }
-      
+
       @media screen and (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
@@ -2327,6 +2327,19 @@ md-dialog {
     }
   }
 
+  .cancel-subscription-block {
+    padding: 10px;
+    background-color: #3a53732b;
+    border-radius: 10px;
+    .cancel-subscription-note {
+      padding: 10px;
+    }
+  }
+
+  span.spacer {
+    flex: 1 1 auto;
+  }
+
   .md-actions, md-dialog-actions {
     display: flex;
     order: 2;
@@ -3198,7 +3211,7 @@ md-list-item {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
     flex: 1 1 auto;
-    
+
     &.md-button {
       font-size: inherit;
       height: inherit;
@@ -5054,7 +5067,7 @@ md-switch {
     @include rtl(margin-left, inherit, 0);
     @include rtl(margin-right, 0, inherit);
   }
-  
+
   &[disabled] {
     cursor: default;
 
@@ -6248,7 +6261,7 @@ $layout-breakpoint-lg:     1920px !default;
   @if $suffix != null {
     $name: 'layout-align-#{$suffix}';
   }
-  
+
   [#{$name}],
   [#{$name}="start stretch"] // defaults
   {

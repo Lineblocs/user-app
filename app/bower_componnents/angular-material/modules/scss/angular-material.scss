@@ -1517,7 +1517,7 @@ md-bottom-sheet {
           }
         }
       }
-      
+
       @media (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
@@ -5390,7 +5390,7 @@ md-slider {
   }
   ._md-thumb {
     z-index: 1;
-    
+
     @include slider-thumb-position($slider-thumb-width, $slider-thumb-height);
 
     // We render thumb in an :after selector to fix an obscure problem with the
@@ -5586,7 +5586,7 @@ md-slider {
     flex-direction: column;
     min-height: $slider-min-size;
     min-width: 0;
-    
+
     ._md-slider-wrapper {
       flex: 1;
       padding-top: 12px;
@@ -5848,7 +5848,7 @@ md-switch {
     @include rtl(margin-left, inherit, 0);
     @include rtl(margin-right, 0, inherit);
   }
-  
+
   &[disabled] {
     cursor: default;
 
