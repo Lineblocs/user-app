@@ -1075,7 +1075,7 @@ ul.benefits {
 
   .search-section{
     min-width: 50%;
-    width: calc(100% - 175px);
+    flex-grow: 1;
     padding: 16px;
     md-autocomplete{
       width: 100% !important;
