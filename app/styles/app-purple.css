@@ -861,7 +861,7 @@ ul.benefits {
   justify-content: space-between; }
   .main-header-block .search-section {
     min-width: 50%;
-    width: calc(100% - 175px);
+    flex-grow: 1;
     padding: 16px; }
     .main-header-block .search-section md-autocomplete {
       width: 100% !important;
