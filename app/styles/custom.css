@@ -926,3 +926,29 @@ ul.no-styling {
 span.spacer {
   flex: 1 1 auto;
 }
+
+.search-section {
+  position: relative;
+}
+
+.search-section i {
+  position: absolute;
+  z-index: 99;
+  height: calc(100% - 32px);
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-input-class input {
+  padding-left: 40px !important;
+  background-color: #f5f5f5 !important;
+  border-radius: 8px;
+}
+
+.search-input-class .md-whiteframe-z1 {
+  box-shadow: none !important;
+  background-color: #f5f5f5!important;
+  border-radius: 8px;
+}

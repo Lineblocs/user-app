@@ -11,23 +11,23 @@
         </div>
         <div class="left-nav main-header-block">
             <div class="search search-section">
-                <md-autocomplete id="acSearch" flex="" required="" md-input-name="autocompleteField"
-                    style="margin: 12px 10px; width: 488px;" ng-disabled="$shared.acSearch.isDisabled"
-                    md-no-cache="$shared.acSearch.noCache" md-selected-item="$shared.acSearch.selectedItem"
-                    md-search-text-change="$shared.searchTextChange(ctrl.searchText)"
-                    md-search-text="$shared.acSearch.searchText" md-selected-item-change="$shared.selectedItemChange(item)"
-                    md-items="item in $shared.querySearch($shared.acSearch.searchText)" md-item-text="item.display"
-                    md-min-length="0" placeholder="Search for section..">
+                <i class="mdi mdi-magnify"></i>
+                <md-autocomplete md-search-icon="search" md-input-name="autocompleteField" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in searchResults"
+                    md-item-text="item" md-search-text-change="searchSection()"
+                    md-selected-item-change="selectedItemChange(item)"
+                    md-mode="standard"
+                    class="search-input-class"
+                    md-clear-button="true"
+                    md-min-length="0"
+                    placeholder="Search for section ...">
                     <md-item-template>
-                        <span md-highlight-text="$shared.acSearch.searchText"
-                            md-highlight-flags="^i">{{item.display}}</span>
+                        <md-divider ng-if="item.divider"></md-divider>
+                        <span md-highlight-text="searchText">{{item.title}}</span>
                     </md-item-template>
                     <md-not-found>
-                        No states matching "{{ctrl.searchText}}" were found.
-                        <a ng-click="ctrl.newState($shared.acSearch.searchText)">Create a new one!</a>
+                        No states matching <span ng-if="searchResults.length && ctrl.searchText">"{{ctrl.searchText}}"</span> were found.
                     </md-not-found>
                 </md-autocomplete>
-                </md-menu-content>
             </div>
 
             <nav class="right">
