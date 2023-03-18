@@ -9,12 +9,8 @@
 * Main module of the application.
 */
 window.app_version = 2.0;
-     function loadAddedResources2() {
-        addScript("https://apis.google.com/js/platform.js");
-    }
     function loadAddedResources1() {
         addScript("https://js.stripe.com/v2/");
-
     }
 
     // add CSS file
@@ -1844,30 +1840,36 @@ var regParams = {
             console.log('state is currently', $state.current.name);
             var data = res.data;
                 $shared.customizations = data['customizations'];
+                $shared.frontend_api_creds = data['frontend_api_creds'];
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
     });
 
     function addSocialLoginScript() {
+
+      //0 - add microsoft script
       if ($shared.customizations.enable_msft_signin) addScript('https://alcdn.msauth.net/browser/2.17.0/js/msal-browser.min.js');
+
+      //1 - add apple script
       if ($shared.customizations.enable_apple_signin) {
         addScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js');
         setTimeout(function() {
           appleSignInInit();
         }, 1000)
       }
+
+      //2 - add google script
       if ($shared.customizations.enable_google_signin) addScript('https://apis.google.com/js/platform.js');
     }
 
     function appleSignInInit() {
       AppleID.auth.init({
-        clientId: $shared.customizations.apple_signin_client_id,
+        clientId: $shared.frontend_api_creds.apple_signin_client_id,
         scope: 'email',
         redirectURI: 'http://localhost:9000/',
         usePopup: true, // Optional parameter to open the sign-in window as a popup
       });
     }
-
 });
 
 

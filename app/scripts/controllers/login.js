@@ -34,8 +34,8 @@ if (code) {
     body: new URLSearchParams({
       grant_type: 'authorization_code',
       code: code,
-      client_id: 'your-client-id',
-      client_secret: 'your-client-secret',
+      client_id: $shared.frontend_api_creds.apple_signin_client_id,
+      client_secret:  $shared.frontend_api_creds.apple_signin_client_secret,
       redirect_uri: 'https://your-app.com/callback',
     }),
   }).then(response => response.json()).then(data => {
@@ -94,7 +94,7 @@ function redirectUser() {
     const msalConfig = {
       auth: {
           // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
-          clientId: $shared.customizations.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          clientId: $shared.frontend_api_creds.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
           // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
           authority: "https://login.microsoftonline.com/common",
           // Full redirect URL, in form of http://localhost:3000
