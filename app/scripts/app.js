@@ -530,7 +530,7 @@ return changed;
     }
     factory.selectedItemChange = function(item) {
       console.log('Item changed to ' + JSON.stringify(item));
-      factory.changeRoute(item.state, item.stateParams);
+      if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
     }
 
   factory.showToast = function(msg, position) {
