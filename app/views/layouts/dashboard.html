@@ -21,7 +21,7 @@
                     <div ng-repeat="result in totalResults">
                         <div ng-if="result.results.length">
                             <div class="custom-autocomplete-dropdown-key">{{result.key}}</div>
-                            <div class="custom-autocomplete-dropdown-item" ng-repeat="item in result.results"  ng-click="selectedItemChange(item)">
+                            <div class="custom-autocomplete-dropdown-item" ng-repeat="item in result.results"  ng-click="selectedItemChange(item, result.key)">
                                 {{item.title}}
                             </div>
                         </div>

@@ -7946,10 +7946,14 @@ angular.module('Lineblocs')
     $scope.totalResults = [];
   };
 
-  $scope.selectedItemChange = function(item) {
-    $scope.searchText = item.title;
-    $scope.totalResults = [];
-    if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
+  $scope.selectedItemChange = function(item, type) {
+    if (type && type === 'resource articles') {
+      window.open(item.url, '_blank');
+    } else {
+      $scope.searchText = item.title;
+      $scope.totalResults = [];
+      if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
+    }
   }
 
   $scope.clearSearch = function() {
