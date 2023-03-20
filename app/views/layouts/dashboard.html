@@ -10,12 +10,13 @@
             <img width="180" ng-src="{{$shared.getAppLogo()}}" />
         </div>
         <div class="left-nav main-header-block">
-            <div class="search search-section" ng-click-outside="onOutsideClick()">
-                <i class="mdi mdi-magnify"></i>
+            <div class="search search-section" id="search-section-global" ng-click-outside="onOutsideClick()">
+                <i class="mdi mdi-magnify first-element"></i>
                 <input type="text" class="custom-autocomplete"
                     placeholder="Search for section ..."
                     ng-model="searchText" ng-model-options="{ debounce: 500 }"
                     ng-focus="searchSection()" ng-change="searchSection()">
+                <i class="mdi mdi-close last-element" ng-if="searchText" ng-click="clearSearch()"></i>
                 <div class="custom-autocomplete-dropdown" ng-if="totalResults.length">
                     <div ng-repeat="result in totalResults">
                         <div ng-if="result.results.length">

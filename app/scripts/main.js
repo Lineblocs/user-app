@@ -7912,32 +7912,6 @@ angular
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .component('ngClickOutside', {
-    restrict: 'A',
-    compile: function($element, attrs) {
-      return {
-        post: function(scope, element, attrs) {
-          var onClick = function(event) {
-            if (!element[0].contains(event.target)) {
-              scope.$eval(attrs.ngClickOutside);
-              scope.$apply();
-            }
-          };
-          document.addEventListener('click', onClick);
-          scope.$on('$destroy', function() {
-            document.removeEventListener('click', onClick);
-          });
-        }
-      };
-    }
-  }).config(function($compileProvider) {
-    $compileProvider.directive('ngClickOutside', function() {
-      return {
-        restrict: 'A',
-        priority: 1000
-      };
-    });
-  })
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared, Backend) {
 	$scope.$shared = $shared;
 
@@ -7977,6 +7951,18 @@ angular.module('Lineblocs')
     $scope.totalResults = [];
     if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
   }
+
+  $scope.clearSearch = function() {
+    $scope.searchText = '';
+    $scope.totalResults = [];
+  }
+
+  document.addEventListener('click', function(event) {
+    if (!document.getElementById('search-section-global').contains(event.target)) {
+      $scope.totalResults = [];
+      $scope.$apply();
+    }
+  });
 
   	if ($('body').hasClass('extended')) {
 	  	$timeout(function(){

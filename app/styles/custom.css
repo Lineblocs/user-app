@@ -931,7 +931,7 @@ span.spacer {
   position: relative;
 }
 
-.search-section i {
+.search-section i.first-element {
   position: absolute;
   z-index: 99;
   height: calc(100% - 32px);
@@ -939,6 +939,19 @@ span.spacer {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.search-section i.last-element {
+  position: absolute;
+  z-index: 99;
+  top: 15px;
+  right: 15px;
+  height: calc(100% - 32px);
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .search-input-class input {
