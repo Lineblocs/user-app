@@ -10,24 +10,22 @@
             <img width="180" ng-src="{{$shared.getAppLogo()}}" />
         </div>
         <div class="left-nav main-header-block">
-            <div class="search search-section">
+            <div class="search search-section" ng-click-outside="onOutsideClick()">
                 <i class="mdi mdi-magnify"></i>
-                <md-autocomplete md-search-icon="search" md-input-name="autocompleteField" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in searchResults"
-                    md-item-text="item" md-search-text-change="searchSection()"
-                    md-selected-item-change="selectedItemChange(item)"
-                    md-mode="standard"
-                    class="search-input-class"
-                    md-clear-button="true"
-                    md-min-length="0"
-                    placeholder="Search for section ...">
-                    <md-item-template>
-                        <md-divider ng-if="item.divider"></md-divider>
-                        <span md-highlight-text="searchText">{{item.title}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                        No states matching <span ng-if="searchResults.length && ctrl.searchText">"{{ctrl.searchText}}"</span> were found.
-                    </md-not-found>
-                </md-autocomplete>
+                <input type="text" class="custom-autocomplete"
+                    placeholder="Search for section ..."
+                    ng-model="searchText" ng-model-options="{ debounce: 500 }"
+                    ng-focus="searchSection()" ng-change="searchSection()">
+                <div class="custom-autocomplete-dropdown" ng-if="totalResults.length">
+                    <div ng-repeat="result in totalResults">
+                        <div ng-if="result.results.length">
+                            <div class="custom-autocomplete-dropdown-key">{{result.key}}</div>
+                            <div class="custom-autocomplete-dropdown-item" ng-repeat="item in result.results"  ng-click="selectedItemChange(item)">
+                                {{item.title}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <nav class="right">

@@ -8,6 +8,32 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
+  .component('ngClickOutside', {
+    restrict: 'A',
+    compile: function($element, attrs) {
+      return {
+        post: function(scope, element, attrs) {
+          var onClick = function(event) {
+            if (!element[0].contains(event.target)) {
+              scope.$eval(attrs.ngClickOutside);
+              scope.$apply();
+            }
+          };
+          document.addEventListener('click', onClick);
+          scope.$on('$destroy', function() {
+            document.removeEventListener('click', onClick);
+          });
+        }
+      };
+    }
+  }).config(function($compileProvider) {
+    $compileProvider.directive('ngClickOutside', function() {
+      return {
+        restrict: 'A',
+        priority: 1000
+      };
+    });
+  })
   .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared, Backend) {
 	$scope.$shared = $shared;
 
@@ -28,17 +54,22 @@ angular.module('Lineblocs')
   };
 
   function getMatchingItems() {
-    $scope.searchResults = [];
-    if (!$scope.totalResults || !$scope.totalResults.length) return  $scope.searchResults;
-    for (const [index, value] of $scope.totalResults.entries()) {
-      if (index > 0 && index < $scope.totalResults.length && value.results.length > 0) value.results[0]["divider"] = true;
-      $scope.searchResults.push(...value.results)
+    if (!$scope.totalResults || !$scope.totalResults.length) return [];
+    for (const value of $scope.totalResults) {
+      value.key = value.key.replace(/_/g, ' ')
+      value.results = value.results.slice(0, 5);
     }
-    $scope.searchResults;
+    $scope.searchResults = $scope.totalResults;
+  };
+
+  $scope.onOutsideClick = function() {
+    console.log('outside click');
+    $scope.searchText = '';
+    $scope.totalResults = [];
   };
 
   $scope.selectedItemChange = function(item) {
-    this.searchText = item.title;
+    $scope.searchText = item.title;
     $scope.totalResults = [];
     if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
   }
