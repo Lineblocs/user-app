@@ -1004,3 +1004,43 @@ span.spacer {
   padding: 8px 10px;
   text-transform: capitalize;
 }
+
+
+.add-block-number-modal {
+  width: 100%;
+  max-width: 500px;
+}
+
+.country-width{
+  width: 100px;
+}
+
+.info-phone-number{
+  background-color: #3a53732b;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.info-phone{
+  padding: 0px 0px 0px 6px;
+}
+
+.info-phone-note{
+  padding: 15px;
+}
+
+.country-field{
+  padding: 0px 20px 0px 20px;
+}
+
+.md-input-container {
+  margin: 0px;
+}
+
+.card-bottom{
+  padding-bottom: 0 !important;
+}
+
+.submit-button{
+  padding-top: 0 !important;
+}
