@@ -9,12 +9,8 @@
 * Main module of the application.
 */
 window.app_version = 2.0;
-     function loadAddedResources2() {
-        addScript("https://apis.google.com/js/platform.js");
-    }
     function loadAddedResources1() {
         addScript("https://js.stripe.com/v2/");
-
     }
 
     // add CSS file
@@ -1851,9 +1847,36 @@ var regParams = {
             console.log('state is currently', $state.current.name);
             var data = res.data;
                 $shared.customizations = data['customizations'];
+                $shared.frontend_api_creds = data['frontend_api_creds'];
             console.log('customizations are ', $shared.customizations);
+          addSocialLoginScript();
     });
 
+    function addSocialLoginScript() {
+
+      //0 - add microsoft script
+      if ($shared.customizations.enable_msft_signin) addScript('https://alcdn.msauth.net/browser/2.17.0/js/msal-browser.min.js');
+
+      //1 - add apple script
+      if ($shared.customizations.enable_apple_signin) {
+        addScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js');
+        setTimeout(function() {
+          appleSignInInit();
+        }, 1000)
+      }
+
+      //2 - add google script
+      if ($shared.customizations.enable_google_signin) addScript('https://apis.google.com/js/platform.js');
+    }
+
+    function appleSignInInit() {
+      AppleID.auth.init({
+        clientId: $shared.frontend_api_creds.apple_signin_client_id,
+        scope: 'email',
+        redirectURI: DEPLOYMENT_DOMAIN,
+        usePopup: true, // Optional parameter to open the sign-in window as a popup
+      });
+    }
 });
 
 
@@ -8380,8 +8403,8 @@ if (code) {
     body: new URLSearchParams({
       grant_type: 'authorization_code',
       code: code,
-      client_id: 'your-client-id',
-      client_secret: 'your-client-secret',
+      client_id: $shared.frontend_api_creds.apple_signin_client_id,
+      client_secret:  $shared.frontend_api_creds.apple_signin_client_secret,
       redirect_uri: 'https://your-app.com/callback',
     }),
   }).then(response => response.json()).then(data => {
@@ -8440,11 +8463,11 @@ function redirectUser() {
     const msalConfig = {
       auth: {
           // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
-          clientId: "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          clientId: $shared.frontend_api_creds.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
           // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
           authority: "https://login.microsoftonline.com/common",
           // Full redirect URL, in form of http://localhost:3000
-          redirectUri: "http://localhost:9000/",
+          redirectUri: DEPLOYMENT_DOMAIN,
       },
       cache: {
           cacheLocation: "sessionStorage", // This configures where your cache will be stored
