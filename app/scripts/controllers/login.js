@@ -98,7 +98,7 @@ function redirectUser() {
           // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
           authority: "https://login.microsoftonline.com/common",
           // Full redirect URL, in form of http://localhost:3000
-          redirectUri: "http://localhost:9000/",
+          redirectUri: DEPLOYMENT_DOMAIN,
       },
       cache: {
           cacheLocation: "sessionStorage", // This configures where your cache will be stored
