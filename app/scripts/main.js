@@ -3820,9 +3820,12 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $timeout, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
   $shared.updateTitle("Create Number");
+  $scope.continue = false;
   $scope.flows = [];
+  $scope.step = 1;
+  $scope.fileName = "";
   $scope.number = {
     "first_name": "",
     "last_name": "",
@@ -3841,6 +3844,34 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
     "noCSR": false,
     "noInvoice": false
   };
+
+  $scope.uploadedFiles = {
+    loa: null,
+    csr: null,
+    invoice: null
+  }
+
+  $scope.openFileInput = function (id) {
+    $timeout(function () {
+      const fileInput = document.getElementById(id);
+      fileInput.click();
+      fileInput.addEventListener('change', function (event) {
+        console.log('Selected file:', event);
+        if (event.target.files.length > 0) {
+          $scope.uploadedFiles[id] = event.target.files[0];
+          $scope.$apply();
+        }
+      });
+    });
+  };
+
+  $scope.clearFileInput = function (id) {
+    $scope.uploadedFiles[id] = null;
+  }
+
+  $scope.continueToProcess = function () {
+    $scope.continue = true;
+  }
 
   function checkFile(id, key) {
     if (angular.element(id).prop("files").length === 0) {
@@ -3878,9 +3909,9 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
     params.append("number", $scope.number['number']);
     params.append("address_line_1", $scope.number['address_line_1']);
     params.append("address_line_2", $scope.number['address_line_2']);
-    params.append("loa", angular.element("#loa").prop("files")[0]);
-    params.append("csr", angular.element("#csr").prop("files")[0]);
-    params.append("invoice", angular.element("#invoice").prop("files")[0]);
+    params.append("loa", $scope.uploadedFiles['loa']);
+    params.append("csr", $scope.uploadedFiles['csr']);
+    params.append("invoice", $scope.uploadedFiles['invoice']);
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/saveNumber", params, true).then(function () {

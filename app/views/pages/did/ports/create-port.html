@@ -7,38 +7,71 @@
     </md-card-title-text>
     </md-card-title>
     <md-card-content>
-        <p>
-when you try to port a number to lineblocs we try to work with your provider to port your number to our carrier and our app.<br/>
-this process can sometimes can take upto 6 weeks.<br/><br/>
+        <div ng-if="!continue">
+            <p>
+                when you try to port a number to lineblocs we try to work with your provider to port your number to our carrier
+                and our app.<br />
+                this process can sometimes can take upto 6 weeks.<br /><br />
 
-you will be notified in email regarding the status of your port request as any change takes place or a date<br/>
-is established for when the port request will be completed.<br/><br/>
+                you will be notified in email regarding the status of your port request as any change takes place or a
+                date<br />
+                is established for when the port request will be completed.<br /><br />
 
-below are some things to note before trying to port a number:<br/><br/>
+                below are some things to note before trying to port a number:<br /><br />
 
-- the number you are trying port should not have been disconnected by the provider<br/>
-- no dispute should be open with the porting number<br/>
-- porting number should not be scheduled for disconnection<br/>
-- the porting number should not have any contract with the provider<br/>
-- the porting number you port must be available in a rate center we support<br/>
-to find a list of available rate centers please view <a ng-href="{{$shared.createDomainLink('/resources/other-topics/available-rate-centers')}}">Lineblocs Supported Rate
-Centers</a><br/><br/>
+                - the number you are trying port should not have been disconnected by the provider<br />
+                - no dispute should be open with the porting number<br />
+                - porting number should not be scheduled for disconnection<br />
+                - the porting number should not have any contract with the provider<br />
+                - the porting number you port must be available in a rate center we support<br />
+                to find a list of available rate centers please view <a
+                    ng-href="{{$shared.createDomainLink('/resources/other-topics/available-rate-centers')}}">Lineblocs Supported
+                    Rate
+                    Centers</a><br /><br />
 
-if the number you are trying to port meets these requirements please also note that you will need to provide<br/>
-the following documents:<br/><br/>
+                if the number you are trying to port meets these requirements please also note that you will need to
+                provide<br />
+                the following documents:<br /><br />
 
-letter of authorization (LOA) - a letter of authorization from the number owner<br/>
-customer service record (CSR) - a customer service record<br/>
-recent invoice from your provider - an invoice dated no longer than 90 days from the day you make the port<br/>
-request.
-        </p></p>
-        <form name="portForm" ng-submit="saveNumber(portForm)" novalidate>
+                letter of authorization (LOA) - a letter of authorization from the number owner<br />
+                customer service record (CSR) - a customer service record<br />
+                recent invoice from your provider - an invoice dated no longer than 90 days from the day you make the port<br />
+                request.
+            </p>
+            </p>
+            <div class="continue-to-process">
+                <md-button class="md-raised md-primary" ng-click="continueToProcess()">Continue to Process Request</md-button>
+            </div>
+        </div>
+
+        <form name="portForm" ng-submit="saveNumber(portForm)" novalidate ng-if="continue">
             <h5>Start Port Request</h5>
             <p>
                 to begin your port request please fill in the form below
             </p>
-            <div layout="row">
-                <div flex="100">
+            <div class="form-port-details">
+                <div class="stepper">
+                    <div class="step" ng-class="{'active': step == 1}" ng-click="step = 1">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Personal Details</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step" ng-class="{'active': step == 2}" ng-click="step = 2">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Address Details</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step" ng-class="{'active': step == 3}" ng-click="step = 3">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Port Details</div>
+                        <div class="step-line"></div>
+                    </div>
+                    <div class="step" ng-class="{'active': step == 4}" ng-click="step = 4">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Upload Documents</div>
+                    </div>
+                </div>
+                <div layout="row" class="form-port-details" ng-if="step == 1">
                     <md-input-container>
                         <label>Your First Name</label>
                         <input name="first_name" ng-model="number.first_name" required="">
@@ -53,11 +86,6 @@ request.
                             </div>
                         </div>
                     </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-
-                <div flex="100">
                     <md-input-container>
                         <label>Your Last Name</label>
                         <input name="last_name" ng-model="number.last_name" required="">
@@ -73,131 +101,113 @@ request.
                         </div>
                     </md-input-container>
                 </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>Country</label>
-                        <md-select name="country" ng-model="number.country" ng-change="changeCountry(number.country)" required="">
-                            <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
-                                {{country.name}}
-                            </md-option>
-                        </md-select>
-                        <div ng-show="triedSubmit">
+                <div class="form-port-details" ng-if="step == 2">
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Address Line 1</label>
+                            <input name="address_line_1" ng-model="number.address_line_1" name="address_line_1" required="">
+                            <div ng-show="triedSubmit">
+                                <div class="box">
 
-                            <div class="box">
-                                <div ng-show="portForm.country.$error.required">This field is
-                                    required
+                                    <div ng-show="portForm.address_line_1.$error.minlength">Please enter 1
+                                        characters or
+                                        more</div>
+                                    <div ng-show="portForm.address_line_1.$error.required">This field is
+                                        required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>Address Line 1</label>
-                        <input name="address_line_1" ng-model="number.address_line_1" name="address_line_1" required="">
-                        <div ng-show="triedSubmit">
-                            <div class="box">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Address Line 2</label>
+                            <input ng-model="number.address_line_2" name="address_line_2" required=""/>
+                            <div ng-show="triedSubmit">
 
-                                <div ng-show="portForm.address_line_1.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.address_line_1.$error.required">This field is
-                                    required
+                                <div class="box">
+
+                                    <div ng-show="portForm.address_line_2.$error.minlength">Please enter 1
+                                        characters or
+                                        more</div>
+                                    <div ng-show="portForm.address_line_2.$error.required">This field is
+                                        required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>Address Line 2</label>
-                        <input ng-model="number.address_line_2" name="address_line_2" required=""/>
-                        <div ng-show="triedSubmit">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container>
+                            <label>City</label>
+                            <input ng-model="number.city" name="city" required="">
+                            <div ng-show="triedSubmit">
 
-                            <div class="box">
+                                <div class="box">
 
-                                <div ng-show="portForm.address_line_2.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.address_line_2.$error.required">This field is
-                                    required
+                                    <div ng-show="portForm.city.$error.minlength">Please enter 1
+                                        characters or
+                                        more</div>
+                                    <div ng-show="portForm.city.$error.required">This field is
+                                        required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>City</label>
-                        <input ng-model="number.city" name="city" required="">
-                        <div ng-show="triedSubmit">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>State / Province</label>
+                            <input ng-model="number.state" name="state" required="">
+                            <div ng-show="triedSubmit">
 
-                            <div class="box">
+                                <div class="box">
 
-                                <div ng-show="portForm.city.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.city.$error.required">This field is
-                                    required
+                                    <div ng-show="portForm.state.$error.minlength">Please enter 1
+                                        characters or
+                                        more</div>
+                                    <div ng-show="portForm.state.$error.required">This field is
+                                        required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>State / Province</label>
-                        <input ng-model="number.state" name="state" required="">
-                        <div ng-show="triedSubmit">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Country</label>
+                            <md-select name="country" ng-model="number.country" ng-change="changeCountry(number.country)" required="">
+                                <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
+                                    {{country.name}}
+                                </md-option>
+                            </md-select>
+                            <div ng-show="triedSubmit">
 
-                            <div class="box">
-
-                                <div ng-show="portForm.state.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.state.$error.required">This field is
-                                    required
+                                <div class="box">
+                                    <div ng-show="portForm.country.$error.required">This field is
+                                        required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <md-input-container>
-                        <label>Zip / Postal Code</label>
-                        <input ng-model="number.zip" name="zip" required="">
-                        <div ng-show="triedSubmit">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Zip / Postal Code</label>
+                            <input ng-model="number.zip" name="zip" required="">
+                            <div ng-show="triedSubmit">
 
-                            <div class="box">
+                                <div class="box">
 
-                                <div ng-show="portForm.zip.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.zip.$error.required">This field is
-                                    required
+                                    <div ng-show="portForm.zip.$error.minlength">Please enter 1
+                                        characters or
+                                        more</div>
+                                    <div ng-show="portForm.zip.$error.required">This field is
+                                        required
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </md-input-container>
+                        </md-input-container>
+                    </div>
                 </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
+                <div layout="row" class="form-port-details" ng-if="step == 3">
                     <md-input-container>
                         <label>Number Provider</label>
-                         <input ng-model="number.provider" required="" name="provider">
+                        <input ng-model="number.provider" required="" name="provider">
                         <div ng-show="triedSubmit">
                             <div ng-show="portForm.provider.$error.minlength">Please enter 1
                                 characters or
@@ -206,12 +216,7 @@ request.
                                 required
                             </div>
                         </div>
-                </div>
-                </md-input-container>
-            </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
+                    </md-input-container>
                     <md-input-container>
                         <label>Number to port</label>
                         <input name="number" ng-model="number.number" required="">
@@ -229,63 +234,100 @@ request.
                         </div>
                     </md-input-container>
                 </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <label>Letter Of Authorization</label>
-                    <br />
-                    <input name="loa" id="loa" type="file" required="" accept=".pdf,.doc,.docx"  />
-                    <div ng-show="triedSubmit">
-
-                        <div class="box">
-                            <div ng-show="files.noLOA">This field is
-                                required
+                <div class="form-port-details" ng-if="step == 4">
+                    <div layout="row" class="file-upload-container">
+                        <div layout="column" class="upload-area">
+                            <label class="upload-label-doc">Letter Of Authorization</label>
+                            <div layout="column" class="dash-border">
+                                <i class="mdi mdi-folder-upload upload-icon"></i>
+                                <label for="loa" class="file-format">File Format: PDF/DOC./DOCX.</label>
+                                <input type="file" id="loa" class="invisible" accept=".pdf,.doc,.docx"/>
+                                <button class="upload-btn" ng-click="openFileInput('loa')">Choose File</button>
+                                <span class="file-format">Maximum size: 5MB</span>
+                            </div>
+                            <div class="selected-file" ng-if="uploadedFiles.loa.name">
+                                {{ uploadedFiles.loa.name }}
+                                <i class="mdi mdi-close" ng-click="clearFileInput('loa')"></i>
+                            </div>
+                        </div>
+                        <div layout="column" class="upload-area">
+                            <label class="upload-label-doc">Customer Service Record</label>
+                            <div layout="column" class="dash-border">
+                                <i class="mdi mdi-folder-upload upload-icon"></i>
+                                <label for="csr" class="file-format">File Format: PDF/ DOC./ DOCX.</label>
+                                <input type="file" name="csr" class="invisible" id="csr" required="" accept=".pdf,.doc,.docx"/>
+                                <button class="upload-btn" ng-click="openFileInput('csr')">Choose File</button>
+                                <span class="file-format">Maximum size: 5MB</span>
+                            </div>
+                            <div class="selected-file" ng-if="uploadedFiles.csr.name">
+                                {{ uploadedFiles.csr.name }}
+                                <i class="mdi mdi-close" ng-click="clearFileInput('csr')"></i>
+                            </div>
+                        </div>
+                        <div layout="column" class="upload-area">
+                            <label class="upload-label-doc">Recent Invoice</label>
+                            <div layout="column" class="dash-border">
+                                <i class="mdi mdi-folder-upload upload-icon"></i>
+                                <label for="invoice" class="file-format">File Format: PDF/DOC./DOCX.</label>
+                                <input type="file" class="invisible" name="invoice" id="invoice" required="" accept=".pdf,.doc,.docx"/>
+                                <button class="upload-btn" ng-click="openFileInput('invoice')">Choose File</button>
+                                <span class="file-format">Maximum size: 5MB</span>
+                            </div>
+                            <div class="selected-file" ng-if="uploadedFiles.invoice.name">
+                                {{ uploadedFiles.invoice.name }}
+                                <i class="mdi mdi-close" ng-click="clearFileInput('invoice')"></i>
+                            </div>
+                        </div>
+                        <!-- <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="files.noLOA">This field is required </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <!-- <div layout="row" class="upload-data">
+                        <label class="upload-label-doc">Customer Service Record</label>
+                        <div class="file-input-container">
+                            <input name="csr" id="csr" type="file" required="" accept=".pdf,.doc,.docx" />
+                            <label for="csr" class="upload-label"><i class="mdi mdi-folder-upload upload-icon"></i>Choose a file...</label>
+                        </div>
+                        <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="files.noCSR"> This field is required </div>
                             </div>
                         </div>
                     </div>
-                    <br />
-                    <br />
-                </div>
-            </div>
-            <div layout="row">
-                <div flex="100">
-                    <label>Customer Service Record</label>
-                    <br />
-                    <input name="csr" id="csr" type="file" required="" accept=".pdf,.doc,.docx" />
-                    <div ng-show="triedSubmit">
-
-                        <div class="box">
-                            <div ng-show="files.noCSR">
-                                This field is
-                                required
+                    <div layout="row" class="upload-data">
+                        <label class="upload-label-doc">Recent Invoice</label>
+                        <div class="file-input-container">
+                            <input name="invoice" id="invoice" type="file" required="" accept=".pdf,.doc,.docx" />
+                            <label for="invoice" class="upload-label"><i class="mdi mdi-folder-upload upload-icon"></i>Choose a file...</label>
+                        </div>
+                        <div ng-show="triedSubmit">
+                            <div class="box">
+                                <div ng-show="files.noInvoice">This field is required </div>
                             </div>
                         </div>
-                    </div>
-                    <br />
-                    <br />
+                    </div> -->
+                </div>
+                <div ng-show="step == 1" class="next-step-button">
+                    <md-button type="submit" ng-click="step = 2" class="md-raised md-primary no-margin-sides">Next</md-button>
+                </div>
+
+                <div ng-show="step == 2" class="button-group">
+                    <md-button type="submit" ng-click="step = 1" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="submit" ng-click="step = 3" class="md-raised md-primary no-margin-sides">Next</md-button>
+                </div>
+
+                <div ng-show="step == 3" class="button-group">
+                    <md-button type="submit" ng-click="step = 2" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="submit" ng-click="step = 4" class="md-raised md-primary no-margin-sides">Next</md-button>
+                </div>
+
+                <div ng-show="step == 4" class="button-group">
+                    <md-button type="submit" ng-click="step = 3" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
                 </div>
             </div>
-            <div layout="row">
-                <div flex="100">
-                    <label>Recent Invoice</label>
-                    <br />
-                    <input name="invoice" id="invoice" type="file" required="" accept=".pdf,.doc,.docx" />
-                    <div ng-show="triedSubmit">
-
-                        <div class="box">
-                            <div ng-show="files.noInvoice">This field is
-                                required
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <br />
-                </div>
-            </div>
-
-
-
-            <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
         </form>
 
     </md-card-content>
