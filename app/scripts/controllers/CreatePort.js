@@ -21,8 +21,12 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     "state": "",
     "zip": "",
     "country": "",
-    "provider": "",
-    "number": "",
+    "portNumbers": [
+      {
+        "provider": "",
+        "number": "",
+      }
+    ],
     "address_line_1": "",
     "address_line_2": "",
   }
@@ -36,6 +40,18 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     loa: null,
     csr: null,
     invoice: null
+  }
+
+
+  $scope.addPortNumber = function () {
+    $scope.number.portNumbers.push({
+      provider: '',
+      number: '',
+    });
+  }
+
+  $scope.removePortNumber = function (index) {
+    $scope.number.portNumbers.splice(index, 1);
   }
 
   $scope.openFileInput = function (id) {
@@ -61,7 +77,7 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
   }
 
   function checkFile(id, key) {
-    if (angular.element(id).prop("files").length === 0) {
+    if (angular.element(id) && angular.element(id).prop("files").length === 0) {
       $scope.files[key] = true;
       return false;
     }
@@ -69,7 +85,6 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     return true;
   }
   $scope.saveNumber = function (form) {
-    console.log("saveNumber");
     $scope.triedSubmit = true;
     if (!checkFile("#loa", "noLOA")) {
       return;
@@ -92,13 +107,21 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     params.append("state", $scope.number['state']);
     params.append("zip", $scope.number['zip']);
     params.append("country", $scope.number['country']['iso']);
-    params.append("provider", $scope.number['provider']);
-    params.append("number", $scope.number['number']);
     params.append("address_line_1", $scope.number['address_line_1']);
     params.append("address_line_2", $scope.number['address_line_2']);
     params.append("loa", $scope.uploadedFiles['loa']);
     params.append("csr", $scope.uploadedFiles['csr']);
     params.append("invoice", $scope.uploadedFiles['invoice']);
+    for ([index, portNumber] of $scope.number.portNumbers.entries()) {
+      if (index === 0) {
+        params.append("provider", portNumber['provider']);
+        params.append("number", portNumber['number']);
+      } else {
+        params.append("provider" + index, portNumber['provider']);
+        params.append("number" + index, portNumber['number']);
+      }
+    }
+
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/saveNumber", params, true).then(function () {

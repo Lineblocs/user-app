@@ -1117,8 +1117,9 @@ span.spacer {
   cursor: pointer;
 } */
 
-.file-upload-container{
-  height: 300px;
+.file-upload-container {
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .upload-icon {
@@ -1129,14 +1130,6 @@ span.spacer {
 .upload-label-doc{
   margin-top: 25px;
   margin-bottom: 15px;
-}
-
-.upload-area {
-  display: flex;
-  height: 200px;
-  width: 500px;
-  margin-right: 20px;
-  margin-left: 20px;
 }
 
 .dash-border {
@@ -1230,4 +1223,22 @@ span.spacer {
 
 .submit-button{
   padding-top: 0 !important;
+}
+
+.form-port-details {
+  flex-wrap: wrap;
+}
+
+.port-number-details {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+}
+
+.port-number-details .action-button {
+  margin-top: 14px;
+}
+
+.port-number-details .porting-number-counts {
+  margin-top: 30px;
 }
