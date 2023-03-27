@@ -204,37 +204,67 @@
                         </md-input-container>
                     </div>
                 </div>
-                <div layout="row" class="form-port-details" ng-if="step == 3">
-
-                    <div class="port-number-details" ng-repeat="item in number.portNumbers">
-                        <div class="porting-number-counts">
-                            {{$index + 1}}
-                        </div>
+                <div class="form-port-details" ng-if="step == 3">
+                    <div class="action-port-button">
+                        <md-button class="md-raised md-primary single-btn" ng-click="tabChanged('Port single number')"
+                            ng-class="{ 'activated-button': selectedPortType !== 'Port single number' }">
+                            Port single number
+                        </md-button>
+                        <md-button class="md-raised md-primary multiple-btn" ng-click="tabChanged('Multi number port')"
+                            ng-class="{ 'activated-button': selectedPortType !== 'Multi number port' }">
+                            Multi number port
+                        </md-button>
+                    </div>
+                    <div class="md-padding" ng-if="selectedPortType === 'Port single number'">
                         <md-input-container>
                             <label>Number Provider</label>
-                            <input ng-model="item.provider" required="" name="provider-{{$index}}">
+                            <input ng-model="number.provider" required="" name="provider-main">
                             <div ng-show="triedSubmit">
-                                <div ng-show="portForm['provider' + $index].$error.minlength">Please enter 1 characters or more</div>
-                                <div ng-show="portForm['provider' + $index].$error.required">This field is required</div>
+                                <div ng-show="portForm['provider' + 'main'].$error.minlength">Please enter 1 characters or more</div>
+                                <div ng-show="portForm['provider' + 'main'].$error.required">This field is required</div>
                             </div>
                         </md-input-container>
                         <md-input-container>
                             <label>Number to port</label>
-                            <input name="number-{{$index}}" ng-model="item.number" required="">
+                            <input name="number-main" ng-model="number.number" required="">
                             <div ng-show="triedSubmit">
-                                <div ng-show="portForm[number + $index].$error.minlength">Please enter 1 characters or more</div>
-                                <div ng-show="portForm[number + $index].$error.required">This field is required</div>
+                                <div ng-show="portForm[number + 'main'].$error.minlength">Please enter 1 characters or more</div>
+                                <div ng-show="portForm[number + 'main'].$error.required">This field is required</div>
                             </div>
                         </md-input-container>
-                        <div class="action-button">
-                            <md-button class="md-raised md-primary" ng-if="$index < 1" ng-click="addPortNumber()">
-                                <i class="mdi mdi-plus"></i> Add
-                            </md-button>
-                            <md-button class="md-raised md-primary" ng-if="$index > 0" ng-click="removePortNumber($index)">
-                                <i class="mdi mdi-minus"></i> Remove
-                            </md-button>
+                    </div>
+                    <div class="md-padding" ng-if="selectedPortType === 'Multi number port'">
+                        <div class="port-number-details" ng-repeat="item in number.portNumbers">
+                            <div class="porting-number-counts">
+                                {{$index + 1}}
+                            </div>
+                            <md-input-container>
+                                <label>Number Provider</label>
+                                <input ng-model="item.provider" required="" name="provider-{{$index}}">
+                                <div ng-show="triedSubmit">
+                                    <div ng-show="portForm['provider' + $index].$error.minlength">Please enter 1 characters or more</div>
+                                    <div ng-show="portForm['provider' + $index].$error.required">This field is required</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Number to port</label>
+                                <input name="number-{{$index}}" ng-model="item.number" required="">
+                                <div ng-show="triedSubmit">
+                                    <div ng-show="portForm[number + $index].$error.minlength">Please enter 1 characters or more</div>
+                                    <div ng-show="portForm[number + $index].$error.required">This field is required</div>
+                                </div>
+                            </md-input-container>
+                            <div class="action-button">
+                                <md-button class="md-raised md-primary" ng-if="$index < 1" ng-click="addPortNumber()">
+                                    <i class="mdi mdi-plus"></i> Add
+                                </md-button>
+                                <md-button class="md-raised md-primary" ng-if="$index > 0" ng-click="removePortNumber($index)">
+                                    <i class="mdi mdi-minus"></i> Remove
+                                </md-button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="form-port-details" ng-if="step == 4">
                     <div layout="row" class="file-upload-container">
@@ -283,21 +313,21 @@
                     </div>
                 </div>
                 <div ng-show="step == 1" class="next-step-button">
-                    <md-button type="submit" ng-click="step = 2" class="md-raised md-primary no-margin-sides">Next</md-button>
+                    <md-button type="button" ng-click="step = 2" class="md-raised md-primary no-margin-sides">Next</md-button>
                 </div>
 
                 <div ng-show="step == 2" class="button-group">
-                    <md-button type="submit" ng-click="step = 1" class="md-raised no-margin-sides">Prev</md-button>
-                    <md-button type="submit" ng-click="step = 3" class="md-raised md-primary no-margin-sides">Next</md-button>
+                    <md-button type="button" ng-click="step = 1" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="button" ng-click="step = 3" class="md-raised md-primary no-margin-sides">Next</md-button>
                 </div>
 
                 <div ng-show="step == 3" class="button-group">
-                    <md-button type="submit" ng-click="step = 2" class="md-raised no-margin-sides">Prev</md-button>
-                    <md-button type="submit" ng-click="step = 4" class="md-raised md-primary no-margin-sides">Next</md-button>
+                    <md-button type="button" ng-click="step = 2" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="button" ng-click="step = 4" class="md-raised md-primary no-margin-sides">Next</md-button>
                 </div>
 
                 <div ng-show="step == 4" class="button-group">
-                    <md-button type="submit" ng-click="step = 3" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="button" ng-click="step = 3" class="md-raised no-margin-sides">Prev</md-button>
                     <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
                 </div>
             </div>

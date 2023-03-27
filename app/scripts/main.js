@@ -3870,6 +3870,8 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
   $scope.flows = [];
   $scope.step = 1;
   $scope.fileName = "";
+  $scope.selectedPortType = "Port single number";
+  $scope.tab1FormFilled = false;
   $scope.number = {
     "first_name": "",
     "last_name": "",
@@ -3878,6 +3880,8 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     "state": "",
     "zip": "",
     "country": "",
+    "provider": "",
+    "number": "",
     "portNumbers": [
       {
         "provider": "",
@@ -3892,6 +3896,12 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     "noCSR": false,
     "noInvoice": false
   };
+
+  $scope.tabChanged = function (tab) {
+    $scope.selectedPortType = tab;
+    console.log("tabChanged ", $scope.selectedPortType);
+    // $scope.currentTab = tab;
+  }
 
   $scope.uploadedFiles = {
     loa: null,
@@ -3942,7 +3952,9 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     return true;
   }
   $scope.saveNumber = function (form) {
+    console.log("Port single number ===>", $scope.selectedPortType)
     $scope.triedSubmit = true;
+    $scope.tab1FormFilled = true;
     if (!checkFile("#loa", "noLOA")) {
       return;
     }
@@ -3969,15 +3981,24 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     params.append("loa", $scope.uploadedFiles['loa']);
     params.append("csr", $scope.uploadedFiles['csr']);
     params.append("invoice", $scope.uploadedFiles['invoice']);
-    for ([index, portNumber] of $scope.number.portNumbers.entries()) {
-      if (index === 0) {
-        params.append("provider", portNumber['provider']);
-        params.append("number", portNumber['number']);
-      } else {
-        params.append("provider" + index, portNumber['provider']);
-        params.append("number" + index, portNumber['number']);
+
+    if ($scope.selectedPortType === 'Port single number') {
+      params.append("provider", $scope.number['provider']);
+      params.append("number", $scope.number['number']);
+    } else {
+      for ([index, portNumber] of $scope.number.portNumbers.entries()) {
+        if (index === 0) {
+          params.append("provider", portNumber['provider']);
+          params.append("number", portNumber['number']);
+        } else {
+          params.append("provider" + index, portNumber['provider']);
+          params.append("number" + index, portNumber['number']);
+        }
       }
     }
+
+
+
 
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";

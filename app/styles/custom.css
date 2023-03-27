@@ -1242,3 +1242,30 @@ span.spacer {
 .port-number-details .porting-number-counts {
   margin-top: 30px;
 }
+
+.form-port-details .action-port-button {
+  display: flex;
+  justify-content: center;
+
+}
+
+.form-port-details .action-port-button button {
+  margin: 0;
+  padding: 0 15px;
+  margin-top: 12px;
+}
+
+.form-port-details .action-port-button button.activated-button {
+  background-color: white !important;
+  color: black !important;
+}
+
+.form-port-details .action-port-button button.single-btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.form-port-details .action-port-button button.multiple-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
