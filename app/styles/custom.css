@@ -1004,3 +1004,64 @@ span.spacer {
   padding: 8px 10px;
   text-transform: capitalize;
 }
+
+.action-security-button {
+  display: flex;
+  justify-content: center;
+}
+
+.action-security-button button {
+  margin: 0;
+  padding: 0 15px;
+  margin-top: 12px;
+}
+
+.action-security-button button.activated-button {
+  background-color: white !important;
+  color: black !important;
+}
+
+.action-security-button button.single-btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.action-security-button button.multiple-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.verify-button{
+  height: 45px;
+}
+
+.sms-success{
+  display: flex;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  color: #38ac38;
+  font-size: 40px;
+}
+
+.sms-success .success-color{
+  color: #38ac38;
+  margin-bottom: 16px;
+}
+
+.auth-app-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.qr-code-auth{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  height: 200px;
+}
+
+.auth-code-width{
+  width: 30%;
+}

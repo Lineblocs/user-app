@@ -9418,6 +9418,11 @@ angular.module('Lineblocs')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
+    $scope.selectedSecurityType = "SMS verification";
+    $scope.selectedVerify = "edit";
+    $scope.smsVerifiedSuccessfully = false;
+    $scope.authVerifiedSuccessfully = false;
+    $scope.isDisabled = false;
 	  $scope.ui = {
 		  show1Secret: false,
 		  show2Secret: false,
@@ -9427,11 +9432,36 @@ angular.module('Lineblocs')
 		last_name: "",
 		email: "",
 		password: "",
-		password2: ""
+		password2: "",
 	};
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
+  $scope.tabChanged = function (tab) {
+    $scope.isDisabled = false;
+    $scope.selectedSecurityType = tab;
+    if($scope.selectedSecurityType === "SMS verification") {
+      $scope.authVerifiedSuccessfully = false;
+    } else {
+      $scope.smsVerifiedSuccessfully = false;
+    }
+  }
+  $scope.verifyChanged = function (verify) {
+    $scope.triedSubmit = true;
+    $scope.selectedVerify = verify;
+    if($scope.selectedVerify === "verify") {
+      $scope.isDisabled = true;
+    } else {
+      $scope.isDisabled = false;
+    }
+  }
+  $scope.smsVerificationSuccess = function() {
+
+    $scope.smsVerifiedSuccessfully = true;
+  }
+  $scope.authAppSuccess = function() {
+    $scope.authVerifiedSuccessfully = true;
+  }
     $scope.submitSettings = function($event, settingsForm) {
 		$scope.triedSubmit = true;
 		if (settingsForm.$valid) {
@@ -9480,6 +9510,7 @@ angular.module('Lineblocs')
       	return false;
 
 	}
+
     $scope.submitPasswords = function($event, passwordsForm) {
 		$scope.triedSubmit = true;
 		if ($scope.user.password !== $scope.user.password2) {
