@@ -25,12 +25,7 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     "country": "",
     "provider": "",
     "number": "",
-    "portNumbers": [
-      {
-        "provider": "",
-        "number": "",
-      }
-    ],
+    "type_of_port": "Port single number",
     "address_line_1": "",
     "address_line_2": "",
   }
@@ -50,18 +45,6 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     loa: null,
     csr: null,
     invoice: null
-  }
-
-
-  $scope.addPortNumber = function () {
-    $scope.number.portNumbers.push({
-      provider: '',
-      number: '',
-    });
-  }
-
-  $scope.removePortNumber = function (index) {
-    $scope.number.portNumbers.splice(index, 1);
   }
 
   $scope.openFileInput = function (id) {
@@ -125,19 +108,15 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     params.append("csr", $scope.uploadedFiles['csr']);
     params.append("invoice", $scope.uploadedFiles['invoice']);
 
+    params.append("type_of_port", $scope.selectedPortType);
+
     if ($scope.selectedPortType === 'Port single number') {
       params.append("provider", $scope.number['provider']);
       params.append("number", $scope.number['number']);
     } else {
-      for ([index, portNumber] of $scope.number.portNumbers.entries()) {
-        if (index === 0) {
-          params.append("provider", portNumber['provider']);
-          params.append("number", portNumber['number']);
-        } else {
-          params.append("provider" + index, portNumber['provider']);
-          params.append("number" + index, portNumber['number']);
-        }
-      }
+      const numbers = $scope.number['number'].split('\n').filter(item => item);
+      params.append("provider", $scope.number['provider']);
+      params.append("numbers", JSON.stringify(numbers));
     }
 
 
