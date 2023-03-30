@@ -1850,7 +1850,49 @@ var regParams = {
                 $shared.frontend_api_creds = data['frontend_api_creds'];
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
+          addAnalyticsScript();
     });
+
+    function addAnalyticsScript() {
+
+      if ($shared.frontend_api_creds.google_analytics_script_tag) {
+        addGoogleAnalyticsScript($shared.frontend_api_creds.google_analytics_script_tag);
+      }
+
+      if ($shared.frontend_api_creds.matomo_script_tag) {
+        addMotomoAnalyticsScript($shared.frontend_api_creds.matomo_script_tag);
+      }
+    }
+
+    function addGoogleAnalyticsScript(code) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=' +code;
+      document.getElementsByTagName('head')[0].appendChild(script);
+      setTimeout(function() {
+        const script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.async = true;
+        script2.innerHTML = "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '" +code + "');";
+        document.getElementsByTagName('head')[0].appendChild(script2);
+      }, 1000)
+    }
+
+    function addMotomoAnalyticsScript(code) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = 'https://cdn.motomo.com/mtm.js';
+      document.getElementsByTagName('head')[0].appendChild(script);
+      setTimeout(function() {
+        const script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.async = true;
+        script2.innerHTML = "window.mtmSiteId = '" + code + "';";
+        document.getElementsByTagName('head')[0].appendChild(script2);
+      }, 1000)
+    }
 
     function addSocialLoginScript() {
 
