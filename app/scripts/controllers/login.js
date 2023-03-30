@@ -19,7 +19,8 @@ angular.module('Lineblocs')
 	$scope.challenge = null;
 	$scope.user = {
 		email: "",
-		password: ""
+		password: "",
+    otp:"",
 	};
 	$scope.step = 1;
 var clickedGoogSignIn = false;
@@ -147,11 +148,7 @@ function redirectUser() {
     $scope.startThirdPartyLogin( response.account.userName, response.account.name, '', '', loginOption);
   }
 
-
-    $scope.submit1 = function($event, loginForm) {
-		$scope.step = 2;
-	}
-    $scope.submit1 = function($event, loginForm) {
+  $scope.validateEmail = function($event, loginForm) {
 		$scope.triedSubmit = true;
 		if (!loginForm.$valid) {
 
@@ -170,24 +167,47 @@ function redirectUser() {
 			});
 	}
 
-    $scope.submit = function($event, loginForm) {
-		$scope.triedSubmit = true;
-		if (!loginForm.$valid) {
-			return;
-		}
+  $scope.validatePassword = function($event, loginForm) {
+    $scope.isLoading = true;
+    Backend.get("/request2FACode").then(function( res ) {
+      $scope.isLoading = false;
+      $scope.step = 3;
+    }).catch(function() {
+      $scope.step = 3;
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+	}
 
-			var data = angular.copy( $scope.user );
-			data['challenge'] = $scope.challenge;
-			$scope.isLoading = true;
-			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
-				var token = res.data;
-				finishLogin(token, res.data.workspace);
-			}).catch(function() {
-				$scope.isLoading = false;
-				$scope.couldNotLogin = true;
-			})
-			return;
+  $scope.validateOtp = function ($event, loginForm) {
+    $scope.triedSubmit = true;
+    if (!loginForm.$valid) {
+      return;
     }
+    $scope.isLoading = true;
+    Backend.post("/verify2FACode", {"2fa_code": $scope.user.otp}).then(function( res ) {
+      $scope.isLoading = false;
+      initiateLogin();
+    }).catch(function() {
+      initiateLogin();
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+  }
+
+  function initiateLogin() {
+    var data = angular.copy($scope.user);
+    data['challenge'] = $scope.challenge;
+    $scope.isLoading = true;
+    Backend.post("/jwt/authenticate", data, true).then(function (res) {
+      var token = res.data;
+      finishLogin(token, res.data.workspace);
+    }).catch(function () {
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+  }
+
 	$scope.gotoRegister = function() {
 		$shared.changingPage = true;
 		$shared.scrollToTop();
@@ -231,6 +251,7 @@ function redirectUser() {
 			}, 0);
 		});
 	}
+
 	function renderButton() {
       gapi.signin2.render('gSignIn', {
         'scope': 'profile email',

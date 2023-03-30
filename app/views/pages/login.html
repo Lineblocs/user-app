@@ -21,7 +21,7 @@
         <div class="content login-page-content">
             <div ng-show="step===1" class="login-block">
 
-                <form class="login-form" ng-submit="submit1($event, login1Form)" name="login1Form" novalidate>
+                <form class="login-form" ng-submit="validateEmail($event, login1Form)" name="login1Form" novalidate>
                     <div class="top-heading">
 
                         <h3>Login</h3>
@@ -131,7 +131,7 @@
                 </form>
             </div>
             <div ng-show="step===2" class="login-block">
-                <form class="login-form" ng-submit="submit($event, login2Form)" name="login2Form" novalidate>
+                <form class="login-form" ng-submit="validatePassword($event, login2Form)" name="login2Form" novalidate>
                     <div class="top-heading">
 
 
@@ -185,12 +185,8 @@
                     <br />
 
                     <div class="login-btn">
-
-
-
-
                         <button type="submit" class="custom">
-                            <span>Login</span>
+                            <span class="login-button-custom" >Continue</span>
                         </button>
                     </div>
                     <div layout="row" layout-align="center">
@@ -199,6 +195,59 @@
                     <div layout="row" layout-align="center">
                         <a ng-click="gotoForgot()">Forgot Password</a>
                     </div>
+
+                </form>
+            </div>
+            <div ng-show="step===3" class="login-block">
+                <form class="login-form" ng-submit="validateOtp($event, login3Form)" name="login3Form" novalidate>
+                    <div class="top-heading">
+                        <h3>Login</h3>
+                        <div layout="row" layout-align="center">
+                            <center>
+                                <p>
+                                    Welcome back {{userInfo.name}}
+                                </p>
+                            </center>
+                        </div>
+                        <div class="box invalid-login">
+                            <center>
+                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
+                                    again.
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="field-input otp">
+                        <div class="input-box no-margin">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+                                <g fill="#317780" fill-rule="nonzero">
+                                    <title>cellphone-settings</title>
+                                    <path d="M16,16H8V4H16M16,0H8A2,2 0 0,0 6,2V18A2,2 0 0,0 8,20H16A2,2 0 0,0 18,18V2A2,2 0 0,0 16,0M15,24H17V22H15M11,24H13V22H11M7,24H9V22H7V24Z" />
+                                </g>
+                            </svg>
+                            <md-input-container>
+                                <input name="otp" ng-model="user.otp" type="number" placeholder="OTP"
+                                    required="">
+                                <div ng-show="triedSubmit">
+                                    <div class="box">
+                                        <div ng-show="loginForm.otp.$error.required">This field is required</div>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="login-btn">
+                        <button type="submit" class="custom">
+                            <span>Verify Otp</span>
+                        </button>
+                    </div>
+                    <div layout="row" layout-align="center">
+                        <a ng-click="backStep1()">Not You?</a>
+                    </div>
+                    <!-- <div layout="row" layout-align="center">
+                        <a ng-click="gotoForgot()">Resend OTP</a>
+                    </div> -->
 
                 </form>
             </div>
