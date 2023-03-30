@@ -8045,11 +8045,11 @@ angular.module('Lineblocs')
   };
 
   $scope.selectedItemChange = function(item, type) {
+    $scope.searchText = item.title;
+    $scope.totalResults = [];
     if (type && type === 'resource articles') {
       window.open(item.url, '_blank');
     } else {
-      $scope.searchText = item.title;
-      $scope.totalResults = [];
       if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
     }
   }
