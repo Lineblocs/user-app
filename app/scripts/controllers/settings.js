@@ -12,24 +12,40 @@ angular.module('Lineblocs')
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
     $scope.selectedSecurityType = "SMS verification";
-    $scope.selectedVerify = "edit";
+    $scope.selectedVerify = "verify";
     $scope.smsVerifiedSuccessfully = false;
     $scope.authVerifiedSuccessfully = false;
     $scope.isDisabled = false;
+    $scope.base64_contents ='';
 	  $scope.ui = {
 		  show1Secret: false,
 		  show2Secret: false,
 	  };
+
+    get2FAConfig();
+
 	$scope.user = {
 		first_name: "",
 		last_name: "",
 		email: "",
 		password: "",
 		password2: "",
+    enable_2fa: false,
+    type_of_2fa: null,
 	};
+  $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
+  $scope.onEnable2FA = function() {
+    save2FASettings();
+    if(!$scope.user.enable_2fa) $scope.user.type_of_2fa = null;
+  }
+  $scope.onOptionClick = function(option) {
+    $scope.user.type_of_2fa = option;
+    save2FASettings();
+  }
+
   $scope.tabChanged = function (tab) {
     $scope.isDisabled = false;
     $scope.selectedSecurityType = tab;
@@ -37,6 +53,7 @@ angular.module('Lineblocs')
       $scope.authVerifiedSuccessfully = false;
     } else {
       $scope.smsVerifiedSuccessfully = false;
+      $scope.user.otp = '';
     }
   }
   $scope.verifyChanged = function (verify) {
@@ -44,13 +61,16 @@ angular.module('Lineblocs')
     $scope.selectedVerify = verify;
     if($scope.selectedVerify === "verify") {
       $scope.isDisabled = true;
+      request2FACode();
     } else {
       $scope.isDisabled = false;
     }
   }
-  $scope.smsVerificationSuccess = function() {
-
-    $scope.smsVerifiedSuccessfully = true;
+  $scope.smsVerificationSuccess = function(code) {
+    if(code) {
+      verify2FACode(code);
+      $scope.smsVerifiedSuccessfully = true;
+    }
   }
   $scope.authAppSuccess = function() {
     $scope.authVerifiedSuccessfully = true;
@@ -77,6 +97,51 @@ angular.module('Lineblocs')
       	return false;
 
 	}
+
+  // 2FA Functions
+  function verify2FACode(code) {
+    const data = {};
+    data['2fa_code'] = code;
+    Backend.post("/verify2FACode", data).then(function( res ) {
+      $scope.authAppSuccess();
+    });
+  }
+
+  function request2FACode() {
+    Backend.get("/request2FACode").then(function( res ) {
+      $scope.smsVerificationSuccess();
+    });
+  }
+
+  function save2FASettings() {
+    const data = {};
+    data.enable_2fa = $scope.user.enable_2fa;
+    data.type_of_2fa = $scope.user.type_of_2fa?.value;
+    Backend.post("/save2FASettings", data).then(function( res ) {
+      console.log('res', res);
+      // $scope.user.2FAConfig = res.data;
+    });
+  }
+
+  // function get2FAConfig() {
+  //   const data = {};
+  //   data.enable_2fa = true;
+  //   data.type_of_2fa = 'sms';
+
+  //   Backend.post("/2FAConfig", data).then(function( res ) {
+  //     console.log('res', res);
+  //     // $scope.user.2FAConfig = res.data;
+  //   });
+  // }
+
+  function get2FAConfig() {
+    Backend.get("/get2FAConfig").then(function( res ) {
+      console.log('res', res);
+      // $scope.user.2FAConfig = res.data;
+      $scope.base64_contents = res.data.qrcode_base64;
+    });
+  }
+
    $scope.submitPersonal = function($event, personalForm) {
 		$scope.triedSubmit = true;
 		console.log("submitPersonal ", personalForm);
