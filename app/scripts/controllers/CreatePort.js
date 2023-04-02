@@ -47,6 +47,22 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
     invoice: null
   }
 
+  $scope.validatePrevForm = function () {
+    $scope.step--;
+    $scope.triedSubmit = false;
+  };
+
+  $scope.validateStepForm = function(form, step) {
+    if (step > $scope.step && !form.$valid) {
+      $scope.triedSubmit = true;
+      return;
+    }
+    if (step > $scope.step + 1) return;
+    $scope.triedSubmit = false;
+    $scope.step = step;
+  };
+
+
   $scope.openFileInput = function (id) {
     $timeout(function () {
       const fileInput = document.getElementById(id);
@@ -119,9 +135,6 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
       params.append("numbers", JSON.stringify(numbers));
     }
 
-
-
-
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/saveNumber", params, true).then(function () {
@@ -137,14 +150,15 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
         $shared.endIsLoading();
       });
   }
+
   $scope.changeCountry = function (country) {
     console.log("changeCountry ", country);
     $scope.number.country = country;
-    $scope.number.address_line_1 = '';
-    $scope.number.address_line_2 = '';
-    $scope.number.city = '';
-    $scope.number.state = '';
-    $scope.number.zip = '';
+    // $scope.number.address_line_1 = '';
+    // $scope.number.address_line_2 = '';
+    // $scope.number.city = '';
+    // $scope.number.state = '';
+    // $scope.number.zip = '';
   }
 
   $shared.endIsLoading();

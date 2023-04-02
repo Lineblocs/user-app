@@ -1244,3 +1244,38 @@ span.spacer {
 .multi-port-input{
   margin-bottom: 0px;
 }
+
+.box{
+  font-size: 14px;
+  color: red;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.step-check-icon {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+}
+
+.step-check-icon:before {
+  content: "\2713";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 16px;
+}
+
+.checked-circle {
+  font-size: 38px;
+  color: #109c10;
+}
