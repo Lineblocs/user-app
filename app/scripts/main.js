@@ -9574,8 +9574,8 @@ angular.module('Lineblocs')
 		console.log("changeCountry ", country);
 	}
   $scope.onEnable2FA = function() {
-    save2FASettings();
     if(!$scope.user.enable_2fa) $scope.user.type_of_2fa = null;
+    save2FASettings();
   }
   $scope.onOptionClick = function(option) {
     $scope.user.type_of_2fa = option;
@@ -9746,11 +9746,14 @@ angular.module('Lineblocs')
 	}
 
 	$shared.isLoading = true;
-	Backend.get("/self").then(function(res) {
-		$scope.user = res.data;
-		console.log("user is ", $scope.user);
-		$shared.endIsLoading();
-	});
+	Backend.get("/self").then((res) => {
+    if (!isNaN(Number(res.data['enable_2fa']))) res.data['enable_2fa'] === 0 ? res.data['enable_2fa'] = false : res.data['enable_2fa'] = true;
+    return res;
+  }).then(function(res) {
+      $scope.user = res.data;
+      console.log("user is ", $scope.user);
+      $shared.endIsLoading();
+    });
   });
 
 'use strict';

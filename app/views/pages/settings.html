@@ -191,15 +191,17 @@
 
        <md-tab label="Security">
            <div layout="column" class="md-padding auth-app-code" >
-            <p>Note: Enabling two-factor authentication (2FA) is a simple and effective way to secure your accounts. To get started, Enable it below. In case of sms you will receive otp on phone and for the authenticator app need to download an authenticator app on your mobile device and link it to your account by scanning a QR code. Once set up, the app will generate a unique code that you'll need to enter in addition to your password to access your account.</p>
             <md-switch class="md-primary" ng-model="user.enable_2fa" aria-label="switch" ng-change="onEnable2FA()">
-              Enable Two-Factor Authentication(2FA)
+                Enable Two-Factor Authentication(2FA)
             </md-switch>
             <md-radio-group layout="row" class="radio-group" ng-if="user.enable_2fa" ng-model="user.type_of_2fa" aria-labelledby="auth2FA">
                 <md-radio-button class="md-primary" ng-repeat="option in type_of_2fa" ng-value="option.value" ng-click="onOptionClick(option)">{{ option.name }}</md-radio-button>
             </md-radio-group>
+            <p ng-if="user.type_of_2fa === 'totp' && user.enable_2fa" >Note: Enabling two-factor authentication (2FA) is a simple and effective way to secure your accounts. To get started, Enable it below. In case of sms you will receive otp on phone and for the authenticator app need to download an authenticator app on your mobile device and link it to your account by scanning a QR code. Once set up, the app will generate a unique code that you'll need to enter in addition to your password to access your account.</p>
             <div ng-if="user.type_of_2fa === 'totp' && user.enable_2fa">
                 <p>Scan the QR code into your app</p>
+            </div>
+            <div ng-if="user.type_of_2fa === 'totp' && user.enable_2fa">
                 <img ng-src="data:image/png;base64,{{base64_contents}}" class="qr-code-auth" alt="QR" />
             </div>
         </div>
