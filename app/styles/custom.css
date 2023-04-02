@@ -1025,3 +1025,26 @@ span.spacer {
 .radio-group{
   margin-bottom: 45px;
 }
+.reset-otp {
+  text-align: right;
+}
+
+.reset-otp span {
+  cursor: pointer;
+}
+
+.request-otp-info {
+  text-align: center;
+  margin: 15px 0;
+  font-size: 15px;
+}
+
+.request-assistant {
+  text-align: center;
+  margin-top: 15px;
+}
+.request-assistant span {
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+}

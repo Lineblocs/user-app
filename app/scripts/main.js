@@ -8514,8 +8514,30 @@ function redirectUser() {
 	}
 
   $scope.validatePassword = function($event, loginForm) {
+    if (!loginForm.$valid) {
+      return;
+    }
+    const data = angular.copy($scope.user);
+    data['challenge'] = $scope.challenge;
     $scope.isLoading = true;
-    Backend.get("/request2FACode").then(function( res ) {
+    Backend.post("/jwt/authenticate", data, true).then(function (res) {
+      if (res.data.enable_2fa === 1) {
+        $scope.requestOtp($event, loginForm);
+      } else {
+        finishLogin(res.data.token, res.data.workspace);
+      }
+    }).catch(function () {
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+	}
+
+  $scope.requestOtp = function($event) {
+    $scope.isLoading = true;
+    Backend.post("/request2FACode", {
+      "email": $scope.user.email,
+      "password": $scope.user.password
+    }).then(function( res ) {
       $scope.isLoading = false;
       $scope.step = 3;
     }).catch(function() {
@@ -8523,7 +8545,7 @@ function redirectUser() {
       $scope.isLoading = false;
       $scope.couldNotLogin = true;
     })
-	}
+  }
 
   $scope.validateOtp = function ($event, loginForm) {
     $scope.triedSubmit = true;
@@ -8531,27 +8553,21 @@ function redirectUser() {
       return;
     }
     $scope.isLoading = true;
-    Backend.post("/verify2FACode", {"2fa_code": $scope.user.otp}).then(function( res ) {
+    Backend.post("/verify2FACode", {
+      "email": $scope.user.email,
+      "password": $scope.user.password,
+      "2fa_code": $scope.user.otp
+    }).then(function( res ) {
       $scope.isLoading = false;
-      initiateLogin();
+      finishLogin(res.data.token, res.data.workspace);
     }).catch(function() {
-      initiateLogin();
       $scope.isLoading = false;
       $scope.couldNotLogin = true;
     })
   }
 
-  function initiateLogin() {
-    var data = angular.copy($scope.user);
-    data['challenge'] = $scope.challenge;
-    $scope.isLoading = true;
-    Backend.post("/jwt/authenticate", data, true).then(function (res) {
-      var token = res.data;
-      finishLogin(token, res.data.workspace);
-    }).catch(function () {
-      $scope.isLoading = false;
-      $scope.couldNotLogin = true;
-    })
+  $scope.requestAssistant = function() {
+    window.open(`https://${DEPLOYMENT_DOMAIN}/resources/other-topics/2fa-verification-support`, '_blank');
   }
 
 	$scope.gotoRegister = function() {
@@ -8565,12 +8581,6 @@ function redirectUser() {
 		$state.go('forgot');
 	}
 
-  // Sample object for login option
-  // const loginOption = {
-  //   provider: 'google',
-  //   id_token,
-  //   access_token,
-  // }
 	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar, loginOption) {
 		var data = {};
 		data['email'] = email;
