@@ -1048,3 +1048,242 @@ span.spacer {
   text-decoration: underline;
   cursor: pointer;
 }
+.form-port-details{
+  border: 1px solid #f5f5f5;
+  padding: 0px 20px 0px;
+  margin-top: 15px;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 25%;
+  text-align: center;
+}
+
+.step-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.step-title {
+  font-size: 14px;
+  color: #777;
+}
+
+.step-line {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background-color: #ccc;
+  top: 15px;
+  left: calc(50% + 15px);
+}
+
+.step:last-child .step-line {
+  display: none;
+}
+
+.step.active .step-number {
+  border-color: #4050b5;
+  color: #4050b5;
+}
+
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.next-step-button{
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.file-upload-container {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.upload-icon {
+  font-size: 60px;
+  color: #ccc;
+}
+
+.upload-label-doc{
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+.dash-border {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+.upload-btn {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #3949ab;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  width: 150px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* .upload-btn:hover {
+  background-color: #aaa;
+} */
+
+.file-format{
+  font-size: 14px;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+.selected-file {
+  display: flex;
+  margin-top: 4px;
+  padding: 5px 10px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selected-file i {
+  cursor: pointer;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.continue-to-process {
+  text-align: center;
+}
+
+.continue-to-process button {
+  padding: 5px 50px;
+}
+
+.add-block-number-modal {
+  width: 100%;
+  max-width: 500px;
+}
+
+.country-width{
+  width: 100px;
+}
+
+.info-phone-number{
+  background-color: #3a53732b;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.info-phone{
+  padding: 0px 0px 0px 6px;
+}
+
+.info-phone-note{
+  padding: 15px;
+}
+
+.country-field{
+  padding: 0px 20px 0px 20px;
+}
+
+.md-input-container {
+  margin: 0px;
+}
+
+.card-bottom{
+  padding-bottom: 0 !important;
+}
+
+.submit-button{
+  padding-top: 0 !important;
+}
+
+.form-port-details {
+  flex-wrap: wrap;
+}
+
+.port-number-details {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+}
+
+.port-number-details .action-button {
+  margin-top: 14px;
+}
+
+.port-number-details .porting-number-counts {
+  margin-top: 30px;
+}
+
+.form-port-details .action-port-button {
+  display: flex;
+  justify-content: center;
+
+}
+
+.form-port-details .action-port-button button {
+  margin: 0;
+  padding: 0 15px;
+  margin-top: 12px;
+}
+
+.form-port-details .action-port-button button.activated-button {
+  background-color: white !important;
+  color: black !important;
+}
+
+.form-port-details .action-port-button button.single-btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.form-port-details .action-port-button button.multiple-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.multi-port-style{
+  width: 100%;
+  border: 1px solid #f5f5f5;
+  padding: 10px 25px;
+  margin-bottom: 20px;
+}
+
+.multi-port-input{
+  margin-bottom: 0px;
+}

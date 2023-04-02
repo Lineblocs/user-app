@@ -9,12 +9,8 @@
 * Main module of the application.
 */
 window.app_version = 2.0;
-     function loadAddedResources2() {
-        addScript("https://apis.google.com/js/platform.js");
-    }
     function loadAddedResources1() {
         addScript("https://js.stripe.com/v2/");
-
     }
 
     // add CSS file
@@ -1851,9 +1847,36 @@ var regParams = {
             console.log('state is currently', $state.current.name);
             var data = res.data;
                 $shared.customizations = data['customizations'];
+                $shared.frontend_api_creds = data['frontend_api_creds'];
             console.log('customizations are ', $shared.customizations);
+          addSocialLoginScript();
     });
 
+    function addSocialLoginScript() {
+
+      //0 - add microsoft script
+      if ($shared.customizations.enable_msft_signin) addScript('https://alcdn.msauth.net/browser/2.17.0/js/msal-browser.min.js');
+
+      //1 - add apple script
+      if ($shared.customizations.enable_apple_signin) {
+        addScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js');
+        setTimeout(function() {
+          appleSignInInit();
+        }, 1000)
+      }
+
+      //2 - add google script
+      if ($shared.customizations.enable_google_signin) addScript('https://apis.google.com/js/platform.js');
+    }
+
+    function appleSignInInit() {
+      AppleID.auth.init({
+        clientId: $shared.frontend_api_creds.apple_signin_client_id,
+        scope: 'email',
+        redirectURI: DEPLOYMENT_DOMAIN,
+        usePopup: true, // Optional parameter to open the sign-in window as a popup
+      });
+    }
 });
 
 
@@ -3271,18 +3294,38 @@ angular.module('Lineblocs')
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $http ) {
     $shared.updateTitle("Blocked Numbers");
     $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
+      $scope.countryCode = '';
       $scope.data = {
-        number: ""
+        number: "",
+        notes: ""
       };
+      $scope.searchCountry = '';
+      $http.get('../../scripts/constants/country-list.json').then(function(countries) {
+        $scope.countries = countries.data;
+      });
+
+      $scope.onNumberChange = function() {
+        $scope.data.number = Number($scope.data.number.replace(/[^0-9]/g, '').slice(0, 10));
+        if (!$scope.data.number) $scope.data.number = '';
+      }
+
+      $scope.getMatchedCountry = function(text) {
+        console.log('text', text);
+        if (!text) return;
+        const matchedCountry = $scope.countries.filter(country => country.name.toLowerCase().includes(text.toLowerCase()));
+        console.log('matchedCountry', matchedCountry);
+        return matchedCountry;
+      }
       $scope.submit= function() {
-        var data = angular.copy($scope.data);
+        const data = angular.copy($scope.data);
+        data.number = $scope.countryCode + data.number;
         Backend.post("/settings/blockedNumbers", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
@@ -3296,7 +3339,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
       }
 
       $scope.close = function() {
-        $mdDialog.hide(); 
+        $mdDialog.hide();
       }
     }
 
@@ -3314,6 +3357,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
       });
   }
   $scope.createNumber = function($event) {
+    console.log('createNumber',  $scope.countries);
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'views/dialogs/add-blocked-number.html',
@@ -3820,9 +3864,14 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $timeout, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
   $shared.updateTitle("Create Number");
+  $scope.continue = false;
   $scope.flows = [];
+  $scope.step = 1;
+  $scope.fileName = "";
+  $scope.selectedPortType = "Port single number";
+  $scope.tab1FormFilled = false;
   $scope.number = {
     "first_name": "",
     "last_name": "",
@@ -3833,6 +3882,7 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
     "country": "",
     "provider": "",
     "number": "",
+    "type_of_port": "Port single number",
     "address_line_1": "",
     "address_line_2": "",
   }
@@ -3842,8 +3892,42 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
     "noInvoice": false
   };
 
+  $scope.tabChanged = function (tab) {
+    $scope.selectedPortType = tab;
+    console.log("tabChanged ", $scope.selectedPortType);
+    // $scope.currentTab = tab;
+  }
+
+  $scope.uploadedFiles = {
+    loa: null,
+    csr: null,
+    invoice: null
+  }
+
+  $scope.openFileInput = function (id) {
+    $timeout(function () {
+      const fileInput = document.getElementById(id);
+      fileInput.click();
+      fileInput.addEventListener('change', function (event) {
+        console.log('Selected file:', event);
+        if (event.target.files.length > 0) {
+          $scope.uploadedFiles[id] = event.target.files[0];
+          $scope.$apply();
+        }
+      });
+    });
+  };
+
+  $scope.clearFileInput = function (id) {
+    $scope.uploadedFiles[id] = null;
+  }
+
+  $scope.continueToProcess = function () {
+    $scope.continue = true;
+  }
+
   function checkFile(id, key) {
-    if (angular.element(id).prop("files").length === 0) {
+    if (angular.element(id) && angular.element(id).prop("files").length === 0) {
       $scope.files[key] = true;
       return false;
     }
@@ -3851,8 +3935,9 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
     return true;
   }
   $scope.saveNumber = function (form) {
-    console.log("saveNumber");
+    console.log("Port single number ===>", $scope.selectedPortType)
     $scope.triedSubmit = true;
+    $scope.tab1FormFilled = true;
     if (!checkFile("#loa", "noLOA")) {
       return;
     }
@@ -3874,13 +3959,26 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, Backe
     params.append("state", $scope.number['state']);
     params.append("zip", $scope.number['zip']);
     params.append("country", $scope.number['country']['iso']);
-    params.append("provider", $scope.number['provider']);
-    params.append("number", $scope.number['number']);
     params.append("address_line_1", $scope.number['address_line_1']);
     params.append("address_line_2", $scope.number['address_line_2']);
-    params.append("loa", angular.element("#loa").prop("files")[0]);
-    params.append("csr", angular.element("#csr").prop("files")[0]);
-    params.append("invoice", angular.element("#invoice").prop("files")[0]);
+    params.append("loa", $scope.uploadedFiles['loa']);
+    params.append("csr", $scope.uploadedFiles['csr']);
+    params.append("invoice", $scope.uploadedFiles['invoice']);
+
+    params.append("type_of_port", $scope.selectedPortType);
+
+    if ($scope.selectedPortType === 'Port single number') {
+      params.append("provider", $scope.number['provider']);
+      params.append("number", $scope.number['number']);
+    } else {
+      const numbers = $scope.number['number'].split('\n').filter(item => item);
+      params.append("provider", $scope.number['provider']);
+      params.append("numbers", JSON.stringify(numbers));
+    }
+
+
+
+
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
     Backend.postFiles("/port/saveNumber", params, true).then(function () {
@@ -7947,11 +8045,11 @@ angular.module('Lineblocs')
   };
 
   $scope.selectedItemChange = function(item, type) {
+    $scope.searchText = item.title;
+    $scope.totalResults = [];
     if (type && type === 'resource articles') {
       window.open(item.url, '_blank');
     } else {
-      $scope.searchText = item.title;
-      $scope.totalResults = [];
       if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
     }
   }
@@ -8381,8 +8479,8 @@ if (code) {
     body: new URLSearchParams({
       grant_type: 'authorization_code',
       code: code,
-      client_id: 'your-client-id',
-      client_secret: 'your-client-secret',
+      client_id: $shared.frontend_api_creds.apple_signin_client_id,
+      client_secret:  $shared.frontend_api_creds.apple_signin_client_secret,
       redirect_uri: 'https://your-app.com/callback',
     }),
   }).then(response => response.json()).then(data => {
@@ -8441,11 +8539,11 @@ function redirectUser() {
     const msalConfig = {
       auth: {
           // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
-          clientId: "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          clientId: $shared.frontend_api_creds.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
           // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
           authority: "https://login.microsoftonline.com/common",
           // Full redirect URL, in form of http://localhost:3000
-          redirectUri: "http://localhost:9000/",
+          redirectUri: DEPLOYMENT_DOMAIN,
       },
       cache: {
           cacheLocation: "sessionStorage", // This configures where your cache will be stored
