@@ -1850,7 +1850,16 @@ var regParams = {
                 $shared.frontend_api_creds = data['frontend_api_creds'];
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
+          addAnalyticsScript();
     });
+
+    function addAnalyticsScript() {
+      if ($shared.customizations.analytics_sdk === 'google') {
+        document.head.innerHTML += $shared.frontend_api_creds.google_analytics_script_tag;
+      } else if ($shared.customizations.analytics_sdk === 'matomo') {
+        document.head.innerHTML += $shared.frontend_api_creds.matomo_script_tag;
+      }
+    }
 
     function addSocialLoginScript() {
 
