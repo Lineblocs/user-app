@@ -1005,6 +1005,49 @@ span.spacer {
   text-transform: capitalize;
 }
 
+.auth-app-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.qr-code-auth{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  height: 200px;
+}
+
+.auth-code-width{
+  width: 30%;
+}
+
+.radio-group{
+  margin-bottom: 45px;
+}
+.reset-otp {
+  text-align: right;
+}
+
+.reset-otp span {
+  cursor: pointer;
+}
+
+.request-otp-info {
+  text-align: center;
+  margin: 15px 0;
+  font-size: 15px;
+}
+
+.request-assistant {
+  text-align: center;
+  margin-top: 15px;
+}
+.request-assistant span {
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+}
 .form-port-details{
   border: 1px solid #f5f5f5;
   padding: 0px 20px 0px;
