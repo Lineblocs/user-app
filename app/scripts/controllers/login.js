@@ -19,7 +19,8 @@ angular.module('Lineblocs')
 	$scope.challenge = null;
 	$scope.user = {
 		email: "",
-		password: ""
+		password: "",
+    otp:"",
 	};
 	$scope.step = 1;
 var clickedGoogSignIn = false;
@@ -147,11 +148,7 @@ function redirectUser() {
     $scope.startThirdPartyLogin( response.account.userName, response.account.name, '', '', loginOption);
   }
 
-
-    $scope.submit1 = function($event, loginForm) {
-		$scope.step = 2;
-	}
-    $scope.submit1 = function($event, loginForm) {
+  $scope.validateEmail = function($event, loginForm) {
 		$scope.triedSubmit = true;
 		if (!loginForm.$valid) {
 
@@ -170,24 +167,63 @@ function redirectUser() {
 			});
 	}
 
-    $scope.submit = function($event, loginForm) {
-		$scope.triedSubmit = true;
-		if (!loginForm.$valid) {
-			return;
-		}
-
-			var data = angular.copy( $scope.user );
-			data['challenge'] = $scope.challenge;
-			$scope.isLoading = true;
-			Backend.post("/jwt/authenticate", data, true).then(function( res ) {
-				var token = res.data;
-				finishLogin(token, res.data.workspace);
-			}).catch(function() {
-				$scope.isLoading = false;
-				$scope.couldNotLogin = true;
-			})
-			return;
+  $scope.validatePassword = function($event, loginForm) {
+    if (!loginForm.$valid) {
+      return;
     }
+    const data = angular.copy($scope.user);
+    data['challenge'] = $scope.challenge;
+    $scope.isLoading = true;
+    Backend.post("/jwt/authenticate", data, true).then(function (res) {
+      if (res.data.enable_2fa === 1) {
+        $scope.requestOtp($event, loginForm);
+      } else {
+        finishLogin(res.data.token, res.data.workspace);
+      }
+    }).catch(function () {
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+	}
+
+  $scope.requestOtp = function($event) {
+    $scope.isLoading = true;
+    Backend.post("/request2FACode", {
+      "email": $scope.user.email,
+      "password": $scope.user.password
+    }).then(function( res ) {
+      $scope.isLoading = false;
+      $scope.step = 3;
+    }).catch(function() {
+      $scope.step = 3;
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+  }
+
+  $scope.validateOtp = function ($event, loginForm) {
+    $scope.triedSubmit = true;
+    if (!loginForm.$valid) {
+      return;
+    }
+    $scope.isLoading = true;
+    Backend.post("/verify2FACode", {
+      "email": $scope.user.email,
+      "password": $scope.user.password,
+      "2fa_code": $scope.user.otp
+    }).then(function( res ) {
+      $scope.isLoading = false;
+      finishLogin(res.data.token, res.data.workspace);
+    }).catch(function() {
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+  }
+
+  $scope.requestAssistant = function() {
+    window.open(`https://${DEPLOYMENT_DOMAIN}/resources/other-topics/2fa-verification-support`, '_blank');
+  }
+
 	$scope.gotoRegister = function() {
 		$shared.changingPage = true;
 		$shared.scrollToTop();
@@ -199,12 +235,6 @@ function redirectUser() {
 		$state.go('forgot');
 	}
 
-  // Sample object for login option
-  // const loginOption = {
-  //   provider: 'google',
-  //   id_token,
-  //   access_token,
-  // }
 	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar, loginOption) {
 		var data = {};
 		data['email'] = email;
@@ -231,6 +261,7 @@ function redirectUser() {
 			}, 0);
 		});
 	}
+
 	function renderButton() {
       gapi.signin2.render('gSignIn', {
         'scope': 'profile email',
