@@ -37,7 +37,6 @@
                         <div class="box invalid-login">
 
                             <center>
-                                <div ng-show="invalideOtp" class="red">Invalid OTP. Please try again.</div>
                                 <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
                                     again.
                                 </div>
@@ -214,9 +213,8 @@
                         </div>
                         <div class="box invalid-login">
                             <center>
-                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
-                                    again.
-                                </div>
+                                <div ng-show="invalideOtp" class="red">Invalid OTP. Please try again.</div>
+
                             </center>
                         </div>
                     </div>
