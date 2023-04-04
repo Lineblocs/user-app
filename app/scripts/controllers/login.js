@@ -8,7 +8,7 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval) {
 	  $shared.updateTitle("Login");
 	  $shared.processResult();
 	$scope.triedSubmit = false;
@@ -24,8 +24,26 @@ angular.module('Lineblocs')
     otp:"",
 	};
 	$scope.step = 1;
+  $scope.countdownDuration = 5;
+  $scope.resendTimeout = $scope.countdownDuration * 60;
+  $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
 var clickedGoogSignIn = false;
-
+var countdown;
+function startCountdown() {
+  countdown = $interval(function() {
+    var minutes = Math.floor($scope.resendTimeout / 60);
+    var seconds = $scope.resendTimeout - minutes * 60;
+    $scope.resendTimeout--;
+    if ($scope.resendTimeout < 0) {
+      $interval.cancel(countdown);
+    }
+    $scope.timerDisplay = padZero(minutes) + ':' + padZero(seconds);
+  }, 1000);
+}
+startCountdown();
+function padZero(number) {
+  return (number < 10 ? '0' : '') + number;
+}
 const code = $location.search().code;
 if (code) {
   fetch('https://appleid.apple.com/auth/token', {
@@ -176,7 +194,7 @@ function redirectUser() {
     data['challenge'] = $scope.challenge;
     $scope.isLoading = true;
     Backend.post("/jwt/authenticate", data, true).then(function (res) {
-      if (res.data.enable_2fa === 1) {
+      if (res.data.enable_2fa === true) {
         $scope.requestOtp($event, loginForm);
       } else {
         finishLogin(res.data);
@@ -189,6 +207,10 @@ function redirectUser() {
 
   $scope.requestOtp = function($event) {
     $scope.isLoading = true;
+    $scope.resendTimeout = $scope.countdownDuration * 60;
+    $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
+    $interval.cancel(countdown);
+    startCountdown();
     Backend.get("/request2FACode", {params: {email: $scope.user.email, password: $scope.user.password}}).then(function( res ) {
       $scope.isLoading = false;
       $scope.step = 3;
