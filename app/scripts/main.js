@@ -8461,11 +8461,12 @@ angular.module('Lineblocs')
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle) {
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval) {
 	  $shared.updateTitle("Login");
 	  $shared.processResult();
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
+  $scope.invalideOtp = false;
 	$scope.noUserFound = false;
 	$scope.shouldSplash = false;
 	$scope.isLoading = false;
@@ -8476,8 +8477,26 @@ angular.module('Lineblocs')
     otp:"",
 	};
 	$scope.step = 1;
+  $scope.countdownDuration = 5;
+  $scope.resendTimeout = $scope.countdownDuration * 60;
+  $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
 var clickedGoogSignIn = false;
-
+var countdown;
+function startCountdown() {
+  countdown = $interval(function() {
+    var minutes = Math.floor($scope.resendTimeout / 60);
+    var seconds = $scope.resendTimeout - minutes * 60;
+    $scope.resendTimeout--;
+    if ($scope.resendTimeout < 0) {
+      $interval.cancel(countdown);
+    }
+    $scope.timerDisplay = padZero(minutes) + ':' + padZero(seconds);
+  }, 1000);
+}
+startCountdown();
+function padZero(number) {
+  return (number < 10 ? '0' : '') + number;
+}
 const code = $location.search().code;
 if (code) {
   fetch('https://appleid.apple.com/auth/token', {
@@ -8515,20 +8534,20 @@ function redirectUser() {
 		}
 		$state.go('dashboard-user-welcome', {});
 }
-	function finishLogin(token, workspace) {
+	function finishLogin(data) {
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
 				$scope.couldNotLogin = false;
-				$shared.isAdmin = token.isAdmin;
+				$shared.isAdmin = data.isAdmin;
 
-				$shared.setAuthToken(token);
-				$shared.setWorkspace(workspace);
+				$shared.setAuthToken(data);
+				$shared.setWorkspace(data.workspace);
 				if (!$shared.isAdmin) {
 					redirectUser();
 					return;
 				}
 				$shared.isAdmin = true;
-				$shared.setAdminAuthToken(token.adminWorkspaceToken);
+				$shared.setAdminAuthToken(data.adminWorkspaceToken);
 				Backend.get("/admin/getWorkspaces").then(function(res) {
 					$shared.workspaces = res.data.data;
 					$state.go('dashboard-user-welcome', {});
@@ -8628,10 +8647,10 @@ function redirectUser() {
     data['challenge'] = $scope.challenge;
     $scope.isLoading = true;
     Backend.post("/jwt/authenticate", data, true).then(function (res) {
-      if (res.data.enable_2fa === 1) {
+      if (res.data.enable_2fa === true) {
         $scope.requestOtp($event, loginForm);
       } else {
-        finishLogin(res.data.token, res.data.workspace);
+        finishLogin(res.data);
       }
     }).catch(function () {
       $scope.isLoading = false;
@@ -8641,10 +8660,11 @@ function redirectUser() {
 
   $scope.requestOtp = function($event) {
     $scope.isLoading = true;
-    Backend.post("/request2FACode", {
-      "email": $scope.user.email,
-      "password": $scope.user.password
-    }).then(function( res ) {
+    $scope.resendTimeout = $scope.countdownDuration * 60;
+    $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
+    $interval.cancel(countdown);
+    startCountdown();
+    Backend.get("/request2FACode", {params: {email: $scope.user.email, password: $scope.user.password}}).then(function( res ) {
       $scope.isLoading = false;
       $scope.step = 3;
     }).catch(function() {
@@ -8660,13 +8680,20 @@ function redirectUser() {
       return;
     }
     $scope.isLoading = true;
+    $scope.invalideOtp = false;
     Backend.post("/verify2FACode", {
       "email": $scope.user.email,
       "password": $scope.user.password,
       "2fa_code": $scope.user.otp
     }).then(function( res ) {
       $scope.isLoading = false;
-      finishLogin(res.data.token, res.data.workspace);
+      console.log("res", res);
+      if (res.data.success) {
+        finishLogin(res.data);
+      } else {
+        $scope.invalideOtp = true;
+        $scope.$apply();
+      }
     }).catch(function() {
       $scope.isLoading = false;
       $scope.couldNotLogin = true;
@@ -8703,7 +8730,7 @@ function redirectUser() {
 				$shared.scrollToTop();
 
 				if ( res.data.confirmed ) {
-					finishLogin(res.data.info, res.data.info.workspace);
+					finishLogin(res.data);
 					return;
 				}
 				$state.go('register', {
@@ -9583,7 +9610,11 @@ angular.module('Lineblocs')
 		console.log("changeCountry ", country);
 	}
   $scope.onEnable2FA = function() {
-    if(!$scope.user.enable_2fa) $scope.user.type_of_2fa = null;
+    if(!$scope.user.enable_2fa) {
+      $scope.user.type_of_2fa = null;
+    } else {
+      $scope.user.type_of_2fa = 'sms';
+    }
     save2FASettings();
   }
   $scope.onOptionClick = function(option) {
@@ -9755,10 +9786,7 @@ angular.module('Lineblocs')
 	}
 
 	$shared.isLoading = true;
-	Backend.get("/self").then((res) => {
-    if (!isNaN(Number(res.data['enable_2fa']))) res.data['enable_2fa'] === 0 ? res.data['enable_2fa'] = false : res.data['enable_2fa'] = true;
-    return res;
-  }).then(function(res) {
+	Backend.get("/self").then(function(res) {
       $scope.user = res.data;
       console.log("user is ", $scope.user);
       $shared.endIsLoading();

@@ -213,9 +213,8 @@
                         </div>
                         <div class="box invalid-login">
                             <center>
-                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
-                                    again.
-                                </div>
+                                <div ng-show="invalideOtp" class="red">Invalid OTP. Please try again.</div>
+
                             </center>
                         </div>
                     </div>
@@ -240,7 +239,8 @@
                         </div>
                     </div>
                     <div class="reset-otp">
-                        <span ng-click="requestOtp()">Resend Otp</span>
+                        <p class="request-otp-info" ng-show="resendTimeout > 0">Resend OTP in {{timerDisplay}}</p>
+                        <span ng-show="resendTimeout <= 0" ng-click="requestOtp()">Resend OTP</span>
                     </div>
                     <br />
                     <div class="login-btn">
