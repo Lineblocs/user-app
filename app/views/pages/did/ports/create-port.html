@@ -51,22 +51,31 @@
             </p>
             <div class="form-port-details">
                 <div class="stepper">
-                    <div class="step" ng-class="{'active': step == 1}" ng-click="step = 1">
-                        <div class="step-number">1</div>
+                    <div class="step" ng-class="{'active': step == 1}" ng-click="validateStepForm(portForm, 1)">
+                        <div class="step-number" ng-if="step > 1">
+                            <i class="mdi mdi-check-circle-outline checked-circle"></i>
+                        </div>
+                        <div class="step-number" ng-if="step <= 1"> 1 </div>
                         <div class="step-title">Personal Details</div>
                         <div class="step-line"></div>
                     </div>
-                    <div class="step" ng-class="{'active': step == 2}" ng-click="step = 2">
-                        <div class="step-number">2</div>
+                    <div class="step" ng-class="{'active': step == 2}" ng-click="validateStepForm(portForm, 2)">
+                        <div class="step-number" ng-if="step > 2">
+                            <i class="mdi mdi-check-circle-outline checked-circle"></i>
+                        </div>
+                        <div class="step-number"  ng-if="step <= 2">2</div>
                         <div class="step-title">Address Details</div>
                         <div class="step-line"></div>
                     </div>
-                    <div class="step" ng-class="{'active': step == 3}" ng-click="step = 3">
-                        <div class="step-number">3</div>
+                    <div class="step" ng-class="{'active': step == 3}" ng-click="validateStepForm(portForm, 3)">
+                        <div class="step-number" ng-if="step > 3">
+                            <i class="mdi mdi-check-circle-outline checked-circle"></i>
+                        </div>
+                        <div class="step-number"  ng-if="step <= 3">3</div>
                         <div class="step-title">Port Details</div>
                         <div class="step-line"></div>
                     </div>
-                    <div class="step" ng-class="{'active': step == 4}" ng-click="step = 4">
+                    <div class="step" ng-class="{'active': step == 4}" ng-click="validateStepForm(portForm, 4)">
                         <div class="step-number">4</div>
                         <div class="step-title">Upload Documents</div>
                     </div>
@@ -75,28 +84,18 @@
                     <md-input-container>
                         <label>Your First Name</label>
                         <input name="first_name" ng-model="number.first_name" required="">
-                        <div ng-show="triedSubmit">
-                            <div class="box">
-                                <div ng-show="portForm.first_name.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.first_name.$error.required">This field is
-                                    required
-                                </div>
+                        <div class="box">
+                            <div ng-show="triedSubmit && portForm.first_name.$error.required">
+                                This field is required
                             </div>
                         </div>
                     </md-input-container>
                     <md-input-container>
                         <label>Your Last Name</label>
                         <input name="last_name" ng-model="number.last_name" required="">
-                        <div ng-show="triedSubmit">
-                            <div class="box">
-                                <div ng-show="portForm.last_name.$error.minlength">Please enter 1
-                                    characters or
-                                    more</div>
-                                <div ng-show="portForm.last_name.$error.required">This field is
-                                    required
-                                </div>
+                        <div class="box">
+                            <div ng-show="triedSubmit && portForm.last_name.$error.required">
+                                This field is required
                             </div>
                         </div>
                     </md-input-container>
@@ -106,31 +105,18 @@
                         <md-input-container>
                             <label>Address Line 1</label>
                             <input name="address_line_1" ng-model="number.address_line_1" name="address_line_1" required="">
-                            <div ng-show="triedSubmit">
-                                <div class="box">
-
-                                    <div ng-show="portForm.address_line_1.$error.minlength">Please enter 1
-                                        characters or
-                                        more</div>
-                                    <div ng-show="portForm.address_line_1.$error.required">This field is
-                                        required
-                                    </div>
+                            <div class="box">
+                                <div ng-show="triedSubmit && portForm.address_line_1.$error.required">
+                                    This field is required
                                 </div>
                             </div>
                         </md-input-container>
                         <md-input-container>
                             <label>Address Line 2</label>
                             <input ng-model="number.address_line_2" name="address_line_2" required=""/>
-                            <div ng-show="triedSubmit">
-
-                                <div class="box">
-
-                                    <div ng-show="portForm.address_line_2.$error.minlength">Please enter 1
-                                        characters or
-                                        more</div>
-                                    <div ng-show="portForm.address_line_2.$error.required">This field is
-                                        required
-                                    </div>
+                            <div class="box">
+                                <div ng-show="triedSubmit && portForm.address_line_2.$error.required">
+                                    This field is required
                                 </div>
                             </div>
                         </md-input-container>
@@ -139,32 +125,18 @@
                         <md-input-container>
                             <label>City</label>
                             <input ng-model="number.city" name="city" required="">
-                            <div ng-show="triedSubmit">
-
-                                <div class="box">
-
-                                    <div ng-show="portForm.city.$error.minlength">Please enter 1
-                                        characters or
-                                        more</div>
-                                    <div ng-show="portForm.city.$error.required">This field is
-                                        required
-                                    </div>
+                            <div class="box">
+                                <div ng-show="triedSubmit && portForm.city.$error.required">
+                                    This field is required
                                 </div>
                             </div>
                         </md-input-container>
                         <md-input-container>
                             <label>State / Province</label>
                             <input ng-model="number.state" name="state" required="">
-                            <div ng-show="triedSubmit">
-
-                                <div class="box">
-
-                                    <div ng-show="portForm.state.$error.minlength">Please enter 1
-                                        characters or
-                                        more</div>
-                                    <div ng-show="portForm.state.$error.required">This field is
-                                        required
-                                    </div>
+                            <div class="box">
+                                <div ng-show="triedSubmit && portForm.state.$error.required">
+                                    This field is required
                                 </div>
                             </div>
                         </md-input-container>
@@ -177,28 +149,18 @@
                                     {{country.name}}
                                 </md-option>
                             </md-select>
-                            <div ng-show="triedSubmit">
-
-                                <div class="box">
-                                    <div ng-show="portForm.country.$error.required">This field is
-                                        required
-                                    </div>
+                            <div class="box">
+                                <div ng-show="triedSubmit && portForm.country.$error.required">
+                                    This field is required
                                 </div>
                             </div>
                         </md-input-container>
                         <md-input-container>
                             <label>Zip / Postal Code</label>
                             <input ng-model="number.zip" name="zip" required="">
-                            <div ng-show="triedSubmit">
-
-                                <div class="box">
-
-                                    <div ng-show="portForm.zip.$error.minlength">Please enter 1
-                                        characters or
-                                        more</div>
-                                    <div ng-show="portForm.zip.$error.required">This field is
-                                        required
-                                    </div>
+                            <div class="box">
+                                <div ng-show="triedSubmit && portForm.zip.$error.required">
+                                    This field is required
                                 </div>
                             </div>
                         </md-input-container>
@@ -218,18 +180,16 @@
                     <div class="md-padding" ng-if="selectedPortType === 'Port single number'">
                         <md-input-container>
                             <label>Number Provider</label>
-                            <input ng-model="number.provider" required="" name="provider-main">
-                            <div ng-show="triedSubmit">
-                                <div ng-show="portForm['provider' + 'main'].$error.minlength">Please enter 1 characters or more</div>
-                                <div ng-show="portForm['provider' + 'main'].$error.required">This field is required</div>
+                            <input ng-model="number.provider" required="" name="provider_main">
+                            <div class="box">
+                                <div ng-show="triedSubmit && !number.provider">This field is required</div>
                             </div>
                         </md-input-container>
                         <md-input-container>
                             <label>Number to port</label>
-                            <input name="number-main" ng-model="number.number" required="">
-                            <div ng-show="triedSubmit">
-                                <div ng-show="portForm[number + 'main'].$error.minlength">Please enter 1 characters or more</div>
-                                <div ng-show="portForm[number + 'main'].$error.required">This field is required</div>
+                            <input name="number_main" ng-model="number.number" required="">
+                            <div class="box">
+                                <div ng-show="triedSubmit && !number.number">This field is required</div>
                             </div>
                         </md-input-container>
                     </div>
@@ -238,18 +198,16 @@
                             <div layout="column" class="multi-port-style">
                                 <md-input-container class="multi-port-input">
                                     <label>Number Provider</label>
-                                    <input ng-model="number.provider" required="" name="provider-main">
-                                    <div ng-show="triedSubmit">
-                                        <div ng-show="portForm['provider' + 'main'].$error.minlength">Please enter 1 characters or more</div>
-                                        <div ng-show="portForm['provider' + 'main'].$error.required">This field is required</div>
+                                    <input ng-model="number.provider" required="" name="provider_main">
+                                    <div class="box">
+                                        <div ng-show="triedSubmit && !number.provider">This field is required</div>
                                     </div>
                                 </md-input-container>
                                 <md-input-container class="multi-port-input">
                                     <label>Number to port</label>
-                                    <textarea name="number-main" ng-model="number.number" rows="3" md-select-on-focus required=""></textarea>
-                                    <div ng-show="triedSubmit">
-                                        <div ng-show="portForm[number + 'main'].$error.minlength">Please enter 1 characters or more</div>
-                                        <div ng-show="portForm[number + 'main'].$error.required">This field is required</div>
+                                    <textarea name="number_main" ng-model="number.number" rows="3" md-select-on-focus required=""></textarea>
+                                    <div class="box">
+                                        <div ng-show="triedSubmit && !number.number">This field is required</div>
                                     </div>
                                 </md-input-container>
                             </div>
@@ -272,6 +230,11 @@
                                 {{ uploadedFiles.loa.name }}
                                 <i class="mdi mdi-close" ng-click="clearFileInput('loa')"></i>
                             </div>
+                            <div ng-show="triedSubmit && !file && !uploadedFiles.loa.name">
+                                <div class="box">
+                                    Please upload a file
+                                </div>
+                            </div>
                         </div>
                         <div layout="column" class="upload-area">
                             <label class="upload-label-doc">Customer Service Record</label>
@@ -285,6 +248,11 @@
                             <div class="selected-file" ng-if="uploadedFiles.csr.name">
                                 {{ uploadedFiles.csr.name }}
                                 <i class="mdi mdi-close" ng-click="clearFileInput('csr')"></i>
+                            </div>
+                            <div ng-show="triedSubmit && !file && !uploadedFiles.csr.name">
+                                <div class="box">
+                                    Please upload a file
+                                </div>
                             </div>
                         </div>
                         <div layout="column" class="upload-area">
@@ -300,25 +268,30 @@
                                 {{ uploadedFiles.invoice.name }}
                                 <i class="mdi mdi-close" ng-click="clearFileInput('invoice')"></i>
                             </div>
+                            <div ng-show="triedSubmit && !file && !uploadedFiles.invoice.name">
+                                <div class="box">
+                                    Please upload a file
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div ng-show="step == 1" class="next-step-button">
-                    <md-button type="button" ng-click="step = 2" class="md-raised md-primary no-margin-sides">Next</md-button>
+                    <md-button type="button" ng-click="validateStepForm(portForm, 2)" class="md-raised md-primary no-margin-sides">Next</md-button>
                 </div>
 
                 <div ng-show="step == 2" class="button-group">
-                    <md-button type="button" ng-click="step = 1" class="md-raised no-margin-sides">Prev</md-button>
-                    <md-button type="button" ng-click="step = 3" class="md-raised md-primary no-margin-sides">Next</md-button>
+                    <md-button type="button" ng-click="validatePrevForm()" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="button" ng-click="validateStepForm(portForm, 3)" class="md-raised md-primary no-margin-sides">Next</md-button>
                 </div>
 
                 <div ng-show="step == 3" class="button-group">
-                    <md-button type="button" ng-click="step = 2" class="md-raised no-margin-sides">Prev</md-button>
-                    <md-button type="button" ng-click="step = 4" class="md-raised md-primary no-margin-sides">Next</md-button>
+                    <md-button type="button" ng-click="validatePrevForm()" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="button" ng-click="validateStepForm(portForm, 4)" class="md-raised md-primary no-margin-sides">Next</md-button>
                 </div>
 
                 <div ng-show="step == 4" class="button-group">
-                    <md-button type="button" ng-click="step = 3" class="md-raised no-margin-sides">Prev</md-button>
+                    <md-button type="button" ng-click="validatePrevForm()" class="md-raised no-margin-sides">Prev</md-button>
                     <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
                 </div>
             </div>
