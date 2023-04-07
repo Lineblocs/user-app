@@ -1,0 +1,64 @@
+<div class="extension-history">
+    <span class="md-headline history-title">History</span>
+    <md-card md-theme="'default'" class="custom-container" md-theme-watch>
+        <md-table-container>
+            <table md-table>
+              <thead md-head>
+                <tr md-row class="table-header-history">
+                  <th md-column ng-click="sortColumn('from')">
+                    <div layout="row" class="column-header">
+                        <span ng-class="{'text-muted-call': activeColumn !== 'from', 'text-primary-call': activeColumn === 'from'}">From</span>
+                        <div layout="column" class="call-arrow" ng-if="activeColumn !== 'from'">
+                            <i class="mdi mdi-menu-up arrow-icon-both"></i>
+                            <i class="mdi mdi-menu-down arrow-icon-both"></i>
+                        </div>
+                        <i class="mdi mdi-menu-up arrow-icon" ng-if="activeColumn === 'from' && !sortReverse" ng-class="{'text-muted': activeColumn !== 'from' || !sortReverse, 'text-primary': activeColumn === 'from' && !sortReverse}" ng-click="toggleSortOrder('from', true)"></i>
+                        <i class="mdi mdi-menu-down arrow-icon" ng-if="activeColumn === 'from' && sortReverse" ng-class="{'text-muted': activeColumn !== 'from' || sortReverse, 'text-primary': activeColumn === 'from' && sortReverse}" ng-click="toggleSortOrder('from', false)"></i>
+                    </div>
+                  </th>
+                  <th md-column ng-click="sortColumn('to')">
+                    <div layout="row" class="column-header">
+                        <span ng-class="{'text-muted-call': activeColumn !== 'to', 'text-primary-call': activeColumn === 'to'}">To</span>
+                        <div layout="column" class="call-arrow" ng-if="activeColumn !== 'to'">
+                            <i class="mdi mdi-menu-up arrow-icon-both"></i>
+                            <i class="mdi mdi-menu-down arrow-icon-both"></i>
+                        </div>
+                        <i class="mdi mdi-menu-up arrow-icon" ng-if="activeColumn === 'to' && !sortReverse" ng-class="{'text-muted': activeColumn !== 'to' || !sortReverse, 'text-primary': activeColumn === 'to' && !sortReverse}" ng-click="toggleSortOrder('to', true)"></i>
+                        <i class="mdi mdi-menu-down arrow-icon" ng-if="activeColumn === 'to' && sortReverse" ng-class="{'text-muted': activeColumn !== 'to' || sortReverse, 'text-primary': activeColumn === 'to' && sortReverse}" ng-click="toggleSortOrder('call_duration', false)"></i>
+                    </div>
+                  </th>
+                  <th md-column ng-click="sortColumn('call_duration')">
+                    <div layout="row" class="column-header">
+                        <span ng-class="{'text-muted-call': activeColumn !== 'call_duration', 'text-primary-call': activeColumn === 'call_duration'}">Call Duration</span>
+                        <div layout="column" class="call-arrow" ng-if="activeColumn !== 'call_duration'">
+                            <i class="mdi mdi-menu-up arrow-icon-both"></i>
+                            <i class="mdi mdi-menu-down arrow-icon-both"></i>
+                        </div>
+                        <i class="mdi mdi-menu-up arrow-icon" ng-if="activeColumn === 'call_duration' && !sortReverse" ng-class="{'text-muted': activeColumn !== 'call_duration' || !sortReverse, 'text-primary': activeColumn === 'call_duration' && !sortReverse}" ng-click="toggleSortOrder('call_duration', true)"></i>
+                        <i class="mdi mdi-menu-down arrow-icon" ng-if="activeColumn === 'call_duration' && sortReverse" ng-class="{'text-muted': activeColumn !== 'call_duration' || sortReverse, 'text-primary': activeColumn === 'call_duration' && sortReverse}" ng-click="toggleSortOrder('call_duration', false)"></i>
+                    </div>
+                  </th>
+                  <th md-column>Direction</th>
+                  <th md-column>Status</th>
+                </tr>
+              </thead>
+              <tbody md-body>
+                <tr md-row ng-repeat="item in history">
+                  <td md-cell>{{ item.from }}</td>
+                  <td md-cell>{{ item.to }}</td>
+                  <td md-cell>{{ displayTime(item.call_duration) }}</td>
+                  <td md-cell>
+                    <i class="mdi mdi-phone-incoming call-direction" ng-if="item.direction == 'incoming'"></i>
+                    <i class="mdi mdi-phone-outgoing call-direction" ng-if="item.direction == 'outgoing'"></i>
+                  </td>
+                  <td md-cell>
+                    <i class="mdi mdi-phone-classic call-direction"
+                      ng-class="{'green-icon': item.status === 'answered', 'red-icon': item.status === 'rejected' || item.status === 'busy'}">
+                    </i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </md-table-container>
+    </md-card>
+</div>

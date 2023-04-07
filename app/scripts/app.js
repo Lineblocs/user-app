@@ -1427,6 +1427,12 @@ var regParams = {
         controller: 'ExtensionsCtrl',
         params:  listPageParams
     })
+    .state('history', {
+        url: '/history?page&search',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/history.html',
+        controller: 'HistoryCtrl',
+    })
     .state('extension-create', {
         url: '/extension/create',
         parent: 'dashboard',
