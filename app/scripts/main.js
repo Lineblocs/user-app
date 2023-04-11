@@ -3331,7 +3331,7 @@ angular.module('Lineblocs')
 		});
 
 	}
-	
+
 	loadData(true).then(function(res) {
 		console.log("plans ", res.data);
 	  });

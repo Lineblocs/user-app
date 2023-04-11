@@ -2,7 +2,7 @@
     <center>
     <h2>Upgrade Plan</h2>
     </center>
-    <div class="pricing-plan-container" flex="75" layout="row">
+    <div class="pricing-plan-container" flex="80" layout="row">
         <div ng-repeat="plan in plans">
             <md-card ng-show="plan.include_in_pricing_pages" class="plan-cards" ng-class="{'featured-popular': plan.featured_plan}">
                 <div ng-show="plan.featured_plan" class="popular">
@@ -60,7 +60,7 @@
                     </md-card-content>
                 </md-content>
                 <md-card-actions layout="row" layout-align="center" class="button-plan">
-                    <md-button type="submit" class="no-margin-sides started-button" ng-click="upgradePlan('pay-as-you-go')">
+                    <md-button type="submit" class="no-margin-sides started-button" ng-click="upgradePlan(plan.key_name)">
                         Get Started</md-button>
                     <!-- <md-button ng-show="canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides">
                         Select</md-button>
