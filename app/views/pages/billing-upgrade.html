@@ -2,66 +2,77 @@
     <center>
     <h2>Upgrade Plan</h2>
     </center>
-<div layout="row">
+    <div class="pricing-plan-container" flex="75" layout="row">
+        <div ng-repeat="plan in plans">
+            <md-card ng-show="plan.include_in_pricing_pages" class="plan-cards" ng-class="{'featured-popular': plan.featured_plan}">
+                <div ng-show="plan.featured_plan" class="popular">
+                    <i class="mdi mdi-star"></i>
+                    <p>MOST POPULAR</p>
+                </div>
+                <md-card-title>
+                    <md-card-title-text class="pricing-header">
+                        <span class="md-headline">{{ plan.nice_name }}</span>
+                        <span class="md-subhead">
+                           <h1>$0.00</h1><small>Per month/user </small>
+                        </span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-content>
+                    <md-card-content class="pricing-content">
+                        <ul class="plan-info">
+                            <h5 class="no-margin-top-bottom">&nbsp;</h5>
+                            <li ng-show="plan.fax">Fax included</li>
 
+                            <li ng-show="plan.im_integrations">IM support</li>
 
-    <div flex="25">
-        <md-card class="my-cards">
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Pay As You Go <small ng-show="isCurrentPlan('pay-as-you-go')">(Current)</small></span>
-                    <span class="md-subhead">
-                       <h5>$0</h5><small>/user/month** </small>
-                    </span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-content>
-            <md-card-content>
-                <ul class="plan-info">
-                    <small>Includes</small>
-                    <h5 class="no-margin-top-bottom">&nbsp;</h5>
-                    <li>
-<li><i class="mdi mdi-check">
-</i>
-Metered minutes outbound in US or Canada</li>
+                            <li ng-show="plan.productivity_integrations">Productivity tools</li>
 
-<li><i class="mdi mdi-check">
-</i>5 extensions</li>
+                            <li ng-show="plan.pay_as_you_go"><b>Metered</b> minutes outbound in US or Canada</li>
 
-<li><i class="mdi mdi-check">
-</i>1GB Voicemail</li>
+                            <li ng-show="plan.pay_as_you_go"><b>Metered</b> inbound calling</li>
 
-<li><i class="mdi mdi-check">
-</i>Metered inbound calling</li>
+                            <li ng-show="plan.extensions"><b>5</b> Extensions</li>
 
-<li><i class="mdi mdi-check">
-</i>100 Fax per month</li>
+                            <li ng-show="plan.pay_as_you_go"><b>1GB</b> Voicemail</li>
 
-<li><i class="mdi mdi-check">
-</i>Number Porting</li>
+                            <li ng-show="plan.fraud_protection">Fraud Protection</li>
 
-<li><i class="mdi mdi-check">
-</i>Unlimited Calling between extensions</li>
+                            <li ng-show="plan.crm_integrations">CRM integrations</li>
 
-<li><i class="mdi mdi-check">
-</i>Standard Call Features</li>
+                            <li ng-show="plan.voice_analytics">Voice analytics</li>
 
-<li><i class="mdi mdi-check">
-</i>Voicemail Transcription</li>
+                            <li ng-show="plan.pay_as_you_go">100 Fax per month</li>
 
-                </ul>
-</md-card-content>
-            </md-content>
-            <md-card-actions layout="row" layout-align="end center">
-                <md-button ng-show="canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides">
-                    Select</md-button>
-                <md-button ng-show="!canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides" ng-disabled="true">
-                    Cannot Downgrade</md-button>
+                            <li ng-show="plan.programmable_toolkit">Programmable APIs</li>
 
-            </md-card-actions>
-        </md-card>
+                            <li ng-show="plan.sso">SSO support</li>
+
+                            <li ng-show="plan.provisioner">Phone provisioner</li>
+
+                            <li ng-show="plan.vpn">Internal VPN support</li>
+
+                            <li class="plan-plus" ng-show="plan.pay_as_you_go"><b>Plus:</b></li>
+
+                            <li ng-show="plan.pay_as_you_go">Unlimited calling between extensions</li>
+
+                            <li ng-show="plan.pay_as_you_go">Standard Call Features</li>
+                        </ul>
+                    </md-card-content>
+                </md-content>
+                <md-card-actions layout="row" layout-align="center" class="button-plan">
+                    <md-button type="submit" class="no-margin-sides started-button" ng-click="upgradePlan('pay-as-you-go')">
+                        Get Started</md-button>
+                    <!-- <md-button ng-show="canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides">
+                        Select</md-button>
+                    <md-button ng-show="!canUpgrade('pay-as-you-go')" ng-click="upgradePlan('pay-as-you-go')" type="submit" class="md-raised md-primary no-margin-sides" ng-disabled="true">
+                        Cannot Downgrade</md-button> -->
+
+                </md-card-actions>
+            </md-card>
+        </div>
     </div>
-    <div flex="25">
+
+    <!-- <div flex="25">
         <md-card class="my-cards">
             <md-card-title>
                 <md-card-title-text>
@@ -237,6 +248,5 @@ Metered minutes outbound in US or Canada</li>
                     Cannot Downgrade</md-button>
             </md-card-actions>
         </md-card>
-    </div>
-</div>
+    </div> -->
 </div>

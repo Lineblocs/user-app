@@ -11,6 +11,7 @@ angular.module('Lineblocs')
   .controller('BillingUpgradePlanCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing Upgrade");
 	  $scope.$shared = $shared;
+    $scope.plans = '';
 	  $scope.isCurrentPlan = function(name) {
 		if (name==='pay-as-you-go') {
 			return true;
@@ -45,7 +46,13 @@ angular.module('Lineblocs')
 		$state.go('billing-upgrade-submit', {"plan": plan});
 	}
 
-	  Backend.get("/plans").then(function(res) {
+	Backend.get("/plans").then(function(res) {
 		console.log("plans ", res.data);
-	  });
   });
+
+  Backend.get("/getServicePlans").then(function(res) {
+    console.log("getServicePlans ", res.data);
+    $scope.plans = res.data;
+  });
+});
+

@@ -1785,7 +1785,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, $state, Backend) {
+}).run(function($rootScope, $shared, $state, Backend, Authenticator) {
 
       //Idle.watch();
     $rootScope.$on('IdleStart', function() {
@@ -1798,6 +1798,13 @@ var regParams = {
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         // do something
         console.log("state is changing ", arguments);
+        if(toState.requireAuthentication) {
+          if(!Authenticator.isAuthenticated() || !Authenticator.checkAuthenticationTime()) {
+            $state.go('login');
+          } else {
+            Authenticator.resetLastAuthenticationTime();
+          }
+        }
         $shared.state = toState;
         if (fromState.name === 'flow-editor') {
             $shared.showNavbar();
@@ -1879,13 +1886,42 @@ var regParams = {
     }
 
     function appleSignInInit() {
-      AppleID.auth.init({
-        clientId: $shared.frontend_api_creds.apple_signin_client_id,
-        scope: 'email',
-        redirectURI: DEPLOYMENT_DOMAIN,
-        usePopup: true, // Optional parameter to open the sign-in window as a popup
-      });
+      if ($shared.frontend_api_creds.apple_signin_client_id) {
+        AppleID.auth.init({
+          clientId: $shared.frontend_api_creds.apple_signin_client_id,
+          scope: 'email',
+          redirectURI: DEPLOYMENT_DOMAIN,
+          usePopup: true, // Optional parameter to open the sign-in window as a popup
+        });
+      }
     }
+}).service('Authenticator', function($window, $q, $shared, $state, $rootScope) {
+   var lastAuthenticationTime;
+   this.isAuthenticated = function() {
+        return $window.sessionStorage.token !== undefined;
+   };
+   this.checkAuthenticationTime = function() {
+      var currentTime = new Date().getTime();
+      var timeSinceLastAuthentication = currentTime - lastAuthenticationTime;
+      return timeSinceLastAuthentication < 30 * 60 * 1000;
+   };
+   this.setLastAuthenticationTime = function() {
+      lastAuthenticationTime = new Date().getTime();
+   };
+   this.resetLastAuthenticationTime = function() {
+      lastAuthenticationTime = null;
+   };
+   this.authenticate = function(username, password) {
+    return Backend.post("/authenticate", {username: username, password: password}).then(function(res) {
+      if(res.data.token){
+        $window.sessionStorage.token =  res.data.token;
+        this.setLastAuthenticationTime();
+        return $q.resolve(res);
+      } else {
+        return $q.reject(res);
+      }
+    });
+   };
 });
 
 
@@ -3021,6 +3057,7 @@ angular.module('Lineblocs')
   .controller('BillingUpgradePlanCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing Upgrade");
 	  $scope.$shared = $shared;
+    $scope.plans = '';
 	  $scope.isCurrentPlan = function(name) {
 		if (name==='pay-as-you-go') {
 			return true;
@@ -3055,10 +3092,16 @@ angular.module('Lineblocs')
 		$state.go('billing-upgrade-submit', {"plan": plan});
 	}
 
-	  Backend.get("/plans").then(function(res) {
+	Backend.get("/plans").then(function(res) {
 		console.log("plans ", res.data);
-	  });
   });
+
+  Backend.get("/getServicePlans").then(function(res) {
+    console.log("getServicePlans ", res.data);
+    $scope.plans = res.data;
+  });
+});
+
 
 'use strict';
 
