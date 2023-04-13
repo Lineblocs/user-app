@@ -1322,3 +1322,14 @@ span.spacer {
   font-size: 38px;
   color: #109c10;
 }
+
+.phone-sms{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+
+.sms-number-field{
+  margin-bottom: 0px;
+}
