@@ -7078,30 +7078,50 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-    $shared.updateTitle("Verified Caller IDs");
+angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $http ) {
+  $shared.updateTitle("Verified Caller IDs");
   $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.$mdDialog = $mdDialog;
+      $scope.countryCode = '';
       $scope.data = {
         step1: {
-          number: ""
-        }, 
+          number: "",
+          notes: ""
+        },
         step2:{
           code: ""
         }
 
       };
       $scope.step = 1;
+      $http.get('../../scripts/constants/country-list.json').then(function(countries) {
+        $scope.countries = countries.data;
+      });
       $scope.postStep1 = function() {
-        var data = angular.copy($scope.data.step1);
+        const data = angular.copy($scope.data.step1);
+        data.number = $scope.countryCode + data.number;
         Backend.post("/settings/verifiedCallerids", data).then(function(res) {
-          $scope.step = 2;           
+          $scope.step = 2;
         });
       }
+
+      $scope.onNumberChange = function() {
+        $scope.data.step1.number = Number($scope.data.step1.number.replace(/[^0-9]/g, '').slice(0, 10));
+        if (!$scope.data.step1.number) $scope.data.step1.number = '';
+      }
+
+      $scope.getMatchedCountry = function(text) {
+        console.log('text', text);
+        if (!text) return;
+        const matchedCountry = $scope.countries.filter(country => country.name.toLowerCase().includes(text.toLowerCase()));
+        console.log('matchedCountry', matchedCountry);
+        return matchedCountry;
+      }
+
       $scope.postStep2 = function() {
         var data = {
          'code': $scope.data.step2['code'],
@@ -7131,7 +7151,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
 
       $scope.close = function() {
         console.log("closing dialog..");
-        $mdDialog.hide(); 
+        $mdDialog.hide();
       }
     }
 
