@@ -859,6 +859,7 @@ return changed;
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 $shared.planInfo=  res.data[4];
+                // $shared.planInfo.rank = 3;
                 $shared.workspaceInfo=  res.data[5];
                 console.log("updated UI state");
                 resolve(res);
