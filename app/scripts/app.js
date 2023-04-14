@@ -287,7 +287,8 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
             'extensions': [
                 'extensions',
                 'extension-create',
-                'extension-edit'
+                'extension-edit',
+                'history'
             ],
             'recordings': [
                 'recordings'
@@ -1428,7 +1429,7 @@ var regParams = {
         params:  listPageParams
     })
     .state('history', {
-        url: '/history?page&search',
+      url: '/extension/{extensionId}/history?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/history.html',
         controller: 'HistoryCtrl',

@@ -196,21 +196,11 @@
                                     class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text">
                                     {{ 'flows' | translate }}</span></md-button>
                         </li>
-                        <li class="show-subnav" ng-show="$shared.canPerformAction('manage_extensions')">
-                            <md-button href="" ng-click="subnav('ui-5');" class="show-menu">
-                                <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-5'}"></i>
-                                <i class="mdi mdi-cellphone"></i> &nbsp;
-                                <span class="text">{{ 'extensions' | translate }}</span></md-button>
-                            <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-5'}">
-                                <li ng-class="{active: $state.includes('extensions')}">
-                                    <md-button href="" ng-click="$shared.changeRoute('extensions')" class=""><span
-                                            class="text">{{ 'extensions' | translate }}</span></md-button>
-                                </li>
-                                <li ng-class="{active: $state.includes('history')}">
-                                    <md-button href="" ng-click="$shared.changeRoute('history')" class="">
-                                       <span class="text">{{ 'history' | translate }}</span></md-button>
-                                </li>
-                            </ul>
+                        <li ng-class="{active: $shared.isSectionActive('extensions')}"
+                            ng-show="$shared.canPerformAction('manage_extensions')">
+                            <md-button href="" ng-click="$shared.changeRoute('extensions')" class=""><i
+                                    class="mdi mdi-cellphone"></i> &nbsp;<span
+                                    class="text">{{ 'extensions' | translate }}</span></md-button>
                         </li>
                         <li class="show-subnav" ng-show="$shared.isSettingEnabled('provisioner')">
                             <md-button href="" class=" show-menu" ng-click="subnav('ui-2')">

@@ -13,12 +13,12 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
     $scope.$shared = $shared;
     $scope.pagination = pagination;
     $scope.Backend = Backend;
-    
+
     function DialogController($scope, $mdDialog, extension, $shared) {
       $scope.$shared = $shared;
       $scope.extension = extension;
       $scope.close = function() {
-        $mdDialog.hide(); 
+        $mdDialog.hide();
       }
     }
   $scope.settings = {
@@ -44,6 +44,9 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
   }
   $scope.createExtension = function(extension) {
     $state.go('extension-create', {});
+  }
+  $scope.historyInfo = function(extension) {
+    $state.go('history', {extensionId: extension.public_id});
   }
   $scope.connectInfo = function($event, extension) {
     $mdDialog.show({

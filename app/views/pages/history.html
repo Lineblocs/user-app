@@ -51,10 +51,7 @@
                     <i class="mdi mdi-phone-incoming call-direction" ng-if="item.direction == 'incoming'"></i>
                     <i class="mdi mdi-phone-outgoing call-direction" ng-if="item.direction == 'outgoing'"></i>
                   </td>
-                  <td md-cell>
-                    <i class="mdi mdi-phone-classic call-direction"
-                      ng-class="{'green-icon': item.status === 'answered', 'red-icon': item.status === 'rejected' || item.status === 'busy'}">
-                    </i>
+                  <td md-cell>{{ item.status }}
                   </td>
                 </tr>
               </tbody>

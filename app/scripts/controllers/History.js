@@ -20,21 +20,21 @@ angular.module('Lineblocs').controller('HistoryCtrl', function ($scope, Backend,
         "to": "123-222-3030",
         "call_duration": 36,
         "direction": "incoming",
-        "status": "answered"
+        "status": "Answered"
       },
       {
         "from": "122-202-3030",
         "to": "123-202-3030",
         "call_duration": 1806,
         "direction": "outgoing",
-        "status": "rejected"
+        "status": "Rejected"
       },
       {
         "from": "121-202-3030",
         "to": "123-102-3030",
         "call_duration": 1254,
         "direction": "incoming",
-        "status": "busy"
+        "status": "Busy"
       }
     ];
     $scope.displayTime = function(durationInSeconds) {

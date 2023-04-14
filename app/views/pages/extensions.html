@@ -88,7 +88,7 @@
               </md-button>
               <md-button ng-click="deleteExtension($event, extension)" class="md-icon-button" aria-label="Settings">
                   <md-icon >
-                    
+
                     <i class="mdi mdi-delete"></i>
                          <md-tooltip class="helper-tooltip" md-direction="top">
                               Delete this item
@@ -102,6 +102,14 @@
                               View Connection Info
                           </md-tooltip>
                   </md-icon>
+              </md-button>
+              <md-button ng-click="historyInfo(extension)" class="md-icon-button" aria-label="Settings">
+                <md-icon >
+                  <i class="mdi mdi-history"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                            View History Info
+                        </md-tooltip>
+                </md-icon>
               </md-button>
             </td>
           </tr>
