@@ -1322,3 +1322,118 @@ span.spacer {
   font-size: 38px;
   color: #109c10;
 }
+
+.pricing-plan-container{
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pricing-header{
+  align-items: center;
+}
+
+.plan-cards{
+  width: 295px;
+  position: relative;
+  margin-bottom: 30px;
+  overflow: hidden;
+  height: 980px;
+}
+
+.popular {
+  position: absolute;
+  background: #ff655d;
+  top: 0px;
+  right: 0px;
+  width: 150px;
+  height: 150px;
+  transform: rotate(45deg) translateY(-120px);
+  transform-origin: center;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.popular i{
+  font-size: 24px;
+  color: #fff;
+}
+
+.popular p {
+  font-size: 10px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.pricing-content{
+  padding: 0px 24px 0px 40px;
+}
+
+.pricing-content li {
+  line-height: 2;
+}
+
+.started-button{
+  border: 2px solid #181147;
+  color: #181147;
+  width: 130px;
+  height: 50px;
+  font-weight: 400;
+}
+
+.started-button:hover {
+  background-color: #181147 !important;
+  color: white;
+}
+
+.pricing-plan-container md-card-title{
+  flex: 0;
+}
+
+.button-plan{
+  margin-top: auto;
+  padding: 30px;
+}
+
+md-content{
+  background-color: white;
+}
+
+.plan-info li{
+  list-style: disc;
+}
+
+.plan-info li::marker{
+  color: #6ad7fa;
+}
+
+.featured-popular {
+  border: 5px solid #ff655d;
+}
+
+.plan-info .plan-plus{
+  list-style: none;
+  margin-top: 35px;
+  font-size: 12px;
+}
+
+.started-button-downgrade{
+  width: 150px;
+  height: 50px;
+  font-weight: 400;
+  border: 2px solid;
+}
+.phone-sms{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+
+.sms-number-field{
+  margin-bottom: 0px;
+}

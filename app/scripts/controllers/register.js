@@ -23,13 +23,14 @@ angular.module('Lineblocs')
 	  $scope.step = 1;
 	  $scope.userId = null;
 	  $scope.token = null;
-	  $scope.invalidCode =false; 
-	  $scope.invalidNumber =false; 
+	  $scope.invalidCode =false;
+	  $scope.invalidNumber =false;
 	  $scope.planInfo = null;
 	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
 		last_name: "",
+    mobile_number: "",
 		email: "",
 		password: "",
 		password2: ""
@@ -50,6 +51,11 @@ angular.module('Lineblocs')
 
   $scope.workspace = "";
   $scope.selectedTemplate = null;
+
+  $scope.onNumberChange = function() {
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
+  }
 
   function doSpinup() {
 	$scope.shouldSplash = true;
@@ -112,7 +118,7 @@ angular.module('Lineblocs')
 					$shared.showError("Error", data.message);
 					return;
 				}
-				$scope.token = data; 
+				$scope.token = data;
 				$scope.userId = data.userId;
 				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
@@ -311,7 +317,7 @@ angular.module('Lineblocs')
 					// Get the token ID:
 					$mdDialog.hide();
 					stripeRespAddCard(response).then(function() {
-						$scope.step = 4;	
+						$scope.step = 4;
 					});
 				}
 			}, 0);
