@@ -13,11 +13,10 @@ angular.module('Lineblocs')
 	  $scope.$shared = $shared;
     $scope.plans = '';
 
-    $scope.canUpgrade = function(planRank) {
-      console.log("canUpgrade ", arguments);
+    $scope.canUpgrade = function(plan) {
       const info = $shared.planInfo;
-      const currentRank = info.rank;
-      if (planRank >= currentRank) return false;
+      const currentRank = $scope.plans.find((plan) => plan.key_name === info.key_name).rank;
+      if (plan.rank >= currentRank) return false;
       return true;
     }
 
