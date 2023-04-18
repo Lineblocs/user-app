@@ -1,5 +1,5 @@
 <div>
-    <md-card md-theme="'default'"" md-theme-watch>
+    <md-card md-theme="'default'" md-theme-watch>
         <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true">
         <md-tab label="Checkout">
             <div layout="row">
@@ -11,10 +11,20 @@
                                 <h5>Benefits</h5>
                                 <ul class="benefits">
                                     <li ng-repeat="benefit in plan.benefits">
-                                        <i class="mdi mdi-check"></i>
-                                        {{benefit}}
+                                        <div ng-show="benefit.value">
+                                            <i class="mdi mdi-check"></i>
+                                            {{benefit.description}}
+                                        </div>
                                     </li>
-
+                                </ul>
+                                <h5>Features</h5>
+                                <ul class="benefits">
+                                    <li ng-repeat="feature in plan.features">
+                                        <div ng-show="feature.value">
+                                            <i class="mdi mdi-check"></i>
+                                            {{feature.description}}
+                                        </div>
+                                    </li>
                                 </ul>
                         </md-content>
                     </div>

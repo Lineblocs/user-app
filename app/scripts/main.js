@@ -859,6 +859,7 @@ return changed;
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 $shared.planInfo=  res.data[4];
+                // $shared.planInfo.rank = 3;
                 $shared.workspaceInfo=  res.data[5];
                 console.log("updated UI state");
                 resolve(res);
@@ -1785,7 +1786,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, $state, Backend) {
+}).run(function($rootScope, $shared, $state, Backend, Authenticator) {
 
       //Idle.watch();
     $rootScope.$on('IdleStart', function() {
@@ -1798,6 +1799,13 @@ var regParams = {
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         // do something
         console.log("state is changing ", arguments);
+        if(toState.requireAuthentication) {
+          if(!Authenticator.isAuthenticated() || !Authenticator.checkAuthenticationTime()) {
+            $state.go('login');
+          } else {
+            Authenticator.resetLastAuthenticationTime();
+          }
+        }
         $shared.state = toState;
         if (fromState.name === 'flow-editor') {
             $shared.showNavbar();
@@ -1879,13 +1887,42 @@ var regParams = {
     }
 
     function appleSignInInit() {
-      AppleID.auth.init({
-        clientId: $shared.frontend_api_creds.apple_signin_client_id,
-        scope: 'email',
-        redirectURI: DEPLOYMENT_DOMAIN,
-        usePopup: true, // Optional parameter to open the sign-in window as a popup
-      });
+      if ($shared.frontend_api_creds.apple_signin_client_id) {
+        AppleID.auth.init({
+          clientId: $shared.frontend_api_creds.apple_signin_client_id,
+          scope: 'email',
+          redirectURI: DEPLOYMENT_DOMAIN,
+          usePopup: true, // Optional parameter to open the sign-in window as a popup
+        });
+      }
     }
+}).service('Authenticator', function($window, $q, $shared, $state, $rootScope) {
+   var lastAuthenticationTime;
+   this.isAuthenticated = function() {
+        return $window.sessionStorage.token !== undefined;
+   };
+   this.checkAuthenticationTime = function() {
+      var currentTime = new Date().getTime();
+      var timeSinceLastAuthentication = currentTime - lastAuthenticationTime;
+      return timeSinceLastAuthentication < 30 * 60 * 1000;
+   };
+   this.setLastAuthenticationTime = function() {
+      lastAuthenticationTime = new Date().getTime();
+   };
+   this.resetLastAuthenticationTime = function() {
+      lastAuthenticationTime = null;
+   };
+   this.authenticate = function(username, password) {
+    return Backend.post("/authenticate", {username: username, password: password}).then(function(res) {
+      if(res.data.token){
+        $window.sessionStorage.token =  res.data.token;
+        this.setLastAuthenticationTime();
+        return $q.resolve(res);
+      } else {
+        return $q.reject(res);
+      }
+    });
+   };
 });
 
 
@@ -3021,44 +3058,25 @@ angular.module('Lineblocs')
   .controller('BillingUpgradePlanCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing Upgrade");
 	  $scope.$shared = $shared;
-	  $scope.isCurrentPlan = function(name) {
-		if (name==='pay-as-you-go') {
-			return true;
-		}
-		return false;
-	  }
-	$scope.canUpgrade = function(plan) {
-		console.log("canUpgrade ", arguments);
-		var info = $shared.planInfo;
-		var current = info.key_name;
-		var plan1 = 'pay-as-you-go';
-		var plan2 = 'starter';
-		var plan3 = 'pro';
-		var plan4 = 'ultimate';
-		if (current === plan1 && plan === plan1) {
-			return false;
-		}
-		if (current === plan2 && (plan === plan1 || plan === plan2)) {
-			return false;
-		}
-		if (current === plan3 && (plan === plan1 || plan === plan2 || plan === plan3)) {
-			return false;
-		}
-		if (current === plan4 && (plan === plan1 || plan === plan2 || plan === plan3 || plan === plan4)) {
-			return false;
-		}
+    $scope.plans = '';
 
-		return true;
+    $scope.canUpgrade = function(plan) {
+      const info = $shared.planInfo;
+      const currentRank = $scope.plans.find((plan) => plan.key_name === info.key_name).rank;
+      if (plan.rank >= currentRank) return false;
+      return true;
+    }
 
-	}
-	$scope.upgradePlan =  function(plan) {
-		$state.go('billing-upgrade-submit', {"plan": plan});
-	}
+    $scope.upgradePlan =  function(plan) {
+      $state.go('billing-upgrade-submit', {"plan": plan});
+    }
 
-	  Backend.get("/plans").then(function(res) {
-		console.log("plans ", res.data);
-	  });
-  });
+    Backend.get("/getServicePlans").then(function(res) {
+      console.log("getServicePlans ", res.data);
+      $scope.plans = res.data;
+    });
+});
+
 
 'use strict';
 
@@ -3129,14 +3147,16 @@ angular.module('Lineblocs')
 		return $q(function(resolve, reject) {
 			$q.all([
 				Backend.get("/billing"),
-				Backend.get("/plans")
+				Backend.get("/getServicePlans")
 			]).then(function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];
-				$scope.plan = res[1].data[ $stateParams['plan'] ];
+				$scope.plan = res[1].data.find(function(obj) {
+          return obj.key_name == $stateParams['plan'];
+        });
 				console.log("config is ", $scope.config);
 				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
@@ -3288,7 +3308,7 @@ angular.module('Lineblocs')
 		});
 
 	}
-	
+
 	loadData(true).then(function(res) {
 		console.log("plans ", res.data);
 	  });
