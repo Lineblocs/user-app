@@ -1427,3 +1427,13 @@ md-content{
   font-weight: 400;
   border: 2px solid;
 }
+.phone-sms{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+}
+
+.sms-number-field{
+  margin-bottom: 0px;
+}

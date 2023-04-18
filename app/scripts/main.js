@@ -7098,30 +7098,50 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-    $shared.updateTitle("Verified Caller IDs");
+angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $http ) {
+  $shared.updateTitle("Verified Caller IDs");
   $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
       $scope.$shared = $shared;
       $scope.error = false;
       $scope.errorText = "";
       $scope.$mdDialog = $mdDialog;
+      $scope.countryCode = '';
       $scope.data = {
         step1: {
-          number: ""
-        }, 
+          number: "",
+          notes: ""
+        },
         step2:{
           code: ""
         }
 
       };
       $scope.step = 1;
+      $http.get('../../scripts/constants/country-list.json').then(function(countries) {
+        $scope.countries = countries.data;
+      });
       $scope.postStep1 = function() {
-        var data = angular.copy($scope.data.step1);
+        const data = angular.copy($scope.data.step1);
+        data.number = $scope.countryCode + data.number;
         Backend.post("/settings/verifiedCallerids", data).then(function(res) {
-          $scope.step = 2;           
+          $scope.step = 2;
         });
       }
+
+      $scope.onNumberChange = function() {
+        $scope.data.step1.number = Number($scope.data.step1.number.replace(/[^0-9]/g, '').slice(0, 10));
+        if (!$scope.data.step1.number) $scope.data.step1.number = '';
+      }
+
+      $scope.getMatchedCountry = function(text) {
+        console.log('text', text);
+        if (!text) return;
+        const matchedCountry = $scope.countries.filter(country => country.name.toLowerCase().includes(text.toLowerCase()));
+        console.log('matchedCountry', matchedCountry);
+        return matchedCountry;
+      }
+
       $scope.postStep2 = function() {
         var data = {
          'code': $scope.data.step2['code'],
@@ -7151,7 +7171,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
 
       $scope.close = function() {
         console.log("closing dialog..");
-        $mdDialog.hide(); 
+        $mdDialog.hide();
       }
     }
 
@@ -9196,13 +9216,14 @@ angular.module('Lineblocs')
 	  $scope.step = 1;
 	  $scope.userId = null;
 	  $scope.token = null;
-	  $scope.invalidCode =false; 
-	  $scope.invalidNumber =false; 
+	  $scope.invalidCode =false;
+	  $scope.invalidNumber =false;
 	  $scope.planInfo = null;
 	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
 		last_name: "",
+    mobile_number: "",
 		email: "",
 		password: "",
 		password2: ""
@@ -9223,6 +9244,11 @@ angular.module('Lineblocs')
 
   $scope.workspace = "";
   $scope.selectedTemplate = null;
+
+  $scope.onNumberChange = function() {
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
+  }
 
   function doSpinup() {
 	$scope.shouldSplash = true;
@@ -9285,7 +9311,7 @@ angular.module('Lineblocs')
 					$shared.showError("Error", data.message);
 					return;
 				}
-				$scope.token = data; 
+				$scope.token = data;
 				$scope.userId = data.userId;
 				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
@@ -9484,7 +9510,7 @@ angular.module('Lineblocs')
 					// Get the token ID:
 					$mdDialog.hide();
 					stripeRespAddCard(response).then(function() {
-						$scope.step = 4;	
+						$scope.step = 4;
 					});
 				}
 			}, 0);
@@ -9638,24 +9664,40 @@ angular.module('Lineblocs')
 		password2: "",
     enable_2fa: false,
     type_of_2fa: null,
+    mobile_number: ""
 	};
   $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
   $scope.onEnable2FA = function() {
-    if(!$scope.user.enable_2fa) {
-      $scope.user.type_of_2fa = null;
-    } else {
+    if($scope.user.enable_2fa) {
       $scope.user.type_of_2fa = 'sms';
     }
-    save2FASettings();
   }
-  $scope.onOptionClick = function(option) {
-    $scope.user.type_of_2fa = option;
-    save2FASettings();
+  $scope.on2FASubmit = function() {
+    $scope.triedSubmit = true;
+    if(!$scope.user.enable_2fa) {
+      $scope.user.enable_2fa = false;
+      save2FASettings();
+    } else {
+      $scope.user.enable_2fa = true;
+      if($scope.user.type_of_2fa === 'sms') {
+        if(!$scope.user.mobile_number) return;
+        Backend.put("/self", { mobile_number: $scope.user.mobile_number }).then(function(res) {
+          save2FASettings();
+        });
+      } else {
+        $scope.user.type_of_2fa = 'totp';
+        save2FASettings();
+      }
+    }
   }
 
+  $scope.onNumberChange = function() {
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
+  }
   $scope.tabChanged = function (tab) {
     $scope.isDisabled = false;
     $scope.selectedSecurityType = tab;
@@ -9726,7 +9768,7 @@ angular.module('Lineblocs')
   function save2FASettings() {
     const data = {};
     data.enable_2fa = $scope.user.enable_2fa;
-    data.type_of_2fa = $scope.user.type_of_2fa?.value;
+    if($scope.user.enable_2fa) data.type_of_2fa = $scope.user.type_of_2fa;
     Backend.post("/save2FASettings", data).then(function( res ) {
       console.log('res', res);
       // $scope.user.2FAConfig = res.data;
