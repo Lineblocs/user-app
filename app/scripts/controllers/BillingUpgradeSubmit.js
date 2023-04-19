@@ -67,14 +67,16 @@ angular.module('Lineblocs')
 		return $q(function(resolve, reject) {
 			$q.all([
 				Backend.get("/billing"),
-				Backend.get("/plans")
+				Backend.get("/getServicePlans")
 			]).then(function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];
-				$scope.plan = res[1].data[ $stateParams['plan'] ];
+				$scope.plan = res[1].data.find(function(obj) {
+          return obj.key_name == $stateParams['plan'];
+        });
 				console.log("config is ", $scope.config);
 				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
@@ -226,7 +228,7 @@ angular.module('Lineblocs')
 		});
 
 	}
-	
+
 	loadData(true).then(function(res) {
 		console.log("plans ", res.data);
 	  });

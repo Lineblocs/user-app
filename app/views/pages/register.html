@@ -109,6 +109,26 @@
                                         </md-input-container>
                                     </div>
                                 </div>
+                                <div flex="100" flex-gt-sm="50">
+                                    <div class="input-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                                            <title>cellphone</title>
+                                            <path fill="#317780" fill-rule="nonzero" d="M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z" />
+                                        </svg>
+
+                                        <md-input-container>
+                                            <input name="mobile_number" ng-model="user.mobile_number" type="text"
+                                                placeholder="Phone Number" required="" minlength="10" ng-change="onNumberChange()">
+                                            <div ng-show="triedSubmit">
+                                                <div class="box">
+                                                    <div ng-show="registerForm.mobile_number.$error.required">This field is
+                                                        required</div>
+                                                    <div ng-show="registerForm.mobile_number.$error.minlength" class="red">The number you entered was invalid.</div>
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -263,7 +283,7 @@
 
                             </div>
                             <div class="login-btn">
-                                <button>
+                                <button class="custom">
                                     <span>Send Code</span>
                                 </button>
                             </div>
