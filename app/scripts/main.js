@@ -5340,17 +5340,7 @@ angular.module('Lineblocs').controller('HistoryCtrl', function ($scope, Backend,
         "status": "Busy"
       }
     ];
-    $scope.displayTime = function(durationInSeconds) {
-      var minutes = Math.floor(durationInSeconds / 60);
-      var seconds = durationInSeconds % 60;
-      if (minutes === 0) {
-        return seconds + " seconds";
-      } else if (seconds === 0) {
-        return minutes + " minute";
-      } else {
-        return minutes + " minute " + seconds + " seconds";
-      }
-    };
+
     $scope.sortColumn = function(column) {
       if ($scope.activeColumn === column) {
         $scope.sortReverse = !$scope.sortReverse;

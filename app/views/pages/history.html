@@ -46,7 +46,7 @@
                 <tr md-row ng-repeat="item in history">
                   <td md-cell>{{ item.from }}</td>
                   <td md-cell>{{ item.to }}</td>
-                  <td md-cell>{{ displayTime(item.call_duration) }}</td>
+                  <td md-cell>{{ item.call_duration * 1000 | date: 'HH:mm:ss' }}</td>
                   <td md-cell>
                     <i class="mdi mdi-phone-incoming call-direction" ng-if="item.direction == 'incoming'"></i>
                     <i class="mdi mdi-phone-outgoing call-direction" ng-if="item.direction == 'outgoing'"></i>
