@@ -287,7 +287,8 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
             'extensions': [
                 'extensions',
                 'extension-create',
-                'extension-edit'
+                'extension-edit',
+                'history'
             ],
             'recordings': [
                 'recordings'
@@ -1427,6 +1428,12 @@ var regParams = {
         templateUrl: 'views/pages/extensions.html',
         controller: 'ExtensionsCtrl',
         params:  listPageParams
+    })
+    .state('history', {
+      url: '/extension/{extensionId}/history?page&search',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/history.html',
+        controller: 'HistoryCtrl',
     })
     .state('extension-create', {
         url: '/extension/create',
@@ -4796,12 +4803,12 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
     $scope.$shared = $shared;
     $scope.pagination = pagination;
     $scope.Backend = Backend;
-    
+
     function DialogController($scope, $mdDialog, extension, $shared) {
       $scope.$shared = $shared;
       $scope.extension = extension;
       $scope.close = function() {
-        $mdDialog.hide(); 
+        $mdDialog.hide();
       }
     }
   $scope.settings = {
@@ -4827,6 +4834,9 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
   }
   $scope.createExtension = function(extension) {
     $state.go('extension-create', {});
+  }
+  $scope.historyInfo = function(extension) {
+    $state.go('history', {extensionId: extension.public_id});
   }
   $scope.connectInfo = function($event, extension) {
     $mdDialog.show({
@@ -5310,6 +5320,74 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
   $scope.load();
 });
 
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('HistoryCtrl', function ($scope, Backend, pagination, $location, $state, $shared, $q, $stateParams) {
+    $shared.updateTitle("History");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+    $shared.isLoading = false;
+    $scope.history = [
+      {
+        "from": "123-202-3030",
+        "to": "123-222-3030",
+        "call_duration": 36,
+        "direction": "incoming",
+        "status": "Answered"
+      },
+      {
+        "from": "122-202-3030",
+        "to": "123-202-3030",
+        "call_duration": 1806,
+        "direction": "outgoing",
+        "status": "Rejected"
+      },
+      {
+        "from": "121-202-3030",
+        "to": "123-102-3030",
+        "call_duration": 1254,
+        "direction": "incoming",
+        "status": "Busy"
+      }
+    ];
+
+    $scope.sortColumn = function(column) {
+      if ($scope.activeColumn === column) {
+        $scope.sortReverse = !$scope.sortReverse;
+      } else {
+        $scope.activeColumn = column;
+        $scope.sortReverse = false;
+      }
+
+      $scope.history.sort(function(a, b) {
+        if (a[column] < b[column]) {
+          return $scope.sortReverse ? 1 : -1;
+        } else if (a[column] > b[column]) {
+          return $scope.sortReverse ? -1 : 1;
+        } else {
+          return 0;
+        }
+      });
+    };
+    $scope.toggleSortOrder = function(column, currentSortOrder) {
+      if ($scope.activeColumn === column) {
+        $scope.sortReverse = !currentSortOrder;
+      } else {
+        $scope.activeColumn = column;
+        $scope.sortReverse = false;
+      }
+    }
+});
 
 'use strict';
 
