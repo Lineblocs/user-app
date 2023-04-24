@@ -198,16 +198,25 @@
                     <md-radio-button class="md-primary" ng-repeat="option in type_of_2fa" ng-value="option.value">{{ option.name }}</md-radio-button>
                 </md-radio-group>
                 <div ng-if="user.type_of_2fa === 'sms' && user.enable_2fa" class="phone-sms">
-                    <md-input-container class="sms-number-field">
+                    <md-input-container class="country-field-width md-input-container">
+                        <label>Country</label>
+                        <md-select ng-model="user.country_code">
+                            <md-option ng-repeat="country in countries" ng-value="country.dial_code">
+                                <span class="flag-icon flag-icon-{{country.code.toLowerCase()}} flag-icon-squared"></span>
+                                ({{country.dial_code}}){{country.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-input-container">
                         <input name="mobile_number" ng-model="user.mobile_number" type="text"
                             placeholder="Phone Number" required="" minlength="10" ng-change="onNumberChange()">
-                        <div ng-show="triedSubmit">
-                            <div class="box">
-                                <div ng-show="registerForm.mobile_number.$error.required">This field is
-                                    required</div>
-                                <div ng-show="registerForm.mobile_number.$error.minlength" class="red">The number you entered was invalid.</div>
-                            </div>
-                        </div>
+                    </md-input-container>
+                    <div layout="row" class="sent-code-width">
+                        <md-button type="submit" class="md-raised md-primary no-margin-sides verify-button country-field-width" ng-click="verifyOtp()" ng-disabled="isOtpVerified">Send authentication code</md-button>
+                        <p class="sent-text" ng-if="isOtpVerified"><i class="mdi mdi-check"></i>Sent. It may take a minute for the SMS to arrive.</p>
+                    </div>
+                    <md-input-container class="md-input-container" ng-if="isOtpVerified">
+                        <input name="otp" ng-model="user.otp" type="text" placeholder="Verify the code sent to your phone" required="" minlength="6">
                     </md-input-container>
                 </div>
                 <p ng-if="user.type_of_2fa === 'totp' && user.enable_2fa" >Note: Enabling two-factor authentication (2FA) is a simple and effective way to secure your accounts. To get started, Enable it below. In case of sms you will receive otp on phone and for the authenticator app need to download an authenticator app on your mobile device and link it to your account by scanning a QR code. Once set up, the app will generate a unique code that you'll need to enter in addition to your password to access your account.</p>
@@ -217,9 +226,9 @@
                 <div ng-if="user.type_of_2fa === 'totp' && user.enable_2fa">
                     <img ng-src="data:image/png;base64,{{base64_contents}}" class="qr-code-auth" alt="QR" />
                 </div>
-            <div class="submit">
-                <md-button type="submit" class="md-raised md-primary no-margin-sides" ng-click="on2FASubmit()">Submit</md-button>
-            </div>
+                <div class="submit">
+                    <md-button type="submit" class="md-raised md-primary no-margin-sides" ng-click="on2FASubmit()">Submit</md-button>
+                </div>
         </div>
        </md-tab>
     </md-tabs>

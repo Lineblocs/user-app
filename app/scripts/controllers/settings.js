@@ -11,12 +11,14 @@ angular.module('Lineblocs')
   .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
+    $scope.isOtpVerified = false;
     $scope.selectedSecurityType = "SMS verification";
     $scope.selectedVerify = "verify";
     $scope.smsVerifiedSuccessfully = false;
     $scope.authVerifiedSuccessfully = false;
     $scope.isDisabled = false;
     $scope.base64_contents ='';
+    $scope.countries = [];
 	  $scope.ui = {
 		  show1Secret: false,
 		  show2Secret: false,
@@ -32,7 +34,9 @@ angular.module('Lineblocs')
 		password2: "",
     enable_2fa: false,
     type_of_2fa: null,
-    mobile_number: ""
+    mobile_number: "",
+    country_code : '',
+    otp : ''
 	};
   $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
@@ -43,6 +47,11 @@ angular.module('Lineblocs')
       $scope.user.type_of_2fa = 'sms';
     }
   }
+
+  Backend.get('/getCountryList').then(function(countries) {
+    $scope.countries = countries.data.data;
+  });
+
   $scope.on2FASubmit = function() {
     $scope.triedSubmit = true;
     if(!$scope.user.enable_2fa) {
@@ -52,7 +61,7 @@ angular.module('Lineblocs')
       $scope.user.enable_2fa = true;
       if($scope.user.type_of_2fa === 'sms') {
         if(!$scope.user.mobile_number) return;
-        Backend.put("/self", { mobile_number: $scope.user.mobile_number }).then(function(res) {
+        Backend.post("/updateSelf", { mobile_number: $scope.user.country_code + $scope.user.mobile_number }).then(function(res) {
           save2FASettings();
         });
       } else {
@@ -76,15 +85,10 @@ angular.module('Lineblocs')
       $scope.user.otp = '';
     }
   }
-  $scope.verifyChanged = function (verify) {
+  $scope.verifyOtp = function () {
     $scope.triedSubmit = true;
-    $scope.selectedVerify = verify;
-    if($scope.selectedVerify === "verify") {
-      $scope.isDisabled = true;
-      request2FACode();
-    } else {
-      $scope.isDisabled = false;
-    }
+    $scope.isOtpVerified = true;
+    request2FACode();
   }
   $scope.smsVerificationSuccess = function(code) {
     if(code) {
@@ -128,7 +132,7 @@ angular.module('Lineblocs')
   }
 
   function request2FACode() {
-    Backend.get("/request2FACode").then(function( res ) {
+    Backend.get("/request2FAConfirmationCode?type_of_2fa=" + $scope.user.type_of_2fa).then(function( res ) {
       $scope.smsVerificationSuccess();
     });
   }
@@ -232,6 +236,8 @@ angular.module('Lineblocs')
 	$shared.isLoading = true;
 	Backend.get("/self").then(function(res) {
       $scope.user = res.data;
+      $scope.user.country_code = $scope.user.mobile_number.slice(0, -10);
+      $scope.user.mobile_number = $scope.user.mobile_number.slice(-10);
       console.log("user is ", $scope.user);
       $shared.endIsLoading();
     });

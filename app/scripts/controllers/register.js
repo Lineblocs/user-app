@@ -30,6 +30,7 @@ angular.module('Lineblocs')
 	$scope.user = {
 		first_name: "",
 		last_name: "",
+    country_code: "",
     mobile_number: "",
 		email: "",
 		password: "",
@@ -50,7 +51,11 @@ angular.module('Lineblocs')
 	};
 
   $scope.workspace = "";
+  $scope.countries = [];
   $scope.selectedTemplate = null;
+  Backend.get('/getCountryList').then(function(countries) {
+    $scope.countries = countries.data.data;
+  });
 
   $scope.onNumberChange = function() {
     $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
@@ -111,7 +116,8 @@ angular.module('Lineblocs')
 		}
 		if (registerForm.$valid) {
 			var data = angular.copy( $scope.user );
-				$shared.changingPage = true;
+      $shared.changingPage = true;
+      data.mobile_number = $scope.user.country_code + $scope.user.mobile_number;
 			Backend.post("/register", data).then(function( res ) {
 				var data = res.data;
 				if ( !data.success ) {

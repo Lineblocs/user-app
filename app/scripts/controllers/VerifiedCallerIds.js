@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $http ) {
+angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
   $shared.updateTitle("Verified Caller IDs");
   $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
@@ -27,8 +27,9 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
 
       };
       $scope.step = 1;
-      $http.get('../../scripts/constants/country-list.json').then(function(countries) {
-        $scope.countries = countries.data;
+      $scope.countries = [];
+      Backend.get('/getCountryList').then(function(countries) {
+        $scope.countries = countries.data.data;
       });
       $scope.postStep1 = function() {
         const data = angular.copy($scope.data.step1);

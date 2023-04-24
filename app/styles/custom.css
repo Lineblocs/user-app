@@ -1430,10 +1430,27 @@ md-content{
 .phone-sms{
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 30%;
 }
 
 .sms-number-field{
   margin-bottom: 0px;
+}
+
+.country-field-width{
+  margin-bottom: 30px;
+}
+
+.verify-button{
+  width: 35%;
+}
+
+.sent-text{
+  font-size: 12px;
+  margin-top: 16px;
+  margin-left: 12px;
+}
+
+.sent-code-width{
+  width: 150%;
 }

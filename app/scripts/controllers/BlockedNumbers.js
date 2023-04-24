@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q, $http ) {
+angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
     $shared.updateTitle("Blocked Numbers");
     $scope.Backend = Backend;
     function DialogController($scope, $mdDialog, Backend, $shared, onCreated) {
@@ -20,8 +20,9 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
         notes: ""
       };
       $scope.searchCountry = '';
-      $http.get('../../scripts/constants/country-list.json').then(function(countries) {
-        $scope.countries = countries.data;
+      $scope.countries = [];
+      Backend.get('/getCountryList').then(function(countries) {
+        $scope.countries = countries.data.data;
       });
 
       $scope.onNumberChange = function() {
