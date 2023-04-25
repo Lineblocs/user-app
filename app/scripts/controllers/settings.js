@@ -8,7 +8,7 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
     $scope.selectedSecurityType = "SMS verification";
@@ -34,10 +34,44 @@ angular.module('Lineblocs')
     type_of_2fa: null,
     mobile_number: ""
 	};
+  $scope.selectedTheme = $window.localStorage.THEME || 'default';
   $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
+
+  $scope.theme = {
+    default: 'styles/app-blue.css',
+    dark: 'styles/app-grey.css',
+    light: 'styles/app-cyan.css',
+  }
+  $scope.setTheme = function(theme) {
+    $scope.selectedTheme = theme;
+    $window.localStorage.setItem('THEME', theme);
+    Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+      addStyle($scope.theme[theme]);
+      removeStyle($scope.theme[theme]);
+    });
+  };
+
+  function addStyle(path) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', path);
+    document.head.appendChild(link);
+  }
+
+  function removeStyle(selectedPath) {
+    const allLinks = ['styles/app-grey.css', 'styles/app-blue.css', 'styles/app-green.css', 'styles/app-red.css', 'styles/app-purple.css', 'styles/app-cyan.css' ]
+    const links = document.head.querySelectorAll('link[href]');
+    for (var i = 0; i < links.length; i++) {
+      const path = links[i].getAttribute('href');
+      if (!allLinks.includes(path)) continue;
+      if (path === selectedPath) continue;
+      document.head.removeChild(links[i]);
+    }
+  }
   $scope.onEnable2FA = function() {
     if($scope.user.enable_2fa) {
       $scope.user.type_of_2fa = 'sms';

@@ -813,7 +813,7 @@ return changed;
         }
         return factory;
     })
-    .factory("Backend", function($http, $q, $shared, $mdDialog, $state, $timeout) {
+    .factory("Backend", function($http, $q, $shared, $mdDialog, $state, $timeout, ThemeService) {
         var factory = this;
         factory.queued = [];
         var skip = ['login', 'register', 'forgot', 'reset'];
@@ -851,13 +851,29 @@ return changed;
             $shared.showError(message);
 
         }
+
+      function applyTheme(theme) {
+        const themes = {
+          default: 'styles/app-blue.css',
+          dark: 'styles/app-grey.css',
+          light: 'styles/app-cyan.css',
+        }
+        if (theme !== ThemeService.getTheme()) {
+          ThemeService.setTheme(theme);
+        }
+        ThemeService.addStyle(themes[theme]);
+        ThemeService.removeStyle(themes[theme]);
+      }
+      applyTheme(ThemeService.getTheme());
+
      factory.refreshWorkspaceData = function() {
          return $q(function(resolve, reject) {
             factory.get("/dashboard").then(function(res) {
                 var graph = res.data[0];
                 console.log("GOT state data ", res);
-				$shared.billInfo=  res.data[1];
+				        $shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
+                applyTheme($shared.userInfo.theme);
                 $shared.planInfo=  res.data[4];
                 // $shared.planInfo.rank = 3;
                 $shared.workspaceInfo=  res.data[5];
@@ -1923,6 +1939,32 @@ var regParams = {
       }
     });
    };
+}).service('ThemeService', function($window) {
+  this.setTheme = function(theme) {
+    $window.localStorage.setItem('THEME', theme);
+  };
+  this.getTheme = function() {
+    return $window.localStorage.getItem('THEME') || 'default';
+  };
+
+  this.addStyle = function(path) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', path);
+    document.head.appendChild(link);
+  }
+
+  this.removeStyle = function(selectedPath) {
+    const allLinks = ['styles/app-grey.css', 'styles/app-blue.css', 'styles/app-green.css', 'styles/app-red.css', 'styles/app-purple.css', 'styles/app-cyan.css' ]
+    const links = document.head.querySelectorAll('link[href]');
+    for (var i = 0; i < links.length; i++) {
+      const path = links[i].getAttribute('href');
+      if (!allLinks.includes(path)) continue;
+      if (path === selectedPath) continue;
+      document.head.removeChild(links[i]);
+    }
+  }
 });
 
 
@@ -9640,7 +9682,7 @@ angular.module('Lineblocs')
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window) {
 	  $shared.updateTitle("Settings");
 	  $scope.triedSubmit = false;
     $scope.selectedSecurityType = "SMS verification";
@@ -9666,10 +9708,44 @@ angular.module('Lineblocs')
     type_of_2fa: null,
     mobile_number: ""
 	};
+  $scope.selectedTheme = $window.localStorage.THEME || 'default';
   $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
+
+  $scope.theme = {
+    default: 'styles/app-blue.css',
+    dark: 'styles/app-grey.css',
+    light: 'styles/app-cyan.css',
+  }
+  $scope.setTheme = function(theme) {
+    $scope.selectedTheme = theme;
+    $window.localStorage.setItem('THEME', theme);
+    Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+      addStyle($scope.theme[theme]);
+      removeStyle($scope.theme[theme]);
+    });
+  };
+
+  function addStyle(path) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', path);
+    document.head.appendChild(link);
+  }
+
+  function removeStyle(selectedPath) {
+    const allLinks = ['styles/app-grey.css', 'styles/app-blue.css', 'styles/app-green.css', 'styles/app-red.css', 'styles/app-purple.css', 'styles/app-cyan.css' ]
+    const links = document.head.querySelectorAll('link[href]');
+    for (var i = 0; i < links.length; i++) {
+      const path = links[i].getAttribute('href');
+      if (!allLinks.includes(path)) continue;
+      if (path === selectedPath) continue;
+      document.head.removeChild(links[i]);
+    }
+  }
   $scope.onEnable2FA = function() {
     if($scope.user.enable_2fa) {
       $scope.user.type_of_2fa = 'sms';
