@@ -358,6 +358,14 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
      }
+
+     factory.getCurrentTheme = function() {
+        var theme = localStorage.getItem("THEME");
+        if ( !theme ) {
+            theme = "default";
+        }
+        return theme;
+      }
 	factory.getCardImg = function(card) {
         console.log("getCardImg ", card);
 		var map = {
@@ -1867,6 +1875,7 @@ var regParams = {
      // get settings & customizations
 
      console.log("getting all settings...")
+     $shared.isLoading = true;
     Backend.get("/getAllSettings").then(function(res) {
             console.log('state is currently', $state.current.name);
             var data = res.data;

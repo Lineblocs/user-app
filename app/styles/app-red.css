@@ -67,6 +67,107 @@ nav.right md-menu {
   /*height: 69px;*/
   /*padding: 8px 0;*/ }
 
+md-content {
+  background-color: #1a1a1a; }
+
+md-card-content {
+  background-color: #f5f5f5; }
+
+md-switch .md-label {
+  color: #fff; }
+
+md-radio-button {
+  color: #fff; }
+
+.card-body-appearance {
+  color: #fff; }
+
+md-input-container:not(.md-input-invalid).md-input-has-value label {
+  color: #fff; }
+
+md-input-container label {
+  color: #fff;
+  border-color: #fff; }
+
+md-input-container .md-input {
+  color: #fff;
+  border-color: #fff; }
+
+.title-text {
+  color: #fff; }
+
+md-select-menu:not(.md-overflow) md-content {
+  background-color: #1a1a1a; }
+
+.search-section .custom-autocomplete {
+  background-color: #1a1a1a !important;
+  color: #fff; }
+
+button.md-button {
+  color: #fff; }
+
+md-dialog .md-dialog-content {
+  background-color: #1a1a1a; }
+
+md-dialog md-dialog-actions {
+  background-color: #1a1a1a; }
+
+.md-select-menu-container.md-active md-select-menu md-content md-option:hover {
+  background-color: #C54033; }
+
+md-select-menu md-content md-option {
+  color: #fff; }
+
+md-dialog md-dialog-content {
+  background-color: #1a1a1a;
+  color: #fff; }
+
+md-select .md-select-value.md-select-placeholder {
+  color: #fff;
+  border-color: #fff; }
+
+md-card md-card-content {
+  background-color: #1a1a1a; }
+
+.md-button.md-raised[disabled] {
+  background-color: #f5f5f5; }
+
+md-select .md-select-value {
+  color: #fff;
+  border-color: #fff; }
+
+md-checkbox .md-label {
+  color: #fff; }
+
+.search-section .custom-autocomplete-dropdown .custom-autocomplete-dropdown-item:hover {
+  background-color: #1a1a1a; }
+
+h5 {
+  color: #fff; }
+
+md-card {
+  background-color: #1a1a1a;
+  color: #fff; }
+
+md-card md-card-title md-card-title-text:not(:only-child) .md-subhead {
+  color: #fff; }
+
+table.md-table th.md-column {
+  color: #fff; }
+
+table.md-table td.md-cell {
+  color: #fff;
+  border-color: #fff; }
+
+md-icon {
+  color: #fff; }
+
+md-checkbox:not(.md-checked) .md-icon {
+  border-color: #fff; }
+
+md-checkbox:not([disabled]).md-warn:not(.md-checked) .md-icon {
+  border-color: #fff; }
+
 md-tooltip .md-content {
   height: auto !important; }
 
@@ -348,7 +449,8 @@ div.scroll::-webkit-scrollbar-thumb:hover {
   width: 200px;
   position: fixed;
   bottom: 0;
-  z-index: 5; }
+  z-index: 5;
+  box-shadow: 1px 1px 7px 0px rgba(145, 145, 145, 0.5); }
   .extended .sidebar .sidebar-content {
     /*position: relative;*/
     overflow-y: auto;
@@ -858,7 +960,9 @@ ul.benefits {
 .main-header-block {
   width: 100%;
   display: flex;
-  justify-content: space-between; }
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  color: #fff; }
   .main-header-block .search-section {
     min-width: 50%;
     flex-grow: 1;
@@ -866,6 +970,33 @@ ul.benefits {
     .main-header-block .search-section md-autocomplete {
       width: 100% !important;
       margin: 0 !important; }
+  .main-header-block .search-section .custom-autocomplete-dropdown {
+    background-color: #f5f5f5; }
+  .main-header-block .search-section .custom-autocomplete-dropdown .custom-autocomplete-dropdown-key {
+    background-color: #1a1a1a; }
+
+h3 {
+  color: #fff; }
+
+li {
+  color: #fff; }
+
+.plan-info {
+  color: #fff; }
+
+md-select-menu md-content md-option {
+  background-color: #1a1a1a; }
+
+.calls-graph.mdl-cell {
+  background: #1a1a1a !important;
+  color: #fff; }
+
+md-menu-content {
+  background-color: #f5f5f5;
+  box-shadow: 1px 1px 7px 0px rgba(145, 145, 145, 0.5); }
+
+md-menu-item .md-button {
+  color: #fff; }
 
 @media only screen and (max-width: 670px) {
   .main-header-block {

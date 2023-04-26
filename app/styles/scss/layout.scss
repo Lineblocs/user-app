@@ -76,6 +76,142 @@ nav.right {
 	}
 }
 
+md-content {
+  background-color: $linblocsSecondary;
+}
+
+md-card-content{
+  background-color: $bg;
+}
+
+md-switch .md-label{
+  color: $text;
+}
+
+md-radio-button {
+  color: $text;
+}
+
+.card-body-appearance{
+  color: $text;
+}
+
+md-input-container:not(.md-input-invalid).md-input-has-value label{
+  color: $text;
+}
+
+md-input-container label{
+  color: $text;
+  border-color: $text;
+}
+
+md-input-container .md-input {
+  color: $text;
+  border-color: $text;
+}
+
+.title-text{
+  color: $text;
+}
+
+md-select-menu:not(.md-overflow) md-content{
+  background-color: $linblocsSecondary;
+}
+
+.search-section .custom-autocomplete{
+  background-color: $linblocsSecondary !important;
+  color: $text;
+}
+
+button.md-button{
+  color: $text;
+}
+
+md-dialog .md-dialog-content{
+  background-color: $linblocsSecondary;
+}
+
+md-dialog md-dialog-actions{
+  background-color: $linblocsSecondary;
+}
+
+.md-select-menu-container.md-active md-select-menu md-content md-option:hover{
+  background-color: $primary;
+}
+
+md-select-menu md-content md-option{
+  color: $text;
+}
+
+md-dialog md-dialog-content{
+  background-color: $linblocsSecondary;
+  color: $text;
+}
+
+md-select .md-select-value.md-select-placeholder {
+  color: $text;
+  border-color: $text;
+}
+
+md-card md-card-content{
+  background-color: $linblocsSecondary;
+}
+
+.md-button.md-raised[disabled] {
+  background-color: $disabled;
+}
+
+md-select .md-select-value {
+  color: $text;
+  border-color: $text;
+}
+
+md-checkbox .md-label {
+  color: $text;
+}
+
+.search-section .custom-autocomplete-dropdown .custom-autocomplete-dropdown-item:hover {
+  background-color: $linblocsSecondary;
+}
+
+h5{
+  color: $text;
+}
+
+md-card{
+  background-color: $linblocsSecondary;
+  color: $text;
+}
+
+md-card md-card-title md-card-title-text:not(:only-child) .md-subhead{
+  color: $text;
+}
+
+table.md-table th.md-column {
+  color: $text;
+}
+
+table.md-table td.md-cell{
+  color: $text;
+  border-color: $text;
+}
+
+md-icon{
+  color: $text;
+}
+
+md-checkbox:not(.md-checked) .md-icon {
+  border-color: $text;
+}
+
+md-checkbox:not([disabled]).md-warn:not(.md-checked) .md-icon {
+  border-color: $text;
+}
+
+input {
+  // background-color: $linblocsPrimary;
+}
+
 md-tooltip .md-content {
     height: auto !important;
 }
@@ -400,6 +536,8 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 		position: fixed;
 		bottom:0;
     z-index: 5;
+    box-shadow: 1px 1px 7px 0px rgba(145, 145, 145, 0.5);
+
 		.sidebar-content {
 			/*position: relative;*/
 			overflow-y: auto;
@@ -1072,6 +1210,8 @@ ul.benefits {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  background-color: $bg;
+  color: $text;
 
   .search-section{
     min-width: 50%;
@@ -1082,10 +1222,46 @@ ul.benefits {
       margin: 0 !important;
     }
   }
+  .search-section .custom-autocomplete-dropdown{
+    background-color: $bg;
+  }
 
+  .search-section .custom-autocomplete-dropdown .custom-autocomplete-dropdown-key {
+    background-color: $linblocsSecondary;
+  }
   .action-buttons{
 
   }
+}
+
+h3 {
+  color: $text;
+}
+
+li{
+  color: $text;
+}
+
+.plan-info{
+  color: $text;
+}
+
+md-select-menu md-content md-option{
+  background-color: $linblocsSecondary;
+}
+
+.calls-graph.mdl-cell{
+  background: $linblocsSecondary !important;
+  color: $text;
+}
+
+md-menu-content {
+  background-color: $bg;
+  box-shadow: 1px 1px 7px 0px rgba(145, 145, 145, 0.5);
+}
+
+md-menu-item .md-button {
+  color: $text;
 }
 
 @media only screen and (max-width: 670px) {
