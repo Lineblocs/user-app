@@ -25,7 +25,7 @@ body {
   border-bottom: 1px solid #E3E3E3; }
 
 .content-holder {
-  background: #f5f5f5;
+  background: whitesmoke;
   transition: all 0.3s cubic-bezier(0.27, 0.63, 0.5, 1.05);
   min-height: 100vh; }
 
@@ -66,6 +66,107 @@ body {
 nav.right md-menu {
   /*height: 69px;*/
   /*padding: 8px 0;*/ }
+
+md-content {
+  background-color: white; }
+
+md-card-content {
+  background-color: whitesmoke; }
+
+md-switch .md-label {
+  color: black; }
+
+md-radio-button {
+  color: black; }
+
+.card-body-appearance {
+  color: black; }
+
+md-input-container:not(.md-input-invalid).md-input-has-value label {
+  color: black; }
+
+md-input-container label {
+  color: black;
+  border-color: black; }
+
+md-input-container .md-input {
+  color: black;
+  border-color: black; }
+
+.title-text {
+  color: black; }
+
+md-select-menu:not(.md-overflow) md-content {
+  background-color: white; }
+
+.search-section .custom-autocomplete {
+  background-color: white !important;
+  color: black; }
+
+button.md-button {
+  color: black; }
+
+md-dialog .md-dialog-content {
+  background-color: white; }
+
+md-dialog md-dialog-actions {
+  background-color: white; }
+
+.md-select-menu-container.md-active md-select-menu md-content md-option:hover {
+  background-color: #395373; }
+
+md-select-menu md-content md-option {
+  color: black; }
+
+md-dialog md-dialog-content {
+  background-color: white;
+  color: black; }
+
+md-select .md-select-value.md-select-placeholder {
+  color: black;
+  border-color: black; }
+
+md-card md-card-content {
+  background-color: white; }
+
+.md-button.md-raised[disabled] {
+  background-color: #f5f5f5; }
+
+md-select .md-select-value {
+  color: black;
+  border-color: black; }
+
+md-checkbox .md-label {
+  color: black; }
+
+.search-section .custom-autocomplete-dropdown .custom-autocomplete-dropdown-item:hover {
+  background-color: white; }
+
+h5 {
+  color: black; }
+
+md-card {
+  background-color: white;
+  color: black; }
+
+md-card md-card-title md-card-title-text:not(:only-child) .md-subhead {
+  color: black; }
+
+table.md-table th.md-column {
+  color: black; }
+
+table.md-table td.md-cell {
+  color: black;
+  border-color: black; }
+
+md-icon {
+  color: black; }
+
+md-checkbox:not(.md-checked) .md-icon {
+  border-color: black; }
+
+md-checkbox:not([disabled]).md-warn:not(.md-checked) .md-icon {
+  border-color: black; }
 
 md-tooltip .md-content {
   height: auto !important; }
@@ -348,7 +449,8 @@ div.scroll::-webkit-scrollbar-thumb:hover {
   width: 200px;
   position: fixed;
   bottom: 0;
-  z-index: 5; }
+  z-index: 5;
+  box-shadow: 1px 1px 7px 0px rgba(145, 145, 145, 0.5); }
   .extended .sidebar .sidebar-content {
     /*position: relative;*/
     overflow-y: auto;
@@ -858,7 +960,9 @@ ul.benefits {
 .main-header-block {
   width: 100%;
   display: flex;
-  justify-content: space-between; }
+  justify-content: space-between;
+  background-color: whitesmoke;
+  color: black; }
   .main-header-block .search-section {
     min-width: 50%;
     flex-grow: 1;
@@ -866,6 +970,33 @@ ul.benefits {
     .main-header-block .search-section md-autocomplete {
       width: 100% !important;
       margin: 0 !important; }
+  .main-header-block .search-section .custom-autocomplete-dropdown {
+    background-color: whitesmoke; }
+  .main-header-block .search-section .custom-autocomplete-dropdown .custom-autocomplete-dropdown-key {
+    background-color: white; }
+
+h3 {
+  color: black; }
+
+li {
+  color: black; }
+
+.plan-info {
+  color: black; }
+
+md-select-menu md-content md-option {
+  background-color: white; }
+
+.calls-graph.mdl-cell {
+  background: white !important;
+  color: black; }
+
+md-menu-content {
+  background-color: whitesmoke;
+  box-shadow: 1px 1px 7px 0px rgba(145, 145, 145, 0.5); }
+
+md-menu-item .md-button {
+  color: black; }
 
 @media only screen and (max-width: 670px) {
   .main-header-block {

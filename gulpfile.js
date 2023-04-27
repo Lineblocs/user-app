@@ -276,7 +276,6 @@ gulp.src([
 "./bower_components/flag-css/dist/css/flag-css.css",
 "./bower_components/mdi/css/materialdesignicons.css",
 "./bower_components/flag-icon-css/css/flag-icon.min.css",
-"./app/styles/app-blue.css",
 "./app/styles/custom.css"
   ])
         .pipe(concat('concat.css'))

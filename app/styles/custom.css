@@ -1437,3 +1437,35 @@ md-content{
 .sms-number-field{
   margin-bottom: 0px;
 }
+
+.card-img-top{
+  width: 100%;
+  height: 140px;
+}
+
+.appearance-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-appearance{
+  width: 265px;
+  margin-right: 24px;
+  border: 1px solid whitesmoke;
+  border-radius: 6px;
+}
+
+.appearance-group{
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.form-check-appearance{
+  border-top: 1px solid whitesmoke;
+  padding: 10px;
+}
+
+.card-body-appearance{
+  height: 45px;
+}
