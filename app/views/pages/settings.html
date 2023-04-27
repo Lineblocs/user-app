@@ -222,5 +222,48 @@
             </div>
         </div>
        </md-tab>
+
+       <md-tab label="Appearance">
+            <div class="appearance-container">
+                <div layout="row" class="appearance-group">
+                    <!-- <label class="card card-appearance">
+                        <img src="https://www.aha.io/89140db330c29d08acbfd572f473edb7/aha-theme-preview.png" alt="Dark Theme Preview" class="card-img-top">
+                        <div class="card-body-appearance">
+                            <div class="form-check-appearance">
+                            <input class="form-check-input" type="radio" name="themeRadios" id="lightRadio" value="light" ng-model="selectedTheme">
+                            <label class="form-check-label" for="lightRadio">
+                                Light
+                            </label>
+                            </div>
+                        </div>
+                    </label> -->
+                    <label class="card card-appearance">
+                        <img src="https://www.aha.io/89140db330c29d08acbfd572f473edb7/aha-theme-preview.png" alt="Dark Theme Preview" class="card-img-top">
+                        <div class="card-body-appearance">
+                            <div class="form-check-appearance">
+                            <input class="form-check-input" type="radio" name="themeRadios" id="darkRadio" value="dark" ng-model="selectedTheme">
+                            <label class="form-check-label" for="darkRadio">
+                                Dark
+                            </label>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="card card-appearance">
+                        <img src="https://www.aha.io/89140db330c29d08acbfd572f473edb7/aha-theme-preview.png" alt="Dark Theme Preview" class="card-img-top">
+                        <div class="card-body-appearance">
+                            <div class="form-check-appearance">
+                            <input class="form-check-input" type="radio" name="themeRadios" id="defaultRadio" value="default" ng-model="selectedTheme">
+                            <label class="form-check-label" for="defaultRadio">
+                                Default
+                            </label>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+                <div class="submit">
+                    <md-button type="submit" class="md-raised md-primary no-margin-sides" ng-click="setTheme(selectedTheme)">Submit</md-button>
+                </div>
+            </div>
+       </md-tab>
     </md-tabs>
 </md-card>
