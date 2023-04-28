@@ -56,23 +56,14 @@ angular.module('Lineblocs')
     $scope.triedSubmit = true;
     if(!$scope.user.enable_2fa) {
       $scope.user.enable_2fa = false;
-      save2FASettings();
     } else {
       $scope.user.enable_2fa = true;
-      if($scope.user.type_of_2fa === 'sms') {
-        if(!$scope.user.mobile_number) return;
-        Backend.post("/updateSelf", { mobile_number: $scope.user.country_code + $scope.user.mobile_number }).then(function(res) {
-          save2FASettings();
-        });
-      } else {
-        $scope.user.type_of_2fa = 'totp';
-        save2FASettings();
-      }
     }
+    save2FASettings();
   }
 
   $scope.onNumberChange = function() {
-    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '')?.slice(0, 10));
     if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
   }
   $scope.tabChanged = function (tab) {
@@ -131,11 +122,14 @@ angular.module('Lineblocs')
     });
   }
 
-  function request2FACode() {
+  async function request2FACode() {
+    console.log('verifyOtp', $shared.userInfo);
+    if (!$shared.userInfo.mobile_number) await Backend.post("/updateSelf", { mobile_number: $scope.user.country_code + $scope.user.mobile_number });
     Backend.get("/request2FAConfirmationCode?type_of_2fa=" + $scope.user.type_of_2fa).then(function( res ) {
       $scope.smsVerificationSuccess();
     });
   }
+
 
   function save2FASettings() {
     const data = {};
@@ -236,9 +230,10 @@ angular.module('Lineblocs')
 	$shared.isLoading = true;
 	Backend.get("/self").then(function(res) {
       $scope.user = res.data;
-      $scope.user.country_code = $scope.user.mobile_number.slice(0, -10);
-      $scope.user.mobile_number = $scope.user.mobile_number.slice(-10);
-      console.log("user is ", $scope.user);
+      if ( $scope.user.mobile_number && $scope.user.mobile_number.length > 10) {
+        $scope.user.country_code = $scope.user.mobile_number.slice(0, -10);
+        $scope.user.mobile_number = $scope.user.mobile_number.slice(-10);
+      }
       $shared.endIsLoading();
     });
   });

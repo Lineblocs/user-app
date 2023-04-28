@@ -58,7 +58,7 @@ angular.module('Lineblocs')
   });
 
   $scope.onNumberChange = function() {
-    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    $scope.user.mobile_number = $scope.user.mobile_number ? Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10)) : null;
     if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
   }
 
