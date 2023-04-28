@@ -390,8 +390,7 @@
                     </form>
                 </div>
                 <div ng-show="step===4">
-                    <form class="login-form" ng-submit="submitBillingForm($event, billingForm)" name="billingForm"
-                        novalidate>
+                    <form class="login-form" ng-submit="submitBillingForm($event, billingForm)" name="billingForm" novalidate>
                         <div class="inner">
 
                             <div class="top-heading">
@@ -438,13 +437,19 @@
                                     </div>
                                 </div>
                                 <h5>Card Details</h5>
+                                <div layout="column">
+                                    <md-input-container class="card-input-container">
+                                        <label>Number</label>
+                                        <input ng-model="card.number" name="number" required ng-pattern="/^[0-9]{13,16}$/"/>
+                                        <div ng-if="card.number && getCreditCardBrand(card.number) && getCreditCardBrand(card.number).logo" class="credit-card-brand">
+                                            <img ng-src="{{getCreditCardBrand(card.number).logo}}" class="card-logo" />
+                                        </div>
+                                        <div ng-show="billingForm.number.$invalid && billingForm.number.$touched">
+                                            <span class="custom-error">Please enter a valid card number.</span>
+                                        </div>
+                                    </md-input-container>
+                                </div>
                                 <div layout="row">
-                                    <div flex>
-                                        <md-input-container>
-                                            <label>Number</label>
-                                            <input ng-model="card.number" />
-                                        </md-input-container>
-                                    </div>
                                     <div flex>
                                         <md-input-container>
                                             <label>Expires</label>
@@ -461,7 +466,7 @@
                             </div>
                         </div>
                         <div class="login-btn">
-                            <button>
+                            <button class="custom">
                                 <span>Submit</span>
                             </button>
                         </div>

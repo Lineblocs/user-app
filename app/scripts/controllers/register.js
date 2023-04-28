@@ -346,6 +346,62 @@ angular.module('Lineblocs')
 			});
 		}
 
+    $scope.validateCardNumber = function (number) {
+      const regex = new RegExp("^[0-9]{13,19}$");
+      if (!regex.test(number)){
+          return false;
+      }
+      return luhnCheck(number);
+  }
+
+  function luhnCheck(val) {
+      let checksum = 0;
+      let j = 1;
+      for (let i = val.length - 1; i >= 0; i--) {
+        let calc = 0;
+        calc = Number(val.charAt(i)) * j;
+        if (calc > 9) {
+          checksum = checksum + 1;
+          calc = calc - 10;
+        }
+        checksum = checksum + calc;
+        if (j == 1) {
+          j = 2;
+        } else {
+          j = 1;
+        }
+      }
+      return (checksum % 10) == 0;
+  }
+
+  const patterns = {
+    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+    mastercard: /^5[1-5][0-9]{14}$/,
+    amex: /^3[47][0-9]{13}$/,
+    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/
+  };
+  const logos = {
+    visa: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/40px-Visa_Inc._logo.svg.png',
+    mastercard: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/40px-Mastercard-logo.svg.png',
+    amex: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/40px-American_Express_logo.svg.png',
+    discover: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Discover_Card_logo.svg/40px-Discover_Card_logo.svg.png'
+  };
+
+  $scope.getCreditCardBrand = function (cardNumber) {
+      if (!cardNumber) return null;
+      cardNumber = cardNumber.replace(/\D/g, '');
+
+      for (const brand in patterns) {
+        if (!patterns[brand].test(cardNumber)) continue;
+        return {
+          brand: brand,
+          logo: logos[brand]
+        };
+      }
+      return null;
+    }
+
+
 	$q.all([
 		Backend.get("/getCallSystemTemplates"),
 		Backend.get("/getConfig"),

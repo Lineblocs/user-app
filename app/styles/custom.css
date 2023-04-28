@@ -374,6 +374,7 @@ table {
     .signup-page .content .signup-form,
     .signup-page .content .login-form,
     .login-page .content .signup-form,
+    .add-card-details,
     .login-page .content .login-form {
       border-radius: 20px;
       box-shadow: 0 6px 30px 0 rgba(0, 0, 0, 0.1);
@@ -1453,4 +1454,19 @@ md-content{
 
 .sent-code-width{
   width: 150%;
+}
+
+.custom-error {
+  color: rgb(221,44,0);
+  font: 80%;
+}
+
+.credit-card-brand {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+
+.credit-card-brand img {
+  max-height: 22px;
 }
