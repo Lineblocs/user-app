@@ -1469,3 +1469,7 @@ md-content{
 .card-body-appearance{
   height: 45px;
 }
+
+.md-icon-float {
+  flex: 1 1 auto;
+}
