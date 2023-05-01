@@ -34,11 +34,20 @@ angular.module('Lineblocs')
     type_of_2fa: null,
     mobile_number: ""
 	};
-  $scope.selectedTheme = $window.localStorage.THEME || 'default';
+  $scope.selectedTheme = $window.localStorage.THEME;
   $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
+
+  function applyDefaultTheme() {
+    const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
+    if (!$scope.selectedTheme) {
+      $scope.selectedTheme = defaultTheme.name;
+      $window.localStorage.setItem('THEME', defaultTheme.name);
+    }
+  }
+  applyDefaultTheme();
 
   $scope.theme = {
     default: 'styles/app-blue.css',

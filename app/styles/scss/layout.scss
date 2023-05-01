@@ -97,17 +97,17 @@ md-radio-button {
 }
 
 md-input-container:not(.md-input-invalid).md-input-has-value label{
-  color: $text;
+  color: $textInput;
 }
 
 md-input-container label{
-  color: $text;
-  border-color: $text;
+  color: $textInput;
+  border-color: $textInput;
 }
 
 md-input-container .md-input {
   color: $text;
-  border-color: $text;
+  border-color: $textInput;
 }
 
 .title-text{
@@ -139,6 +139,18 @@ md-dialog md-dialog-actions{
   background-color: $primary;
 }
 
+md-input-container .md-input:focus{
+  border-color: $focusedInput !important;
+}
+
+md-input-container.md-input-focused label {
+  color: $focusedInput !important;
+}
+
+p{
+ color: $textInput;
+}
+
 md-select-menu md-content md-option{
   color: $text;
 }
@@ -149,8 +161,8 @@ md-dialog md-dialog-content{
 }
 
 md-select .md-select-value.md-select-placeholder {
-  color: $text;
-  border-color: $text;
+  color: $textInput;
+  border-color: $textInput;
 }
 
 md-card md-card-content{
@@ -158,12 +170,17 @@ md-card md-card-content{
 }
 
 .md-button.md-raised[disabled] {
-  background-color: $disabled;
+  background-color: $linblocsSecondary;
+  color: $text;
+}
+
+md-input-container:not(.md-input-has-value) input:not(:focus){
+  background: $linblocsSecondary;
 }
 
 md-select .md-select-value {
   color: $text;
-  border-color: $text;
+  border-color: $textInput;
 }
 
 md-checkbox .md-label {
