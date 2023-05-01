@@ -1881,10 +1881,19 @@ var regParams = {
             var data = res.data;
                 $shared.customizations = data['customizations'];
                 $shared.frontend_api_creds = data['frontend_api_creds'];
+                $shared.available_themes = data['available_themes'];
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
           addAnalyticsScript();
+          applyDefaultTheme();
     });
+
+    function applyDefaultTheme() {
+      const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
+      if (!$window.localStorage.THEME && defaultTheme) {
+        $window.localStorage.setItem('THEME', defaultTheme.name);
+      }
+    }
 
     function addAnalyticsScript() {
       if ($shared.customizations.analytics_sdk === 'google') {
@@ -1957,6 +1966,7 @@ var regParams = {
   };
 
   this.addStyle = function(path) {
+    if (!path) return;
     var link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
