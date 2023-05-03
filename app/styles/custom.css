@@ -1469,3 +1469,100 @@ md-content{
 .card-body-appearance{
   height: 45px;
 }
+.payment-container{
+  width: 100%;
+}
+.payment-input{
+  margin-right: 15px !important;
+  position: relative;
+}
+.payment-input svg {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0px;
+  margin-right: 0px !important;
+}
+.top-payment-heading{
+  display: flex;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.payment-info{
+  margin-bottom: 40px;
+  font-weight: 300;
+  font-size: 15px;
+}
+.accept-payment{
+  margin-right: 0px;
+}
+.accept-payment-terms{
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.8;
+}
+.payment-detail{
+  font-size: 20px;
+  color: #395373;
+  font-weight: 500;
+  margin-top: 20px;
+}
+.payment-button{
+  border-radius: 50px !important;
+  width: 130px;
+  margin-right: 12px !important;
+}
+.payment-value-conatiner{
+  width: 60%;
+  height: 300px;
+  padding: 18px !important;
+}
+.pay-trial{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.trail-text{
+  font-size: 14px;
+}
+.payment-info-billed{
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.pay-trial-details{
+  background: #3a537324;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+.font-trail{
+  font-weight: 500;
+}
+.trail-button{
+  width: 100%;
+  margin-top: 18px;
+}
+.payment-details-container{
+  margin-right: 18px;
+}
+.custom-error {
+  color: rgb(221,44,0);
+  font-size: 80%;
+}
+
+.credit-card-brand {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+
+.credit-card-brand img {
+  max-height: 22px;
+}
+.field-input-ui{
+  margin-bottom: 18px;
+}
+.address-detail{
+  margin-bottom: 30px;
+}

@@ -42,6 +42,21 @@ angular.module('Lineblocs')
 	$scope.verify2 = {
 		confirmation_code: ""
 	};
+  $scope.paymentDetails = {
+    payment_card: {
+      payment_card_number: "",
+      expiration_date: "",
+      security_code: "",
+      cardholder_name: ""
+    },
+    address: {
+      country: "",
+      state: "",
+      city: "",
+      street: "",
+      postal_code: "",
+    }
+  };
 	$scope.card = {
 		number: "",
 		cvv: "",
@@ -57,6 +72,47 @@ angular.module('Lineblocs')
     if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
   }
 
+  $scope.onSecurityCode = () => {
+    $scope.paymentDetails.payment_card.security_code = Number((($scope.paymentDetails.payment_card && $scope.paymentDetails.payment_card.security_code) || '').replace(/[^0-9]/g, '').slice(0, 3));
+    if (!$scope.paymentDetails.payment_card.security_code) $scope.paymentDetails.payment_card.security_code = '';
+  }
+
+  const patterns = {
+    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+    mastercard: /^5[1-5][0-9]{14}$/,
+    amex: /^3[47][0-9]{13}$/,
+    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/
+  };
+  const logos = {
+    visa: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/40px-Visa_Inc._logo.svg.png',
+    mastercard: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/40px-Mastercard-logo.svg.png',
+    amex: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/40px-American_Express_logo.svg.png',
+    discover: 'https://www.duplichecker.com/newassets1/images/cradit-card-validator/Discover.svg'
+  };
+  $scope.getCreditCardBrand = function (cardNumber) {
+    if (!cardNumber) return null;
+    cardNumber = cardNumber.replace(/\D/g, '');
+
+    for (const brand in patterns) {
+      if (!patterns[brand].test(cardNumber)) continue;
+      return {
+        brand: brand,
+        logo: logos[brand]
+      };
+    }
+    return null;
+  }
+  $scope.changeCountry = function (country) {
+    $scope.paymentDetails.address.country = country;
+  }
+  $scope.validateExpirationDate = function(value) {
+    if (!value) return true;
+    let parts = value.split('/');
+    let expirationDate = new Date(parts[1], parts[0] - 1, 1);
+    expirationDate.setFullYear(parts[1]);
+    let currentDate = new Date();
+    return expirationDate >= currentDate;
+  };
   function doSpinup() {
 	$scope.shouldSplash = true;
 	$shared.setAuthToken( $scope.token );
