@@ -91,7 +91,7 @@ md-input-container label {
 
 md-input-container .md-input {
   color: #fff;
-  border-color: black; }
+  border-color: #00000061; }
 
 .title-text {
   color: #fff; }
@@ -121,6 +121,9 @@ md-input-container .md-input:focus {
 md-input-container.md-input-focused label {
   color: #00000061 !important; }
 
+.step-number {
+  color: #1a1a1a; }
+
 p {
   color: black; }
 
@@ -133,7 +136,7 @@ md-dialog md-dialog-content {
 
 md-select .md-select-value.md-select-placeholder {
   color: black;
-  border-color: black; }
+  border-color: #00000061; }
 
 md-card md-card-content {
   background-color: #1a1a1a; }
@@ -166,20 +169,20 @@ md-card md-card-title md-card-title-text:not(:only-child) .md-subhead {
   color: #fff; }
 
 table.md-table th.md-column {
-  color: #fff; }
+  color: black; }
 
 table.md-table td.md-cell {
   color: #fff;
-  border-color: #fff; }
+  border-color: #00000061; }
 
 md-icon {
-  color: #fff; }
+  color: black; }
 
 md-checkbox:not(.md-checked) .md-icon {
-  border-color: #fff; }
+  border-color: black; }
 
 md-checkbox:not([disabled]).md-warn:not(.md-checked) .md-icon {
-  border-color: #fff; }
+  border-color: black; }
 
 md-tooltip .md-content {
   height: auto !important; }

@@ -83,15 +83,15 @@ md-radio-button {
   color: black; }
 
 md-input-container:not(.md-input-invalid).md-input-has-value label {
-  color: #00000061; }
+  color: #666; }
 
 md-input-container label {
-  color: #00000061;
-  border-color: #00000061; }
+  color: #666;
+  border-color: #666; }
 
 md-input-container .md-input {
   color: black;
-  border-color: #00000061; }
+  border-color: #0000001F; }
 
 .title-text {
   color: black; }
@@ -116,13 +116,16 @@ md-dialog md-dialog-actions {
   background-color: #395373; }
 
 md-input-container .md-input:focus {
-  border-color: #00000061 !important; }
+  border-color: #3F51B5 !important; }
 
 md-input-container.md-input-focused label {
-  color: #00000061 !important; }
+  color: #3F51B5 !important; }
+
+.step-number {
+  color: #666; }
 
 p {
-  color: #00000061; }
+  color: #666; }
 
 md-select-menu md-content md-option {
   color: black; }
@@ -132,8 +135,8 @@ md-dialog md-dialog-content {
   color: black; }
 
 md-select .md-select-value.md-select-placeholder {
-  color: #00000061;
-  border-color: #00000061; }
+  color: #666;
+  border-color: #0000001F; }
 
 md-card md-card-content {
   background-color: white; }
@@ -147,7 +150,7 @@ md-input-container:not(.md-input-has-value) input:not(:focus) {
 
 md-select .md-select-value {
   color: black;
-  border-color: #00000061; }
+  border-color: #666; }
 
 md-checkbox .md-label {
   color: black; }
@@ -166,20 +169,20 @@ md-card md-card-title md-card-title-text:not(:only-child) .md-subhead {
   color: black; }
 
 table.md-table th.md-column {
-  color: black; }
+  color: #666; }
 
 table.md-table td.md-cell {
   color: black;
-  border-color: black; }
+  border-color: #0000001F; }
 
 md-icon {
-  color: black; }
+  color: #666; }
 
 md-checkbox:not(.md-checked) .md-icon {
-  border-color: black; }
+  border-color: #666; }
 
 md-checkbox:not([disabled]).md-warn:not(.md-checked) .md-icon {
-  border-color: black; }
+  border-color: #666; }
 
 md-tooltip .md-content {
   height: auto !important; }
