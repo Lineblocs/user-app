@@ -8,7 +8,7 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog) {
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $http) {
 	  $shared.updateTitle("Register");
 		console.log("STATE ", $stateParams);
 	  var countryToCode = {
@@ -49,6 +49,9 @@ angular.module('Lineblocs')
       security_code: "",
       cardholder_name: ""
     },
+    paypal: {
+      name: "",
+    },
     address: {
       country: "",
       state: "",
@@ -63,6 +66,19 @@ angular.module('Lineblocs')
 		expires: "",
 		name: "",
 	};
+  $scope.countries = [];
+  $scope.cardVisible = true;
+  $scope.paypalVisible = false;
+
+  $scope.displayCard = function() {
+    $scope.cardVisible = true;
+    $scope.paypalVisible = false;
+  };
+
+  $scope.displayPaypal = function() {
+    $scope.cardVisible = false;
+    $scope.paypalVisible = true;
+  };
 
   $scope.workspace = "";
   $scope.selectedTemplate = null;
@@ -73,9 +89,13 @@ angular.module('Lineblocs')
   }
 
   $scope.onSecurityCode = () => {
-    $scope.paymentDetails.payment_card.security_code = Number((($scope.paymentDetails.payment_card && $scope.paymentDetails.payment_card.security_code) || '').replace(/[^0-9]/g, '').slice(0, 3));
+    $scope.paymentDetails.payment_card.security_code = Number($scope.paymentDetails.payment_card.security_code.replace(/[^0-9]/g, '').slice(0, 3));
     if (!$scope.paymentDetails.payment_card.security_code) $scope.paymentDetails.payment_card.security_code = '';
   }
+
+  $http.get('../../scripts/constants/country-states.json').then(function(countries) {
+    $scope.countries = countries.data.countries;
+  });
 
   const patterns = {
     visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
@@ -105,12 +125,22 @@ angular.module('Lineblocs')
   $scope.changeCountry = function (country) {
     $scope.paymentDetails.address.country = country;
   }
+  $scope.changeState = function (state) {
+    $scope.paymentDetails.address.state = state;
+  }
+  $scope.checkoutTrial = function() {
+    $scope.step = 6;
+  }
+  $scope.checkoutDashboard = function() {
+    $location.path('/dashboard');
+  }
   $scope.validateExpirationDate = function(value) {
     if (!value) return true;
     let parts = value.split('/');
-    let expirationDate = new Date(parts[1], parts[0] - 1, 1);
-    expirationDate.setFullYear(parts[1]);
+    let expirationDate = new Date('20' + parts[1], parts[0] - 1, 1);
     let currentDate = new Date();
+    let lastDayOfMonth = new Date(expirationDate.getFullYear(), expirationDate.getMonth() + 1, 0).getDate();
+    expirationDate.setDate(lastDayOfMonth);
     return expirationDate >= currentDate;
   };
   function doSpinup() {
