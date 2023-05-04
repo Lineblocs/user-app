@@ -144,6 +144,7 @@ angular.module('Lineblocs')
 			var data = {};
 			data['first_name'] = $scope.user.first_name;
 			data['last_name'] = $scope.user.last_name;
+			data['company_name'] = $scope.user.company_name;
 			data['email'] = $scope.user.email;
 			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {

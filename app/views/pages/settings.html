@@ -30,6 +30,15 @@
                   </div>
                 </md-input-container>
                 <md-input-container>
+                  <input name="company_name" ng-model="user.company_name" type="text" placeholder="Company Name" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="settingsForm.company_name.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+
+                <md-input-container>
                   <input name="email" ng-model="user.email" type="email" placeholder="Company Email" required="">
                   <div ng-show="triedSubmit">
                     <div class="box">
