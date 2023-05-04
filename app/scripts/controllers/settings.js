@@ -146,6 +146,7 @@ angular.module('Lineblocs')
 			data['last_name'] = $scope.user.last_name;
 			data['company_name'] = $scope.user.company_name;
 			data['email'] = $scope.user.email;
+			data['tax_number'] = $scope.user.tax_number;
 			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(
