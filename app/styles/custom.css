@@ -1496,6 +1496,7 @@ md-content{
 }
 .accept-payment{
   margin-right: 0px;
+  margin-bottom: 50px;
 }
 .accept-payment-terms{
   font-size: 10px;
@@ -1514,8 +1515,10 @@ md-content{
   margin-right: 12px !important;
 }
 .payment-value-conatiner{
-  width: 60%;
-  height: 250px;
+  height: 100%;
+  width: 100%;
+  max-width: 420px;
+  min-height: 250px;
   padding: 18px !important;
 }
 .pay-trial{
@@ -1616,4 +1619,10 @@ md-content{
   border-radius: 50px !important;
   justify-content: center;
   margin-top: 15px;
+}
+.paypal-button{
+  width: 100%;
+  margin-top: 18px;
+  height: 40px;
+  border-radius: 6px;
 }

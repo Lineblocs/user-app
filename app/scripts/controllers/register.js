@@ -7,8 +7,9 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
+var paypal;
 angular.module('Lineblocs')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $http) {
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $filter) {
 	  $shared.updateTitle("Register");
 		console.log("STATE ", $stateParams);
 	  var countryToCode = {
@@ -66,18 +67,27 @@ angular.module('Lineblocs')
 		expires: "",
 		name: "",
 	};
-  $scope.countries = [];
   $scope.cardVisible = true;
   $scope.paypalVisible = false;
+  $scope.paypalLoaded = false;
+  const currentDate = new Date();
+  const trialDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
+  $scope.nextTrialDate = $filter('date')(trialDate, 'MMM dd, yyyy');
+  $scope.chargeCurrentDate = $filter('date')(new Date(), 'MMM dd, yyyy');
 
   $scope.displayCard = function() {
     $scope.cardVisible = true;
     $scope.paypalVisible = false;
+    $scope.paymentForm.$setPristine();
+    $scope.paymentForm.$setUntouched();
   };
 
   $scope.displayPaypal = function() {
     $scope.cardVisible = false;
     $scope.paypalVisible = true;
+    $scope.paymentForm.$setPristine();
+    $scope.paymentForm.$setUntouched();
+    renderPaypalButton();
   };
 
   $scope.workspace = "";
@@ -92,10 +102,6 @@ angular.module('Lineblocs')
     $scope.paymentDetails.payment_card.security_code = Number($scope.paymentDetails.payment_card.security_code.replace(/[^0-9]/g, '').slice(0, 3));
     if (!$scope.paymentDetails.payment_card.security_code) $scope.paymentDetails.payment_card.security_code = '';
   }
-
-  $http.get('../../scripts/constants/country-states.json').then(function(countries) {
-    $scope.countries = countries.data.countries;
-  });
 
   const patterns = {
     visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
@@ -131,6 +137,7 @@ angular.module('Lineblocs')
   $scope.checkoutTrial = function() {
     $scope.step = 6;
   }
+
   $scope.checkoutDashboard = function() {
     $location.path('/dashboard');
   }
@@ -323,6 +330,31 @@ angular.module('Lineblocs')
 		}
 		return false;
 	}
+
+  function renderPaypalButton() {
+    if ($scope.paypalLoaded) return;
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '10.00'
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Transaction completed by ' + details.payer.name.given_name);
+        });
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+    }).render('#paypal-button-container');
+    $scope.paypalLoaded = true;
+  }
 
 	$scope.finishSignup = function() {
 		$scope.triedSubmit = true;

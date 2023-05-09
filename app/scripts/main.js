@@ -180,16 +180,7 @@ angular
         factory.PAGE_CONTENT_NO_PADDING = false;
         factory.isLoading = true;
         factory.currentWorkspace = "";
-        factory.billingCountries = [
-    {
-       iso: 'CA',
-       name: 'Canada'
-    },
-    {
-       iso: 'US',
-       name: 'United States'
-    }
-  ];
+        factory.billingCountries = [];
   factory.ranges = [
         "/8",
         "/16",
@@ -1884,6 +1875,10 @@ var regParams = {
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
           addAnalyticsScript();
+          addPaymentScript();
+    });
+    Backend.get("/getBillingCountries").then((res) => {
+        $shared.billingCountries = res.data;
     });
 
     function addAnalyticsScript() {
@@ -1909,6 +1904,11 @@ var regParams = {
 
       //2 - add google script
       if ($shared.customizations.enable_google_signin) addScript('https://apis.google.com/js/platform.js');
+    }
+
+    function addPaymentScript() {
+      // if ($shared.customizations.enable_paypal_signin) addScript('https://www.paypal.com/sdk/js?client-id=' + $shared.frontend_api_creds.paypal_client_id + '&components=buttons');
+      addScript('https://www.paypal.com/sdk/js?client-id=AUflBHBWaadLlcLUEG5H513ix02TfejudnE-9Lx6ZZ8r0IIa0tU1MHeUlBQHfIR1L0_IV0yePltwqYg3&disable-funding=credit,card&components=buttons');
     }
 
     function appleSignInInit() {
@@ -9251,8 +9251,9 @@ angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
  * # MainCtrl
  * Controller of Lineblocs
  */
+var paypal;
 angular.module('Lineblocs')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $http) {
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $filter) {
 	  $shared.updateTitle("Register");
 		console.log("STATE ", $stateParams);
 	  var countryToCode = {
@@ -9310,18 +9311,27 @@ angular.module('Lineblocs')
 		expires: "",
 		name: "",
 	};
-  $scope.countries = [];
   $scope.cardVisible = true;
   $scope.paypalVisible = false;
+  $scope.paypalLoaded = false;
+  const currentDate = new Date();
+  const trialDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
+  $scope.nextTrialDate = $filter('date')(trialDate, 'MMM dd, yyyy');
+  $scope.chargeCurrentDate = $filter('date')(new Date(), 'MMM dd, yyyy');
 
   $scope.displayCard = function() {
     $scope.cardVisible = true;
     $scope.paypalVisible = false;
+    $scope.paymentForm.$setPristine();
+    $scope.paymentForm.$setUntouched();
   };
 
   $scope.displayPaypal = function() {
     $scope.cardVisible = false;
     $scope.paypalVisible = true;
+    $scope.paymentForm.$setPristine();
+    $scope.paymentForm.$setUntouched();
+    renderPaypalButton();
   };
 
   $scope.workspace = "";
@@ -9336,10 +9346,6 @@ angular.module('Lineblocs')
     $scope.paymentDetails.payment_card.security_code = Number($scope.paymentDetails.payment_card.security_code.replace(/[^0-9]/g, '').slice(0, 3));
     if (!$scope.paymentDetails.payment_card.security_code) $scope.paymentDetails.payment_card.security_code = '';
   }
-
-  $http.get('../../scripts/constants/country-states.json').then(function(countries) {
-    $scope.countries = countries.data.countries;
-  });
 
   const patterns = {
     visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
@@ -9375,6 +9381,7 @@ angular.module('Lineblocs')
   $scope.checkoutTrial = function() {
     $scope.step = 6;
   }
+
   $scope.checkoutDashboard = function() {
     $location.path('/dashboard');
   }
@@ -9567,6 +9574,31 @@ angular.module('Lineblocs')
 		}
 		return false;
 	}
+
+  function renderPaypalButton() {
+    if ($scope.paypalLoaded) return;
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '10.00'
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('Transaction completed by ' + details.payer.name.given_name);
+        });
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+    }).render('#paypal-button-container');
+    $scope.paypalLoaded = true;
+  }
 
 	$scope.finishSignup = function() {
 		$scope.triedSubmit = true;

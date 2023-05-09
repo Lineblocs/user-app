@@ -180,16 +180,7 @@ angular
         factory.PAGE_CONTENT_NO_PADDING = false;
         factory.isLoading = true;
         factory.currentWorkspace = "";
-        factory.billingCountries = [
-    {
-       iso: 'CA',
-       name: 'Canada'
-    },
-    {
-       iso: 'US',
-       name: 'United States'
-    }
-  ];
+        factory.billingCountries = [];
   factory.ranges = [
         "/8",
         "/16",
@@ -1884,6 +1875,10 @@ var regParams = {
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
           addAnalyticsScript();
+          addPaymentScript();
+    });
+    Backend.get("/getBillingCountries").then((res) => {
+        $shared.billingCountries = res.data;
     });
 
     function addAnalyticsScript() {
@@ -1909,6 +1904,11 @@ var regParams = {
 
       //2 - add google script
       if ($shared.customizations.enable_google_signin) addScript('https://apis.google.com/js/platform.js');
+    }
+
+    function addPaymentScript() {
+      // if ($shared.customizations.enable_paypal_signin) addScript('https://www.paypal.com/sdk/js?client-id=' + $shared.frontend_api_creds.paypal_client_id + '&components=buttons');
+      addScript('https://www.paypal.com/sdk/js?client-id=AUflBHBWaadLlcLUEG5H513ix02TfejudnE-9Lx6ZZ8r0IIa0tU1MHeUlBQHfIR1L0_IV0yePltwqYg3&disable-funding=credit,card&components=buttons');
     }
 
     function appleSignInInit() {
