@@ -136,7 +136,7 @@ md-dialog md-dialog-content {
 
 md-select .md-select-value.md-select-placeholder {
   color: #fff;
-  border-color: #fff; }
+  border-color: #fff !important; }
 
 md-select:not([disabled]):focus .md-select-value.md-select-placeholder {
   color: #fff;
@@ -157,11 +157,30 @@ md-chips.md-default-theme .md-chips .md-chip-input-container input, md-chips .md
   color: #fff;
   border: 1px solid #474242; }
 
+md-select-menu md-content md-option:not([disabled]):focus {
+  background: #1a1a1a; }
+
+md-input-container:not(.md-input-focused):not(.md-input-invalid) label.md-required:after {
+  color: #fff; }
+
+md-radio-button .md-off {
+  border-color: #fff; }
+
+.clickable {
+  color: #fff !important; }
+
+.form-port-details .action-port-button button.activated-button {
+  background-color: #22272e !important;
+  color: #fff !important; }
+
+md-input-container:not(.md-input-has-value) md-select[required] .md-select-value span:first-child:after {
+  color: #fff; }
+
 .md-button:not([disabled]):hover {
   background-color: #21262d; }
 
 .md-button.md-raised:not([disabled]):hover {
-  background-color: #21262d !important; }
+  background-color: #3F51B5 !important; }
 
 .md-button.md-raised[disabled] {
   background-color: #4e4e4e;
@@ -432,6 +451,12 @@ audio.small {
 
 md-dialog-content.add-trigger-form {
   width: 480px; }
+
+.bill-info {
+  color: #fff; }
+
+small {
+  color: #fff; }
 
 .collapsed-content {
   margin-left: 80px;
@@ -874,7 +899,7 @@ nav.right ul:after {
     bottom: 0px; }
 
 .link {
-  color: darkBlue;
+  color: #fff;
   cursor: pointer; }
 
 .plan-info {
@@ -1068,6 +1093,39 @@ input:-internal-autofill-selected,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
   -webkit-text-fill-color: #fff !important; }
+
+md-chips .md-chip-input-container input::-webkit-input-placeholder {
+  /* WebKit-based browsers */
+  color: #fff !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #fff !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #fff !important; }
+
+md-chips .md-chip-input-container input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #fff !important; }
+
+md-chips .md-chips {
+  box-shadow: 0 1px #fff; }
+
+.md-select.md-no-underline .md-select-value {
+  border-bottom-color: #fff !important; }
+
+.billing-container .filter-row .start-date {
+  background: #22272e;
+  color: #fff; }
+
+.billing-container .filter-row .end-date {
+  background: #22272e;
+  color: #fff; }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) hue-rotate(190deg) brightness(0.8); }
 
 md-card {
   border-radius: 20px; }

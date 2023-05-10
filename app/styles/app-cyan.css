@@ -113,7 +113,7 @@ md-dialog md-dialog-actions {
   background-color: #1a1a1a; }
 
 .md-select-menu-container.md-active md-select-menu md-content md-option:hover {
-  background-color: #009788; }
+  background-color: #f5f5f5; }
 
 md-input-container .md-input:focus {
   border-color: #00000061 !important; }
@@ -136,7 +136,7 @@ md-dialog md-dialog-content {
 
 md-select .md-select-value.md-select-placeholder {
   color: black;
-  border-color: #00000061; }
+  border-color: #00000061 !important; }
 
 md-select:not([disabled]):focus .md-select-value.md-select-placeholder {
   color: black;
@@ -157,11 +157,30 @@ md-chips.md-default-theme .md-chips .md-chip-input-container input, md-chips .md
   color: black;
   border: 1px solid white; }
 
+md-select-menu md-content md-option:not([disabled]):focus {
+  background: #1a1a1a; }
+
+md-input-container:not(.md-input-focused):not(.md-input-invalid) label.md-required:after {
+  color: black; }
+
+md-radio-button .md-off {
+  border-color: black; }
+
+.clickable {
+  color: darkBlue !important; }
+
+.form-port-details .action-port-button button.activated-button {
+  background-color: #f5f5f5 !important;
+  color: black !important; }
+
+md-input-container:not(.md-input-has-value) md-select[required] .md-select-value span:first-child:after {
+  color: black; }
+
 .md-button:not([disabled]):hover {
   background-color: rgba(0, 0, 0, 0.26); }
 
 .md-button.md-raised:not([disabled]):hover {
-  background-color: rgba(0, 0, 0, 0.26) !important; }
+  background-color: #3F51B5 !important; }
 
 .md-button.md-raised[disabled] {
   background-color: #f5f5f5;
@@ -432,6 +451,12 @@ audio.small {
 
 md-dialog-content.add-trigger-form {
   width: 480px; }
+
+.bill-info {
+  color: #0a1247; }
+
+small {
+  color: black; }
 
 .collapsed-content {
   margin-left: 80px;
@@ -1068,6 +1093,39 @@ input:-internal-autofill-selected,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
   -webkit-text-fill-color: black !important; }
+
+md-chips .md-chip-input-container input::-webkit-input-placeholder {
+  /* WebKit-based browsers */
+  color: black !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: black !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: black !important; }
+
+md-chips .md-chip-input-container input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: black !important; }
+
+md-chips .md-chips {
+  box-shadow: 0 1px black; }
+
+.md-select.md-no-underline .md-select-value {
+  border-bottom-color: black !important; }
+
+.billing-container .filter-row .start-date {
+  background: white;
+  color: black; }
+
+.billing-container .filter-row .end-date {
+  background: white;
+  color: black; }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) hue-rotate(190deg) brightness(0.8); }
 
 md-card {
   border-radius: 20px; }

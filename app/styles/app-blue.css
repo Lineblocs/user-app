@@ -113,7 +113,7 @@ md-dialog md-dialog-actions {
   background-color: white; }
 
 .md-select-menu-container.md-active md-select-menu md-content md-option:hover {
-  background-color: #395373; }
+  background-color: whitesmoke; }
 
 md-input-container .md-input:focus {
   border-color: #3F51B5 !important; }
@@ -136,7 +136,7 @@ md-dialog md-dialog-content {
 
 md-select .md-select-value.md-select-placeholder {
   color: #666;
-  border-color: #0000001F; }
+  border-color: #0000001F !important; }
 
 md-select:not([disabled]):focus .md-select-value.md-select-placeholder {
   color: #666;
@@ -157,11 +157,30 @@ md-chips.md-default-theme .md-chips .md-chip-input-container input, md-chips .md
   color: black;
   border: 1px solid #f5f5f500; }
 
+md-select-menu md-content md-option:not([disabled]):focus {
+  background: white; }
+
+md-input-container:not(.md-input-focused):not(.md-input-invalid) label.md-required:after {
+  color: #666; }
+
+md-radio-button .md-off {
+  border-color: #666; }
+
+.clickable {
+  color: darkBlue !important; }
+
+.form-port-details .action-port-button button.activated-button {
+  background-color: whitesmoke !important;
+  color: black !important; }
+
+md-input-container:not(.md-input-has-value) md-select[required] .md-select-value span:first-child:after {
+  color: #666; }
+
 .md-button:not([disabled]):hover {
   background-color: white; }
 
 .md-button.md-raised:not([disabled]):hover {
-  background-color: white !important; }
+  background-color: #3F51B5 !important; }
 
 .md-button.md-raised[disabled] {
   background-color: rgba(0, 0, 0, 0.12);
@@ -432,6 +451,12 @@ audio.small {
 
 md-dialog-content.add-trigger-form {
   width: 480px; }
+
+.bill-info {
+  color: #0a1247; }
+
+small {
+  color: black; }
 
 .collapsed-content {
   margin-left: 80px;
@@ -1068,6 +1093,39 @@ input:-internal-autofill-selected,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
   -webkit-text-fill-color: black !important; }
+
+md-chips .md-chip-input-container input::-webkit-input-placeholder {
+  /* WebKit-based browsers */
+  color: #666 !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #666 !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #666 !important; }
+
+md-chips .md-chip-input-container input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #666 !important; }
+
+md-chips .md-chips {
+  box-shadow: 0 1px #666; }
+
+.md-select.md-no-underline .md-select-value {
+  border-bottom-color: #666 !important; }
+
+.billing-container .filter-row .start-date {
+  background: white;
+  color: black; }
+
+.billing-container .filter-row .end-date {
+  background: white;
+  color: black; }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) hue-rotate(190deg) brightness(0.8); }
 
 md-card {
   border-radius: 20px; }
