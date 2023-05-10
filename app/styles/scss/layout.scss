@@ -169,17 +169,59 @@ md-select .md-select-value.md-select-placeholder {
   border-color: $inputField;
 }
 
+md-select:not([disabled]):focus .md-select-value.md-select-placeholder {
+  color: $textInput;
+  border-color: $inputField;
+}
+
+md-select:not([disabled]):focus .md-select-value {
+  border-bottom-color: $inputField;
+  color: $textInput;
+}
+
 md-card md-card-content{
   background-color: $linblocsSecondary;
 }
 
-.md-button.md-raised[disabled] {
-  background-color: $linblocsSecondary;
+md-chips.md-default-theme .md-chips .md-chip-input-container input, md-chips .md-chips .md-chip-input-container input {
   color: $text;
+}
+
+.md-button.md-raised{
+  background-color: $secondaryButton;
+  color: $text;
+  border: 1px solid $borderButton;
+}
+
+
+
+.md-button:not([disabled]):hover{
+  background-color: $secondaryButton;
+}
+
+.md-button.md-raised:not([disabled]):hover{
+  background-color: $secondaryButton !important;
+}
+
+.md-button.md-raised[disabled] {
+  background-color: $disabled;
+  color: $disabledText;
+}
+
+.choose-file input[type=file] {
+  background: $linblocsSecondary !important;
 }
 
 md-input-container:not(.md-input-has-value) input:not(:focus){
   background: $linblocsSecondary;
+}
+
+md-select-menu md-content md-option:not([disabled]):hover{
+  background-color: $bg;
+}
+
+.my-chips input::placeholder {
+  color: #999999; /* set the color of the placeholder text */
 }
 
 md-select .md-select-value {
@@ -253,8 +295,8 @@ md-tooltip .md-content {
 	min-height: 32px;
 	min-width: 1%;
 	line-height: 24px;
-	background-color: rgb(250,250,250) !important;
-	color: rgb(33,33,33) !important;
+	background-color: $secondaryButton !important;
+	color: $text !important;
 	margin-top: 0px;
 	margin-left: 0px;
 	margin-bottom: 0px;
@@ -1072,7 +1114,7 @@ ul.benefits {
   width: 800px;
 }
 .margin-content {
-  margin: 8px;
+  padding: 8px;
 }
 .setup-flow-box {
 	width: 800px;
