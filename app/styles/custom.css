@@ -1127,6 +1127,7 @@ span.spacer {
 .file-upload-container {
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .upload-icon {
