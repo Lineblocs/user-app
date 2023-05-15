@@ -37,6 +37,7 @@ text-align: left;
 }
 .dashboard-block {
 	min-height: 450px;
+  background: $linblocsSecondary;
 }
 .dashboard-block-margin {
 
@@ -76,6 +77,11 @@ nav.right {
 	}
 }
 
+.md-subheader{
+  background-color: $bg;
+  color: $text;
+}
+
 md-content {
   background-color: $linblocsSecondary;
 }
@@ -90,6 +96,14 @@ md-switch .md-label{
 
 md-radio-button {
   color: $text;
+}
+
+md-checkbox.md-checked .md-icon{
+  border-color: $textInput;
+}
+
+md-checkbox[disabled]:not(.md-checked) .md-icon{
+  border-color: $textInput;
 }
 
 .card-body-appearance{
@@ -1374,14 +1388,17 @@ md-menu-item .md-button {
   }
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-internal-autofill-selected,
-input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px $linblocsSecondary inset !important;
-    -webkit-text-fill-color: $text !important;
+.login-page-content {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-internal-autofill-selected,
+  input:-webkit-autofill:active{
+      -webkit-box-shadow: 0 0 0 30px $linblocsSecondary inset !important;
+      -webkit-text-fill-color: $text !important;
+  }
 }
+
 
 md-chips .md-chip-input-container input::-webkit-input-placeholder {
   /* WebKit-based browsers */
@@ -1416,11 +1433,11 @@ md-chips .md-chips{
   color: $text;
 }
 
+.date-scheme{
+  color-scheme: $dateColor;
+}
+
 .billing-container .filter-row .end-date{
   background: $defaultDate;
   color: $text;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.8) sepia(1) hue-rotate(190deg) brightness(0.8);
 }

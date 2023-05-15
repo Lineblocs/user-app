@@ -642,6 +642,7 @@ return changed;
         }
         factory.doLogout = function() {
             factory.purgeSession();
+            localStorage.clear();
             $state.go('login', {});
         }
         factory.setAuthToken = function(token) {
