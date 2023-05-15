@@ -323,8 +323,22 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
     factory.getDomain = function() {
             return  DEPLOYMENT_DOMAIN;
     }
+
+
     factory.getHomeLink = function() {
             return  "https://" + DEPLOYMENT_DOMAIN + "/";
+    }
+
+    factory.getAppPortalDomain = function(workspace, suffixOnly) {
+        suffixOnly = suffixOnly||true;
+        var domain = "app." + DEPLOYMENT_DOMAIN;
+        if ( workspace ) {
+            domain = workspace + ".app." + DEPLOYMENT_DOMAIN;
+            if ( suffixOnly ) {
+                domain = "app." + DEPLOYMENT_DOMAIN;
+            }
+        }
+        return domain;
     }
     factory.getEditorResource = function(path) {
             return  getEditorPath() + "/" + path;
