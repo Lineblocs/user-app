@@ -2169,478 +2169,6 @@ var regParams = {
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
-	  $shared.updateTitle("Create Carrier");
-  $scope.values = {
-    name: "",
-    ip_address: "",
-    routes: [],
-    auths: [],
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting carrier form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['name'] = $scope.values.name;
-      values['ip_address'] = $scope.values.ip_address;
-      values['routes'] = $scope.values.routes;
-      values['auths'] = $scope.values.auths;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/byo/carrier/saveCarrier", values).then(function() {
-       console.log("updated carrier..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created carrier')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('byo-carriers', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-   $scope.addRoute = function() {
-     console.log("addRoute called..");
-    var copy = {
-      "prefix": "",
-      "prepend": "",
-      "match": ""
-    };
-    $scope.values.routes.push(copy);
-  }
-   $scope.addAuth= function() {
-     console.log("addAuth called..");
-    var copy = {
-      "ip": "",
-      "range": "/32"
-    };
-    $scope.values.auths.push(copy);
-  }
-  $scope.removeRoute = function($index, route) {
-    $scope.values.routes.splice($index, 1);
-  }
-  $scope.removeAuth = function($index, auth) {
-    $scope.values.auths.splice($index, 1);
-  }
-
-  $shared.endIsLoading();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
-	  $shared.updateTitle("Edit Carrier");
-  $scope.flows = [];
-  $scope.carrier = null;
-  $scope.submit = function(carrier) {
-    var params = {};
-    params['name'] = $scope.carrier.name;
-    params['ip_address'] = $scope.carrier.ip_address;
-    params['routes'] = $scope.carrier.routes;
-    params['auths'] = $scope.carrier.auths;
-    var toastPos = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-    var toastPosStr = Object.keys(toastPos)
-      .filter(function(pos) { return toastPos[pos]; })
-      .join(' ');
-    console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-    Backend.post("/byo/carrier/updateCarrier/" + $stateParams['carrierId'], params).then(function() {
-        console.log("updated carrier..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Carrier updated..')
-            .position(toastPosStr)
-            .hideDelay(3000)
-        );
-        $state.go('byo-carriers', {});
-      $shared.endIsCreateLoading();
-    });
-  }
-   $scope.addRoute = function() {
-    var copy = {
-      "prefix": "",
-      "prepend": "",
-      "match": ""
-    };
-    $scope.carrier.routes.push(copy);
-  }
-   $scope.addAuth= function() {
-     console.log("addAuth called..");
-    var copy = {
-      "ip": "",
-      "range": "/32"
-    };
-    $scope.carrier.auths.push(copy);
-  }
-  $scope.removeAuth = function($index, auth) {
-    $scope.carrier.auths.splice($index, 1);
-  }
-  $scope.removeRoute = function($index, route) {
-    $scope.carrier.routes.splice($index, 1);
-  }
-
-  $shared.isLoading = true;
-  Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
-    $scope.carrier = res.data;
-    $shared.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
-    $shared.updateTitle("My Carriers");
-    $scope.$stateParams = $stateParams;
-    $scope.$shared = $shared;
-    $scope.pagination = pagination;
-    $scope.Backend = Backend;
-  $scope.carriers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/byo/carrier/listCarriers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'carriers' );
-      pagination.loadData().then(function(res) {
-      $scope.carriers = res.data.data;
-      $shared.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-  $scope.editCarrier = function(carrier) {
-
-    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
-  }
-  $scope.createCarrier = function(carrier) {
-
-    $state.go('byo-carrier-create');
-  }
-  $scope.deleteCarrier = function($event, carrier) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this carrier?')
-          .textContent('you will not be able to use this carrier any longer')
-          .ariaLabel('Delete')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
-	  $shared.updateTitle("Create DIDNumber");
-  $scope.values = {
-    username: "",
-    secret: "",
-    tags: [],
-    flow_id: ""
-  };
-  $scope.ui = {
-    showSecret: false,
-    secretStrength: 0
-  }
-  $scope.triedSubmit = false;
-  $scope.submit = function(form) {
-    console.log("submitting number form ", arguments);
-    $scope.triedSubmit = true;
-    if (form.$valid) {
-      var values = {};
-      values['number'] = $scope.values.number;
-      values['flow_id'] = $scope.values.flow_id;
-      var toastPos = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-      };
-      var toastPosStr = Object.keys(toastPos)
-        .filter(function(pos) { return toastPos[pos]; })
-        .join(' ');
-      console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-      Backend.post("/byo/did/saveNumber", values).then(function() {
-       console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Created carrier')
-            .position("top right")
-            .hideDelay(3000)
-        );
-        $state.go('byo-did-numbers', {});
-        $shared.endIsCreateLoading();
-      });
-    }
-  }
-  $scope.changeFlow = function(flow) {
-    $scope.values.flow_id = flow;
-    console.log("changeFlow", flow);
-  }
-  $scope.editFlow = function(flowId) {
-    $state.go('flow-editor', {flowId: flowId});
-  }
-  $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-  ]).then(function(res) {
-    $scope.flows = res[0].data.data;
-    $shared.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
-	  $shared.updateTitle("Edit DID Number");
-  $scope.flows = [];
-  $scope.number = null;
-  $scope.submit = function(number) {
-    var params = {};
-    params['number'] = $scope.number.number;
-    params['flow_id'] = $scope.number.flow_id;
-    var toastPos = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-    var toastPosStr = Object.keys(toastPos)
-      .filter(function(pos) { return toastPos[pos]; })
-      .join(' ');
-    console.log("toastPosStr", toastPosStr);
-      $shared.isCreateLoading = true;
-    Backend.post("/byo/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
-        console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('DIDNumber updated..')
-            .position(toastPosStr)
-            .hideDelay(3000)
-        );
-        $state.go('byo-did-numbers', {});
-      $shared.endIsCreateLoading();
-    });
-  }
-  $scope.changeFlow = function(flow) {
-    $scope.number.flow_id = flow;
-    console.log("changeFlow", flow);
-  }
-  $scope.editFlow = function(flowId) {
-    $state.go('flow-editor', {flowId: flowId});
-  }
-  $shared.isLoading = true;
-  $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
-  ]).then(function(res) {
-    $scope.flows = res[0].data.data;
-    $scope.number = res[1].data;
-    $shared.endIsLoading();
-  });
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
-    $shared.updateTitle("My DIDNumbers");
-    $scope.$stateParams = $stateParams;
-    $scope.$shared = $shared;
-    $scope.pagination = pagination;
-    $scope.Backend = Backend;
-  $scope.numbers = [];
-  $scope.load = function() {
-    return $q(function(resolve, reject) {
-      $shared.isLoading = true;
-      pagination.resetSearch();
-      pagination.changeUrl( "/byo/did/listNumbers" );
-      pagination.changePage( 1 );
-      pagination.changeScope( $scope, 'numbers' );
-      pagination.loadData().then(function(res) {
-      $scope.numbers = res.data.data;
-      $shared.endIsLoading();
-      resolve();
-    }, reject);
-  });
-  }
-
-  $scope.importNumbers = function($event) {
-    console.log("importNumbers called..");
-    $mdDialog.show({
-      controller: DialogImportController,
-      templateUrl: 'views/dialogs/import-byo-numbers.html',
-      parent: angular.element(document.body),
-      targetEvent: $event,
-      clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
-      locals: {
-        onAdded: function() {
-          $scope.load();
-        }
-
-      }
-    })
-    .then(function() {
-    }, function() {
-    });
-
-  }
-  $scope.createNumber = function() {
-
-    $state.go('byo-did-number-create');
-  }
-  $scope.editNumber = function(number) {
-
-    $state.go('byo-did-number-edit', {numberId: number.public_id});
-  }
-  $scope.deleteNumber = function($event, number) {
-    // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-          .title('Are you sure you want to delete this DID number?')
-          .textContent('If you delete this carrier you will not be able to call it anymore')
-          .ariaLabel('Delete')
-          .targetEvent($event)
-          .ok('Yes')
-          .cancel('No');
-    $mdDialog.show(confirm).then(function() {
-      $shared.isLoading = true;
-      Backend.delete("/byo/did/deleteNumber/" + number.public_id).then(function() {
-          $scope.load().then(function() {
-            $mdToast.show(
-              $mdToast.simple()
-                .textContent('Number deleted..')
-                .position("top right")
-                .hideDelay(3000)
-            );
-          });
-
-      })
-    }, function() {
-    });
-  }
-
-    function DialogImportController($scope, $mdDialog, Backend, $shared, onAdded) {
-      $scope.$shared = $shared;
-      $scope.error = false;
-      $scope.errorText = "";
-      $scope.data = {
-        number: ""
-      };
-      $scope.submit= function($event) {
-        var params = new FormData();
-      params.append("file", angular.element("#uploadFile").prop("files")[0]);
-      $shared.isLoading = true;
-    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
-        console.log("updated number..");
-        $mdToast.show(
-          $mdToast.simple()
-          .textContent('Imported numbers..')
-          .position("top right")
-          .hideDelay(3000)
-        );
-        $mdDialog.hide(); 
-        $shared.endIsLoading();
-        onAdded();
-      }, function() {
-        $shared.endIsLoading();
-      });
-      }
-      $scope.close = function() {
-        $mdDialog.hide(); 
-      }
-    }
-
-  $scope.load();
-});
-
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
 angular.module('Lineblocs')
   .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	  $shared.updateTitle("Billing");
@@ -3498,6 +3026,18 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
 
 
 'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
+});
+'use strict';
 /**
  * @ngdoc function
  * @name Lineblocs.controller:MainCtrl
@@ -3841,38 +3381,465 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
-	  $shared.updateTitle("Call View");
-  $scope.call = [];
-  $scope.load = function() {
-    $shared.isLoading =true;
-    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
-      console.log("call is ", res.data);
-      $shared.isLoading =false;
-      var call = res.data;
-      call.recordings = call.recordings.map(function(obj) {
-        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
-        return obj;
-      });
-      $scope.call = call;
-    })
+angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared ) {
+	  $shared.updateTitle("Create Carrier");
+  $scope.values = {
+    name: "",
+    ip_address: "",
+    routes: [],
+    auths: [],
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
   }
-  $scope.saveCall = function() {
-    var data = {
-      notes: $scope.call.notes
-    };
-    Backend.post("/call/updateCall/" + $stateParams['callId'], data).then(function(res) {
-      console.log("call is ", res.data);
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting carrier form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['name'] = $scope.values.name;
+      values['ip_address'] = $scope.values.ip_address;
+      values['routes'] = $scope.values.routes;
+      values['auths'] = $scope.values.auths;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/byo/carrier/saveCarrier", values).then(function() {
+       console.log("updated carrier..");
         $mdToast.show(
           $mdToast.simple()
-            .textContent('Call updated..')
-            .position('top right')
+            .textContent('Created carrier')
+            .position("top right")
             .hideDelay(3000)
         );
-        $state.go('calls', {});
+        $state.go('byo-carriers', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+   $scope.addRoute = function() {
+     console.log("addRoute called..");
+    var copy = {
+      "prefix": "",
+      "prepend": "",
+      "match": ""
+    };
+    $scope.values.routes.push(copy);
+  }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.values.auths.push(copy);
+  }
+  $scope.removeRoute = function($index, route) {
+    $scope.values.routes.splice($index, 1);
+  }
+  $scope.removeAuth = function($index, auth) {
+    $scope.values.auths.splice($index, 1);
+  }
+
+  $shared.endIsLoading();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit Carrier");
+  $scope.flows = [];
+  $scope.carrier = null;
+  $scope.submit = function(carrier) {
+    var params = {};
+    params['name'] = $scope.carrier.name;
+    params['ip_address'] = $scope.carrier.ip_address;
+    params['routes'] = $scope.carrier.routes;
+    params['auths'] = $scope.carrier.auths;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+    Backend.post("/byo/carrier/updateCarrier/" + $stateParams['carrierId'], params).then(function() {
+        console.log("updated carrier..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Carrier updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('byo-carriers', {});
+      $shared.endIsCreateLoading();
+    });
+  }
+   $scope.addRoute = function() {
+    var copy = {
+      "prefix": "",
+      "prepend": "",
+      "match": ""
+    };
+    $scope.carrier.routes.push(copy);
+  }
+   $scope.addAuth= function() {
+     console.log("addAuth called..");
+    var copy = {
+      "ip": "",
+      "range": "/32"
+    };
+    $scope.carrier.auths.push(copy);
+  }
+  $scope.removeAuth = function($index, auth) {
+    $scope.carrier.auths.splice($index, 1);
+  }
+  $scope.removeRoute = function($index, route) {
+    $scope.carrier.routes.splice($index, 1);
+  }
+
+  $shared.isLoading = true;
+  Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
+    $scope.carrier = res.data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My Carriers");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.carriers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'carriers' );
+      pagination.loadData().then(function(res) {
+      $scope.carriers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+  $scope.editCarrier = function(carrier) {
+
+    $state.go('byo-carrier-edit', {carrierId: carrier.public_id});
+  }
+  $scope.createCarrier = function(carrier) {
+
+    $state.go('byo-carrier-create');
+  }
+  $scope.deleteCarrier = function($event, carrier) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this carrier?')
+          .textContent('you will not be able to use this carrier any longer')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scope, Backend, $location, $state, $mdDialog, $mdToast, $timeout, $shared, $q ) {
+	  $shared.updateTitle("Create DIDNumber");
+  $scope.values = {
+    username: "",
+    secret: "",
+    tags: [],
+    flow_id: ""
+  };
+  $scope.ui = {
+    showSecret: false,
+    secretStrength: 0
+  }
+  $scope.triedSubmit = false;
+  $scope.submit = function(form) {
+    console.log("submitting number form ", arguments);
+    $scope.triedSubmit = true;
+    if (form.$valid) {
+      var values = {};
+      values['number'] = $scope.values.number;
+      values['flow_id'] = $scope.values.flow_id;
+      var toastPos = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+      var toastPosStr = Object.keys(toastPos)
+        .filter(function(pos) { return toastPos[pos]; })
+        .join(' ');
+      console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+      Backend.post("/byo/did/saveNumber", values).then(function() {
+       console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Created carrier')
+            .position("top right")
+            .hideDelay(3000)
+        );
+        $state.go('byo-did-numbers', {});
+        $shared.endIsCreateLoading();
+      });
+    }
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.values.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope, Backend, $location, $state, $stateParams, $mdDialog, $q, $mdToast, $shared) {
+	  $shared.updateTitle("Edit DID Number");
+  $scope.flows = [];
+  $scope.number = null;
+  $scope.submit = function(number) {
+    var params = {};
+    params['number'] = $scope.number.number;
+    params['flow_id'] = $scope.number.flow_id;
+    var toastPos = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+    var toastPosStr = Object.keys(toastPos)
+      .filter(function(pos) { return toastPos[pos]; })
+      .join(' ');
+    console.log("toastPosStr", toastPosStr);
+      $shared.isCreateLoading = true;
+    Backend.post("/byo/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('DIDNumber updated..')
+            .position(toastPosStr)
+            .hideDelay(3000)
+        );
+        $state.go('byo-did-numbers', {});
+      $shared.endIsCreateLoading();
+    });
+  }
+  $scope.changeFlow = function(flow) {
+    $scope.number.flow_id = flow;
+    console.log("changeFlow", flow);
+  }
+  $scope.editFlow = function(flowId) {
+    $state.go('flow-editor', {flowId: flowId});
+  }
+  $shared.isLoading = true;
+  $q.all([
+    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
+  ]).then(function(res) {
+    $scope.flows = res[0].data.data;
+    $scope.number = res[1].data;
+    $shared.endIsLoading();
+  });
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
+    $shared.updateTitle("My DIDNumbers");
+    $scope.$stateParams = $stateParams;
+    $scope.$shared = $shared;
+    $scope.pagination = pagination;
+    $scope.Backend = Backend;
+  $scope.numbers = [];
+  $scope.load = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/byo/did/listNumbers" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'numbers' );
+      pagination.loadData().then(function(res) {
+      $scope.numbers = res.data.data;
+      $shared.endIsLoading();
+      resolve();
+    }, reject);
+  });
+  }
+
+  $scope.importNumbers = function($event) {
+    console.log("importNumbers called..");
+    $mdDialog.show({
+      controller: DialogImportController,
+      templateUrl: 'views/dialogs/import-byo-numbers.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onAdded: function() {
+          $scope.load();
+        }
+
+      }
     })
+    .then(function() {
+    }, function() {
+    });
 
   }
+  $scope.createNumber = function() {
+
+    $state.go('byo-did-number-create');
+  }
+  $scope.editNumber = function(number) {
+
+    $state.go('byo-did-number-edit', {numberId: number.public_id});
+  }
+  $scope.deleteNumber = function($event, number) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this DID number?')
+          .textContent('If you delete this carrier you will not be able to call it anymore')
+          .ariaLabel('Delete')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+      $shared.isLoading = true;
+      Backend.delete("/byo/did/deleteNumber/" + number.public_id).then(function() {
+          $scope.load().then(function() {
+            $mdToast.show(
+              $mdToast.simple()
+                .textContent('Number deleted..')
+                .position("top right")
+                .hideDelay(3000)
+            );
+          });
+
+      })
+    }, function() {
+    });
+  }
+
+    function DialogImportController($scope, $mdDialog, Backend, $shared, onAdded) {
+      $scope.$shared = $shared;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        number: ""
+      };
+      $scope.submit= function($event) {
+        var params = new FormData();
+      params.append("file", angular.element("#uploadFile").prop("files")[0]);
+      $shared.isLoading = true;
+    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
+        console.log("updated number..");
+        $mdToast.show(
+          $mdToast.simple()
+          .textContent('Imported numbers..')
+          .position("top right")
+          .hideDelay(3000)
+        );
+        $mdDialog.hide(); 
+        $shared.endIsLoading();
+        onAdded();
+      }, function() {
+        $shared.endIsLoading();
+      });
+      }
+      $scope.close = function() {
+        $mdDialog.hide(); 
+      }
+    }
+
   $scope.load();
 });
 
@@ -3924,6 +3891,51 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared, $mdToast) {
+	  $shared.updateTitle("Call View");
+  $scope.call = [];
+  $scope.load = function() {
+    $shared.isLoading =true;
+    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
+      console.log("call is ", res.data);
+      $shared.isLoading =false;
+      var call = res.data;
+      call.recordings = call.recordings.map(function(obj) {
+        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        return obj;
+      });
+      $scope.call = call;
+    })
+  }
+  $scope.saveCall = function() {
+    var data = {
+      notes: $scope.call.notes
+    };
+    Backend.post("/call/updateCall/" + $stateParams['callId'], data).then(function(res) {
+      console.log("call is ", res.data);
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Call updated..')
+            .position('top right')
+            .hideDelay(3000)
+        );
+        $state.go('calls', {});
+    })
+
+  }
+  $scope.load();
+});
+
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
   $shared.updateTitle("Cancel Subscription");
   $shared.endIsCreateLoading();
@@ -3946,6 +3958,191 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
   }
 });
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+	$scope.options1 = {
+	    lineWidth: 12,
+	    scaleColor: false,
+	    size: 120,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+    $scope.line = {
+	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	          data: [
+	      [65, 59, 80, 81, 56, 55, 40],
+	      [28, 48, 40, 19, 86, 27, 90]
+	    ],
+	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+    };
+
+    $scope.bar = {
+	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+		data: [
+		   [65, 59, 80, 81, 56, 55, 40],
+		   [28, 48, 40, 19, 86, 27, 90]
+		],
+		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
+    	
+    };
+
+    $scope.donut = {
+    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data: [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+     $scope.pie = {
+    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
+    	      data : [300, 500, 100],
+    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
+    };
+
+
+    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
+                       {"x":20,"top-1":100,"top-2":35},
+                       {"x":30,"top-1":15,"top-2":75},
+                       {"x":40,"top-1":50,"top-2":45}];
+    $scope.datacolumns=[{"id":"top-1","type":"spline"},
+                        {"id":"top-2","type":"spline"}];
+    $scope.datax={"id":"x"};
+
+    
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular
+    .module('Lineblocs')
+    .controller('calendarCtrl', function ($scope) {
+    });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+ angular.module('Lineblocs').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
+    $scope.rating1 = 3;
+    $scope.rating2 = 2;
+    $scope.rating3 = 4;  
+    var self = this,  j= 0, counter = 0;
+    self.modes = [ ];
+    self.activated = true;
+    self.determinateValue = 30;
+    /**
+    * Turn off or on the 5 themed loaders
+    */
+    self.toggleActivation = function() {
+        if ( !self.activated ) self.modes = [ ];
+        if (  self.activated ) j = counter = 0;
+    };
+    // Iterate every 100ms, non-stop
+    $interval(function() {
+    // Increment the Determinate loader
+        self.determinateValue += 1;
+        if (self.determinateValue > 100) {
+            self.determinateValue = 30;
+        }
+        // Incrementally start animation the five (5) Indeterminate,
+        // themed progress circular bars
+        if ( (j < 5) && !self.modes[j] && self.activated ) {
+            self.modes[j] = 'indeterminate';
+        }
+        if ( counter++ % 4 == 0 ) j++;
+    }, 100, 0, true);
+    var last = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+    };
+    $scope.demo = {};
+    $scope.toastPosition = angular.extend({},last);
+    $scope.getToastPosition = function() {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+        .filter(function(pos) { return $scope.toastPosition[pos]; })
+        .join(' ');
+    };
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+        last = angular.extend({},current);
+    }
+    $scope.showCustomToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showSimpleToast = function() {
+        $mdToast.show(
+            $mdToast.simple()
+            .content('Simple Toast!')
+            .position($scope.getToastPosition())
+            .hideDelay(30000)
+            );
+    };
+    $scope.showActionToast = function() {
+        var toast = $mdToast.simple()
+        .content('Action Toast!')
+        .action('OK')
+        .highlightAction(false)
+        .position($scope.getToastPosition());
+        $mdToast.show(toast).then(function(response) {
+            if ( response == 'ok' ) {
+                alert('You clicked \'OK\'.');
+            }
+        });
+    };
+})
+.controller('ToastCtrl', function($scope, $mdToast) {
+    $scope.closeToast = function() {
+        $mdToast.hide();
+    };
+
+});
 'use strict';
 
 /**
@@ -4110,6 +4307,147 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
   }
 
   $shared.endIsLoading();
+});
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared, Backend) {
+	$scope.$shared = $shared;
+
+  	$scope.$state = $state;
+
+  	$rootScope.$on('$stateChangeSuccess', function(){
+		$timeout(function() {
+			$('body').scrollTop(0);
+		}, 200);
+	});
+
+  $scope.searchText = '';
+  $scope.searchSection = function() {
+    Backend.get("/search?query="+ $scope.searchText).then(function(res) {
+      $scope.totalResults = res.data.categories;
+      getMatchingItems();
+    });
+  };
+
+  function getMatchingItems() {
+    if (!$scope.totalResults || !$scope.totalResults.length) return [];
+    for (const value of $scope.totalResults) {
+      value.key = value.key.replace(/_/g, ' ')
+      value.results = value.results.slice(0, 5);
+    }
+    $scope.searchResults = $scope.totalResults;
+  };
+
+  $scope.onOutsideClick = function() {
+    console.log('outside click');
+    $scope.searchText = '';
+    $scope.totalResults = [];
+  };
+
+  $scope.selectedItemChange = function(item, type) {
+    $scope.searchText = item.title;
+    $scope.totalResults = [];
+    if (type && type === 'resource articles') {
+      window.open(item.url, '_blank');
+    } else {
+      if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
+    }
+  }
+
+  $scope.clearSearch = function() {
+    $scope.searchText = '';
+    $scope.totalResults = [];
+  }
+
+  document.addEventListener('click', function(event) {
+    if (!document.getElementById('search-section-global').contains(event.target)) {
+      $scope.totalResults = [];
+      $scope.$apply();
+    }
+  });
+
+  	if ($('body').hasClass('extended')) {
+	  	$timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+		}, 200);
+  	};
+
+  	$scope.rtl = function(){
+  		$('body').toggleClass('rtl');
+  	}
+  	$scope.subnav = function(x){
+		if(x==$scope.showingSubNav)
+			$scope.showingSubNav = 0;
+		else
+			$scope.showingSubNav = x;
+		return false;
+	}
+	$scope.extend = function  () {
+		$( '.c-hamburger' ).toggleClass('is-active');
+        $('body').toggleClass('extended');
+        $('.sidebar').toggleClass('ps-container');
+        $rootScope.$broadcast('resize');
+        $timeout(function(){
+			//$('.sidebar').perfectScrollbar();
+			console.log('pfscroll');
+		}, 200);
+	}
+
+
+
+
+
+	$scope.changeTheme = function(setTheme){
+
+		$('<link>')
+		  .appendTo('head')
+		  .attr({type : 'text/css', rel : 'stylesheet'})
+		  .attr('href', 'styles/app-'+setTheme+'.css');
+	}
+
+	var w = angular.element($window);
+
+	w.bind('resize', function () {
+		/*
+	    if ($(window).width()<1200) {
+            $('.c-hamburger').removeClass('is-active');
+            $('body').removeClass('extended');
+        }
+        if ($(window).width()>1600) {
+            $('.c-hamburger').addClass('is-active');
+            //$('body').addClass('extended');
+		};
+		*/
+	});
+
+	if ($(window).width()<1200) {
+		$rootScope.$on('$stateChangeSuccess', function(){
+			$( '.c-hamburger' ).removeClass('is-active');
+        	$('body').removeClass('extended');
+		});
+	}
+
+	if ($(window).width()<600) {
+		$rootScope.$on('$stateChangeSuccess', function(){
+			$( '.mdl-grid' ).removeAttr('dragula');
+		});
+	}
+
+	$scope.changeLanguage = (function (l) {
+
+		$translate.use(l);
+
+	});
+	loadAddedResources1();
 });
 
 'use strict';
@@ -5382,6 +5720,231 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs')
+  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Forgot Password");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+	$scope.user = {
+		email: "",
+	};
+    $scope.submit = function($event, forgotForm) {
+		$scope.triedSubmit = true;
+		if (forgotForm.$valid) {
+			var data = angular.copy( $scope.user );
+			$scope.isLoading = true;
+			var resetMsg = ""
+			Backend.post("/forgot", data, true).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');
+/*
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Reset instructions sent to email..')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					*/
+			}).catch(function() {
+				$scope.isLoading = false;
+				$scope.errorMsg = "No such user exists.";
+			})
+			return;
+		}
+	}
+	$scope.gotoLogin= function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+    	$state.go('login');
+	}
+	$shared.changingPage = false;
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
+  $scope.$shared = $shared;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+	  $shared.updateTitle("Dashboard");
+	$scope.options1 = {
+	    lineWidth: 8,
+	    scaleColor: false,
+	    size: 85,
+	    lineCap: "square",
+	    barColor: "#fb8c00",
+	    trackColor: "#f9dcb8"
+	};
+	$scope.options2 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#00D554",
+        trackColor: "#c7f9db"
+	};
+	$scope.options3 = {
+	    lineWidth: 8,
+        scaleColor: false,
+        size: 85,
+        lineCap: "square",
+        barColor: "#F800FC",
+        trackColor: "#F5E5F5"
+	};
+
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	$scope.series = ['Series A', 'Series B'];
+	$scope.data = [
+		[65, 59, 80, 81, 56, 55, 40],
+		[28, 48, 40, 19, 86, 27, 90]
+	];
+
+	$scope.onClick = function (points, evt) {
+		console.log(points, evt);
+	};
+	if ($(window).width()<600) {		
+		$( '.mdl-grid' ).removeAttr('dragula');
+	};
+    $scope.line2 = {
+	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
+	          data: [
+	      			[99, 180, 80, 140, 120, 220, 100],
+	      			[50, 145, 200, 75, 50, 100, 50]
+		],
+	    colours: [{ 
+				fillColor: "#2b36ff",
+	            strokeColor: "#C172FF",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#8F00FF",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#8F00FF"
+        	},
+        	{
+        		fillColor: "#ffa01c",
+	            strokeColor: "#FFB53A",
+	            pointColor: "#fff",
+	            pointStrokeColor: "#FF8300",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "#FF8300"
+        	}
+        	],
+	    options: {
+	    	responsive: true,
+            bezierCurve : false,
+            datasetStroke: false,
+            legendTemplate: false,
+            pointDotRadius : 9,
+            pointDotStrokeWidth : 3,
+            datasetStrokeWidth : 3
+	    },
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
+
+	};
+	$scope.load = function() {
+		$timeout(function () {
+			var color = Chart.helpers.color;
+			$shared.isLoading = true;
+			Backend.get("/dashboard").then(function(res) {
+				var graph = res.data[0];
+				$shared.billInfo=  res.data[1];
+				$shared.userInfo=  res.data[2];
+				console.log("graph data is ", graph);
+				$shared.isLoading = false;
+				$timeout(function(){
+					$scope.line = {
+						legend: true,
+						labels: graph.labels,
+							data: [
+						graph.data.inbound,
+						graph.data.outbound
+						//[7, 20, 10, 15, 17, 10, 27],
+						//[6, 9, 22, 11, 13, 20, 27]
+						],
+						series: [
+					'Inbound',
+					'Outbound'
+				],
+						colours: [{ 
+								fillColor: "#3f51b5",
+								strokeColor: "#3f51b5",
+								pointColor: "#3f51b5",
+								pointStrokeColor: "#3f51b5",
+								pointHighlightFill: "#3f51b5",
+								pointHighlightStroke: "#3f51b5"
+							},
+							{
+								fillColor: "#3D3D3D",
+								strokeColor: "#3D3D3D",
+								pointColor: "#3D3D3D",
+								pointStrokeColor: "#3D3D3D",
+								pointHighlightFill: "#3D3D3D",
+								pointHighlightStroke: "#3D3D3D"
+							}
+							],
+		options: {
+				legend: {
+			display: true,
+			position: 'right'
+			},
+							responsive: true,
+								bezierCurve : false,
+								datasetStroke: false,
+								/*
+								legendTemplate: '<ul>'
+						+'<% for (var i=0; i<datasets.length; i++) { %>'
+							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+						+'</li>'
+						+'<% } %>'
+					+'</ul>',
+					*/
+								pointDotRadius : 6,
+								showTooltips: false,
+						},
+						onClick: function (points, evt) {
+						console.log(points, evt);
+						}
+
+					};
+				}, 0);
+			});
+		}, 0);
+	}
+	$scope.reloadGraph = function() {
+		console.log("reloadGraph called..");
+		$scope.load();
+	}
+	$scope.load();
+
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('HostedTrunksCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Hosted Trunks");
     $scope.$stateParams = $stateParams;
@@ -5738,6 +6301,430 @@ angular.module('Lineblocs').controller('IpWhitelistCtrl', function ($scope, Back
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs')
+  .controller('JoinWorkspaceCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, Idle) {
+	  $shared.updateTitle("Join Workspace");
+	  var hash = $stateParams['hash'];
+	  $scope.passwordSet = false;
+	  $scope.values = {
+		  "first_name": "",
+		  "last_name": "",
+		  "password": "",
+		  "password2": ""
+	  };
+	function finishLogin(token, workspace) {
+		console.log("finishLogin ", arguments);
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				$shared.isAdmin = token.isAdmin;
+
+				$shared.setAuthToken(token);
+				$shared.setWorkspace(workspace);
+				Idle.watch();
+				$state.go('dashboard-user-welcome', {});
+	}
+
+	$scope.submit =function($event, inviteForm) {
+		if (!inviteForm.$valid) {
+			$scope.triedSubmit = true;
+			$scope.errorMsg = "Please fill in all fields below..";
+			return;
+		}
+		if ($scope.values.password !== $scope.values.password2) {
+			$scope.errorMsg = "Passwords don't match";
+			return;
+
+
+		}
+		var data = {
+			"hash": $stateParams['hash'],
+			"first_name": $scope.values['first_name'],
+			"last_name": $scope.values['last_name'],
+			"password": $scope.values['password']
+		};
+		Backend.post("/submitJoinWorkspace", data).then(function(res) {
+			$scope.isLoading = true;
+			var token = res.data;
+			console.log("token is ", token);
+			finishLogin(token, res.data.workspace);
+		});
+	}
+	$scope.acceptInvite = function() {
+			var data = {
+			"hash": $stateParams['hash']
+		};
+			$scope.isLoading = true;
+		Backend.post("/acceptWorkspaceInvite", data).then(function(res) {
+			var token = res.data;
+				finishLogin(token, res.data.workspace);
+		});
+	}
+
+	  Backend.get("/fetchWorkspaceInfo?hash=" +hash).then(function(res) {
+		  $scope.info = res.data;
+		  if ( $scope.info.user.needs_password_set ) {
+			  $scope.passwordSet = true;
+		  }
+	  });
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval) {
+	  $shared.updateTitle("Login");
+	  $shared.processResult();
+	$scope.triedSubmit = false;
+	$scope.couldNotLogin = false;
+  $scope.invalideOtp = false;
+	$scope.noUserFound = false;
+	$scope.shouldSplash = false;
+	$scope.isLoading = false;
+	$scope.challenge = null;
+	$scope.user = {
+		email: "",
+		password: "",
+    otp:"",
+	};
+	$scope.step = 1;
+  $scope.countdownDuration = 5;
+  $scope.resendTimeout = $scope.countdownDuration * 60;
+  $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
+var clickedGoogSignIn = false;
+var countdown;
+function startCountdown() {
+  countdown = $interval(function() {
+    var minutes = Math.floor($scope.resendTimeout / 60);
+    var seconds = $scope.resendTimeout - minutes * 60;
+    $scope.resendTimeout--;
+    if ($scope.resendTimeout < 0) {
+      $interval.cancel(countdown);
+    }
+    $scope.timerDisplay = padZero(minutes) + ':' + padZero(seconds);
+  }, 1000);
+}
+startCountdown();
+function padZero(number) {
+  return (number < 10 ? '0' : '') + number;
+}
+const code = $location.search().code;
+if (code) {
+  fetch('https://appleid.apple.com/auth/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code: code,
+      client_id: $shared.frontend_api_creds.apple_signin_client_id,
+      client_secret:  $shared.frontend_api_creds.apple_signin_client_secret,
+      redirect_uri: 'https://your-app.com/callback',
+    }),
+  }).then(response => response.json()).then(data => {
+    const loginOption = {
+      provider    : 'apple',
+      id_token    : data.access_token,
+      access_token: data.access_token,
+    };
+    $scope.startThirdPartyLogin( user.email, user.displayName, '', '', loginOption);
+  })
+  .catch(error => {
+    // Handle the error
+  });
+}
+
+function redirectUser() {
+		Idle.watch();
+		var hash = window.location.hash.substr(1);
+		var query = URI(hash).query(true);
+		if ( query.next ) {
+				window.location.replace("#/" + query.next);
+				return;
+		}
+		$state.go('dashboard-user-welcome', {});
+}
+	function finishLogin(data) {
+		console.log("finishLogin ", arguments);
+				$scope.isLoading = false;
+				$scope.couldNotLogin = false;
+				$shared.isAdmin = data.isAdmin;
+
+				$shared.setAuthToken(data);
+				$shared.setWorkspace(data.workspace);
+				if (!$shared.isAdmin) {
+					redirectUser();
+					return;
+				}
+				$shared.isAdmin = true;
+				$shared.setAdminAuthToken(data.adminWorkspaceToken);
+				Backend.get("/admin/getWorkspaces").then(function(res) {
+					$shared.workspaces = res.data.data;
+					$state.go('dashboard-user-welcome', {});
+				});
+	}
+
+  // Apple Login ==============================================================
+  $scope.loginWithApple = function () {
+    console.log("loginWithApple", AppleID);
+    AppleID.auth.signIn();
+  }
+
+
+  // Microsoft login ===========================================================
+  $scope.loginWithMicrosoft = function () {
+
+    const msalConfig = {
+      auth: {
+          // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
+          clientId: $shared.frontend_api_creds.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
+          // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
+          authority: "https://login.microsoftonline.com/common",
+          // Full redirect URL, in form of http://localhost:3000
+          redirectUri: DEPLOYMENT_DOMAIN,
+      },
+      cache: {
+          cacheLocation: "sessionStorage", // This configures where your cache will be stored
+          storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+      },
+      system: {
+          loggerOptions: {
+              loggerCallback: (level, message, containsPii) => {
+                console.log("loggerCallback", level);
+                  if (containsPii) {
+                      return;
+                  }
+                  switch (level) {
+                      case msal?.LogLevel?.Error:
+                          console.error(message);
+                          return;
+                      case msal?.LogLevel?.Info:
+                          console.info(message);
+                          return;
+                      case msal?.LogLevel?.Verbose:
+                          console.debug(message);
+                          return;
+                      case msal?.LogLevel?.Warning:
+                          console.warn(message);
+                          return;
+                  }
+              }
+          }
+      }
+    };
+
+    const myMSALObj = new msal.PublicClientApplication(msalConfig);
+    myMSALObj.loginPopup({scopes: ["User.Read"]}).then(handleResponse)
+      .catch(error => {
+          console.error(error);
+      });
+  }
+
+  function handleResponse(response) {
+    if (response === null) return;
+    const loginOption = {
+      provider    : 'microsoft',
+      id_token    : response.idToken,
+      access_token: response.accessToken,
+    };
+    $scope.startThirdPartyLogin( response.account.userName, response.account.name, '', '', loginOption);
+  }
+
+  $scope.validateEmail = function($event, loginForm) {
+		$scope.triedSubmit = true;
+		if (!loginForm.$valid) {
+
+			$scope.errorMsg = "Please enter a valid email";
+			return;
+		}
+			$shared.changingPage = true;
+			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
+				$shared.changingPage = false;
+				if ( res.data.found ) {
+					$scope.userInfo = res.data.info;
+					$scope.step = 2;
+					return;
+				}
+				$scope.noUserFound = true;
+			});
+	}
+
+  $scope.validatePassword = function($event, loginForm) {
+    if (!loginForm.$valid) {
+      return;
+    }
+    const data = angular.copy($scope.user);
+    data['challenge'] = $scope.challenge;
+    $scope.isLoading = true;
+    Backend.post("/jwt/authenticate", data, true).then(function (res) {
+      if (res.data.enable_2fa === true) {
+        $scope.requestOtp($event, loginForm);
+      } else {
+        finishLogin(res.data);
+      }
+    }).catch(function () {
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+	}
+
+  $scope.requestOtp = function($event) {
+    $scope.isLoading = true;
+    $scope.resendTimeout = $scope.countdownDuration * 60;
+    $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
+    $interval.cancel(countdown);
+    startCountdown();
+    Backend.get("/request2FACode", {params: {email: $scope.user.email, password: $scope.user.password}}).then(function( res ) {
+      $scope.isLoading = false;
+      $scope.step = 3;
+    }).catch(function() {
+      $scope.step = 3;
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+  }
+
+  $scope.validateOtp = function ($event, loginForm) {
+    $scope.triedSubmit = true;
+    if (!loginForm.$valid) {
+      return;
+    }
+    $scope.isLoading = true;
+    $scope.invalideOtp = false;
+    Backend.post("/verify2FACode", {
+      "email": $scope.user.email,
+      "password": $scope.user.password,
+      "2fa_code": $scope.user.otp
+    }).then(function( res ) {
+      $scope.isLoading = false;
+      console.log("res", res);
+      if (res.data.success) {
+        finishLogin(res.data);
+      } else {
+        $scope.invalideOtp = true;
+        $scope.$apply();
+      }
+    }).catch(function() {
+      $scope.isLoading = false;
+      $scope.couldNotLogin = true;
+    })
+  }
+
+  $scope.requestAssistant = function() {
+    window.open(`https://${DEPLOYMENT_DOMAIN}/resources/other-topics/2fa-verification-support`, '_blank');
+  }
+
+	$scope.gotoRegister = function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+    	$state.go('register');
+	}
+	$scope.gotoForgot = function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+		$state.go('forgot');
+	}
+
+	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar, loginOption) {
+		var data = {};
+		data['email'] = email;
+		data['first_name'] = firstname;
+		data['last_name'] = lastname;
+		data['avatar'] = avatar;
+		data['challenge'] = $scope.challenge;
+    data['login_option'] = loginOption;
+			$shared.changingPage = true;
+		Backend.post("/thirdPartyLogin", data).then(function( res ) {
+			$timeout(function() {
+				$scope.$apply();
+				$shared.scrollToTop();
+
+				if ( res.data.confirmed ) {
+					finishLogin(res.data);
+					return;
+				}
+				$state.go('register', {
+					"hasData": true,
+					"userId": res.data.userId,
+					"authData": {"token": res.data.info.token}
+				});
+			}, 0);
+		});
+	}
+
+	function renderButton() {
+      gapi.signin2.render('gSignIn', {
+        'scope': 'profile email',
+        'width': 400,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+		'onsuccess': function(googleLoginResponse) {
+				if (!clickedGoogSignIn) {
+					return;
+				}
+				var profile = googleLoginResponse.getBasicProfile();
+				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				console.log('Name: ' + profile.getName());
+				console.log('Image URL: ' + profile.getImageUrl());
+				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+				var ctrl= angular.element("body").scope();
+				var fullName = profile.getName().split(' '),
+    				firstName = fullName[0],
+    				lastName = fullName[fullName.length - 1];
+        const { id_token, access_token } = googleLoginResponse.getAuthResponse();
+        const loginOption = {
+          provider: 'google',
+          id_token,
+          access_token,
+        }
+				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl(), loginOption);
+			},
+			onerror: function(err) {
+			console.log('Google signIn2.render button err: ' + err)
+			},
+        'onfailure': function() {
+			console.error("failure ", arguments);
+		}
+	  });
+    }
+
+	$scope.backStep1 = function() {
+		$scope.step = 1;
+	}
+	$shared.changingPage = false;
+	angular.element("#gSignIn").on("click", function() {
+		clickedGoogSignIn = true;
+	});
+	var full = window.location.host
+	//window.location.host is subdomain.domain.com
+	var parts = full.split('.')
+	var sub = parts[0]
+	var second = sub.split(":");
+	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
+		$scope.challenge = sub;
+	}
+	$timeout(function() {
+		renderButton();
+	}, 0);
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, Backend, $location, $state, $mdDialog, $stateParams, $sce, $shared) {
 	  $shared.updateTitle("Log View");
   $scope.log = null;
@@ -5754,6 +6741,55 @@ angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, 
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+});
+
+angular.module('Lineblocs').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
 'use strict';
 
 /**
@@ -5937,6 +6973,175 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('NotFoundCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window, Idle) {
+	  $shared.updateTitle("404 Not Found");
+	  $scope.goBack = function() {
+         $window.history.back();
+	  }
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('WorkspaceOptionsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
+	  $shared.updateTitle("Workspace Options");
+	  $scope.triedSubmit = false;
+	  $scope.ui = {
+	  };
+	$scope.workspace = {
+		byo_enabled: null,
+		outbound_macro_id: null
+	};
+    $scope.submitSettings = function($event, settingsForm) {
+		$scope.triedSubmit = true;
+		console.log("submit ", arguments);
+		if (settingsForm.$valid) {
+			var data = {};
+			data['byo_enabled'] = $scope.workspace.byo_enabled;
+			data['outbound_macro_id'] = $scope.workspace.outbound_macro_id;
+			Backend.post("/updateWorkspace2", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					$shared.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+	$scope.changeOutbound = function(value) {
+		console.log("changeFunction  ", arguments);
+		$scope.workspace.outbound_macro_id = value;
+	}
+	$shared.isLoading = true;
+	$q.all([
+		Backend.get("/workspace"),
+		Backend.get("/function/listFunctions?all=1")
+	]).then(function(res) {
+		$scope.workspace = res[0].data;
+		console.log("workspace is ", $scope.workspace);
+		$scope.functions = res[1].data.data;
+		$shared.endIsLoading();
+	});
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('PaginationDemoCtrl', function ($scope, $log) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
+
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.pageChanged = function() {
+    $log.log('Page changed to: ' + $scope.currentPage);
+  };
+
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:HomeCtrl
+ * @description
+ * # HomeCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
+	$scope.status = '  ';
+
+	$scope.showAdvanced = function(ev) {
+	    $mdDialog.show({
+	    	controller: DialogController,
+	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
+	      	parent: angular.element(document.body),
+	      	targetEvent: ev,
+	      	clickOutsideToClose:true
+	    });
+	};
+	function DialogController($scope, $mdDialog) {
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+	}
+	
+	$scope.cards = [
+		{
+			name: 'Gary Neville',
+			subject: 'Once a scouse, always a scouse.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Antony Martial',
+			subject: 'Meet up in LA.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Danny Ings',
+			subject: 'Request for loan.',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Roberto Firmoni',
+			subject: 'No match time!',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Lewandowski',
+			subject: 'Watch that?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		},
+		{
+			name: 'Pep Guardiola',
+			subject: 'When is BR Leaving?',
+			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+			time: '30 minutes ago'	
+		}
+	];
+
+
+}]);
 'use strict';
 
 /**
@@ -7024,6 +8229,57 @@ angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, 
  * # MainCtrl
  * Controller of Lineblocs
  */
+angular.module('Lineblocs').controller('piechartCtrl', ['$scope', function ($scope) {
+   
+    $scope.options1 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#F0AD4E',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options2 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#3CA2E0',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+    $scope.options3 = {
+        animate:{
+            duration:2000,
+            enabled:true
+        },
+        barColor:'#D9534F',
+        trackColor:'#ECF0F1',
+        scaleColor:'#737373',
+
+        lineWidth:5,
+        size: 115,
+        lineCap:'circle'
+    };
+}]);
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
 angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $mdToast, $shared, $q, $stateParams) {
     $shared.updateTitle("Ported Numbers");
 
@@ -7082,6 +8338,75 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+ angular.module('Lineblocs').controller('profileCtrl', function ($scope) {
+    $scope.products = [
+ 	{url:'images/portrait1.jpg'}, 
+ 	{url:'images/portrait2.jpg'},         
+ 	{url:'images/portrait3.jpg'},         
+ 	{url: 'images/portrait4.jpg'},
+ 	{url: 'images/portrait5.jpg'},
+ 	{url: 'images/portrait7.jpg'},
+ 	{url: 'images/portrait8.jpg'},
+ 	{url: 'images/portrait9.jpg'}
+ 	];
+   
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
+  $scope.max = 200;
+
+  $scope.random = function() {
+    var value = Math.floor((Math.random() * 100) + 1);
+    var type;
+
+    if (value < 25) {
+      type = 'success';
+    } else if (value < 50) {
+      type = 'info';
+    } else if (value < 75) {
+      type = 'warning';
+    } else {
+      type = 'danger';
+    }
+
+    $scope.showWarning = (type === 'danger' || type === 'warning');
+
+    $scope.dynamic = value;
+    $scope.type = type;
+  };
+  $scope.random();
+
+  $scope.randomStacked = function() {
+    $scope.stacked = [];
+    var types = ['success', 'info', 'warning', 'danger'];
+
+    for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
+        var index = Math.floor((Math.random() * 4));
+        $scope.stacked.push({
+          value: Math.floor((Math.random() * 30) + 1),
+          type: types[index]
+        });
+    }
+  };
+  $scope.randomStacked();
+});
 'use strict';
 
 /**
@@ -7151,6 +8476,862 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
 });
 
 
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog) {
+	  $shared.updateTitle("Register");
+		console.log("STATE ", $stateParams);
+	  var countryToCode = {
+		  US: "+1",
+		  CA: "+1",
+	  };
+	  $scope.acceptTerms =true;
+	  $scope.triedSubmit = false;
+	  $scope.passwordsDontMatch = false;
+	  $scope.shouldSplash = false;
+	  $scope.didVerifyCall = false;
+	  $scope.step = 1;
+	  $scope.userId = null;
+	  $scope.token = null;
+	  $scope.invalidCode =false;
+	  $scope.invalidNumber =false;
+	  $scope.planInfo = null;
+	$scope.hasWorkspaceNameErr = false;
+	$scope.user = {
+		first_name: "",
+		last_name: "",
+    mobile_number: "",
+		email: "",
+		password: "",
+		password2: ""
+	};
+	$scope.verify1 = {
+		country: "US",
+		mobile_number: ""
+	};
+	$scope.verify2 = {
+		confirmation_code: ""
+	};
+	$scope.card = {
+		number: "",
+		cvv: "",
+		expires: "",
+		name: "",
+	};
+
+  $scope.workspace = "";
+  $scope.selectedTemplate = null;
+
+  $scope.onNumberChange = function() {
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
+  }
+
+  function doSpinup() {
+	$scope.shouldSplash = true;
+	$shared.setAuthToken( $scope.token );
+	var data = { "userId": $scope.userId, "plan": $stateParams['plan'] };
+	$scope.invalidCode = false;
+	$shared.changingPage = true;
+	Backend.post("/userSpinup", data).then(function( res ) {
+		var data = res.data;
+		if ( data.success ) {
+
+			Idle.watch();
+			$shared.setAuthToken($scope.token);
+			$shared.setWorkspace(res.data.workspace);
+			$shared.changingPage = false;
+			$state.go('dashboard-user-welcome', {});
+
+			return;
+		}
+		$mdToast.show(
+		$mdToast.simple()
+			.textContent('Error occured while creating your account. please account support')
+			.position("top right")
+			.hideDelay(1000*10)
+		);
+	});
+
+  }
+
+  	$scope.gotoVerificationFlow = function() {
+				var verficationWorkflow = $shared.customizations['verification_workflow'];
+				if ( verficationWorkflow === 'sms' ) {
+					$scope.step = 2;
+				} else {
+					$scope.step = 3;
+				}
+	}
+    $scope.submit = function($event, registerForm) {
+		console.log("called submit");
+		$scope.triedSubmit = true;
+		console.log("data is ", $scope.user);
+		console.log("form ", registerForm);
+		if (!$scope.acceptTerms) {
+			$scope.triedSubmit = true;
+			$scope.didNotAcceptTerms = true;
+			return;
+		}
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (registerForm.$valid) {
+			var data = angular.copy( $scope.user );
+				$shared.changingPage = true;
+			Backend.post("/register", data).then(function( res ) {
+				var data = res.data;
+				if ( !data.success ) {
+					$shared.showError("Error", data.message);
+					return;
+				}
+				$scope.token = data;
+				$scope.userId = data.userId;
+				$scope.workspaceInfo = data.workspace;
+				$shared.changingPage = false;
+				$scope.gotoVerificationFlow();
+			});
+			return;
+		}
+      	return false;
+
+	}
+
+	$scope.submitVerify1Form = function($event, verify1Form) {
+		console.log("called submitVerify1Form");
+		$scope.triedSubmit = true;
+		if (verify1Form.$valid) {
+			var data = {};
+			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
+			data.userId = $scope.userId;
+				$shared.changingPage = true;
+			Backend.post("/registerSendVerify", data).then(function( res ) {
+				var data = res.data;
+					$shared.changingPage = false;
+				if (res.data.valid) {
+					$scope.didVerifyCall = true;
+					$scope.invalidNumber = false;
+					return;
+				}
+				$scope.invalidNumber = true;
+				//$scope.showNumberInvalid = true;
+			});
+			return;
+		}
+		return false;
+	}
+
+	$scope.submitVerify2Form = function($event, verify2Form) {
+		console.log("called submitVerify2Form");
+		$scope.triedSubmit = true;
+		if (verify2Form.$valid) {
+			var data = angular.copy( $scope.verify2 );
+			data.userId = $scope.userId;
+				$shared.changingPage = true;
+			Backend.post("/registerVerify", data).then(function( res ) {
+				var isValid = res.data.isValid;
+				$shared.changingPage = false;
+				if (isValid) {
+					var email = $scope.user.email;
+					var splitted = email.split("@");
+					$scope.workspace = $shared.cleanWorkspaceName(splitted[0]);
+					$scope.step = 3;
+				} else {
+					$scope.invalidCode = true;
+				}
+			});
+			return;
+		}
+		return false;
+	}
+
+	function checkWorkspaceName(name) {
+		if (name !== name.toLowerCase()) {
+			return false;
+		}
+		if (!name.match(/^[a-z0-9\-]+$/)) {
+			return false;
+		}
+		return true;
+	}
+	$scope.submitBillingForm = function($event, billingForm) {
+
+		//setup tokens for workspace access
+		$shared.setAuthToken($scope.token);
+		$shared.setWorkspace($scope.workspace);
+
+
+			var data = {};
+			data['number'] = $scope.card.number;
+			data['cvc'] = $scope.card.cvv;
+			var splitted = $scope.card.expires.split("/");
+			data['exp_month'] = splitted[ 0 ];
+			data['exp_year'] = splitted[ 1 ];
+			data['address_zip'] = $scope.card.postal_code;
+			Stripe.card.createToken(data, stripeResponseHandler);
+	}
+	$scope.submitWorkspaceForm = function($event, workspaceForm) {
+		console.log("called submitWorkspaceForm");
+		$scope.triedSubmit = true;
+		if (!checkWorkspaceName($scope.workspace)) {
+			$scope.hasWorkspaceNameErr = true;
+			return;
+		}
+		if (workspaceForm.$valid) {
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.plan = $stateParams['plan'];
+			data.workspace = $scope.workspace;
+				$shared.changingPage = true;
+			Backend.post("/updateWorkspace", data).then(function( res ) {
+				$shared.changingPage = false;
+				if (res.data.success) {
+					$scope.invalidWorkspaceTaken = false;
+					//doSpinup();
+					if ($stateParams['plan'] === 'pay-as-you-go') {
+						$scope.step = 5;
+					} else {
+						//need to add card
+						$scope.step = 4;
+					}
+
+					//$scope.step = 4;
+					return;
+				}
+				$scope.invalidWorkspaceTaken = true;
+				$scope.workspace = res.data.workspace;
+			});
+		}
+		return false;
+	}
+
+	$scope.finishSignup = function() {
+		$scope.triedSubmit = true;
+		if (!$scope.selectedTemplate) {
+			      alert = $mdDialog.alert({
+        title: 'Error',
+        textContent: 'Please select a template',
+        ok: 'Close'
+      });
+			return;
+
+		}
+			var data = {};
+			data["userId"] = $scope.userId;
+			data.templateId =  $scope.selectedTemplate.id;
+				$shared.changingPage = true;
+			Backend.post("/provisionCallSystem", data).then(function( res ) {
+				$shared.changingPage = false;
+				doSpinup();
+				return;
+			});
+		return false;
+	}
+
+	$scope.recall = function() {
+		var data = angular.copy( $scope.verify1 );
+		data.userId = $scope.userId;
+				$shared.changingPage = true;
+		Backend.post("/registerSendVerify", data).then(function( res ) {
+				$shared.changingPage = false;
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('You will be called shortly.')
+            .position("top right")
+            .hideDelay(3000)
+		);
+		   });
+	}
+    $scope.authenticate = function() {
+
+    	var defer = $q.defer();
+
+    	$timeout(function(){
+
+    		defer.resolve();
+
+    		$timeout(function(){
+    		   	$location.path('/dashboard/home');
+    		}, 600);
+
+    	}, 1100);
+
+    	return defer.promise;
+
+	}
+	    $scope.useTemplate = function (template) {
+      $scope.selectedTemplate = template;
+    };
+    $scope.isSelected = function (template) {
+      if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {
+        return true;
+      }
+      return false;
+    }
+	$scope.gotoLogin= function() {
+		$shared.changingPage = true;
+		$shared.scrollToTop();
+    	$state.go('login');
+	}
+		function stripeResponseHandler(status, response) {
+			$timeout(function() {
+				$scope.$apply();
+				if (response.error) { // Problem!
+					// Show the errors on the form
+					$scope.billErrorMsg = response.error.message;
+					//angular.element('.add-card-form').scrollTop(0);
+				} else { // Token was created!
+					// Get the token ID:
+					$mdDialog.hide();
+					stripeRespAddCard(response).then(function() {
+						$scope.step = 4;
+					});
+				}
+			}, 0);
+		}
+		function stripeRespAddCard(response) {
+			return $q(function(resolve, reject) {
+				var data = {};
+				data['stripe_token'] = response.id;
+				data['stripe_card'] = response.card.id;
+				data['last_4'] = response.card.last4;
+				data['issuer'] = response.card.brand;
+				$shared.isCreateLoading =true;
+				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspaceInfo.id;
+				Backend.post("/addCard" + qs, data).then(function(res) {
+					resolve(res);
+					$shared.endIsCreateLoading();
+				}, function(err) {
+					console.error("an error occured ", err);
+				});
+			});
+		}
+
+	$q.all([
+		Backend.get("/getCallSystemTemplates"),
+		Backend.get("/getConfig"),
+		Backend.get("/plans"),
+	]).then(function(res) {
+		$scope.templates = res[0].data;
+		$scope.plans = res[2].data;
+		$shared.changingPage = false;
+		console.log("plans ", $scope.plans);
+		console.log("user selected plan is ", $stateParams['plan'] );
+		if ( $stateParams['plan'] ) {
+			$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
+		}
+		console.log("plan info is ", $scope.planInfo);
+		if ( $stateParams['hasData'] ) {
+			console.log("$stateParams data is ", $stateParams);
+			$scope.token = $stateParams['authData'];
+
+			$scope.userId = $stateParams['userId'];
+			$scope.gotoVerificationFlow();
+		}
+		$scope.config = res[1].data;
+		console.log("config is ", $scope.config);
+		Stripe.setPublishableKey($scope.config.stripe.key);
+
+	});
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
+	  $shared.updateTitle("Reset");
+	$scope.triedSubmit = false;
+	$scope.isLoading = false;
+	$scope.couldNotReset = false;
+	$scope.couldNotResetMsg = "";
+	var token = $location.search()['token'];
+	$scope.user = {
+		email: "",
+		password: "",
+		confirmPassword: "",
+		token: token
+	};
+	console.log("reset params are ", $scope.user);
+    $scope.submit = function($event, resetForm) {
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.confirmPassword) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (resetForm.$valid) {
+			var data = {};
+			data.email = $scope.user.email;
+			data.token = $scope.user.token;
+			data.password = $scope.user.password;
+			data.password_confirmation = $scope.user.confirmPassword;
+			$scope.isLoading = true;
+			console.log("requesting reset ", data);
+			$scope.couldNotReset = false;
+			$scope.couldNotResetMsg = "";
+			Backend.post("/reset", data, true).then(function( res ) {
+				var token = res.data;
+				$scope.isLoading = false;
+				/*
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Password was reset successfully.')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					*/
+				
+				$shared.showMsg('Password reset', 'You have successfully reset your password.').then(function()  {
+					$state.go('login', {});
+				});
+			}).catch(function(res) {
+				console.log("error reply is ", res);
+				$scope.couldNotReset = true;
+				$scope.couldNotResetMsg = res.data.message;
+
+				$scope.isLoading = false;
+			})
+			return;
+		}
+    }
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window) {
+	  $shared.updateTitle("Settings");
+	  $scope.triedSubmit = false;
+    $scope.selectedSecurityType = "SMS verification";
+    $scope.selectedVerify = "verify";
+    $scope.smsVerifiedSuccessfully = false;
+    $scope.authVerifiedSuccessfully = false;
+    $scope.isDisabled = false;
+    $scope.base64_contents ='';
+	  $scope.ui = {
+		  show1Secret: false,
+		  show2Secret: false,
+	  };
+
+    get2FAConfig();
+
+	$scope.user = {
+		first_name: "",
+		last_name: "",
+		email: "",
+		password: "",
+		password2: "",
+    enable_2fa: false,
+    type_of_2fa: null,
+    mobile_number: ""
+	};
+  $scope.selectedTheme = $window.localStorage.THEME;
+  $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
+	$scope.changeCountry = function(country) {
+		console.log("changeCountry ", country);
+	}
+
+  function applyDefaultTheme() {
+    const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
+    if (!$scope.selectedTheme) {
+      $scope.selectedTheme = defaultTheme.name;
+      $window.localStorage.setItem('THEME', defaultTheme.name);
+    }
+  }
+  applyDefaultTheme();
+
+  $scope.theme = {
+    default: 'styles/app-blue.css',
+    dark: 'styles/app-grey.css',
+    light: 'styles/app-cyan.css',
+  }
+  $scope.setTheme = function(theme) {
+    $scope.selectedTheme = theme;
+    $window.localStorage.setItem('THEME', theme);
+    Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+      addStyle($scope.theme[theme]);
+      removeStyle($scope.theme[theme]);
+    });
+  };
+
+  function addStyle(path) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', path);
+    document.head.appendChild(link);
+  }
+
+  function removeStyle(selectedPath) {
+    const allLinks = ['styles/app-grey.css', 'styles/app-blue.css', 'styles/app-green.css', 'styles/app-red.css', 'styles/app-purple.css', 'styles/app-cyan.css' ]
+    const links = document.head.querySelectorAll('link[href]');
+    for (var i = 0; i < links.length; i++) {
+      const path = links[i].getAttribute('href');
+      if (!allLinks.includes(path)) continue;
+      if (path === selectedPath) continue;
+      document.head.removeChild(links[i]);
+    }
+  }
+  $scope.onEnable2FA = function() {
+    if($scope.user.enable_2fa) {
+      $scope.user.type_of_2fa = 'sms';
+    }
+  }
+  $scope.on2FASubmit = function() {
+    $scope.triedSubmit = true;
+    if(!$scope.user.enable_2fa) {
+      $scope.user.enable_2fa = false;
+      save2FASettings();
+    } else {
+      $scope.user.enable_2fa = true;
+      if($scope.user.type_of_2fa === 'sms') {
+        if(!$scope.user.mobile_number) return;
+        Backend.put("/self", { mobile_number: $scope.user.mobile_number }).then(function(res) {
+          save2FASettings();
+        });
+      } else {
+        $scope.user.type_of_2fa = 'totp';
+        save2FASettings();
+      }
+    }
+  }
+
+  $scope.onNumberChange = function() {
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
+  }
+  $scope.tabChanged = function (tab) {
+    $scope.isDisabled = false;
+    $scope.selectedSecurityType = tab;
+    if($scope.selectedSecurityType === "SMS verification") {
+      $scope.authVerifiedSuccessfully = false;
+    } else {
+      $scope.smsVerifiedSuccessfully = false;
+      $scope.user.otp = '';
+    }
+  }
+  $scope.verifyChanged = function (verify) {
+    $scope.triedSubmit = true;
+    $scope.selectedVerify = verify;
+    if($scope.selectedVerify === "verify") {
+      $scope.isDisabled = true;
+      request2FACode();
+    } else {
+      $scope.isDisabled = false;
+    }
+  }
+  $scope.smsVerificationSuccess = function(code) {
+    if(code) {
+      verify2FACode(code);
+      $scope.smsVerifiedSuccessfully = true;
+    }
+  }
+  $scope.authAppSuccess = function() {
+    $scope.authVerifiedSuccessfully = true;
+  }
+    $scope.submitSettings = function($event, settingsForm) {
+		$scope.triedSubmit = true;
+		if (settingsForm.$valid) {
+			var data = {};
+			data['first_name'] = $scope.user.first_name;
+			data['last_name'] = $scope.user.last_name;
+			data['company_name'] = $scope.user.company_name;
+			data['email'] = $scope.user.email;
+			$shared.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					$shared.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+
+  // 2FA Functions
+  function verify2FACode(code) {
+    const data = {};
+    data['2fa_code'] = code;
+    Backend.post("/verify2FACode", data).then(function( res ) {
+      $scope.authAppSuccess();
+    });
+  }
+
+  function request2FACode() {
+    Backend.get("/request2FACode").then(function( res ) {
+      $scope.smsVerificationSuccess();
+    });
+  }
+
+  function save2FASettings() {
+    const data = {};
+    data.enable_2fa = $scope.user.enable_2fa;
+    if($scope.user.enable_2fa) data.type_of_2fa = $scope.user.type_of_2fa;
+    Backend.post("/save2FASettings", data).then(function( res ) {
+      console.log('res', res);
+      // $scope.user.2FAConfig = res.data;
+    });
+  }
+
+  // function get2FAConfig() {
+  //   const data = {};
+  //   data.enable_2fa = true;
+  //   data.type_of_2fa = 'sms';
+
+  //   Backend.post("/2FAConfig", data).then(function( res ) {
+  //     console.log('res', res);
+  //     // $scope.user.2FAConfig = res.data;
+  //   });
+  // }
+
+  function get2FAConfig() {
+    Backend.get("/get2FAConfig").then(function( res ) {
+      console.log('res', res);
+      // $scope.user.2FAConfig = res.data;
+      $scope.base64_contents = res.data.qrcode_base64;
+    });
+  }
+
+   $scope.submitPersonal = function($event, personalForm) {
+		$scope.triedSubmit = true;
+		console.log("submitPersonal ", personalForm);
+		if (personalForm.$valid) {
+			var data = {};
+			data['address_line_1'] =$scope.user.address_line_1;
+			data['address_line_2'] =$scope.user.address_line_2;
+			data['postal_code'] =$scope.user.postal_code;
+			data['state'] =$scope.user.state;
+			data['city'] =$scope.user.city;
+			data['country'] =$scope.user.country;
+			$shared.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your info')
+						.position("top right")
+						.hideDelay(3000)
+					);
+					$shared.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+
+    $scope.submitPasswords = function($event, passwordsForm) {
+		$scope.triedSubmit = true;
+		if ($scope.user.password !== $scope.user.password2) {
+			$scope.passwordsDontMatch = true;
+			return;
+		} else {
+			$scope.passwordsDontMatch = false;
+		}
+		if (passwordsForm.$valid) {
+			var data = {};
+			data['password'] = $scope.user.password;
+			$shared.isCreateLoading = true;
+			Backend.post("/updateSelf", data).then(function( res ) {
+				var token = res.data;
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Updated your passwords')
+						.position("top right")
+						.hideDelay(3000)
+					);
+				$shared.endIsCreateLoading();
+			});
+			return;
+		}
+      	return false;
+
+	}
+	$scope.show1Secret = function() {
+		$scope.ui.show1Secret = true;
+	}
+	$scope.hide1Secret = function() {
+		$scope.ui.show1Secret = false;
+	}
+	$scope.show2Secret = function() {
+		$scope.ui.show2Secret = true;
+	}
+	$scope.hide2Secret = function() {
+		$scope.ui.show2Secret = false;
+	}
+
+	$shared.isLoading = true;
+	Backend.get("/self").then(function(res) {
+      $scope.user = res.data;
+      console.log("user is ", $scope.user);
+      $shared.endIsLoading();
+    });
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('sidenavCtrl', function($scope, $location){
+	$scope.selectedMenu = 'dashboard';
+	$scope.collapseVar = 0;
+
+	$scope.check = function(x){
+
+		if(x==$scope.collapseVar)
+			$scope.collapseVar = 0;
+		else
+			$scope.collapseVar = x;
+	};
+	$scope.multiCheck = function(y){
+
+		if(y==$scope.multiCollapseVar)
+			$scope.multiCollapseVar = 0;
+		else
+			$scope.multiCollapseVar = y;
+	};
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('TabsDemoCtrl', function ($scope, $window) {
+  $scope.tabs = [
+    { title:'Dynamic Title 1', content:'Dynamic content 1' },
+    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      $window.alert('You\'ve selected the alert tab!');
+    });
+  };
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('TimepickerDemoCtrl', function ($scope, $log) {
+  $scope.mytime = new Date();
+
+  $scope.hstep = 1;
+  $scope.mstep = 15;
+
+  $scope.options = {
+    hstep: [1, 2, 3],
+    mstep: [1, 5, 10, 15, 25, 30]
+  };
+
+  $scope.ismeridian = true;
+  $scope.toggleMode = function() {
+    $scope.ismeridian = ! $scope.ismeridian;
+  };
+
+  $scope.update = function() {
+    var d = new Date();
+    d.setHours( 14 );
+    d.setMinutes( 0 );
+    $scope.mytime = d;
+  };
+
+  $scope.changed = function () {
+    $log.log('Time changed to: ' + $scope.mytime);
+  };
+
+  $scope.clear = function() {
+    $scope.mytime = null;
+  };
+});
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+ angular.module('Lineblocs').controller('todoCtrl', function ($scope) {
+ 	$scope.todos = [
+ 	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
+ 	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         
+ 	{text:'Avengers Age of Ultron.', done:false, id: 'option4'},         
+ 	{text: 'Henna birthday at Mezbaan.', done:false, id: 'option5'}
+ 	];
+ 	function makeid()
+ 	{
+ 		var text = "";
+ 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+ 		for( var i=0; i < 5; i++ )
+ 			text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+ 		return text;
+ 	}
+ 	$scope.addTodo = function () {
+ 		$scope.todos.push({text:$scope.formTodoText, done:false, id:makeid()});
+ 		$scope.formTodoText = '';
+ 	};
+ });
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('TooltipDemoCtrl', function ($scope) {
+  $scope.dynamicTooltip = 'Hello, World!';
+  $scope.dynamicTooltipText = 'dynamic';
+  $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
+});
 'use strict';
 
 /**
@@ -7927,2184 +10108,3 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
   }, 0);
 });
 
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('BodyCtrl', function ($scope, $shared) {
-  $scope.$shared = $shared;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('cardCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-	$scope.options1 = {
-	    lineWidth: 12,
-	    scaleColor: false,
-	    size: 120,
-	    lineCap: "square",
-	    barColor: "#fb8c00",
-	    trackColor: "#f9dcb8"
-	};
-	
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-    $scope.line = {
-	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-	          data: [
-	      [65, 59, 80, 81, 56, 55, 40],
-	      [28, 48, 40, 19, 86, 27, 90]
-	    ],
-	    colours: ['#2979FF','#00D554','#7AB67B','#D9534F','#3faae3'],
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-
-    };
-
-    $scope.bar = {
-	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-		data: [
-		   [65, 59, 80, 81, 56, 55, 40],
-		   [28, 48, 40, 19, 86, 27, 90]
-		],
-		colours: ['#FFA726','#FF4081','#7AB67B','#D9534F','#3faae3']
-    	
-    };
-
-    $scope.donut = {
-    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data: [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-     $scope.pie = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	      data : [300, 500, 100],
-    	      colours: ['#FF4081','#F0AD4E','#00D554','#D9534F','#3faae3']
-    };
-
-
-    $scope.datapoints=[{"x":10,"top-1":10,"top-2":15},
-                       {"x":20,"top-1":100,"top-2":35},
-                       {"x":30,"top-1":15,"top-2":75},
-                       {"x":40,"top-1":50,"top-2":45}];
-    $scope.datacolumns=[{"id":"top-1","type":"spline"},
-                        {"id":"top-2","type":"spline"}];
-    $scope.datax={"id":"x"};
-
-    
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular
-    .module('Lineblocs')
-    .controller('calendarCtrl', function ($scope) {
-    });
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
- angular.module('Lineblocs').controller('componentCtrl', function ($scope, $interval, $mdToast, $document) {
-    $scope.rating1 = 3;
-    $scope.rating2 = 2;
-    $scope.rating3 = 4;  
-    var self = this,  j= 0, counter = 0;
-    self.modes = [ ];
-    self.activated = true;
-    self.determinateValue = 30;
-    /**
-    * Turn off or on the 5 themed loaders
-    */
-    self.toggleActivation = function() {
-        if ( !self.activated ) self.modes = [ ];
-        if (  self.activated ) j = counter = 0;
-    };
-    // Iterate every 100ms, non-stop
-    $interval(function() {
-    // Increment the Determinate loader
-        self.determinateValue += 1;
-        if (self.determinateValue > 100) {
-            self.determinateValue = 30;
-        }
-        // Incrementally start animation the five (5) Indeterminate,
-        // themed progress circular bars
-        if ( (j < 5) && !self.modes[j] && self.activated ) {
-            self.modes[j] = 'indeterminate';
-        }
-        if ( counter++ % 4 == 0 ) j++;
-    }, 100, 0, true);
-    var last = {
-        bottom: false,
-        top: true,
-        left: false,
-        right: true
-    };
-    $scope.demo = {};
-    $scope.toastPosition = angular.extend({},last);
-    $scope.getToastPosition = function() {
-        sanitizePosition();
-        return Object.keys($scope.toastPosition)
-        .filter(function(pos) { return $scope.toastPosition[pos]; })
-        .join(' ');
-    };
-    function sanitizePosition() {
-        var current = $scope.toastPosition;
-        if ( current.bottom && last.top ) current.top = false;
-        if ( current.top && last.bottom ) current.bottom = false;
-        if ( current.right && last.left ) current.left = false;
-        if ( current.left && last.right ) current.right = false;
-        last = angular.extend({},current);
-    }
-    $scope.showCustomToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showSimpleToast = function() {
-        $mdToast.show(
-            $mdToast.simple()
-            .content('Simple Toast!')
-            .position($scope.getToastPosition())
-            .hideDelay(30000)
-            );
-    };
-    $scope.showActionToast = function() {
-        var toast = $mdToast.simple()
-        .content('Action Toast!')
-        .action('OK')
-        .highlightAction(false)
-        .position($scope.getToastPosition());
-        $mdToast.show(toast).then(function(response) {
-            if ( response == 'ok' ) {
-                alert('You clicked \'OK\'.');
-            }
-        });
-    };
-})
-.controller('ToastCtrl', function($scope, $mdToast) {
-    $scope.closeToast = function() {
-        $mdToast.hide();
-    };
-
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared, Backend) {
-	$scope.$shared = $shared;
-
-  	$scope.$state = $state;
-
-  	$rootScope.$on('$stateChangeSuccess', function(){
-		$timeout(function() {
-			$('body').scrollTop(0);
-		}, 200);
-	});
-
-  $scope.searchText = '';
-  $scope.searchSection = function() {
-    Backend.get("/search?query="+ $scope.searchText).then(function(res) {
-      $scope.totalResults = res.data.categories;
-      getMatchingItems();
-    });
-  };
-
-  function getMatchingItems() {
-    if (!$scope.totalResults || !$scope.totalResults.length) return [];
-    for (const value of $scope.totalResults) {
-      value.key = value.key.replace(/_/g, ' ')
-      value.results = value.results.slice(0, 5);
-    }
-    $scope.searchResults = $scope.totalResults;
-  };
-
-  $scope.onOutsideClick = function() {
-    console.log('outside click');
-    $scope.searchText = '';
-    $scope.totalResults = [];
-  };
-
-  $scope.selectedItemChange = function(item, type) {
-    $scope.searchText = item.title;
-    $scope.totalResults = [];
-    if (type && type === 'resource articles') {
-      window.open(item.url, '_blank');
-    } else {
-      if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
-    }
-  }
-
-  $scope.clearSearch = function() {
-    $scope.searchText = '';
-    $scope.totalResults = [];
-  }
-
-  document.addEventListener('click', function(event) {
-    if (!document.getElementById('search-section-global').contains(event.target)) {
-      $scope.totalResults = [];
-      $scope.$apply();
-    }
-  });
-
-  	if ($('body').hasClass('extended')) {
-	  	$timeout(function(){
-			//$('.sidebar').perfectScrollbar();
-		}, 200);
-  	};
-
-  	$scope.rtl = function(){
-  		$('body').toggleClass('rtl');
-  	}
-  	$scope.subnav = function(x){
-		if(x==$scope.showingSubNav)
-			$scope.showingSubNav = 0;
-		else
-			$scope.showingSubNav = x;
-		return false;
-	}
-	$scope.extend = function  () {
-		$( '.c-hamburger' ).toggleClass('is-active');
-        $('body').toggleClass('extended');
-        $('.sidebar').toggleClass('ps-container');
-        $rootScope.$broadcast('resize');
-        $timeout(function(){
-			//$('.sidebar').perfectScrollbar();
-			console.log('pfscroll');
-		}, 200);
-	}
-
-
-
-
-
-	$scope.changeTheme = function(setTheme){
-
-		$('<link>')
-		  .appendTo('head')
-		  .attr({type : 'text/css', rel : 'stylesheet'})
-		  .attr('href', 'styles/app-'+setTheme+'.css');
-	}
-
-	var w = angular.element($window);
-
-	w.bind('resize', function () {
-		/*
-	    if ($(window).width()<1200) {
-            $('.c-hamburger').removeClass('is-active');
-            $('body').removeClass('extended');
-        }
-        if ($(window).width()>1600) {
-            $('.c-hamburger').addClass('is-active');
-            //$('body').addClass('extended');
-		};
-		*/
-	});
-
-	if ($(window).width()<1200) {
-		$rootScope.$on('$stateChangeSuccess', function(){
-			$( '.c-hamburger' ).removeClass('is-active');
-        	$('body').removeClass('extended');
-		});
-	}
-
-	if ($(window).width()<600) {
-		$rootScope.$on('$stateChangeSuccess', function(){
-			$( '.mdl-grid' ).removeAttr('dragula');
-		});
-	}
-
-	$scope.changeLanguage = (function (l) {
-
-		$translate.use(l);
-
-	});
-	loadAddedResources1();
-});
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('ForgotCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
-	  $shared.updateTitle("Forgot Password");
-	$scope.triedSubmit = false;
-	$scope.isLoading = false;
-	$scope.user = {
-		email: "",
-	};
-    $scope.submit = function($event, forgotForm) {
-		$scope.triedSubmit = true;
-		if (forgotForm.$valid) {
-			var data = angular.copy( $scope.user );
-			$scope.isLoading = true;
-			var resetMsg = ""
-			Backend.post("/forgot", data, true).then(function( res ) {
-				var token = res.data;
-				$scope.isLoading = false;
-				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');
-/*
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Reset instructions sent to email..')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					*/
-			}).catch(function() {
-				$scope.isLoading = false;
-				$scope.errorMsg = "No such user exists.";
-			})
-			return;
-		}
-	}
-	$scope.gotoLogin= function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-    	$state.go('login');
-	}
-	$shared.changingPage = false;
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
-  $scope.$shared = $shared;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
-	  $shared.updateTitle("Dashboard");
-	$scope.options1 = {
-	    lineWidth: 8,
-	    scaleColor: false,
-	    size: 85,
-	    lineCap: "square",
-	    barColor: "#fb8c00",
-	    trackColor: "#f9dcb8"
-	};
-	$scope.options2 = {
-	    lineWidth: 8,
-        scaleColor: false,
-        size: 85,
-        lineCap: "square",
-        barColor: "#00D554",
-        trackColor: "#c7f9db"
-	};
-	$scope.options3 = {
-	    lineWidth: 8,
-        scaleColor: false,
-        size: 85,
-        lineCap: "square",
-        barColor: "#F800FC",
-        trackColor: "#F5E5F5"
-	};
-
-	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-	$scope.series = ['Series A', 'Series B'];
-	$scope.data = [
-		[65, 59, 80, 81, 56, 55, 40],
-		[28, 48, 40, 19, 86, 27, 90]
-	];
-
-	$scope.onClick = function (points, evt) {
-		console.log(points, evt);
-	};
-	if ($(window).width()<600) {		
-		$( '.mdl-grid' ).removeAttr('dragula');
-	};
-    $scope.line2 = {
-	    labels: ["JAN","FEB","MAR","APR","MAY","JUN"],
-	          data: [
-	      			[99, 180, 80, 140, 120, 220, 100],
-	      			[50, 145, 200, 75, 50, 100, 50]
-		],
-	    colours: [{ 
-				fillColor: "#2b36ff",
-	            strokeColor: "#C172FF",
-	            pointColor: "#fff",
-	            pointStrokeColor: "#8F00FF",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "#8F00FF"
-        	},
-        	{
-        		fillColor: "#ffa01c",
-	            strokeColor: "#FFB53A",
-	            pointColor: "#fff",
-	            pointStrokeColor: "#FF8300",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "#FF8300"
-        	}
-        	],
-	    options: {
-	    	responsive: true,
-            bezierCurve : false,
-            datasetStroke: false,
-            legendTemplate: false,
-            pointDotRadius : 9,
-            pointDotStrokeWidth : 3,
-            datasetStrokeWidth : 3
-	    },
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-
-	};
-	$scope.load = function() {
-		$timeout(function () {
-			var color = Chart.helpers.color;
-			$shared.isLoading = true;
-			Backend.get("/dashboard").then(function(res) {
-				var graph = res.data[0];
-				$shared.billInfo=  res.data[1];
-				$shared.userInfo=  res.data[2];
-				console.log("graph data is ", graph);
-				$shared.isLoading = false;
-				$timeout(function(){
-					$scope.line = {
-						legend: true,
-						labels: graph.labels,
-							data: [
-						graph.data.inbound,
-						graph.data.outbound
-						//[7, 20, 10, 15, 17, 10, 27],
-						//[6, 9, 22, 11, 13, 20, 27]
-						],
-						series: [
-					'Inbound',
-					'Outbound'
-				],
-						colours: [{ 
-								fillColor: "#3f51b5",
-								strokeColor: "#3f51b5",
-								pointColor: "#3f51b5",
-								pointStrokeColor: "#3f51b5",
-								pointHighlightFill: "#3f51b5",
-								pointHighlightStroke: "#3f51b5"
-							},
-							{
-								fillColor: "#3D3D3D",
-								strokeColor: "#3D3D3D",
-								pointColor: "#3D3D3D",
-								pointStrokeColor: "#3D3D3D",
-								pointHighlightFill: "#3D3D3D",
-								pointHighlightStroke: "#3D3D3D"
-							}
-							],
-		options: {
-				legend: {
-			display: true,
-			position: 'right'
-			},
-							responsive: true,
-								bezierCurve : false,
-								datasetStroke: false,
-								/*
-								legendTemplate: '<ul>'
-						+'<% for (var i=0; i<datasets.length; i++) { %>'
-							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-						+'</li>'
-						+'<% } %>'
-					+'</ul>',
-					*/
-								pointDotRadius : 6,
-								showTooltips: false,
-						},
-						onClick: function (points, evt) {
-						console.log(points, evt);
-						}
-
-					};
-				}, 0);
-			});
-		}, 0);
-	}
-	$scope.reloadGraph = function() {
-		console.log("reloadGraph called..");
-		$scope.load();
-	}
-	$scope.load();
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('JoinWorkspaceCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $stateParams, Idle) {
-	  $shared.updateTitle("Join Workspace");
-	  var hash = $stateParams['hash'];
-	  $scope.passwordSet = false;
-	  $scope.values = {
-		  "first_name": "",
-		  "last_name": "",
-		  "password": "",
-		  "password2": ""
-	  };
-	function finishLogin(token, workspace) {
-		console.log("finishLogin ", arguments);
-				$scope.isLoading = false;
-				$scope.couldNotLogin = false;
-				$shared.isAdmin = token.isAdmin;
-
-				$shared.setAuthToken(token);
-				$shared.setWorkspace(workspace);
-				Idle.watch();
-				$state.go('dashboard-user-welcome', {});
-	}
-
-	$scope.submit =function($event, inviteForm) {
-		if (!inviteForm.$valid) {
-			$scope.triedSubmit = true;
-			$scope.errorMsg = "Please fill in all fields below..";
-			return;
-		}
-		if ($scope.values.password !== $scope.values.password2) {
-			$scope.errorMsg = "Passwords don't match";
-			return;
-
-
-		}
-		var data = {
-			"hash": $stateParams['hash'],
-			"first_name": $scope.values['first_name'],
-			"last_name": $scope.values['last_name'],
-			"password": $scope.values['password']
-		};
-		Backend.post("/submitJoinWorkspace", data).then(function(res) {
-			$scope.isLoading = true;
-			var token = res.data;
-			console.log("token is ", token);
-			finishLogin(token, res.data.workspace);
-		});
-	}
-	$scope.acceptInvite = function() {
-			var data = {
-			"hash": $stateParams['hash']
-		};
-			$scope.isLoading = true;
-		Backend.post("/acceptWorkspaceInvite", data).then(function(res) {
-			var token = res.data;
-				finishLogin(token, res.data.workspace);
-		});
-	}
-
-	  Backend.get("/fetchWorkspaceInfo?hash=" +hash).then(function(res) {
-		  $scope.info = res.data;
-		  if ( $scope.info.user.needs_password_set ) {
-			  $scope.passwordSet = true;
-		  }
-	  });
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval) {
-	  $shared.updateTitle("Login");
-	  $shared.processResult();
-	$scope.triedSubmit = false;
-	$scope.couldNotLogin = false;
-  $scope.invalideOtp = false;
-	$scope.noUserFound = false;
-	$scope.shouldSplash = false;
-	$scope.isLoading = false;
-	$scope.challenge = null;
-	$scope.user = {
-		email: "",
-		password: "",
-    otp:"",
-	};
-	$scope.step = 1;
-  $scope.countdownDuration = 5;
-  $scope.resendTimeout = $scope.countdownDuration * 60;
-  $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
-var clickedGoogSignIn = false;
-var countdown;
-function startCountdown() {
-  countdown = $interval(function() {
-    var minutes = Math.floor($scope.resendTimeout / 60);
-    var seconds = $scope.resendTimeout - minutes * 60;
-    $scope.resendTimeout--;
-    if ($scope.resendTimeout < 0) {
-      $interval.cancel(countdown);
-    }
-    $scope.timerDisplay = padZero(minutes) + ':' + padZero(seconds);
-  }, 1000);
-}
-startCountdown();
-function padZero(number) {
-  return (number < 10 ? '0' : '') + number;
-}
-const code = $location.search().code;
-if (code) {
-  fetch('https://appleid.apple.com/auth/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({
-      grant_type: 'authorization_code',
-      code: code,
-      client_id: $shared.frontend_api_creds.apple_signin_client_id,
-      client_secret:  $shared.frontend_api_creds.apple_signin_client_secret,
-      redirect_uri: 'https://your-app.com/callback',
-    }),
-  }).then(response => response.json()).then(data => {
-    const loginOption = {
-      provider    : 'apple',
-      id_token    : data.access_token,
-      access_token: data.access_token,
-    };
-    $scope.startThirdPartyLogin( user.email, user.displayName, '', '', loginOption);
-  })
-  .catch(error => {
-    // Handle the error
-  });
-}
-
-function redirectUser() {
-		Idle.watch();
-		var hash = window.location.hash.substr(1);
-		var query = URI(hash).query(true);
-		if ( query.next ) {
-				window.location.replace("#/" + query.next);
-				return;
-		}
-		$state.go('dashboard-user-welcome', {});
-}
-	function finishLogin(data) {
-		console.log("finishLogin ", arguments);
-				$scope.isLoading = false;
-				$scope.couldNotLogin = false;
-				$shared.isAdmin = data.isAdmin;
-
-				$shared.setAuthToken(data);
-				$shared.setWorkspace(data.workspace);
-				if (!$shared.isAdmin) {
-					redirectUser();
-					return;
-				}
-				$shared.isAdmin = true;
-				$shared.setAdminAuthToken(data.adminWorkspaceToken);
-				Backend.get("/admin/getWorkspaces").then(function(res) {
-					$shared.workspaces = res.data.data;
-					$state.go('dashboard-user-welcome', {});
-				});
-	}
-
-  // Apple Login ==============================================================
-  $scope.loginWithApple = function () {
-    console.log("loginWithApple", AppleID);
-    AppleID.auth.signIn();
-  }
-
-
-  // Microsoft login ===========================================================
-  $scope.loginWithMicrosoft = function () {
-
-    const msalConfig = {
-      auth: {
-          // 'Application (client) ID' of app registration in Azure portal - this value is a GUID
-          clientId: $shared.frontend_api_creds.msft_signin_client_id || "3a49ca34-f4b5-40b3-a8bc-27ed569d7867",
-          // Full directory URL, in the form of https://login.microsoftonline.com/<tenant-id>
-          authority: "https://login.microsoftonline.com/common",
-          // Full redirect URL, in form of http://localhost:3000
-          redirectUri: DEPLOYMENT_DOMAIN,
-      },
-      cache: {
-          cacheLocation: "sessionStorage", // This configures where your cache will be stored
-          storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
-      },
-      system: {
-          loggerOptions: {
-              loggerCallback: (level, message, containsPii) => {
-                console.log("loggerCallback", level);
-                  if (containsPii) {
-                      return;
-                  }
-                  switch (level) {
-                      case msal?.LogLevel?.Error:
-                          console.error(message);
-                          return;
-                      case msal?.LogLevel?.Info:
-                          console.info(message);
-                          return;
-                      case msal?.LogLevel?.Verbose:
-                          console.debug(message);
-                          return;
-                      case msal?.LogLevel?.Warning:
-                          console.warn(message);
-                          return;
-                  }
-              }
-          }
-      }
-    };
-
-    const myMSALObj = new msal.PublicClientApplication(msalConfig);
-    myMSALObj.loginPopup({scopes: ["User.Read"]}).then(handleResponse)
-      .catch(error => {
-          console.error(error);
-      });
-  }
-
-  function handleResponse(response) {
-    if (response === null) return;
-    const loginOption = {
-      provider    : 'microsoft',
-      id_token    : response.idToken,
-      access_token: response.accessToken,
-    };
-    $scope.startThirdPartyLogin( response.account.userName, response.account.name, '', '', loginOption);
-  }
-
-  $scope.validateEmail = function($event, loginForm) {
-		$scope.triedSubmit = true;
-		if (!loginForm.$valid) {
-
-			$scope.errorMsg = "Please enter a valid email";
-			return;
-		}
-			$shared.changingPage = true;
-			Backend.get("/getUserInfo?email=" + $scope.user.email).then(function( res ) {
-				$shared.changingPage = false;
-				if ( res.data.found ) {
-					$scope.userInfo = res.data.info;
-					$scope.step = 2;
-					return;
-				}
-				$scope.noUserFound = true;
-			});
-	}
-
-  $scope.validatePassword = function($event, loginForm) {
-    if (!loginForm.$valid) {
-      return;
-    }
-    const data = angular.copy($scope.user);
-    data['challenge'] = $scope.challenge;
-    $scope.isLoading = true;
-    Backend.post("/jwt/authenticate", data, true).then(function (res) {
-      if (res.data.enable_2fa === true) {
-        $scope.requestOtp($event, loginForm);
-      } else {
-        finishLogin(res.data);
-      }
-    }).catch(function () {
-      $scope.isLoading = false;
-      $scope.couldNotLogin = true;
-    })
-	}
-
-  $scope.requestOtp = function($event) {
-    $scope.isLoading = true;
-    $scope.resendTimeout = $scope.countdownDuration * 60;
-    $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
-    $interval.cancel(countdown);
-    startCountdown();
-    Backend.get("/request2FACode", {params: {email: $scope.user.email, password: $scope.user.password}}).then(function( res ) {
-      $scope.isLoading = false;
-      $scope.step = 3;
-    }).catch(function() {
-      $scope.step = 3;
-      $scope.isLoading = false;
-      $scope.couldNotLogin = true;
-    })
-  }
-
-  $scope.validateOtp = function ($event, loginForm) {
-    $scope.triedSubmit = true;
-    if (!loginForm.$valid) {
-      return;
-    }
-    $scope.isLoading = true;
-    $scope.invalideOtp = false;
-    Backend.post("/verify2FACode", {
-      "email": $scope.user.email,
-      "password": $scope.user.password,
-      "2fa_code": $scope.user.otp
-    }).then(function( res ) {
-      $scope.isLoading = false;
-      console.log("res", res);
-      if (res.data.success) {
-        finishLogin(res.data);
-      } else {
-        $scope.invalideOtp = true;
-        $scope.$apply();
-      }
-    }).catch(function() {
-      $scope.isLoading = false;
-      $scope.couldNotLogin = true;
-    })
-  }
-
-  $scope.requestAssistant = function() {
-    window.open(`https://${DEPLOYMENT_DOMAIN}/resources/other-topics/2fa-verification-support`, '_blank');
-  }
-
-	$scope.gotoRegister = function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-    	$state.go('register');
-	}
-	$scope.gotoForgot = function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-		$state.go('forgot');
-	}
-
-	$scope.startThirdPartyLogin = function(email, firstname, lastname, avatar, loginOption) {
-		var data = {};
-		data['email'] = email;
-		data['first_name'] = firstname;
-		data['last_name'] = lastname;
-		data['avatar'] = avatar;
-		data['challenge'] = $scope.challenge;
-    data['login_option'] = loginOption;
-			$shared.changingPage = true;
-		Backend.post("/thirdPartyLogin", data).then(function( res ) {
-			$timeout(function() {
-				$scope.$apply();
-				$shared.scrollToTop();
-
-				if ( res.data.confirmed ) {
-					finishLogin(res.data);
-					return;
-				}
-				$state.go('register', {
-					"hasData": true,
-					"userId": res.data.userId,
-					"authData": {"token": res.data.info.token}
-				});
-			}, 0);
-		});
-	}
-
-	function renderButton() {
-      gapi.signin2.render('gSignIn', {
-        'scope': 'profile email',
-        'width': 400,
-        'height': 50,
-        'longtitle': true,
-        'theme': 'dark',
-		'onsuccess': function(googleLoginResponse) {
-				if (!clickedGoogSignIn) {
-					return;
-				}
-				var profile = googleLoginResponse.getBasicProfile();
-				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-				console.log('Name: ' + profile.getName());
-				console.log('Image URL: ' + profile.getImageUrl());
-				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-				var ctrl= angular.element("body").scope();
-				var fullName = profile.getName().split(' '),
-    				firstName = fullName[0],
-    				lastName = fullName[fullName.length - 1];
-        const { id_token, access_token } = googleLoginResponse.getAuthResponse();
-        const loginOption = {
-          provider: 'google',
-          id_token,
-          access_token,
-        }
-				$scope.startThirdPartyLogin( profile.getEmail(), firstName, lastName, profile.getImageUrl(), loginOption);
-			},
-			onerror: function(err) {
-			console.log('Google signIn2.render button err: ' + err)
-			},
-        'onfailure': function() {
-			console.error("failure ", arguments);
-		}
-	  });
-    }
-
-	$scope.backStep1 = function() {
-		$scope.step = 1;
-	}
-	$shared.changingPage = false;
-	angular.element("#gSignIn").on("click", function() {
-		clickedGoogSignIn = true;
-	});
-	var full = window.location.host
-	//window.location.host is subdomain.domain.com
-	var parts = full.split('.')
-	var sub = parts[0]
-	var second = sub.split(":");
-	if (sub !== 'app' && second[0] !== 'localhost' && parts[1] !== 'ngrok') {
-		$scope.challenge = sub;
-	}
-	$timeout(function() {
-		renderButton();
-	}, 0);
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.open = function (size) {
-
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-});
-
-angular.module('Lineblocs').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close($scope.selected.item);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('NotFoundCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window, Idle) {
-	  $shared.updateTitle("404 Not Found");
-	  $scope.goBack = function() {
-         $window.history.back();
-	  }
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('WorkspaceOptionsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast) {
-	  $shared.updateTitle("Workspace Options");
-	  $scope.triedSubmit = false;
-	  $scope.ui = {
-	  };
-	$scope.workspace = {
-		byo_enabled: null,
-		outbound_macro_id: null
-	};
-    $scope.submitSettings = function($event, settingsForm) {
-		$scope.triedSubmit = true;
-		console.log("submit ", arguments);
-		if (settingsForm.$valid) {
-			var data = {};
-			data['byo_enabled'] = $scope.workspace.byo_enabled;
-			data['outbound_macro_id'] = $scope.workspace.outbound_macro_id;
-			Backend.post("/updateWorkspace2", data).then(function( res ) {
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Updated your info')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					$shared.endIsCreateLoading();
-			});
-			return;
-		}
-      	return false;
-
-	}
-	$scope.changeOutbound = function(value) {
-		console.log("changeFunction  ", arguments);
-		$scope.workspace.outbound_macro_id = value;
-	}
-	$shared.isLoading = true;
-	$q.all([
-		Backend.get("/workspace"),
-		Backend.get("/function/listFunctions?all=1")
-	]).then(function(res) {
-		$scope.workspace = res[0].data;
-		console.log("workspace is ", $scope.workspace);
-		$scope.functions = res[1].data.data;
-		$shared.endIsLoading();
-	});
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('PaginationDemoCtrl', function ($scope, $log) {
-  $scope.totalItems = 64;
-  $scope.currentPage = 4;
-
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-
-  $scope.pageChanged = function() {
-    $log.log('Page changed to: ' + $scope.currentPage);
-  };
-
-  $scope.maxSize = 5;
-  $scope.bigTotalItems = 175;
-  $scope.bigCurrentPage = 1;
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:HomeCtrl
- * @description
- * # HomeCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('paperCtrl', ['$scope', '$timeout', '$mdDialog', function ($scope, $timeout, $mdDialog) {
-	$scope.status = '  ';
-
-	$scope.showAdvanced = function(ev) {
-	    $mdDialog.show({
-	    	controller: DialogController,
-	      	templateUrl: 'views/pages/dashboard/mail/compose.html',
-	      	parent: angular.element(document.body),
-	      	targetEvent: ev,
-	      	clickOutsideToClose:true
-	    });
-	};
-	function DialogController($scope, $mdDialog) {
-		$scope.hide = function() {
-			$mdDialog.hide();
-		};
-		$scope.cancel = function() {
-			$mdDialog.cancel();
-		};
-	}
-	
-	$scope.cards = [
-		{
-			name: 'Gary Neville',
-			subject: 'Once a scouse, always a scouse.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Antony Martial',
-			subject: 'Meet up in LA.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Danny Ings',
-			subject: 'Request for loan.',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Roberto Firmoni',
-			subject: 'No match time!',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Lewandowski',
-			subject: 'Watch that?',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		},
-		{
-			name: 'Pep Guardiola',
-			subject: 'When is BR Leaving?',
-			body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-			time: '30 minutes ago'	
-		}
-	];
-
-
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('piechartCtrl', ['$scope', function ($scope) {
-   
-    $scope.options1 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#F0AD4E',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
-
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
-    };
-    $scope.options2 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#3CA2E0',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
-
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
-    };
-    $scope.options3 = {
-        animate:{
-            duration:2000,
-            enabled:true
-        },
-        barColor:'#D9534F',
-        trackColor:'#ECF0F1',
-        scaleColor:'#737373',
-
-        lineWidth:5,
-        size: 115,
-        lineCap:'circle'
-    };
-}]);
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
- angular.module('Lineblocs').controller('profileCtrl', function ($scope) {
-    $scope.products = [
- 	{url:'images/portrait1.jpg'}, 
- 	{url:'images/portrait2.jpg'},         
- 	{url:'images/portrait3.jpg'},         
- 	{url: 'images/portrait4.jpg'},
- 	{url: 'images/portrait5.jpg'},
- 	{url: 'images/portrait7.jpg'},
- 	{url: 'images/portrait8.jpg'},
- 	{url: 'images/portrait9.jpg'}
- 	];
-   
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
-  $scope.max = 200;
-
-  $scope.random = function() {
-    var value = Math.floor((Math.random() * 100) + 1);
-    var type;
-
-    if (value < 25) {
-      type = 'success';
-    } else if (value < 50) {
-      type = 'info';
-    } else if (value < 75) {
-      type = 'warning';
-    } else {
-      type = 'danger';
-    }
-
-    $scope.showWarning = (type === 'danger' || type === 'warning');
-
-    $scope.dynamic = value;
-    $scope.type = type;
-  };
-  $scope.random();
-
-  $scope.randomStacked = function() {
-    $scope.stacked = [];
-    var types = ['success', 'info', 'warning', 'danger'];
-
-    for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
-        var index = Math.floor((Math.random() * 4));
-        $scope.stacked.push({
-          value: Math.floor((Math.random() * 30) + 1),
-          type: types[index]
-        });
-    }
-  };
-  $scope.randomStacked();
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog) {
-	  $shared.updateTitle("Register");
-		console.log("STATE ", $stateParams);
-	  var countryToCode = {
-		  US: "+1",
-		  CA: "+1",
-	  };
-	  $scope.acceptTerms =true;
-	  $scope.triedSubmit = false;
-	  $scope.passwordsDontMatch = false;
-	  $scope.shouldSplash = false;
-	  $scope.didVerifyCall = false;
-	  $scope.step = 1;
-	  $scope.userId = null;
-	  $scope.token = null;
-	  $scope.invalidCode =false;
-	  $scope.invalidNumber =false;
-	  $scope.planInfo = null;
-	$scope.hasWorkspaceNameErr = false;
-	$scope.user = {
-		first_name: "",
-		last_name: "",
-    mobile_number: "",
-		email: "",
-		password: "",
-		password2: ""
-	};
-	$scope.verify1 = {
-		country: "US",
-		mobile_number: ""
-	};
-	$scope.verify2 = {
-		confirmation_code: ""
-	};
-	$scope.card = {
-		number: "",
-		cvv: "",
-		expires: "",
-		name: "",
-	};
-
-  $scope.workspace = "";
-  $scope.selectedTemplate = null;
-
-  $scope.onNumberChange = function() {
-    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
-    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
-  }
-
-  function doSpinup() {
-	$scope.shouldSplash = true;
-	$shared.setAuthToken( $scope.token );
-	var data = { "userId": $scope.userId, "plan": $stateParams['plan'] };
-	$scope.invalidCode = false;
-	$shared.changingPage = true;
-	Backend.post("/userSpinup", data).then(function( res ) {
-		var data = res.data;
-		if ( data.success ) {
-
-			Idle.watch();
-			$shared.setAuthToken($scope.token);
-			$shared.setWorkspace(res.data.workspace);
-			$shared.changingPage = false;
-			$state.go('dashboard-user-welcome', {});
-
-			return;
-		}
-		$mdToast.show(
-		$mdToast.simple()
-			.textContent('Error occured while creating your account. please account support')
-			.position("top right")
-			.hideDelay(1000*10)
-		);
-	});
-
-  }
-
-  	$scope.gotoVerificationFlow = function() {
-				var verficationWorkflow = $shared.customizations['verification_workflow'];
-				if ( verficationWorkflow === 'sms' ) {
-					$scope.step = 2;
-				} else {
-					$scope.step = 3;
-				}
-	}
-    $scope.submit = function($event, registerForm) {
-		console.log("called submit");
-		$scope.triedSubmit = true;
-		console.log("data is ", $scope.user);
-		console.log("form ", registerForm);
-		if (!$scope.acceptTerms) {
-			$scope.triedSubmit = true;
-			$scope.didNotAcceptTerms = true;
-			return;
-		}
-		if ($scope.user.password !== $scope.user.password2) {
-			$scope.passwordsDontMatch = true;
-			return;
-		} else {
-			$scope.passwordsDontMatch = false;
-		}
-		if (registerForm.$valid) {
-			var data = angular.copy( $scope.user );
-				$shared.changingPage = true;
-			Backend.post("/register", data).then(function( res ) {
-				var data = res.data;
-				if ( !data.success ) {
-					$shared.showError("Error", data.message);
-					return;
-				}
-				$scope.token = data;
-				$scope.userId = data.userId;
-				$scope.workspaceInfo = data.workspace;
-				$shared.changingPage = false;
-				$scope.gotoVerificationFlow();
-			});
-			return;
-		}
-      	return false;
-
-	}
-
-	$scope.submitVerify1Form = function($event, verify1Form) {
-		console.log("called submitVerify1Form");
-		$scope.triedSubmit = true;
-		if (verify1Form.$valid) {
-			var data = {};
-			data.mobile_number = countryToCode[$scope.verify1.country] + $scope.verify1.mobile_number;
-			data.userId = $scope.userId;
-				$shared.changingPage = true;
-			Backend.post("/registerSendVerify", data).then(function( res ) {
-				var data = res.data;
-					$shared.changingPage = false;
-				if (res.data.valid) {
-					$scope.didVerifyCall = true;
-					$scope.invalidNumber = false;
-					return;
-				}
-				$scope.invalidNumber = true;
-				//$scope.showNumberInvalid = true;
-			});
-			return;
-		}
-		return false;
-	}
-
-	$scope.submitVerify2Form = function($event, verify2Form) {
-		console.log("called submitVerify2Form");
-		$scope.triedSubmit = true;
-		if (verify2Form.$valid) {
-			var data = angular.copy( $scope.verify2 );
-			data.userId = $scope.userId;
-				$shared.changingPage = true;
-			Backend.post("/registerVerify", data).then(function( res ) {
-				var isValid = res.data.isValid;
-				$shared.changingPage = false;
-				if (isValid) {
-					var email = $scope.user.email;
-					var splitted = email.split("@");
-					$scope.workspace = $shared.cleanWorkspaceName(splitted[0]);
-					$scope.step = 3;
-				} else {
-					$scope.invalidCode = true;
-				}
-			});
-			return;
-		}
-		return false;
-	}
-
-	function checkWorkspaceName(name) {
-		if (name !== name.toLowerCase()) {
-			return false;
-		}
-		if (!name.match(/^[a-z0-9\-]+$/)) {
-			return false;
-		}
-		return true;
-	}
-	$scope.submitBillingForm = function($event, billingForm) {
-
-		//setup tokens for workspace access
-		$shared.setAuthToken($scope.token);
-		$shared.setWorkspace($scope.workspace);
-
-
-			var data = {};
-			data['number'] = $scope.card.number;
-			data['cvc'] = $scope.card.cvv;
-			var splitted = $scope.card.expires.split("/");
-			data['exp_month'] = splitted[ 0 ];
-			data['exp_year'] = splitted[ 1 ];
-			data['address_zip'] = $scope.card.postal_code;
-			Stripe.card.createToken(data, stripeResponseHandler);
-	}
-	$scope.submitWorkspaceForm = function($event, workspaceForm) {
-		console.log("called submitWorkspaceForm");
-		$scope.triedSubmit = true;
-		if (!checkWorkspaceName($scope.workspace)) {
-			$scope.hasWorkspaceNameErr = true;
-			return;
-		}
-		if (workspaceForm.$valid) {
-			var data = {};
-			data["userId"] = $scope.userId;
-			data.plan = $stateParams['plan'];
-			data.workspace = $scope.workspace;
-				$shared.changingPage = true;
-			Backend.post("/updateWorkspace", data).then(function( res ) {
-				$shared.changingPage = false;
-				if (res.data.success) {
-					$scope.invalidWorkspaceTaken = false;
-					//doSpinup();
-					if ($stateParams['plan'] === 'pay-as-you-go') {
-						$scope.step = 5;
-					} else {
-						//need to add card
-						$scope.step = 4;
-					}
-
-					//$scope.step = 4;
-					return;
-				}
-				$scope.invalidWorkspaceTaken = true;
-				$scope.workspace = res.data.workspace;
-			});
-		}
-		return false;
-	}
-
-	$scope.finishSignup = function() {
-		$scope.triedSubmit = true;
-		if (!$scope.selectedTemplate) {
-			      alert = $mdDialog.alert({
-        title: 'Error',
-        textContent: 'Please select a template',
-        ok: 'Close'
-      });
-			return;
-
-		}
-			var data = {};
-			data["userId"] = $scope.userId;
-			data.templateId =  $scope.selectedTemplate.id;
-				$shared.changingPage = true;
-			Backend.post("/provisionCallSystem", data).then(function( res ) {
-				$shared.changingPage = false;
-				doSpinup();
-				return;
-			});
-		return false;
-	}
-
-	$scope.recall = function() {
-		var data = angular.copy( $scope.verify1 );
-		data.userId = $scope.userId;
-				$shared.changingPage = true;
-		Backend.post("/registerSendVerify", data).then(function( res ) {
-				$shared.changingPage = false;
-           $mdToast.show(
-          $mdToast.simple()
-            .textContent('You will be called shortly.')
-            .position("top right")
-            .hideDelay(3000)
-		);
-		   });
-	}
-    $scope.authenticate = function() {
-
-    	var defer = $q.defer();
-
-    	$timeout(function(){
-
-    		defer.resolve();
-
-    		$timeout(function(){
-    		   	$location.path('/dashboard/home');
-    		}, 600);
-
-    	}, 1100);
-
-    	return defer.promise;
-
-	}
-	    $scope.useTemplate = function (template) {
-      $scope.selectedTemplate = template;
-    };
-    $scope.isSelected = function (template) {
-      if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {
-        return true;
-      }
-      return false;
-    }
-	$scope.gotoLogin= function() {
-		$shared.changingPage = true;
-		$shared.scrollToTop();
-    	$state.go('login');
-	}
-		function stripeResponseHandler(status, response) {
-			$timeout(function() {
-				$scope.$apply();
-				if (response.error) { // Problem!
-					// Show the errors on the form
-					$scope.billErrorMsg = response.error.message;
-					//angular.element('.add-card-form').scrollTop(0);
-				} else { // Token was created!
-					// Get the token ID:
-					$mdDialog.hide();
-					stripeRespAddCard(response).then(function() {
-						$scope.step = 4;
-					});
-				}
-			}, 0);
-		}
-		function stripeRespAddCard(response) {
-			return $q(function(resolve, reject) {
-				var data = {};
-				data['stripe_token'] = response.id;
-				data['stripe_card'] = response.card.id;
-				data['last_4'] = response.card.last4;
-				data['issuer'] = response.card.brand;
-				$shared.isCreateLoading =true;
-				var qs = "?user_id=" + $scope.userId + "&workspace_id=" + $scope.workspaceInfo.id;
-				Backend.post("/addCard" + qs, data).then(function(res) {
-					resolve(res);
-					$shared.endIsCreateLoading();
-				}, function(err) {
-					console.error("an error occured ", err);
-				});
-			});
-		}
-
-	$q.all([
-		Backend.get("/getCallSystemTemplates"),
-		Backend.get("/getConfig"),
-		Backend.get("/plans"),
-	]).then(function(res) {
-		$scope.templates = res[0].data;
-		$scope.plans = res[2].data;
-		$shared.changingPage = false;
-		console.log("plans ", $scope.plans);
-		console.log("user selected plan is ", $stateParams['plan'] );
-		if ( $stateParams['plan'] ) {
-			$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
-		}
-		console.log("plan info is ", $scope.planInfo);
-		if ( $stateParams['hasData'] ) {
-			console.log("$stateParams data is ", $stateParams);
-			$scope.token = $stateParams['authData'];
-
-			$scope.userId = $stateParams['userId'];
-			$scope.gotoVerificationFlow();
-		}
-		$scope.config = res[1].data;
-		console.log("config is ", $scope.config);
-		Stripe.setPublishableKey($scope.config.stripe.key);
-
-	});
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('ResetCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle) {
-	  $shared.updateTitle("Reset");
-	$scope.triedSubmit = false;
-	$scope.isLoading = false;
-	$scope.couldNotReset = false;
-	$scope.couldNotResetMsg = "";
-	var token = $location.search()['token'];
-	$scope.user = {
-		email: "",
-		password: "",
-		confirmPassword: "",
-		token: token
-	};
-	console.log("reset params are ", $scope.user);
-    $scope.submit = function($event, resetForm) {
-		$scope.triedSubmit = true;
-		if ($scope.user.password !== $scope.user.confirmPassword) {
-			$scope.passwordsDontMatch = true;
-			return;
-		} else {
-			$scope.passwordsDontMatch = false;
-		}
-		if (resetForm.$valid) {
-			var data = {};
-			data.email = $scope.user.email;
-			data.token = $scope.user.token;
-			data.password = $scope.user.password;
-			data.password_confirmation = $scope.user.confirmPassword;
-			$scope.isLoading = true;
-			console.log("requesting reset ", data);
-			$scope.couldNotReset = false;
-			$scope.couldNotResetMsg = "";
-			Backend.post("/reset", data, true).then(function( res ) {
-				var token = res.data;
-				$scope.isLoading = false;
-				/*
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Password was reset successfully.')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					*/
-				
-				$shared.showMsg('Password reset', 'You have successfully reset your password.').then(function()  {
-					$state.go('login', {});
-				});
-			}).catch(function(res) {
-				console.log("error reply is ", res);
-				$scope.couldNotReset = true;
-				$scope.couldNotResetMsg = res.data.message;
-
-				$scope.isLoading = false;
-			})
-			return;
-		}
-    }
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs')
-  .controller('SettingsCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $window) {
-	  $shared.updateTitle("Settings");
-	  $scope.triedSubmit = false;
-    $scope.selectedSecurityType = "SMS verification";
-    $scope.selectedVerify = "verify";
-    $scope.smsVerifiedSuccessfully = false;
-    $scope.authVerifiedSuccessfully = false;
-    $scope.isDisabled = false;
-    $scope.base64_contents ='';
-	  $scope.ui = {
-		  show1Secret: false,
-		  show2Secret: false,
-	  };
-
-    get2FAConfig();
-
-	$scope.user = {
-		first_name: "",
-		last_name: "",
-		email: "",
-		password: "",
-		password2: "",
-    enable_2fa: false,
-    type_of_2fa: null,
-    mobile_number: ""
-	};
-  $scope.selectedTheme = $window.localStorage.THEME;
-  $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
-	$scope.changeCountry = function(country) {
-		console.log("changeCountry ", country);
-	}
-
-  function applyDefaultTheme() {
-    const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
-    if (!$scope.selectedTheme) {
-      $scope.selectedTheme = defaultTheme.name;
-      $window.localStorage.setItem('THEME', defaultTheme.name);
-    }
-  }
-  applyDefaultTheme();
-
-  $scope.theme = {
-    default: 'styles/app-blue.css',
-    dark: 'styles/app-grey.css',
-    light: 'styles/app-cyan.css',
-  }
-  $scope.setTheme = function(theme) {
-    $scope.selectedTheme = theme;
-    $window.localStorage.setItem('THEME', theme);
-    Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
-      addStyle($scope.theme[theme]);
-      removeStyle($scope.theme[theme]);
-    });
-  };
-
-  function addStyle(path) {
-    var link = document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('type', 'text/css');
-    link.setAttribute('href', path);
-    document.head.appendChild(link);
-  }
-
-  function removeStyle(selectedPath) {
-    const allLinks = ['styles/app-grey.css', 'styles/app-blue.css', 'styles/app-green.css', 'styles/app-red.css', 'styles/app-purple.css', 'styles/app-cyan.css' ]
-    const links = document.head.querySelectorAll('link[href]');
-    for (var i = 0; i < links.length; i++) {
-      const path = links[i].getAttribute('href');
-      if (!allLinks.includes(path)) continue;
-      if (path === selectedPath) continue;
-      document.head.removeChild(links[i]);
-    }
-  }
-  $scope.onEnable2FA = function() {
-    if($scope.user.enable_2fa) {
-      $scope.user.type_of_2fa = 'sms';
-    }
-  }
-  $scope.on2FASubmit = function() {
-    $scope.triedSubmit = true;
-    if(!$scope.user.enable_2fa) {
-      $scope.user.enable_2fa = false;
-      save2FASettings();
-    } else {
-      $scope.user.enable_2fa = true;
-      if($scope.user.type_of_2fa === 'sms') {
-        if(!$scope.user.mobile_number) return;
-        Backend.put("/self", { mobile_number: $scope.user.mobile_number }).then(function(res) {
-          save2FASettings();
-        });
-      } else {
-        $scope.user.type_of_2fa = 'totp';
-        save2FASettings();
-      }
-    }
-  }
-
-  $scope.onNumberChange = function() {
-    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
-    if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
-  }
-  $scope.tabChanged = function (tab) {
-    $scope.isDisabled = false;
-    $scope.selectedSecurityType = tab;
-    if($scope.selectedSecurityType === "SMS verification") {
-      $scope.authVerifiedSuccessfully = false;
-    } else {
-      $scope.smsVerifiedSuccessfully = false;
-      $scope.user.otp = '';
-    }
-  }
-  $scope.verifyChanged = function (verify) {
-    $scope.triedSubmit = true;
-    $scope.selectedVerify = verify;
-    if($scope.selectedVerify === "verify") {
-      $scope.isDisabled = true;
-      request2FACode();
-    } else {
-      $scope.isDisabled = false;
-    }
-  }
-  $scope.smsVerificationSuccess = function(code) {
-    if(code) {
-      verify2FACode(code);
-      $scope.smsVerifiedSuccessfully = true;
-    }
-  }
-  $scope.authAppSuccess = function() {
-    $scope.authVerifiedSuccessfully = true;
-  }
-    $scope.submitSettings = function($event, settingsForm) {
-		$scope.triedSubmit = true;
-		if (settingsForm.$valid) {
-			var data = {};
-			data['first_name'] = $scope.user.first_name;
-			data['last_name'] = $scope.user.last_name;
-			data['email'] = $scope.user.email;
-			$shared.isCreateLoading = true;
-			Backend.post("/updateSelf", data).then(function( res ) {
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Updated your info')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					$shared.endIsCreateLoading();
-			});
-			return;
-		}
-      	return false;
-
-	}
-
-  // 2FA Functions
-  function verify2FACode(code) {
-    const data = {};
-    data['2fa_code'] = code;
-    Backend.post("/verify2FACode", data).then(function( res ) {
-      $scope.authAppSuccess();
-    });
-  }
-
-  function request2FACode() {
-    Backend.get("/request2FACode").then(function( res ) {
-      $scope.smsVerificationSuccess();
-    });
-  }
-
-  function save2FASettings() {
-    const data = {};
-    data.enable_2fa = $scope.user.enable_2fa;
-    if($scope.user.enable_2fa) data.type_of_2fa = $scope.user.type_of_2fa;
-    Backend.post("/save2FASettings", data).then(function( res ) {
-      console.log('res', res);
-      // $scope.user.2FAConfig = res.data;
-    });
-  }
-
-  // function get2FAConfig() {
-  //   const data = {};
-  //   data.enable_2fa = true;
-  //   data.type_of_2fa = 'sms';
-
-  //   Backend.post("/2FAConfig", data).then(function( res ) {
-  //     console.log('res', res);
-  //     // $scope.user.2FAConfig = res.data;
-  //   });
-  // }
-
-  function get2FAConfig() {
-    Backend.get("/get2FAConfig").then(function( res ) {
-      console.log('res', res);
-      // $scope.user.2FAConfig = res.data;
-      $scope.base64_contents = res.data.qrcode_base64;
-    });
-  }
-
-   $scope.submitPersonal = function($event, personalForm) {
-		$scope.triedSubmit = true;
-		console.log("submitPersonal ", personalForm);
-		if (personalForm.$valid) {
-			var data = {};
-			data['address_line_1'] =$scope.user.address_line_1;
-			data['address_line_2'] =$scope.user.address_line_2;
-			data['postal_code'] =$scope.user.postal_code;
-			data['state'] =$scope.user.state;
-			data['city'] =$scope.user.city;
-			data['country'] =$scope.user.country;
-			$shared.isCreateLoading = true;
-			Backend.post("/updateSelf", data).then(function( res ) {
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Updated your info')
-						.position("top right")
-						.hideDelay(3000)
-					);
-					$shared.endIsCreateLoading();
-			});
-			return;
-		}
-      	return false;
-
-	}
-
-    $scope.submitPasswords = function($event, passwordsForm) {
-		$scope.triedSubmit = true;
-		if ($scope.user.password !== $scope.user.password2) {
-			$scope.passwordsDontMatch = true;
-			return;
-		} else {
-			$scope.passwordsDontMatch = false;
-		}
-		if (passwordsForm.$valid) {
-			var data = {};
-			data['password'] = $scope.user.password;
-			$shared.isCreateLoading = true;
-			Backend.post("/updateSelf", data).then(function( res ) {
-				var token = res.data;
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Updated your passwords')
-						.position("top right")
-						.hideDelay(3000)
-					);
-				$shared.endIsCreateLoading();
-			});
-			return;
-		}
-      	return false;
-
-	}
-	$scope.show1Secret = function() {
-		$scope.ui.show1Secret = true;
-	}
-	$scope.hide1Secret = function() {
-		$scope.ui.show1Secret = false;
-	}
-	$scope.show2Secret = function() {
-		$scope.ui.show2Secret = true;
-	}
-	$scope.hide2Secret = function() {
-		$scope.ui.show2Secret = false;
-	}
-
-	$shared.isLoading = true;
-	Backend.get("/self").then(function(res) {
-      $scope.user = res.data;
-      console.log("user is ", $scope.user);
-      $shared.endIsLoading();
-    });
-  });
-
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('sidenavCtrl', function($scope, $location){
-	$scope.selectedMenu = 'dashboard';
-	$scope.collapseVar = 0;
-
-	$scope.check = function(x){
-
-		if(x==$scope.collapseVar)
-			$scope.collapseVar = 0;
-		else
-			$scope.collapseVar = x;
-	};
-	$scope.multiCheck = function(y){
-
-		if(y==$scope.multiCollapseVar)
-			$scope.multiCollapseVar = 0;
-		else
-			$scope.multiCollapseVar = y;
-	};
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('TabsDemoCtrl', function ($scope, $window) {
-  $scope.tabs = [
-    { title:'Dynamic Title 1', content:'Dynamic content 1' },
-    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
-  ];
-
-  $scope.alertMe = function() {
-    setTimeout(function() {
-      $window.alert('You\'ve selected the alert tab!');
-    });
-  };
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('TimepickerDemoCtrl', function ($scope, $log) {
-  $scope.mytime = new Date();
-
-  $scope.hstep = 1;
-  $scope.mstep = 15;
-
-  $scope.options = {
-    hstep: [1, 2, 3],
-    mstep: [1, 5, 10, 15, 25, 30]
-  };
-
-  $scope.ismeridian = true;
-  $scope.toggleMode = function() {
-    $scope.ismeridian = ! $scope.ismeridian;
-  };
-
-  $scope.update = function() {
-    var d = new Date();
-    d.setHours( 14 );
-    d.setMinutes( 0 );
-    $scope.mytime = d;
-  };
-
-  $scope.changed = function () {
-    $log.log('Time changed to: ' + $scope.mytime);
-  };
-
-  $scope.clear = function() {
-    $scope.mytime = null;
-  };
-});
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
- angular.module('Lineblocs').controller('todoCtrl', function ($scope) {
- 	$scope.todos = [
- 	{text:'Meeting with Nabindar Singh.', done:false, id: 'option1'}, 
- 	{text:'Exercise at 6:pm with Nicholas.', done:false, id: 'option3'},         
- 	{text:'Avengers Age of Ultron.', done:false, id: 'option4'},         
- 	{text: 'Henna birthday at Mezbaan.', done:false, id: 'option5'}
- 	];
- 	function makeid()
- 	{
- 		var text = "";
- 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
- 		for( var i=0; i < 5; i++ )
- 			text += possible.charAt(Math.floor(Math.random() * possible.length));
-
- 		return text;
- 	}
- 	$scope.addTodo = function () {
- 		$scope.todos.push({text:$scope.formTodoText, done:false, id:makeid()});
- 		$scope.formTodoText = '';
- 	};
- });
-'use strict';
-
-/**
- * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of Lineblocs
- */
-angular.module('Lineblocs').controller('TooltipDemoCtrl', function ($scope) {
-  $scope.dynamicTooltip = 'Hello, World!';
-  $scope.dynamicTooltipText = 'dynamic';
-  $scope.htmlTooltip = 'I\'ve been made <b>bold</b>!';
-});
