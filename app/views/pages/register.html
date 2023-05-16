@@ -41,7 +41,6 @@
             </center>
             <div class="content login-page-content">
                 <div ng-show="step===1">
-
                     <form class="login-form" ng-submit="submit($event, registerForm)" name="registerForm" novalidate>
 
                         <div class="top-heading">
@@ -140,7 +139,6 @@
                                         d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z" />
                                 </svg>
 
-                                <!-- <input type="text" placeholder="Password"> -->
                                 <md-input-container>
                                     <input name="email" ng-model="user.email" type="email"
                                         placeholder="Company Email Address" required="">
@@ -167,7 +165,6 @@
                                     </g>
                                 </svg>
 
-                                <!-- <input type="text" placeholder="Password"> -->
                                 <md-input-container>
                                     <input name="password" ng-model="user.password" type="password"
                                         placeholder="Password" minlength="5" required="" />
@@ -198,7 +195,6 @@
                                     </g>
                                 </svg>
 
-                                <!-- <input type="text" placeholder="Password"> -->
                                 <md-input-container>
                                     <input name="password2" ng-model="user.password2" type="password"
                                         placeholder="Confirm Password" required="" />
@@ -225,6 +221,7 @@
                         </div>
                     </form>
                 </div>
+
                 <div ng-show="step===2">
                     <div ng-show="!didVerifyCall">
                         <form class="login-form" ng-submit="submitVerify1Form($event, verify1Form)" name="verify1Form"
@@ -251,7 +248,7 @@
                                     <div layout="row" class="width-100">
                                         <div flex="10">
                                             <md-select ng-model="verify1.country"
-                                                ng-change="changeCountry(verify1.country)" class="margin-10">
+                                                ng-change="changeCountry(verify1.country)" class="margin-10" aria-label="country_name">
                                                 <md7option><em>None</em></md-option>
                                                     <md-option ng-value="'US'">
                                                         <span class="flag-icon flag-icon-us flag-icon-squared"></span>
@@ -330,6 +327,7 @@
                     </div>
 
                 </div>
+
                 <div ng-show="step===3">
                     <form class="login-form" ng-submit="submitWorkspaceForm($event, workspaceForm)" name="workspaceForm"
                         novalidate>
@@ -380,7 +378,7 @@
                         </div>
                     </form>
                 </div>
-                <div ng-show="step===4">
+                <!-- <div ng-show="step===4">
                     <form class="login-form" ng-submit="submitBillingForm($event, billingForm)" name="billingForm"
                         novalidate>
                         <div class="inner">
@@ -463,10 +461,9 @@
                         </p>
 
                     </form>
-                </div>
+                </div> -->
 
-
-                <div ng-show="step===5" class="call-system-picker">
+                <div ng-show="step===4" class="call-system-picker">
                     <form class="login-form" ng-submit="finishSignup($event, templateForm)" name="templateForm"
                         novalidate>
                         <div layout="row">
@@ -515,8 +512,274 @@
                     </form>
                 </div>
 
+                <div ng-show="step===5" class="payment-container">
+                    <div class="login-form" layout="row">
+                        <div class="payment-details-container">
+                            <h3 class="top-payment-heading">Start free 30-day Pro trial</h3>
+                            <p class="payment-info">Linebloc free trail with more details.</p>
 
-                <div class="text login-text">
+                            <div layout="row">
+                                <md-button type="button" class="md-raised no-margin-sides payment-button" ng-click="displayCard()"
+                                    ng-class="{'md-primary': cardVisible, '': !cardVisible}">Payment Card
+                                </md-button>
+                                <md-button type="button" class="md-raised no-margin-sides payment-button" ng-click="displayPaypal()"
+                                    ng-class="{'md-primary': paypalVisible, '': !paypalVisible}"> PayPal
+                                </md-button>
+                            </div>
+                            <form ng-submit="submitPaymentForm($event, paymentForm)" name="paymentForm" novalidate>
+                                <div ng-show="cardVisible">
+                                    <h4 class="top-payment-heading payment-detail">Payment details</h4>
+                                    <p class="payment-info">The bank may hold and release $1 to verify the card.</p>
+
+                                    <div class="field-input" layout="column">
+                                        <div layout="row" layout-md="row" flex="100" class="field-input-ui">
+                                            <div flex="100">
+                                                <div class="input-box">
+                                                    <md-input-container class="payment-input">
+                                                        <label>Payment card number</label>
+                                                        <input name="payment_card_number" ng-model="paymentDetails.payment_card.payment_card_number"
+                                                            placeholder="Card number" ng-required="paymentMethod == 'card'" ng-change="cardNumberChange()">
+                                                        <div ng-if="!paymentDetails.payment_card.payment_card_number">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                                <path fill="#317780" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm-1 14H5c-.55 0-1-.45-1-1v-5h16v5c0 .55-.45 1-1 1zm1-10H4V6h16v2z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div ng-if="paymentDetails.payment_card.payment_card_number && getCreditCardBrand(paymentDetails.payment_card.payment_card_number) && getCreditCardBrand(paymentDetails.payment_card.payment_card_number).logo" class="credit-card-brand">
+                                                            <img ng-src="{{getCreditCardBrand(paymentDetails.payment_card.payment_card_number).logo}}" class="card-logo" />
+                                                        </div>
+                                                        <div ng-show="paymentForm.payment_card_number.$invalid && paymentForm.payment_card_number.$touched">
+                                                            <span class="custom-error">Please enter a valid card number.</span>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                            <div flex="100">
+                                                <div class="input-box">
+                                                    <md-input-container class="payment-input">
+                                                        <label>Expiration date</label>
+                                                        <input name="expiration_date" ng-model="paymentDetails.payment_card.expiration_date"
+                                                            placeholder="MM/YY" ng-required="paymentMethod == 'card'"
+                                                            ng-change="expirationDateValid = validateExpirationDate(paymentDetails.payment_card.expiration_date)"
+                                                            ng-class="{'invalid': !expirationDateValid}"
+                                                        >
+                                                        <div ng-show="!expirationDateValid && !paymentForm.expiration_date.$error.pattern && paymentForm.expiration_date.$touched">
+                                                            <span class="custom-error">Please enter a valid date.</span>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                            <div flex="100" flex-gt-sm="50">
+                                                <div class="input-box">
+                                                    <md-input-container>
+                                                        <label>CVV</label>
+                                                        <input name="security_code" ng-model="paymentDetails.payment_card.security_code" type="text"
+                                                            placeholder="1234" ng-required="paymentMethod == 'card'" ng-change="onSecurityCode()">
+                                                        <div ng-show="paymentForm.security_code.$invalid && paymentForm.security_code.$touched">
+                                                            <span class="custom-error">Please enter a valid cvv.</span>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div flex="100" flex-gt-sm="50">
+                                            <div class="input-box">
+                                                <md-input-container>
+                                                    <label>Cardholder name</label>
+                                                    <input name="cardholder_name" ng-model="paymentDetails.payment_card.cardholder_name" type="text"
+                                                        placeholder="Cardholder name" ng-required="paymentMethod == 'card'">
+                                                    <div ng-show="paymentForm.cardholder_name.$invalid && paymentForm.cardholder_name.$touched">
+                                                        <span class="custom-error">Please enter a cardholder name.</span>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-show="paypalVisible">
+                                    <h4 class="top-payment-heading payment-detail">PayPal</h4>
+                                    <p class="payment-info">We'll now send you on to PayPal so that you can complete your purchase. After the transaction has gone through, the system will
+                                        automatically redirect you back to Linebloc so you can enjoy your new upgrade.
+                                        <br/>
+                                        <b>This step is highly important so we ask you to please not skip or interrupt it.</b>
+                                    </p>
+
+                                    <div class="field-input name-details" layout="column">
+                                        <div layout="row" layout-md="row" flex="100" class="field-input-ui">
+                                            <div flex="100">
+                                                <div class="input-box">
+                                                    <md-input-container>
+                                                        <label>Your name</label>
+                                                        <input name="your_name" ng-model="paymentDetails.paypal.name" type="text"
+                                                            placeholder="Your name" ng-required="paymentMethod == 'paypal'">
+                                                        <div ng-show="paymentForm.your_name.$invalid && paymentForm.your_name.$touched">
+                                                            <span class="custom-error">Please enter name.</span>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4 class="top-payment-heading payment-detail address-detail">Address</h4>
+                                <div class="field-input" layout="column">
+                                    <div layout="row" layout-md="row" flex="100" class="field-input-ui">
+                                        <div flex="100">
+                                            <div class="input-box">
+                                                <md-input-container class="payment-input">
+                                                    <label>Country</label>
+                                                    <md-select name="country" ng-model="paymentDetails.address.country" ng-change="changeCountry(paymentDetails.address.country)" placeholder="Country" required="">
+                                                        <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
+                                                            {{country.name}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-show="paymentForm.country.$error.required && paymentForm.country.$touched">
+                                                        <span class="custom-error">This field is required.</span>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                        <div flex="100">
+                                            <div class="input-box">
+                                                <md-input-container class="payment-input">
+                                                    <label>State/Region</label>
+                                                    <md-select name="state" ng-model="paymentDetails.address.state" ng-change="changeState(paymentDetails.address.state)" placeholder="State/Region" required="">
+                                                        <md-option ng-if="paymentDetails.address.country" ng-repeat="state in paymentDetails.address.country.states" ng-value="state">
+                                                            {{state.name}}
+                                                        </md-option>
+                                                        <md-option ng-if="!paymentDetails.address.country">
+                                                            No states
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-show="paymentForm.state.$error.required && paymentForm.state.$touched">
+                                                        <span class="custom-error">This field is required.</span>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div layout="row" layout-md="row" flex="100" class="field-input-ui">
+                                        <div flex="100">
+                                            <div class="input-box">
+                                                <md-input-container class="payment-input">
+                                                    <label>City</label>
+                                                    <input name="city" ng-model="paymentDetails.address.city" type="text"
+                                                        placeholder="City" required="">
+                                                    <div ng-show="paymentForm.city.$error.required && paymentForm.city.$touched">
+                                                        <span class="custom-error">This field is required.</span>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                        <div flex="100">
+                                            <div class="input-box">
+                                                <md-input-container class="payment-input">
+                                                    <label>Street</label>
+                                                    <input name="street" ng-model="paymentDetails.address.street" type="text"
+                                                        placeholder="Street" required="">
+                                                    <div ng-show="paymentForm.street.$error.required && paymentForm.street.$touched">
+                                                        <span class="custom-error">This field is required.</span>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex="100" flex-gt-sm="50">
+                                        <div class="input-box">
+                                            <md-input-container>
+                                                <label>Zip/Postal code</label>
+                                                <input name="postal_code" ng-model="paymentDetails.address.postal_code" type="text"
+                                                    placeholder="Postal code" required="">
+                                                <div ng-show="paymentForm.postal_code.$error.required && paymentForm.postal_code.$touched">
+                                                    <span class="custom-error">This field is required.</span>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <md-checkbox class="accept-payment" ng-model="paymentDetails.accept_terms" aria-label="Checkbox 2"></md-checkbox>
+                                    <p class="accept-payment-terms">Billing starts on {{nextTrialDate}}, the end of your trial, and will renew automatically every month.
+                                        Payments won't be refunded for partial billing periods. Cancel anytime in lineblocs's settings.<a target="_blank"
+                                        ng-href="{{$shared.createDomainLink('pages/tos')}}"> Learn
+                                        more.</a><br/><br/>
+                                        By continuing, you verify that you are at least 18 years old and agree to <a target="_blank"
+                                        ng-href="{{$shared.createDomainLink('pages/tos')}}">these terms.</a>
+                                    </p>
+                                </div>
+                                <md-button ng-show="cardVisible" type="submit" class="md-raised md-primary no-margin-sides trail-button" ng-click="selectPaymentMethod('card')">Start 30-day free trial</md-button>
+                                <div ng-show="paypalVisible" id="paypal-button-container" class="md-raised no-margin-sides paypal-button" ng-click="selectPaymentMethod('paypal')"></div>
+                                <div id="card-errors" role="alert"></div>
+                            </form>
+                        </div>
+                        <div class="login-form payment-value-conatiner">
+                            <div class="pay-trial">
+                                <b class="trail-text">PRO Trail (30 Days)</b>
+                                <b class="trail-text">$0.00</b>
+                            </div>
+                            <hr>
+                            <div class="pay-trial">
+                                <b class="trail-text">Payable on {{nextTrialDate}}</b>
+                                <b class="trail-text">${{planPrice}}</b>
+                            </div>
+                            <div class="pay-trial-details">
+                                <p class="payment-info-billed font-trail">You will not be billed today.</p>
+                                <p class="payment-info-billed">Your card will be charged ${{planPrice}} on {{nextTrialDate}}.</p>
+                            </div>
+                            <div class="pay-trial-details">
+                                <p class="payment-info-billed font-trail">You can cancel auto-renewal.</p>
+                                <p class="payment-info-billed">You can cancel your trail & auto-renewal BEFORE {{nextTrialDate}}
+                                    and you will not be charged at all.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div ng-show="step===6">
+                    <div class="login-form checkout-container-box" layout="row">
+                        <div class="checkout-container">
+                            <i class="mdi mdi-check-circle check-checkout"></i>
+                            <h3 class="checkout-heading">Woohoo! Let the fun begin</h3>
+                            <p class="checkout-details">Your 30-day free trial is live and kicking, and you've now got free
+                                access to loads of additional features. Don't forget: we may also
+                                have a special offer or two for you during this trial - keep your eyes
+                                peeled.
+                            </p>
+                            <md-button type="button" class="md-raised md-primary no-margin-sides trail-dashboard-button" ng-click="checkoutDashboard()">Go to Dashboard</md-button>
+                        </div>
+                        <div class="login-form payment-trial-conatiner">
+                            <div class="pay-trial">
+                                <small class="trail-header">DESCRIPTION</small>
+                                <small class="trail-header">SUBTOTAL</small>
+                            </div>
+                            <div class="pay-trial">
+                                <b class="trail-text">PRO Trail (30 Days)</b>
+                                <b class="trail-text">$0.00</b>
+                            </div>
+                            <div class="pay-trial total-trial">
+                                <div layout="column">
+                                    <b class="trail-text">Payable on {{nextTrialDate}}</b>
+                                    <small class="trail-header">Tax included $7.77</small>
+                                </div>
+                                <b class="trail-text">${{planPrice}}</b>
+                            </div>
+                            <hr>
+                            <div class="pay-trial total-trial">
+                                <b class="trail-text">Total:</b>
+                                <b class="trail-text">$0.00</b>
+                            </div>
+                            <div class="pay-trial-details">
+                                <p class="payment-info-billed">We'll charge your card ${{planPrice}} on {{chargeCurrentDate}}. If you cancel auto-
+                                    renewal before this time, you'll not be charged at all.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text login-text" ng-show="step!==5 && step!==6">
 
                     <h2>Be Connected!</h2>
                     <p>Register for an account to start using <span>lineblocs!</span></p>

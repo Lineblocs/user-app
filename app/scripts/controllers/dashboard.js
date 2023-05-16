@@ -58,7 +58,7 @@ angular.module('Lineblocs')
   }
 
   document.addEventListener('click', function(event) {
-    if (!document.getElementById('search-section-global').contains(event.target)) {
+    if (document.getElementById('search-section-global') && !document.getElementById('search-section-global').contains(event.target)) {
       $scope.totalResults = [];
       $scope.$apply();
     }
