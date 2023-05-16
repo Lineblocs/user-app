@@ -1127,6 +1127,7 @@ span.spacer {
 .file-upload-container {
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .upload-icon {
@@ -1469,6 +1470,7 @@ md-content{
 .card-body-appearance{
   height: 45px;
 }
+<<<<<<< HEAD
 .payment-container{
   width: 100%;
 }
@@ -1625,4 +1627,13 @@ md-content{
   margin-top: 18px;
   height: 40px;
   border-radius: 6px;
+=======
+
+.md-icon-float {
+  flex: 1 1 auto;
+}
+
+p {
+  font-weight: 300;
+>>>>>>> c621974b4741205a4fea4e2f10e49939384a56c0
 }

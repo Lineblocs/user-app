@@ -30,6 +30,24 @@
                   </div>
                 </md-input-container>
                 <md-input-container>
+                  <input name="company_name" ng-model="user.company_name" type="text" placeholder="Company Name" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="settingsForm.company_name.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+
+                <md-input-container>
+                  <input name="tax_number" ng-model="user.tax_number" type="text" placeholder="Company Name" required="">
+                  <div ng-show="triedSubmit">
+                    <div class="box">
+                      <div ng-show="settingsForm.tax_number.$error.required">This field is required</div>
+                    </div>
+                  </div>
+                </md-input-container>
+
+                <md-input-container>
                   <input name="email" ng-model="user.email" type="email" placeholder="Company Email" required="">
                   <div ng-show="triedSubmit">
                     <div class="box">
@@ -226,35 +244,13 @@
        <md-tab label="Appearance">
             <div class="appearance-container">
                 <div layout="row" class="appearance-group">
-                    <!-- <label class="card card-appearance">
+                    <label class="card card-appearance" ng-repeat="available_theme in $shared.available_themes">
                         <img src="https://www.aha.io/89140db330c29d08acbfd572f473edb7/aha-theme-preview.png" alt="Dark Theme Preview" class="card-img-top">
                         <div class="card-body-appearance">
                             <div class="form-check-appearance">
-                            <input class="form-check-input" type="radio" name="themeRadios" id="lightRadio" value="light" ng-model="selectedTheme">
-                            <label class="form-check-label" for="lightRadio">
-                                Light
-                            </label>
-                            </div>
-                        </div>
-                    </label> -->
-                    <label class="card card-appearance">
-                        <img src="https://www.aha.io/89140db330c29d08acbfd572f473edb7/aha-theme-preview.png" alt="Dark Theme Preview" class="card-img-top">
-                        <div class="card-body-appearance">
-                            <div class="form-check-appearance">
-                            <input class="form-check-input" type="radio" name="themeRadios" id="darkRadio" value="dark" ng-model="selectedTheme">
-                            <label class="form-check-label" for="darkRadio">
-                                Dark
-                            </label>
-                            </div>
-                        </div>
-                    </label>
-                    <label class="card card-appearance">
-                        <img src="https://www.aha.io/89140db330c29d08acbfd572f473edb7/aha-theme-preview.png" alt="Dark Theme Preview" class="card-img-top">
-                        <div class="card-body-appearance">
-                            <div class="form-check-appearance">
-                            <input class="form-check-input" type="radio" name="themeRadios" id="defaultRadio" value="default" ng-model="selectedTheme">
-                            <label class="form-check-label" for="defaultRadio">
-                                Default
+                            <input class="form-check-input" type="radio" name="selectedTheme" id="{{available_theme.name}}" ng-value="available_theme.name" ng-model="$parent.selectedTheme">
+                            <label class="form-check-label" for="{{available_theme.name}}">
+                                {{available_theme.name}}
                             </label>
                             </div>
                         </div>

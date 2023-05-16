@@ -37,7 +37,8 @@ body {
   margin: 0 auto; }
 
 .dashboard-block {
-  min-height: 450px; }
+  min-height: 450px;
+  background: #1a1a1a; }
 
 .dashboard-block-margin {
   margin: 8px; }
@@ -67,6 +68,10 @@ nav.right md-menu {
   /*height: 69px;*/
   /*padding: 8px 0;*/ }
 
+.md-subheader {
+  background-color: #f5f5f5;
+  color: #fff; }
+
 md-content {
   background-color: #1a1a1a; }
 
@@ -79,19 +84,25 @@ md-switch .md-label {
 md-radio-button {
   color: #fff; }
 
+md-checkbox.md-checked .md-icon {
+  border-color: black; }
+
+md-checkbox[disabled]:not(.md-checked) .md-icon {
+  border-color: black; }
+
 .card-body-appearance {
   color: #fff; }
 
 md-input-container:not(.md-input-invalid).md-input-has-value label {
-  color: #fff; }
+  color: black; }
 
 md-input-container label {
-  color: #fff;
-  border-color: #fff; }
+  color: black;
+  border-color: black; }
 
 md-input-container .md-input {
   color: #fff;
-  border-color: #fff; }
+  border-color: #00000061; }
 
 .title-text {
   color: #fff; }
@@ -113,7 +124,19 @@ md-dialog md-dialog-actions {
   background-color: #1a1a1a; }
 
 .md-select-menu-container.md-active md-select-menu md-content md-option:hover {
-  background-color: #5F3575; }
+  background-color: #f5f5f5; }
+
+md-input-container .md-input:focus {
+  border-color: #00000061 !important; }
+
+md-input-container.md-input-focused label {
+  color: #00000061 !important; }
+
+.step-number {
+  color: #1a1a1a; }
+
+p {
+  color: black; }
 
 md-select-menu md-content md-option {
   color: #fff; }
@@ -123,18 +146,77 @@ md-dialog md-dialog-content {
   color: #fff; }
 
 md-select .md-select-value.md-select-placeholder {
-  color: #fff;
-  border-color: #fff; }
+  color: black;
+  border-color: #00000061 !important; }
+
+md-select:not([disabled]):focus .md-select-value.md-select-placeholder {
+  color: black;
+  border-color: #00000061; }
+
+md-select:not([disabled]):focus .md-select-value {
+  border-bottom-color: #00000061;
+  color: black; }
 
 md-card md-card-content {
   background-color: #1a1a1a; }
 
+md-chips.md-default-theme .md-chips .md-chip-input-container input, md-chips .md-chips .md-chip-input-container input {
+  color: #fff; }
+
+.md-button.md-raised {
+  background-color: rgba(0, 0, 0, 0.26);
+  color: #fff;
+  border: 1px solid white; }
+
+md-select-menu md-content md-option:not([disabled]):focus {
+  background: #1a1a1a; }
+
+md-input-container:not(.md-input-focused):not(.md-input-invalid) label.md-required:after {
+  color: black; }
+
+md-radio-button .md-off {
+  border-color: black; }
+
+.clickable {
+  color: darkBlue !important; }
+
+.form-port-details .action-port-button button.activated-button {
+  background-color: #f5f5f5 !important;
+  color: #fff !important; }
+
+md-input-container:not(.md-input-has-value) md-select[required] .md-select-value span:first-child:after {
+  color: black; }
+
+.md-button:not([disabled]):hover {
+  background-color: rgba(0, 0, 0, 0.26); }
+
+.md-button.md-raised:not([disabled]):hover {
+  background-color: #3F51B5 !important; }
+
 .md-button.md-raised[disabled] {
+  background-color: #f5f5f5;
+  color: #1a1a1a; }
+
+.choose-file input[type=file] {
+  background: #1a1a1a !important; }
+
+md-input-container:not(.md-input-has-value) input:not(:focus) {
+  background: #1a1a1a; }
+
+md-select-menu md-content md-option:not([disabled]):hover {
   background-color: #f5f5f5; }
+
+.my-chips input:-ms-input-placeholder {
+  color: #999999;
+  /* set the color of the placeholder text */ }
+
+.my-chips input::placeholder {
+  color: #999999;
+  /* set the color of the placeholder text */ }
 
 md-select .md-select-value {
   color: #fff;
-  border-color: #fff; }
+  border-color: black; }
 
 md-checkbox .md-label {
   color: #fff; }
@@ -153,20 +235,20 @@ md-card md-card-title md-card-title-text:not(:only-child) .md-subhead {
   color: #fff; }
 
 table.md-table th.md-column {
-  color: #fff; }
+  color: black; }
 
 table.md-table td.md-cell {
   color: #fff;
-  border-color: #fff; }
+  border-color: #00000061; }
 
 md-icon {
-  color: #fff; }
+  color: black; }
 
 md-checkbox:not(.md-checked) .md-icon {
-  border-color: #fff; }
+  border-color: black; }
 
 md-checkbox:not([disabled]).md-warn:not(.md-checked) .md-icon {
-  border-color: #fff; }
+  border-color: black; }
 
 md-tooltip .md-content {
   height: auto !important; }
@@ -184,8 +266,8 @@ md-tooltip .md-content {
   min-height: 32px;
   min-width: 1%;
   line-height: 24px;
-  background-color: #fafafa !important;
-  color: #212121 !important;
+  background-color: rgba(0, 0, 0, 0.26) !important;
+  color: #fff !important;
   margin-top: 0px;
   margin-left: 0px;
   margin-bottom: 0px; }
@@ -380,6 +462,12 @@ audio.small {
 
 md-dialog-content.add-trigger-form {
   width: 480px; }
+
+.bill-info {
+  color: #0a1247; }
+
+small {
+  color: #fff; }
 
 .collapsed-content {
   margin-left: 80px;
@@ -849,7 +937,7 @@ ul.benefits {
   width: 800px; }
 
 .margin-content {
-  margin: 8px; }
+  padding: 8px; }
 
 .setup-flow-box {
   width: 800px; }
@@ -1008,6 +1096,47 @@ md-menu-item .md-button {
       justify-content: center; }
   .page-content {
     padding-top: 150px; } }
+
+.login-page-content input:-webkit-autofill,
+.login-page-content input:-webkit-autofill:hover,
+.login-page-content input:-webkit-autofill:focus,
+.login-page-content input:-internal-autofill-selected,
+.login-page-content input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+  -webkit-text-fill-color: #fff !important; }
+
+md-chips .md-chip-input-container input::-webkit-input-placeholder {
+  /* WebKit-based browsers */
+  color: black !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: black !important; }
+
+md-chips .md-chip-input-container input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: black !important; }
+
+md-chips .md-chip-input-container input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: black !important; }
+
+md-chips .md-chips {
+  box-shadow: 0 1px black; }
+
+.md-select.md-no-underline .md-select-value {
+  border-bottom-color: black !important; }
+
+.billing-container .filter-row .start-date {
+  background: white;
+  color: #fff; }
+
+.date-scheme {
+  color-scheme: light; }
+
+.billing-container .filter-row .end-date {
+  background: white;
+  color: #fff; }
 
 md-card {
   border-radius: 20px; }

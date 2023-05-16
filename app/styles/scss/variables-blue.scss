@@ -8,9 +8,21 @@ $warning: #ffa726;
 $pink: #2979ff;
 $green: #00D554;
 $text: black;
+$textInput: #666;
+$focusedInput: #3F51B5;
+$inputField: #0000001F;
+$stepInput: #666;
+$secondaryButton: white;
+$borderButton: #f5f5f500;
+$billText: #0a1247;
+$highlightText: darkBlue;
+$defaultButton: #3F51B5;
+$defaultDate: white;
+$dateColor: light;
 
 $bg: whitesmoke;
-$disabled: #f5f5f5;
+$disabled: rgba(0,0,0,0.12);
+$disabledText: rgba(0,0,0,0.38);
 $linblocsSecondary: white;
 /* Transition Mixin */
 

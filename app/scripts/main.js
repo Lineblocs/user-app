@@ -314,8 +314,22 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
     factory.getDomain = function() {
             return  DEPLOYMENT_DOMAIN;
     }
+
+
     factory.getHomeLink = function() {
             return  "https://" + DEPLOYMENT_DOMAIN + "/";
+    }
+
+    factory.getAppPortalDomain = function(workspace, suffixOnly) {
+        suffixOnly = suffixOnly||true;
+        var domain = "app." + DEPLOYMENT_DOMAIN;
+        if ( workspace ) {
+            domain = workspace + ".app." + DEPLOYMENT_DOMAIN;
+            if ( suffixOnly ) {
+                domain = "app." + DEPLOYMENT_DOMAIN;
+            }
+        }
+        return domain;
     }
     factory.getEditorResource = function(path) {
             return  getEditorPath() + "/" + path;
@@ -633,6 +647,7 @@ return changed;
         }
         factory.doLogout = function() {
             factory.purgeSession();
+            localStorage.clear();
             $state.go('login', {});
         }
         factory.setAuthToken = function(token) {
@@ -1872,6 +1887,7 @@ var regParams = {
             var data = res.data;
                 $shared.customizations = data['customizations'];
                 $shared.frontend_api_creds = data['frontend_api_creds'];
+                $shared.available_themes = data['available_themes'];
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
           addAnalyticsScript();
@@ -1879,7 +1895,15 @@ var regParams = {
     });
     Backend.get("/getBillingCountries").then((res) => {
         $shared.billingCountries = res.data;
+        applyDefaultTheme();
     });
+
+    function applyDefaultTheme() {
+      const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
+      if (!$window.localStorage.THEME && defaultTheme) {
+        $window.localStorage.setItem('THEME', defaultTheme.name);
+      }
+    }
 
     function addAnalyticsScript() {
       if ($shared.customizations.analytics_sdk === 'google') {
@@ -1957,6 +1981,7 @@ var regParams = {
   };
 
   this.addStyle = function(path) {
+    if (!path) return;
     var link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
@@ -9835,11 +9860,20 @@ angular.module('Lineblocs')
     type_of_2fa: null,
     mobile_number: ""
 	};
-  $scope.selectedTheme = $window.localStorage.THEME || 'default';
+  $scope.selectedTheme = $window.localStorage.THEME;
   $scope.type_of_2fa = [{value: 'sms', name: 'SMS Verification'}, {value: 'totp', name: 'Authenticator App'}];
 	$scope.changeCountry = function(country) {
 		console.log("changeCountry ", country);
 	}
+
+  function applyDefaultTheme() {
+    const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
+    if (!$scope.selectedTheme) {
+      $scope.selectedTheme = defaultTheme.name;
+      $window.localStorage.setItem('THEME', defaultTheme.name);
+    }
+  }
+  applyDefaultTheme();
 
   $scope.theme = {
     default: 'styles/app-blue.css',
@@ -9936,7 +9970,9 @@ angular.module('Lineblocs')
 			var data = {};
 			data['first_name'] = $scope.user.first_name;
 			data['last_name'] = $scope.user.last_name;
+			data['company_name'] = $scope.user.company_name;
 			data['email'] = $scope.user.email;
+			data['tax_number'] = $scope.user.tax_number;
 			$shared.isCreateLoading = true;
 			Backend.post("/updateSelf", data).then(function( res ) {
 					$mdToast.show(

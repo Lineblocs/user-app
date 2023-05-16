@@ -314,8 +314,22 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
     factory.getDomain = function() {
             return  DEPLOYMENT_DOMAIN;
     }
+
+
     factory.getHomeLink = function() {
             return  "https://" + DEPLOYMENT_DOMAIN + "/";
+    }
+
+    factory.getAppPortalDomain = function(workspace, suffixOnly) {
+        suffixOnly = suffixOnly||true;
+        var domain = "app." + DEPLOYMENT_DOMAIN;
+        if ( workspace ) {
+            domain = workspace + ".app." + DEPLOYMENT_DOMAIN;
+            if ( suffixOnly ) {
+                domain = "app." + DEPLOYMENT_DOMAIN;
+            }
+        }
+        return domain;
     }
     factory.getEditorResource = function(path) {
             return  getEditorPath() + "/" + path;
@@ -633,6 +647,7 @@ return changed;
         }
         factory.doLogout = function() {
             factory.purgeSession();
+            localStorage.clear();
             $state.go('login', {});
         }
         factory.setAuthToken = function(token) {
@@ -1872,6 +1887,7 @@ var regParams = {
             var data = res.data;
                 $shared.customizations = data['customizations'];
                 $shared.frontend_api_creds = data['frontend_api_creds'];
+                $shared.available_themes = data['available_themes'];
             console.log('customizations are ', $shared.customizations);
           addSocialLoginScript();
           addAnalyticsScript();
@@ -1879,7 +1895,15 @@ var regParams = {
     });
     Backend.get("/getBillingCountries").then((res) => {
         $shared.billingCountries = res.data;
+        applyDefaultTheme();
     });
+
+    function applyDefaultTheme() {
+      const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
+      if (!$window.localStorage.THEME && defaultTheme) {
+        $window.localStorage.setItem('THEME', defaultTheme.name);
+      }
+    }
 
     function addAnalyticsScript() {
       if ($shared.customizations.analytics_sdk === 'google') {
@@ -1957,6 +1981,7 @@ var regParams = {
   };
 
   this.addStyle = function(path) {
+    if (!path) return;
     var link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
