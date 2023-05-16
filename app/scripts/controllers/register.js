@@ -27,6 +27,7 @@ angular.module('Lineblocs')
 	  $scope.invalidCode =false;
 	  $scope.invalidNumber =false;
 	  $scope.planInfo = null;
+    $scope.planPrice = null;
 	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
@@ -59,7 +60,8 @@ angular.module('Lineblocs')
       city: "",
       street: "",
       postal_code: "",
-    }
+    },
+    accept_terms: false,
   };
 	$scope.card = {
 		number: "",
@@ -67,6 +69,7 @@ angular.module('Lineblocs')
 		expires: "",
 		name: "",
 	};
+  $scope.paymentMethods = '';
   $scope.cardVisible = true;
   $scope.paypalVisible = false;
   $scope.paypalLoaded = false;
@@ -94,12 +97,21 @@ angular.module('Lineblocs')
   $scope.selectedTemplate = null;
 
   $scope.onNumberChange = function() {
-    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10));
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10)); ///^(0[1-9]|1[0-2])\/\d{2}$/
     if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
   }
 
+  $scope.cardNumberChange = function() {
+    if (!$scope.paymentDetails || !$scope.paymentDetails.payment_card) return;
+    if (!$scope.paymentDetails.payment_card.payment_card_number) return;
+    $scope.paymentDetails.payment_card.payment_card_number = Number($scope.paymentDetails.payment_card.payment_card_number.replace(/[^0-9]/g, '').slice(0, 16));
+    if (!$scope.paymentDetails.payment_card.payment_card_number) $scope.paymentDetails.payment_card.payment_card_number = '';
+  }
+
   $scope.onSecurityCode = () => {
-    $scope.paymentDetails.payment_card.security_code = Number($scope.paymentDetails.payment_card.security_code.replace(/[^0-9]/g, '').slice(0, 3));
+    if (!$scope.paymentDetails || !$scope.paymentDetails.payment_card) return;
+    if (!$scope.paymentDetails.payment_card.security_code) return;
+    $scope.paymentDetails.payment_card.security_code = Number($scope.paymentDetails.payment_card.security_code.replace(/[^0-9]/g, '').slice(0, 4));
     if (!$scope.paymentDetails.payment_card.security_code) $scope.paymentDetails.payment_card.security_code = '';
   }
 
@@ -117,7 +129,7 @@ angular.module('Lineblocs')
   };
   $scope.getCreditCardBrand = function (cardNumber) {
     if (!cardNumber) return null;
-    cardNumber = cardNumber.replace(/\D/g, '');
+    cardNumber = cardNumber.toString().replace(/\D/g, '');
 
     for (const brand in patterns) {
       if (!patterns[brand].test(cardNumber)) continue;
@@ -136,20 +148,33 @@ angular.module('Lineblocs')
   }
   $scope.checkoutTrial = function() {
     $scope.step = 6;
+
   }
 
   $scope.checkoutDashboard = function() {
-    $location.path('/dashboard');
+    doSpinup();
   }
+
   $scope.validateExpirationDate = function(value) {
     if (!value) return true;
+    value = value.replace(/[^0-9/]/g, '');
     let parts = value.split('/');
+    if (parts[0].length > 2) parts[0] = parts[0].slice(0, 2);
+    if (parts[1] && parts[1].length > 2) parts[1] = parts[1].slice(0, 2);
+    $scope.paymentDetails.payment_card.expiration_date = parts.join('/');
+    if (parts[0].length === 2 && parts.length === 1 && $scope.prevExpiry !== value + '/') {
+      $scope.paymentDetails.payment_card.expiration_date = value + '/';
+    }
+    $scope.prevExpiry = $scope.paymentDetails.payment_card.expiration_date;
+    if (parts[0] > 12 || parts[0] < 1 || parts[1] < 0 || parts[1] > 99) return false;
     let expirationDate = new Date('20' + parts[1], parts[0] - 1, 1);
     let currentDate = new Date();
     let lastDayOfMonth = new Date(expirationDate.getFullYear(), expirationDate.getMonth() + 1, 0).getDate();
     expirationDate.setDate(lastDayOfMonth);
     return expirationDate >= currentDate;
   };
+
+
   function doSpinup() {
 	$scope.shouldSplash = true;
 	$shared.setAuthToken( $scope.token );
@@ -223,6 +248,90 @@ angular.module('Lineblocs')
 
 	}
 
+  $scope.selectPaymentMethod = function(method) {
+    $scope.paymentMethod = method;
+  };
+
+  $scope.submitPaymentForm = function($event, paymentForm) {
+    console.log("called click PaymentForm");
+    $scope.triedSubmit = true;
+    if(!$scope.paymentDetails.accept_terms) return;
+    if(paymentForm.$valid) {
+      if($scope.paymentMethod === 'card') {
+        submitTrial();
+        // $scope.step = 6;
+        return;
+      } else {
+        $scope.step = 5;
+      }
+    }
+  }
+
+  async function submitTrial() {
+    const response = await createCardToken($shared.customizations.payment_gateway, $scope.paymentDetails);
+    const data = {};
+    const billingAddress = {
+      'addr1': $scope.paymentDetails.address.street,
+      'addr2': $scope.paymentDetails.address.street,
+      'country': $scope.paymentDetails.address.country.name,
+      'zipcode': $scope.paymentDetails.address.postal_code,
+    };
+    data['payment_gateway'] = $shared.customizations.payment_gateway;
+    data['billing_region_id'] = $scope.paymentDetails.address.state.id;
+    data['billing_address'] = billingAddress;
+    data['user_id'] = $scope.userId;
+    data['workspace_id'] = $scope.workspaceInfo.id;
+    data['payment_values'] = Object.assign({}, response);
+    Backend.post("/saveCustomerPaymentDetails", data, true).then(function( res ) {
+      console.log('saved payment details', res);
+      $scope.step = 6;
+    }).catch(function(err) {
+      console.log('error saving payment details', err);
+      $scope.step = 6;
+    });
+  }
+
+  async function initializePaymentGateway() {
+    return new Promise(async (resolve, reject) => {
+      switch ($shared.customizations.payment_gateway) {
+        case 'stripe': {
+          Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
+          resolve();
+        }
+        default: {
+          reject();
+        }
+      }
+    });
+  }
+
+  async function createCardToken(gateway, paymentDetails) {
+    try {
+      switch (gateway) {
+        case 'stripe': {
+          const expiry = paymentDetails.payment_card.expiration_date.split('/');
+          const cardDetails = {
+            number: paymentDetails.payment_card.payment_card_number,
+            exp_month: expiry[0],
+            exp_year: expiry[1],
+            cvc: paymentDetails.payment_card.security_code,
+            name: paymentDetails.payment_card.cardholder_name,
+            address_line1: paymentDetails.address.street,
+            address_city: paymentDetails.address.city,
+            address_state: paymentDetails.address.state.name,
+            address_zip: paymentDetails.address.postal_code,
+            address_country: paymentDetails.address.country.name,
+          };
+          const response = await Stripe.card.createToken(cardDetails);
+          return {card_token: response.id, last_4: response.card.last4};
+        }
+      }
+    } catch (err) {
+
+    }
+  }
+
+
 	$scope.submitVerify1Form = function($event, verify1Form) {
 		console.log("called submitVerify1Form");
 		$scope.triedSubmit = true;
@@ -233,7 +342,7 @@ angular.module('Lineblocs')
 				$shared.changingPage = true;
 			Backend.post("/registerSendVerify", data).then(function( res ) {
 				var data = res.data;
-					$shared.changingPage = false;
+				$shared.changingPage = false;
 				if (res.data.valid) {
 					$scope.didVerifyCall = true;
 					$scope.invalidNumber = false;
@@ -313,15 +422,15 @@ angular.module('Lineblocs')
 				$shared.changingPage = false;
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
-					//doSpinup();
-					if ($stateParams['plan'] === 'pay-as-you-go') {
-						$scope.step = 5;
+					// doSpinup();
+					if ($stateParams['plan'] === 'basic') {
+						$scope.step = 4;
 					} else {
 						//need to add card
-						$scope.step = 4;
+						$scope.step = 3;
 					}
 
-					//$scope.step = 4;
+					// $scope.step = 4;
 					return;
 				}
 				$scope.invalidWorkspaceTaken = true;
@@ -338,7 +447,7 @@ angular.module('Lineblocs')
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: '10.00'
+              value: $scope.planPrice
             }
           }]
         });
@@ -373,7 +482,8 @@ angular.module('Lineblocs')
 				$shared.changingPage = true;
 			Backend.post("/provisionCallSystem", data).then(function( res ) {
 				$shared.changingPage = false;
-				doSpinup();
+        $scope.step = 5;
+				// doSpinup();
 				return;
 			});
 		return false;
@@ -458,30 +568,36 @@ angular.module('Lineblocs')
 			});
 		}
 
-	$q.all([
-		Backend.get("/getCallSystemTemplates"),
-		Backend.get("/getConfig"),
-		Backend.get("/plans"),
-	]).then(function(res) {
-		$scope.templates = res[0].data;
-		$scope.plans = res[2].data;
-		$shared.changingPage = false;
-		console.log("plans ", $scope.plans);
-		console.log("user selected plan is ", $stateParams['plan'] );
-		if ( $stateParams['plan'] ) {
-			$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
-		}
-		console.log("plan info is ", $scope.planInfo);
-		if ( $stateParams['hasData'] ) {
-			console.log("$stateParams data is ", $stateParams);
-			$scope.token = $stateParams['authData'];
+  function load() {
+    $q.all([
+      Backend.get("/getCallSystemTemplates"),
+      Backend.get("/getConfig"),
+      Backend.get("/getServicePlans"),
+    ]).then(async function (res) {
+      $scope.templates = res[0].data;
+      $scope.plans = res[2].data.find(function(obj) {
+        return obj.featured_plan == true;
+      });
+      $shared.changingPage = false;
+      console.log("plans ", $scope.plans);
+      $scope.planInfo = $scope.plans.nice_name;
+      $scope.planPrice = $scope.plans.monthly_charge;
+      console.log("user selected plan is ", $stateParams['plan'] );
+      // if ( $stateParams['plan'] ) {
+      // 	$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
+      // }
+      console.log("plan info is ", $scope.planInfo);
+      if ( $stateParams['hasData'] ) {
+        console.log("$stateParams data is ", $stateParams);
+        $scope.token = $stateParams['authData'];
 
-			$scope.userId = $stateParams['userId'];
-			$scope.gotoVerificationFlow();
-		}
-		$scope.config = res[1].data;
-		console.log("config is ", $scope.config);
-		Stripe.setPublishableKey($scope.config.stripe.key);
-
-	});
+        $scope.userId = $stateParams['userId'];
+        $scope.gotoVerificationFlow();
+      }
+      $scope.config = res[1].data;
+      console.log("config is ", $scope.config);
+      await initializePaymentGateway();
+    });
+  }
+  load();
   });
