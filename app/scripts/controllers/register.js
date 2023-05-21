@@ -482,9 +482,11 @@ angular.module('Lineblocs')
 				$shared.changingPage = true;
 			Backend.post("/provisionCallSystem", data).then(function( res ) {
 				$shared.changingPage = false;
-        $scope.step = 5;
-				// doSpinup();
-				return;
+        if ($shared.customizations.signup_requires_payment_detail) {
+          $scope.step = 5;
+        } else {
+          doSpinup();
+        }
 			});
 		return false;
 	}
