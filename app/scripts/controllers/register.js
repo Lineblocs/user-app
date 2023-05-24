@@ -415,7 +415,7 @@ angular.module('Lineblocs')
 		if (workspaceForm.$valid) {
 			var data = {};
 			data["userId"] = $scope.userId;
-			data.plan = $stateParams['plan'];
+			data.plan = getBestServicePlanOption();
 			data.workspace = $scope.workspace;
 				$shared.changingPage = true;
 			Backend.post("/updateWorkspace", data).then(function( res ) {
@@ -439,7 +439,33 @@ angular.module('Lineblocs')
 		}
 		return false;
 	}
+	function getBestServicePlanOption() {
+		var explicitPlan  = $stateParams['plan'];
 
+		if ( explicitPlan ) {
+			return explicitPlan;
+		}
+
+		// get the default one from the API
+
+		var featuredPlan = $scope.plans.filter((plan) => {
+			if ( plan.featured_plan ) {
+				return true;
+			}
+			return false;
+		});
+		if ( featuredPlan.length > 0 ) {
+			return featuredPlan[0].name;
+		}
+
+		// if no featured plan was found then use the first match.
+		if ( $scope.plans.length > 0 ) {
+			return $scope.plans[0].name;
+		}
+
+		// no plans are setup
+		throw new Error("No service plan matches found");
+	}
   function renderPaypalButton() {
     if ($scope.paypalLoaded) return;
     paypal.Buttons({
