@@ -1,0 +1,38 @@
+{
+  "name": "flag-css",
+  "description": "CSS for SVG country flags with PNG fallback.",
+  "version": "0.0.11",
+  "authors": [
+    "kf <7kfpun@gmail.com>"
+  ],
+  "keywords": [
+    "flag",
+    "country",
+    "css",
+    "svg",
+    "png"
+  ],
+  "homepage": "https://7kfpun.github.io/flag-css/",
+  "dependencies": {},
+  "devDependencies": {},
+  "license": ["MIT"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/7kfpun/flag-css.git"
+  },
+  "main": [
+    "./dist/css/flag-css.css",
+    "./dist/less/flag-css.less",
+    "./dist/scss/flag-css.scss"
+  ],
+  "ignore": [
+    "*.html",
+    "*.js",
+    "*.json",
+    "*.md",
+    "*.txt",
+    "*.zip",
+    ".*",
+    "/less"
+  ]
+}

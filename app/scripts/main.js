@@ -1316,11 +1316,6 @@ if (checked.length === 0) {
             }
     };
 var regParams = {
-            plan: {
-            value: 'basic',
-            squash: true
-
-            },
     };
 
     $stateProvider
@@ -9447,7 +9442,8 @@ angular.module('Lineblocs')
   function doSpinup() {
 	$scope.shouldSplash = true;
 	$shared.setAuthToken( $scope.token );
-	var data = { "userId": $scope.userId, "plan": $stateParams['plan'] };
+	var data = { "userId": $scope.userId, "plan": $scope.plan.key_name };
+	console.log("do spinup data ", data);
 	$scope.invalidCode = false;
 	$shared.changingPage = true;
 	Backend.post("/userSpinup", data).then(function( res ) {
@@ -9684,7 +9680,8 @@ angular.module('Lineblocs')
 		if (workspaceForm.$valid) {
 			var data = {};
 			data["userId"] = $scope.userId;
-			data.plan = $stateParams['plan'];
+			data["plan"] = $scope.plan.key_name;
+			console.log("plan option is ", data.plan);
 			data.workspace = $scope.workspace;
 				$shared.changingPage = true;
 			Backend.post("/updateWorkspace", data).then(function( res ) {
@@ -9692,14 +9689,7 @@ angular.module('Lineblocs')
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
 					// doSpinup();
-					if ($stateParams['plan'] === 'basic') {
-						$scope.step = 4;
-					} else {
-						//need to add card
-						$scope.step = 3;
-					}
-
-					// $scope.step = 4;
+					$scope.step = 4;
 					return;
 				}
 				$scope.invalidWorkspaceTaken = true;
@@ -9708,7 +9698,34 @@ angular.module('Lineblocs')
 		}
 		return false;
 	}
+	function getBestServicePlanOption() {
+		var explicitPlan  = $stateParams['plan'];
+		console.log("explicitPlan ", explicitPlan);
 
+		if ( explicitPlan != null ) {
+			return explicitPlan;
+		}
+		// get the default one from the API
+
+		var featuredPlan = $scope.plans.filter((plan) => {
+			if ( plan.featured_plan ) {
+				return true;
+			}
+			return false;
+		});
+		console.log("featured plan ", featuredPlan);
+		if ( featuredPlan.length > 0 ) {
+			return featuredPlan[0];
+		}
+
+		// if no featured plan was found then use the first match.
+		if ( $scope.plans.length > 0 ) {
+			return $scope.plans[0];
+		}
+
+		// no plans are setup
+		throw new Error("No service plan matches found");
+	}
   function renderPaypalButton() {
     if ($scope.paypalLoaded) return;
     paypal.Buttons({
@@ -9846,13 +9863,15 @@ angular.module('Lineblocs')
       Backend.get("/getServicePlans"),
     ]).then(async function (res) {
       $scope.templates = res[0].data;
-      $scope.plans = res[2].data.find(function(obj) {
-        return obj.featured_plan == true;
-      });
+	  $scope.plans = res[2].data;
+
+	  var plan = getBestServicePlanOption();
+	  $scope.plan = plan;
+	  console.log("selected plan option is ", plan);
       $shared.changingPage = false;
       console.log("plans ", $scope.plans);
-      $scope.planInfo = $scope.plans.nice_name;
-      $scope.planPrice = $scope.plans.monthly_charge;
+      $scope.planInfo = plan.nice_name;
+      $scope.planPrice = plan.monthly_charge;
       console.log("user selected plan is ", $stateParams['plan'] );
       // if ( $stateParams['plan'] ) {
       // 	$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
