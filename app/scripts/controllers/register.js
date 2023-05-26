@@ -603,13 +603,12 @@ angular.module('Lineblocs')
       Backend.get("/getServicePlans"),
     ]).then(async function (res) {
       $scope.templates = res[0].data;
-      $scope.plans = res[2].data.find(function(obj) {
-        return obj.featured_plan == true;
-      });
+	  $scope.plans = res[2].data;
+	  var plan = getBestServicePlanOption();
       $shared.changingPage = false;
       console.log("plans ", $scope.plans);
-      $scope.planInfo = $scope.plans.nice_name;
-      $scope.planPrice = $scope.plans.monthly_charge;
+      $scope.planInfo = plan.nice_name;
+      $scope.planPrice = plan.monthly_charge;
       console.log("user selected plan is ", $stateParams['plan'] );
       // if ( $stateParams['plan'] ) {
       // 	$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
