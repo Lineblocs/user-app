@@ -1316,11 +1316,6 @@ if (checked.length === 0) {
             }
     };
 var regParams = {
-            plan: {
-            value: 'basic',
-            squash: true
-
-            },
     };
 
     $stateProvider
