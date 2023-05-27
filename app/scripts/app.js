@@ -1641,6 +1641,12 @@ var regParams = {
         templateUrl: 'views/pages/settings/extension-codes.html',
         controller: 'ExtensionCodesCtrl'
     })
+    .state('settings-geo-permission', {
+      url: '/settings/geo-permission',
+      parent: 'dashboard',
+      templateUrl: 'views/pages/settings/geo-permission.html',
+      controller: 'GeoPermissionCtrl'
+    })
     .state('files', {
 
         url: '/files',
