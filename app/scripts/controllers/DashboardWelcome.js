@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of Lineblocs
  */
- angular.module('Lineblocs').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+ angular.module('Lineblocs').controller('DashboardWelcomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', 'ThemeService', function ($scope, $timeout, Backend, $shared, $q, ThemeService) {
 	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
@@ -84,6 +84,17 @@
 	    }
 
 	};
+	function applyTheme(theme) {
+        const themes = {
+          default: 'styles/app-blue.css',
+          dark: 'styles/app-grey.css'
+        }
+        if (theme !== ThemeService.getTheme()) {
+          ThemeService.setTheme(theme);
+        }
+        ThemeService.addStyle(themes[theme]);
+        ThemeService.removeStyle(themes[theme]);
+    }
 	$scope.load = function() {
 		$timeout(function () {
 			var color = Chart.helpers.color;
@@ -94,6 +105,7 @@
                 $shared.userInfo=  res.data[2];
                 $scope.checklist = res.data[3];
 				console.log("graph data is ", graph);
+				applyTheme($shared.userInfo.theme);
 				$shared.isLoading = false;
 				$timeout(function(){
 					$scope.line = {
