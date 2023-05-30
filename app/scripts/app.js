@@ -168,7 +168,7 @@ angular
             }
         };
     })
-    .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast) {
+    .factory("$shared", function($state, $mdDialog, $timeout, $q, $window, $location, $mdToast, ThemeService) {
         var factory = this;
         var baseTitle = createBaseTitle();
         factory.tempStopErrors = false;
@@ -648,6 +648,7 @@ return changed;
         factory.doLogout = function() {
             factory.purgeSession();
             localStorage.clear();
+            ThemeService.addStyle("styles/app-blue.css");
             $state.go('login', {});
         }
         factory.setAuthToken = function(token) {
@@ -869,8 +870,7 @@ return changed;
       function applyTheme(theme) {
         const themes = {
           default: 'styles/app-blue.css',
-          dark: 'styles/app-grey.css',
-          light: 'styles/app-cyan.css',
+          dark: 'styles/app-grey.css'
         }
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
@@ -885,7 +885,7 @@ return changed;
             factory.get("/dashboard").then(function(res) {
                 var graph = res.data[0];
                 console.log("GOT state data ", res);
-				        $shared.billInfo=  res.data[1];
+				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
                 applyTheme($shared.userInfo.theme);
                 $shared.planInfo=  res.data[4];
