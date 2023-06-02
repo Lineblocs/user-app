@@ -337,6 +337,11 @@
                                         class=""><span class="text">{{ 'extension-codes' | translate }}</span>
                                     </md-button>
                                 </li>
+                                <li ng-class="{active: $state.includes('settings-geo-permission')}">
+                                    <md-button href="" ng-click="$shared.changeRoute('settings-geo-permission')"
+                                        class=""><span class="text">{{ 'geo-permission' | translate }}</span>
+                                    </md-button>
+                                </li>
                                 <li ng-class="{active: $state.includes('settings-workspace-options')}">
                                     <md-button href="" ng-click="$shared.changeRoute('settings-workspace-options')"
                                         class=""><span class="text">{{ 'workspace-options' | translate }}</span>
