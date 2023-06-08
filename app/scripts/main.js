@@ -977,8 +977,15 @@ if (checked.length === 0) {
             }
             return true;
         }
-        factory.get = function(path, params, showMsg)
-        {
+
+        function hasTokenExpired(message) {
+          if (message.includes('Token has expired')) {
+            $state.go('login');
+            localStorage.clear();
+          }
+        }
+
+        factory.get = function(path, params, showMsg) {
             var item = $q(function(resolve, reject) {
                     if (!skip.includes($state.current.name) && $state.current_name) {
                         if ( !checkHttpCallPrerequisites() ) {
@@ -989,6 +996,7 @@ if (checked.length === 0) {
                     }
                     $http.get(createUrl(path), params).then(resolve,function(res) {
                         console.log('received reply ', res);
+                        hasTokenExpired(res && res.data && res.data.message);
                         errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
                         reject(res);
                     });
@@ -1016,7 +1024,7 @@ if (checked.length === 0) {
 
                 $http.delete(createUrl(path)).then(resolve,function(res) {
                     errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
-
+                    hasTokenExpired(res && res.data && res.data.message);
                     reject(res);
                  });
             });
@@ -1042,6 +1050,7 @@ if (checked.length === 0) {
                         errorHandler(res, res.headers('X-ErrorCode-ID'), showMsg);
 
                     }
+                    hasTokenExpired(res && res.data && res.data.message);
                     reject(res);
                  });
             });
