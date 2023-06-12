@@ -27,8 +27,8 @@
         <md-button layout="row" ng-click="cancelSubscription($event)" class="md-raised md-warn no-margin-sides"><i class="mdi mdi-delete-forever delete-subscription"></i>Cancel Subscription</md-button>
     </div>
 
-    <md-card md-theme="'default'"" md-theme-watch class="card-radius">
-        <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+    <md-card md-theme="'default'" md-theme-watch class="card-radius">
+        <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true" ng-if="isTabLoaded">
         <md-tab label="Add Credit" ng-if="$shared.planName()==='pay-as-you-go'">
             <md-content class="md-padding">
                 <div class="bottom-sheet-demo inset no-padding">

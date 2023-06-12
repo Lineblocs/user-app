@@ -2655,6 +2655,7 @@ angular.module('Lineblocs')
 	  $shared.updateTitle("Billing");
 	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
+	  $scope.isTabLoaded = false;
 	  $scope.startDate = moment().startOf('month').toDate();
 	  $scope.endDate = moment().endOf('month').toDate();
 	$scope.cards = [];
@@ -2683,6 +2684,12 @@ angular.module('Lineblocs')
 		expires: "",
 		cvv: ""
 	};
+	$timeout(function() {
+        $scope.isTabLoaded = true;
+		if (!$scope.$$phase) {
+			$scope.$apply();
+		}
+    }, 1000); 
     function TriggerDialogController($scope, $mdDialog,$shared, onCreate) {
       $scope.$shared = $shared;
 	  $scope.data = {
