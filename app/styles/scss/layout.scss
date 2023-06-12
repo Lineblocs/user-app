@@ -646,7 +646,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
 		.sidebar-content {
 			/*position: relative;*/
 			overflow-y: auto;
-			height: 700px;
+			height: 100%;
 		}
 		.top-logo {
 			display: none;
@@ -779,7 +779,7 @@ div.scroll::-webkit-scrollbar-thumb:hover {background: rgba(0,0,0,0.55)}
     				@include transition(.4s);
     				&.visible {
     					opacity: 1;
-    					max-height: 300px;
+    					max-height: 325px;
 
     				}
     				li {
