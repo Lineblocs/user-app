@@ -575,8 +575,6 @@ md-dialog-content.add-trigger-form {
 small{
   color: $text;
 }
-md-tabs.settings {
-}
 .collapsed-content {
 	margin-left: 80px;
 	position: relative;
@@ -1207,6 +1205,7 @@ ul.benefits {
     }
     md-pagination-wrapper{
         margin: 0 !important;
+		width: 481px !important;
     }
 }
 .billing-container{
