@@ -1635,3 +1635,7 @@ md-content{
 p {
   font-weight: 300;
 }
+
+md-checkbox.md-checked .md-icon {
+  background-color: rgb(64 80 181) !important;
+}
