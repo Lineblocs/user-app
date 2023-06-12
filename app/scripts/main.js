@@ -1833,6 +1833,7 @@ var regParams = {
         if(toState.requireAuthentication) {
           if(!Authenticator.isAuthenticated() || !Authenticator.checkAuthenticationTime()) {
             $state.go('login');
+            localStorage.clear();
           } else {
             Authenticator.resetLastAuthenticationTime();
           }
@@ -1949,7 +1950,10 @@ var regParams = {
 }).service('Authenticator', function($window, $q, $shared, $state, $rootScope) {
    var lastAuthenticationTime;
    this.isAuthenticated = function() {
-        return $window.sessionStorage.token !== undefined;
+        const authObject = JSON.parse($window.localStorage.AUTH || '');
+        if (!authObject) return false;
+        if (!authObject.token.expire_in_timestamp) return false;
+        return Date.now() < authObject.token.expire_in_timestamp * 1000;
    };
    this.checkAuthenticationTime = function() {
       var currentTime = new Date().getTime();
