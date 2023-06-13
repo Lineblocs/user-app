@@ -1139,6 +1139,11 @@ md-chips .md-chips {
   background: white;
   color: #fff; }
 
+.error-message {
+  color: red;
+  font-size: 14px;
+  padding-left: 18px; }
+
 md-card {
   border-radius: 20px; }
 
