@@ -1440,3 +1440,9 @@ md-chips .md-chips{
   background: $defaultDate;
   color: $text;
 }
+
+.error-message{
+	color: red;
+	font-size: 14px;
+	padding-left: 18px;
+}

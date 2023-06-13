@@ -394,7 +394,11 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
         }
 
         factory.cancelForm = function() {
-   $window.history.back();
+            $window.history.back();
+        }
+
+        factory.navigateDashboard = function(){
+            $state.go('dashboard', {});
         }
      factory.changeAdminWorkspace = function(workspace) {
          console.log("changeAdminWorkspace ", workspace);

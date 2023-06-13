@@ -8,7 +8,9 @@
                 <span class="md-subhead">create a hosted trunk to route traffic to your own SIP infrastructure</span>
             </md-card-title-text>
         </md-card-title>
-
+        <div ng-if="errorMessage">
+            <span class="error-message">{{errorMessage}}</span>
+        </div>
         <md-card-content>
 
             <form name="trunkForm" ng-submit="saveTrunk(trunkForm)" novalidate>
@@ -22,7 +24,7 @@
                                 <div flex="95">
                                     <md-input-container>
                                         <label>Name</label>
-                                        <input name="username" ng-model="values.name" required="" minlength="1">
+                                        <input name="username" ng-model="values.name" required="" minlength="1" ng-change="checkTrunkFields()">
                                         <div ng-show="triedSubmit">
                                             <div class="box">
                                                 <div ng-show="trunkForm.username.$error.minlength">Please enter 1
@@ -67,13 +69,13 @@
                                 <div flex="95">
                                     <md-input-container>
                                         <label>SIP URI</label>
-                                        <input name="sip_uri" ng-model="values.sip_uri" required="" minlength="1">
+                                        <input name="sip_uri" ng-model="values.sip_uri" required="" minlength="1" ng-change="checkTrunkFields()">
                                         <div ng-show="triedSubmit">
                                             <div class="box">
-                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                <div ng-show="trunkForm.sip_uri.$error.minlength">Please enter 1
                                                     characters or
                                                     more</div>
-                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                <div ng-show="trunkForm.sip_uri.$error.required">This field is
                                                     required
                                                 </div>
                                             </div>
@@ -95,13 +97,13 @@
                                 <div flex="95">
                                     <md-input-container>
                                         <label>Recovery SIP URI</label>
-                                        <input name="recovery_sip_uri" ng-model="values.recovery_sip_uri" required="" minlength="1">
+                                        <input name="recovery_sip_uri" ng-model="values.recovery_sip_uri" required="" minlength="1" ng-change="checkTrunkFields()">
                                         <div ng-show="triedSubmit">
                                             <div class="box">
-                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                <div ng-show="trunkForm.recovery_sip_uri.$error.minlength">Please enter 1
                                                     characters or
                                                     more</div>
-                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                <div ng-show="trunkForm.recovery_sip_uri.$error.required">This field is
                                                     required
                                                 </div>
                                             </div>
@@ -136,13 +138,13 @@
                                 <div flex="80">
                                     <md-input-container>
                                         <label>Termination SIP URI</label>
-                                        <input name="sip_uri" ng-model="values.termination_sip_uri" required="" minlength="1">
+                                        <input name="termination_sip_uri" ng-model="values.termination_sip_uri" required="" minlength="1" ng-change="checkTrunkFields()">
                                         <div ng-show="triedSubmit">
                                             <div class="box">
-                                                <div ng-show="trunkForm.username.$error.minlength">Please enter 1
+                                                <div ng-show="trunkForm.termination_sip_uri.$error.minlength">Please enter 1
                                                     characters or
                                                     more</div>
-                                                <div ng-show="trunkForm.username.$error.required">This field is
+                                                <div ng-show="trunkForm.termination_sip_uri.$error.required">This field is
                                                     required
                                                 </div>
                                             </div>
@@ -151,7 +153,7 @@
                                 </div>
                                 <div flex="15">
                                     <md-input-container>
-                                        <input name="sip_uri" value=".pstn.{{shared.getDomain()}}" required="" minlength="1" disabled>
+                                        <input name="termination_sip_uri" value=".pstn.{{shared.getDomain()}}" required="" minlength="1" disabled>
                                     </md-input-container>
                                 </div>
                                 <div flex="5">
