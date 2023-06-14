@@ -12,7 +12,7 @@
                     <div flex="95">
                         <md-input-container>
                             <label>Number</label>
-                            <input name="name" ng-model="values.number" required="" minlength="1">
+                            <input name="name" ng-model="values.number" required="" minlength="1" ng-change="onNumberChange()"/>
                             <div ng-show="triedSubmit">
                                 <div class="box">
                                     <div ng-show="groupForm.name.$error.minlength">Please enter 1 characters or more

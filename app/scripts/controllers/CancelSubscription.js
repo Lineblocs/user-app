@@ -23,6 +23,7 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
       $shared.isCreateLoading = true;
       Backend.post("/billing/discontinue").then(function (res) {
         $mdToast.show($mdToast.simple().textContent('Subscription cancelled').position("top right").hideDelay(3000));
+        $state.go('billing');
         $shared.endIsCreateLoading();
       });
     });
