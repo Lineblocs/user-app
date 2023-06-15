@@ -3956,9 +3956,10 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
  */
 angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
   $shared.updateTitle("Cancel Subscription");
+  $scope.cancelSubscription = false;
   $shared.endIsCreateLoading();
   $scope.cancelSubscription = function ($event) {
-
+    $scope.cancelSubscription = true;
     const confirm = $mdDialog.confirm()
       .title('Are you sure you want to cancel your subscription?')
       .textContent('You will not be able to use Lineblocs until you subscribe again.')
@@ -3970,9 +3971,13 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
       $shared.isCreateLoading = true;
       Backend.post("/billing/discontinue").then(function (res) {
         $mdToast.show($mdToast.simple().textContent('Subscription cancelled').position("top right").hideDelay(3000));
+        $scope.cancelSubscription = false;
         $shared.endIsCreateLoading();
       });
     });
+  }
+  $scope.goBilling = function() {
+    $state.go('billing');
   }
 });
 
@@ -6655,6 +6660,10 @@ angular.module('Lineblocs').controller('PhoneGroupsCreateCtrl', function ($scope
     secretStrength: 0
   }
   $scope.triedSubmit = false;
+  $scope.onNumberChange = function() {
+    $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.values.number) $scope.values.number = '';
+  }
   $scope.submit = function(form) {
     console.log("submitting phone form ", arguments);
     $scope.triedSubmit = true;
@@ -6710,6 +6719,10 @@ angular.module('Lineblocs').controller('PhoneGroupsEditCtrl', function ($scope, 
     secretStrength: 0
   }
   $scope.triedSubmit = false;
+  $scope.onNumberChange = function() {
+    $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.values.number) $scope.values.number = '';
+  }
   $scope.submit = function(form) {
     console.log("submitting phone form ", arguments);
     $scope.triedSubmit = true;
@@ -10149,7 +10162,7 @@ angular.module('Lineblocs')
       $scope.user.enable_2fa = true;
       if($scope.user.type_of_2fa === 'sms') {
         if(!$scope.user.mobile_number) return;
-        Backend.put("/self", { mobile_number: $scope.user.mobile_number }).then(function(res) {
+        Backend.post("/updateSelf", { mobile_number: $scope.user.mobile_number }).then(function(res) {
           save2FASettings();
         });
       } else {
@@ -10237,8 +10250,12 @@ angular.module('Lineblocs')
     data.enable_2fa = $scope.user.enable_2fa;
     if($scope.user.enable_2fa) data.type_of_2fa = $scope.user.type_of_2fa;
     Backend.post("/save2FASettings", data).then(function( res ) {
-      console.log('res', res);
-      // $scope.user.2FAConfig = res.data;
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('Saved successfully..')
+          .position("top right")
+          .hideDelay(3000)
+        );
     });
   }
 

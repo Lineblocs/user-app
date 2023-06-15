@@ -18,6 +18,10 @@ angular.module('Lineblocs').controller('PhoneGroupsCreateCtrl', function ($scope
     secretStrength: 0
   }
   $scope.triedSubmit = false;
+  $scope.onNumberChange = function() {
+    $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 10));
+    if (!$scope.values.number) $scope.values.number = '';
+  }
   $scope.submit = function(form) {
     console.log("submitting phone form ", arguments);
     $scope.triedSubmit = true;
