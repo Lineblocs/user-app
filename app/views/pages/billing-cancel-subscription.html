@@ -1,4 +1,4 @@
-<div class="cancel-subscription-block">
+<div class="cancel-subscription-block" ng-if="cancelSubscription">
     <div class="cancel-subscription-header">
         We're sorry to see you go!
     </div>
@@ -15,5 +15,17 @@
     </div>
     <div class="confirm-cancel">
         <md-button ng-click="cancelSubscription($event)" class="md-raised md-warn no-margin-sides confirm-button">Confirm Cancellation</md-button>
+    </div>
+</div>
+<div class="cancel-subscription-block" ng-if="!cancelSubscription">
+    <div class="cancel-subscription-header">
+        We're sorry to see you go!
+    </div>
+    <div class="cancel-subscription-description">
+        We hope to see you again soon. Please know that you're always welcome to return if you decide to use our services again in the future. We've valued your time with us and we're confident that our paths may cross again. Until then, we wish you all the best in your future endeavors. If you have any questions or need further assistance, our support team is always ready to help you. Thank you for your time and patronage.
+    </div>
+
+    <div class="cancel-subscription-description">
+       You can subscribe plan again from <a ng-click="goBilling()" href>Billing Page</a>
     </div>
 </div>
