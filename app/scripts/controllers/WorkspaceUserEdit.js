@@ -52,7 +52,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/updateUser/" + $stateParams['userId'], values).then(function() {
+      Backend.post("/workspaceUser/" + $stateParams['userId'], values).then(function() {
        console.log("added user..");
         $mdToast.show(
           $mdToast.simple()
@@ -116,9 +116,9 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
 
   function load() {
     $q.all([
-      Backend.get("/workspaceUser/userData/" + $stateParams['userId']),
-      Backend.get("/extension/listExtensions?all=1"),
-      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/workspaceUser/" + $stateParams['userId']),
+      Backend.get("/extension/list?all=1"),
+      Backend.get("/did/list?all=1"),
       Backend.get("/getPOPs")
       ]).then(function(res) {
         $scope.values.user = res[0].data;

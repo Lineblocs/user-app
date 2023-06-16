@@ -39,7 +39,7 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
       .join(' ');
     console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-    Backend.post("/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+    Backend.post("/did/" + $stateParams['numberId'], params).then(function() {
         console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()
@@ -76,7 +76,7 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
         "category": "did",
         "onSuccess": function(flowId) {
 
-          Backend.get("/flow/listFlows?all=1").then(function(res) {
+          Backend.get("/flow/list?all=1").then(function(res) {
             console.log("setting flow ", flowId);
             $scope.flows = res.data.data;
             angular.forEach($scope.flows, function(flow) {
@@ -103,8 +103,8 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
 
   $shared.isLoading = true;
   $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-    Backend.get("/did/numberData/" + $stateParams['numberId'])
+    Backend.get("/flow/list?all=1"),
+    Backend.get("/did/" + $stateParams['numberId'])
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
     $scope.number = res[1].data;

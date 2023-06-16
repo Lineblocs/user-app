@@ -72,7 +72,7 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         $shared.isLoading = true;
-      Backend.delete("/extension/deleteExtension/" + extension.public_id).then(function() {
+      Backend.delete("/extension/" + extension.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()

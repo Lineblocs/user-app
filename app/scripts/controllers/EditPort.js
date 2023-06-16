@@ -68,7 +68,7 @@ angular.module('Lineblocs').controller('EditPortCtrl', function ($scope, Backend
     }
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
-    Backend.postFiles("/port/updateNumber/" + $stateParams['numberId'], params, true).then(function () {
+    Backend.postFiles("/port/" + $stateParams['numberId'], params, true).then(function () {
       console.log("updated number..");
       $mdToast.show(
         $mdToast.simple()
@@ -95,7 +95,7 @@ angular.module('Lineblocs').controller('EditPortCtrl', function ($scope, Backend
     return url;
   }
   $shared.isLoading = true;
-  Backend.get("/port/numberData/" + $stateParams['numberId']).then(function (res) {
+  Backend.get("/port/" + $stateParams['numberId']).then(function (res) {
     $scope.number = res.data;
     angular.forEach($shared.billingCountries, function (country) {
       if (country.iso === $scope.number.country) {

@@ -44,7 +44,7 @@ angular.module('Lineblocs').controller('PhoneGroupsCtrl', function ($scope, Back
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/phoneGroup/deletePhoneGroup/" + group.id).then(function() {
+      Backend.delete("/phoneGroup/" + group.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

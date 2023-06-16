@@ -13,7 +13,7 @@ angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, B
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/workspaceParam/listParams").then(function(res) {
+        Backend.get("/workspaceParam/list").then(function(res) {
           $scope.params = res.data;
           $shared.endIsLoading();
           resolve();
@@ -24,7 +24,7 @@ angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, B
   }
   $scope.saveParams = function() {
       var data = angular.copy($scope.params);
-      Backend.post("/workspaceParam/saveParams", data).then(function() {
+      Backend.post("/workspaceParam/", data).then(function() {
           $mdToast.show(
           $mdToast.simple()
             .textContent('Workspace params saved successfully..')

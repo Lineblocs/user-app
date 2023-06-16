@@ -14,7 +14,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/workspaceUser/listUsers").then(function(res) {
+        Backend.get("/workspaceUser/list").then(function(res) {
           $scope.users = res.data;
           $shared.endIsLoading();
           resolve();
@@ -34,7 +34,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         $shared.isLoading = true;
-      Backend.delete("/workspaceUser/deleteUser/" + user.public_id).then(function() {
+      Backend.delete("/workspaceUser/" + user.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()
@@ -50,7 +50,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
   }
   $scope.resendInvite = function(user) {
     // Appending dialog to document.body to cover sidenav in docs app
-      Backend.post("/workspaceUser/resendInvite/" + user.public_id).then(function() {
+      Backend.post("/workspaceUser/" + user.public_id + "/resendInvite").then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()

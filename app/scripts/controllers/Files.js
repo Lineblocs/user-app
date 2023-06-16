@@ -15,7 +15,7 @@ angular.module('Lineblocs').controller('FilesCtrl', function ($scope, Backend, $
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/file/listFiles").then(function(res) {
+        Backend.get("/file/list").then(function(res) {
           $scope.files = res.data.data;
           $shared.endIsLoading();
           //loadPicker();
@@ -57,7 +57,7 @@ angular.module('Lineblocs').controller('FilesCtrl', function ($scope, Backend, $
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/file/deleteFile/" + file.id).then(function() {
+      Backend.delete("/file/" + file.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
@@ -213,7 +213,7 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
           "accessToken": oauthToken
         };
         $shared.isCreateLoading = true;
-        Backend.post("/file/uploadByGoogleDrive", data).then(function(res) {
+        Backend.post("/file/uploadFromGoogleDrive", data).then(function(res) {
           var data = res.data;
           $shared.endIsCreateLoading();
           if (data.amountFailed > 0) {

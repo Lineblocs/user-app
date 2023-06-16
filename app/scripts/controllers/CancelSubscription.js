@@ -22,7 +22,7 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
       .cancel('Dismiss');
     $mdDialog.show(confirm).then(function () {
       $shared.isCreateLoading = true;
-      Backend.post("/billing/discontinue").then(function (res) {
+      Backend.post("/billingDiscontinue").then(function (res) {
         $mdToast.show($mdToast.simple().textContent('Subscription cancelled').position("top right").hideDelay(3000));
         $scope.cancelSubscription = false;
         $shared.endIsCreateLoading();

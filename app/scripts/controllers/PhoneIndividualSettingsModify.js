@@ -32,7 +32,7 @@ angular.module('Lineblocs').controller('PhoneIndividualSettingsModifyCtrl', func
     $scope.values['group_id'] = phoneGroup;
   }
     $shared.isLoading = true;
-  Backend.get("/phoneIndividualSetting/phoneIndividualSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
+  Backend.get("/phoneIndividualSetting/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
     if (item.phone_type) {

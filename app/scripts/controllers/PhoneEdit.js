@@ -51,7 +51,7 @@ angular.module('Lineblocs').controller('PhoneEditCtrl', function ($scope, Backen
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isLoading = true;
-      Backend.post("/phone/updatePhone/" + $stateParams['phoneId'], values).then(function() {
+      Backend.post("/phone/" + $stateParams['phoneId'], values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
@@ -85,8 +85,8 @@ angular.module('Lineblocs').controller('PhoneEditCtrl', function ($scope, Backen
   $timeout(function() {
     $q.all([
       Backend.get("/phone/phoneDefs"),
-      Backend.get("/phoneGroup/listPhoneGroups?all=1"),
-      Backend.get("/phone/phoneData/" + $stateParams['phoneId'])
+      Backend.get("/phoneGroup/list?all=1"),
+      Backend.get("/phone/" + $stateParams['phoneId'])
     ]).then(function(res) {
       $scope.phoneDefs = res[0].data;
       $scope.phoneGroups = res[1].data.data;
