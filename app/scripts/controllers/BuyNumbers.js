@@ -111,7 +111,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
     data['vanity_prefix'] = $scope.settings['vanity_prefix'];
     data['vanity_pattern'] = $scope.settings['vanity_pattern'];
     $shared.isCreateLoading = true;
-    Backend.get("/did/available", {
+    Backend.get("/did/availableNumbers", {
       "params": data
     }).then(function (res) {
       $scope.numbers = res.data;
@@ -161,12 +161,12 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
       params['features'] = number.features.join(",");
       params['type'] = number.type;
       $shared.isCreateLoading = true;
-      Backend.post("/did/saveNumber", params).then(function (res) {
+      Backend.post("/did/", params).then(function (res) {
         if (!res.data.success) {
           $shared.showError("Purchase Error", res.data.message);
           return;
         }
-        Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function (res) {
+        Backend.get("/did/" + res.headers("X-Number-ID")).then(function (res) {
           var number = res.data;
           $shared.endIsCreateLoading();
           resolve(number);

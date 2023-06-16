@@ -24,7 +24,7 @@ angular.module('Lineblocs')
 			var data = {};
 			data['byo_enabled'] = $scope.workspace.byo_enabled;
 			data['outbound_macro_id'] = $scope.workspace.outbound_macro_id;
-			Backend.post("/updateWorkspace2", data).then(function( res ) {
+			Backend.post("/updateWorkspace", data).then(function( res ) {
 					$mdToast.show(
 					$mdToast.simple()
 						.textContent('Updated your info')
@@ -45,7 +45,7 @@ angular.module('Lineblocs')
 	$shared.isLoading = true;
 	$q.all([
 		Backend.get("/workspace"),
-		Backend.get("/function/listFunctions?all=1")
+		Backend.get("/function/list?all=1")
 	]).then(function(res) {
 		$scope.workspace = res[0].data;
 		console.log("workspace is ", $scope.workspace);

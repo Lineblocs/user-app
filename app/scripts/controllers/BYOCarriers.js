@@ -47,7 +47,7 @@ angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Back
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+      Backend.delete("/byo/carrier/" + carrier.public_id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

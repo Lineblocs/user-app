@@ -39,7 +39,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
       $scope.submit= function() {
         const data = angular.copy($scope.data);
         data.number = $scope.countryCode + data.number;
-        Backend.post("/settings/blockedNumbers", data).then(function(res) {
+        Backend.post("/settings/blockedNumbers/", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Number verified')
@@ -60,7 +60,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/settings/blockedNumbers").then(function(res) {
+        Backend.get("/settings/blockedNumbers/list").then(function(res) {
           $scope.numbers = res.data;
           $shared.endIsLoading();
           resolve();

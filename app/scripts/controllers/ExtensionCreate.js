@@ -63,7 +63,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.postCouldError("/extension/saveExtension", values).then(function(res) {
+        Backend.postCouldError("/extension/", values).then(function(res) {
         console.log("updated extension..");
         console.log("save ext ", res);
         var id = res.headers("x-extension-id");
@@ -160,7 +160,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
 
   function load() {
     return $q(function(resolve, reject) {
-      Backend.get("/flow/listFlows?category=extension").then(function(res) {
+      Backend.get("/flow/list?category=extension").then(function(res) {
         $scope.flows = res.data.data;
           $shared.endIsLoading();
           resolve();

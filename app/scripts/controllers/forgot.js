@@ -21,7 +21,7 @@ angular.module('Lineblocs')
 			var data = angular.copy( $scope.user );
 			$scope.isLoading = true;
 			var resetMsg = ""
-			Backend.post("/forgot", data, true).then(function( res ) {
+			Backend.post("/account/forgotPassword", data, true).then(function( res ) {
 				var token = res.data;
 				$scope.isLoading = false;
 				$shared.showMsg('Reset instructions', 'We have sent you instructions to reset your password');

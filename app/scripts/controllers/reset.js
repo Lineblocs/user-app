@@ -40,7 +40,7 @@ angular.module('Lineblocs')
 			console.log("requesting reset ", data);
 			$scope.couldNotReset = false;
 			$scope.couldNotResetMsg = "";
-			Backend.post("/reset", data, true).then(function( res ) {
+			Backend.post("/account/resetPassword", data, true).then(function( res ) {
 				var token = res.data;
 				$scope.isLoading = false;
 				/*

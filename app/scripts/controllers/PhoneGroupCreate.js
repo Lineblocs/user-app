@@ -40,7 +40,7 @@ angular.module('Lineblocs').controller('PhoneGroupsCreateCtrl', function ($scope
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/phoneGroup/savePhoneGroup", values).then(function() {
+      Backend.post("/phoneGroup/", values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()

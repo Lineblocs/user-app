@@ -40,7 +40,7 @@ angular.module('Lineblocs').controller('PhoneGroupsEditCtrl', function ($scope, 
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/phoneGroup/updatePhoneGroup/" + $stateParams['phoneGroupId'], values).then(function() {
+      Backend.post("/phoneGroup/" + $stateParams['phoneGroupId'], values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
@@ -55,7 +55,7 @@ angular.module('Lineblocs').controller('PhoneGroupsEditCtrl', function ($scope, 
   }
 
 
-      Backend.get("/phoneGroup/phoneGroupData/" + $stateParams['phoneGroupId']).then(function(res) {
+      Backend.get("/phoneGroup/" + $stateParams['phoneGroupId']).then(function(res) {
         $scope.values = res.data;
       });
 

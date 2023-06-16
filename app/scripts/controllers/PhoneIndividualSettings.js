@@ -11,7 +11,7 @@ angular.module('Lineblocs').controller('PhoneIndividualSettingsCtrl', function (
     $shared.updateTitle("PhoneIndividualSettings");
     $scope.settings = [];
   $scope.load = function() {
-      Backend.get( "/phoneIndividualSetting/listPhoneIndividualSettings" ).then(function(res) {
+      Backend.get( "/phoneIndividualSetting/list" ).then(function(res) {
           $scope.settings = res.data.data;
           $shared.endIsLoading();
       });
@@ -31,7 +31,7 @@ angular.module('Lineblocs').controller('PhoneIndividualSettingsCtrl', function (
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/phoneGlobalSetting/deletePhoneSetting/" + phone.id).then(function() {
+      Backend.delete("/phoneGlobalSetting/" + phone.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

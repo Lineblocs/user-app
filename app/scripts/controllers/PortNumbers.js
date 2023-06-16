@@ -46,7 +46,7 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/port/deleteNumber/" + number.id).then(function() {
+      Backend.delete("/port/" + number.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

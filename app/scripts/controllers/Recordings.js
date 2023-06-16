@@ -48,7 +48,7 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+      Backend.delete("/recording/" + recording.id).then(function() {
         console.log("deleted recording..");
         $scope.load().then(function() {
           $mdToast.show(

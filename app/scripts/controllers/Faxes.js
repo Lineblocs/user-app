@@ -47,7 +47,7 @@ angular.module('Lineblocs').controller('FaxesCtrl', function ($scope, Backend, p
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/fax/deleteFax/" + fax.id).then(function() {
+      Backend.delete("/fax/" + fax.id).then(function() {
         console.log("deleted fax..");
         $scope.load().then(function() {
           $mdToast.show(

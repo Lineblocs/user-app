@@ -52,7 +52,7 @@ angular.module('Lineblocs').controller('IpWhitelistCtrl', function ($scope, Back
       return $q(function(resolve, reject) {
         $q.all([
           Backend.get("/self"),
-          Backend.get("/settings/ipWhitelist")
+          Backend.get("/settings/ipWhitelist/list")
          ]).then(function(res) {
           $scope.disabled = res[0].data.ip_whitelist_disabled;
           $scope.settings.disabled = $scope.disabled;

@@ -24,7 +24,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
         var toastPosStr = Object.keys(toastPos)
   $scope.values = {};
   $scope.load = function() {
-    Backend.get("/did/listNumbers?all=1").then((res) =>  {
+    Backend.get("/did/list?all=1").then((res) =>  {
       numbers = res.data.data;
       $shared.endIsLoading();
     });

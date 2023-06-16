@@ -24,7 +24,7 @@ angular.module('Lineblocs').controller('HostedTrunksEditCtrl', function ($scope,
   $scope.load = function() {
       var url ='/trunk/' + $stateParams['trunkId'];
       $q.all([
-        Backend.get("/did/listNumbers?all=1"),
+        Backend.get("/did/list?all=1"),
         Backend.get(url)
      ]).then(function(res) {
         console.log("trunk data ", res);

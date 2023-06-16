@@ -23,7 +23,7 @@ angular.module('Lineblocs').controller('DebuggerLogsCtrl', function ($scope, Bac
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'logs' );
       $q.all([
-      Backend.get("/flow/listFlows?all=1"),
+      Backend.get("/flow/list?all=1"),
       pagination.loadData()
       ]).then(function(res) {
         $scope.flows = res[0].data.data;

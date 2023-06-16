@@ -15,7 +15,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
-          Backend.get("/flow/listFlows?all=1"),
+          Backend.get("/flow/list?all=1"),
           Backend.get("/settings/extensionCodes")
 
         ]).then(function(res) {
@@ -44,7 +44,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
     });
     var data = {"codes": codes};
     $shared.isCreateLoading = true;
-    Backend.post("/settings/extensionCodes", data).then(function(res) {
+    Backend.post("/settings/extensionCodes/", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension codes updated..')

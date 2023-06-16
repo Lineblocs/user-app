@@ -80,7 +80,7 @@ angular.module('Lineblocs')
 		data['amount'] =  amount;
 		$scope.data.creditAmount.value;
 		$shared.isCreateLoading =true;
-		Backend.post("/credit/addCredit", data).then(function(res) {
+		Backend.post("/credit/", data).then(function(res) {
 			console.log("added credit amount");
 					loadData(true).then(function() {
 						$mdToast.show(
@@ -103,7 +103,7 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				Backend.post("/card/addCard", data).then(function(res) {
+				Backend.post("/card/", data).then(function(res) {
 					resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
@@ -392,7 +392,7 @@ angular.module('Lineblocs')
 	}
 	$scope.setPrimary = function(card)
 	{
-      Backend.put("/card/setPrimary/" + card.id).then(function() {
+      Backend.put("/card/" + card.id + "/setPrimary").then(function() {
 				loadData(true).then(function() {
 		 $mdToast.show(
           $mdToast.simple()
@@ -405,7 +405,7 @@ angular.module('Lineblocs')
 	}
 	$scope.deleteCard = function(card)
 	{
-      Backend.delete("/card/deleteCard/" + card.id).then(function() {
+      Backend.delete("/card/" + card.id).then(function() {
 				loadData(true).then(function() {
 		 $mdToast.show(
           $mdToast.simple()
