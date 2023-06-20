@@ -38,7 +38,7 @@ angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scop
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/byo/did/", values).then(function() {
+      Backend.post("/byo/did", values).then(function() {
        console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()

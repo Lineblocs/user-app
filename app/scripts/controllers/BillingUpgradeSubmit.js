@@ -49,7 +49,7 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				Backend.post("/card/", data).then(function(res) {
+				Backend.post("/card", data).then(function(res) {
 					resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {

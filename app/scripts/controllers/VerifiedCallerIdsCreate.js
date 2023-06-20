@@ -45,7 +45,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCreateCtrl', function (
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/extension/", values).then(function() {
+      Backend.post("/extension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
           $mdToast.simple()

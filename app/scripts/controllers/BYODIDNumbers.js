@@ -18,7 +18,7 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/byo/did/listNumbers" );
+      pagination.changeUrl( "/byo/did/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {

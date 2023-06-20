@@ -161,7 +161,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
       params['features'] = number.features.join(",");
       params['type'] = number.type;
       $shared.isCreateLoading = true;
-      Backend.post("/did/", params).then(function (res) {
+      Backend.post("/did", params).then(function (res) {
         if (!res.data.success) {
           $shared.showError("Purchase Error", res.data.message);
           return;

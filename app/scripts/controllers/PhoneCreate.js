@@ -51,7 +51,7 @@ angular.module('Lineblocs').controller('PhoneCreateCtrl', function ($scope, Back
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/phone/", values).then(function() {
+      Backend.post("/phone", values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()

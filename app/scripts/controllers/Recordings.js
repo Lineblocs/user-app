@@ -23,7 +23,7 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changeUrl( "/recording/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'recordings' );
         pagination.loadData().then(function(res) {
