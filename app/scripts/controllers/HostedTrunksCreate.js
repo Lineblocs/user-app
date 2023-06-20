@@ -53,6 +53,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
    };
    if(!params.recovery_sip_uri || !params.sip_uri || !params.termination_sip_uri || !params.name){
       $scope.errorMessage = 'Please fill in all fields before submitting';
+      return;
    }
    params['did_numbers'] =$scope.numbers.filter( function( number ) {
     return number.checked;
