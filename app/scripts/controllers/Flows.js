@@ -21,7 +21,7 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
     return $q(function(resolve, reject) {
       $shared.isLoading =true;
         pagination.resetSearch();
-        pagination.changeUrl( "/flow/listFlows" );
+        pagination.changeUrl( "/flow/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'flows' );
         pagination.loadData().then(function(res) {

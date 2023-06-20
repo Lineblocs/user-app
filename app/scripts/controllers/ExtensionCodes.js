@@ -44,7 +44,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
     });
     var data = {"codes": codes};
     $shared.isCreateLoading = true;
-    Backend.post("/settings/extensionCodes/", data).then(function(res) {
+    Backend.post("/settings/extensionCodes", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension codes updated..')

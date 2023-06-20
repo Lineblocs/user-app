@@ -19,7 +19,7 @@ angular.module('Lineblocs').controller('MyNumbersCtrl', function ($scope, Backen
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changeUrl( "/did/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {

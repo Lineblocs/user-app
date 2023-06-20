@@ -39,7 +39,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/", values).then(function(res) {
+      Backend.post("/workspaceUser", values).then(function(res) {
        console.log("added user..");
        var id = res.headers('X-WorkspaceUser-ID');
         $mdToast.show(

@@ -85,11 +85,12 @@ function getWorkspace() {
 }
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
+var version = "v1";
 if (check1 || check2) {
-    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api/" + version
 } else {
     //var baseUrl = "/api";
-    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api/" + version;
 }
 
 function createUrl(path) {
@@ -2099,7 +2100,7 @@ var regParams = {
         data['template_id'] = $scope.selectedTemplate.id;
       }
       $shared.isCreateLoading = true;
-      Backend.post("/flow/", data).then(function (res) {
+      Backend.post("/flow", data).then(function (res) {
         $shared.isCreateLoading = false;
         console.log("response arguments ", arguments);
         console.log("response headers ", res.headers('X-Flow-ID'));
@@ -2225,7 +2226,7 @@ angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope,
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/byo/carrier/", values).then(function() {
+      Backend.post("/byo/carrier", values).then(function() {
        console.log("updated carrier..");
         $mdToast.show(
           $mdToast.simple()
@@ -2359,7 +2360,7 @@ angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Back
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changeUrl( "/byo/carrier/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'carriers' );
       pagination.loadData().then(function(res) {
@@ -2446,7 +2447,7 @@ angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scop
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/byo/did/", values).then(function() {
+      Backend.post("/byo/did", values).then(function() {
        console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()
@@ -2554,7 +2555,7 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/byo/did/listNumbers" );
+      pagination.changeUrl( "/byo/did/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
@@ -2760,7 +2761,7 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				Backend.post("/card/", data).then(function(res) {
+				Backend.post("/card", data).then(function(res) {
 					resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
@@ -3221,7 +3222,7 @@ angular.module('Lineblocs')
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
 				$shared.isCreateLoading =true;
-				Backend.post("/card/", data).then(function(res) {
+				Backend.post("/card", data).then(function(res) {
 					resolve(res);
 					$shared.endIsCreateLoading();
 				}, function(err) {
@@ -3447,7 +3448,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
       $scope.submit= function() {
         const data = angular.copy($scope.data);
         data.number = $scope.countryCode + data.number;
-        Backend.post("/settings/blockedNumbers/", data).then(function(res) {
+        Backend.post("/settings/blockedNumbers", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Number verified')
@@ -3690,7 +3691,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
       params['features'] = number.features.join(",");
       params['type'] = number.type;
       $shared.isCreateLoading = true;
-      Backend.post("/did/", params).then(function (res) {
+      Backend.post("/did", params).then(function (res) {
         if (!res.data.success) {
           $shared.showError("Purchase Error", res.data.message);
           return;
@@ -3929,7 +3930,7 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
   $scope.$shared = $shared;
   $scope.load = function() {
       pagination.resetSearch();
-      pagination.changeUrl( "/call/listCalls" );
+      pagination.changeUrl( "/call/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'calls' );
       pagination.loadData().then(function(res) {
@@ -4391,7 +4392,7 @@ angular.module('Lineblocs').controller('DebuggerLogsCtrl', function ($scope, Bac
   $scope.load = function() {
     $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/log/listLogs" );
+      pagination.changeUrl( "/log/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'logs' );
       $q.all([
@@ -4567,7 +4568,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
     });
     var data = {"codes": codes};
     $shared.isCreateLoading = true;
-    Backend.post("/settings/extensionCodes/", data).then(function(res) {
+    Backend.post("/settings/extensionCodes", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Extension codes updated..')
@@ -4663,7 +4664,7 @@ angular.module('Lineblocs').controller('ExtensionCreateCtrl', function ($scope, 
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.postCouldError("/extension/", values).then(function(res) {
+        Backend.postCouldError("/extension", values).then(function(res) {
         console.log("updated extension..");
         console.log("save ext ", res);
         var id = res.headers("x-extension-id");
@@ -4920,7 +4921,7 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
   $scope.load = function() {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/extension/listExtensions" );
+      pagination.changeUrl( "/extension/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'extensions');
       return $q(function(resolve, reject) {
@@ -5007,7 +5008,7 @@ angular.module('Lineblocs').controller('FaxesCtrl', function ($scope, Backend, p
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-        pagination.changeUrl( "/fax/listFaxes" );
+        pagination.changeUrl( "/fax/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'faxes' );
         pagination.loadData().then(function(res) {
@@ -5368,7 +5369,7 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
     return $q(function(resolve, reject) {
       $shared.isLoading =true;
         pagination.resetSearch();
-        pagination.changeUrl( "/flow/listFlows" );
+        pagination.changeUrl( "/flow/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'flows' );
         pagination.loadData().then(function(res) {
@@ -5458,7 +5459,7 @@ angular.module('Lineblocs').controller('GeoPermissionCtrl', function ($scope, Ba
         return object;
       });
 
-      Backend.post('/workspaceRoutingACL/', requestData)
+      Backend.post('/workspaceRoutingACL/saveACLs', requestData)
         .then(function(response) {
           console.log('Success:', response);
         }, function(error) {
@@ -5880,7 +5881,7 @@ angular.module('Lineblocs').controller('MyNumbersCtrl', function ($scope, Backen
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/did/listNumbers" );
+      pagination.changeUrl( "/did/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
@@ -6095,7 +6096,7 @@ angular.module('Lineblocs').controller('PhoneCreateCtrl', function ($scope, Back
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/phone/", values).then(function() {
+      Backend.post("/phone", values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
@@ -6388,7 +6389,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCreateCtrl', function
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/phoneGlobalSetting/", values).then(function(res) {
+        Backend.post("/phoneGlobalSetting", values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
@@ -6464,7 +6465,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsModifyCtrl', function
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/phoneGlobalSetting/", values).then(function(res) {
+        Backend.post("/phoneGlobalSetting", values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
@@ -6682,7 +6683,7 @@ angular.module('Lineblocs').controller('PhoneGroupsCreateCtrl', function ($scope
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/phoneGroup/", values).then(function() {
+      Backend.post("/phoneGroup", values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
@@ -6782,7 +6783,7 @@ angular.module('Lineblocs').controller('PhoneGroupsCtrl', function ($scope, Back
   $scope.load = function() {
    $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/phoneGroup/listPhoneGroups" );
+      pagination.changeUrl( "/phoneGroup/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'phoneGroups' );
       pagination.loadData().then(function(res) {
@@ -7079,7 +7080,7 @@ angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, 
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
           pagination.resetSearch();
-          pagination.changeUrl( "/phone/listPhones" );
+          pagination.changeUrl( "/phone/list" );
           pagination.changePage( 1 );
           pagination.changeScope( $scope, 'phones' );
           pagination.loadData().then(function(res) {
@@ -7149,7 +7150,7 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/port/listNumbers" );
+      pagination.changeUrl( "/port/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
@@ -7220,7 +7221,7 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changeUrl( "/recording/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'recordings' );
         pagination.loadData().then(function(res) {
@@ -7459,7 +7460,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCreateCtrl', function (
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/extension/", values).then(function() {
+      Backend.post("/extension", values).then(function() {
        console.log("updated extension..");
         $mdToast.show(
           $mdToast.simple()
@@ -7567,7 +7568,7 @@ angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, B
   }
   $scope.saveParams = function() {
       var data = angular.copy($scope.params);
-      Backend.post("/workspaceParam/", data).then(function() {
+      Backend.post("/workspaceParam", data).then(function() {
           $mdToast.show(
           $mdToast.simple()
             .textContent('Workspace params saved successfully..')
@@ -7850,7 +7851,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/", values).then(function(res) {
+      Backend.post("/workspaceUser", values).then(function(res) {
        console.log("added user..");
        var id = res.headers('X-WorkspaceUser-ID');
         $mdToast.show(

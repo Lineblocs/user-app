@@ -22,7 +22,7 @@ angular.module('Lineblocs').controller('FaxesCtrl', function ($scope, Backend, p
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-        pagination.changeUrl( "/fax/listFaxes" );
+        pagination.changeUrl( "/fax/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'faxes' );
         pagination.loadData().then(function(res) {

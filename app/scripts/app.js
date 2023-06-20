@@ -85,11 +85,12 @@ function getWorkspace() {
 }
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
+var version = "v1";
 if (check1 || check2) {
-    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api/" + version
 } else {
     //var baseUrl = "/api";
-    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api";
+    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api/" + version;
 }
 
 function createUrl(path) {

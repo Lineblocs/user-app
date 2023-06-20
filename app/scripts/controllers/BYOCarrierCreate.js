@@ -40,7 +40,7 @@ angular.module('Lineblocs').controller('BYOCarrierCreateCtrl', function ($scope,
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/byo/carrier/", values).then(function() {
+      Backend.post("/byo/carrier", values).then(function() {
        console.log("updated carrier..");
         $mdToast.show(
           $mdToast.simple()

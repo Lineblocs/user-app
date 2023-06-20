@@ -18,7 +18,7 @@ angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, 
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
           pagination.resetSearch();
-          pagination.changeUrl( "/phone/listPhones" );
+          pagination.changeUrl( "/phone/list" );
           pagination.changePage( 1 );
           pagination.changeScope( $scope, 'phones' );
           pagination.loadData().then(function(res) {

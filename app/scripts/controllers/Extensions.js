@@ -28,7 +28,7 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
   $scope.load = function() {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/extension/listExtensions" );
+      pagination.changeUrl( "/extension/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'extensions');
       return $q(function(resolve, reject) {

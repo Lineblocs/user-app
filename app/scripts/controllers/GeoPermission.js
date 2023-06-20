@@ -36,7 +36,7 @@ angular.module('Lineblocs').controller('GeoPermissionCtrl', function ($scope, Ba
         return object;
       });
 
-      Backend.post('/workspaceRoutingACL/', requestData)
+      Backend.post('/workspaceRoutingACL/saveACLs', requestData)
         .then(function(response) {
           console.log('Success:', response);
         }, function(error) {

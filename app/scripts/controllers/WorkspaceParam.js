@@ -24,7 +24,7 @@ angular.module('Lineblocs').controller('WorkspaceParamCtrl', function ($scope, B
   }
   $scope.saveParams = function() {
       var data = angular.copy($scope.params);
-      Backend.post("/workspaceParam/", data).then(function() {
+      Backend.post("/workspaceParam", data).then(function() {
           $mdToast.show(
           $mdToast.simple()
             .textContent('Workspace params saved successfully..')

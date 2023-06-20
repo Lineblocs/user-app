@@ -32,7 +32,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCreateCtrl', function
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/phoneGlobalSetting/", values).then(function(res) {
+        Backend.post("/phoneGlobalSetting", values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
