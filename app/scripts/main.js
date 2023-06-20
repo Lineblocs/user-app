@@ -9790,7 +9790,7 @@ angular.module('Lineblocs')
 			console.log("plan option is ", data.plan);
 			data.workspace = $scope.workspace;
 				$shared.changingPage = true;
-			Backend.post("/updateWorkspace", data).then(function( res ) {
+			Backend.post("/setupWorkspace", data).then(function( res ) {
 				$shared.changingPage = false;
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
