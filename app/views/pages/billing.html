@@ -23,8 +23,6 @@
             <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
             </div>
         </div>
-        <span class="spacer"></span>
-        <a layout="row" ng-click="cancelSubscription($event)" class="md-raised md-warn no-margin-sides"><i class="mdi mdi-delete-forever delete-subscription"></i>Cancel Subscription</a>
     </div>
 
     <md-card md-theme="'default'" md-theme-watch class="card-radius">
@@ -463,6 +461,7 @@
                 <md-checkbox ng-model="settings.db.invoices_by_email" aria-label="Receive Invoices By Email">
                     Receive Invoices By Email
                 </md-checkbox>
+                <a class="cancel-subscribe" ng-click="cancelSubscription($event)" href>Cancel Subscription</a>
                 <div ng-show="$shared.planName()==='pay-as-you-go'">
                     <md-input-container>
                         <label>Billing Package</label>
