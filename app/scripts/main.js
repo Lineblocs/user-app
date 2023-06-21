@@ -6663,8 +6663,9 @@ angular.module('Lineblocs').controller('PhoneGroupsCreateCtrl', function ($scope
   }
   $scope.triedSubmit = false;
   $scope.onNumberChange = function() {
-    $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 10));
-    if (!$scope.values.number) $scope.values.number = '';
+    if ($scope.values.number) {
+      $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 4));
+    }
   }
   $scope.submit = function(form) {
     console.log("submitting phone form ", arguments);
@@ -6722,8 +6723,9 @@ angular.module('Lineblocs').controller('PhoneGroupsEditCtrl', function ($scope, 
   }
   $scope.triedSubmit = false;
   $scope.onNumberChange = function() {
-    $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 10));
-    if (!$scope.values.number) $scope.values.number = '';
+    if ($scope.values.number) {
+      $scope.values.number = Number($scope.values.number.replace(/[^0-9]/g, '').slice(0, 4));
+    }
   }
   $scope.submit = function(form) {
     console.log("submitting phone form ", arguments);
