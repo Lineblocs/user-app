@@ -137,7 +137,7 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
 
     $shared.isLoading = true;
     var errorMsg = "One of the documents could not be uploaded please be sure to upload a file size less than 10MB and use one of the following file formats: pdf,doc,doc";
-    Backend.postFiles("/port/saveNumber", params, true).then(function () {
+    Backend.postFiles("/port/", params, true).then(function () {
         console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()

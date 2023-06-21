@@ -32,7 +32,7 @@ angular.module('Lineblocs').controller('PhoneIndividualSettingsModifyCategoryCtr
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isLoading = true;
-        Backend.post("/phoneIndividualSetting/updatePhoneIndividualSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
+        Backend.post("/phoneIndividualSetting/" + $stateParams['phoneSettingId'], values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
@@ -88,7 +88,7 @@ $scope.createOptions = function(field)
   }
 
     $shared.isLoading = true;
-  Backend.get("/phoneIndividualSetting/phoneIndividualSettingData/"+$stateParams['phoneSettingId']).then(function(res) {
+  Backend.get("/phoneIndividualSetting/"+$stateParams['phoneSettingId']).then(function(res) {
     var item = res.data;
     var qsMap = {};
     if (item.phone_type) {

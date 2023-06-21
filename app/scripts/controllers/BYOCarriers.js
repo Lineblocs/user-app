@@ -18,7 +18,7 @@ angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Back
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/byo/carrier/listCarriers" );
+      pagination.changeUrl( "/byo/carrier/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'carriers' );
       pagination.loadData().then(function(res) {
@@ -47,7 +47,7 @@ angular.module('Lineblocs').controller('BYOCarriersCtrl', function ($scope, Back
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/byo/carrier/deleteCarrier/" + carrier.public_id).then(function() {
+      Backend.delete("/byo/carrier/" + carrier.public_id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

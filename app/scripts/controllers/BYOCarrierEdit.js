@@ -28,7 +28,7 @@ angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, B
       .join(' ');
     console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-    Backend.post("/byo/carrier/updateCarrier/" + $stateParams['carrierId'], params).then(function() {
+    Backend.post("/byo/carrier/" + $stateParams['carrierId'], params).then(function() {
         console.log("updated carrier..");
         $mdToast.show(
           $mdToast.simple()
@@ -64,7 +64,7 @@ angular.module('Lineblocs').controller('BYOCarrierEditCtrl', function ($scope, B
   }
 
   $shared.isLoading = true;
-  Backend.get("/byo/carrier/carrierData/" + $stateParams['carrierId']).then(function(res) {
+  Backend.get("/byo/carrier/" + $stateParams['carrierId']).then(function(res) {
     $scope.carrier = res.data;
     $shared.endIsLoading();
   });

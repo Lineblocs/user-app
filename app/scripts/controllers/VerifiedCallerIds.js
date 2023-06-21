@@ -33,7 +33,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
       $scope.postStep1 = function() {
         const data = angular.copy($scope.data.step1);
         data.number = $scope.countryCode + data.number;
-        Backend.post("/settings/verifiedCallerids", data).then(function(res) {
+        Backend.post("/settings/verifiedCallerIDs", data).then(function(res) {
           $scope.step = 2;
         });
       }
@@ -56,7 +56,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
          'code': $scope.data.step2['code'],
          'number': $scope.data.step1['number']
         };
-        Backend.post("/settings/verifiedCallerids/confirm", data).then(function(res) {
+        Backend.post("/settings/verifiedCallerIDs/confirm", data).then(function(res) {
           var data = res.data;
 
           if (data.success) {
@@ -88,7 +88,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/settings/verifiedCallerids").then(function(res) {
+        Backend.get("/settings/verifiedCallerIDs/list").then(function(res) {
           $scope.numbers = res.data;
           $shared.endIsLoading();
           resolve();
@@ -127,7 +127,7 @@ angular.module('Lineblocs').controller('VerifiedCallerIdsCtrl', function ($scope
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         $shared.isLoading = true;
-      Backend.delete("/settings/verifiedCallerids/" + number.public_id).then(function() {
+      Backend.delete("/settings/verifiedCallerIDs/" + number.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()

@@ -39,7 +39,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/workspaceUser/addUser", values).then(function(res) {
+      Backend.post("/workspaceUser", values).then(function(res) {
        console.log("added user..");
        var id = res.headers('X-WorkspaceUser-ID');
         $mdToast.show(
@@ -57,8 +57,8 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
   }
   $timeout(function() {
     $q.all([
-      Backend.get("/extension/listExtensions?all=1"),
-      Backend.get("/did/listNumbers?all=1"),
+      Backend.get("/extension/list?all=1"),
+      Backend.get("/did/list?all=1"),
     ]).then(function(res) {
       $shared.endIsLoading();
       $scope.extensions = res[0].data.data;

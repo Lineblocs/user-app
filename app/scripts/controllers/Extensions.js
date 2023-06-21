@@ -28,7 +28,7 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
   $scope.load = function() {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/extension/listExtensions" );
+      pagination.changeUrl( "/extension/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'extensions');
       return $q(function(resolve, reject) {
@@ -72,7 +72,7 @@ angular.module('Lineblocs').controller('ExtensionsCtrl', function ($scope, Backe
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
         $shared.isLoading = true;
-      Backend.delete("/extension/deleteExtension/" + extension.public_id).then(function() {
+      Backend.delete("/extension/" + extension.public_id).then(function() {
           $scope.load().then(function() {
            $mdToast.show(
           $mdToast.simple()

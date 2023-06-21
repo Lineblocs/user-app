@@ -23,7 +23,7 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-        pagination.changeUrl( "/recording/listRecordings" );
+        pagination.changeUrl( "/recording/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'recordings' );
         pagination.loadData().then(function(res) {
@@ -48,7 +48,7 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/recording/deleteRecording/" + recording.id).then(function() {
+      Backend.delete("/recording/" + recording.id).then(function() {
         console.log("deleted recording..");
         $scope.load().then(function() {
           $mdToast.show(

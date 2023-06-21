@@ -60,7 +60,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/settings/blockedNumbers").then(function(res) {
+        Backend.get("/settings/blockedNumbers/list").then(function(res) {
           $scope.numbers = res.data;
           $shared.endIsLoading();
           resolve();

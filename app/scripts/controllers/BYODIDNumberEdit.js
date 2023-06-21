@@ -26,7 +26,7 @@ angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope,
       .join(' ');
     console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-    Backend.post("/byo/did/updateNumber/" + $stateParams['numberId'], params).then(function() {
+    Backend.post("/byo/did/" + $stateParams['numberId'], params).then(function() {
         console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()
@@ -47,8 +47,8 @@ angular.module('Lineblocs').controller('BYODIDNumberEditCtrl', function ($scope,
   }
   $shared.isLoading = true;
   $q.all([
-    Backend.get("/flow/listFlows?all=1"),
-    Backend.get("/byo/did/numberData/" + $stateParams['numberId'])
+    Backend.get("/flow/list?all=1"),
+    Backend.get("/byo/did/" + $stateParams['numberId'])
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
     $scope.number = res[1].data;

@@ -12,7 +12,7 @@ angular.module('Lineblocs').controller('GeoPermissionCtrl', function ($scope, Ba
     console.log("STATE PARAMS ", $stateParams);
     $scope.geoCountries = [];
     $scope.load = function() {
-      Backend.get("/workspaceRoutingACL/listACLs").then((item) => {
+      Backend.get("/workspaceRoutingACL/list").then((item) => {
         item.data.forEach((country) => {
           if (country.preset_acl_enabled && country.enabled === null) country.enabled = country.preset_acl_enabled;
         });

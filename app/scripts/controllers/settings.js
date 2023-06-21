@@ -95,7 +95,7 @@ angular.module('Lineblocs')
       $scope.user.enable_2fa = true;
       if($scope.user.type_of_2fa === 'sms') {
         if(!$scope.user.mobile_number) return;
-        Backend.put("/self", { mobile_number: $scope.user.mobile_number }).then(function(res) {
+        Backend.post("/updateSelf", { mobile_number: $scope.user.mobile_number }).then(function(res) {
           save2FASettings();
         });
       } else {
@@ -183,8 +183,12 @@ angular.module('Lineblocs')
     data.enable_2fa = $scope.user.enable_2fa;
     if($scope.user.enable_2fa) data.type_of_2fa = $scope.user.type_of_2fa;
     Backend.post("/save2FASettings", data).then(function( res ) {
-      console.log('res', res);
-      // $scope.user.2FAConfig = res.data;
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('Saved successfully..')
+          .position("top right")
+          .hideDelay(3000)
+        );
     });
   }
 

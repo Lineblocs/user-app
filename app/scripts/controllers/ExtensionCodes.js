@@ -15,7 +15,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
         $q.all([
-          Backend.get("/flow/listFlows?all=1"),
+          Backend.get("/flow/list?all=1"),
           Backend.get("/settings/extensionCodes")
 
         ]).then(function(res) {

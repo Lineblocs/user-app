@@ -51,7 +51,7 @@ angular.module('Lineblocs').controller('PhoneCreateCtrl', function ($scope, Back
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/phone/savePhone", values).then(function() {
+      Backend.post("/phone", values).then(function() {
        console.log("updated phone..");
         $mdToast.show(
           $mdToast.simple()
@@ -89,7 +89,7 @@ angular.module('Lineblocs').controller('PhoneCreateCtrl', function ($scope, Back
   $timeout(function() {
     $q.all([
       Backend.get("/phone/phoneDefs"),
-      Backend.get("/phoneGroup/listPhoneGroups?all=1")
+      Backend.get("/phoneGroup/list?all=1")
     ]).then(function(res) {
       $scope.phoneDefs = res[0].data;
       $scope.phoneGroups = res[1].data.data;

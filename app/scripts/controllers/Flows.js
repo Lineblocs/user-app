@@ -21,7 +21,7 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
     return $q(function(resolve, reject) {
       $shared.isLoading =true;
         pagination.resetSearch();
-        pagination.changeUrl( "/flow/listFlows" );
+        pagination.changeUrl( "/flow/list" );
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'flows' );
         pagination.loadData().then(function(res) {
@@ -48,7 +48,7 @@ angular.module('Lineblocs').controller('FlowsCtrl', function ($scope, Backend, p
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/flow/deleteFlow/" + flow.id).then(function() {
+      Backend.delete("/flow/" + flow.id).then(function() {
            $mdToast.show(
           $mdToast.simple()
             .textContent('Flow deleted..')

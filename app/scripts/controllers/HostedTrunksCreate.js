@@ -24,7 +24,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
         var toastPosStr = Object.keys(toastPos)
   $scope.values = {};
   $scope.load = function() {
-    Backend.get("/did/listNumbers?all=1").then((res) =>  {
+    Backend.get("/did/list?all=1").then((res) =>  {
       numbers = res.data.data;
       $shared.endIsLoading();
     });
@@ -53,6 +53,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
    };
    if(!params.recovery_sip_uri || !params.sip_uri || !params.termination_sip_uri || !params.name){
       $scope.errorMessage = 'Please fill in all fields before submitting';
+      return;
    }
    params['did_numbers'] =$scope.numbers.filter( function( number ) {
     return number.checked;

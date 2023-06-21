@@ -24,8 +24,8 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
   $scope.load = function() {
   $shared.isLoading = true;
    $q.all([
-      Backend.get("/flow/listFlows?category=extension"),
-      Backend.get("/extension/extensionData/" + $stateParams['extensionId'])
+      Backend.get("/flow/list?category=extension"),
+      Backend.get("/extension/" + $stateParams['extensionId'])
    ]).then(function(res) {
       $scope.flows= res[0].data.data;
       $scope.extension = res[1].data;
@@ -71,7 +71,7 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/extension/updateExtension/" + $stateParams['extensionId'], values).then(function() {
+        Backend.post("/extension/" + $stateParams['extensionId'], values).then(function() {
         console.log("updated extension..");
           $mdToast.show(
             $mdToast.simple()

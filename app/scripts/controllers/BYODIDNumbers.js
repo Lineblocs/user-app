@@ -18,7 +18,7 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/byo/did/listNumbers" );
+      pagination.changeUrl( "/byo/did/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
@@ -69,7 +69,7 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/byo/did/deleteNumber/" + number.public_id).then(function() {
+      Backend.delete("/byo/did/" + number.public_id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
@@ -95,7 +95,7 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
         var params = new FormData();
       params.append("file", angular.element("#uploadFile").prop("files")[0]);
       $shared.isLoading = true;
-    Backend.postFiles("/byo/did/importNumbers", params, true).then(function () {
+    Backend.postFiles("/byo/did/import", params, true).then(function () {
         console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()

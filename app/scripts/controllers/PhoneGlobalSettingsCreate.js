@@ -32,7 +32,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCreateCtrl', function
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/phoneGlobalSetting/savePhoneGlobalSetting", values).then(function(res) {
+        Backend.post("/phoneGlobalSetting", values).then(function(res) {
         console.log("updated phone..");
           $mdToast.show(
             $mdToast.simple()
@@ -64,7 +64,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCreateCtrl', function
     $shared.isLoading = true;
     $q.all([
       Backend.get("/phone/phoneDefs"),
-      Backend.get("/phoneGroup/listPhoneGroups?all=1")
+      Backend.get("/phoneGroup/list?all=1")
     ]).then(function(res) {
       $scope.phoneDefs = res[0].data;
       $scope.phoneGroups = res[1].data.data;

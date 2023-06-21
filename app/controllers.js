@@ -87,7 +87,7 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
     data['prefix'] = "";
     data['country_iso'] = $scope.settings['country']['iso'];
     $shared.isCreateLoading = true;
-    Backend.get("/did/available", { "params": data }).then(function(res) {
+    Backend.get("/did/availableNumbers", { "params": data }).then(function(res) {
       $scope.numbers = res.data;
       $scope.didFetch = true;
       $shared.endIsCreateLoading();
@@ -110,8 +110,8 @@ angular.module('Lineblocs').controller('BuyNumbersCtrl', function ($scope, Backe
         params['monthly_cost'] = number.monthly_cost;
         params['provider'] = number.provider;
         params['country'] = number.country;
-        Backend.post("/did/saveNumber", params).then(function(res) {
-          Backend.get("/did/numberData/" + res.headers("X-Number-ID")).then(function(res) {
+        Backend.post("/did/", params).then(function(res) {
+          Backend.get("/did/" + res.headers("X-Number-ID")).then(function(res) {
               var number = res.data;
               purchaseConfirm($event, number);
           });

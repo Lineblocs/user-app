@@ -18,7 +18,7 @@ angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, 
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
           pagination.resetSearch();
-          pagination.changeUrl( "/phone/listPhones" );
+          pagination.changeUrl( "/phone/list" );
           pagination.changePage( 1 );
           pagination.changeScope( $scope, 'phones' );
           pagination.loadData().then(function(res) {
@@ -47,7 +47,7 @@ angular.module('Lineblocs').controller('PhonesCtrl', function ($scope, Backend, 
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/phone/deletePhone/" + phone.id).then(function() {
+      Backend.delete("/phone/" + phone.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

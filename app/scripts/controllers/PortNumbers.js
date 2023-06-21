@@ -19,7 +19,7 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
     return $q(function(resolve, reject) {
       $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/port/listNumbers" );
+      pagination.changeUrl( "/port/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'numbers' );
       pagination.loadData().then(function(res) {
@@ -46,7 +46,7 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/port/deleteNumber/" + number.id).then(function() {
+      Backend.delete("/port/" + number.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()

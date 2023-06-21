@@ -20,7 +20,7 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
   $scope.$shared = $shared;
   $scope.load = function() {
       pagination.resetSearch();
-      pagination.changeUrl( "/call/listCalls" );
+      pagination.changeUrl( "/call/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'calls' );
       pagination.loadData().then(function(res) {

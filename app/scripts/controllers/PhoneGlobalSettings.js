@@ -12,7 +12,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCtrl', function ($sco
     $scope.settings = [];
   $scope.load = function() {
     return $q(function(resolve, reject) {
-      Backend.get( "/phoneGlobalSetting/listPhoneGlobalSettings" ).then(function(res) {
+      Backend.get( "/phoneGlobalSetting/list" ).then(function(res) {
           $scope.settings = res.data.data;
           $shared.endIsLoading();
           resolve();
@@ -37,7 +37,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCtrl', function ($sco
           .cancel('No');
     $mdDialog.show(confirm).then(function() {
       $shared.isLoading = true;
-      Backend.delete("/phoneGlobalSetting/deletePhoneGlobalSetting/" + phoneSettings.id).then(function() {
+      Backend.delete("/phoneGlobalSetting/" + phoneSettings.id).then(function() {
           $scope.load().then(function() {
             $mdToast.show(
               $mdToast.simple()
@@ -54,7 +54,7 @@ angular.module('Lineblocs').controller('PhoneGlobalSettingsCtrl', function ($sco
   $timeout(function() {
     $q.all([
       Backend.get("/phone/phoneDefs"),
-      Backend.get("/phoneGroup/listPhoneGroups?all=1")
+      Backend.get("/phoneGroup/list?all=1")
     ]).then(function(res) {
       $scope.phoneDefs = res[0].data;
       $scope.phoneGroups = res[1].data.data;

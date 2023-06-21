@@ -12,7 +12,7 @@ angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend
   $scope.call = [];
   $scope.load = function() {
     $shared.isLoading =true;
-    Backend.get("/call/callData/" + $stateParams['callId']).then(function(res) {
+    Backend.get("/call/" + $stateParams['callId']).then(function(res) {
       console.log("call is ", res.data);
       $shared.isLoading =false;
       var call = res.data;
@@ -27,7 +27,7 @@ angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend
     var data = {
       notes: $scope.call.notes
     };
-    Backend.post("/call/updateCall/" + $stateParams['callId'], data).then(function(res) {
+    Backend.post("/call/" + $stateParams['callId'], data).then(function(res) {
       console.log("call is ", res.data);
         $mdToast.show(
           $mdToast.simple()

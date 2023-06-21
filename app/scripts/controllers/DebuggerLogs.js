@@ -19,11 +19,11 @@ angular.module('Lineblocs').controller('DebuggerLogsCtrl', function ($scope, Bac
   $scope.load = function() {
     $shared.isLoading = true;
       pagination.resetSearch();
-      pagination.changeUrl( "/log/listLogs" );
+      pagination.changeUrl( "/log/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'logs' );
       $q.all([
-      Backend.get("/flow/listFlows?all=1"),
+      Backend.get("/flow/list?all=1"),
       pagination.loadData()
       ]).then(function(res) {
         $scope.flows = res[0].data.data;

@@ -85,7 +85,7 @@
         data['template_id'] = $scope.selectedTemplate.id;
       }
       $shared.isCreateLoading = true;
-      Backend.post("/flow/saveFlow", data).then(function (res) {
+      Backend.post("/flow", data).then(function (res) {
         $shared.isCreateLoading = false;
         console.log("response arguments ", arguments);
         console.log("response headers ", res.headers('X-Flow-ID'));

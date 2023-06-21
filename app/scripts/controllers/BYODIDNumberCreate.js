@@ -38,7 +38,7 @@ angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scop
         .join(' ');
       console.log("toastPosStr", toastPosStr);
       $shared.isCreateLoading = true;
-      Backend.post("/byo/did/saveNumber", values).then(function() {
+      Backend.post("/byo/did", values).then(function() {
        console.log("updated number..");
         $mdToast.show(
           $mdToast.simple()
@@ -59,7 +59,7 @@ angular.module('Lineblocs').controller('BYODIDNumberCreateCtrl', function ($scop
     $state.go('flow-editor', {flowId: flowId});
   }
   $q.all([
-    Backend.get("/flow/listFlows?all=1"),
+    Backend.get("/flow/list?all=1"),
   ]).then(function(res) {
     $scope.flows = res[0].data.data;
     $shared.endIsLoading();

@@ -12,7 +12,7 @@ angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, 
   $scope.log = null;
   $scope.load = function() {
     $shared.isLoading =true;
-    Backend.get("/log/logData/" + $stateParams['logId']).then(function(res) {
+    Backend.get("/log/" + $stateParams['logId']).then(function(res) {
       console.log("log is ", res.data);
       $shared.isLoading =false;
       var log = res.data;
