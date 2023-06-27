@@ -1,20 +1,19 @@
-FROM scratch
-EXPOSE 8010
-
-FROM httpd:2.4
-WORKDIR /usr/local/apache2/htdocs/
-RUN apt-get -y update
-RUN apt-get -y install wget xz-utils git
-RUN wget -O /usr/share/node.tar.xz https://nodejs.org/dist/v11.10.1/node-v11.10.1-linux-x64.tar.xz
-RUN cd /usr/share/ && tar xvf /usr/share/node.tar.xz
+FROM --platform=linux/amd64 node:11.10.1 AS builder
+WORKDIR /app/
 COPY . .
 RUN chmod 0755 *.sh
-RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm config set unsafe-perm=true
-RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm install
-RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm install -g install gulp@3.9.1
-RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm install -g install node-sass@4.13.0 --unsafe-perm
-RUN PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ npm install -g install bower@1.8.8
-RUN ./deploy_docker.sh
+RUN npm config set unsafe-perm=true
+RUN npm install
+RUN npm install -g install gulp@3.9.1
+RUN npm install -g install node-sass@4.13.0 --unsafe-perm
+RUN npm install -g install bower@1.8.8
+RUN ./build_docker.sh
+
+FROM --platform=linux/amd64 httpd:2.4
+EXPOSE 8010
+WORKDIR /usr/local/apache2/htdocs/
+RUN apt-get -y update
+COPY --from=builder /app .
 
 COPY ports.conf /etc/apache2/ports.conf
 COPY apache.conf /usr/local/apache2/conf/httpd.conf
