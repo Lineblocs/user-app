@@ -1,5 +1,4 @@
 #! /bin/bash
-PATH=$PATH:/usr/share/node-v11.10.1-linux-x64/bin/ gulp compress-css
 INDEX_PATH='app/index.html'
 
 sed "s/CONFIGURED_DEPLOYMENT_DOMAIN/${DEPLOYMENT_DOMAIN}/g" $INDEX_PATH > $INDEX_PATH.cop
