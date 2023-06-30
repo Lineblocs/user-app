@@ -1822,7 +1822,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, $state, Backend, Authenticator) {
+}).run(function($rootScope, $shared, $state, Backend, Authenticator, $window) {
 
       //Idle.watch();
     $rootScope.$on('IdleStart', function() {
@@ -9469,7 +9469,8 @@ angular.module('Lineblocs')
   $scope.selectedTemplate = null;
 
   $scope.onNumberChange = function() {
-    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10)); ///^(0[1-9]|1[0-2])\/\d{2}$/
+	if(!$scope.user.mobile_number) return;
+    $scope.user.mobile_number = Number($scope.user.mobile_number.replace(/[^0-9]/g, '').slice(0, 10)); 
     if (!$scope.user.mobile_number) $scope.user.mobile_number = '';
   }
 
