@@ -1639,3 +1639,12 @@ p {
 md-checkbox.md-checked .md-icon {
   background-color: rgb(64 80 181) !important;
 }
+
+.trunk-name {
+  margin-top: 40px;
+  margin-bottom: 0px;
+}
+
+.trunk-icon{
+  margin-top: 50px !important;
+}
