@@ -14,6 +14,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
     $scope.pagination = pagination;
     $scope.numbers = [];
     $scope.Backend = Backend;
+    $scope.step = 1;
     $scope.triedSubmit = false;
         var toastPos = {
           bottom: false,
@@ -33,6 +34,19 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
     if ($scope.values.recovery_sip_uri && $scope.values.sip_uri && $scope.values.termination_sip_uri && $scope.values.name) {
       $scope.errorMessage = null;
     } 
+  };
+  $scope.validatePrevForm = function () {
+    $scope.step--;
+    $scope.triedSubmit = false;
+  };
+  $scope.validateStepForm = function(form, step) {
+    if (step > $scope.step && !form.$valid) {
+      $scope.triedSubmit = true;
+      return;
+    }
+    if (step > $scope.step + 1) return;
+    $scope.triedSubmit = false;
+    $scope.step = step;
   };
   $scope.saveTrunk = function(trunk) {
     console.log('save trunk called...');
