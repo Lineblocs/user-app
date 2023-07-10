@@ -1823,7 +1823,10 @@ var regParams = {
         templateUrl: 'views/pages/dashboard/blank.html',
     })
 }).run(function($rootScope, $shared, $state, Backend, Authenticator, $window) {
-
+    $rootScope.shared = $shared;
+    $rootScope.$watch('shared.title', function(newTitle, oldTitle) {
+        document.title = newTitle;
+    });
       //Idle.watch();
     $rootScope.$on('IdleStart', function() {
         /* Display modal warning or sth */
