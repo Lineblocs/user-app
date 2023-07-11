@@ -1,7 +1,6 @@
 FROM --platform=linux/amd64 node:11.10.1 AS builder
 WORKDIR /app/
 COPY . .
-RUN chmod 0755 *.sh
 RUN npm config set unsafe-perm=true
 RUN npm install
 RUN npm install -g install gulp@3.9.1
