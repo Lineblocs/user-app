@@ -1,0 +1,50 @@
+version: "3.6"
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: lineblocs-app-nginx-proxy
+    ports:
+      - "80:80"
+    environment:
+      - TRUST_DOWNSTREAM_PROXY=true
+      - DHPARAM_GENERATION=false
+      - HTTPS_METHOD=nohttps
+    networks:
+      - lineblocs_internal_app
+    profiles:
+      - enable_proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  user-app:
+    # use image from dockerhub. Using node 11.10.1
+    image: node:11.10.1
+    volumes:
+      - ..:/app
+    logging: *default-logging
+    working_dir: /app
+    container_name: lineblocs-user-app
+    restart: unless-stopped
+    ports:
+     - ${APP_PORT_HOST}:9000
+    entrypoint:
+      sh -c "
+        npm config set unsafe-perm=true;
+        npm install;
+        npm install -g install gulp@3.9.1;
+        npm install -g install node-sass@4.13.0 --unsafe-perm ;
+        npm install -g install bower@1.8.8 ;
+        ./shell_scripts/run_dev_server.sh ;
+      "
+    environment:
+      - DEPLOYMENT_DOMAIN=app.${DEPLOYMENT_DOMAIN}
+      - VIRTUAL_HOST=app.${DEPLOYMENT_DOMAIN}
+      - VIRTUAL_PORT=9000
+    networks:
+      - lineblocs_internal_app
+networks:
+  lineblocs_internal_app:
