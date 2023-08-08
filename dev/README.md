@@ -92,4 +92,5 @@ Log in to terminal of container  -> `docker exec -it lineblocs-user-app bash`
 
 Modify lineblocs-site project under `user-app/app`
 
-
+### Note
+Please remember, lineblocs app integrated with lineblocs editor and libeblocs site. So make sure can access https://lineblocs.com and https://editor.lineblocs.com
