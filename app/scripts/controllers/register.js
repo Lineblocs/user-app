@@ -440,7 +440,9 @@ angular.module('Lineblocs')
 		console.log("explicitPlan ", explicitPlan);
 
 		if ( explicitPlan != null ) {
-			return explicitPlan;
+			return $scope.plans.find(function(plan) {
+				return plan.key_name === explicitPlan;
+			});
 		}
 		// get the default one from the API
 
