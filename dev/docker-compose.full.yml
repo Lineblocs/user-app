@@ -61,6 +61,8 @@ services:
       "
     environment:
       - DEPLOYMENT_DOMAIN=app.${DEPLOYMENT_DOMAIN}
+      - VIRTUAL_HOST=app.${DEPLOYMENT_DOMAIN}
+      - VIRTUAL_PORT=9000
     networks:
       - lineblocs_internal_app
   editor: 
