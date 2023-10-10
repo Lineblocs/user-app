@@ -27,9 +27,9 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
     if (form.$valid) {
       var values = {
         assign: {
-          "extension_id": $scope.values.extension_id,
-          "number_id": $scope.values.number_id,
-          "preferred_pop": $scope.values.preferred_pop
+          "extension_id": $shared.nullIfEmpty( $scope.values.extension_id ),
+          "number_id": $shared.nullIfEmpty( $scope.values.number_id ),
+          "preferred_pop": $shared.nullIfEmpty( $scope.values.preferred_pop ),
         }
       };
       var toastPos = {

@@ -15,7 +15,7 @@
                                 <md-input-container>
                                     <label>Assigned Extension</label>
                                     <md-select ng-model="values.extension_id" ng-change="changeExtension(values.extension_id)">
-                                        <md-option><em>None</em></md-option>
+                                        <md-option value=""><em>None</em></md-option>
                                         <md-option ng-repeat="extension in extensions" ng-value="extension.id">
                                             {{extension.username}}
                                         </md-option>
@@ -46,7 +46,7 @@
                                 <md-input-container>
                                     <label>Assigned DID</label>
                                     <md-select ng-model="values.number_id" ng-change="changeNumber(values.number_id)">
-                                        <md-option><em>None</em></md-option>
+                                        <md-option value=""><em>None</em></md-option>
                                         <md-option ng-repeat="number in numbers" ng-value="number.id">
                                             {{number.number}}
                                         </md-option>
@@ -78,7 +78,7 @@
                                 <md-input-container>
                                     <label>Preferred PoP</label>
                                     <md-select ng-model="values.preferred_pop" ng-change="changePreferredPOP(values.preferred_pop)">
-                                        <md-option><em>None</em></md-option>
+                                        <md-option value=""><em>None</em></md-option>
                                         <md-option ng-repeat="pop in pops" ng-value="pop.aws_code">
                                             {{pop.name}}
                                         </md-option>

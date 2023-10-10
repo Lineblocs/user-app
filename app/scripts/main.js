@@ -575,7 +575,12 @@ return changed;
         }, flickerTimeout);
     });
   }
-
+  factory.nullIfEmpty = function(value) {
+    if ( !value || value === "" ) {
+        return null;
+    }
+    return value;
+  }
   factory.scrollToTop = function() {
       $window.scrollTo(0, 0);
   }
@@ -7717,9 +7722,9 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
     if (form.$valid) {
       var values = {
         assign: {
-          "extension_id": $scope.values.extension_id,
-          "number_id": $scope.values.number_id,
-          "preferred_pop": $scope.values.preferred_pop
+          "extension_id": $shared.nullIfEmpty( $scope.values.extension_id ),
+          "number_id": $shared.nullIfEmpty( $scope.values.number_id ),
+          "preferred_pop": $shared.nullIfEmpty( $scope.values.preferred_pop ),
         }
       };
       var toastPos = {
@@ -7938,8 +7943,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       var user = angular.copy($scope.values.user);
       // add assignment data
       var assign = {};
-      assign['extension_id'] = $scope.values['extension_id'];
-      assign['number_id'] = $scope.values['number_id'];
+      assign['extension_id'] = $shared.nullIfEmpty( $scope.values['extension_id'] );
+      assign['number_id'] = $shared.nullIfEmpty( $scope.values['number_id'] );
       var values = {
         user: user,
         roles: angular.copy($scope.values.roles),
@@ -9829,7 +9834,9 @@ angular.module('Lineblocs')
 		console.log("explicitPlan ", explicitPlan);
 
 		if ( explicitPlan != null ) {
-			return explicitPlan;
+			return $scope.plans.find(function(plan) {
+				return plan.key_name === explicitPlan;
+			});
 		}
 		// get the default one from the API
 

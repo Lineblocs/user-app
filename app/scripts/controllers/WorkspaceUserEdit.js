@@ -34,8 +34,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       var user = angular.copy($scope.values.user);
       // add assignment data
       var assign = {};
-      assign['extension_id'] = $scope.values['extension_id'];
-      assign['number_id'] = $scope.values['number_id'];
+      assign['extension_id'] = $shared.nullIfEmpty( $scope.values['extension_id'] );
+      assign['number_id'] = $shared.nullIfEmpty( $scope.values['number_id'] );
       var values = {
         user: user,
         roles: angular.copy($scope.values.roles),

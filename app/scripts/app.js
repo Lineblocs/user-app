@@ -575,7 +575,12 @@ return changed;
         }, flickerTimeout);
     });
   }
-
+  factory.nullIfEmpty = function(value) {
+    if ( !value || value === "" ) {
+        return null;
+    }
+    return value;
+  }
   factory.scrollToTop = function() {
       $window.scrollTo(0, 0);
   }
