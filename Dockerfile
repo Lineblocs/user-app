@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:11.10.1 AS builder
+FROM --platform=linux/amd64 node:11.10.1-alpine AS builder
 WORKDIR /app/
 COPY . .
 RUN npm config set unsafe-perm=true
@@ -11,7 +11,7 @@ RUN ./shell_scripts/build_docker.sh
 FROM --platform=linux/amd64 httpd:2.4
 EXPOSE 8010
 WORKDIR /usr/local/apache2/htdocs/
-RUN apt-get -y update
+#RUN apt-get -y update
 COPY --from=builder /app .
 
 COPY ports.conf /etc/apache2/ports.conf
