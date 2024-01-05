@@ -269,16 +269,6 @@
                                     class="mdi mdi-library-music"></i> &nbsp;<span
                                     class="text">{{ 'media-files' | translate }}</span></md-button>
                         </li>
-                        <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}">
-                            <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""><i
-                                   class="mdi mdi-account"></i> &nbsp;<span
-                                      class="text">{{ 'users' | translate }}</span></md-button>
-                        </li>
-                        <li ng-class="{active: $shared.isSectionActive('billing')}">
-                            <md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i
-                                    class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
-                                    class="text">{{ 'billing' | translate }}</span></md-button>
-                        </li>
 
                         <li ng-class="{active: $shared.isSectionActive('hosted-trunks')}">
                             <md-button href="" ng-click="$shared.changeRoute('hosted-trunks')" class=""><i
@@ -306,6 +296,25 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}">
+                            <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""><i
+                                   class="mdi mdi-account"></i> &nbsp;<span
+                                      class="text">{{ 'users' | translate }}</span></md-button>
+                        </li>
+                        <li ng-class="{active: $shared.isSectionActive('support')}">
+                            <md-button href="" ng-click="$shared.changeRoute('support')" class=""><i
+                                    class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
+                                    class="text">{{ 'support' | translate }}</span></md-button>
+                        </li>
+
+
+                        <li ng-class="{active: $shared.isSectionActive('billing')}">
+                            <md-button href="" ng-click="$shared.changeRoute('billing')" class=""><i
+                                    class="mdi mdi-credit-card-multiple"></i> &nbsp;<span
+                                    class="text">{{ 'billing' | translate }}</span></md-button>
+                        </li>
+
                         <li class="show-subnav">
                             <md-button href="" class=" show-menu" ng-click="subnav('ui-1')">
                                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>

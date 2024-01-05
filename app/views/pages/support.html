@@ -1,0 +1,123 @@
+<div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && supportTickets.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <div class="inner">
+      <center>
+        <h5>No support tickets listed</h5>
+        <md-button ng-click="createSupportTicket()" class="md-raised md-primary">Open Ticket</md-button>
+      </center>
+    </div>
+    </div>
+  </md-card>
+</div>
+<div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && supportTickets.length > 0)">
+   <div layout="row side-options" layout-align="end center">
+        <div flex="10">
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text" />
+                <a ng-show="pagination.shouldShowClear()" class="clear-search important-show" ng-click="pagination.clearSearch()">X</a>
+                <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
+            </md-input-container>
+        </div>
+        <md-button ng-click="createSupporTicket()" class="md-raised md-primary create-new">Create New</md-button>
+        <div>
+            <md-menu md-position-mode="target-right target">
+                <div class="nav-item">
+                    <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
+                        ng-click="$mdOpenMenu($event)">
+                        Actions
+                        <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+                </div>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button href="" ng-click="Backend.deleteAllChecked('supportTickets', supportTickets)" style="display:flex;">
+                            Delete All</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+<div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && supportTickets.length === 0" class="no-results">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <div class="no-results">
+      <div class="inner">
+        <center>
+          <h5>No support tickets found</h5>
+          <md-button ng-click="createSupportTicket()" class="md-raised md-primary">Open Ticket</md-button>
+        </center>
+      </div>
+    </div>
+  </md-card>
+</div>
+  <!-- exact table from live demo -->
+  <div ng-show="supportTickets.length > 0">
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><md-checkbox ng-model="selectedAll" ng-change="Backend.selectAll(selectedAll, 'supportTickets', supportTickets)" aria-label="Checkbox" class="md-warn md-align-top-left" flex></th>
+            <th md-column><span>Registered</span></th>
+            <th md-column><span>Username</span></th>
+            <th md-column>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="supportTicket in supportTickets">
+                <td md-cell>
+                    <md-checkbox ng-model="support ticket.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                </td>
+            <td md-cell ng-if="support ticket.registered">
+                  <img ng-src="{{'/images/ext-online.png'}}" width="16" height="16"/>
+            </td>
+          <td md-cell ng-if="!support ticket.registered">
+                  <img ng-src="{{'/images/ext-offline.png'}}" width="16" height="16"/>
+            </td>
+
+            <td md-cell>{{support ticket.username}}</td>
+            <td md-cell>
+              <md-button ng-click="editExtension(support ticket)" class="md-icon-button" aria-label="Settings">
+
+                  <md-icon>
+                    <i class="mdi mdi-pencil"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit this item
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
+              <md-button ng-click="deleteExtension($event, support ticket)" class="md-icon-button" aria-label="Settings">
+                  <md-icon >
+                    
+                    <i class="mdi mdi-delete"></i>
+                         <md-tooltip class="helper-tooltip" md-direction="top">
+                              Delete this item
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
+              <md-button ng-click="connectInfo($event, support ticket)" class="md-icon-button" aria-label="Settings">
+                  <md-icon >
+                    <i class="mdi mdi-information"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              View Connection Info
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+    <div layout="row" layout-align="end">
+
+      <div>
+        <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+        <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+        <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      </div>
+    </div>
+  </div>
+</div>

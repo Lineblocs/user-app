@@ -1516,6 +1516,18 @@ var regParams = {
         controller: 'FaxesCtrl',
         params:  listPageParams
     })
+    .state('support', {
+        url: '/support',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/support.html',
+        controller: 'SupportCtrl'
+    })
+    .state('support-create', {
+        url: '/support/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/support-create.html',
+        controller: 'SupportCreateCtrl'
+    })
     .state('billing', {
         url: '/billing',
         parent: 'dashboard',

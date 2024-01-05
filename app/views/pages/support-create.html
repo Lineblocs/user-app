@@ -1,0 +1,145 @@
+<div>
+    <md-card>
+
+        <md-card-title>
+
+            <md-card-title-text>
+                <span class="md-headline">Open Support Ticket</span>
+                <span class="md-subhead">please fill in the details below to create a new support ticket</span>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+
+            <form name="supportForm" ng-submit="submit(supportForm)" novalidate>
+                <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true">
+
+                    <md-tab label="Details">
+
+
+                        <md-content class="md-padding">
+                            <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+                                        <label>Category</label>
+                                        <md-select ng-change="changeCategory(values.category)"
+                                            ng-model="values.category" placeholder="Select Category">
+
+                                            <md-option>None</md-option>
+                                            <md-option ng-value="category.id"
+                                                ng-repeat="category in categories track by category.id">
+                                                {{category.name}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            The username you will use to login to your extension with
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+                            </div>
+
+                            <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+
+                                        <label>Extension</label>
+                                        <input name="extension" ng-model="values.extension" required="" minlength="1">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="supportForm.extension.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="supportForm.extension.$error.required">This field is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            Extension this support ticket is related to (if any)
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+                            </div>
+
+                             <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+
+                                        <label>Subject</label>
+                                        <input name="subject" ng-model="values.subject" required="" minlength="1">
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="supportForm.extension.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="supportForm.extension.$error.required">This field is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            Subject of support request
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+
+                            </div>
+
+
+                             <div layout="row">
+                                <div flex="95">
+                                    <md-input-container>
+
+                                        <label>Message</label>
+                                        <textarea ng-model="values.message" rows="3" md-select-on-focus></textarea>
+                                        <div ng-show="triedSubmit">
+                                            <div class="box">
+                                                <div ng-show="supportForm.extension.$error.minlength">Please enter 1
+                                                    characters or
+                                                    more</div>
+                                                <div ng-show="supportForm.extension.$error.required">This field is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div flex="5">
+                                    <md-icon class="tooltip-icon">
+                                        <i class="mdi mdi-information"></i>
+                                        <md-tooltip class="helper-tooltip" md-direction="top">
+                                            Detailed explanation of issue(s) encountered.
+                                        </md-tooltip>
+                                    </md-icon>
+                                </div>
+
+                            </div>
+
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                                <div class="cancel">
+                                    <a href="" ng-click="$shared.cancelForm()">Cancel</a>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-card-content>
+
+    </md-card>
+</div>

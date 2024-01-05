@@ -1516,6 +1516,18 @@ var regParams = {
         controller: 'FaxesCtrl',
         params:  listPageParams
     })
+    .state('support', {
+        url: '/support',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/support.html',
+        controller: 'SupportCtrl'
+    })
+    .state('support-create', {
+        url: '/support/create',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/support-create.html',
+        controller: 'SupportCreateCtrl'
+    })
     .state('billing', {
         url: '/billing',
         parent: 'dashboard',
@@ -7289,6 +7301,95 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
   $scope.load();
 });
 
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('SupportCtrl', function($scope, $location, $timeout, $stateParams, $q, Backend, pagination, $shared, $state, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Support");
+		$scope.$stateParams = $stateParams;
+		$scope.pagination = pagination;
+	  $scope.$shared = $shared;
+	  $scope.supportTickets = [];
+
+	function loadData(createLoading) {
+		console.log("support load data started")
+		if (createLoading) {
+			$shared.isCreateLoading =true;
+		} else {
+			$shared.isLoading =true;
+		}
+
+		return $q(function(resolve, reject) {
+			console.log("loading support tickets");
+			Backend.get("/supportTicket/list").then(function(res) {
+				console.log("finished loading..");
+				//$scope.supportTickets = res.data.data;
+				if (createLoading) {
+					$shared.endIsCreateLoading();
+				} else {
+					$shared.endIsLoading();
+				}
+				console.log("support tickets ", $scope.supportTickets);
+				resolve();
+			}, reject);
+		});
+	}
+	$scope.createSupportTicket = function() {
+    	$state.go('support-create', {});
+	}
+	$scope.editSupportTicket = function(ticket) {
+		$state.go('support-edit', {ticketId: ticket.public_id});
+	}
+	loadData(false);
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('SupportCreateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	$shared.updateTitle("Create Support ticket");
+	$scope.$shared = $shared;
+	$scope.categories = [
+		{
+			"id": 1,
+			"name": "Phone connection issues"
+		},
+		{
+			"id": 2,
+			"name": "Audio quality issues"
+		},
+	];
+	$scope.values = {
+		category: "",
+		subject: "",
+		message: "",
+		extension: "",
+	};
+	$scope.changeCategory = function(category) {
+		$scope.values.category = category;
+		console.log("changeCategory", category);
+	}
+
+	$scope.submit = function(form) {
+		console.log("submitting support ticket form ", arguments);
+	
+	}
+  });
 
 'use strict';
 
