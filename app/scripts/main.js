@@ -1517,16 +1517,23 @@ var regParams = {
         params:  listPageParams
     })
     .state('support', {
-        url: '/support',
+        url: '/support?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/support.html',
-        controller: 'SupportCtrl'
+        controller: 'SupportCtrl',
+        params:  listPageParams
     })
     .state('support-create', {
         url: '/support/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/support-create.html',
         controller: 'SupportCreateCtrl'
+    })
+    .state('support-update', {
+        url: '/support/{ticketId}/update',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/support-update.html',
+        controller: 'SupportUpdateCtrl'
     })
     .state('billing', {
         url: '/billing',
@@ -7317,6 +7324,9 @@ angular.module('Lineblocs')
 		$scope.$stateParams = $stateParams;
 		$scope.pagination = pagination;
 	  $scope.$shared = $shared;
+		$scope.settings = {
+			page: 0
+		};
 	  $scope.supportTickets = [];
 
 	function loadData(createLoading) {
@@ -7331,7 +7341,7 @@ angular.module('Lineblocs')
 			console.log("loading support tickets");
 			Backend.get("/supportTicket/list").then(function(res) {
 				console.log("finished loading..");
-				//$scope.supportTickets = res.data.data;
+				$scope.supportTickets = res.data.data;
 				if (createLoading) {
 					$shared.endIsCreateLoading();
 				} else {
@@ -7342,13 +7352,29 @@ angular.module('Lineblocs')
 			}, reject);
 		});
 	}
+  $scope.load = function() {
+      $shared.isLoading = true;
+      pagination.resetSearch();
+      pagination.changeUrl( "/supportTicket/list" );
+      pagination.changePage( 1 );
+      pagination.changeScope( $scope, 'supportTickets');
+      return $q(function(resolve, reject) {
+        pagination.loadData().then(function(res) {
+        $scope.supportTickets = res.data.data;
+        $shared.endIsLoading();
+        resolve();
+        }, reject);
+      });
+  }
+
 	$scope.createSupportTicket = function() {
     	$state.go('support-create', {});
 	}
-	$scope.editSupportTicket = function(ticket) {
-		$state.go('support-edit', {ticketId: ticket.public_id});
+	$scope.updateSupportTicket = function(ticket) {
+		$state.go('support-update', {ticketId: ticket.public_id});
 	}
-	loadData(false);
+	//loadData(false);
+  	$scope.load();
   });
 
 'use strict';
@@ -7377,7 +7403,7 @@ angular.module('Lineblocs')
 	$scope.values = {
 		category: "",
 		subject: "",
-		message: "",
+		comment: "",
 		extension: "",
 	};
 	$scope.changeCategory = function(category) {
@@ -7387,7 +7413,74 @@ angular.module('Lineblocs')
 
 	$scope.submit = function(form) {
 		console.log("submitting support ticket form ", arguments);
-	
+		$scope.triedSubmit = true;
+		var params = angular.copy( $scope.values );
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+		console.log('params are ', params);
+		Backend.post("/supportTicket", params, true, true).then(function() {
+			console.log("created ticket.");
+			$mdToast.show(
+			$mdToast.simple()
+				.textContent('created ticket')
+				.position(toastPosStr)
+				.hideDelay(3000)
+			);
+			$state.go('support', {});
+		$shared.endIsCreateLoading();
+		});
+	}
+  });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	$shared.updateTitle("Update Support ticket");
+	$scope.$shared = $shared;
+	$scope.values = {
+		comment: ""
+	};
+
+	$scope.submit = function(form) {
+		console.log("submitting support ticket form ", arguments);
+		$scope.triedSubmit = true;
+		var params = angular.copy( $scope.values );
+        var toastPos = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+        var toastPosStr = Object.keys(toastPos)
+          .filter(function(pos) { return toastPos[pos]; })
+          .join(' ');
+		console.log('params are ', params);
+		Backend.post("/supportTicket", params, true, true).then(function() {
+			console.log("created ticket.");
+			$mdToast.show(
+			$mdToast.simple()
+				.textContent('created ticket')
+				.position(toastPosStr)
+				.hideDelay(3000)
+			);
+			$state.go('support', {});
+		$shared.endIsCreateLoading();
+		});
 	}
   });
 

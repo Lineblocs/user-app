@@ -104,13 +104,13 @@
                                     <md-input-container>
 
                                         <label>Message</label>
-                                        <textarea ng-model="values.message" rows="3" md-select-on-focus></textarea>
+                                        <textarea required ng-model="values.comment" rows="3" md-select-on-focus></textarea>
                                         <div ng-show="triedSubmit">
                                             <div class="box">
-                                                <div ng-show="supportForm.extension.$error.minlength">Please enter 1
+                                                <div ng-show="supportForm.comment.$error.minlength">Please enter 1
                                                     characters or
                                                     more</div>
-                                                <div ng-show="supportForm.extension.$error.required">This field is
+                                                <div ng-show="supportForm.comment.$error.required">This field is
                                                     required</div>
                                             </div>
                                         </div>

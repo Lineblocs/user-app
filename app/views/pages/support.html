@@ -20,7 +20,7 @@
                 <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
             </md-input-container>
         </div>
-        <md-button ng-click="createSupporTicket()" class="md-raised md-primary create-new">Create New</md-button>
+        <md-button ng-click="createSupportTicket()" class="md-raised md-primary create-new">Create New</md-button>
         <div>
             <md-menu md-position-mode="target-right target">
                 <div class="nav-item">
@@ -59,48 +59,29 @@
         <thead md-head md-order="query.order" md-on-reorder="getDesserts">
           <tr md-row>
             <th md-column><md-checkbox ng-model="selectedAll" ng-change="Backend.selectAll(selectedAll, 'supportTickets', supportTickets)" aria-label="Checkbox" class="md-warn md-align-top-left" flex></th>
-            <th md-column><span>Registered</span></th>
-            <th md-column><span>Username</span></th>
+            <th md-column><span>Subject</span></th>
+            <th md-column><span>Status</span></th>
             <th md-column>&nbsp;</th>
           </tr>
         </thead>
         <tbody md-body>
           <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="supportTicket in supportTickets">
                 <td md-cell>
-                    <md-checkbox ng-model="support ticket.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
+                    <md-checkbox ng-model="supportTicket.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex>
                 </td>
-            <td md-cell ng-if="support ticket.registered">
-                  <img ng-src="{{'/images/ext-online.png'}}" width="16" height="16"/>
-            </td>
-          <td md-cell ng-if="!support ticket.registered">
-                  <img ng-src="{{'/images/ext-offline.png'}}" width="16" height="16"/>
-            </td>
-
-            <td md-cell>{{support ticket.username}}</td>
             <td md-cell>
-              <md-button ng-click="editExtension(support ticket)" class="md-icon-button" aria-label="Settings">
+              {{supportTicket.subject}}
+            </td>
+            <td md-cell>
+              {{supportTicket.status}}
+            </td>
+            <td md-cell>
+              <md-button ng-click="updateSupportTicket(supportTicket)" class="md-icon-button" aria-label="Add update to support ticket">
 
                   <md-icon>
                     <i class="mdi mdi-pencil"></i>
                           <md-tooltip class="helper-tooltip" md-direction="top">
-                              Edit this item
-                          </md-tooltip>
-                  </md-icon>
-              </md-button>
-              <md-button ng-click="deleteExtension($event, support ticket)" class="md-icon-button" aria-label="Settings">
-                  <md-icon >
-                    
-                    <i class="mdi mdi-delete"></i>
-                         <md-tooltip class="helper-tooltip" md-direction="top">
-                              Delete this item
-                          </md-tooltip>
-                  </md-icon>
-              </md-button>
-              <md-button ng-click="connectInfo($event, support ticket)" class="md-icon-button" aria-label="Settings">
-                  <md-icon >
-                    <i class="mdi mdi-information"></i>
-                          <md-tooltip class="helper-tooltip" md-direction="top">
-                              View Connection Info
+                              Update ticket
                           </md-tooltip>
                   </md-icon>
               </md-button>

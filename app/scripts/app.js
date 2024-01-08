@@ -1517,16 +1517,23 @@ var regParams = {
         params:  listPageParams
     })
     .state('support', {
-        url: '/support',
+        url: '/support?page&search',
         parent: 'dashboard',
         templateUrl: 'views/pages/support.html',
-        controller: 'SupportCtrl'
+        controller: 'SupportCtrl',
+        params:  listPageParams
     })
     .state('support-create', {
         url: '/support/create',
         parent: 'dashboard',
         templateUrl: 'views/pages/support-create.html',
         controller: 'SupportCreateCtrl'
+    })
+    .state('support-update', {
+        url: '/support/{ticketId}/update',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/support-update.html',
+        controller: 'SupportUpdateCtrl'
     })
     .state('billing', {
         url: '/billing',
