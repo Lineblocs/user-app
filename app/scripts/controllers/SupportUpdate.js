@@ -8,17 +8,21 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams) {
 	$shared.updateTitle("Update Support ticket");
 	$scope.$shared = $shared;
 	$scope.values = {
 		comment: ""
 	};
 
-	$scope.submit = function(form) {
+	$scope.newUpdate = {
+		comment: ""
+	}
+
+	$scope.submitUpdate = function(updateForm) {
 		console.log("submitting support ticket form ", arguments);
 		$scope.triedSubmit = true;
-		var params = angular.copy( $scope.values );
+		var params = angular.copy( $scope.newUpdate );
         var toastPos = {
           bottom: false,
           top: true,
@@ -29,16 +33,28 @@ angular.module('Lineblocs')
           .filter(function(pos) { return toastPos[pos]; })
           .join(' ');
 		console.log('params are ', params);
-		Backend.post("/supportTicket", params, true, true).then(function() {
-			console.log("created ticket.");
+		var url = "/supportTicket/" + $scope.ticket.public_id +"/update";
+		Backend.post(url, params, true, true).then(function() {
+			console.log("sent support ticket update.");
 			$mdToast.show(
 			$mdToast.simple()
-				.textContent('created ticket')
+				.textContent('update submitted successfully')
 				.position(toastPosStr)
 				.hideDelay(3000)
 			);
-			$state.go('support', {});
+			//$state.go('support', {});
 		$shared.endIsCreateLoading();
+		// reload data
+		load();
+			});
+	}
+	function load() {
+		var url = "/supportTicket/" + $stateParams['ticketId'];
+		console.log("loading data")
+		Backend.get(url).then(function(res) {
+			console.log("ticket loaded.", res);
+			$scope.ticket = res.data;
 		});
 	}
+	load();
   });

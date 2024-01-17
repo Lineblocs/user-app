@@ -19,9 +19,27 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('imagemin');
 const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
+const { exec } = require('child_process');
 
 
-
+function buildDistributables() {
+    const command = `rm -rf app/dist && cp -rf dist app/ && cp ./app/index-prod.html ./app/index.html`;
+    // Execute the shell command
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error: ${error.message}`);
+            return;
+        }
+    
+        if (stderr) {
+            console.error(`stderr: ${stderr}`);
+            return;
+        }
+    
+        // The output of the command is available in the 'stdout' variable
+        console.log(`Command output: ${stdout}`);
+    });
+}
 
 gulp.task('styles', function() {
     return gulp.src([
@@ -164,6 +182,7 @@ gulp.task('wiredep', function() {
 });
 
 gulp.task('watch', ['connect'], function() {
+    const buildTimeout = 1000;
     $.livereload.listen();
 // watch for changes
     gulp.watch([
@@ -174,12 +193,16 @@ gulp.task('watch', ['connect'], function() {
     '!app/templates.html'
     ]).on('change', function() {
         gulp.start('scripts');
+        //gulp.start('compress-js');
+        setTimeout(() => {
+            buildDistributables();
+        }, buildTimeout);
         /*
         mergeTemplates().then(function(output) {
             fs.writeFileSync("./app/templates.html", output);
         });
         */
-        $.livereload.changed();
+        //$.livereload.changed();
     });
     gulp.watch('app/styles/**/*.scss', ['styles']);
     //gulp.watch('bower.json', ['wiredep']);

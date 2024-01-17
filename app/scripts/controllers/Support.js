@@ -60,6 +60,7 @@ angular.module('Lineblocs')
     	$state.go('support-create', {});
 	}
 	$scope.updateSupportTicket = function(ticket) {
+		console.log("going to support ticket ", ticket);
 		$state.go('support-update', {ticketId: ticket.public_id});
 	}
 	//loadData(false);

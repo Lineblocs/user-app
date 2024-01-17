@@ -1,0 +1,110 @@
+<div>
+    <md-card>
+
+        <md-card-title>
+
+            <md-card-title-text>
+                <span class="md-headline">Support Ticket {{ticket.ref_number}}</span>
+                <span class="md-subhead"></span>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+
+            Subject: {{ticket.subject}}
+            <br />
+            <br />
+            {{ticket.comment}}
+        </md-card-content>
+
+    </md-card>
+
+    <div ng-if="ticket.updates.length===0">
+        <md-card md-theme="'default'" md-theme-watch>
+            <div class="no-results">
+                <div class="inner">
+                    <center>
+                        <h5>No updates at this time</h5>
+                    </center>
+                </div>
+            </div>
+        </md-card>
+    </div>
+
+    <md-card ng-repeat="update in ticket.updates">
+        <div ng-if="update.direction==='STAFF'">
+            <md-card-title>
+
+                <md-card-title-text>
+                    <span class="md-headline">Staff response</span>
+                    <span class="md-subhead"></span>
+                </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content>
+                {{update.comment}}
+
+                <div ng-if="update.attachments.length>0">
+                    <ul>
+                        <li ng-repeat="attachment in update.attachments">
+                            {{attachment}}
+                        </li>
+                    </ul>
+                </div>
+            </md-card-content>
+        </div>
+        <div ng-if="update.direction==='ENDUSER'">
+            <md-card-title>
+
+                <md-card-title-text>
+                    <span class="md-headline">User</span>
+                    <span class="md-subhead"></span>
+                </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content>
+                {{update.comment}}
+
+                <div ng-if="update.attachments.length>0">
+                    <ul>
+                        <li ng-repeat="attachment in update.attachments">
+                            {{attachment}}
+                        </li>
+                    </ul>
+                </div>
+            </md-card-content>
+
+        </div>
+
+    </md-card>
+
+    <md-card>
+
+        <md-card-title>
+
+            <md-card-title-text>
+                <span class="md-headline">Add Reply</span>
+                <span class="md-subhead">send a follow up message</span>
+            </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+
+            <form name="updateForm" ng-submit="submitUpdate(updateForm)" novalidate>
+                <md-content class="md-padding">
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Comment</label>
+                            <textarea required ng-model="newUpdate.comment" rows="3" md-select-on-focus></textarea>
+                        </md-input-container>
+                    </div>
+                            <div class="form-btns">
+                                <div class="submit">
+                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                                </div>
+                            </div>
+            </form>
+        </md-card-content>
+
+    </md-card>
+</div>
