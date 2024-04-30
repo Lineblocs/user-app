@@ -1044,7 +1044,38 @@ md-checkbox {
 }
 .pay-options {
 	padding-right: 15px;
+	button {
+		margin-bottom: 10px !important;
+	}
+}
+.pay-amount {
+	width: 100%;
+	margin: 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
 
+	li {
+		float: left;
+		margin-right: 10px;
+		margin-bottom: 10px;
+		border: 1px solid #E3E3E3;
+		text-align: center;
+		padding: 15px;
+		border-radius: 7px;
+		cursor: pointer;
+	}
+	li.active {
+		border: 1px solid #E3E3E3;
+		background: rgb(63,81,181);
+		color: #FFFFFF;
+		cursor: initial;
+	}
+	li.active:hover {
+		background: rgb(63,81,181) !important;
+	}
+	li:hover {
+		background: #E3E3E3 !important;
+	}
 }
 .filter-date {
 	margin-top: 10px;
@@ -1205,7 +1236,8 @@ ul.benefits {
     }
     md-pagination-wrapper{
         margin: 0 !important;
-		width: 481px !important;
+		/*width: 481px !important;*/
+		width: 100% !important;
     }
 }
 .billing-container{

@@ -1,0 +1,184 @@
+<div class="billing-container">
+    <div layout="row" layout-align="end center" class="billing-title-container" layout-margin
+        ng-show="$shared.planName()==='pay-as-you-go'">
+        <div class="title-block">
+            <h5>Remaining Balance</h5>
+            <div class="bill-info">
+                <strong>{{billing.info.remainingBalance}}</strong>
+            </div>
+        </div>
+        <div class="title-block">
+            <h5>Plan:</h5>
+            <div class="bill-info">
+                <strong>{{$shared.planInfo.nice_name}}</strong>
+                <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+            </div>
+        </div>
+    </div>
+
+    <div layout="row" layout-align="end center" class="billing-title-container" layout-margin
+        ng-show="$shared.planName()!=='pay-as-you-go'">
+        <div class="title-block">
+            <h5 class="title-text">Plan:</h5>
+            <div class="bill-info sub-title-text">
+                {{$shared.planInfo.nice_name}}
+                <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+            </div>
+        </div>
+    </div>
+
+    <md-card md-theme="'default'" md-theme-watch class="card-radius">
+        <md-tabs class="md-primary" md-center-tabs layout-fill md-dynamic-height="true" ng-if="isTabLoaded">
+            <md-tab label="Make Payment">
+                <md-content class="md-padding">
+                    <div class="bottom-sheet-demo inset no-padding">
+                        <div class="left">
+                            <div class="pay-options">
+                                <h5>Pay With</h5>
+                                <md-button ng-disabled="settings.type==='CARD'" type="button"
+                                    ng-click="changeType('CARD')" class="md-raised md-primary no-margin-sides">
+                                    Credit Card</md-button>
+                                <br />
+                                <md-button ng-disabled="settings.type==='PAYPAL'" type="button"
+                                    ng-click="changeType('PAYPAL')" class="md-raised md-primary no-margin-sides">
+                                    PayPal</md-button>
+                            </div>
+                        </div>
+                        <div class="left line-left">
+                            <div ng-show="settings.type==='CARD'">
+                                <div ng-show="cards.length === 0">
+                                    <h5>Select Payment Amount</h5>
+                                    <ul class="pay-amount">
+                                        <li ng-class="{active: selectedAmount === 25.00}" ng-click="selectAmount(25.00)">25.00</li>
+                                        <li ng-class="{active: selectedAmount === 50.00}" ng-click="selectAmount(50.00)">50.00</li>
+                                        <li ng-class="{active: selectedAmount === 100.00}" ng-click="selectAmount(100.00)">100.00</li>
+                                    </ul>
+
+
+                                    <h5>No Cards Added</h5>
+                                    <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">
+                                        Add A
+                                        Card</md-button>
+
+                                </div>
+                                <div ng-show="cards.length > 0">
+                                    <h5>Use Existing Card</h5>
+                                    <div layout="row">
+                                        <div flex="">
+                                            <md-radio-group ng-model="data.selectedCard"
+                                                ng-change="changeCard(data.selectedCard)">
+                                                <md-radio-button ng-repeat="card in cards" ng-value="card.id"
+                                                    aria-label="{{$shared.createCardLabel(card)}}">
+                                                    <label>{{$shared.createCardLabel(card)}}</label>
+                                                    <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                                </md-radio-button>
+                                                <md-radio-button ng-value="'new'" aria-label="Add New Card">
+                                                    <label>Add New Card</label>
+                                                    <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                                </md-radio-button>
+                                            </md-radio-group>
+                                        </div>
+                                    </div>
+                                    <div ng-show="settings.newCard">
+                                        <form ng-cloak ng-submit="submit()">
+                                            <md-content>
+                                                <md-input-container>
+                                                    <label>Your Name</label>
+                                                    <input ng-model="card.name" />
+                                                </md-input-container>
+                                                <md-input-container>
+                                                    <label>Address</label>
+                                                    <input ng-model="card.address" />
+                                                </md-input-container>
+                                                <div layout="row">
+                                                    <div flex>
+                                                        <md-input-container>
+                                                            <label>City</label>
+                                                            <input ng-model="card.city" />
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex>
+                                                        <md-input-container>
+                                                            <label>Postal Code</label>
+                                                            <input ng-model="card.postal_code" />
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex>
+                                                        <md-input-container>
+                                                            <label>Country</label>
+                                                            <md-select ng-model="card.country"
+                                                                ng-change="changeCountry(card.country)">
+                                                                <md-option
+                                                                    ng-repeat="country in $shared.billingCountries"
+                                                                    ng-value="country">
+                                                                    {{country.name}}
+                                                                </md-option>
+                                                            </md-select>
+                                                        </md-input-container>
+                                                    </div>
+                                                </div>
+                                                <h5>Card Details</h5>
+                                                <div layout="row">
+                                                    <div flex>
+                                                        <md-input-container>
+                                                            <label>Number</label>
+                                                            <input ng-model="card.number" />
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex>
+                                                        <md-input-container>
+                                                            <label>Expires</label>
+                                                            <input placeholder="MM/YY" ng-model="card.expires" />
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div flex>
+                                                        <md-input-container>
+                                                            <label>CVV</label>
+                                                            <input ng-model="card.cvv" />
+                                                        </md-input-container>
+                                                    </div>
+                                                </div>
+                                            </md-content>
+                                        </form>
+                                    </div>
+                                    <md-input-container>
+                                        <label>Add credit Amount</label>
+                                        <md-select ng-model="data.creditAmount"
+                                            ng-change="changeAmount(data.creditAmount)">
+                                            <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                                {{amount.name}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-button ng-click="addCredit($event)"
+                                        class="md-raised md-primary no-margin-sides">Add
+                                        Credit
+                                    </md-button>
+
+                                </div>
+                            </div>
+                            <div ng-show="settings.type==='PAYPAL'">
+                                <md-input-container>
+                                    <label>Add credit Amount</label>
+                                    <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
+                                        <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                            {{amount.name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <!--
+                                <md-button ng-click="addCreditPayPal($event)" class="md-raised md-primary no-margin-sides">Add Credit
+                                </md-button>                            <br/>
+                            -->
+                                <!-- PayPal Logo -->
+                                <a class="clickable" title="How PayPal Works" ng-click="addCreditPayPal($event)"><img
+                                        src="https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_m.png"
+                                        alt="Pay with PayPal" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-card>
+</div>

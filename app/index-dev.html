@@ -90,10 +90,16 @@
     <script src="../bower_components/ngclipboard/dist/ngclipboard.js"></script>
     <script src="../bower_components/urijs/src/URI.min.js"></script>
     <script src="scripts/main.js"></script>
+  <script>
+      // some global settings used throughout the app
+      var DEPLOYMENT_DOMAIN = 'lineblocs.com';
+  </script>
     <!-- endbower -->
 
     <!-- endbuild -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
   <!-- Matomo -->
   <script type="text/javascript">
     var _paq = window._paq || [];
@@ -110,7 +116,7 @@
   </script>
   <!-- End Matomo Code -->
   <script>
-    loadAddedResources2();
+    loadAddedResources1();
             angular.bootstrap(document, ['Lineblocs']);
         var shared = angular.element("body").scope().$shared;
         shared.initialLoaded = true;

@@ -291,7 +291,7 @@
                 </div>
             </md-content>
         </md-tab>
-        <md-tab label="History">
+        <md-tab label="History & Payments">
             <md-content class="md-padding">
                 <div class="content-data-block">
                     <div class="data-block">
@@ -315,6 +315,17 @@
                         <span class="title-text">{{billing.info.estimatedBalance}}</span>
                     </div>
                     <small class="info-text">balance including charges this month.</small>
+                </div>
+
+                <div class="content-data-block">
+                    <md-button ng-click="makePayment($event)" class="md-raised md-primary">
+                        <span>
+                            <md-icon class="tooltip-icon">
+                                <i class="mdi mdi-filter-variant"></i>
+                            </md-icon>
+                            Make a payment
+                        </span>
+                    </md-button>
                 </div>
                 <!-- <h5>Account Balance {{billing.info.accountBalance}}</h5>
                 <small>

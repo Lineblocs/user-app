@@ -1577,6 +1577,12 @@ var regParams = {
       templateUrl: 'views/pages/billing-cancel-subscription.html',
       controller: 'CancelSubscriptionCtrl',
   })
+    .state('billing-make-payment', {
+        url: '/billing/make-payment',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/make-payment.html',
+        controller: 'MakePaymentCtrl'
+    })
     .state('home', {
         url: '/home',
         parent: 'dashboard',

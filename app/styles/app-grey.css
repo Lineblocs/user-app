@@ -840,6 +840,32 @@ md-checkbox .md-label {
 
 .pay-options {
   padding-right: 15px; }
+  .pay-options button {
+    margin-bottom: 10px !important; }
+
+.pay-amount {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important; }
+  .pay-amount li {
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #E3E3E3;
+    text-align: center;
+    padding: 15px;
+    border-radius: 7px;
+    cursor: pointer; }
+  .pay-amount li.active {
+    border: 1px solid #E3E3E3;
+    background: #3f51b5;
+    color: #FFFFFF;
+    cursor: initial; }
+  .pay-amount li.active:hover {
+    background: #3f51b5 !important; }
+  .pay-amount li:hover {
+    background: #E3E3E3 !important; }
 
 .filter-date {
   margin-top: 10px; }
@@ -979,7 +1005,8 @@ ul.benefits {
     border-radius: 8px 8px 0 0px !important; }
   .card-radius md-pagination-wrapper {
     margin: 0 !important;
-    width: 481px !important; }
+    /*width: 481px !important;*/
+    width: 100% !important; }
 
 .billing-container button {
   margin: 0;

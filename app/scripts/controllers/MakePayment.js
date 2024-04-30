@@ -8,14 +8,15 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
-	  $shared.updateTitle("Billing");
+  .controller('MakePaymentCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Make Payment");
 	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
 	  $scope.isTabLoaded = false;
 	  $scope.startDate = moment().startOf('month').toDate();
 	  $scope.endDate = moment().endOf('month').toDate();
 	$scope.cards = [];
+	$scope.selectedAmount = 25.00;
 	$scope.creditAmounts = [
 		{"name": "$10", "value": 10.00},
 		{"name": "$25", "value": 25.00},
@@ -63,6 +64,7 @@ angular.module('Lineblocs')
       $scope.close = function() {
         $mdDialog.hide();
 	  }
+
 	  $scope.save = function() {
 		var data = angular.copy($scope.data);
 		Backend.post("/addUsageTrigger", data).then(function(res) {
@@ -181,11 +183,6 @@ angular.module('Lineblocs')
 			$scope.status = 'You cancelled the dialog.';
 		});
 	}
-	$scope.makePayment = function($event) {
-		console.log('$scope.makePayment called');
-    	$state.go('billing-make-payment', {});
-	}
-
 	$scope.addCredit = function() {
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
@@ -449,6 +446,11 @@ angular.module('Lineblocs')
 	}
 	$scope.upgradePlan = function() {
     	$state.go('billing-upgrade-plan', {});
+	}
+
+	$scope.selectAmount = function(amount) {
+		console.log('selectAmount ', amount)
+		$scope.selectedAmount = amount;
 	}
 
 	loadData(false);
