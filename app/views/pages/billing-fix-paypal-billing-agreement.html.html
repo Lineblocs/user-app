@@ -1,0 +1,26 @@
+<div>
+    <center>
+    <h2>Upgrade Plan</h2>
+    </center>
+    <div class="pricing-plan-container" flex="80" layout="row">
+        <div ng-repeat="plan in plans | orderBy: '-rank'">
+            <md-card ng-show="plan.include_in_pricing_pages" class="plan-cards" ng-class="{'featured-popular': plan.featured_plan}">
+                <md-card-title>
+                    <md-card-title-text class="pricing-header">
+                        <span class="md-headline">{{ plan.nice_name }}</span>
+                        <span class="md-subhead">
+                           <h1>Fix Paypal billing agreement</h1>
+                           <p>We noticed you cancelled your billing agreement. You can fix this by creating a new agreement with us</p>
+                        </span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-content>
+                    <md-card-content class="pricing-content">
+                        <md-button ng-click="createNewAgreement()" type="button" class="no-margin-sides started-button">
+                            Create new agreement</md-button>
+                    </md-card-content>
+                </md-content>
+            </md-card>
+        </div>
+    </div>
+</div>

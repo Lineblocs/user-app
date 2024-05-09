@@ -281,6 +281,7 @@ angular.module('Lineblocs')
     data['payment_gateway'] = $shared.customizations.payment_gateway;
     data['billing_region_id'] = $scope.paymentDetails.address.state.id;
     data['billing_address'] = billingAddress;
+    data['payment_card'] = paymentDetails.payment_card;
     data['user_id'] = $scope.userId;
     data['workspace_id'] = $scope.workspaceInfo.id;
     data['payment_values'] = Object.assign({}, response);
