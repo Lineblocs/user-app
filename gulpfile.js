@@ -195,7 +195,7 @@ gulp.task('watch', ['connect'], function() {
         gulp.start('scripts');
         //gulp.start('compress-js');
         setTimeout(() => {
-            buildDistributables();
+            //buildDistributables();
         }, buildTimeout);
         /*
         mergeTemplates().then(function(output) {

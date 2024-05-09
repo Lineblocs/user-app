@@ -7,6 +7,9 @@
     "test": "gulp test",
     "start": "gulp compress-css && gulp scripts && gulp compress-js && gulp serve"
   },
+  "resolutions": {
+    "graceful-fs": "^4.2.11"
+  },
   "devDependencies": {
     "apache-server-configs": "^2.11.0",
     "chai": "^2.1.0",
