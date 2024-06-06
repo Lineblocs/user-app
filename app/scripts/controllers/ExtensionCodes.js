@@ -16,7 +16,7 @@ angular.module('Lineblocs').controller('ExtensionCodesCtrl', function ($scope, B
       return $q(function(resolve, reject) {
         $q.all([
           Backend.get("/flow/list?all=1"),
-          Backend.get("/settings/extensionCodes")
+          Backend.get("/settings/extensionCodes/list")
 
         ]).then(function(res) {
         $scope.flows = res[0].data.data;
