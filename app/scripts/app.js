@@ -1553,7 +1553,6 @@ var regParams = {
         templateUrl: 'views/pages/billing-fix-paypal-billing-agreement.html',
         controller: 'BillingFixPaypalAgreementCtrl'
     })
-    fix-paypal-billing-agreement
     .state('billing-upgrade-plan', {
         url: '/billing/upgrade-plan',
         parent: 'dashboard',

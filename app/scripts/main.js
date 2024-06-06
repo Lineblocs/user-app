@@ -1547,6 +1547,12 @@ var regParams = {
         templateUrl: 'views/pages/billing-add-card.html',
         controller: 'BillingCtrl'
     })
+    .state('billing-fix-paypal-billing-agreement', {
+        url: '/billing/fix-paypal-billing-agreement',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-fix-paypal-billing-agreement.html',
+        controller: 'BillingFixPaypalAgreementCtrl'
+    })
     .state('billing-upgrade-plan', {
         url: '/billing/upgrade-plan',
         parent: 'dashboard',
@@ -3144,6 +3150,33 @@ angular.module('Lineblocs')
 
 	loadData(false);
   });
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs')
+  .controller('BillingFixPaypalAgreementCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+	  $shared.updateTitle("Billing Upgrade");
+	  $scope.$shared = $shared;
+    $scope.plans = '';
+
+    // TODO implement this
+    $scope.createNewAgreement = function(plan) {
+      return true;
+    }
+
+    Backend.get("/getServicePlans").then(function(res) {
+      console.log("getServicePlans ", res.data);
+      $scope.plans = res.data;
+    });
+});
+
 
 'use strict';
 
@@ -5649,7 +5682,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
     return number.checked;
    });
    console.log('saveTrunk params are ', params);
-    Backend.post("/trunk", params, true, true).then(function() {
+    Backend.post("/trunk", params).then(function() {
         console.log("created trunk..");
         $mdToast.show(
           $mdToast.simple()
@@ -10355,6 +10388,7 @@ angular.module('Lineblocs')
     data['payment_gateway'] = $shared.customizations.payment_gateway;
     data['billing_region_id'] = $scope.paymentDetails.address.state.id;
     data['billing_address'] = billingAddress;
+    data['payment_card'] = paymentDetails.payment_card;
     data['user_id'] = $scope.userId;
     data['workspace_id'] = $scope.workspaceInfo.id;
     data['payment_values'] = Object.assign({}, response);
