@@ -73,7 +73,7 @@ angular.module('Lineblocs').controller('HostedTrunksCreateCtrl', function ($scop
     return number.checked;
    });
    console.log('saveTrunk params are ', params);
-    Backend.post("/trunk", params, true, true).then(function() {
+    Backend.post("/trunk", params).then(function() {
         console.log("created trunk..");
         $mdToast.show(
           $mdToast.simple()
