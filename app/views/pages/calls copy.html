@@ -1,0 +1,80 @@
+<div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && calls.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div class=" no-results">
+      <div class="inner">
+        <center>
+            <h5>No calls found</h5>
+        </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="calls.length > 0">
+  <div layout="row side-options" layout-align="end center">
+        <div flex="10">
+            <md-input-container class="search">
+                <label>Search</label>
+                <input ng-keyup="pagination.search()" ng-model="pagination.settings.search" type="text" />
+                <a ng-show="pagination.shouldShowClear()" class="clear-search important-show" ng-click="pagination.clearSearch()">X</a>
+                <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
+            </md-input-container>
+          </div>
+  </div>
+<div ng-show="calls.length === 0" class="no-results">
+    <md-card md-theme="'default'"" md-theme-watch>
+    <div class=" no-results">
+      <div class="inner">
+        <center>
+            <h5>No calls found</h5>
+            <md-button ng-click="createFlow()" class="md-raised md-primary">Create New Flow</md-button>
+
+        </center>
+    </div>
+  </md-card>
+</div>
+<div ng-show="calls.length>0">
+  <!-- exact table from live demo -->
+  <md-card md-theme="'default'"" md-theme-watch>
+    <md-table-container>
+      <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+          <tr md-row>
+            <th md-column><span>From</span></th>
+            <th md-column>To</th>
+            <th md-column>Direction</th>
+            <th md-column>Status</th>
+            <!--
+            <th md-column>&nbsp;</th>
+            -->
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="number" md-select-id="name" md-auto-select ng-repeat="call in calls">
+            <td md-cell>
+               <a class="clickable" ng-click="viewCall(call)">{{call.from}}</a></td>
+            <td md-cell>{{call.to}}</td>
+            <td md-cell>{{call.direction}}</td>
+            <td md-cell>{{call.status}}</td>
+              <!--
+            <td md-cell>
+              <md-button ng-click="viewCall(call)" class="md-icon-button" aria-label="View Call">
+                  <md-icon ><i class="mdi mdi-eye"></i></md-icon>
+              </md-button>
+            </td>
+          -->
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card>
+  <div layout="row" layout-align="end">
+
+    <div>
+      <md-button ng-show="pagination.hasPrev()" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="!pagination.hasPrev()" disabled="" ng-click="pagination.prevPage()" class="md-raised md-primary">Prev Page</md-button>
+      <md-button ng-show="pagination.hasNext()" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+      <md-button ng-show="!pagination.hasNext()" disabled="" ng-click="pagination.nextPage()" class="md-raised md-primary">Next Page</md-button>
+    </div>
+  </div>
+</div>
+ 
+</div>

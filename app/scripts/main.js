@@ -4000,11 +4000,14 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
   $scope.calls = [];
   $scope.$shared = $shared;
   $scope.load = function() {
+      console.log('loading calls')
+      $shared.isLoading = true;
       pagination.resetSearch();
       pagination.changeUrl( "/call/list" );
       pagination.changePage( 1 );
       pagination.changeScope( $scope, 'calls' );
       pagination.loadData().then(function(res) {
+        console.log('call data ',res.data.data);
       $scope.calls = res.data.data;
       $shared.endIsLoading();
     })

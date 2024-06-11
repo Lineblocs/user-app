@@ -5,7 +5,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "start": "gulp compress-css && gulp scripts && gulp compress-js && gulp serve"
+    "start": "./shell_scripts/run_dev_server_v2.sh"
   },
   "resolutions": {
     "graceful-fs": "^4.2.11"
