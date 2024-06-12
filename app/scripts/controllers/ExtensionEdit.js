@@ -33,8 +33,11 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
       $shared.endIsLoading();
     });
   }
+
   $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
+    Backend.get("/generateSecurePassword").then(function(res) {
+    $scope.values.secret = res.data.password;
+    });
   }
   $scope.showSecret = function() {
     $scope.ui.showSecret = true;
