@@ -17,7 +17,8 @@ angular.module('Lineblocs').controller('CallViewCtrl', function ($scope, Backend
       $shared.isLoading =false;
       var call = res.data;
       call.recordings = call.recordings.map(function(obj) {
-        obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        //obj['uri'] = $sce.trustAsResourceUrl(obj['uri']);
+        obj['public_url'] = $sce.trustAsResourceUrl(obj['s3_url']);
         return obj;
       });
       $scope.call = call;
