@@ -247,6 +247,7 @@ searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'], [], ['manage_billing']),
 searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers'], [], ['manage_byo_carriers'], 'bring_carrier'),
 searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers'], [], ['manage_byo_did_numbers'], 'bring_carrier'),
+searchModule("Support", "support", ['support'], [], ['support']),
      ];
 
      factory.isSectionActive = function(area) {
@@ -304,7 +305,9 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
                 'billing-upgrade-plan',
                 'cancel-subscription'
             ],
-
+            'support': [
+                'support',
+            ],
 
          }
          var item = maps[area];
