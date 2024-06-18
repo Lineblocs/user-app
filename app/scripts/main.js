@@ -2217,25 +2217,27 @@ var regParams = {
   }
 
   function SetupExtDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
-        $scope.values = {
+    $scope.values = {
     };
-            $scope.$on("Created", function(id) {
-              console.log("setup created fired.." , arguments);
-              $shared.endIsLoading();
-              $shared.endIsCreateLoading();
-              onSuccess(id);
-            });
+
+    $scope.$on("Created", function(data, id) {
+      console.log("setup created fired.." , arguments);
+      $shared.endIsLoading();
+      $shared.endIsCreateLoading();
+      onSuccess(id);
+    });
 
   }
   function SetupNumberDialogController($scope, $shared, Backend, $mdDialog, onSuccess, onError) {
-        $scope.values = {
+    $scope.values = {
     };
-            $scope.$on("Created", function(id) {
-              console.log("setup created fired.." , arguments);
-              $shared.endIsLoading();
-              $shared.endIsCreateLoading();
-              onSuccess(id);
-            });
+
+    $scope.$on("Created", function(data, id) {
+      console.log("setup created fired.." , arguments);
+      $shared.endIsLoading();
+      $shared.endIsCreateLoading();
+      onSuccess(id);
+    });
 
   }
 'use strict';
@@ -8449,7 +8451,8 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
       email: ""
     },
     roles: $shared.makeDefaultWorkspaceRoles(),
-    preferred_pop: null
+    preferred_pop: null,
+    extension_id: null,
   };
   $scope.triedSubmit = false;
   $scope.submit = function(form) {
@@ -8500,7 +8503,10 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
         "onSuccess": function(extId) {
           console.log("new extension is ", extId);
           $scope.extId = extId;
-          load();
+          load().then(function() {
+            //console.log("selecting extension ID in dropdown")
+            //$scope.values.extension_id = extId;
+          });
         },
         "onError": function(flowId) {
           console.error("error occured..");
@@ -8524,7 +8530,10 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
         "onSuccess": function(numberId) {
           console.log("new number is ", numberId);
           $scope.numberId = numberId;
-          load();
+          load().then(function() {
+            console.log('reloaded data successfully.');
+          });
+
         },
         "onError": function(flowId) {
           console.error("error occured..");
@@ -8537,29 +8546,36 @@ angular.module('Lineblocs').controller('WorkspaceUserAssignCtrl', function ($sco
   }
 
   function load() {
-    $q.all([
-      Backend.get("/workspaceUser/" + $stateParams['userId']),
-      Backend.get("/extension/list?all=1"),
-      Backend.get("/did/list?all=1"),
-      Backend.get("/getPOPs")
-      ]).then(function(res) {
-        var user = res.data;
-        $scope.extensions = res[1].data.data;
-        $scope.numbers = res[2].data.data;
-        $scope.pops = res[3].data;
-          console.log("$scope.values are ", $scope.values);
-        angular.forEach($scope.extensions, function(ext) {
-          if ( $scope.extId && $scope.extId === ext.public_id ) {
-            $scope.values.extension_id = ext.id;
-          }
-        });
-        angular.forEach($scope.numbers, function(number) {
-          if ( $scope.numberId && $scope.numberId === number.public_id ) {
-            $scope.values.number_id = number.id;
-          }
-        });
+    return $q(function(resolve, reject) {
+      $q.all([
+        Backend.get("/workspaceUser/" + $stateParams['userId']),
+        Backend.get("/extension/list?all=1"),
+        Backend.get("/did/list?all=1"),
+        Backend.get("/getPOPs")
+        ]).then(function(res) {
+          var user = res.data;
+          $scope.extensions = res[1].data.data;
+          $scope.numbers = res[2].data.data;
+          $scope.pops = res[3].data;
+            console.log("$scope.values are ", $scope.values);
+          angular.forEach($scope.extensions, function(ext) {
+            if ( $scope.extId && $scope.extId === ext.public_id ) {
+              $scope.values.extension_id = ext.id;
+              $scope.extId = null;
+            }
+          });
+          angular.forEach($scope.numbers, function(number) {
+            if ( $scope.numberId && $scope.numberId === number.public_id ) {
+              $scope.values.number_id = number.id;
+              $scope.numberId = null;
+            }
+          });
 
-        console.log("values are ", $scope.values);
+          console.log("values are ", $scope.values);
+          resolve();
+        }, function() {
+          reject();
+        });
       });
     }
 
