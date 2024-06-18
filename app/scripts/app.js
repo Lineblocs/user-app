@@ -1288,6 +1288,21 @@ if (checked.length === 0) {
         // function to check the authentication //
     var Auth = ["$q", "$state", "$timeout", "$window", "$shared", function ($q, $state, $timeout, $window, $shared) {
         var deferred =$q.defer();
+
+        function redirectToLoginPage() {
+            console.log("not logged in...");
+            if (isAlreadyDoingNextRedirect()) {
+                return;
+            }
+            var path = document.location.href.split("/");
+            var next = path.slice(4, path.length).join("/");
+            //var next = $state.current.name;
+            console.log("next URL is: ", next);
+            console.log("current state is ", $state.current);
+            window.location.replace("/#/login?next=" + next);
+            //$state.go('login', {'next': next});
+            deferred.reject();
+        }
         $timeout(function() {
             console.log("checking auth token..");
             var token = getJWTTokenObj();
@@ -1298,20 +1313,17 @@ if (checked.length === 0) {
             }
             if (token!==''&&token) {
                 $shared.tempStopErrors = false;
-                return deferred.resolve();
-            } else {
-                console.log("not logged in...");
-                if (isAlreadyDoingNextRedirect()) {
+                var expiryTimePadding = (3600*5);
+                var expiryInUnix = token['expire_in_timestamp'];
+                var currentUnixTime = moment().unix()
+                if (currentUnixTime >= (expiryInUnix-expiryTimePadding)) {
+                    redirectToLoginPage();
                     return;
                 }
-                var path = document.location.href.split("/");
-                var next = path.slice(4, path.length).join("/");
-                //var next = $state.current.name;
-                console.log("next URL is: ", next);
-                console.log("current state is ", $state.current);
-                window.location.replace("/#/login?next=" + next);
-                //$state.go('login', {'next': next});
-                deferred.reject();
+
+                return deferred.resolve();
+            } else {
+                redirectToLoginPage();
             }
         }, 0);
     }];

@@ -247,6 +247,7 @@ searchModule("Faxes", "faxes", ['fax', 'faxes']),
 searchModule("Billing", "billing", ['billing', 'add card', 'cards', 'settings'], [], ['manage_billing']),
 searchModule("BYO Carriers", "byo-carriers", ['byo', 'carriers'], [], ['manage_byo_carriers'], 'bring_carrier'),
 searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did', 'numbers'], [], ['manage_byo_did_numbers'], 'bring_carrier'),
+searchModule("Support", "support", ['support'], [], ['support']),
      ];
 
      factory.isSectionActive = function(area) {
@@ -304,7 +305,9 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
                 'billing-upgrade-plan',
                 'cancel-subscription'
             ],
-
+            'support': [
+                'support',
+            ],
 
          }
          var item = maps[area];
@@ -1285,6 +1288,21 @@ if (checked.length === 0) {
         // function to check the authentication //
     var Auth = ["$q", "$state", "$timeout", "$window", "$shared", function ($q, $state, $timeout, $window, $shared) {
         var deferred =$q.defer();
+
+        function redirectToLoginPage() {
+            console.log("not logged in...");
+            if (isAlreadyDoingNextRedirect()) {
+                return;
+            }
+            var path = document.location.href.split("/");
+            var next = path.slice(4, path.length).join("/");
+            //var next = $state.current.name;
+            console.log("next URL is: ", next);
+            console.log("current state is ", $state.current);
+            window.location.replace("/#/login?next=" + next);
+            //$state.go('login', {'next': next});
+            deferred.reject();
+        }
         $timeout(function() {
             console.log("checking auth token..");
             var token = getJWTTokenObj();
@@ -1295,20 +1313,17 @@ if (checked.length === 0) {
             }
             if (token!==''&&token) {
                 $shared.tempStopErrors = false;
-                return deferred.resolve();
-            } else {
-                console.log("not logged in...");
-                if (isAlreadyDoingNextRedirect()) {
+                var expiryTimePadding = (3600*5);
+                var expiryInUnix = token['expire_in_timestamp'];
+                var currentUnixTime = moment().unix()
+                if (currentUnixTime >= (expiryInUnix-expiryTimePadding)) {
+                    redirectToLoginPage();
                     return;
                 }
-                var path = document.location.href.split("/");
-                var next = path.slice(4, path.length).join("/");
-                //var next = $state.current.name;
-                console.log("next URL is: ", next);
-                console.log("current state is ", $state.current);
-                window.location.replace("/#/login?next=" + next);
-                //$state.go('login', {'next': next});
-                deferred.reject();
+
+                return deferred.resolve();
+            } else {
+                redirectToLoginPage();
             }
         }, 0);
     }];
@@ -4884,8 +4899,11 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
       $shared.endIsLoading();
     });
   }
+
   $scope.generateSecret = function() {
-    $scope.values.secret = generatePassword();
+    Backend.get("/generateSecurePassword").then(function(res) {
+    $scope.values.secret = res.data.password;
+    });
   }
   $scope.showSecret = function() {
     $scope.ui.showSecret = true;
@@ -9102,6 +9120,7 @@ angular.module('Lineblocs')
 		*/
 	});
 
+	/*
 	if ($(window).width()<1200) {
 		$rootScope.$on('$stateChangeSuccess', function(){
 			$( '.c-hamburger' ).removeClass('is-active');
@@ -9114,6 +9133,7 @@ angular.module('Lineblocs')
 			$( '.mdl-grid' ).removeAttr('dragula');
 		});
 	}
+		*/
 
 	$scope.changeLanguage = (function (l) {
 

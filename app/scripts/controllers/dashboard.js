@@ -118,6 +118,7 @@ angular.module('Lineblocs')
 		*/
 	});
 
+	/*
 	if ($(window).width()<1200) {
 		$rootScope.$on('$stateChangeSuccess', function(){
 			$( '.c-hamburger' ).removeClass('is-active');
@@ -130,6 +131,7 @@ angular.module('Lineblocs')
 			$( '.mdl-grid' ).removeAttr('dragula');
 		});
 	}
+		*/
 
 	$scope.changeLanguage = (function (l) {
 
