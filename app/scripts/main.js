@@ -10,7 +10,8 @@
 */
 window.app_version = 2.0;
     function loadAddedResources1() {
-        addScript("https://js.stripe.com/v2/");
+        //addScript("https://js.stripe.com/v2/");
+        addScript("https://js.stripe.com/v3/");
     }
 
     // add CSS file
@@ -2788,34 +2789,51 @@ angular.module('Lineblocs')
 	function toCents(dollars) {
 		return dollars * 100;
 	}
+
+  async function initializePaymentGateway() {
+    return new Promise(async (resolve, reject) => {
+      switch ($shared.customizations.payment_gateway) {
+        case 'stripe': {
+			console.log('initializing stripe client');
+          //Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
+		  $scope.stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+          resolve();
+        }
+        default: {
+          reject();
+        }
+      }
+    });
+  }
 		function submitBilling(cardId, amount) {
 			var data = {};
-		data['card_id'] = cardId;
-		data['amount'] =  amount;
-		$scope.data.creditAmount.value;
-		$shared.isCreateLoading =true;
-		Backend.post("/credit/", data).then(function(res) {
-			console.log("added credit amount");
-					loadData(true).then(function() {
-						$mdToast.show(
-						$mdToast.simple()
-							.textContent('Added credits successfully')
-							.position('top right')
-							.hideDelay(3000)
-						);
+			data['card_id'] = cardId;
+			data['amount'] =  amount;
+			$scope.data.creditAmount.value;
+			$shared.isCreateLoading =true;
+			Backend.post("/credit/", data).then(function(res) {
+				console.log("added credit amount");
+						loadData(true).then(function() {
+							$mdToast.show(
+							$mdToast.simple()
+								.textContent('Added credits successfully')
+								.position('top right')
+								.hideDelay(3000)
+							);
 
-							})
-				});
-				//$shared.endIsCreateLoading();
+								})
+					});
+					//$shared.endIsCreateLoading();
 		}
 
-		function stripeRespAddCard(response) {
+		function createCardResource(paymentMethod) {
 			return $q(function(resolve, reject) {
 				var data = {};
-				data['stripe_token'] = response.id;
-				data['stripe_card'] = response.card.id;
-				data['last_4'] = response.card.last4;
-				data['issuer'] = response.card.brand;
+				//data['card_token'] = response.id;
+				//data['stripe_card'] = response.card.id;
+				data['payment_method_id'] = paymentMethod.id;
+				data['last_4'] = paymentMethod.card.last4;
+				data['issuer'] = paymentMethod.card.brand;
 				$shared.isCreateLoading =true;
 				Backend.post("/card", data).then(function(res) {
 					resolve(res);
@@ -2827,6 +2845,7 @@ angular.module('Lineblocs')
 		}
 
 	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
+		var stripeElements;
 		$scope.$shared = $shared;
 		$scope.card = {
 			name: "",
@@ -2837,6 +2856,9 @@ angular.module('Lineblocs')
 			expires: "",
 			cvv: ""
 		};
+
+
+
 		function stripeResponseHandler(status, response) {
 			$timeout(function() {
 				$scope.$apply();
@@ -2852,10 +2874,57 @@ angular.module('Lineblocs')
 			}, 0);
 		}
 
+		function setupStripeElements() {
+			const stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+			console.log('stripe ', stripe)
+			stripeElements = stripe.elements();
+
+			const cardNumber = elements.create('cardNumber');
+			const cardExpiry = elements.create('cardExpiry');
+			const cardCvc = elements.create('cardCvc');
+		
+			cardNumber.mount('#cardNumber');
+			cardExpiry.mount('#cardExpiry');
+			cardCvc.mount('#cardCVC');
+		}
+
+		async function createPaymentMethod() {
+			console.log('createPaymentMethod called');
+			const stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+			const name = '';
+
+			try {
+				const result = await stripe.createPaymentMethod({
+					type: 'card',
+					card: stripeElements,
+					billing_details: {
+						name: name,
+					},
+				})
+				console.log('createPaymentMethod result ', result)
+
+				// Handle result.error or result.paymentMethod
+				const { paymentMethod, error } = result;
+				if (error) {
+					// Display error to user
+					console.error('createPaymentMethod error', error.message);
+					console.error(error);
+					return Promise.reject(error.message);
+				}
+
+				return Promise.resolve( paymentMethod );
+			} catch ( err ) {
+				console.error('createPaymentMethod error', err);
+				console.error(err);
+				return Promise.reject( err );
+			}
+		}
+
 		$scope.cancel = function() {
 			$mdDialog.cancel();
 		}
 		$scope.submit = function() {
+			/*
 			var data = {};
 			data['number'] = $scope.card.number;
 			data['cvc'] = $scope.card.cvv;
@@ -2864,7 +2933,17 @@ angular.module('Lineblocs')
 			data['exp_year'] = splitted[ 1 ];
 			data['address_zip'] = $scope.card.postal_code;
 			Stripe.card.createToken(data, stripeResponseHandler);
-
+			*/
+			console.log('submit add card form');
+			createPaymentMethod().then(function(paymentMethod) {
+				// Get the token ID:
+				$mdDialog.hide();
+				onSuccess(paymentMethod);
+			}).catch(function(error) {
+				// Show the errors on the form
+				$scope.errorMsg = error;
+				angular.element('.add-card-form').scrollTop(0)
+			});
 		}
 	}
 	$scope.createLabel = function(card) {
@@ -2872,7 +2951,7 @@ angular.module('Lineblocs')
 	}
 	$scope.addCard = function($event) {
 		function onSuccess(response) {
-			stripeRespAddCard(response).then(function() {
+			createCardResource(response).then(function() {
 				loadData(true);
 			});
 		}
@@ -2923,7 +3002,7 @@ angular.module('Lineblocs')
 				} else { // Token was created!
 					// Get the token ID:
 					$mdDialog.hide();
-					stripeRespAddCard(response).then(function(res) {
+					createCardResource(response).then(function(res) {
 						var cardId = res.headers('X-Card-ID');
 						$timeout(function() {
 							$scope.$apply();
@@ -3067,18 +3146,20 @@ angular.module('Lineblocs')
 				$scope.usageTriggers = res[0].data[4];
 				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
-				Stripe.setPublishableKey($scope.config.stripe.key);
-				console.log("billing data is ", $scope.billing);
-				console.log("cards are ", $scope.cards);
-				console.log("settings are ", $scope.settings);
-				console.log("usage triggers are ", $scope.usageTriggers);
-				$scope.creditAmount = $scope.creditAmounts[0];
-				if (createLoading) {
-					$shared.endIsCreateLoading();
-				} else {
-					$shared.endIsLoading();
-				}
-				resolve();
+
+				initializePaymentGateway().then(function() {
+					console.log("billing data is ", $scope.billing);
+					console.log("cards are ", $scope.cards);
+					console.log("settings are ", $scope.settings);
+					console.log("usage triggers are ", $scope.usageTriggers);
+					$scope.creditAmount = $scope.creditAmounts[0];
+					if (createLoading) {
+						$shared.endIsCreateLoading();
+					} else {
+						$shared.endIsLoading();
+					}
+					resolve();
+				});
 			}, reject);
 		});
 	}
@@ -3305,7 +3386,7 @@ angular.module('Lineblocs')
 		function stripeRespAddCard(response) {
 			return $q(function(resolve, reject) {
 				var data = {};
-				data['stripe_token'] = response.id;
+				data['card_token'] = response.id;
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
@@ -6072,7 +6153,7 @@ angular.module('Lineblocs')
 		function stripeRespAddCard(response) {
 			return $q(function(resolve, reject) {
 				var data = {};
-				data['stripe_token'] = response.id;
+				data['card_token'] = response.id;
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
@@ -10446,6 +10527,7 @@ angular.module('Lineblocs')
     return new Promise(async (resolve, reject) => {
       switch ($shared.customizations.payment_gateway) {
         case 'stripe': {
+          //Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
           Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
           resolve();
         }
@@ -10729,7 +10811,7 @@ angular.module('Lineblocs')
 		function stripeRespAddCard(response) {
 			return $q(function(resolve, reject) {
 				var data = {};
-				data['stripe_token'] = response.id;
+				data['card_token'] = response.id;
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;

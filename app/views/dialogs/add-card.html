@@ -52,19 +52,19 @@
           <div flex>
           <md-input-container>
               <label>Number</label>
-              <input ng-model="card.number"/>
+              <input id="cardNumber" ng-model="card.number"/>
             </md-input-container>
           </div>
           <div flex>
             <md-input-container>
               <label>Expires</label>
-              <input placeholder="MM/YY" ng-model="card.expires"/>
+              <input id="cardExpiry" placeholder="MM/YY" ng-model="card.expires"/>
             </md-input-container>
           </div>
           <div flex>
             <md-input-container>
               <label>CVV</label>
-              <input ng-model="card.cvv" />
+              <input id="cardCVC" ng-model="card.cvv" />
             </md-input-container>
           </div>
         </div>

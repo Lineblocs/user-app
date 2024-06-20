@@ -10,7 +10,8 @@
 */
 window.app_version = 2.0;
     function loadAddedResources1() {
-        addScript("https://js.stripe.com/v2/");
+        //addScript("https://js.stripe.com/v2/");
+        addScript("https://js.stripe.com/v3/");
     }
 
     // add CSS file

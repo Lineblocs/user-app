@@ -100,7 +100,7 @@ angular.module('Lineblocs')
 		function stripeRespAddCard(response) {
 			return $q(function(resolve, reject) {
 				var data = {};
-				data['stripe_token'] = response.id;
+				data['card_token'] = response.id;
 				data['stripe_card'] = response.card.id;
 				data['last_4'] = response.card.last4;
 				data['issuer'] = response.card.brand;
