@@ -532,7 +532,10 @@
                                     <p class="payment-info">The bank may hold and release $1 to verify the card.</p>
 
                                     <div class="field-input" layout="column">
-                                        <div layout="row" layout-md="row" flex="100" class="field-input-ui">
+                                        <div layout="row" layout-md="row" flex="100" class="field-input-ui" ng-show="needsCustomPaymentForm()">
+                                            <div ng-non-bindable id="card-element"></div>
+                                        </div>
+                                        <div layout="row" layout-md="row" flex="100" class="field-input-ui" ng-show="needsCustomPaymentForm()">
                                             <div flex="100">
                                                 <div class="input-box">
                                                     <md-input-container class="payment-input">

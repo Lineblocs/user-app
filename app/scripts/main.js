@@ -10292,6 +10292,10 @@ angular.module('Lineblocs')
   .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $filter) {
 	  $shared.updateTitle("Register");
 		console.log("STATE ", $stateParams);
+
+	var stripeElements;
+	var stripeCard;
+	var stripe;
 	  var countryToCode = {
 		  US: "+1",
 		  CA: "+1",
@@ -10408,6 +10412,10 @@ angular.module('Lineblocs')
     amex: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/40px-American_Express_logo.svg.png',
     discover: 'https://www.duplichecker.com/newassets1/images/cradit-card-validator/Discover.svg'
   };
+
+	$scope.needsCustomPaymentForm = function() {
+		return false;
+	}
   $scope.getCreditCardBrand = function (cardNumber) {
     if (!cardNumber) return null;
     cardNumber = cardNumber.toString().replace(/\D/g, '');
@@ -10578,8 +10586,9 @@ angular.module('Lineblocs')
     return new Promise(async (resolve, reject) => {
       switch ($shared.customizations.payment_gateway) {
         case 'stripe': {
+			console.log('initializing stripe client');
           //Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-          Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
+		  $scope.stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
           resolve();
         }
         default: {
@@ -10588,6 +10597,81 @@ angular.module('Lineblocs')
       }
     });
   }
+
+
+function setupStripeElements() {
+	console.log('setupStripeElements called');
+	// Create an instance of Elements.
+	stripeElements = stripe.elements();
+
+	// Custom styling can be passed to options when creating an Element.
+	var style = {
+		base: {
+			color: '#ffffff', // Set font color to white
+			fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+			fontSmoothing: 'antialiased',
+			fontSize: '16px',
+			'::placeholder': {
+				color: '#aab7c4'
+			}
+		},
+		invalid: {
+			color: '#fa755a',
+			iconColor: '#fa755a'
+		}
+	};
+
+	// Create an instance of the card Element.
+	stripeCard = stripeElements.create('card', {style: style});
+
+	// Add an instance of the card Element into the `card-element` <div>.
+	stripeCard.mount('#card-element');
+
+	// Handle real-time validation errors from the card Element.
+	stripeCard.on('change', function(event) {
+		if (event.error) {
+			// Show the errors on the form
+			$scope.errorMsg = event.error.message;
+			//angular.element('.add-card-form').scrollTop(0)
+		} else {
+			$scope.errorMsg = null;
+		}
+	});
+}
+
+
+async function createPaymentMethod(paymentDetails) {
+	console.log('createPaymentMethod called');
+	const name = $scope.card.name;
+
+	console.log('createPaymentMethod users name: ' + name);
+
+	try {
+		const result = await stripe.createPaymentMethod({
+			type: 'card',
+			card: stripeCard,
+			billing_details: {
+				name: name,
+			},
+		})
+		console.log('createPaymentMethod result ', result)
+
+		// Handle result.error or result.paymentMethod
+		const { paymentMethod, error } = result;
+		if (error) {
+			// Display error to user
+			console.error('createPaymentMethod error', error.message);
+			console.error(error);
+			return Promise.reject(error.message);
+		}
+
+		return Promise.resolve( paymentMethod );
+	} catch ( err ) {
+		console.error('createPaymentMethod error', err);
+		console.error(err);
+		return Promise.reject( err );
+	}
+}
 
   async function createCardToken(gateway, paymentDetails) {
     try {
