@@ -14,4 +14,5 @@ gulp compress-js
 rm -rf app/dist && cp -rf dist app/
 cp ./app/index-prod.html ./app/index.html
 
-gulp serve
+#gulp serve
+gulp watch
