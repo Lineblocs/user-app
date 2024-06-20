@@ -84,6 +84,28 @@ function getWorkspace() {
     var parsed = JSON.parse(workspace);
     return parsed;
 }
+function waitForElement(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                observer.disconnect();
+                resolve(document.querySelector(selector));
+            }
+        });
+
+        // If you get "parameter 1 is not of type 'Node'" error, see https://stackoverflow.com/a/77855838/492336
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
+
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
 var version = "v1";
@@ -378,15 +400,7 @@ searchModule("Support", "support", ['support'], [], ['support']),
       }
 	factory.getCardImg = function(card) {
         console.log("getCardImg ", card);
-		var map = {
-			"MasterCard": "mastercard",
-			"Visa": "visa",
-			"AMEX": "amex",
-			"Maestro": "maestro",
-			"JCB": "jcb",
-			"Diners": "diners",
-		};
-	    return 	'/images/cards/' + map[ card.issuer ] + '.png'
+	    return 	'/images/cards/' + card.issuer + '.png'
 	}
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;

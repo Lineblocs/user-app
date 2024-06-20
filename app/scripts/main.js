@@ -84,6 +84,28 @@ function getWorkspace() {
     var parsed = JSON.parse(workspace);
     return parsed;
 }
+function waitForElement(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                observer.disconnect();
+                resolve(document.querySelector(selector));
+            }
+        });
+
+        // If you get "parameter 1 is not of type 'Node'" error, see https://stackoverflow.com/a/77855838/492336
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
+
 var check1 = document.location.href.includes("http://localhost");
 var check2 = document.location.href.includes("ngrok.io");
 var version = "v1";
@@ -378,15 +400,7 @@ searchModule("Support", "support", ['support'], [], ['support']),
       }
 	factory.getCardImg = function(card) {
         console.log("getCardImg ", card);
-		var map = {
-			"MasterCard": "mastercard",
-			"Visa": "visa",
-			"AMEX": "amex",
-			"Maestro": "maestro",
-			"JCB": "jcb",
-			"Diners": "diners",
-		};
-	    return 	'/images/cards/' + map[ card.issuer ] + '.png'
+	    return 	'/images/cards/' + card.issuer + '.png'
 	}
         factory.isInLoadingState = function() {
             var check = factory.isLoading || factory.isCreateLoading;
@@ -2846,6 +2860,9 @@ angular.module('Lineblocs')
 
 	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
 		var stripeElements;
+		var stripeCard;
+		var stripe;
+
 		$scope.$shared = $shared;
 		$scope.card = {
 			name: "",
@@ -2856,7 +2873,6 @@ angular.module('Lineblocs')
 			expires: "",
 			cvv: ""
 		};
-
 
 
 		function stripeResponseHandler(status, response) {
@@ -2875,28 +2891,55 @@ angular.module('Lineblocs')
 		}
 
 		function setupStripeElements() {
-			const stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
-			console.log('stripe ', stripe)
+			console.log('setupStripeElements called');
+			// Create an instance of Elements.
 			stripeElements = stripe.elements();
 
-			const cardNumber = elements.create('cardNumber');
-			const cardExpiry = elements.create('cardExpiry');
-			const cardCvc = elements.create('cardCvc');
-		
-			cardNumber.mount('#cardNumber');
-			cardExpiry.mount('#cardExpiry');
-			cardCvc.mount('#cardCVC');
+			// Custom styling can be passed to options when creating an Element.
+			var style = {
+				base: {
+					color: '#ffffff', // Set font color to white
+					fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+					fontSmoothing: 'antialiased',
+					fontSize: '16px',
+					'::placeholder': {
+						color: '#aab7c4'
+					}
+				},
+				invalid: {
+					color: '#fa755a',
+					iconColor: '#fa755a'
+				}
+			};
+
+			// Create an instance of the card Element.
+			stripeCard = stripeElements.create('card', {style: style});
+
+			// Add an instance of the card Element into the `card-element` <div>.
+			stripeCard.mount('#card-element');
+
+			// Handle real-time validation errors from the card Element.
+			stripeCard.on('change', function(event) {
+				if (event.error) {
+					// Show the errors on the form
+					$scope.errorMsg = event.error.message;
+					//angular.element('.add-card-form').scrollTop(0)
+				} else {
+					$scope.errorMsg = null;
+				}
+			});
 		}
 
 		async function createPaymentMethod() {
 			console.log('createPaymentMethod called');
-			const stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
-			const name = '';
+			const name = $scope.card.name;
+
+			console.log('createPaymentMethod users name: ' + name);
 
 			try {
 				const result = await stripe.createPaymentMethod({
 					type: 'card',
-					card: stripeElements,
+					card: stripeCard,
 					billing_details: {
 						name: name,
 					},
@@ -2936,6 +2979,7 @@ angular.module('Lineblocs')
 			*/
 			console.log('submit add card form');
 			createPaymentMethod().then(function(paymentMethod) {
+				console.log('created payment method ', paymentMethod)
 				// Get the token ID:
 				$mdDialog.hide();
 				onSuccess(paymentMethod);
@@ -2945,6 +2989,13 @@ angular.module('Lineblocs')
 				angular.element('.add-card-form').scrollTop(0)
 			});
 		}
+
+		setTimeout(() => {
+			waitForElement('#cardNumber').then(function() {
+				stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+				setupStripeElements();
+			});
+		}, 0);
 	}
 	$scope.createLabel = function(card) {
 		return "**** **** **** " + card.last_4;

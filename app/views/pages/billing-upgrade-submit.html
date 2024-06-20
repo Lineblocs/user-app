@@ -46,11 +46,11 @@
                                         <md-radio-button ng-repeat="card in cards" ng-value="card.id"
                                             aria-label="{{$shared.createCardLabel(card)}}">
                                             <label>{{$shared.createCardLabel(card)}}</label>
-                                            <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                            <md-icon md-svg-icon="{{$shared.getCardImg(card)}}"></md-icon>
                                         </md-radio-button>
                                         <md-radio-button ng-value="'new'" aria-label="Add New Card">
                                             <label>Add New Card</label>
-                                            <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
+                                            <md-icon md-svg-icon="{{$shared.getCardImg(card)}}"></md-icon>
                                         </md-radio-button>
                                     </md-radio-group>
                                 </div>
