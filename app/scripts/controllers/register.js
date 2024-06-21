@@ -30,6 +30,7 @@ angular.module('Lineblocs')
 	  $scope.token = null;
 	  $scope.invalidCode =false;
 	  $scope.invalidNumber =false;
+	  $scope.paymentErrorMsg = null;
 	  $scope.planInfo = null;
     $scope.planPrice = null;
 	$scope.hasWorkspaceNameErr = false;
@@ -221,6 +222,20 @@ angular.module('Lineblocs')
 					$scope.step = 3;
 				}
 	}
+
+	$scope.needsCustomPaymentForm = () => {
+		return false;
+	}
+
+  	$scope.gotoPaymentForm= function() {
+		console.log('gotoPaymentForm called')
+		$scope.step = 5;
+  		initializePaymentGateway().then(() => {
+			setTimeout(() => {
+				setupStripeElements();
+			}, 0);
+		});
+	}
     $scope.submit = function($event, registerForm) {
 		console.log("called submit");
 		$scope.triedSubmit = true;
@@ -250,6 +265,7 @@ angular.module('Lineblocs')
 				$scope.userId = data.userId;
 				$scope.workspaceInfo = data.workspace;
 				$shared.changingPage = false;
+
 				$scope.gotoVerificationFlow();
 			});
 			return;
@@ -262,23 +278,28 @@ angular.module('Lineblocs')
     $scope.paymentMethod = method;
   };
 
+
+  function isPaymentFormValid() {
+    //return paymentForm.$valid;
+	return true;
+  }
   $scope.submitPaymentForm = function($event, paymentForm) {
     console.log("called click PaymentForm");
     $scope.triedSubmit = true;
     if(!$scope.paymentDetails.accept_terms) return;
-    if(paymentForm.$valid) {
+    if(isPaymentFormValid()) {
       if($scope.paymentMethod === 'card') {
         submitTrial();
         // $scope.step = 6;
         return;
       } else {
-        $scope.step = 5;
+		$scope.gotoPaymentForm();
       }
     }
   }
 
   async function submitTrial() {
-    const response = await createCardToken($shared.customizations.payment_gateway, $scope.paymentDetails);
+	const paymentMethod = await createPaymentMethod();
     const data = {};
     const billingAddress = {
       'addr1': $scope.paymentDetails.address.street,
@@ -289,16 +310,22 @@ angular.module('Lineblocs')
     data['payment_gateway'] = $shared.customizations.payment_gateway;
     data['billing_region_id'] = $scope.paymentDetails.address.state.id;
     data['billing_address'] = billingAddress;
-    data['payment_card'] = paymentDetails.payment_card;
+    data['payment_card'] = $scope.paymentDetails.payment_card;
     data['user_id'] = $scope.userId;
     data['workspace_id'] = $scope.workspaceInfo.id;
-    data['payment_values'] = Object.assign({}, response);
+    data['payment_values'] = {};
+	const paymentData = {};
+	paymentData['payment_method_id'] = paymentMethod.id;
+	paymentData['last_4'] = paymentMethod.card.last4;
+	paymentData['issuer'] = paymentMethod.card.brand;
+	data['payment_values'] = paymentData
     Backend.post("/saveCustomerPaymentDetails", data, true).then(function( res ) {
       console.log('saved payment details', res);
       $scope.step = 6;
     }).catch(function(err) {
       console.log('error saving payment details', err);
-      $scope.step = 6;
+
+	  showPaymentError("Internal error occured. Please contact support.");
     });
   }
 
@@ -308,7 +335,7 @@ angular.module('Lineblocs')
         case 'stripe': {
 			console.log('initializing stripe client');
           //Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-		  $scope.stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+		  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
           resolve();
         }
         default: {
@@ -318,6 +345,11 @@ angular.module('Lineblocs')
     });
   }
 
+function showPaymentError(msg) {
+	// Show the errors on the form
+	$scope.paymentErrorMsg = msg;
+	angular.element('#paymentForm').scrollTop(0)
+}
 
 function setupStripeElements() {
 	console.log('setupStripeElements called');
@@ -327,7 +359,6 @@ function setupStripeElements() {
 	// Custom styling can be passed to options when creating an Element.
 	var style = {
 		base: {
-			color: '#ffffff', // Set font color to white
 			fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
 			fontSmoothing: 'antialiased',
 			fontSize: '16px',
@@ -351,10 +382,10 @@ function setupStripeElements() {
 	stripeCard.on('change', function(event) {
 		if (event.error) {
 			// Show the errors on the form
-			$scope.errorMsg = event.error.message;
+			showPaymentError(event.error.message);
 			//angular.element('.add-card-form').scrollTop(0)
 		} else {
-			$scope.errorMsg = null;
+			$scope.paymentErrorMsg = null;
 		}
 	});
 }
@@ -594,7 +625,7 @@ async function createPaymentMethod(paymentDetails) {
 			Backend.post("/provisionCallSystem", data).then(function( res ) {
 				$shared.changingPage = false;
         if ($shared.customizations.signup_requires_payment_detail) {
-          $scope.step = 5;
+			$scope.gotoPaymentForm();
         } else {
           doSpinup();
         }
