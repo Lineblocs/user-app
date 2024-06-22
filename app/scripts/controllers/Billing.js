@@ -418,13 +418,13 @@ angular.module('Lineblocs')
 		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate));
 	}
 	
-	$scope.changeStartDate = function($event) {
+	$scope.changeStartDate = function() {
 		console.log('changeStartDate', arguments);
 		console.log('start date ', $scope.startDate);
 		$scope.startDate = angular.element('#startDate').val();
 	}
 
-	$scope.changeEndDate = function($event) {
+	$scope.changeEndDate = function() {
 		console.log('changeEndDate', arguments);
 		console.log('end date ', $scope.endDate);
 		$scope.endDate = angular.element('#endDate').val();
