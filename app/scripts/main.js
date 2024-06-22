@@ -3144,8 +3144,21 @@ angular.module('Lineblocs')
   }
 
 	function billHistory() {
-		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
+		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate));
 	}
+	
+	$scope.changeStartDate = function($event) {
+		console.log('changeStartDate', arguments);
+		console.log('start date ', $scope.startDate);
+		$scope.startDate = angular.element('#startDate').val();
+	}
+
+	$scope.changeEndDate = function($event) {
+		console.log('changeEndDate', arguments);
+		console.log('end date ', $scope.endDate);
+		$scope.endDate = angular.element('#endDate').val();
+	}
+
 	$scope.filterBilling = function() {
 		$shared.isCreateLoading = true;
 		billHistory().then(function(res) {
@@ -3155,7 +3168,7 @@ angular.module('Lineblocs')
 	}
 	$scope.downloadBilling = function() {
 		var token = getJWTTokenObj();
-		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token.auth));
+		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate) + "&auth=" + token.token.auth));
 	}
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {
