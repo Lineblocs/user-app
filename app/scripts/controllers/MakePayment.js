@@ -76,13 +76,13 @@ angular.module('Lineblocs')
 	function toCents(dollars) {
 		return dollars * 100;
 	}
-		function submitBilling(cardId, amount) {
+		function submitCredit(cardId, amount) {
 			var data = {};
 		data['card_id'] = cardId;
 		data['amount'] =  amount;
 		$scope.data.creditAmount.value;
 		$shared.isCreateLoading =true;
-		Backend.post("/credit/", data).then(function(res) {
+		Backend.post("/credit", data).then(function(res) {
 			console.log("added credit amount");
 					loadData(true).then(function() {
 						$mdToast.show(
@@ -91,6 +91,8 @@ angular.module('Lineblocs')
 							.position('top right')
 							.hideDelay(3000)
 						);
+
+    					$state.go('billing', {});
 
 							})
 				});
@@ -190,40 +192,10 @@ angular.module('Lineblocs')
 		if (!$scope.data.selectedCard) {
 			return;
 		}
-		if ($scope.data.selectedCard === 'new') {
-			var data = {};
-			data['number'] = $scope.card.number;
-			data['cvc'] = $scope.card.cvv;
-			var splitted = $scope.card.expires.split("/");
-			data['exp_month'] = splitted[ 0 ];
-			data['exp_year'] = splitted[ 1 ];
-			data['address_zip'] = $scope.card.postal_code;
-			Stripe.card.createToken(data, function (status, response) {
-				if (response.error) { // Problem!
-					// Show the errors on the form
-					$scope.errorMsg = response.error.message;
 
-				} else { // Token was created!
-					// Get the token ID:
-					$mdDialog.hide();
-					stripeRespAddCard(response).then(function(res) {
-						var cardId = res.headers('X-Card-ID');
-						$timeout(function() {
-							$scope.$apply();
-							submitBilling(cardId, $scope.data.creditAmount.value);
-						}, 0);
-					})
-				}
-				$timeout(function() {
-					$scope.$apply();
-					submitBilling(cardId, $scope.data.creditAmount.value);
-				}, 0);
-			});
-			return;
-		}
 		$timeout(function() {
 			$scope.$apply();
-			submitBilling($scope.data.selectedCard, $scope.data.creditAmount.value);
+			submitCredit($scope.data.selectedCard, $scope.data.creditAmount.value);
 		}, 0);
 
 	}
@@ -350,7 +322,6 @@ angular.module('Lineblocs')
 				$scope.usageTriggers = res[0].data[4];
 				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
-				Stripe.setPublishableKey($scope.config.stripe.key);
 				console.log("billing data is ", $scope.billing);
 				console.log("cards are ", $scope.cards);
 				console.log("settings are ", $scope.settings);
