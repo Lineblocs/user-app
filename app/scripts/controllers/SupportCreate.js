@@ -11,16 +11,7 @@ angular.module('Lineblocs')
   .controller('SupportCreateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	$shared.updateTitle("Create Support ticket");
 	$scope.$shared = $shared;
-	$scope.categories = [
-		{
-			"id": 1,
-			"name": "Phone connection issues"
-		},
-		{
-			"id": 2,
-			"name": "Audio quality issues"
-		},
-	];
+
 	$scope.values = {
 		category: "",
 		subject: "",
@@ -46,6 +37,7 @@ angular.module('Lineblocs')
           .filter(function(pos) { return toastPos[pos]; })
           .join(' ');
 		console.log('params are ', params);
+
 		Backend.post("/supportTicket", params, true, true).then(function() {
 			console.log("created ticket.");
 			$mdToast.show(
@@ -58,4 +50,14 @@ angular.module('Lineblocs')
 		$shared.endIsCreateLoading();
 		});
 	}
+
+	$scope.load = function() {
+      	$shared.isLoading = true;
+		Backend.get("/supportTicket/categories").then(function(res) {
+			var data = res.data;
+			$scope.categories = data;
+          	$shared.endIsLoading();
+		});
+	}
+	$scope.load();
   });

@@ -3147,13 +3147,13 @@ angular.module('Lineblocs')
 		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate));
 	}
 	
-	$scope.changeStartDate = function($event) {
+	$scope.changeStartDate = function() {
 		console.log('changeStartDate', arguments);
 		console.log('start date ', $scope.startDate);
 		$scope.startDate = angular.element('#startDate').val();
 	}
 
-	$scope.changeEndDate = function($event) {
+	$scope.changeEndDate = function() {
 		console.log('changeEndDate', arguments);
 		console.log('end date ', $scope.endDate);
 		$scope.endDate = angular.element('#endDate').val();
@@ -8138,16 +8138,7 @@ angular.module('Lineblocs')
   .controller('SupportCreateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	$shared.updateTitle("Create Support ticket");
 	$scope.$shared = $shared;
-	$scope.categories = [
-		{
-			"id": 1,
-			"name": "Phone connection issues"
-		},
-		{
-			"id": 2,
-			"name": "Audio quality issues"
-		},
-	];
+
 	$scope.values = {
 		category: "",
 		subject: "",
@@ -8173,6 +8164,7 @@ angular.module('Lineblocs')
           .filter(function(pos) { return toastPos[pos]; })
           .join(' ');
 		console.log('params are ', params);
+
 		Backend.post("/supportTicket", params, true, true).then(function() {
 			console.log("created ticket.");
 			$mdToast.show(
@@ -8185,6 +8177,16 @@ angular.module('Lineblocs')
 		$shared.endIsCreateLoading();
 		});
 	}
+
+	$scope.load = function() {
+      	$shared.isLoading = true;
+		Backend.get("/supportTicket/categories").then(function(res) {
+			var data = res.data;
+			$scope.categories = data;
+          	$shared.endIsLoading();
+		});
+	}
+	$scope.load();
   });
 
 'use strict';
@@ -8197,7 +8199,7 @@ angular.module('Lineblocs')
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams) {
+  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams, $sce) {
 	$shared.updateTitle("Update Support ticket");
 	$scope.$shared = $shared;
 	$scope.values = {
@@ -8242,7 +8244,12 @@ angular.module('Lineblocs')
 		console.log("loading data")
 		Backend.get(url).then(function(res) {
 			console.log("ticket loaded.", res);
-			$scope.ticket = res.data;
+			var ticket = res.data;
+			ticket.updates = ticket.updates.map((obj) => {
+				obj.commentHTML = $sce.trustAsHtml(obj.comment);
+				return obj;
+			});
+			$scope.ticket = ticket;
 		});
 	}
 	load();

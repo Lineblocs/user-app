@@ -42,7 +42,8 @@
             </md-card-title>
 
             <md-card-content>
-                {{update.comment}}
+                <div ng-bind-html="update.commentHTML">
+                </div>
 
                 <div ng-if="update.attachments.length>0">
                     <ul>

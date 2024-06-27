@@ -8,7 +8,7 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams) {
+  .controller('SupportUpdateCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams, $sce) {
 	$shared.updateTitle("Update Support ticket");
 	$scope.$shared = $shared;
 	$scope.values = {
@@ -53,7 +53,12 @@ angular.module('Lineblocs')
 		console.log("loading data")
 		Backend.get(url).then(function(res) {
 			console.log("ticket loaded.", res);
-			$scope.ticket = res.data;
+			var ticket = res.data;
+			ticket.updates = ticket.updates.map((obj) => {
+				obj.commentHTML = $sce.trustAsHtml(obj.comment);
+				return obj;
+			});
+			$scope.ticket = ticket;
 		});
 	}
 	load();
