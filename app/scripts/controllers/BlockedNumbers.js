@@ -42,7 +42,7 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
         Backend.post("/settings/blockedNumbers", data).then(function(res) {
            $mdToast.show(
           $mdToast.simple()
-            .textContent('Number verified')
+            .textContent('Number added to blocked callers list successfully.')
             .position("top right")
             .hideDelay(3000)
         );
@@ -53,6 +53,45 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
 
       $scope.close = function() {
         $mdDialog.hide();
+      }
+    }
+
+
+    function ImportDialogController($scope, $mdDialog, Backend, $shared, onCreated, onFinished) {
+      $scope.$shared = $shared;
+      $scope.error = false;
+      $scope.errorText = "";
+      $scope.data = {
+        file: null
+      };
+      $scope.submit = function($event) {
+        var files = angular.element("#uploadFile").prop("files");
+        if ( files.length === 0 ) {
+          $scope.errorText="Please select atleast 1 file..";
+          return;
+        }
+        var params = new FormData();
+        angular.forEach(files, function(file) {
+          params.append("file[]", file);
+        });
+        $shared.isCreateLoading = true;
+        Backend.postFiles("/settings/blockedNumbers/uploadList", params, true).then(function(res) {
+          var data = res.data;
+          $shared.endIsCreateLoading();
+          if (data.amountFailed > 0) {
+              angular.forEach(data.results, function(result) {
+                if ( !result.success ) {
+                  var msg = result.name + " failed to upload please check the file type and size";
+                  $shared.showToast( msg );
+                }
+              });
+            }
+            $mdDialog.hide();
+            onFinished();
+        });
+      }
+      $scope.close = function() {
+        $mdDialog.hide(); 
       }
     }
 
@@ -111,6 +150,32 @@ angular.module('Lineblocs').controller('BlockedNumbersCtrl', function ($scope, B
           });
 
       })
+    }, function() {
+    });
+  }
+
+  $scope.import= function($event) {
+    const data = angular.copy($scope.data);
+    console.log('import',  $scope.countries);
+    $mdDialog.show({
+      controller: ImportDialogController,
+      templateUrl: 'views/dialogs/blocked-numbers-import.html',
+      parent: angular.element(document.body),
+      targetEvent: $event,
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen, // Only for -xs, -sm breakpoints.
+      locals: {
+        onCreated: function() {
+          $scope.load();
+        },
+        onFinished: function() {
+          $scope.load();
+        },
+
+
+      }
+    })
+    .then(function() {
     }, function() {
     });
   }
