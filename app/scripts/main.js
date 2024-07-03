@@ -106,19 +106,25 @@ function waitForElement(selector) {
 }
 
 
-var check1 = document.location.href.includes("http://localhost");
-var check2 = document.location.href.includes("ngrok.io");
-var version = "v1";
-if (check1 || check2) {
-    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api/" + version
-} else {
-    //var baseUrl = "/api";
-    var baseUrl = "https://" + DEPLOYMENT_DOMAIN + "/api/" + version;
+function getBaseUrl() {
+    var check1 = document.location.href.includes("http://localhost");
+    var check2 = document.location.href.includes("ngrok.io");
+    var version = "v1";
+    if (check1 || check2) {
+        var baseUrl = "https://" + DEPLOYMENT_DOMAIN;
+    } else {
+        //var baseUrl = "/api";
+        var baseUrl = "https://" + DEPLOYMENT_DOMAIN;
+    }
+
+    return baseUrl;
 }
 
 function createUrl(path) {
-    return baseUrl + path;
+    var version = "v1";
+    return getBaseUrl() + "/api/" + version + path;
 }
+
 
 function generatePassword() {
     var length = 32,
@@ -369,7 +375,7 @@ searchModule("Support", "support", ['support'], [], ['support']),
         if ( !logo || logo === '' ) {
                 return '/images/new-logo-blue.png';
         }
-        return "/assets/img/" + logo;
+        return getBaseUrl() + "/assets/img/" + logo;
      }
      factory.getAppIcon = function() {
         var icon = factory.customizations['app_icon'];
@@ -378,14 +384,14 @@ searchModule("Support", "support", ['support'], [], ['support']),
         if ( !icon || icon === '' ) {
                 return '/images/logo-icon-white.png';
         }
-        return "/assets/img/" + icon;
+        return getBaseUrl() + "/assets/img/" + icon;
      }
      factory.getAltAppLogo = function() {
         var logo = factory.customizations['alt_app_logo'];
         if ( !logo || logo === '' ) {
                 return '/images/new-logo-blue.png';
         }
-        return "/assets/img/" + logo;
+        return getBaseUrl() + "/assets/img/" + logo;
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
@@ -1174,12 +1180,10 @@ if (checked.length === 0) {
             $shared.changeRoute('.', {'page': page, "search": $stateParams['search']}, true /** force */, true);
         }
         factory.hasNext = function() {
-            console.log("hasNext meta is ", factory.meta);
             var current = factory.getCurrentPage();
             if (factory.meta && factory.meta.pagination && (current === factory.meta.pagination.total_pages || factory.meta.pagination.total_pages === 0)) {
                 return false;
             }
-            console.log("we have next");
             return true;
         }
         factory.hasPrev = function() {
@@ -1206,20 +1210,25 @@ if (checked.length === 0) {
                 key: key
             }
         }
-        factory.loadData = function() {
-            var url = factory.settings.currentUrl + "?page=" + factory.getCurrentPage();
+        factory.loadData = function(params) {
+            params = params || {};
+            var url = factory.settings.currentUrl;
+            params['?page'] = factory.getCurrentPage();
+
             if (factory.settings.search !== "") {
-                url += "&search=" + encodeURIComponent(factory.settings.search);
+                params['search'] = encodeURIComponent(factory.settings.search);
             }
             for ( var index in factory.settings.args ) {
                 var arg = factory.settings.args[ index ];
                 if ( arg !== '' && arg ) {
-                    url += "&" + index + "=" + encodeURIComponent(arg);
+                    //url += "&" + index + "=" + encodeURIComponent(arg);
+                    params[index] = encodeURIComponent(arg);
                 }
             }
+
             $shared.isCreateLoading = true;
             return $q(function(resolve, reject) {
-                Backend.get(url).then(function(res) {
+                Backend.get(url, {params: params}).then(function(res) {
                     var meta = res.data.meta;
                     factory.meta = meta;
                     var scopeObj = factory.settings.scope.obj
@@ -8065,6 +8074,15 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
   $scope.settings = {
     page: 0
   };
+  var startDate = new moment().startOf('month');
+  var endDate = new moment().endOf("month");
+  $scope.filterArgs = {
+    "tags": "",
+    "from": "",
+    "to": "",
+    "start_date": startDate.toDate(),
+    "end_date": endDate.toDate(),
+  };
     $scope.pagination = pagination;
     $scope.$stateParams = $stateParams;
 
@@ -8080,6 +8098,26 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'recordings' );
         pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          //obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          obj['public_url'] = $sce.trustAsResourceUrl(obj.s3_url);
+          return obj;
+        });
+        $shared.endIsLoading();
+        resolve();
+      }, reject)
+    });
+  }
+  $scope.filter = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      var queryArgs = Object.assign({}, $scope.filterArgs);
+      pagination.resetSearch();
+        pagination.changeUrl( "/recording/list" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData(queryArgs).then(function(res) {
         var recordings = res.data.data;
         $scope.recordings = recordings.map(function(obj) {
           //obj.uri = $sce.trustAsResourceUrl(obj.uri);

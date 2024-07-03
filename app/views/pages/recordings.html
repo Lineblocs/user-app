@@ -10,35 +10,6 @@
   </md-card>
 </div>
 <div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && recordings.length > 0)" class="recording-screen-block">
-   <div layout="row side-options" layout-align="end center">
-        <div >
-            <md-input-container class="search">
-                <label>Search</label>
-                <input  type="search" class="" ng-keyup="pagination.search()" ng-model="pagination.settings.search" />
-                <a ng-show="pagination.shouldShowClear()" class="clear-search important-show" ng-click="pagination.clearSearch()">X</a>
-                <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
-            </md-input-container>
-        </div>
-        <div>
-            <md-menu md-position-mode="target-right target">
-                <div class="nav-item">
-                    <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
-                        ng-click="$mdOpenMenu($event)">
-                        Actions
-                        <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
-                    </md-button>
-                </div>
-                <md-menu-content width="3">
-                    <md-menu-item>
-                        <md-button href="" ng-click="Backend.deleteAllChecked('recordings', recordings)" style="display:flex;">
-                            Delete All</md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-        </div>
-    </div>
-    <!-- exact table from live demo -->
-
     <md-card md-theme="'default'"" md-theme-watch class="card-radius">
         <md-card-title class="p-16">
             <span class="md-headline title-text">Recordings Filter</span>
@@ -48,7 +19,7 @@
                 <div class="tag-block">
                     <md-input-container>
                         <label>Tags</label>
-                        <input placeholder="comma separated tags. e.g: voicemail, 1000" ng-keyup="pagination.search()" ng-model="pagination.settings.args.tags" type="text">
+                        <input placeholder="comma separated tags. e.g: voicemail, 1000" ng-model="filterArgs.tags" type="text">
                     </md-input-container>
                 </div>
 
@@ -57,30 +28,30 @@
                         <div class="from-to-text">
                             <md-input-container >
                                 <label>From</label>
-                                <input type="text" class="start-date custom-input" />
+                                <input ng-model="filterArgs.from" type="text" class="start-date custom-input" />
                             </md-input-container>
                         </div>
                         <div class="from-to-text">
                             <md-input-container >
                                 <label>To</label>
-                                <input type="text"  class="start-date custom-input" />
+                                <input ng-model="filterArgs.to" type="text"  class="start-date custom-input" />
                             </md-input-container>
                         </div>
                         <div>
                             <md-input-container >
                                 <label>Date start</label>
-                                <input type="date"  class="start-date custom-input" />
+                                <input ng-model="filterArgs.start_date" type="date"  class="start-date custom-input" />
                             </md-input-container>
                         </div>
                         <div>
                             <md-input-container >
                                 <label>Date end</label>
-                                <input type="date"  class="end-date custom-input" />
+                                <input ng-model="filterArgs.end_date" type="date"  class="end-date custom-input" />
 
                             </md-input-container>
                         </div>
                         <div class="m-lr-16">
-                            <md-button  class="md-raised md-primary" ng-click="pagination.search()">
+                            <md-button  class="md-raised md-primary" ng-click="filter()">
                                 <span>
                                     <md-icon class="tooltip-icon">
                                         <i class="mdi mdi-filter-variant"></i>

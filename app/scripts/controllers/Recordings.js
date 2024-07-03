@@ -12,6 +12,15 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
   $scope.settings = {
     page: 0
   };
+  var startDate = new moment().startOf('month');
+  var endDate = new moment().endOf("month");
+  $scope.filterArgs = {
+    "tags": "",
+    "from": "",
+    "to": "",
+    "start_date": startDate.toDate(),
+    "end_date": endDate.toDate(),
+  };
     $scope.pagination = pagination;
     $scope.$stateParams = $stateParams;
 
@@ -27,6 +36,26 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
         pagination.changePage( 1 );
         pagination.changeScope( $scope, 'recordings' );
         pagination.loadData().then(function(res) {
+        var recordings = res.data.data;
+        $scope.recordings = recordings.map(function(obj) {
+          //obj.uri = $sce.trustAsResourceUrl(obj.uri);
+          obj['public_url'] = $sce.trustAsResourceUrl(obj.s3_url);
+          return obj;
+        });
+        $shared.endIsLoading();
+        resolve();
+      }, reject)
+    });
+  }
+  $scope.filter = function() {
+    return $q(function(resolve, reject) {
+      $shared.isLoading = true;
+      var queryArgs = Object.assign({}, $scope.filterArgs);
+      pagination.resetSearch();
+        pagination.changeUrl( "/recording/list" );
+        pagination.changePage( 1 );
+        pagination.changeScope( $scope, 'recordings' );
+        pagination.loadData(queryArgs).then(function(res) {
         var recordings = res.data.data;
         $scope.recordings = recordings.map(function(obj) {
           //obj.uri = $sce.trustAsResourceUrl(obj.uri);
