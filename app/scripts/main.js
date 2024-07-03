@@ -906,6 +906,13 @@ return changed;
           default: 'styles/app-blue.css',
           dark: 'styles/app-grey.css'
         }
+
+        // do not apply theme on pages that dont alternate themes
+        var ignoreOnPages = ['login', 'register', 'forgot', 'reset'];
+        if (ignoreOnPages.includes($state.current.name)) {
+            return;
+        }
+
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
         }
@@ -5265,7 +5272,7 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/extension/" + $stateParams['extensionId'], values).then(function() {
+        Backend.postCouldError("/extension/" + $stateParams['extensionId'], values).then(function() {
         console.log("updated extension..");
           $mdToast.show(
             $mdToast.simple()
@@ -6808,9 +6815,15 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
       value: 'accept-call'
     },
     {
+      name: 'None',
+      value: 'none'
+    },
+    /*
+    {
       name: 'Accept Fax',
       value: 'accept-fax'
     },
+    */
 
   ]
   $scope.number = null;

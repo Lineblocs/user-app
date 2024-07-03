@@ -16,9 +16,15 @@ angular.module('Lineblocs').controller('MyNumbersEditCtrl', function ($scope, Ba
       value: 'accept-call'
     },
     {
+      name: 'None',
+      value: 'none'
+    },
+    /*
+    {
       name: 'Accept Fax',
       value: 'accept-fax'
     },
+    */
 
   ]
   $scope.number = null;

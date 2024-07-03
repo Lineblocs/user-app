@@ -32,7 +32,6 @@
                             <md-input-container>
                                 <label>DID Action</label>
                                 <md-select ng-model="number.did_action" ng-change="changeDIDAction(number.did_action)">
-                                    <md-option><em>None</em></md-option>
                                     <md-option ng-repeat="action in didActions" ng-value="action.value">
                                         {{action.name}}
                                     </md-option>

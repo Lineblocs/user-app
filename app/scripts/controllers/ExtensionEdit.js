@@ -74,7 +74,7 @@ angular.module('Lineblocs').controller('ExtensionEditCtrl', function ($scope, Ba
           .join(' ');
         console.log("toastPosStr", toastPosStr);
         $shared.isCreateLoading = true;
-        Backend.post("/extension/" + $stateParams['extensionId'], values).then(function() {
+        Backend.postCouldError("/extension/" + $stateParams['extensionId'], values).then(function() {
         console.log("updated extension..");
           $mdToast.show(
             $mdToast.simple()

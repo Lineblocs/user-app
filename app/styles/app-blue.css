@@ -362,11 +362,6 @@ md-input-container.search {
       position: absolute;
       height: 768px;
       width: 100%; }
-      .load-mask .container .mask .block {
-        background: #FFF;
-        opacity: .5;
-        height: 768px;
-        width: 100%; }
     .load-mask .container .spinner {
       position: absolute;
       top: 40px;
