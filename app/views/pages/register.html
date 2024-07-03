@@ -516,13 +516,13 @@
                     <div class="login-form" layout="row">
                         <div class="payment-details-container">
                             <h3 class="top-payment-heading">Start free 30-day Pro trial</h3>
-                            <p class="payment-info">Linebloc free trial with more details.</p>
+                            <p class="payment-info">{{$shared.customizations.site_name}} free trial with more details.</p>
 
                             <div layout="row">
                                 <md-button type="button" class="md-raised no-margin-sides payment-button" ng-click="displayCard()"
                                     ng-class="{'md-primary': cardVisible, '': !cardVisible}">Payment Card
                                 </md-button>
-                                <md-button type="button" class="md-raised no-margin-sides payment-button" ng-click="displayPaypal()"
+                                <md-button ng-if="$shared.customizations.paypal_agreements_enabled" type="button" class="md-raised no-margin-sides payment-button" ng-click="displayPaypal()"
                                     ng-class="{'md-primary': paypalVisible, '': !paypalVisible}"> PayPal
                                 </md-button>
                             </div>

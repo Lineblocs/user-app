@@ -369,7 +369,7 @@ searchModule("Support", "support", ['support'], [], ['support']),
         if ( !logo || logo === '' ) {
                 return '/images/new-logo-blue.png';
         }
-        return logo;
+        return "/assets/img/" + logo;
      }
      factory.getAppIcon = function() {
         var icon = factory.customizations['app_icon'];
@@ -378,14 +378,14 @@ searchModule("Support", "support", ['support'], [], ['support']),
         if ( !icon || icon === '' ) {
                 return '/images/logo-icon-white.png';
         }
-        return icon;
+        return "/assets/img/" + icon;
      }
      factory.getAltAppLogo = function() {
         var logo = factory.customizations['alt_app_logo'];
         if ( !logo || logo === '' ) {
                 return '/images/new-logo-blue.png';
         }
-        return logo;
+        return "/assets/img/" + logo;
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
