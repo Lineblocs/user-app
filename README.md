@@ -18,6 +18,12 @@ npm install -g install bower@1.8.8
 bower install
 ```
 
+## Create the distribution directories if your creating a release build
+
+```
+mkdir -p app/dist
+```
+
 ## Run
 
 ```
