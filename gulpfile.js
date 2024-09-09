@@ -3,7 +3,7 @@
 
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var karma = require('karma').server;
+var Server = require('karma').Server;
 var argv = require('yargs').argv;
 var $ = require('gulp-load-plugins')();
 var gulpLivereload = require('gulp-livereload');
@@ -22,6 +22,7 @@ const imagemin = require('imagemin');
 const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
 const { exec } = require('child_process');
+var mode = require('gulp-mode')();
 
 
 function buildDistributables() {
@@ -43,6 +44,7 @@ function buildDistributables() {
     });
 }
 
+
 gulp.task('styles', function() {
     return gulp.src([
         'app/styles/app-blue.scss',
@@ -52,6 +54,7 @@ gulp.task('styles', function() {
         'app/styles/app-grey.scss',
         'app/styles/app-cyan.scss',
         ])
+    .pipe(mode.development(sourcemaps.init()))
     .pipe($.plumber())
     .pipe($.sass())
     .pipe($.autoprefixer({browsers: ['last 1 version']}))
@@ -61,8 +64,8 @@ gulp.task('styles', function() {
 gulp.task('jshint', function() {
     return gulp.src('app/scripts/**/*.js')
     .pipe($.jshint())
-//.pipe($.jshint.reporter('jshint-stylish'))
-//.pipe($.jshint.reporter('fail'));
+    // .pipe($.jshint.reporter('jshint-stylish'))
+    // .pipe($.jshint.reporter('fail'));
 });
 
 gulp.task('jscs', function() {
@@ -150,12 +153,30 @@ gulp.task('serve', ['connect', 'fonts', 'lang', 'watch'], function() {
     }
 });
 
+// gulp.task('test', function(done) {
+//     karma.start({
+//         configFile: __dirname + '/test/karma.conf.js',
+//         singleRun: true
+//     }, done);
+// });
+// gulp.task('test', function(done) {
+//     new Server({
+//       configFile: __dirname + '/karma.conf.js',
+//       singleRun: true
+//     }, done).start();
+//   });
+
 gulp.task('test', function(done) {
-    karma.start({
-        configFile: __dirname + '/test/karma.conf.js',
-        singleRun: true
-    }, done);
+    Server.start({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: false
+    }, function() {
+        done();
+    }, function(err) {
+        done(err);
+    });
 });
+
 
 // inject bower components
 gulp.task('wiredep', function() {

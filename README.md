@@ -28,6 +28,8 @@ mkdir -p app/dist
 
 ```
 gulp serve
+npm test
+npm run build
 ```
 
 To view the app please goto http://localhost:9000/
