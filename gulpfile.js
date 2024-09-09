@@ -3,9 +3,11 @@
 
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var karma = require('karma').server;
+var Server = require('karma').Server;
 var argv = require('yargs').argv;
 var $ = require('gulp-load-plugins')();
+var gulpLivereload = require('gulp-livereload');
+var connectLivereload = require('connect-livereload');
 // Require plugins
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
@@ -20,6 +22,7 @@ const imagemin = require('imagemin');
 const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
 const { exec } = require('child_process');
+var mode = require('gulp-mode')();
 
 
 function buildDistributables() {
@@ -41,6 +44,7 @@ function buildDistributables() {
     });
 }
 
+
 gulp.task('styles', function() {
     return gulp.src([
         'app/styles/app-blue.scss',
@@ -50,6 +54,7 @@ gulp.task('styles', function() {
         'app/styles/app-grey.scss',
         'app/styles/app-cyan.scss',
         ])
+    .pipe(mode.development(sourcemaps.init()))
     .pipe($.plumber())
     .pipe($.sass())
     .pipe($.autoprefixer({browsers: ['last 1 version']}))
@@ -59,8 +64,8 @@ gulp.task('styles', function() {
 gulp.task('jshint', function() {
     return gulp.src('app/scripts/**/*.js')
     .pipe($.jshint())
-//.pipe($.jshint.reporter('jshint-stylish'))
-//.pipe($.jshint.reporter('fail'));
+    // .pipe($.jshint.reporter('jshint-stylish'))
+    // .pipe($.jshint.reporter('fail'));
 });
 
 gulp.task('jscs', function() {
@@ -129,16 +134,17 @@ gulp.task('connect', ['styles'], function() {
     .use(require('connect-livereload')({port: 35729}))
     .use(serveStatic('.tmp'))
     .use(serveStatic('app'))
-// paths to bower_components should be relative to the current file
-// e.g. in app/index.html you should use ../bower_components
-.use('/bower_components', serveStatic('bower_components'))
-.use(serveIndex('app'));
+    .use(connectLivereload())
+    // paths to bower_components should be relative to the current file
+    // e.g. in app/index.html you should use ../bower_components
+    .use('/bower_components', serveStatic('bower_components'))
+    .use(serveIndex('app'));
 
-require('http').createServer(app)
-.listen(9000)
-.on('listening', function() {
-    console.log('Started connect web server on http://localhost:9000');
-});
+    require('http').createServer(app)
+    .listen(9000)
+    .on('listening', function() {
+        console.log('Started connect web server on http://localhost:9000');
+    });
 });
 
 gulp.task('serve', ['connect', 'fonts', 'lang', 'watch'], function() {
@@ -147,12 +153,30 @@ gulp.task('serve', ['connect', 'fonts', 'lang', 'watch'], function() {
     }
 });
 
+// gulp.task('test', function(done) {
+//     karma.start({
+//         configFile: __dirname + '/test/karma.conf.js',
+//         singleRun: true
+//     }, done);
+// });
+// gulp.task('test', function(done) {
+//     new Server({
+//       configFile: __dirname + '/karma.conf.js',
+//       singleRun: true
+//     }, done).start();
+//   });
+
 gulp.task('test', function(done) {
-    karma.start({
-        configFile: __dirname + '/test/karma.conf.js',
-        singleRun: true
-    }, done);
+    Server.start({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: false
+    }, function() {
+        done();
+    }, function(err) {
+        done(err);
+    });
 });
+
 
 // inject bower components
 gulp.task('wiredep', function() {
@@ -181,37 +205,51 @@ gulp.task('wiredep', function() {
     */
 });
 
-gulp.task('watch', ['connect'], function() {
-    const buildTimeout = 1000;
-    $.livereload.listen();
-// watch for changes
-    gulp.watch([
-    'app/**/*.html',
-    '.tmp/styles/**/*.css',
+// gulp.task('watch', ['connect'], function() {
+//     const buildTimeout = 1000;
+//     gulpLivereload.listen();
+//     // watch for changes
+//     gulp.watch([
+//     'app/**/*.html',
+//     '.tmp/styles/**/*.css',
+//     'app/scripts/**/*.js',
+//     'app/images/**/*',
+//     '!app/templates.html'
+//     ]).on('`change`', function() {
+//         gulp.start('scripts');
+//         //gulp.start('compress-js');
+//         setTimeout(() => {
+//             //buildDistributables();
+//         }, buildTimeout);
+//         /*
+//         mergeTemplates().then(function(output) {
+//             fs.writeFileSync("./app/templates.html", output);
+//         });
+//         */
+//         //$.livereload.changed();
+//     });
+//     gulp.watch('app/styles/**/*.scss', ['styles']);
+//     //gulp.watch('bower.json', ['wiredep']);
+// });
+
+gulp.task('watch', ['connect'], function () {
+    gulpLivereload.listen();
+    gulp.watch(['app/**/*.html',
+    'app/styles/**/*.css',
     'app/scripts/**/*.js',
     'app/images/**/*',
     '!app/templates.html'
-    ]).on('change', function() {
-        gulp.start('scripts');
-        //gulp.start('compress-js');
-        setTimeout(() => {
-            //buildDistributables();
-        }, buildTimeout);
-        /*
-        mergeTemplates().then(function(output) {
-            fs.writeFileSync("./app/templates.html", output);
-        });
-        */
-        //$.livereload.changed();
+    ], function(file) {
+      gulp.src(file.path)
+        .pipe(gulpLivereload());
     });
     gulp.watch('app/styles/**/*.scss', ['styles']);
-    //gulp.watch('bower.json', ['wiredep']);
-});
+  });
 
 gulp.task('builddist', ['jshint', 'html', 'images', 'lang', 'fonts', 'extras', 'styles'],
-    function() {
-        return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-    });
+function() {
+    return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+});
 
 gulp.task('build', ['clean'], function() {
     gulp.start('builddist');
@@ -291,19 +329,19 @@ gulp.task('compress-js', ['scripts'], function() {
 });
 gulp.task('compress-css', ['styles'], function() {
     console.log("cleaning CSS");
-gulp.src([
-"./bower_components/angular-material/angular-material.css",
-"./bower_components/angular-chart.js/dist/angular-chart.css",
-"./bower_components/c3/c3.css",
-"./bower_components/angular-material-data-table/dist/md-data-table.css",
-"./bower_components/flag-css/dist/css/flag-css.css",
-"./bower_components/mdi/css/materialdesignicons.css",
-"./bower_components/flag-icon-css/css/flag-icon.min.css",
-"./app/styles/custom.css"
-  ])
-        .pipe(concat('concat.css'))
-        .pipe(gulp.dest('dist'))
-        .pipe(rename('main.min.css'))
+    gulp.src([
+        "./bower_components/angular-material/angular-material.css",
+        "./bower_components/angular-chart.js/dist/angular-chart.css",
+        "./bower_components/c3/c3.css",
+        "./bower_components/angular-material-data-table/dist/md-data-table.css",
+        "./bower_components/flag-css/dist/css/flag-css.css",
+        "./bower_components/mdi/css/materialdesignicons.css",
+        "./bower_components/flag-icon-css/css/flag-icon.min.css",
+        "./app/styles/custom.css"
+    ])
+    .pipe(concat('concat.css'))
+    .pipe(gulp.dest('dist'))
+    .pipe(rename('main.min.css'))
     .pipe(cleanCSS(
        {
     }))

@@ -5,7 +5,8 @@
   },
   "scripts": {
     "test": "gulp test",
-    "start": "./shell_scripts/run_dev_server_v2.sh"
+    "start": "./shell_scripts/run_dev_server_v2.sh",
+    "build": "gulp build"
   },
   "resolutions": {
     "graceful-fs": "^4.2.11"
@@ -26,12 +27,13 @@
     "gulp-if": "^1.2.5",
     "gulp-inject": "^1.2.0",
     "gulp-jscs": "^1.4.0",
-    "gulp-jshint": "^1.9.2",
+    "gulp-jshint": "^2.1.0",
     "gulp-less": "^3.0.1",
     "gulp-livereload": "^3.8.0",
     "gulp-load-plugins": "^0.8.0",
     "gulp-minify": "^3.1.0",
     "gulp-minify-html": "^1.0.0",
+    "gulp-mode": "^1.1.0",
     "gulp-ng-annotate": "^0.5.2",
     "gulp-ngdocs": "^0.2.10",
     "gulp-plumber": "^0.6.6",
@@ -41,6 +43,7 @@
     "gulp-size": "^1.2.1",
     "gulp-uglify": "^1.5.4",
     "gulp-useref": "^1.1.1",
+    "jshint": "^2.13.6",
     "jshint-stylish": "^1.0.1",
     "karma": "^4.2.0",
     "karma-jasmine": "^2.0.1",
@@ -60,6 +63,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "imagemin": "^7.0.1",
     "imagemin-jpegtran": "^6.0.0",
-    "imagemin-pngquant": "^8.0.0"
+    "imagemin-pngquant": "^8.0.0",
+    "karma-chrome-launcher": "^3.2.0"
   }
 }
