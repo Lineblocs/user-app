@@ -8,10 +8,11 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared, Backend) {
+  .controller('DashboardCtrl', function($scope, $state, $rootScope, $translate, $timeout, $window, $shared, Backend, ThemeService) {
 	$scope.$shared = $shared;
 
   	$scope.$state = $state;
+
 
   	$rootScope.$on('$stateChangeSuccess', function(){
 		$timeout(function() {
@@ -96,11 +97,15 @@ angular.module('Lineblocs')
 
 
 	$scope.changeTheme = function(setTheme){
+		const themeMap = {
+			'light': 'blue',
+			'dark': 'blue'
+		}
 
 		$('<link>')
 		  .appendTo('head')
 		  .attr({type : 'text/css', rel : 'stylesheet'})
-		  .attr('href', 'styles/app-'+setTheme+'.css');
+		  .attr('href', 'styles/app-'+themeMap[setTheme]+'.css');
 	}
 
 	var w = angular.element($window);
@@ -138,5 +143,6 @@ angular.module('Lineblocs')
 		$translate.use(l);
 
 	});
+
 	loadAddedResources1();
 });

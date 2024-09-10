@@ -571,13 +571,14 @@ return changed;
       if (item && item.ui_identifier) $state.go(item.ui_identifier, {});
     }
 
-  factory.showToast = function(msg, position) {
+  factory.showToast = function(msg, position, delayMs) {
+      delayMs = delayMs||3000;
       var position = position || "top right";
                     $mdToast.show(
                     $mdToast.simple()
                         .textContent(msg)
                         .position(position)
-                        .hideDelay(3000)
+                        .hideDelay(delayMs)
                     );
   }
 
@@ -901,7 +902,8 @@ return changed;
 
         }
 
-      function applyTheme(theme) {
+      factory.applyTheme = function(theme) {
+        theme = theme||ThemeService.getTheme();
         const themes = {
           default: 'styles/app-blue.css',
           dark: 'styles/app-grey.css'
@@ -917,9 +919,8 @@ return changed;
           ThemeService.setTheme(theme);
         }
         ThemeService.addStyle(themes[theme]);
-        ThemeService.removeStyle(themes[theme]);
+        //ThemeService.removeStyle(themes[theme]);
       }
-      applyTheme(ThemeService.getTheme());
 
      factory.refreshWorkspaceData = function() {
          return $q(function(resolve, reject) {
@@ -928,7 +929,7 @@ return changed;
                 console.log("GOT state data ", res);
 				$shared.billInfo=  res.data[1];
                 $shared.userInfo=  res.data[2];
-                applyTheme($shared.userInfo.theme);
+                factory.applyTheme($shared.userInfo.theme);
                 $shared.planInfo=  res.data[4];
                 // $shared.planInfo.rank = 3;
                 $shared.workspaceInfo=  res.data[5];
@@ -1920,6 +1921,8 @@ var regParams = {
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         // do something
         console.log("state is changing ", arguments);
+
+        Backend.applyTheme();
         if(toState.requireAuthentication) {
           if(!Authenticator.isAuthenticated() || !Authenticator.checkAuthenticationTime()) {
             $state.go('login');
@@ -2075,13 +2078,27 @@ var regParams = {
     return $window.localStorage.getItem('THEME') || 'default';
   };
 
-  this.addStyle = function(path) {
-    if (!path) return;
+  function addStyleToDOM(path) {
     var link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('type', 'text/css');
+    link.setAttribute('data-theme', '1');
     link.setAttribute('href', path);
     document.head.appendChild(link);
+  }
+  this.addStyle = function(path) {
+    if (!path) return;
+
+    console.log('add style ', path);
+    // remove existing theme
+    const currentLink = document.head.querySelector('link[data-theme]');
+
+    if (currentLink && currentLink.getAttribute('href') !== path) {
+        currentLink.remove();
+        addStyleToDOM(path);
+    } else if (!currentLink) {
+        addStyleToDOM(path);
+    }
   }
 
   this.removeStyle = function(selectedPath) {

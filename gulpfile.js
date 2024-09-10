@@ -147,7 +147,7 @@ gulp.task('connect', ['styles'], function() {
     });
 });
 
-gulp.task('serve', ['connect', 'fonts', 'lang', 'watch'], function() {
+gulp.task('serve', ['connect', 'fonts', 'lang', 'compress-css', 'compress-js', 'watch'], function() {
     if (argv.open) {
         require('opn')('http://localhost:9000');
     }
@@ -234,17 +234,21 @@ gulp.task('wiredep', function() {
 
 gulp.task('watch', ['connect'], function () {
     gulpLivereload.listen();
-    gulp.watch(['app/**/*.html',
-    'app/styles/**/*.css',
-    'app/scripts/**/*.js',
-    'app/images/**/*',
-    '!app/templates.html'
-    ], function(file) {
-      gulp.src(file.path)
-        .pipe(gulpLivereload());
+
+    gulp.watch('app/styles/**/*.scss', ['compress-css']);
+    gulp.watch('app/scripts/**/*.js', ['compress-js', 'reload']);
+    gulp.watch('app/images/**/*', function(file) {
+        gulp.src(file.path)
+            .pipe(gulpLivereload());  // Notify livereload server of changes
     });
-    gulp.watch('app/styles/**/*.scss', ['styles']);
-  });
+    gulp.watch([
+        'app/**/*.html',
+        '!app/templates.html'
+    ], function(file) {
+        gulp.src(file.path)
+            .pipe(gulpLivereload());  // Notify livereload server of changes
+    });
+});
 
 gulp.task('builddist', ['jshint', 'html', 'images', 'lang', 'fonts', 'extras', 'styles'],
 function() {
@@ -322,11 +326,17 @@ gulp.task('compress-js', ['scripts'], function() {
       './app/scripts/main.js'
     ])
             .pipe(concat('main.min.js'))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('app/dist'))
         .pipe(rename('main.min.js'))
-        .pipe(gulp.dest('app/scripts/'));
+        .pipe(gulp.dest('app/scripts/'))
+        .pipe(gulpLivereload());  // Notify livereload server of changes
 
 });
+
+gulp.task('reload', function() {
+   gulpLivereload()
+});
+
 gulp.task('compress-css', ['styles'], function() {
     console.log("cleaning CSS");
     gulp.src([
@@ -353,7 +363,7 @@ gulp.task('compress-css', ['styles'], function() {
       basename: 'app',
       suffix: '.min',
   }))
-  .pipe(gulp.dest('app/styles/'))
+  .pipe(gulp.dest('app/styles/'));
 
 });
 

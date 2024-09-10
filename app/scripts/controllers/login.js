@@ -29,6 +29,7 @@ angular.module('Lineblocs')
   $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
 var clickedGoogSignIn = false;
 var countdown;
+
 function startCountdown() {
   countdown = $interval(function() {
     var minutes = Math.floor($scope.resendTimeout / 60);
