@@ -258,6 +258,7 @@ angular.module('Lineblocs')
 				// Show the errors on the form
 				$scope.errorMsg = error;
 				angular.element('.add-card-form').scrollTop(0)
+				debugger
 			});
 		}
 

@@ -2920,3 +2920,18 @@ code {
     font-size: 14px; }
     .recording-screen-block .filter-row button span md-icon {
       margin: 0; }
+.progressdv{
+  background: rgb(189 189 189 / 42%);
+  border-radius: 20px 20px 0 0;
+}    
+.progressbar{
+  height: 10px;
+  background: #395373;
+  border-radius: 20px 0 0 0;
+}    
+.frm{
+  border-radius: 0 0 20px 20px !important;
+}
+.inptdv{
+  height: 90px;
+}

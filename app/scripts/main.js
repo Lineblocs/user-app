@@ -3020,6 +3020,7 @@ angular.module('Lineblocs')
 				// Show the errors on the form
 				$scope.errorMsg = error;
 				angular.element('.add-card-form').scrollTop(0)
+				debugger
 			});
 		}
 
@@ -6485,8 +6486,8 @@ angular.module('Lineblocs')
 				loadData(true);
 			});
 		}
-		function onError() {
-
+		function onError(err) {
+			console.log('Payment card add error: '+ err);
 		}
 		$mdDialog.show({
 			controller: DialogController,
@@ -10523,8 +10524,9 @@ angular.module('Lineblocs').controller('ProgressDemoCtrl', function ($scope) {
  * Controller of Lineblocs
  */
 var paypal;
+var count = 0;
 angular.module('Lineblocs')
-  .controller('RegisterCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $filter) {
+  .controller('RegisterCtrl', function($scope, $compile, $location, $timeout, $q, Backend, $shared, $state, $mdToast, Idle, $stateParams, $mdDialog, $filter) {
 	  $shared.updateTitle("Register");
 		console.log("STATE ", $stateParams);
 
@@ -10564,6 +10566,10 @@ angular.module('Lineblocs')
 	$scope.verify2 = {
 		confirmation_code: ""
 	};
+	$scope.query = {
+		question_id: "",
+		response: ""
+	};
   $scope.paymentDetails = {
     payment_card: {
       payment_card_number: "",
@@ -10597,6 +10603,8 @@ angular.module('Lineblocs')
   const trialDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
   $scope.nextTrialDate = $filter('date')(trialDate, 'MMM dd, yyyy');
   $scope.chargeCurrentDate = $filter('date')(new Date(), 'MMM dd, yyyy');
+  $scope.qIndex = 0;
+
 
   $scope.displayCard = function() {
     $scope.cardVisible = true;
@@ -10744,7 +10752,7 @@ angular.module('Lineblocs')
 
   	$scope.gotoPaymentForm= function() {
 		console.log('gotoPaymentForm called')
-		$scope.step = 5;
+		$scope.step = 6;
   		initializePaymentGateway().then(() => {
 			setTimeout(() => {
 				setupStripeElements();
@@ -10787,6 +10795,38 @@ angular.module('Lineblocs')
 		}
       	return false;
 
+	}
+
+	$scope.submitQuestion = function(event, form, id) {
+		if($scope.qIndex !== $scope.registrationQuestions.length-1){
+			$scope.qIndex++;
+			$scope.width = ((($scope.qIndex+1) / $scope.registrationQuestions.length) * 100).toString() + '%';
+			console.log($scope.width)
+			if($scope.width === '100%'){
+				$scope.brdr = '20px';
+			}
+		} else{
+			resObj = {};
+			resObj.responses = [];
+			resObj.user_id = $scope.userId;
+			for(var q=0; q<$scope.registrationQuestions.length; q++){
+				if($scope.registrationQuestions[q].response !== undefined){
+					resObj.responses.push({
+						question_id: $scope.registrationQuestions[q].id, 
+						response: $scope.registrationQuestions[q].response
+					})
+				}
+			}
+			console.log(resObj);
+			Backend.post("/saveRegistrationQuestionResponses", resObj).then(function( res ) {
+				if (res.data.success) {
+					$scope.step = 5;
+					return;
+				}
+			});
+			return;
+		}
+	
 	}
 
   $scope.selectPaymentMethod = function(method) {
@@ -10836,7 +10876,7 @@ angular.module('Lineblocs')
 	data['payment_values'] = paymentData
     Backend.post("/saveCustomerPaymentDetails", data, true).then(function( res ) {
       console.log('saved payment details', res);
-      $scope.step = 6;
+      $scope.step = 7;
     }).catch(function(err) {
       console.log('error saving payment details', err);
 
@@ -11204,7 +11244,7 @@ async function createPaymentMethod(paymentDetails) {
 					// Get the token ID:
 					$mdDialog.hide();
 					stripeRespAddCard(response).then(function() {
-						$scope.step = 4;
+						$scope.step = 5;
 					});
 				}
 			}, 0);
@@ -11228,13 +11268,17 @@ async function createPaymentMethod(paymentDetails) {
 		}
 
   function load() {
+	debugger
     $q.all([
       Backend.get("/getCallSystemTemplates"),
       Backend.get("/getConfig"),
       Backend.get("/getServicePlans"),
+	  Backend.get("/getRegistrationQuestions"),
     ]).then(async function (res) {
       $scope.templates = res[0].data;
 	  $scope.plans = res[2].data;
+	  $scope.registrationQuestions = res[3].data;
+	  $scope.width = ((1 / $scope.registrationQuestions.length) * 100).toString() + '%';
 
 	  var plan = getBestServicePlanOption();
 	  $scope.plan = plan;
