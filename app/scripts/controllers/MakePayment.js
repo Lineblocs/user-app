@@ -166,8 +166,8 @@ angular.module('Lineblocs')
 				loadData(true);
 			});
 		}
-		function onError() {
-
+		function onError(err) {
+			console.log('Payment card add error: '+ err);
 		}
 		$mdDialog.show({
 			controller: DialogController,
