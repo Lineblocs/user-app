@@ -9683,6 +9683,55 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 				$shared.billInfo=  res.data[1];
 				$shared.userInfo=  res.data[2];
 				console.log("graph data is ", graph);
+				$scope.calls = [
+					{
+						name: "Call 1",
+						callerName: "XYZ caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						exten: "Ext 1",
+						purchased: "No"
+					},
+					{
+						name: "Call 2",
+						callerName: "ABC caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						exten: "Ext 2",
+						purchased: "Yes"
+					},
+					{
+						name: "Call 3",
+						callerName: "QWE caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						exten: "Ext 3",
+						purchased: "Yes"
+					}
+				];
+				$scope.recordings = [
+					{
+						name: "Call 1",
+						callerName: "XYZ caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						record: "value11",
+					},
+					{
+						name: "Call 2",
+						callerName: "ABC caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						record: "value22",
+					},
+					{
+						name: "Call 3",
+						callerName: "QWE caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						record: "value33",
+					}
+				];
 				$shared.isLoading = false;
 				$timeout(function(){
 					$scope.line = {
@@ -9745,6 +9794,7 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 		}, 0);
 	}
 	$scope.reloadGraph = function() {
+		debugger
 		console.log("reloadGraph called..");
 		$scope.load();
 	}

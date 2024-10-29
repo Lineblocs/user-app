@@ -2917,21 +2917,35 @@ code {
     margin: 0;
     padding: 0;
     padding: 0px 16px;
-    font-size: 14px; }
-    .recording-screen-block .filter-row button span md-icon {
-      margin: 0; }
-.progressdv{
-  background: rgb(189 189 189 / 42%);
-  border-radius: 20px 20px 0 0;
-}    
-.progressbar{
-  height: 10px;
-  background: #395373;
-  border-radius: 20px 0 0 0;
-}    
-.frm{
-  border-radius: 0 0 20px 20px !important;
-}
-.inptdv{
-  height: 90px;
+    font-size: 14px; 
+  }
+  .recording-screen-block .filter-row button span md-icon {
+    margin: 0;
+  }
+  .cdh5{
+    margin: 0;
+    padding: 20px;
+    background: aliceblue;
+    /* border-radius: 20px 20px 0 0; */
+  }
+  .rptDv{
+    padding: 20px;
+    background: #accdf66b;
+    margin: 10px;
+    border-radius: 6px;
+  }
+  .mrgndv{
+    margin-right: 10px;
+  }
+  .m-20{
+    margin-right: 20px;
+  }
+  .lsttd{
+    padding: 10px 0 10px 0 !important;
+  }
+  .brdrtr{
+    border-bottom: 1px solid #8c898959;
+  }
+.tdnm{
+  font-weight: 500;
 }

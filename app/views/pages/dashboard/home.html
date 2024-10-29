@@ -1,10 +1,74 @@
 <div class="layout-row" layout-sm="column" layout-xs="column">
 	<div class="mdl-cell shadow grid-margin calls-graph" flex="100" flex-sm="100">
-		<div class="panel-header">Calls Graph <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
+		<div class="panel-header">Calls <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
                 <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
             </md-button></span>
 		</div>
-		<div class="linechart" relink-event="resize"><canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" click="line.onClick" series="line.series" colours="line.colours" options="line.options" legend="true"></canvas>
+		<div class="linechart" relink-event="resize">
+			<div class="mdl-grid">
+				<div class="mdl-cell-12-col" style="background: white;">
+					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+						<div class="shadow mrgndv" flex="70" flex-sm="100" flex-xs="100"> 
+							<h5 class="cdh5">Call Details</h5>
+							<div class="rptDv" ng-repeat="call in calls">
+								<table class="table table-bordered">
+									<!-- <thead>
+										<tr>
+											<th>Name</th>
+											<th>Email</th>
+											<th>Address</th>
+										</tr>
+									</thead> -->
+									<tbody>
+										<tr class="brdrtr">
+											<td class="lsttd tdnm">Name</td>
+											<td class="lsttd">{{call.name}}</td>
+										</tr>
+										<tr class="brdrtr">
+											<td class="lsttd tdnm">Caller Name</td>
+											<td class="lsttd">{{call.callerName}}</td>
+										</tr>
+										<tr class="brdrtr">
+											<td class="lsttd tdnm">To Number</td>
+											<td class="lsttd">{{call.toNumber}}</td>
+										</tr>
+										<tr class="brdrtr">
+											<td class="lsttd tdnm">From Number</td>
+											<td class="lsttd">{{call.fromNumber}}</td>
+										</tr>
+										<tr class="brdrtr">
+											<td class="lsttd tdnm">Extention</td>
+											<td class="lsttd">{{call.exten}}</td>
+										</tr>
+										<tr class="brdrtr">
+											<td class="lsttd tdnm">Purchased</td>
+											<td class="lsttd">{{call.purchased}}</td>
+										</tr>
+									</tbody>
+								</table>
+								<!-- <p>
+								<strong><span class="m-20">Name</span></strong> {{call.name}} <br>
+								<strong><span class="m-20">Caller Name</span></strong> {{call.callerName}} <br>
+								<strong><span class="m-20">To Number</span></strong>{{call.toNumber}} <br>
+								<strong><span class="m-20">From Number</span></strong>{{call.fromNumber}} <br>
+								<strong><span class="m-20">Extention</span></strong>{{call.exten}} <br>
+								<strong><span class="m-20">Purchased</span></strong> {{call.purchased}}
+							</p> -->
+							</div>
+						</div>
+						<div class="shadow mrgndv" flex="30" flex-sm="100" flex-xs="100"> 
+							<h5 class="cdh5">Recordings</h5>
+							<div class="rptDv" ng-repeat="record in recordings">
+								<strong>{{record.name}}</strong> <br>
+								{{record.callerName}} <br>
+								{{record.toNumber}} <br>
+								{{record.fromNumber}} <br>
+								{{record.record}} <br>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
