@@ -93,54 +93,113 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 				$shared.billInfo=  res.data[1];
 				$shared.userInfo=  res.data[2];
 				console.log("graph data is ", graph);
-				$scope.calls = [
+				$scope.callsMade = [
 					{
 						name: "Call 1",
 						callerName: "XYZ caller",
 						fromNumber: "9876543210",
 						toNumber: "1234567890",
 						exten: "Ext 1",
-						purchased: "No"
+						img: "logo-icon.png",
+						duration: "25m: 20sec",
+						date:"1 days before",
 					},
+					// {
+					// 	name: "Call 2",
+					// 	callerName: "ABC caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 2",
+					// 	img: "Logo_Final_Icon_White.png",
+					// 	duration: "1h: 5m: 10sec",
+					// 	date:"2 days before",
+					// },
+					// {
+					// 	name: "Call 3",
+					// 	callerName: "QWE caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 3",
+					// 	img: "logo-icon.png",
+					// 	duration: "5m: 40sec",
+					// 	date:"3 days before",
+					// }
+				];
+				$scope.callsIncoming = [{
+					name: "Call 1",
+					callerName: "XYZ caller",
+					fromNumber: "9876543210",
+					toNumber: "1234567890",
+					exten: "Ext 1",
+					img: "logo-icon.png",
+					duration: "25m: 20sec",
+					date:"1 days before",
+				},
+					// {
+					// 	name: "Call 2",
+					// 	callerName: "ABC caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 2",
+					// 	img: "Logo_Final_Icon_White.png",
+					// 	duration: "1h: 5m: 10sec",
+					// 	date:"2 days before",
+					// },
+					// {
+					// 	name: "Call 3",
+					// 	callerName: "QWE caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 3",
+					// 	img: "logo-icon.png",
+					// 	duration: "5m: 40sec",
+					// 	date:"3 days before",
+					// }
+				]
+				$scope.DIDPurchased = [
 					{
-						name: "Call 2",
-						callerName: "ABC caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						exten: "Ext 2",
-						purchased: "Yes"
+						DIDNumber:"8882229990",
+						region: "Region Two"
 					},
+					// {
+					// 	DIDNumber:"7766554433",
+					// 	region: "ABC"
+					// },
+					// {
+					// 	DIDNumber:"0011223344",
+					// 	region: "QWE"
+					// },
+				];
+				$scope.DIDRenewed = [
 					{
-						name: "Call 3",
-						callerName: "QWE caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						exten: "Ext 3",
-						purchased: "Yes"
-					}
+						DIDNumber:"8882229990",
+						region: "Region One"
+					},
+					// {
+					// 	DIDNumber:"7766554433",
+					// 	region: "ABC"
+					// },
+					// {
+					// 	DIDNumber:"0011223344",
+					// 	region: "QWE"
+					// },
 				];
 				$scope.recordings = [
 					{
-						name: "Call 1",
-						callerName: "XYZ caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
 						record: "value11",
+						from: "7678687687",
+						to: "6655441488"
 					},
-					{
-						name: "Call 2",
-						callerName: "ABC caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						record: "value22",
-					},
-					{
-						name: "Call 3",
-						callerName: "QWE caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						record: "value33",
-					}
+					// {
+					// 	record: "value22",
+					// 	from: "0099887767",
+					// 	to: "98787"
+					// },
+					// {
+					// 	record: "value33",
+					// 	from: "8765432876",
+					// 	to: "0941526790"
+					// },
 				];
 				$shared.isLoading = false;
 				$timeout(function(){

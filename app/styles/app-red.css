@@ -2479,6 +2479,55 @@ md-card img {
   .temp.absolute {
     position: relative; } }
 
+/* Meeran code for css start */
+.pd-20 {
+  padding: 20px; }
+
+.imgduratn {
+  display: flex; }
+
+.ucion {
+  padding: 18px;
+  font-size: 22px;
+  background: #395373;
+  color: white; }
+
+.round {
+  border-radius: 50%; }
+
+.square {
+  border-radius: 15%; }
+
+.cname {
+  margin-left: 20px; }
+
+.cn {
+  font-weight: 500; }
+
+.cd {
+  font-size: 14px; }
+
+.ptg {
+  font-size: 14px;
+  margin: 20px 0 0 5px; }
+
+.mg-20 {
+  margin: 20px 0 0 5px; }
+
+td {
+  padding: 5px 0 0 5px !important;
+  font-size: 14px; }
+
+.datatable {
+  width: 30%; }
+
+.mdl-grid {
+  margin-bottom: 30px;
+  background: #dbf2ff; }
+
+.valclr {
+  color: #395373; }
+
 /* Styles for profile */
 .lightbox-container a {
   cursor: pointer; }

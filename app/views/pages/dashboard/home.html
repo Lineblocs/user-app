@@ -1,69 +1,223 @@
 <div class="layout-row" layout-sm="column" layout-xs="column">
 	<div class="mdl-cell shadow grid-margin calls-graph" flex="100" flex-sm="100">
-		<div class="panel-header">Calls <span class="cog"> <md-button class="md-icon-button" aria-label="Settings" style="line-height: 0 !important;">
-                <md-icon ng-click="reloadGraph()"><i class="mdi mdi-refresh" style="color: #fff;"></i></md-icon>
-            </md-button></span>
-		</div>
 		<div class="linechart" relink-event="resize">
 			<div class="mdl-grid">
 				<div class="mdl-cell-12-col" style="background: white;">
 					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
-						<div class="shadow mrgndv" flex="70" flex-sm="100" flex-xs="100"> 
-							<h5 class="cdh5">Call Details</h5>
-							<div class="rptDv" ng-repeat="call in calls">
-								<table class="table table-bordered">
-									<!-- <thead>
-										<tr>
-											<th>Name</th>
-											<th>Email</th>
-											<th>Address</th>
-										</tr>
-									</thead> -->
+						<!-- <div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100"> 
+							<div class="rptDv" ng-repeat="call in callsMade">
+								<div class="imgduratn">
+									<div class="ucion">
+										<img ng-src="{{'/images/'+call.img}}" width="40" height="40"/>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">{{call.name}}</p>
+											<p class="cd">{{call.duration}}</p>
+											<p class="cd">{{call.date}}</p>
+										</div>
+									</div>
+								</div>
+								<div>
+									<table class="table table-bordered">
+										<div class="mg-20">
+											<strong>Customer call using {{call.exten}} extention.</strong> <br>
+											<div>
+												<p class="didP">
+													<span class="spn1 clr1">DID Purchased</span> 
+													<span style="margin-right: 10px;" ng-repeat="P in call.DIDNumber[0].purchased">{{P}},</span>
+												</p>
+											</div>
+											<div>
+												<p class="didP">
+													<span class="spn1 clr2">DID Renewed</span> 
+													<span style="margin-right: 10px;" ng-repeat="R in call.DIDNumber[1].renewed">{{R}},</span>
+												</p>
+											</div>		
+										</div>
+										<tbody class="tb">
+											<tr class="brdrtr">
+												<td class="lsttd tdnm">Caller Name</td>
+												<td class="lsttd">{{call.callerName}}</td>
+											</tr>
+											<tr class="brdrtr">
+												<td class="lsttd tdnm">To Number</td>
+												<td class="lsttd">{{call.toNumber}}</td>
+											</tr>
+											<tr class="brdrtr">
+												<td class="lsttd tdnm">From Number</td>
+												<td class="lsttd">{{call.fromNumber}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="actdv">
+									<div ng-repeat="act in call.activity">
+										<strong>{{act.name}}</strong>
+									</div>
+								</div>
+								<div class="reco">
+									<p>Recordings</p>
+									<div>
+										<strong>{{call.record}}</strong> <br>
+									</div>
+								</div>
+							</div>
+						</div> -->
+
+						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
+							<div ng-repeat="call in callsMade" class="pd-20">
+								<div class="imgduratn">
+									<div class="ucion round">
+										<i class="mdi mdi-call-made"></i>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">{{call.name}}</p>
+											<p class="cd">{{call.duration}}</p>
+											<p class="cd">{{call.date}}</p>
+										</div>
+									</div>
+								</div>
+								<div>
+									<p class="ptg">This call made using Extension Number #123Abc</p>
+								</div>
+								<table class="datatable">
+									<div class="mg-20">
+										<strong>Call Details</strong> <br>
+									</div>
 									<tbody>
-										<tr class="brdrtr">
-											<td class="lsttd tdnm">Name</td>
-											<td class="lsttd">{{call.name}}</td>
+										<tr>
+											<td>Caller Name</td>
+											<td class="valclr">{{call.callerName}}</td>
 										</tr>
-										<tr class="brdrtr">
-											<td class="lsttd tdnm">Caller Name</td>
-											<td class="lsttd">{{call.callerName}}</td>
+										<tr>
+											<td>To Number</td>
+											<td class="valclr">{{call.toNumber}}</td>
 										</tr>
-										<tr class="brdrtr">
-											<td class="lsttd tdnm">To Number</td>
-											<td class="lsttd">{{call.toNumber}}</td>
-										</tr>
-										<tr class="brdrtr">
-											<td class="lsttd tdnm">From Number</td>
-											<td class="lsttd">{{call.fromNumber}}</td>
-										</tr>
-										<tr class="brdrtr">
-											<td class="lsttd tdnm">Extention</td>
-											<td class="lsttd">{{call.exten}}</td>
-										</tr>
-										<tr class="brdrtr">
-											<td class="lsttd tdnm">Purchased</td>
-											<td class="lsttd">{{call.purchased}}</td>
+										<tr>
+											<td>From Number</td>
+											<td class="valclr">{{call.fromNumber}}</td>
 										</tr>
 									</tbody>
 								</table>
-								<!-- <p>
-								<strong><span class="m-20">Name</span></strong> {{call.name}} <br>
-								<strong><span class="m-20">Caller Name</span></strong> {{call.callerName}} <br>
-								<strong><span class="m-20">To Number</span></strong>{{call.toNumber}} <br>
-								<strong><span class="m-20">From Number</span></strong>{{call.fromNumber}} <br>
-								<strong><span class="m-20">Extention</span></strong>{{call.exten}} <br>
-								<strong><span class="m-20">Purchased</span></strong> {{call.purchased}}
-							</p> -->
 							</div>
 						</div>
-						<div class="shadow mrgndv" flex="30" flex-sm="100" flex-xs="100"> 
-							<h5 class="cdh5">Recordings</h5>
-							<div class="rptDv" ng-repeat="record in recordings">
-								<strong>{{record.name}}</strong> <br>
-								{{record.callerName}} <br>
-								{{record.toNumber}} <br>
-								{{record.fromNumber}} <br>
-								{{record.record}} <br>
+					</div>
+
+					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
+							<div ng-repeat="income in callsIncoming" class="pd-20">
+								<div class="imgduratn">
+									<div class="ucion round">
+										<i class="mdi mdi-call-received"></i>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">{{income.name}}</p>
+											<p class="cd">{{income.duration}}</p>
+											<p class="cd">{{income.date}}</p>
+										</div>
+									</div>
+								</div>
+								<div>
+									<p class="ptg">This call made using Extension Number #123Abc</p>
+								</div>
+								<table class="datatable">
+									<div class="mg-20">
+										<strong>Call Details</strong> <br>
+									</div>
+									<tbody>
+										<tr>
+											<td>Caller Name</td>
+											<td class="valclr">{{income.callerName}}</td>
+										</tr>
+										<tr>
+											<td>To Number</td>
+											<td class="valclr">{{income.toNumber}}</td>
+										</tr>
+										<tr>
+											<td>From Number</td>
+											<td class="valclr">{{income.fromNumber}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
+							<div ng-repeat="didp in DIDPurchased" class="pd-20">
+								<div class="imgduratn">
+									<div class="ucion square">
+										<i class="mdi mdi-wallet-membership"></i>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">Purchased DID's and there region</p>
+										</div>
+									</div>
+								</div>
+								<div>
+									<p  class="ptg">{{didp.DIDNumber }} #{{didp.region}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
+							<div ng-repeat="didR in DIDRenewed" class="pd-20">
+								<div class="imgduratn">
+									<div class="ucion square">
+										<i class="mdi mdi-restore"></i>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">Renewed DID's and there region</p>
+										</div>
+									</div>
+								</div>
+								<div>
+									<p  class="ptg">{{didR.DIDNumber }} #{{didR.region}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
+							<div ng-repeat="rec in recordings" class="pd-20">
+								<div class="imgduratn">
+									<div class="ucion square">
+										<i class="mdi mdi-record-rec"></i>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">Recordings</p>
+										</div>
+									</div>
+								</div>
+								<table class="datatable">
+									<div class="mg-20">
+										<strong>Call Details</strong> <br>
+									</div>
+									<tbody>
+										<tr>
+											<td>Recording</td>
+											<td class="valclr">{{rec.record}}</td>
+										</tr>
+										<tr>
+											<td>From Number</td>
+											<td class="valclr">{{rec.from}}</td>
+										</tr>
+										<tr>
+											<td>To Number</td>
+											<td class="valclr">{{rec.to}}</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>

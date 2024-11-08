@@ -6340,9 +6340,9 @@ angular.module('Lineblocs')
 	$scope.creditAmounts = [
 		{"name": "$10", "value": 10.00},
 		{"name": "$25", "value": 25.00},
-		{"name": "$50", "value": 50.00},
+		{"name": "$75", "value": 75.00},
 		{"name": "$100", "value": 100.00},
-		{"name": "$250", "value": 250.00}
+		{"name": "$250", "value": 250.00},
 	];
 	$scope.settings = {
 		newCard: false,
@@ -6466,6 +6466,7 @@ angular.module('Lineblocs')
 			$mdDialog.cancel();
 		}
 		$scope.submit = function() {
+			debugger
 			var data = {};
 			data['number'] = $scope.card.number;
 			data['cvc'] = $scope.card.cvv;
@@ -6741,7 +6742,17 @@ angular.module('Lineblocs')
 
 	$scope.selectAmount = function(amount) {
 		console.log('selectAmount ', amount)
-		$scope.selectedAmount = amount;
+		if(amount === 0){
+			$scope.active_custom = true;
+			$scope.selectedAmount = amount;
+			// $scope.selectedAmount = $scope.custom_amount;
+		}else{
+			$scope.active_custom = false;
+			$scope.selectedAmount = amount;
+		}
+	}
+	$scope.changeCustoAmount = function(cus_amount) {
+		$scope.selectedAmount = parseInt(cus_amount);
 	}
 
 	loadData(false);
@@ -8965,7 +8976,8 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     user: {
       first_name: "",
       last_name: "",
-      email: ""
+      email: "",
+      assigned_role_id: ""
     },
     roles: $shared.makeDefaultWorkspaceRoles()
   };
@@ -8975,6 +8987,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     $scope.triedSubmit = true;
     if (form.$valid) {
       var values = {
+        assigned_role_id: $scope.values.user.assigned_role_id,
         user: angular.copy($scope.values.user),
         roles: angular.copy($scope.values.roles)
       };
@@ -9005,14 +9018,20 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
       });
     }
   }
+
+  // $scope.changeRole = function(value) {
+  //   console.log(value)
+  // }
   $timeout(function() {
     $q.all([
       Backend.get("/extension/list?all=1"),
       Backend.get("/did/list?all=1"),
+      Backend.get("/workspaceUser/getWorkspaceRoles"),
     ]).then(function(res) {
       $shared.endIsLoading();
       $scope.extensions = res[0].data.data;
       $scope.numbers  = res[1].data.data;
+      $scope.roleList  = res[2].data.roles;
       console.log("data ", res);
     });
   }, 0);
@@ -9039,7 +9058,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     user: {
       first_name: "",
       last_name: "",
-      email: ""
+      email: "",
+      assigned_role_id: ""
     },
     preferred_pop: null,
     roles: $shared.makeDefaultWorkspaceRoles()
@@ -9059,6 +9079,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       assign['extension_id'] = $shared.nullIfEmpty( $scope.values['extension_id'] );
       assign['number_id'] = $shared.nullIfEmpty( $scope.values['number_id'] );
       var values = {
+        assigned_role_id: $scope.values.user.assigned_role_id,
         user: user,
         roles: angular.copy($scope.values.roles),
         assign: assign
@@ -9141,7 +9162,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       Backend.get("/workspaceUser/" + $stateParams['userId']),
       Backend.get("/extension/list?all=1"),
       Backend.get("/did/list?all=1"),
-      Backend.get("/getPOPs")
+      Backend.get("/getPOPs"),
+      Backend.get("/workspaceUser/getWorkspaceRoles"),
       ]).then(function(res) {
         $scope.values.user = res[0].data;
         for ( var index in $scope.values.roles ) {
@@ -9150,6 +9172,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
           }
         }
         $scope.pops = res[3].data;
+        $scope.roleList  = res[4].data.roles;
         $scope.values.extension_id = $scope.values.user.extension_id;
         $scope.values.number_id = $scope.values.user.number_id;
         $scope.values.preferred_pop = $scope.values.user.preferred_pop;
@@ -9683,54 +9706,113 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 				$shared.billInfo=  res.data[1];
 				$shared.userInfo=  res.data[2];
 				console.log("graph data is ", graph);
-				$scope.calls = [
+				$scope.callsMade = [
 					{
 						name: "Call 1",
 						callerName: "XYZ caller",
 						fromNumber: "9876543210",
 						toNumber: "1234567890",
 						exten: "Ext 1",
-						purchased: "No"
+						img: "logo-icon.png",
+						duration: "25m: 20sec",
+						date:"1 days before",
 					},
+					// {
+					// 	name: "Call 2",
+					// 	callerName: "ABC caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 2",
+					// 	img: "Logo_Final_Icon_White.png",
+					// 	duration: "1h: 5m: 10sec",
+					// 	date:"2 days before",
+					// },
+					// {
+					// 	name: "Call 3",
+					// 	callerName: "QWE caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 3",
+					// 	img: "logo-icon.png",
+					// 	duration: "5m: 40sec",
+					// 	date:"3 days before",
+					// }
+				];
+				$scope.callsIncoming = [{
+					name: "Call 1",
+					callerName: "XYZ caller",
+					fromNumber: "9876543210",
+					toNumber: "1234567890",
+					exten: "Ext 1",
+					img: "logo-icon.png",
+					duration: "25m: 20sec",
+					date:"1 days before",
+				},
+					// {
+					// 	name: "Call 2",
+					// 	callerName: "ABC caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 2",
+					// 	img: "Logo_Final_Icon_White.png",
+					// 	duration: "1h: 5m: 10sec",
+					// 	date:"2 days before",
+					// },
+					// {
+					// 	name: "Call 3",
+					// 	callerName: "QWE caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 3",
+					// 	img: "logo-icon.png",
+					// 	duration: "5m: 40sec",
+					// 	date:"3 days before",
+					// }
+				]
+				$scope.DIDPurchased = [
 					{
-						name: "Call 2",
-						callerName: "ABC caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						exten: "Ext 2",
-						purchased: "Yes"
+						DIDNumber:"8882229990",
+						region: "Region Two"
 					},
+					// {
+					// 	DIDNumber:"7766554433",
+					// 	region: "ABC"
+					// },
+					// {
+					// 	DIDNumber:"0011223344",
+					// 	region: "QWE"
+					// },
+				];
+				$scope.DIDRenewed = [
 					{
-						name: "Call 3",
-						callerName: "QWE caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						exten: "Ext 3",
-						purchased: "Yes"
-					}
+						DIDNumber:"8882229990",
+						region: "Region One"
+					},
+					// {
+					// 	DIDNumber:"7766554433",
+					// 	region: "ABC"
+					// },
+					// {
+					// 	DIDNumber:"0011223344",
+					// 	region: "QWE"
+					// },
 				];
 				$scope.recordings = [
 					{
-						name: "Call 1",
-						callerName: "XYZ caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
 						record: "value11",
+						from: "7678687687",
+						to: "6655441488"
 					},
-					{
-						name: "Call 2",
-						callerName: "ABC caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						record: "value22",
-					},
-					{
-						name: "Call 3",
-						callerName: "QWE caller",
-						fromNumber: "9876543210",
-						toNumber: "1234567890",
-						record: "value33",
-					}
+					// {
+					// 	record: "value22",
+					// 	from: "0099887767",
+					// 	to: "98787"
+					// },
+					// {
+					// 	record: "value33",
+					// 	from: "8765432876",
+					// 	to: "0941526790"
+					// },
 				];
 				$shared.isLoading = false;
 				$timeout(function(){

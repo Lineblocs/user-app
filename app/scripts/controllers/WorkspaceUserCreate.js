@@ -15,7 +15,8 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     user: {
       first_name: "",
       last_name: "",
-      email: ""
+      email: "",
+      assigned_role_id: ""
     },
     roles: $shared.makeDefaultWorkspaceRoles()
   };
@@ -25,6 +26,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     $scope.triedSubmit = true;
     if (form.$valid) {
       var values = {
+        assigned_role_id: $scope.values.user.assigned_role_id,
         user: angular.copy($scope.values.user),
         roles: angular.copy($scope.values.roles)
       };
@@ -55,14 +57,20 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
       });
     }
   }
+
+  // $scope.changeRole = function(value) {
+  //   console.log(value)
+  // }
   $timeout(function() {
     $q.all([
       Backend.get("/extension/list?all=1"),
       Backend.get("/did/list?all=1"),
+      Backend.get("/workspaceUser/getWorkspaceRoles"),
     ]).then(function(res) {
       $shared.endIsLoading();
       $scope.extensions = res[0].data.data;
       $scope.numbers  = res[1].data.data;
+      $scope.roleList  = res[2].data.roles;
       console.log("data ", res);
     });
   }, 0);

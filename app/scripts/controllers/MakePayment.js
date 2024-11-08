@@ -20,9 +20,9 @@ angular.module('Lineblocs')
 	$scope.creditAmounts = [
 		{"name": "$10", "value": 10.00},
 		{"name": "$25", "value": 25.00},
-		{"name": "$50", "value": 50.00},
+		{"name": "$75", "value": 75.00},
 		{"name": "$100", "value": 100.00},
-		{"name": "$250", "value": 250.00}
+		{"name": "$250", "value": 250.00},
 	];
 	$scope.settings = {
 		newCard: false,
@@ -146,6 +146,7 @@ angular.module('Lineblocs')
 			$mdDialog.cancel();
 		}
 		$scope.submit = function() {
+			debugger
 			var data = {};
 			data['number'] = $scope.card.number;
 			data['cvc'] = $scope.card.cvv;
@@ -421,7 +422,17 @@ angular.module('Lineblocs')
 
 	$scope.selectAmount = function(amount) {
 		console.log('selectAmount ', amount)
-		$scope.selectedAmount = amount;
+		if(amount === 0){
+			$scope.active_custom = true;
+			$scope.selectedAmount = amount;
+			// $scope.selectedAmount = $scope.custom_amount;
+		}else{
+			$scope.active_custom = false;
+			$scope.selectedAmount = amount;
+		}
+	}
+	$scope.changeCustoAmount = function(cus_amount) {
+		$scope.selectedAmount = parseInt(cus_amount);
 	}
 
 	loadData(false);

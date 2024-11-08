@@ -2479,6 +2479,55 @@ md-card img {
   .temp.absolute {
     position: relative; } }
 
+/* Meeran code for css start */
+.pd-20 {
+  padding: 20px; }
+
+.imgduratn {
+  display: flex; }
+
+.ucion {
+  padding: 18px;
+  font-size: 22px;
+  background: #395373;
+  color: white; }
+
+.round {
+  border-radius: 50%; }
+
+.square {
+  border-radius: 15%; }
+
+.cname {
+  margin-left: 20px; }
+
+.cn {
+  font-weight: 500; }
+
+.cd {
+  font-size: 14px; }
+
+.ptg {
+  font-size: 14px;
+  margin: 20px 0 0 5px; }
+
+.mg-20 {
+  margin: 20px 0 0 5px; }
+
+td {
+  padding: 5px 0 0 5px !important;
+  font-size: 14px; }
+
+.datatable {
+  width: 30%; }
+
+.mdl-grid {
+  margin-bottom: 30px;
+  background: #dbf2ff; }
+
+.valclr {
+  color: #395373; }
+
 /* Styles for profile */
 .lightbox-container a {
   cursor: pointer; }
@@ -2917,35 +2966,6 @@ code {
     margin: 0;
     padding: 0;
     padding: 0px 16px;
-    font-size: 14px; 
-  }
-  .recording-screen-block .filter-row button span md-icon {
-    margin: 0;
-  }
-  .cdh5{
-    margin: 0;
-    padding: 20px;
-    background: aliceblue;
-    /* border-radius: 20px 20px 0 0; */
-  }
-  .rptDv{
-    padding: 20px;
-    background: #accdf66b;
-    margin: 10px;
-    border-radius: 6px;
-  }
-  .mrgndv{
-    margin-right: 10px;
-  }
-  .m-20{
-    margin-right: 20px;
-  }
-  .lsttd{
-    padding: 10px 0 10px 0 !important;
-  }
-  .brdrtr{
-    border-bottom: 1px solid #8c898959;
-  }
-.tdnm{
-  font-weight: 500;
-}
+    font-size: 14px; }
+    .recording-screen-block .filter-row button span md-icon {
+      margin: 0; }
