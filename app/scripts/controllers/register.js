@@ -337,7 +337,7 @@ angular.module('Lineblocs')
     }
   }
 
-  async function submitTrial() {
+  async function submitTrial() { 
 	const paymentMethod = await createPaymentMethod();
     const data = {};
     const billingAddress = {

@@ -56,7 +56,7 @@
                                         <md-content ng-if="active_custom">
                                             <md-input-container>
                                                 <label>Custom Amount</label>
-                                                <input ng-model="custom_amount" ng-change="changeCustoAmount(custom_amount)"/>
+                                                <input type="number" min="0" ng-model="custom_amount" ng-change="changeCustoAmount(custom_amount)"/>
                                             </md-input-container>
                                         </md-content>
                                     </ul>
@@ -158,13 +158,24 @@
                             </div>
                             <div ng-show="settings.type==='PAYPAL'">
                                 <md-input-container>
-                                    <label>Add credit Amount</label>
+                                    <label>Select credit Amount</label>
                                     <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
                                         <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
                                             {{amount.name}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <!-- <ul class="pay-amount">
+                                    <li ng-class="{active: active_custom === true}" ng-click="selectAmount(0)">Custom</li>
+                                </ul> -->
+                                
+
+                                <md-content>
+                                    <md-input-container>
+                                        <label>Custom Amount</label>
+                                        <input type="number" min="0" ng-model="custom_amount" ng-change="changeCustoAmount(custom_amount)"/>
+                                    </md-input-container>
+                                </md-content>
                                 <!--
                                 <md-button ng-click="addCreditPayPal($event)" class="md-raised md-primary no-margin-sides">Add Credit
                                 </md-button>                            <br/>
