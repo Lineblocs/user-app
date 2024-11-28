@@ -182,27 +182,26 @@ angular.module('Lineblocs')
 			cvv: ""
 		};
 
-		function stripeResponseHandler(status, response) {
-			$timeout(function() {
-				$scope.$apply();
-				if (response.error) { // Problem!
-					// Show the errors on the form
-					$scope.errorMsg = response.error.message;
-					angular.element('.add-card-form').scrollTop(0);
-				} else { // Token was created!
-					// Get the token ID:
-					$mdDialog.hide();
-					onSuccess(response);
-				}
-			}, 0);
-		}
+		// function stripeResponseHandler(status, response) {
+		// 	$timeout(function() {
+		// 		$scope.$apply();
+		// 		if (response.error) { // Problem!
+		// 			// Show the errors on the form
+		// 			$scope.errorMsg = response.error.message;
+		// 			angular.element('.add-card-form').scrollTop(0);
+		// 		} else { // Token was created!
+		// 			// Get the token ID:
+		// 			$mdDialog.hide();
+		// 			onSuccess(response);
+		// 		}
+		// 	}, 0);
+		// }
 
 		$scope.cancel = function() {
 			$mdDialog.cancel();
 		}
 
 		$scope.submit = async function() {
-			debugger
 			const paymentMethod = await createPaymentMethod();
 			// Stripe.card.createToken(data, stripeResponseHandler);
 			// stripe.createToken(stripeCard).then(function(result){
@@ -210,17 +209,19 @@ angular.module('Lineblocs')
 			// 		document.getElementById('card-errors').textContent = result.error;
 			// 	} else {
 					// console.log(result.token);
-					// $shared.isCreateLoading =true;
+					$shared.isCreateLoading =true;
 					var data = {};
 					data['issuer'] = paymentMethod.card.brand;
 					data['last_4'] = paymentMethod.card.last4;
 					data['stripe_id'] = paymentMethod.id;
 					data['payment_method_id'] = paymentMethod.id;
 					Backend.post("/card", data).then(function(res) {
-						resolve(res);
+						// resolve(res);
+						$mdDialog.hide();
 						console.log(res);
 						$shared.endIsCreateLoading();
 					}, function(err) {
+						$mdDialog.hide();
 						$shared.endIsCreateLoading();
 						console.error("an error occured ", err);
 					});
@@ -267,7 +268,9 @@ angular.module('Lineblocs')
 					console.log('initializing stripe client');
 				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
 					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
-				  stripe = Stripe("pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg");
+					console.log($shared.frontend_api_creds.stripe_pub_key)
+					debugger
+				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
 				  resolve();
 				}
 				default: {
@@ -346,6 +349,7 @@ angular.module('Lineblocs')
 	}
 
 	$scope.changeCard = function(value) {
+		debugger
 		console.log("changeCard ", value);
 		$scope.data.selectedCard = value;
 		if (value === 'new') {
@@ -450,6 +454,7 @@ angular.module('Lineblocs')
 						}
 					}
 				}
+				debugger
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];

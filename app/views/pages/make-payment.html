@@ -67,8 +67,9 @@
                                 </div>
                                 <div ng-show="cards.length > 0">
                                     <h5>Use Existing Card</h5>
+                                    <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A Card</md-button>
                                     <div layout="row">
-                                        <div flex="">
+                                        <div flex="" style="margin: 20px 0 !important;">
                                             <md-radio-group ng-model="data.selectedCard"
                                                 ng-change="changeCard(data.selectedCard)">
                                                 <md-radio-button ng-repeat="card in cards" ng-value="card.id"
