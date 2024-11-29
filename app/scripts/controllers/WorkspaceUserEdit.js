@@ -17,7 +17,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     user: {
       first_name: "",
       last_name: "",
-      email: ""
+      email: "",
+      assigned_role_id: ""
     },
     preferred_pop: null,
     roles: $shared.makeDefaultWorkspaceRoles()
@@ -37,6 +38,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       assign['extension_id'] = $shared.nullIfEmpty( $scope.values['extension_id'] );
       assign['number_id'] = $shared.nullIfEmpty( $scope.values['number_id'] );
       var values = {
+        assigned_role_id: $scope.values.user.assigned_role_id,
         user: user,
         roles: angular.copy($scope.values.roles),
         assign: assign
@@ -119,7 +121,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       Backend.get("/workspaceUser/" + $stateParams['userId']),
       Backend.get("/extension/list?all=1"),
       Backend.get("/did/list?all=1"),
-      Backend.get("/getPOPs")
+      Backend.get("/getPOPs"),
+      Backend.get("/workspaceUser/getWorkspaceRoles"),
       ]).then(function(res) {
         $scope.values.user = res[0].data;
         for ( var index in $scope.values.roles ) {
@@ -128,6 +131,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
           }
         }
         $scope.pops = res[3].data;
+        $scope.roleList  = res[4].data.roles;
         $scope.values.extension_id = $scope.values.user.extension_id;
         $scope.values.number_id = $scope.values.user.number_id;
         $scope.values.preferred_pop = $scope.values.user.preferred_pop;

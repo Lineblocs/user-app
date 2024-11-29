@@ -1389,6 +1389,23 @@ md-content::-webkit-scrollbar-thumb:hover {
       font-size: 21px;
       line-height: 1; }
 
+#card-element {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px; }
+
+button {
+  background-color: #6772e5;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer; }
+
+button:hover {
+  background-color: #5469d4; }
+
 /* Login page styles */
 .login-overlay {
   position: relative;
@@ -2479,6 +2496,55 @@ md-card img {
   .temp.absolute {
     position: relative; } }
 
+/* Meeran code for css start */
+.pd-20 {
+  padding: 20px; }
+
+.imgduratn {
+  display: flex; }
+
+.ucion {
+  padding: 18px;
+  font-size: 22px;
+  background: #395373;
+  color: white; }
+
+.round {
+  border-radius: 50%; }
+
+.square {
+  border-radius: 15%; }
+
+.cname {
+  margin-left: 20px; }
+
+.cn {
+  font-weight: 500; }
+
+.cd {
+  font-size: 14px; }
+
+.ptg {
+  font-size: 14px;
+  margin: 20px 0 0 5px; }
+
+.mg-20 {
+  margin: 20px 0 0 5px; }
+
+td {
+  padding: 5px 0 0 5px !important;
+  font-size: 14px; }
+
+.datatable {
+  width: 30%; }
+
+.mdl-grid {
+  margin-bottom: 30px;
+  background: #dbf2ff; }
+
+.valclr {
+  color: #395373; }
+
 /* Styles for profile */
 .lightbox-container a {
   cursor: pointer; }
@@ -2920,18 +2986,3 @@ code {
     font-size: 14px; }
     .recording-screen-block .filter-row button span md-icon {
       margin: 0; }
-.progressdv{
-  background: rgb(189 189 189 / 42%);
-  border-radius: 20px 20px 0 0;
-}    
-.progressbar{
-  height: 10px;
-  background: #395373;
-  border-radius: 20px 0 0 0;
-}    
-.frm{
-  border-radius: 0 0 20px 20px !important;
-}
-.inptdv{
-  height: 90px;
-}

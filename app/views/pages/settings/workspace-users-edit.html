@@ -80,6 +80,32 @@
                     </div>
                 </div>
 
+                <div layout="row">
+                    <div flex="95">
+                      <md-input-container>
+                        <label>Role</label>
+                        <md-select ng-model="values.user.assigned_role_id" required="">
+                          <md-option ng-repeat="role in roleList" ng-value="role.id">
+                            {{role.name}}
+                          </md-option>
+                        </md-select>
+                        <div ng-show="triedSubmit">
+                          <div class="box">
+                            <div ng-show="extensionForm.role.$error.required">This field is required</div>
+                          </div>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div flex="5">
+                      <md-icon class="tooltip-icon">
+                        <i class="mdi mdi-information"></i>
+                        <md-tooltip class="helper-tooltip" md-direction="top">
+                          This email will be invited to your lineblocs account
+                        </md-tooltip>
+                      </md-icon>
+                    </div>
+                  </div>
+
                 <h5>Assigned Extension, and DID</h5>
                 <div layout="row">
                     <div flex="66">
@@ -174,7 +200,7 @@
 
 
 
-                <h5>Workspace Roles</h5>
+                <h5>Action</h5>
                 <p>allow or disallow this user to perform certain actions in the workspace</p>
                 <div ng-repeat="role in availableRoles" flex="95">
                     <div layout="row">

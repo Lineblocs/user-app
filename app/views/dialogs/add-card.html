@@ -8,16 +8,21 @@
         </md-button>
       </div>
     </md-toolbar>
-  <form ng-cloak ng-submit="submit()">
-    <md-dialog-content class="add-card-form">
-      <div class="md-dialog-content">
-<div ng-show="errorMsg" class="error-box">
-      <span class="red"><strong>{{errorMsg}}</strong></span>
-    </div>
 
-      <md-input-container>
-          <label>Your Name</label>
-          <input ng-model="card.name"/>
+    <!-- <form ng-submit="submit()">
+      <div id="card-element"></div>
+      <button type="submit">Pay Now</button>
+    </form> -->
+  <form ng-cloak ng-submit="submit()" id="payment-form">
+    <md-dialog-content class="add-card-form"> 
+      <div class="md-dialog-content">
+        <div ng-show="errorMsg" class="error-box">
+          <span class="red"><strong>{{errorMsg}}</strong></span>
+        </div>
+
+        <md-input-container>
+            <label>Your Name</label>
+            <input ng-model="card.name"/>
         </md-input-container>
         <md-input-container>
           <label>Address</label>
@@ -30,14 +35,14 @@
               <input ng-model="card.city"/>
             </md-input-container>
           </div>
-          <!--
+          
           <div flex>
             <md-input-container>
               <label>Postal Code</label>
               <input ng-model="card.postal_code"/>
             </md-input-container>
           </div>
-          -->
+         
           <div flex>
             <md-input-container>
               <label>Country</label>
@@ -50,41 +55,43 @@
           </div>
         </div>
         <h5>Card Details</h5>
-        <div layout="row">
+        <!-- <div layout="row">
           <div flex>
             <div ng-non-bindable id="card-element"></div>
           </div>
-        </div>
+        </div> -->
 
-        <div layout="row">
+        <div ng-non-bindable id="card-element"></div>
+
+        <!-- <div layout="row">
           <div flex>
             <div ng-non-bindable id="cardNumber"></div>
-            <!--
+            
           <md-input-container>
               <label>Number</label>
               <input id="cardNumber" ng-model="card.number"/>
             </md-input-container>
-          -->
+          
           </div>
           <div flex>
             <div ng-non-bindable id="cardExpiry"></div>
-            <!--
+            
             <md-input-container>
               <label>Expires</label>
               <input id="cardExpiry" placeholder="MM/YY" ng-model="card.expires"/>
             </md-input-container>
-            -->
+            
           </div>
           <div flex>
             <div ng-non-bindable id="cardCVC"></div>
-            <!--
+            
             <md-input-container>
               <label>CVV</label>
               <input id="cardCVC" ng-model="card.cvv" />
             </md-input-container>
-            -->
+            
           </div>
-        </div>
+        </div> -->
       </div>
     </md-dialog-content>
 

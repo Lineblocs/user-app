@@ -2771,7 +2771,10 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
  */
 angular.module('Lineblocs')
   .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
-	  $shared.updateTitle("Billing");
+	var stripeElements;
+	var stripeCard;
+	var stripe;
+	$shared.updateTitle("Billing");
 	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
 	  $scope.isTabLoaded = false;
@@ -2892,9 +2895,54 @@ angular.module('Lineblocs')
 		}
 
 	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
-		var stripeElements;
-		var stripeCard;
-		var stripe;
+		$scope.$shared = $shared;
+		var varToWatch = angular.element(document.body).hasClass('md-dialog-is-shwoing');
+		$scope.$watch(varToWatch, function(){
+			console.log('setupStripeElements called');
+			// Create an instance of Elements.
+			// const appearance = {
+			// 	theme: 'night',
+			// 	labels: 'floating'
+			//   };
+			stripeElements = stripe.elements();
+		
+			// Custom styling can be passed to options when creating an Element.
+			var style = {
+				base: {
+					fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+					fontSmoothing: 'antialiased',
+					fontSize: '16px',
+					'::placeholder': {
+						color: '#aab7c4'
+					}
+				},
+				invalid: {
+					color: '#fa755a',
+					iconColor: '#fa755a'
+				},
+				appearance:{
+					theme: 'night'
+				  }
+			};
+		
+			// Create an instance of the card Element.
+			stripeCard = stripeElements.create('card', {style: style});
+			
+		
+			// Add an instance of the card Element into the `card-element` <div>.
+			stripeCard.mount('#card-element');
+		
+			// Handle real-time validation errors from the card Element.
+			stripeCard.on('change', function(event) {
+				if (event.error) {
+					// Show the errors on the form
+					showPaymentError(event.error.message);
+					//angular.element('.add-card-form').scrollTop(0)
+				} else {
+					$scope.paymentErrorMsg = null;
+				}
+			});
+		})
 
 		$scope.$shared = $shared;
 		$scope.card = {
@@ -2908,60 +2956,60 @@ angular.module('Lineblocs')
 		};
 
 
-		function stripeResponseHandler(status, response) {
-			$timeout(function() {
-				$scope.$apply();
-				if (response.error) { // Problem!
-					// Show the errors on the form
-					$scope.errorMsg = response.error.message;
-					angular.element('.add-card-form').scrollTop(0);
-				} else { // Token was created!
-					// Get the token ID:
-					$mdDialog.hide();
-					onSuccess(response);
-				}
-			}, 0);
-		}
+		// function stripeResponseHandler(status, response) {
+		// 	$timeout(function() {
+		// 		$scope.$apply();
+		// 		if (response.error) { // Problem!
+		// 			// Show the errors on the form
+		// 			$scope.errorMsg = response.error.message;
+		// 			angular.element('.add-card-form').scrollTop(0);
+		// 		} else { // Token was created!
+		// 			// Get the token ID:
+		// 			$mdDialog.hide();
+		// 			onSuccess(response);
+		// 		}
+		// 	}, 0);
+		// }
 
-		function setupStripeElements() {
-			console.log('setupStripeElements called');
-			// Create an instance of Elements.
-			stripeElements = stripe.elements();
+		// function setupStripeElements() {
+		// 	console.log('setupStripeElements called');
+		// 	// Create an instance of Elements.
+		// 	stripeElements = stripe.elements();
 
-			// Custom styling can be passed to options when creating an Element.
-			var style = {
-				base: {
-					color: '#ffffff', // Set font color to white
-					fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-					fontSmoothing: 'antialiased',
-					fontSize: '16px',
-					'::placeholder': {
-						color: '#aab7c4'
-					}
-				},
-				invalid: {
-					color: '#fa755a',
-					iconColor: '#fa755a'
-				}
-			};
+		// 	// Custom styling can be passed to options when creating an Element.
+		// 	var style = {
+		// 		base: {
+		// 			color: '#ffffff', // Set font color to white
+		// 			fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+		// 			fontSmoothing: 'antialiased',
+		// 			fontSize: '16px',
+		// 			'::placeholder': {
+		// 				color: '#aab7c4'
+		// 			}
+		// 		},
+		// 		invalid: {
+		// 			color: '#fa755a',
+		// 			iconColor: '#fa755a'
+		// 		}
+		// 	};
 
-			// Create an instance of the card Element.
-			stripeCard = stripeElements.create('card', {style: style});
+		// 	// Create an instance of the card Element.
+		// 	stripeCard = stripeElements.create('card', {style: style});
 
-			// Add an instance of the card Element into the `card-element` <div>.
-			stripeCard.mount('#card-element');
+		// 	// Add an instance of the card Element into the `card-element` <div>.
+		// 	stripeCard.mount('#card-element');
 
-			// Handle real-time validation errors from the card Element.
-			stripeCard.on('change', function(event) {
-				if (event.error) {
-					// Show the errors on the form
-					$scope.errorMsg = event.error.message;
-					//angular.element('.add-card-form').scrollTop(0)
-				} else {
-					$scope.errorMsg = null;
-				}
-			});
-		}
+		// 	// Handle real-time validation errors from the card Element.
+		// 	stripeCard.on('change', function(event) {
+		// 		if (event.error) {
+		// 			// Show the errors on the form
+		// 			$scope.errorMsg = event.error.message;
+		// 			//angular.element('.add-card-form').scrollTop(0)
+		// 		} else {
+		// 			$scope.errorMsg = null;
+		// 		}
+		// 	});
+		// }
 
 		async function createPaymentMethod() {
 			console.log('createPaymentMethod called');
@@ -2999,37 +3047,85 @@ angular.module('Lineblocs')
 		$scope.cancel = function() {
 			$mdDialog.cancel();
 		}
-		$scope.submit = function() {
-			/*
-			var data = {};
-			data['number'] = $scope.card.number;
-			data['cvc'] = $scope.card.cvv;
-			var splitted = $scope.card.expires.split("/");
-			data['exp_month'] = splitted[ 0 ];
-			data['exp_year'] = splitted[ 1 ];
-			data['address_zip'] = $scope.card.postal_code;
-			Stripe.card.createToken(data, stripeResponseHandler);
-			*/
-			console.log('submit add card form');
-			createPaymentMethod().then(function(paymentMethod) {
-				console.log('created payment method ', paymentMethod)
-				// Get the token ID:
-				$mdDialog.hide();
-				onSuccess(paymentMethod);
-			}).catch(function(error) {
-				// Show the errors on the form
-				$scope.errorMsg = error;
-				angular.element('.add-card-form').scrollTop(0)
-				debugger
+		// $scope.submit = function() {
+		// 	/*
+		// 	var data = {};
+		// 	data['number'] = $scope.card.number;
+		// 	data['cvc'] = $scope.card.cvv;
+		// 	var splitted = $scope.card.expires.split("/");
+		// 	data['exp_month'] = splitted[ 0 ];
+		// 	data['exp_year'] = splitted[ 1 ];
+		// 	data['address_zip'] = $scope.card.postal_code;
+		// 	Stripe.card.createToken(data, stripeResponseHandler);
+		// 	*/
+		// 	console.log('submit add card form');
+		// 	createPaymentMethod().then(function(paymentMethod) {
+		// 		console.log('created payment method ', paymentMethod)
+		// 		// Get the token ID:
+		// 		$mdDialog.hide();
+		// 		onSuccess(paymentMethod);
+		// 	}).catch(function(error) {
+		// 		// Show the errors on the form
+		// 		$scope.errorMsg = error;
+		// 		angular.element('.add-card-form').scrollTop(0)
+		// 		debugger
+		// 	});
+		// }
+
+		// setTimeout(() => {
+		// 	waitForElement('#cardNumber').then(function() {
+		// 		stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+		// 		setupStripeElements();
+		// 	});
+		// }, 0);
+
+		$scope.submit = async function() {
+			const paymentMethod = await createPaymentMethod();
+			// Stripe.card.createToken(data, stripeResponseHandler);
+			// stripe.createToken(stripeCard).then(function(result){
+			// 	if(result.error){
+			// 		document.getElementById('card-errors').textContent = result.error;
+			// 	} else {
+					// console.log(result.token);
+					$shared.isCreateLoading =true;
+					var data = {};
+					data['issuer'] = paymentMethod.card.brand;
+					data['last_4'] = paymentMethod.card.last4;
+					data['stripe_id'] = paymentMethod.id;
+					data['payment_method_id'] = paymentMethod.id;
+					Backend.post("/card", data).then(function(res) {
+						// resolve(res);
+						console.log(res);
+						$mdDialog.hide();
+						$shared.endIsCreateLoading();
+					}, function(err) {
+						$mdDialog.hide();
+						$shared.endIsCreateLoading();
+						console.error("an error occured ", err);
+					});
+			// 	}
+			// })
+		}
+		async function initializePaymentGateway() {
+			return new Promise(async (resolve, reject) => {
+			  switch ($shared.customizations.payment_gateway) {
+				case 'stripe': {
+					console.log('initializing stripe client');
+				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
+					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
+					console.log($shared.frontend_api_creds.stripe_pub_key)
+					debugger
+				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+				  resolve();
+				}
+				default: {
+				  reject();
+				}
+			  }
 			});
 		}
 
-		setTimeout(() => {
-			waitForElement('#cardNumber').then(function() {
-				stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
-				setupStripeElements();
-			});
-		}, 0);
+		initializePaymentGateway();
 	}
 	$scope.createLabel = function(card) {
 		return "**** **** **** " + card.last_4;
@@ -6329,20 +6425,23 @@ angular.module('Lineblocs').controller('DebuggerLogViewCtrl', function ($scope, 
  */
 angular.module('Lineblocs')
   .controller('MakePaymentCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
-	  $shared.updateTitle("Make Payment");
-	  $scope.$shared = $shared;
-	  $scope.triedSubmit = false;
-	  $scope.isTabLoaded = false;
-	  $scope.startDate = moment().startOf('month').toDate();
-	  $scope.endDate = moment().endOf('month').toDate();
+	var stripeElements;
+	var stripeCard;
+	var stripe;
+	$shared.updateTitle("Make Payment");
+	$scope.$shared = $shared;
+	$scope.triedSubmit = false;
+	$scope.isTabLoaded = false;
+	$scope.startDate = moment().startOf('month').toDate();
+	$scope.endDate = moment().endOf('month').toDate();
 	$scope.cards = [];
 	$scope.selectedAmount = 25.00;
 	$scope.creditAmounts = [
 		{"name": "$10", "value": 10.00},
 		{"name": "$25", "value": 25.00},
-		{"name": "$50", "value": 50.00},
+		{"name": "$75", "value": 75.00},
 		{"name": "$100", "value": 100.00},
-		{"name": "$250", "value": 250.00}
+		{"name": "$250", "value": 250.00},
 	];
 	$scope.settings = {
 		newCard: false,
@@ -6362,12 +6461,14 @@ angular.module('Lineblocs')
 		expires: "",
 		cvv: ""
 	};
+
 	$timeout(function() {
         $scope.isTabLoaded = true;
 		if (!$scope.$$phase) {
 			$scope.$apply();
 		}
     }, 1000); 
+
     function TriggerDialogController($scope, $mdDialog,$shared, onCreate) {
       $scope.$shared = $shared;
 	  $scope.data = {
@@ -6393,51 +6494,100 @@ angular.module('Lineblocs')
 		});
 	  }
     }
+
 	function toCents(dollars) {
 		return dollars * 100;
 	}
-		function submitCredit(cardId, amount) {
-			var data = {};
-		data['card_id'] = cardId;
-		data['amount'] =  amount;
-		$scope.data.creditAmount.value;
-		$shared.isCreateLoading =true;
-		Backend.post("/credit", data).then(function(res) {
-			console.log("added credit amount");
-					loadData(true).then(function() {
-						$mdToast.show(
-						$mdToast.simple()
-							.textContent('Added credits successfully')
-							.position('top right')
-							.hideDelay(3000)
-						);
 
-    					$state.go('billing', {});
+	function submitCredit(cardId, amount) {
+		var data = {};
+	data['card_id'] = cardId;
+	data['amount'] =  amount;
+	$scope.data.creditAmount.value;
+	$shared.isCreateLoading =true;
+	Backend.post("/credit", data).then(function(res) {
+		console.log("added credit amount");
+				loadData(true).then(function() {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Added credits successfully')
+						.position('top right')
+						.hideDelay(3000)
+					);
 
-							})
-				});
-				//$shared.endIsCreateLoading();
-		}
+					$state.go('billing', {});
 
-		function stripeRespAddCard(response) {
-			return $q(function(resolve, reject) {
-				var data = {};
-				data['card_token'] = response.id;
-				data['stripe_card'] = response.card.id;
-				data['last_4'] = response.card.last4;
-				data['issuer'] = response.card.brand;
-				$shared.isCreateLoading =true;
-				Backend.post("/card", data).then(function(res) {
-					resolve(res);
-					$shared.endIsCreateLoading();
-				}, function(err) {
-					console.error("an error occured ", err);
-				});
+						})
 			});
-		}
+			//$shared.endIsCreateLoading();
+	}
+
+	function stripeRespAddCard(response) {
+		return $q(function(resolve, reject) {
+			var data = {};
+			data['card_token'] = response.id;
+			data['stripe_card'] = response.card.id;
+			data['last_4'] = response.card.last4;
+			data['issuer'] = response.card.brand;
+			$shared.isCreateLoading =true;
+			Backend.post("/card", data).then(function(res) {
+				resolve(res);
+				$shared.endIsCreateLoading();
+			}, function(err) {
+				console.error("an error occured ", err);
+			});
+		});
+	}
 
 	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
 		$scope.$shared = $shared;
+		var varToWatch = angular.element(document.body).hasClass('md-dialog-is-shwoing');
+		$scope.$watch(varToWatch, function(){
+			console.log('setupStripeElements called');
+			// Create an instance of Elements.
+			// const appearance = {
+			// 	theme: 'night',
+			// 	labels: 'floating'
+			//   };
+			stripeElements = stripe.elements();
+		
+			// Custom styling can be passed to options when creating an Element.
+			var style = {
+				base: {
+					fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+					fontSmoothing: 'antialiased',
+					fontSize: '16px',
+					'::placeholder': {
+						color: '#aab7c4'
+					}
+				},
+				invalid: {
+					color: '#fa755a',
+					iconColor: '#fa755a'
+				},
+				appearance:{
+					theme: 'night'
+				  }
+			};
+		
+			// Create an instance of the card Element.
+			stripeCard = stripeElements.create('card', {style: style});
+			
+		
+			// Add an instance of the card Element into the `card-element` <div>.
+			stripeCard.mount('#card-element');
+		
+			// Handle real-time validation errors from the card Element.
+			stripeCard.on('change', function(event) {
+				if (event.error) {
+					// Show the errors on the form
+					showPaymentError(event.error.message);
+					//angular.element('.add-card-form').scrollTop(0)
+				} else {
+					$scope.paymentErrorMsg = null;
+				}
+			});
+		})
 		$scope.card = {
 			name: "",
 			address: "",
@@ -6447,36 +6597,109 @@ angular.module('Lineblocs')
 			expires: "",
 			cvv: ""
 		};
-		function stripeResponseHandler(status, response) {
-			$timeout(function() {
-				$scope.$apply();
-				if (response.error) { // Problem!
-					// Show the errors on the form
-					$scope.errorMsg = response.error.message;
-					angular.element('.add-card-form').scrollTop(0);
-				} else { // Token was created!
-					// Get the token ID:
-					$mdDialog.hide();
-					onSuccess(response);
-				}
-			}, 0);
-		}
+
+		// function stripeResponseHandler(status, response) {
+		// 	$timeout(function() {
+		// 		$scope.$apply();
+		// 		if (response.error) { // Problem!
+		// 			// Show the errors on the form
+		// 			$scope.errorMsg = response.error.message;
+		// 			angular.element('.add-card-form').scrollTop(0);
+		// 		} else { // Token was created!
+		// 			// Get the token ID:
+		// 			$mdDialog.hide();
+		// 			onSuccess(response);
+		// 		}
+		// 	}, 0);
+		// }
 
 		$scope.cancel = function() {
 			$mdDialog.cancel();
 		}
-		$scope.submit = function() {
-			var data = {};
-			data['number'] = $scope.card.number;
-			data['cvc'] = $scope.card.cvv;
-			var splitted = $scope.card.expires.split("/");
-			data['exp_month'] = splitted[ 0 ];
-			data['exp_year'] = splitted[ 1 ];
-			data['address_zip'] = $scope.card.postal_code;
-			Stripe.card.createToken(data, stripeResponseHandler);
 
+		$scope.submit = async function() {
+			const paymentMethod = await createPaymentMethod();
+			// Stripe.card.createToken(data, stripeResponseHandler);
+			// stripe.createToken(stripeCard).then(function(result){
+			// 	if(result.error){
+			// 		document.getElementById('card-errors').textContent = result.error;
+			// 	} else {
+					// console.log(result.token);
+					$shared.isCreateLoading =true;
+					var data = {};
+					data['issuer'] = paymentMethod.card.brand;
+					data['last_4'] = paymentMethod.card.last4;
+					data['stripe_id'] = paymentMethod.id;
+					data['payment_method_id'] = paymentMethod.id;
+					Backend.post("/card", data).then(function(res) {
+						// resolve(res);
+						$mdDialog.hide();
+						console.log(res);
+						$shared.endIsCreateLoading();
+					}, function(err) {
+						$mdDialog.hide();
+						$shared.endIsCreateLoading();
+						console.error("an error occured ", err);
+					});
+			// 	}
+			// })
 		}
+		async function createPaymentMethod(paymentDetails) {
+			console.log('createPaymentMethod called');
+			const name = $scope.card.name;
+		
+			console.log('createPaymentMethod users name: ' + name);
+		
+			try {
+				const result = await stripe.createPaymentMethod({
+					type: 'card',
+					card: stripeCard,
+					billing_details: {
+						name: name,
+					},
+				})
+				console.log('createPaymentMethod result ', result)
+		
+				// Handle result.error or result.paymentMethod
+				const { paymentMethod, error } = result;
+				if (error) {
+					// Display error to user
+					console.error('createPaymentMethod error', error.message);
+					console.error(error);
+					return Promise.reject(error.message);
+				}
+		
+				return Promise.resolve( paymentMethod );
+			} catch ( err ) {
+				console.error('createPaymentMethod error', err);
+				console.error(err);
+				return Promise.reject( err );
+			}
+		}
+
+		async function initializePaymentGateway() {
+			return new Promise(async (resolve, reject) => {
+			  switch ($shared.customizations.payment_gateway) {
+				case 'stripe': {
+					console.log('initializing stripe client');
+				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
+					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
+					console.log($shared.frontend_api_creds.stripe_pub_key)
+					debugger
+				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
+				  resolve();
+				}
+				default: {
+				  reject();
+				}
+			  }
+			});
+		}
+
+		initializePaymentGateway();
+
 	}
+
 	$scope.createLabel = function(card) {
 		return "**** **** **** " + card.last_4;
 	}
@@ -6505,6 +6728,7 @@ angular.module('Lineblocs')
 			$scope.status = 'You cancelled the dialog.';
 		});
 	}
+
 	$scope.addCredit = function() {
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
@@ -6519,6 +6743,7 @@ angular.module('Lineblocs')
 		}, 0);
 
 	}
+
 	$scope.addCreditPayPal = function() {
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
@@ -6534,12 +6759,13 @@ angular.module('Lineblocs')
 		});
 	}
 
-
 	$scope.getCardOptions = function() {
 		var options = angular.copy($scope.cards);
 		//options.push({""})
 	}
+
 	$scope.changeCard = function(value) {
+		debugger
 		console.log("changeCard ", value);
 		$scope.data.selectedCard = value;
 		if (value === 'new') {
@@ -6548,21 +6774,26 @@ angular.module('Lineblocs')
 			$scope.settings.newCard = false;
 		}
 	}
-  $scope.changeBillingPackage = function(newPackage) {
-    console.log("changeBillingPackage ", newPackage);
-    $scope.settings.billing_package = newPackage;
-  }
+
+	$scope.changeBillingPackage = function(newPackage) {
+		console.log("changeBillingPackage ", newPackage);
+		$scope.settings.billing_package = newPackage;
+	}
+
 	$scope.changeAmount = function(value) {
 		console.log("changeAmount ", value);
 		$scope.data.creditAmount = value;
 	}
+
 	$scope.changeAutoRechargeAmount = function(value) {
 		console.log("changeAutoRechargeAmount ", value);
 		$scope.settings.db.auto_recharge_top_up = value;
 	}
+
 	$scope.changeType = function(newType) {
 		$scope.settings.type = newType;
 	}
+
 	$scope.saveSettings = function() {
 		var data = {};
 		data['auto_recharge'] = $scope.settings.db.auto_recharge;
@@ -6583,14 +6814,14 @@ angular.module('Lineblocs')
 			});
 	}
 
-
-  $scope.cancelSubscription = function($event) {
-    $state.go('billing-cancel-subscription', {});
-  }
+	$scope.cancelSubscription = function($event) {
+		$state.go('billing-cancel-subscription', {});
+	}
 
 	function billHistory() {
 		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
 	}
+
 	$scope.filterBilling = function() {
 		$shared.isCreateLoading = true;
 		billHistory().then(function(res) {
@@ -6598,10 +6829,12 @@ angular.module('Lineblocs')
 				$shared.endIsCreateLoading();
 		});
 	}
+
 	$scope.downloadBilling = function() {
 		var token = getJWTTokenObj();
 		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token.auth));
 	}
+
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {
 			"gold": "Gold Route",
@@ -6622,7 +6855,7 @@ angular.module('Lineblocs')
 			$q.all([
 				Backend.get("/billing"),
 				billHistory()
-			]).then(function(res) {
+			]).then(async function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
@@ -6637,6 +6870,7 @@ angular.module('Lineblocs')
 						}
 					}
 				}
+				debugger
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];
@@ -6653,6 +6887,7 @@ angular.module('Lineblocs')
 					$shared.endIsLoading();
 				}
 				resolve();
+				// await initializePaymentGateway();
 			}, reject);
 		});
 	}
@@ -6683,8 +6918,8 @@ angular.module('Lineblocs')
 		});
 
 	}
-	$scope.setPrimary = function(card)
-	{
+
+	$scope.setPrimary = function(card){
       Backend.put("/card/" + card.id + "/setPrimary").then(function() {
 				loadData(true).then(function() {
 		 $mdToast.show(
@@ -6696,8 +6931,8 @@ angular.module('Lineblocs')
 		 });
           });
 	}
-	$scope.deleteCard = function(card)
-	{
+
+	$scope.deleteCard = function(card){
       Backend.delete("/card/" + card.id).then(function() {
 				loadData(true).then(function() {
 		 $mdToast.show(
@@ -6709,6 +6944,7 @@ angular.module('Lineblocs')
 		 });
           });
 	}
+
 	$scope.deleteUsageTrigger = function($event, item) {
 	// Appending dialog to document.body to cover sidenav in docs app
 	console.log("deleteUsageTrigger ", item);
@@ -6735,13 +6971,25 @@ angular.module('Lineblocs')
     }, function() {
     });
 	}
+
 	$scope.upgradePlan = function() {
     	$state.go('billing-upgrade-plan', {});
 	}
 
 	$scope.selectAmount = function(amount) {
 		console.log('selectAmount ', amount)
-		$scope.selectedAmount = amount;
+		if(amount === 0){
+			$scope.active_custom = true;
+			$scope.selectedAmount = amount;
+			// $scope.selectedAmount = $scope.custom_amount;
+		}else{
+			$scope.active_custom = false;
+			$scope.selectedAmount = amount;
+		}
+	}
+
+	$scope.changeCustoAmount = function(cus_amount) {
+		$scope.selectedAmount = parseInt(cus_amount);
 	}
 
 	loadData(false);
@@ -8965,7 +9213,8 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     user: {
       first_name: "",
       last_name: "",
-      email: ""
+      email: "",
+      assigned_role_id: ""
     },
     roles: $shared.makeDefaultWorkspaceRoles()
   };
@@ -8975,6 +9224,7 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     $scope.triedSubmit = true;
     if (form.$valid) {
       var values = {
+        assigned_role_id: $scope.values.user.assigned_role_id,
         user: angular.copy($scope.values.user),
         roles: angular.copy($scope.values.roles)
       };
@@ -9005,14 +9255,20 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
       });
     }
   }
+
+  // $scope.changeRole = function(value) {
+  //   console.log(value)
+  // }
   $timeout(function() {
     $q.all([
       Backend.get("/extension/list?all=1"),
       Backend.get("/did/list?all=1"),
+      Backend.get("/workspaceUser/getWorkspaceRoles"),
     ]).then(function(res) {
       $shared.endIsLoading();
       $scope.extensions = res[0].data.data;
       $scope.numbers  = res[1].data.data;
+      $scope.roleList  = res[2].data.roles;
       console.log("data ", res);
     });
   }, 0);
@@ -9039,7 +9295,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     user: {
       first_name: "",
       last_name: "",
-      email: ""
+      email: "",
+      assigned_role_id: ""
     },
     preferred_pop: null,
     roles: $shared.makeDefaultWorkspaceRoles()
@@ -9059,6 +9316,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       assign['extension_id'] = $shared.nullIfEmpty( $scope.values['extension_id'] );
       assign['number_id'] = $shared.nullIfEmpty( $scope.values['number_id'] );
       var values = {
+        assigned_role_id: $scope.values.user.assigned_role_id,
         user: user,
         roles: angular.copy($scope.values.roles),
         assign: assign
@@ -9141,7 +9399,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
       Backend.get("/workspaceUser/" + $stateParams['userId']),
       Backend.get("/extension/list?all=1"),
       Backend.get("/did/list?all=1"),
-      Backend.get("/getPOPs")
+      Backend.get("/getPOPs"),
+      Backend.get("/workspaceUser/getWorkspaceRoles"),
       ]).then(function(res) {
         $scope.values.user = res[0].data;
         for ( var index in $scope.values.roles ) {
@@ -9150,6 +9409,7 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
           }
         }
         $scope.pops = res[3].data;
+        $scope.roleList  = res[4].data.roles;
         $scope.values.extension_id = $scope.values.user.extension_id;
         $scope.values.number_id = $scope.values.user.number_id;
         $scope.values.preferred_pop = $scope.values.user.preferred_pop;
@@ -9683,6 +9943,114 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 				$shared.billInfo=  res.data[1];
 				$shared.userInfo=  res.data[2];
 				console.log("graph data is ", graph);
+				$scope.callsMade = [
+					{
+						name: "Call 1",
+						callerName: "XYZ caller",
+						fromNumber: "9876543210",
+						toNumber: "1234567890",
+						exten: "Ext 1",
+						img: "logo-icon.png",
+						duration: "25m: 20sec",
+						date:"1 days before",
+					},
+					// {
+					// 	name: "Call 2",
+					// 	callerName: "ABC caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 2",
+					// 	img: "Logo_Final_Icon_White.png",
+					// 	duration: "1h: 5m: 10sec",
+					// 	date:"2 days before",
+					// },
+					// {
+					// 	name: "Call 3",
+					// 	callerName: "QWE caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 3",
+					// 	img: "logo-icon.png",
+					// 	duration: "5m: 40sec",
+					// 	date:"3 days before",
+					// }
+				];
+				$scope.callsIncoming = [{
+					name: "Call 1",
+					callerName: "XYZ caller",
+					fromNumber: "9876543210",
+					toNumber: "1234567890",
+					exten: "Ext 1",
+					img: "logo-icon.png",
+					duration: "25m: 20sec",
+					date:"1 days before",
+				},
+					// {
+					// 	name: "Call 2",
+					// 	callerName: "ABC caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 2",
+					// 	img: "Logo_Final_Icon_White.png",
+					// 	duration: "1h: 5m: 10sec",
+					// 	date:"2 days before",
+					// },
+					// {
+					// 	name: "Call 3",
+					// 	callerName: "QWE caller",
+					// 	fromNumber: "9876543210",
+					// 	toNumber: "1234567890",
+					// 	exten: "Ext 3",
+					// 	img: "logo-icon.png",
+					// 	duration: "5m: 40sec",
+					// 	date:"3 days before",
+					// }
+				]
+				$scope.DIDPurchased = [
+					{
+						DIDNumber:"8882229990",
+						region: "Region Two"
+					},
+					// {
+					// 	DIDNumber:"7766554433",
+					// 	region: "ABC"
+					// },
+					// {
+					// 	DIDNumber:"0011223344",
+					// 	region: "QWE"
+					// },
+				];
+				$scope.DIDRenewed = [
+					{
+						DIDNumber:"8882229990",
+						region: "Region One"
+					},
+					// {
+					// 	DIDNumber:"7766554433",
+					// 	region: "ABC"
+					// },
+					// {
+					// 	DIDNumber:"0011223344",
+					// 	region: "QWE"
+					// },
+				];
+				$scope.recordings = [
+					{
+						record: "value11",
+						from: "7678687687",
+						to: "6655441488"
+					},
+					// {
+					// 	record: "value22",
+					// 	from: "0099887767",
+					// 	to: "98787"
+					// },
+					// {
+					// 	record: "value33",
+					// 	from: "8765432876",
+					// 	to: "0941526790"
+					// },
+				];
 				$shared.isLoading = false;
 				$timeout(function(){
 					$scope.line = {
@@ -9745,6 +10113,7 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 		}, 0);
 	}
 	$scope.reloadGraph = function() {
+		debugger
 		console.log("reloadGraph called..");
 		$scope.load();
 	}
@@ -10853,7 +11222,7 @@ angular.module('Lineblocs')
     }
   }
 
-  async function submitTrial() {
+  async function submitTrial() { 
 	const paymentMethod = await createPaymentMethod();
     const data = {};
     const billingAddress = {
