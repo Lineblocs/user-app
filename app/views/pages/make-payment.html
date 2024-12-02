@@ -74,6 +74,7 @@
                                                 ng-change="changeCard(data.selectedCard)">
                                                 <md-radio-button ng-repeat="card in cards" ng-value="card.id"
                                                     aria-label="{{$shared.createCardLabel(card)}}">
+                                                    <img ng-src="{{$shared.getCardImg(card)}}" height="28"/>
                                                     <label>{{$shared.createCardLabel(card)}}</label>
                                                     <md-icon md-svg-icon="{{getCardIcon(card)}}"></md-icon>
                                                 </md-radio-button>

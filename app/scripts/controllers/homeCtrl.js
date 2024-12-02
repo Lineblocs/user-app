@@ -263,7 +263,6 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 		}, 0);
 	}
 	$scope.reloadGraph = function() {
-		debugger
 		console.log("reloadGraph called..");
 		$scope.load();
 	}

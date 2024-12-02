@@ -752,7 +752,6 @@ async function createPaymentMethod(paymentDetails) {
 		}
 
   function load() {
-	debugger
     $q.all([
       Backend.get("/getCallSystemTemplates"),
       Backend.get("/getConfig"),
