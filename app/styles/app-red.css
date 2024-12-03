@@ -2498,7 +2498,10 @@ md-card img {
 
 /* Meeran code for css start */
 .pd-20 {
-  padding: 20px; }
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 3px 0px rgba(145, 145, 145, 0.5); }
 
 .imgduratn {
   display: flex; }
@@ -2538,12 +2541,11 @@ td {
 .datatable {
   width: 30%; }
 
-.mdl-grid {
-  margin-bottom: 30px;
-  background: #dbf2ff; }
-
 .valclr {
   color: #395373; }
+
+.mrgndv {
+  box-shadow: none; }
 
 /* Styles for profile */
 .lightbox-container a {
