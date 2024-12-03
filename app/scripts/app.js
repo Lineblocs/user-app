@@ -1583,7 +1583,7 @@ var regParams = {
         controller: 'SupportUpdateCtrl'
     })
     .state('billing', {
-        url: '/billing',
+        url: '/billing?frm',
         parent: 'dashboard',
         templateUrl: 'views/pages/billing.html',
         controller: 'BillingCtrl'

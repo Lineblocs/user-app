@@ -1583,7 +1583,7 @@ var regParams = {
         controller: 'SupportUpdateCtrl'
     })
     .state('billing', {
-        url: '/billing',
+        url: '/billing?frm',
         parent: 'dashboard',
         templateUrl: 'views/pages/billing.html',
         controller: 'BillingCtrl'
@@ -2770,10 +2770,14 @@ angular.module('Lineblocs').controller('BYODIDNumbersCtrl', function ($scope, Ba
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams) {
 	var stripeElements;
 	var stripeCard;
 	var stripe;
+	// var explicitPlan  = $stateParams['frm'];
+	if($stateParams['frm'] === 'PS'){
+		$scope.selectedIndex = 1;
+	}
 	$shared.updateTitle("Billing");
 	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
@@ -3068,7 +3072,6 @@ angular.module('Lineblocs')
 		// 		// Show the errors on the form
 		// 		$scope.errorMsg = error;
 		// 		angular.element('.add-card-form').scrollTop(0)
-		// 		debugger
 		// 	});
 		// }
 
@@ -3097,6 +3100,7 @@ angular.module('Lineblocs')
 						// resolve(res);
 						console.log(res);
 						$mdDialog.hide();
+						loadData(true);
 						$shared.endIsCreateLoading();
 					}, function(err) {
 						$mdDialog.hide();
@@ -3110,11 +3114,6 @@ angular.module('Lineblocs')
 			return new Promise(async (resolve, reject) => {
 			  switch ($shared.customizations.payment_gateway) {
 				case 'stripe': {
-					console.log('initializing stripe client');
-				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
-					console.log($shared.frontend_api_creds.stripe_pub_key)
-					debugger
 				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
 				  resolve();
 				}
@@ -3397,7 +3396,7 @@ angular.module('Lineblocs')
 		 });
           });
 	}
-	$scope.deleteCard = function(card)
+	$scope.deleteCard = function(e, card)
 	{
       Backend.delete("/card/" + card.id).then(function() {
 				loadData(true).then(function() {
@@ -6515,7 +6514,7 @@ angular.module('Lineblocs')
 						.hideDelay(3000)
 					);
 
-					$state.go('billing', {});
+					$state.go('billing', {"frm": 'PS'});
 
 						})
 			});
@@ -6635,6 +6634,7 @@ angular.module('Lineblocs')
 						// resolve(res);
 						$mdDialog.hide();
 						console.log(res);
+						loadData(true);
 						$shared.endIsCreateLoading();
 					}, function(err) {
 						$mdDialog.hide();
@@ -6681,11 +6681,6 @@ angular.module('Lineblocs')
 			return new Promise(async (resolve, reject) => {
 			  switch ($shared.customizations.payment_gateway) {
 				case 'stripe': {
-					console.log('initializing stripe client');
-				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
-					console.log($shared.frontend_api_creds.stripe_pub_key)
-					debugger
 				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
 				  resolve();
 				}
@@ -6733,7 +6728,13 @@ angular.module('Lineblocs')
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
-		if (!$scope.data.selectedCard) {
+		if (!$scope.data.creditAmount) {
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Please select a card.')
+				.position('top right')
+				.hideDelay(3000)
+			);
 			return;
 		}
 
@@ -6765,7 +6766,6 @@ angular.module('Lineblocs')
 	}
 
 	$scope.changeCard = function(value) {
-		debugger
 		console.log("changeCard ", value);
 		$scope.data.selectedCard = value;
 		if (value === 'new') {
@@ -6870,7 +6870,6 @@ angular.module('Lineblocs')
 						}
 					}
 				}
-				debugger
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];
@@ -10056,69 +10055,75 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 					$scope.line = {
 						legend: true,
 						labels: graph.labels,
-							data: [
-						graph.data.inbound,
-						graph.data.outbound
-						//[7, 20, 10, 15, 17, 10, 27],
-						//[6, 9, 22, 11, 13, 20, 27]
+						data: [
+							graph.data.inbound,
+							graph.data.outbound
+							//[7, 20, 10, 15, 17, 10, 27],
+							//[6, 9, 22, 11, 13, 20, 27]
 						],
 						series: [
-					'Inbound',
-					'Outbound'
-				],
+							'Inbound',
+							'Outbound'
+						],
 						colours: [{ 
-								fillColor: "#3f51b5",
-								strokeColor: "#3f51b5",
-								pointColor: "#3f51b5",
-								pointStrokeColor: "#3f51b5",
-								pointHighlightFill: "#3f51b5",
-								pointHighlightStroke: "#3f51b5"
+							fillColor: "#3f51b5",
+							strokeColor: "#3f51b5",
+							pointColor: "#3f51b5",
+							pointStrokeColor: "#3f51b5",
+							pointHighlightFill: "#3f51b5",
+							pointHighlightStroke: "#3f51b5"
+						},
+						{
+							fillColor: "#3D3D3D",
+							strokeColor: "#3D3D3D",
+							pointColor: "#3D3D3D",
+							pointStrokeColor: "#3D3D3D",
+							pointHighlightFill: "#3D3D3D",
+							pointHighlightStroke: "#3D3D3D"
+						}],
+						options: {
+							legend: {
+								display: true,
+								position: 'right'
 							},
-							{
-								fillColor: "#3D3D3D",
-								strokeColor: "#3D3D3D",
-								pointColor: "#3D3D3D",
-								pointStrokeColor: "#3D3D3D",
-								pointHighlightFill: "#3D3D3D",
-								pointHighlightStroke: "#3D3D3D"
-							}
-							],
-		options: {
-				legend: {
-			display: true,
-			position: 'right'
-			},
 							responsive: true,
-								bezierCurve : false,
-								datasetStroke: false,
-								/*
-								legendTemplate: '<ul>'
-						+'<% for (var i=0; i<datasets.length; i++) { %>'
-							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-						+'</li>'
-						+'<% } %>'
-					+'</ul>',
-					*/
-								pointDotRadius : 6,
-								showTooltips: false,
+							bezierCurve : false,
+							datasetStroke: false,
+							/*
+							legendTemplate: '<ul>'
+								+'<% for (var i=0; i<datasets.length; i++) { %>'
+									+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+									+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+								+'</li>'
+								+'<% } %>'
+							+'</ul>',
+							*/
+							pointDotRadius : 6,
+							showTooltips: false,
 						},
 						onClick: function (points, evt) {
-						console.log(points, evt);
+							console.log(points, evt);
 						}
-
 					};
 				}, 0);
 			});
 		}, 0);
 	}
+
+	$scope.getFeed = function(){
+		$timeout(function () {
+			Backend.get("/feed").then(function(res) {
+				debugger
+				$scope.feeds = res.data.items;
+			});
+		}, 0);
+	}
 	$scope.reloadGraph = function() {
-		debugger
 		console.log("reloadGraph called..");
 		$scope.load();
 	}
 	$scope.load();
-
+	$scope.getFeed();
 }]);
 'use strict';
 
@@ -11637,7 +11642,6 @@ async function createPaymentMethod(paymentDetails) {
 		}
 
   function load() {
-	debugger
     $q.all([
       Backend.get("/getCallSystemTemplates"),
       Backend.get("/getConfig"),

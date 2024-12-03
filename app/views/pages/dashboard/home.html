@@ -66,7 +66,104 @@
 						</div> -->
 
 						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
-							<div ng-repeat="call in callsMade" class="pd-20">
+							<div ng-repeat="feed in feeds" class="pd-20">
+								<div class="imgduratn">
+									<div class="ucion round" ng-if="feed.direction === 'outbound'" style="background-color: rgb(197,17,98);">
+										<i class="mdi mdi-call-made"></i>
+										<!-- <i class="mdi mdi-call-received" ng-if="feed.direction === 'inbound'" style="background-color:blueviolet;"></i> -->
+									</div>
+									<div class="ucion round" ng-if="feed.direction === 'inbound'" style="background-color: #339797;">
+										<!-- <i class="mdi mdi-call-made" ng-if="feed.direction === 'outbound'" style="background-color: aqua;"></i> -->
+										<i class="mdi mdi-call-received"></i>
+									</div>
+									<div class="cname">
+										<div>
+											<p class="cn">{{feed.from}}</p>
+											<p class="cd">{{feed.to}}</p>
+											<p class="cd">{{feed.started_at}}</p>
+										</div>
+									</div>
+								</div>
+								<div>
+									<p class="ptg">This call made using Extension Number {{feed.from_extension_id}}</p>
+									<!-- <p> -->
+										<span class="statusspan">{{feed.status}}</span>
+									<!-- </p> -->
+								</div>
+								<div class="calldetails">
+									<div class="evtype">
+										Event Type <span>{{feed.event_type}}</span>
+									</div>
+									<table class="datatable">
+										<div class="mg-20">
+											<strong>Call Details</strong> <br>
+										</div>
+										<tbody>
+											<tr>
+												<td>Direction</td>
+												<td class="valclr">{{feed.direction}}</td>
+											</tr>
+											<tr>
+												<td>To Number</td>
+												<td class="valclr">{{feed.to}}</td>
+											</tr>
+											<tr>
+												<td>From Number</td>
+												<td class="valclr">{{feed.from}}</td>
+											</tr>
+											<tr>
+												<td>Start Date</td>
+												<td class="valclr">{{feed.started_at}}</td>
+											</tr>
+											<tr>
+												<td>End Date</td>
+												<td class="valclr">{{feed.ended_at}}</td>
+											</tr>
+											<tr>
+												<td>From Extention</td>
+												<td class="valclr">{{feed.from_extension_id}}</td>
+											</tr>
+											<tr>
+												<td>To Extention</td>
+												<td class="valclr">{{feed.to_extension_id}}</td>
+											</tr>
+											<tr>
+												<td>Billed</td>
+												<td class="valclr">{{feed.billed}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<div>
+									<div class="duraStrong">
+										<strong>Duration</strong>
+									</div>
+									
+									<div class="duraCss">
+										<table>
+											<tr class="durath">
+												<th class="thd">Duration</th>
+												<th class="thd">Duration Live</th>
+												<th class="thd">Duration Live Human</th>
+												<th class="thd">Duration Ended</th>
+												<th>Duration Ended Human</th>
+											</tr>
+											<tr>
+												<td style="text-align: center;">{{feed.duration}}</td>
+												<td>{{feed.duration_live}}</td>
+												<td>{{feed.duration_live_human}}</td>
+												<td>{{feed.duration_ended}}</td>
+												<td>{{feed.duration_ended_human}}</td>
+											</tr>
+											
+										</table>
+									</div>
+								</div>
+								
+							</div>
+
+							<!-- <div ng-repeat="call in callsMade" class="pd-20">
 								<div class="imgduratn">
 									<div class="ucion round">
 										<i class="mdi mdi-call-made"></i>
@@ -101,11 +198,11 @@
 										</tr>
 									</tbody>
 								</table>
-							</div>
+							</div> -->
 						</div>
 					</div>
 
-					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+					<!-- <div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
 						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
 							<div ng-repeat="income in callsIncoming" class="pd-20">
 								<div class="imgduratn">
@@ -144,9 +241,9 @@
 								</table>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
-					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
+					<!-- <div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
 						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
 							<div ng-repeat="didp in DIDPurchased" class="pd-20">
 								<div class="imgduratn">
@@ -220,7 +317,7 @@
 								</table>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

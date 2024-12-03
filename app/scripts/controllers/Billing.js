@@ -8,10 +8,14 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams) {
 	var stripeElements;
 	var stripeCard;
 	var stripe;
+	// var explicitPlan  = $stateParams['frm'];
+	if($stateParams['frm'] === 'PS'){
+		$scope.selectedIndex = 1;
+	}
 	$shared.updateTitle("Billing");
 	  $scope.$shared = $shared;
 	  $scope.triedSubmit = false;
@@ -306,7 +310,6 @@ angular.module('Lineblocs')
 		// 		// Show the errors on the form
 		// 		$scope.errorMsg = error;
 		// 		angular.element('.add-card-form').scrollTop(0)
-		// 		debugger
 		// 	});
 		// }
 
@@ -335,6 +338,7 @@ angular.module('Lineblocs')
 						// resolve(res);
 						console.log(res);
 						$mdDialog.hide();
+						loadData(true);
 						$shared.endIsCreateLoading();
 					}, function(err) {
 						$mdDialog.hide();
@@ -348,11 +352,6 @@ angular.module('Lineblocs')
 			return new Promise(async (resolve, reject) => {
 			  switch ($shared.customizations.payment_gateway) {
 				case 'stripe': {
-					console.log('initializing stripe client');
-				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
-					console.log($shared.frontend_api_creds.stripe_pub_key)
-					debugger
 				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
 				  resolve();
 				}
@@ -635,7 +634,7 @@ angular.module('Lineblocs')
 		 });
           });
 	}
-	$scope.deleteCard = function(card)
+	$scope.deleteCard = function(e, card)
 	{
       Backend.delete("/card/" + card.id).then(function() {
 				loadData(true).then(function() {

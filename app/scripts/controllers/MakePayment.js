@@ -99,7 +99,7 @@ angular.module('Lineblocs')
 						.hideDelay(3000)
 					);
 
-					$state.go('billing', {});
+					$state.go('billing', {"frm": 'PS'});
 
 						})
 			});
@@ -219,6 +219,7 @@ angular.module('Lineblocs')
 						// resolve(res);
 						$mdDialog.hide();
 						console.log(res);
+						loadData(true);
 						$shared.endIsCreateLoading();
 					}, function(err) {
 						$mdDialog.hide();
@@ -265,11 +266,6 @@ angular.module('Lineblocs')
 			return new Promise(async (resolve, reject) => {
 			  switch ($shared.customizations.payment_gateway) {
 				case 'stripe': {
-					console.log('initializing stripe client');
-				  	//Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-					// test key "pk_test_51HKoXpJOeEpaAIklHlV0IunVVfR587K8I9pH3BsGLa1R3gaogqSQw29WHlivLYwZLudmpuN3bwEgwzfr4GZUiilv00PcvDPVOg"
-					console.log($shared.frontend_api_creds.stripe_pub_key)
-					debugger
 				  stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
 				  resolve();
 				}
@@ -317,7 +313,13 @@ angular.module('Lineblocs')
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
-		if (!$scope.data.selectedCard) {
+		if (!$scope.data.creditAmount) {
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Please select a card.')
+				.position('top right')
+				.hideDelay(3000)
+			);
 			return;
 		}
 
@@ -349,7 +351,6 @@ angular.module('Lineblocs')
 	}
 
 	$scope.changeCard = function(value) {
-		debugger
 		console.log("changeCard ", value);
 		$scope.data.selectedCard = value;
 		if (value === 'new') {
@@ -454,7 +455,6 @@ angular.module('Lineblocs')
 						}
 					}
 				}
-				debugger
 				$scope.cards = res[0].data[1];
 				$scope.config = res[0].data[2];
 				$scope.usageTriggers = res[0].data[4];

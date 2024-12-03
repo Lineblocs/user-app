@@ -206,67 +206,73 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 					$scope.line = {
 						legend: true,
 						labels: graph.labels,
-							data: [
-						graph.data.inbound,
-						graph.data.outbound
-						//[7, 20, 10, 15, 17, 10, 27],
-						//[6, 9, 22, 11, 13, 20, 27]
+						data: [
+							graph.data.inbound,
+							graph.data.outbound
+							//[7, 20, 10, 15, 17, 10, 27],
+							//[6, 9, 22, 11, 13, 20, 27]
 						],
 						series: [
-					'Inbound',
-					'Outbound'
-				],
+							'Inbound',
+							'Outbound'
+						],
 						colours: [{ 
-								fillColor: "#3f51b5",
-								strokeColor: "#3f51b5",
-								pointColor: "#3f51b5",
-								pointStrokeColor: "#3f51b5",
-								pointHighlightFill: "#3f51b5",
-								pointHighlightStroke: "#3f51b5"
+							fillColor: "#3f51b5",
+							strokeColor: "#3f51b5",
+							pointColor: "#3f51b5",
+							pointStrokeColor: "#3f51b5",
+							pointHighlightFill: "#3f51b5",
+							pointHighlightStroke: "#3f51b5"
+						},
+						{
+							fillColor: "#3D3D3D",
+							strokeColor: "#3D3D3D",
+							pointColor: "#3D3D3D",
+							pointStrokeColor: "#3D3D3D",
+							pointHighlightFill: "#3D3D3D",
+							pointHighlightStroke: "#3D3D3D"
+						}],
+						options: {
+							legend: {
+								display: true,
+								position: 'right'
 							},
-							{
-								fillColor: "#3D3D3D",
-								strokeColor: "#3D3D3D",
-								pointColor: "#3D3D3D",
-								pointStrokeColor: "#3D3D3D",
-								pointHighlightFill: "#3D3D3D",
-								pointHighlightStroke: "#3D3D3D"
-							}
-							],
-		options: {
-				legend: {
-			display: true,
-			position: 'right'
-			},
 							responsive: true,
-								bezierCurve : false,
-								datasetStroke: false,
-								/*
-								legendTemplate: '<ul>'
-						+'<% for (var i=0; i<datasets.length; i++) { %>'
-							+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
-							+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-						+'</li>'
-						+'<% } %>'
-					+'</ul>',
-					*/
-								pointDotRadius : 6,
-								showTooltips: false,
+							bezierCurve : false,
+							datasetStroke: false,
+							/*
+							legendTemplate: '<ul>'
+								+'<% for (var i=0; i<datasets.length; i++) { %>'
+									+'<li style=\"background-color:<%=datasets[i].fillColor%>\">'
+									+'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+								+'</li>'
+								+'<% } %>'
+							+'</ul>',
+							*/
+							pointDotRadius : 6,
+							showTooltips: false,
 						},
 						onClick: function (points, evt) {
-						console.log(points, evt);
+							console.log(points, evt);
 						}
-
 					};
 				}, 0);
 			});
 		}, 0);
 	}
+
+	$scope.getFeed = function(){
+		$timeout(function () {
+			Backend.get("/feed").then(function(res) {
+				debugger
+				$scope.feeds = res.data.items;
+			});
+		}, 0);
+	}
 	$scope.reloadGraph = function() {
-		debugger
 		console.log("reloadGraph called..");
 		$scope.load();
 	}
 	$scope.load();
-
+	$scope.getFeed();
 }]);

@@ -165,6 +165,9 @@
 /* Meeran code for css start */
 .pd-20{
 	padding: 20px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	// box-shadow: 0px 0px 3px 0px rgba(145, 145, 145, 0.5);
 }
 .imgduratn{
 	display: flex;
@@ -195,7 +198,7 @@ font-weight: 500;
     margin: 20px 0 0 5px;
 }
 .mg-20{
-	margin: 20px 0 0 5px;
+	margin: 0px 0 0 5px;
 }
 td{
 	padding: 5px 0 0 5px !important;
@@ -205,9 +208,20 @@ td{
 	width: 30%;
 }
 .mdl-grid{
-	margin-bottom: 30px;
-	background: #dbf2ff;
+	// margin-bottom: 30px;
+	// background: #dbf2ff;
 }
 .valclr{
 	color: #395373;
+}
+
+.mrgndv{
+	box-shadow: none;
+}
+.calldetails{
+	box-shadow: 0px 0px 3px 0px rgba(145, 145, 145, 0.5);
+    padding: 20px 10px;
+    margin: 20px 0;
+    background: rgb(236 236 236);
+    border-radius: 5px;
 }
