@@ -9856,7 +9856,7 @@ angular.module('Lineblocs').controller('HeadCtrl', function ($scope, $shared) {
  * # HomeCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', function ($scope, $timeout, Backend, $shared, $q) {
+angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', '$sce', '$state', function ($scope, $timeout, Backend, $shared, $q, $sce, $state) {
 	  $shared.updateTitle("Dashboard");
 	$scope.options1 = {
 	    lineWidth: 8,
@@ -10113,10 +10113,24 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 	$scope.getFeed = function(){
 		$timeout(function () {
 			Backend.get("/feed").then(function(res) {
-				debugger
 				$scope.feeds = res.data.items;
+				debugger
+				$scope.feeds = $scope.feeds.map(function(obj) {
+					if(obj.event_type === 'recordings' || obj.s3_url !== undefined){
+						obj['public_url'] = $sce.trustAsResourceUrl(obj.s3_url);
+						
+					}
+					return obj;
+				  });
 			});
 		}, 0);
+	}
+	$scope.gotorecoring = function() {
+		$state.go('recordings');
+	}
+	$scope.gotodid = function(feed) {
+		// $state.go('dids/my-numbers/'+feed.public_id+'/edit');
+		$state.go('my-numbers-edit', { numberId: feed.public_id });
 	}
 	$scope.reloadGraph = function() {
 		console.log("reloadGraph called..");
