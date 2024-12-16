@@ -68,93 +68,127 @@
 						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
 							<div ng-repeat="feed in feeds" class="pd-20">
 								<div class="imgduratn">
-									<div class="ucion round" ng-if="feed.direction === 'outbound'" style="background-color: rgb(197,17,98);">
-										<i class="mdi mdi-call-made"></i>
+									<div class="ucion round" ng-if="feed.event_type === 'recordings'" style="background-color: rgb(197,17,98);">
+										<!-- <i class="mdi mdi-call-made"></i> -->
+										<i class="mdi mdi-record-rec"></i>
 										<!-- <i class="mdi mdi-call-received" ng-if="feed.direction === 'inbound'" style="background-color:blueviolet;"></i> -->
 									</div>
-									<div class="ucion round" ng-if="feed.direction === 'inbound'" style="background-color: #339797;">
+									<div class="ucion round" ng-if="feed.event_type === 'did_numbers'" style="background-color: #339797;">
 										<!-- <i class="mdi mdi-call-made" ng-if="feed.direction === 'outbound'" style="background-color: aqua;"></i> -->
-										<i class="mdi mdi-call-received"></i>
+										<i class="mdi mdi-phone"></i>
 									</div>
 									<div class="cname">
 										<div>
-											<p class="cn">{{feed.from}}</p>
-											<p class="cd">{{feed.to}}</p>
-											<p class="cd">{{feed.started_at}}</p>
+											<p class="cn" ng-if="feed.created_at">{{feed.created_at}}</p>
+											<p class="cd" ng-if="feed.name">{{feed.name}}</p>
+											<p class="cd" ng-if="feed.country">{{feed.country}}</p>
 										</div>
 									</div>
 								</div>
 								<div>
-									<p class="ptg">This call made using Extension Number {{feed.from_extension_id}}</p>
+									<!-- <p class="ptg">This call made using Extension Number {{feed.from_extension_id}}</p> -->
 									<!-- <p> -->
-										<span class="statusspan">{{feed.status}}</span>
+										<!-- <span class="statusspan">{{feed.status}}</span> -->
 									<!-- </p> -->
 								</div>
 								<div class="calldetails">
-									<div class="evtype">
-										Event Type <span>{{feed.event_type}}</span>
+									<div class="etdv">
+										<div ng-if="feed.event_type === 'recordings'">
+											<audio class="small" controls>
+												<source ng-src="{{feed.public_url}}" type="audio/wav"></source>
+											</audio>
+										</div>
+										<div class="evtype rec" ng-if="feed.event_type === 'recordings'" ng-click="gotorecoring()">
+											Event Type <span>{{feed.event_type}}</span>
+										</div> 
+										<div class="evtype purchase" ng-if="feed.event_type === 'did_numbers'" ng-click="gotodid(feed)">
+											Purchase DID Number
+									   </div> 
+										<div class="evtype did" ng-if="feed.event_type === 'did_numbers'">
+											Event Type <span>{{feed.event_type}}</span>
+										</div> 
+										
 									</div>
 									<table class="datatable">
 										<div class="mg-20">
-											<strong>Call Details</strong> <br>
+											<strong>Details</strong> <br>
 										</div>
 										<tbody>
-											<tr>
-												<td>Direction</td>
-												<td class="valclr">{{feed.direction}}</td>
+											<tr ng-if="feed.status !== undefined">
+												<td>Status</td>
+												<td class="valclr">{{feed.status}}</td>
 											</tr>
-											<tr>
-												<td>To Number</td>
-												<td class="valclr">{{feed.to}}</td>
+											<tr ng-if="feed.tag !== undefined">
+												<td>Tag</td>
+												<td class="valclr">{{feed.tag}}</td>
 											</tr>
-											<tr>
-												<td>From Number</td>
-												<td class="valclr">{{feed.from}}</td>
+											<tr ng-if="feed.duration !== undefined">
+												<td>Duration</td>
+												<td class="valclr">{{feed.duration}}</td>
 											</tr>
-											<tr>
-												<td>Start Date</td>
-												<td class="valclr">{{feed.started_at}}</td>
+											<tr ng-if="feed.size !== undefined">
+												<td>Size</td>
+												<td class="valclr">{{feed.size}}</td>
 											</tr>
-											<tr>
-												<td>End Date</td>
-												<td class="valclr">{{feed.ended_at}}</td>
+											<tr ng-if="feed.plan_snapshot !== undefined">
+												<td>Plan Snapshot</td>
+												<td class="valclr">{{feed.plan_snapshot}}</td>
 											</tr>
-											<tr>
-												<td>From Extention</td>
-												<td class="valclr">{{feed.from_extension_id}}</td>
+											<tr ng-if="feed.number !== undefined">
+												<td>Number</td>
+												<td class="valclr didnum" ng-click="gotodid(feed)">{{feed.number}}</td>
+												<!-- <td>Purchase DID Number</td> -->
 											</tr>
-											<tr>
-												<td>To Extention</td>
-												<td class="valclr">{{feed.to_extension_id}}</td>
+											<!-- <tr ng-if="feed.monthly_cost !== undefined">
+												<td>Monthly Cost</td>
+												<td class="valclr">{{feed.monthly_cost}}</td>
+											</tr> -->
+											<tr  ng-if="feed.provider !== undefined">
+												<td>Provider</td>
+												<td class="valclr">{{feed.provider}}</td>
 											</tr>
-											<tr>
-												<td>Billed</td>
-												<td class="valclr">{{feed.billed}}</td>
+											<tr  ng-if="feed.did_action !== undefined">
+												<td>DID Action</td>
+												<td class="valclr">{{feed.did_action}}</td>
 											</tr>
+											<!-- <tr  ng-if="feed.features !== undefined">
+												<td>Features</td>
+												<td class="valclr">{{feed.features}}</td>
+											</tr> -->
+											<tr  ng-if="feed.type !== undefined">
+												<td>Type</td>
+												<td class="valclr">{{feed.type}}</td>
+											</tr>
+											<!-- <tr  ng-if="feed.type !== undefined">
+												<td>Type</td>
+												<td class="valclr">{{feed.type}}</td>
+											</tr> -->
 										</tbody>
 									</table>
 								</div>
 
-								<div>
+								<div ng-if="feed.monthly_cost !== undefined"> 
 									<div class="duraStrong">
-										<strong>Duration</strong>
+										<strong>Costs and Features</strong>
 									</div>
 									
 									<div class="duraCss">
 										<table>
 											<tr class="durath">
-												<th class="thd">Duration</th>
-												<th class="thd">Duration Live</th>
-												<th class="thd">Duration Live Human</th>
+												<th class="thd">Monthly Cost</th>
+												<th class="thd">Setup Cost</th>
+												<th>Features</th>
+												<!-- <th class="thd">Duration Live Human</th>
 												<th class="thd">Duration Ended</th>
-												<th>Duration Ended Human</th>
+												<th>Duration Ended Human</th> -->
 											</tr>
-											<tr>
-												<td style="text-align: center;">{{feed.duration}}</td>
-												<td>{{feed.duration_live}}</td>
-												<td>{{feed.duration_live_human}}</td>
+											<tr class="p-td">
+												<td style="text-align: center;">{{feed.monthly_cost}}</td>
+												<td>{{feed.setup_cost}}</td>
+												<td>{{feed.features}}</td>
+												<!-- <td>{{feed.duration_live_human}}</td>
 												<td>{{feed.duration_ended}}</td>
-												<td>{{feed.duration_ended_human}}</td>
+												<td>{{feed.duration_ended_human}}</td> -->
 											</tr>
 											
 										</table>
