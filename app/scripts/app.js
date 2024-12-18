@@ -873,8 +873,12 @@ return changed;
             //factory.queued.push( item );
         }
         function errorHandler(res, codeId, showMsg) {
+            debugger
             var error = null;
             if ( res.data ) {
+                if(res.data.message === 'Your card has expired.'){
+                    return;
+                }
                 error = res.data.message||null;
             }
             console.log("erroHandler ", arguments);
