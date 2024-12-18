@@ -340,10 +340,22 @@ angular.module('Lineblocs')
 						$mdDialog.hide();
 						loadData(true);
 						$shared.endIsCreateLoading();
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Card added successfully.')
+							.position("top right")
+							.hideDelay(3000)
+						);
 					}, function(err) {
 						$mdDialog.hide();
 						$shared.endIsCreateLoading();
 						console.error("an error occured ", err);
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Card was declined, Please try to add another card.')
+							.position("top right")
+							.hideDelay(3000)
+						);
 					});
 			// 	}
 			// })
@@ -624,7 +636,7 @@ angular.module('Lineblocs')
 	$scope.setPrimary = function(card)
 	{
       Backend.put("/card/" + card.id + "/setPrimary").then(function() {
-				loadData(true).then(function() {
+		loadData(true).then(function() {
 		 $mdToast.show(
           $mdToast.simple()
             .textContent('Set card as primary')
@@ -634,18 +646,49 @@ angular.module('Lineblocs')
 		 });
           });
 	}
-	$scope.deleteCard = function(e, card)
+	$scope.deleteCard = function($event, card)
 	{
-      Backend.delete("/card/" + card.id).then(function() {
-				loadData(true).then(function() {
-		 $mdToast.show(
-          $mdToast.simple()
-            .textContent('Removed card successfully..')
-            .position("top right")
-            .hideDelay(3000)
-		);
-		 });
-          });
+		if(card.primary === 1){
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Primary card can not be deleted')
+				.position("top right")
+				.hideDelay(3000)
+			);
+		}else{
+		 	var confirm = $mdDialog.confirm()
+			.title('Are you sure you want to remove card ?')
+			.textContent('This will permantely remove the card from your added card list')
+			.ariaLabel('Delete card')
+			.targetEvent($event)
+			.ok('Yes')
+			.cancel('No');
+			$mdDialog.show(confirm).then(function() {
+				$shared.isLoading = true;
+				Backend.delete("/card/" + card.id).then(function() {
+					loadData(true).then(function() {
+						$shared.endIsLoading();
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Removed card successfully..')
+							.position("top right")
+							.hideDelay(3000)
+						);
+					});
+				})
+			}, function() {
+			});
+		}
+		// Backend.delete("/card/" + card.id).then(function() {
+		// 	loadData(true).then(function() {
+		// 		$mdToast.show(
+		// 			$mdToast.simple()
+		// 			.textContent('Removed card successfully..')
+		// 			.position("top right")
+		// 			.hideDelay(3000)
+		// 		);
+		// 	});
+		// });
 	}
 	$scope.deleteUsageTrigger = function($event, item) {
 	// Appending dialog to document.body to cover sidenav in docs app
