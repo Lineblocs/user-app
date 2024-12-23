@@ -60,6 +60,7 @@
           <tr md-row>
             <th md-column><md-checkbox ng-model="selectedAll" ng-change="Backend.selectAll(selectedAll, 'supportTickets', supportTickets)" aria-label="Checkbox" class="md-warn md-align-top-left" flex></th>
             <th md-column><span>Subject</span></th>
+            <th md-column><span>Created At</span></th>
             <th md-column><span>Status</span></th>
             <th md-column>&nbsp;</th>
           </tr>
@@ -71,6 +72,9 @@
                 </td>
             <td md-cell>
               {{supportTicket.subject}}
+            </td>
+            <td md-cell>
+              {{supportTicket.friendly_dates.created_at}}
             </td>
             <td md-cell>
               {{supportTicket.status}}
