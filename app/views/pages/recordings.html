@@ -92,6 +92,7 @@
             <th md-column>To</th>
             <th md-column>Direction</th>
             <th md-column>Tags</th>
+            <th md-column>Created At</th>
             <th md-column>Recording</th>
             <th md-column>&nbsp;</th>
           </tr>
@@ -105,6 +106,7 @@
             <td md-cell>{{recording.call_to}}</td>
             <td md-cell>{{recording.call_direction}}</td>
             <td md-cell>{{recording.tags}}</td>
+            <td md-cell>{{recording.friendly_dates.created_at}}</td>
             <td md-cell>
               <audio class="small" controls>
                 <source ng-src="{{recording.public_url}}" type="audio/wav"></source>
