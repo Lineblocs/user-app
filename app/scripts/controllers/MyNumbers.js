@@ -36,6 +36,10 @@ angular.module('Lineblocs').controller('MyNumbersCtrl', function ($scope, Backen
 
     $state.go('my-numbers-edit', {numberId: number.public_id});
   }
+  $scope.editFlow = function(number) {
+    const flowId = number.flow_public_id;
+    $state.go('flow-editor', {flowId: flowId});
+  }
   $scope.deleteNumber = function($event, number) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()

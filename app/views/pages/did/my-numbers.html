@@ -94,6 +94,15 @@
                     {{number.availability}}
                 </td>
                 <td md-cell>
+              <md-button ng-click="editFlow(number)" class="md-icon-button" aria-label="Number">
+
+                  <md-icon>
+                    <i class="mdi mdi-phone-forward"></i>
+                          <md-tooltip class="helper-tooltip" md-direction="top">
+                              Edit call flow
+                          </md-tooltip>
+                  </md-icon>
+              </md-button>
               <md-button ng-click="editNumber(number)" class="md-icon-button" aria-label="Number">
 
                   <md-icon>
