@@ -1,80 +1,17 @@
 <div class="layout-row" layout-sm="column" layout-xs="column">
-	<div class="mdl-cell shadow grid-margin calls-graph" flex="100" flex-sm="100">
+	<!-- <div class="mdl-cell shadow grid-margin calls-graph" flex="100" flex-sm="100">
 		<div class="linechart" relink-event="resize">
 			<div class="mdl-grid">
-				<div class="mdl-cell-12-col" style="background: white;">
+				<div class="mdl-cell-12-col">
 					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
-						<!-- <div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100"> 
-							<div class="rptDv" ng-repeat="call in callsMade">
-								<div class="imgduratn">
-									<div class="ucion">
-										<img ng-src="{{'/images/'+call.img}}" width="40" height="40"/>
-									</div>
-									<div class="cname">
-										<div>
-											<p class="cn">{{call.name}}</p>
-											<p class="cd">{{call.duration}}</p>
-											<p class="cd">{{call.date}}</p>
-										</div>
-									</div>
-								</div>
-								<div>
-									<table class="table table-bordered">
-										<div class="mg-20">
-											<strong>Customer call using {{call.exten}} extention.</strong> <br>
-											<div>
-												<p class="didP">
-													<span class="spn1 clr1">DID Purchased</span> 
-													<span style="margin-right: 10px;" ng-repeat="P in call.DIDNumber[0].purchased">{{P}},</span>
-												</p>
-											</div>
-											<div>
-												<p class="didP">
-													<span class="spn1 clr2">DID Renewed</span> 
-													<span style="margin-right: 10px;" ng-repeat="R in call.DIDNumber[1].renewed">{{R}},</span>
-												</p>
-											</div>		
-										</div>
-										<tbody class="tb">
-											<tr class="brdrtr">
-												<td class="lsttd tdnm">Caller Name</td>
-												<td class="lsttd">{{call.callerName}}</td>
-											</tr>
-											<tr class="brdrtr">
-												<td class="lsttd tdnm">To Number</td>
-												<td class="lsttd">{{call.toNumber}}</td>
-											</tr>
-											<tr class="brdrtr">
-												<td class="lsttd tdnm">From Number</td>
-												<td class="lsttd">{{call.fromNumber}}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div class="actdv">
-									<div ng-repeat="act in call.activity">
-										<strong>{{act.name}}</strong>
-									</div>
-								</div>
-								<div class="reco">
-									<p>Recordings</p>
-									<div>
-										<strong>{{call.record}}</strong> <br>
-									</div>
-								</div>
-							</div>
-						</div> -->
-
 						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
+
 							<div ng-repeat="feed in feeds" class="pd-20">
 								<div class="imgduratn">
 									<div class="ucion round" ng-if="feed.event_type === 'recordings'" style="background-color: rgb(197,17,98);">
-										<!-- <i class="mdi mdi-call-made"></i> -->
 										<i class="mdi mdi-record-rec"></i>
-										<!-- <i class="mdi mdi-call-received" ng-if="feed.direction === 'inbound'" style="background-color:blueviolet;"></i> -->
 									</div>
 									<div class="ucion round" ng-if="feed.event_type === 'did_numbers'" style="background-color: #339797;">
-										<!-- <i class="mdi mdi-call-made" ng-if="feed.direction === 'outbound'" style="background-color: aqua;"></i> -->
 										<i class="mdi mdi-phone"></i>
 									</div>
 									<div class="cname">
@@ -85,12 +22,7 @@
 										</div>
 									</div>
 								</div>
-								<div>
-									<!-- <p class="ptg">This call made using Extension Number {{feed.from_extension_id}}</p> -->
-									<!-- <p> -->
-										<!-- <span class="statusspan">{{feed.status}}</span> -->
-									<!-- </p> -->
-								</div>
+
 								<div class="calldetails">
 									<div class="etdv">
 										<div ng-if="feed.event_type === 'recordings'">
@@ -137,12 +69,8 @@
 											<tr ng-if="feed.number !== undefined">
 												<td>Number</td>
 												<td class="valclr didnum" ng-click="gotodid(feed)">{{feed.number}}</td>
-												<!-- <td>Purchase DID Number</td> -->
 											</tr>
-											<!-- <tr ng-if="feed.monthly_cost !== undefined">
-												<td>Monthly Cost</td>
-												<td class="valclr">{{feed.monthly_cost}}</td>
-											</tr> -->
+
 											<tr  ng-if="feed.provider !== undefined">
 												<td>Provider</td>
 												<td class="valclr">{{feed.provider}}</td>
@@ -151,18 +79,11 @@
 												<td>DID Action</td>
 												<td class="valclr">{{feed.did_action}}</td>
 											</tr>
-											<!-- <tr  ng-if="feed.features !== undefined">
-												<td>Features</td>
-												<td class="valclr">{{feed.features}}</td>
-											</tr> -->
+
 											<tr  ng-if="feed.type !== undefined">
 												<td>Type</td>
 												<td class="valclr">{{feed.type}}</td>
 											</tr>
-											<!-- <tr  ng-if="feed.type !== undefined">
-												<td>Type</td>
-												<td class="valclr">{{feed.type}}</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>
@@ -178,180 +99,98 @@
 												<th class="thd">Monthly Cost</th>
 												<th class="thd">Setup Cost</th>
 												<th>Features</th>
-												<!-- <th class="thd">Duration Live Human</th>
-												<th class="thd">Duration Ended</th>
-												<th>Duration Ended Human</th> -->
 											</tr>
 											<tr class="p-td">
 												<td style="text-align: center;">{{feed.monthly_cost}}</td>
 												<td>{{feed.setup_cost}}</td>
 												<td>{{feed.features}}</td>
-												<!-- <td>{{feed.duration_live_human}}</td>
-												<td>{{feed.duration_ended}}</td>
-												<td>{{feed.duration_ended_human}}</td> -->
 											</tr>
 											
 										</table>
 									</div>
 								</div>
-								
-							</div>
-
-							<!-- <div ng-repeat="call in callsMade" class="pd-20">
-								<div class="imgduratn">
-									<div class="ucion round">
-										<i class="mdi mdi-call-made"></i>
-									</div>
-									<div class="cname">
-										<div>
-											<p class="cn">{{call.name}}</p>
-											<p class="cd">{{call.duration}}</p>
-											<p class="cd">{{call.date}}</p>
-										</div>
-									</div>
-								</div>
-								<div>
-									<p class="ptg">This call made using Extension Number #123Abc</p>
-								</div>
-								<table class="datatable">
-									<div class="mg-20">
-										<strong>Call Details</strong> <br>
-									</div>
-									<tbody>
-										<tr>
-											<td>Caller Name</td>
-											<td class="valclr">{{call.callerName}}</td>
-										</tr>
-										<tr>
-											<td>To Number</td>
-											<td class="valclr">{{call.toNumber}}</td>
-										</tr>
-										<tr>
-											<td>From Number</td>
-											<td class="valclr">{{call.fromNumber}}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div> -->
-						</div>
-					</div>
-
-					<!-- <div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
-						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
-							<div ng-repeat="income in callsIncoming" class="pd-20">
-								<div class="imgduratn">
-									<div class="ucion round">
-										<i class="mdi mdi-call-received"></i>
-									</div>
-									<div class="cname">
-										<div>
-											<p class="cn">{{income.name}}</p>
-											<p class="cd">{{income.duration}}</p>
-											<p class="cd">{{income.date}}</p>
-										</div>
-									</div>
-								</div>
-								<div>
-									<p class="ptg">This call made using Extension Number #123Abc</p>
-								</div>
-								<table class="datatable">
-									<div class="mg-20">
-										<strong>Call Details</strong> <br>
-									</div>
-									<tbody>
-										<tr>
-											<td>Caller Name</td>
-											<td class="valclr">{{income.callerName}}</td>
-										</tr>
-										<tr>
-											<td>To Number</td>
-											<td class="valclr">{{income.toNumber}}</td>
-										</tr>
-										<tr>
-											<td>From Number</td>
-											<td class="valclr">{{income.fromNumber}}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div> -->
-
-					<!-- <div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
-						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
-							<div ng-repeat="didp in DIDPurchased" class="pd-20">
-								<div class="imgduratn">
-									<div class="ucion square">
-										<i class="mdi mdi-wallet-membership"></i>
-									</div>
-									<div class="cname">
-										<div>
-											<p class="cn">Purchased DID's and there region</p>
-										</div>
-									</div>
-								</div>
-								<div>
-									<p  class="ptg">{{didp.DIDNumber }} #{{didp.region}}</p>
-								</div>
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
 
-					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
-						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
-							<div ng-repeat="didR in DIDRenewed" class="pd-20">
-								<div class="imgduratn">
-									<div class="ucion square">
-										<i class="mdi mdi-restore"></i>
-									</div>
-									<div class="cname">
-										<div>
-											<p class="cn">Renewed DID's and there region</p>
-										</div>
-									</div>
-								</div>
-								<div>
-									<p  class="ptg">{{didR.DIDNumber }} #{{didR.region}}</p>
-								</div>
-							</div>
+	
+	<div class="mrgndv" flex="100" flex-sm="100" flex-xs="100">
+		<div ng-repeat="feed in feeds" class="pd-60">
+			<div ng-if="feed.event_type === 'recordings'" class="mdl-cell grid-margin feed-card rec-clr" flex="100" flex-sm="100">
+				<div class="d-flex df-main">
+					<p class="p-rec-name p-com">{{feed.name || 'Anonymous'}}</p>
+					<img src="../../../icons/record.png" class="mlimg">
+				</div>
+				<div class="pm">
+					<div class="d-flex">
+						<img src="../../../icons/system.png" class="statimg">
+						<p class="p-rec-stat p-com clr-blu">{{feed.status}}</p>
+						<div class="rec-btn rbtn-clr" ng-click="gotorecoring()">
+							Recoriing
 						</div>
 					</div>
+				</div>
+				<div class="mid-dv">
+					<p>From: {{feed.from}}</p>
+					<p>To: {{feed.from}}</p>
+				</div>
+				<div class="d-flex dur-dv">
+					<img src="../../../icons/clock.png">
+					<p class="dur-p">Duration: {{feed.duration}}</p>
+				</div>
+				<div class="aud-dv">
+					<audio class="small" controls>
+						<source ng-src="{{feed.public_url}}" type="audio/wav"></source>
+					</audio>
+				</div>
+			</div>
 
-					<div layout="row" layout-xs="column" layout-sm="column" class="mdl-grid">
-						<div class="shadow mrgndv" flex="100" flex-sm="100" flex-xs="100">
-							<div ng-repeat="rec in recordings" class="pd-20">
-								<div class="imgduratn">
-									<div class="ucion square">
-										<i class="mdi mdi-record-rec"></i>
-									</div>
-									<div class="cname">
-										<div>
-											<p class="cn">Recordings</p>
-										</div>
-									</div>
-								</div>
-								<table class="datatable">
-									<div class="mg-20">
-										<strong>Call Details</strong> <br>
-									</div>
-									<tbody>
-										<tr>
-											<td>Recording</td>
-											<td class="valclr">{{rec.record}}</td>
-										</tr>
-										<tr>
-											<td>From Number</td>
-											<td class="valclr">{{rec.from}}</td>
-										</tr>
-										<tr>
-											<td>To Number</td>
-											<td class="valclr">{{rec.to}}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+			<div ng-if="feed.event_type === 'did_numbers'" class="mdl-cell grid-margin feed-card did-clr" flex="100" flex-sm="100">
+				<div class="d-flex df-main">
+					<div class="round-dv">
+						<img src="../../../icons/telephone (1).png">
+					</div>
+					<p class="p-rec-name p-com round-p">{{feed.name || 'Anonymous'}}</p>
+				</div>
+				<div class="p20">
+					<div class="d-flex">
+						<div class="rec-btn dbtn-clr" ng-click="gotodid(feed)">
+							DID Number
 						</div>
-					</div> -->
+						<p class="p-rec-stat clr-blck p-com">{{feed.number}}</p>
+					</div>
+				</div>
+				<div class="d-flex p-flag">
+					<img src="../../../flags/1x1/{{feed.country}}.svg" class="flg-img">
+					<p>{{feed.country}}</p>
+				</div>
+				<p class="cost"><span>Monthly Cost</span>{{feed.monthly_cost}}</p>
+			</div>
+
+			<div ng-if="feed.event_type === 'calls'" class="mdl-cell grid-margin feed-card call-clr" flex="100" flex-sm="100">
+				<div class="d-flex df-main">
+					<p class="p-rec-name p-com call-p">{{feed.name || 'Anonymous'}}</p>
+					<div class="call-btn">
+						Calls
+					</div>
+				</div>
+				<div class="d-flex p-date">
+					<img src="../../../icons/calendar.png">
+					<p>{{feed.date}}</p>
+				</div>
+				<div class="call-num">
+					<p>
+						<span class="ttl">From: </span>
+						<span class="val">{{feed.from}}</span>
+					</p>
+					<p>
+						<span class="ttl">To: </span>
+						<span class="val">{{feed.to}}</span>
+					</p>
 				</div>
 			</div>
 		</div>
