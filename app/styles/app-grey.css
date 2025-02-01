@@ -2497,7 +2497,7 @@ md-card img {
     position: relative; } }
 
 /* Meeran code for css start */
-.pd-20 {
+/* .pd-20 {
   padding: 20px;
   margin-bottom: 10px;
   border-radius: 10px; }
@@ -2550,14 +2550,9 @@ td {
   box-shadow: 0px 0px 3px 0px rgba(145, 145, 145, 0.5);
   padding: 20px 10px;
   margin: 20px 0;
-  /* background: rgba(236, 236, 236, 0.9); */
-  background: #22272e;
+  background: rgba(236, 236, 236, 0.9);
   border-radius: 5px;
-  position: relative;
-}
-.calldetails td{
-  color: #FFFFFF;
-}
+  position: relative; }
 
 .etdv {
   position: absolute;
@@ -2605,22 +2600,188 @@ td {
 
 .duraStrong strong {
   padding: 5px 10px;
-  background: antiquewhite;
-  color: #000000;
-}
+  background: antiquewhite; }
 
 .durath {
-  border-bottom: 1px solid rgba(145, 145, 145, 0.3); 
-  color: #ffffff;
-}
+  border-bottom: 1px solid rgba(145, 145, 145, 0.3); }
 
 .durath .thd {
   border-right: 1px solid rgba(145, 145, 145, 0.3); }
 
 .p-td td {
-  padding-top: 20px !important; 
-  color: #ffffff;
+  padding-top: 20px !important; } */
+
+
+/* meeran code for new home page start here */
+.pd-60{
+  padding: 30px 60px 0;
 }
+.feed-card{
+  /* background: #FFFFFF; */
+  border-radius: 10px !important;
+  padding: 40px 30px 0px;
+}
+.rec-clr{
+  border: 1px solid #FCC324;
+}
+.did-clr{
+  border: 1px solid #8CA2BE;
+}
+.call-clr{
+  border: 1px solid #D8E45D;
+}
+.d-flex{
+  display: flex;
+  /* border-bottom: 1px solid #CBCBCB;
+  padding-bottom: 20px; */
+}
+.df-main{
+  border-bottom: 1px solid #cbcbcbab;
+  padding-bottom: 20px;
+}
+.d-flex-stat{
+  display: flex;
+}
+.mlimg{
+  margin-left: 10px;
+  background: #ffff;
+  border-radius: 15px;
+  padding: 2px;
+}
+.d-flex img, .flg-img{
+  width: 24px;
+  height: 24px;
+}
+.statimg{
+  margin-top: 2px;
+}
+.p-com{
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.p-rec-name{
+  margin-left: 20px;
+  color: #ffff;
+}
+.pm{
+  margin-left: 18px;
+  padding-top: 20px;
+}
+.p20{
+  padding-top: 20px;
+}
+.p-rec-stat{
+  margin-left: 10px;
+  line-height: 24px;
+  text-transform: capitalize;
+}
+.clr-blu{
+  color: #3D679D;
+}
+.clr-blck{
+  color: #ffff;
+}
+.rec-btn{
+  padding: 5px 20px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.rbtn-clr{
+  background: #07FD86;
+  margin-left: 30px;
+  cursor: pointer;
+}
+.dbtn-clr{
+  background: #D8E45D;
+  cursor: pointer;
+}
+.mid-dv{
+  padding: 30px 22px 15px;
+}
+.mid-dv p{
+  font-size: 14px;
+  color: #ffff;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+.dur-dv{
+  margin-left: 20px;
+}
+.dur-p{
+  font-size: 14px;
+  color: #ffff;
+  font-weight: 400;
+  margin-left: 10px;
+  line-height: 20px;
+}
+.aud-dv{
+  padding: 30px 10px;
+}
+.round-dv{
+  padding: 10px 10px 5px;
+  border-radius: 50%;
+  border: 1px solid #8CA2BE;
+}
+.round-p{
+  line-height: 30px;
+}
+.call-p{
+  line-height: 38px;
+}
+.p-flag{
+  padding: 20px 5px;
+}
+.p-flag p{
+  font-size: 14px;
+  color: #ffff;
+  font-weight: 500;
+  margin-left: 10px;
+  line-height: 22px;
+}
+.cost{
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 20px;
+}
+.cost span{
+  margin-right: 15px;
+}
+.call-btn{
+  padding: 10px;
+  border: 1px solid #E0D312;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-left: 20px;
+  color: #22A124;
+  font-weight: 600;
+}
+.p-date{
+  padding: 20px 5px 20px 20px;
+}
+.p-date{
+  font-style: italic;
+  font-size: 16px;
+  color: #ffff;
+  line-height: 22px;
+}
+.p-date img{
+  margin-right: 10px;
+}
+.call-num{
+  padding: 20px 0 20px 20px;
+}
+.call-num p{
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.ttl{
+  font-weight: 400;
+}
+.val{
+  font-weight: 500;
+}
+/* meeran code for new home page end here */
 
 /* Styles for profile */
 .lightbox-container a {
