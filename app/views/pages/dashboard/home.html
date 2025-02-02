@@ -119,78 +119,91 @@
 
 	
 	<div class="mrgndv" flex="100" flex-sm="100" flex-xs="100">
-		<div ng-repeat="feed in feeds" class="pd-60">
-			<div ng-if="feed.event_type === 'recordings'" class="mdl-cell grid-margin feed-card rec-clr" flex="100" flex-sm="100">
-				<div class="d-flex df-main">
-					<p class="p-rec-name p-com">{{feed.name || 'Anonymous'}}</p>
-					<img src="../../../icons/record.png" class="mlimg">
+		<div class="pd-60">
+			<div class="mdl-cell">
+				<h4>Home</h4>
+			</div>
+			<div ng-if="feeds.length===0">
+				<div class="mdl-cell grid-margin feed-card rec-clr" flex="100" flex-sm="100">
+					<div class="d-flex df-main">
+						<h5>No items available at the moment.</h5>
+					</div>
 				</div>
-				<div class="pm">
-					<div class="d-flex">
-						<img src="../../../icons/system.png" class="statimg">
-						<p class="p-rec-stat p-com clr-blu">{{feed.status}}</p>
-						<div class="rec-btn rbtn-clr" ng-click="gotorecoring()">
-							Recoriing
+
+			</div>
+			<div ng-repeat="feed in feeds">
+				<div ng-if="feed.event_type === 'recordings'" class="mdl-cell grid-margin feed-card rec-clr" flex="100" flex-sm="100">
+					<div class="d-flex df-main">
+						<p class="p-rec-name p-com">{{feed.name || 'Anonymous'}}</p>
+						<img src="../../../icons/record.png" class="mlimg">
+					</div>
+					<div class="pm">
+						<div class="d-flex">
+							<img src="../../../icons/system.png" class="statimg">
+							<p class="p-rec-stat p-com clr-blu">{{feed.status}}</p>
+							<div class="rec-btn rbtn-clr" ng-click="gotorecoring()">
+								Recoriing
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="mid-dv">
-					<p>From: {{feed.from}}</p>
-					<p>To: {{feed.from}}</p>
-				</div>
-				<div class="d-flex dur-dv">
-					<img src="../../../icons/clock.png">
-					<p class="dur-p">Duration: {{feed.duration}}</p>
-				</div>
-				<div class="aud-dv">
-					<audio class="small" controls>
-						<source ng-src="{{feed.public_url}}" type="audio/wav"></source>
-					</audio>
-				</div>
-			</div>
-
-			<div ng-if="feed.event_type === 'did_numbers'" class="mdl-cell grid-margin feed-card did-clr" flex="100" flex-sm="100">
-				<div class="d-flex df-main">
-					<div class="round-dv">
-						<img src="../../../icons/telephone (1).png">
+					<div class="mid-dv">
+						<p>From: {{feed.from}}</p>
+						<p>To: {{feed.from}}</p>
 					</div>
-					<p class="p-rec-name p-com round-p">{{feed.name || 'Anonymous'}}</p>
+					<div class="d-flex dur-dv">
+						<img src="../../../icons/clock.png">
+						<p class="dur-p">Duration: {{feed.friendly_duration}}</p>
+					</div>
+					<div class="aud-dv">
+						<audio class="small" controls>
+							<source ng-src="{{feed.public_url}}" type="audio/wav"></source>
+						</audio>
+					</div>
 				</div>
-				<div class="p20">
-					<div class="d-flex">
-						<div class="rec-btn dbtn-clr" ng-click="gotodid(feed)">
-							DID Number
+
+				<div ng-if="feed.event_type === 'did_numbers'" class="mdl-cell grid-margin feed-card did-clr" flex="100" flex-sm="100">
+					<div class="d-flex df-main">
+						<div class="round-dv">
+							<img src="../../../icons/telephone (1).png">
 						</div>
-						<p class="p-rec-stat clr-blck p-com">{{feed.number}}</p>
+						<p class="p-rec-name p-com round-p">{{feed.name || 'Anonymous'}}</p>
 					</div>
+					<div class="p20">
+						<div class="d-flex">
+							<div class="rec-btn dbtn-clr" ng-click="gotodid(feed)">
+								DID Number
+							</div>
+							<p class="p-rec-stat clr-blck p-com">{{feed.number}}</p>
+						</div>
+					</div>
+					<div class="d-flex p-flag">
+						<img src="../../../flags/1x1/{{feed.country}}.svg" class="flg-img">
+						<p>{{feed.country}}</p>
+					</div>
+					<p class="cost"><span>Monthly Cost</span>{{$shared.centsToDollars(feed.monthly_cost, true)}}</p>
 				</div>
-				<div class="d-flex p-flag">
-					<img src="../../../flags/1x1/{{feed.country}}.svg" class="flg-img">
-					<p>{{feed.country}}</p>
-				</div>
-				<p class="cost"><span>Monthly Cost</span>{{feed.monthly_cost}}</p>
-			</div>
 
-			<div ng-if="feed.event_type === 'calls'" class="mdl-cell grid-margin feed-card call-clr" flex="100" flex-sm="100">
-				<div class="d-flex df-main">
-					<p class="p-rec-name p-com call-p">{{feed.name || 'Anonymous'}}</p>
-					<div class="call-btn">
-						Calls
+				<div ng-if="feed.event_type === 'calls'" class="mdl-cell grid-margin feed-card call-clr" flex="100" flex-sm="100">
+					<div class="d-flex df-main">
+						<p class="p-rec-name p-com call-p">{{feed.name || 'Anonymous'}}</p>
+						<div class="call-btn">
+							Calls
+						</div>
 					</div>
-				</div>
-				<div class="d-flex p-date">
-					<img src="../../../icons/calendar.png">
-					<p>{{feed.date}}</p>
-				</div>
-				<div class="call-num">
-					<p>
-						<span class="ttl">From: </span>
-						<span class="val">{{feed.from}}</span>
-					</p>
-					<p>
-						<span class="ttl">To: </span>
-						<span class="val">{{feed.to}}</span>
-					</p>
+					<div class="d-flex p-date">
+						<img src="../../../icons/calendar.png">
+						<p>{{feed.date}}</p>
+					</div>
+					<div class="call-num">
+						<p>
+							<span class="ttl">From: </span>
+							<span class="val">{{feed.from}}</span>
+						</p>
+						<p>
+							<span class="ttl">To: </span>
+							<span class="val">{{feed.to}}</span>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>

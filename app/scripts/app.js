@@ -279,6 +279,13 @@ searchModule("BYO DID Numbers", "byo-did-numbers", ['byo', 'did numbers', 'did',
 searchModule("Support", "support", ['support'], [], ['support']),
      ];
 
+     factory.centsToDollars = function(cents, addDollarSign) {
+        addDollarSign = addDollarSign||false;
+        // Convert to dollars and ensure 2 decimal places
+        const dollars = (cents / 100).toFixed(2);
+        // Return with or without dollar sign based on parameter
+        return addDollarSign ? `$${dollars}` : dollars;
+     }
      factory.isSectionActive = function(area) {
          var current = factory.state.name;
          var maps = {

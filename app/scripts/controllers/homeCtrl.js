@@ -9,6 +9,8 @@
  */
 angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backend', '$shared', '$q', '$sce', '$state', function ($scope, $timeout, Backend, $shared, $q, $sce, $state) {
 	  $shared.updateTitle("Dashboard");
+
+	$scope.$shared = $shared;
 	$scope.options1 = {
 	    lineWidth: 8,
 	    scaleColor: false,
