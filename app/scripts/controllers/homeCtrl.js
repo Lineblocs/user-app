@@ -262,19 +262,16 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 	}
 
 	$scope.getFeed = function(){
-		$timeout(function () {
-			Backend.get("/feed").then(function(res) {
-				$scope.feeds = res.data.items;
-				debugger
-				$scope.feeds = $scope.feeds.map(function(obj) {
-					if(obj.event_type === 'recordings' || obj.s3_url !== undefined){
-						obj['public_url'] = $sce.trustAsResourceUrl(obj.s3_url);
-						
-					}
-					return obj;
-				  });
-			});
-		}, 0);
+		Backend.get("/feed").then(function(res) {
+			//$scope.feeds = res.data.items;
+			$scope.feeds = res.data.items.map(function(obj) {
+				if(obj.event_type === 'recordings' || obj.s3_url !== undefined){
+					obj['public_url'] = $sce.trustAsResourceUrl(obj.s3_url);
+					
+				}
+				return obj;
+				});
+		});
 	}
 	$scope.gotorecoring = function() {
 		$state.go('recordings');
