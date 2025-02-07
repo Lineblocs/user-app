@@ -396,9 +396,11 @@ searchModule("Support", "support", ['support'], [], ['support']),
      factory.getAltAppLogo = function() {
         var logo = factory.customizations['alt_app_logo'];
         if ( !logo || logo === '' ) {
-                return '/images/new-logo-blue.png';
+            return '/images/new-logo-blue.png';
         }
+        debugger
         return getBaseUrl() + "/assets/img/" + logo;
+        
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
@@ -689,7 +691,9 @@ return changed;
         }
         factory.doLogout = function() {
             factory.purgeSession();
+            var theme = $window.localStorage.THEME;
             localStorage.clear();
+            $window.localStorage.setItem('THEME', theme);
             ThemeService.addStyle("styles/app-blue.css");
             $state.go('login', {});
         }
@@ -10324,9 +10328,9 @@ angular.module('Lineblocs')
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval) {
-	  $shared.updateTitle("Login");
-	  $shared.processResult();
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval, $window) {
+  $shared.updateTitle("Login");
+  $shared.processResult();
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
   $scope.invalideOtp = false;
@@ -10343,9 +10347,10 @@ angular.module('Lineblocs')
   $scope.countdownDuration = 5;
   $scope.resendTimeout = $scope.countdownDuration * 60;
   $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
-var clickedGoogSignIn = false;
-var countdown;
-
+  var clickedGoogSignIn = false;
+  var countdown;
+  $scope.selectedTheme = $window.localStorage.THEME;
+  
 function startCountdown() {
   countdown = $interval(function() {
     var minutes = Math.floor($scope.resendTimeout / 60);

@@ -8,9 +8,9 @@
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval) {
-	  $shared.updateTitle("Login");
-	  $shared.processResult();
+  .controller('LoginCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, Idle, $interval, $window) {
+  $shared.updateTitle("Login");
+  $shared.processResult();
 	$scope.triedSubmit = false;
 	$scope.couldNotLogin = false;
   $scope.invalideOtp = false;
@@ -27,9 +27,10 @@ angular.module('Lineblocs')
   $scope.countdownDuration = 5;
   $scope.resendTimeout = $scope.countdownDuration * 60;
   $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
-var clickedGoogSignIn = false;
-var countdown;
-
+  var clickedGoogSignIn = false;
+  var countdown;
+  $scope.selectedTheme = $window.localStorage.THEME;
+  
 function startCountdown() {
   countdown = $interval(function() {
     var minutes = Math.floor($scope.resendTimeout / 60);

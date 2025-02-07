@@ -169,4 +169,28 @@
   .val{
     font-weight: 500;
   }
+  .login-form{
+    background-color: #1a1a1a !important;
+  }
+  body {
+    background: #22272e; 
+  }
+  .login-page-block{
+    background: url(../images/login-bg-dark.png);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    min-height: 650px;
+    display: -ms-flexbox;
+    display: flex
+;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center;
+    background-size: 100% 100%;
+  }
+  .login-page .content .text h2, .signup-page .content .text h2, .login-page .content .text p, .signup-page .content .text p,
+  .login-page .content .text p span, .signup-page .content .text p span, .login-page .content .login-form h3{
+    color: #ffff;
+  }
   /* meeran code for new home page end here */
