@@ -396,9 +396,10 @@ searchModule("Support", "support", ['support'], [], ['support']),
      factory.getAltAppLogo = function() {
         var logo = factory.customizations['alt_app_logo'];
         if ( !logo || logo === '' ) {
-                return '/images/new-logo-blue.png';
+            return '/images/new-logo-blue.png';
         }
         return getBaseUrl() + "/assets/img/" + logo;
+        
      }
      factory.createCardLabel = function(card) {
         return "**** **** **** " + card.last_4;
@@ -689,7 +690,9 @@ return changed;
         }
         factory.doLogout = function() {
             factory.purgeSession();
+            var theme = $window.localStorage.THEME;
             localStorage.clear();
+            $window.localStorage.setItem('THEME', theme);
             ThemeService.addStyle("styles/app-blue.css");
             $state.go('login', {});
         }
