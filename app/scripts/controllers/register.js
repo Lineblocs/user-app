@@ -580,11 +580,18 @@ async function createPaymentMethod(paymentDetails) {
 			Backend.post("/setupWorkspace", data).then(function( res ) {
 				$shared.changingPage = false;
 				if (res.data.success) {
-					$scope.invalidWorkspaceTaken = false;
-					// doSpinup();
-					$scope.step = 4;
+
+					// check if questionnaire is enabled and if we have questions
+					if ($shared.customizations.registration_questionnaire_enabled && $scope.registrationQuestions.length > 0) {
+						$scope.step = 4;
+						$scope.invalidWorkspaceTaken = false;
+						return;
+					}
+
+					$scope.step = 5;
 					return;
 				}
+
 				$scope.invalidWorkspaceTaken = true;
 				$scope.workspace = res.data.workspace;
 			});
