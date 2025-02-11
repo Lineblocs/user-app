@@ -582,7 +582,12 @@ async function createPaymentMethod(paymentDetails) {
 				if (res.data.success) {
 					$scope.invalidWorkspaceTaken = false;
 					// doSpinup();
-					$scope.step = 4;
+					if ($shared.customizations.registration_questionnaire_enabled && $scope.registrationQuestions.length > 0) {
+						$scope.step = 4;
+						return;
+					}
+
+					$scope.step = 5;
 					return;
 				}
 				$scope.invalidWorkspaceTaken = true;
