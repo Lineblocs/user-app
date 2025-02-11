@@ -398,7 +398,6 @@ searchModule("Support", "support", ['support'], [], ['support']),
         if ( !logo || logo === '' ) {
             return '/images/new-logo-blue.png';
         }
-        debugger
         return getBaseUrl() + "/assets/img/" + logo;
         
      }
@@ -931,6 +930,13 @@ return changed;
         }
         ThemeService.addStyle(themes[theme]);
         //ThemeService.removeStyle(themes[theme]);
+        if (window.matchMedia("(max-width: 767px)").matches){
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                ThemeService.setTheme('dark');
+            }else{
+                ThemeService.setTheme('default');
+            }
+        }
       }
 
      factory.refreshWorkspaceData = function() {
