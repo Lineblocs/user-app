@@ -930,12 +930,10 @@ return changed;
         }
         ThemeService.addStyle(themes[theme]);
         //ThemeService.removeStyle(themes[theme]);
-        if (window.matchMedia("(max-width: 767px)").matches){
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                ThemeService.setTheme('dark');
-            }else{
-                ThemeService.setTheme('default');
-            }
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            ThemeService.setTheme('dark');
+        }else{
+            ThemeService.setTheme('default');
         }
       }
 
