@@ -1403,8 +1403,8 @@ button {
   border-radius: 4px;
   cursor: pointer; }
 
-button:hover {
-  background-color: #5469d4; }
+/* button:hover {
+  background-color: #5469d4; } */
 
 /* Login page styles */
 .login-overlay {
@@ -3218,5 +3218,16 @@ code {
 
 .val {
   font-weight: 500; }
+
+.theme-moon {
+  width: 3%;
+  position: absolute;
+  right: 60px;
+  border-radius: 50%;
+  padding: 8px;
+  background: #395373;
+  transform: rotate(80deg);
+  top: 30px;
+  cursor: pointer; }
 
 /* meeran code for new home page end here */

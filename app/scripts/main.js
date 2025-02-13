@@ -4866,6 +4866,7 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
         }
+		debugger
         ThemeService.addStyle(themes[theme]);
         ThemeService.removeStyle(themes[theme]);
     }
@@ -10353,8 +10354,41 @@ angular.module('Lineblocs')
   $scope.timerDisplay = padZero(Math.floor($scope.resendTimeout / 60)) + ':' + padZero($scope.resendTimeout % 60);
   var clickedGoogSignIn = false;
   var countdown;
-  $scope.selectedTheme = $window.localStorage.THEME;
-  
+  $scope.selectedTheme = localStorage.getItem("THEME");
+
+  $scope.theme = {
+    default: 'styles/app-blue.css',
+    dark: 'styles/app-grey.css',
+    light: 'styles/app-cyan.css',
+  }
+
+  $scope.changeTheme = function(theme){
+    $window.localStorage.setItem('THEME', theme);
+    $scope.selectedTheme = theme;
+    Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+      addStyle($scope.theme[theme]);
+      removeStyle($scope.theme[theme]);
+    });
+  }
+  function addStyle(path) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', path);
+    document.head.appendChild(link);
+  }
+
+  function removeStyle(selectedPath) {
+    const allLinks = ['styles/app-grey.css', 'styles/app-blue.css', 'styles/app-green.css', 'styles/app-red.css', 'styles/app-purple.css', 'styles/app-cyan.css' ]
+    const links = document.head.querySelectorAll('link[href]');
+    for (var i = 0; i < links.length; i++) {
+      const path = links[i].getAttribute('href');
+      if (!allLinks.includes(path)) continue;
+      if (path === selectedPath) continue;
+      document.head.removeChild(links[i]);
+    }
+  }
+
 function startCountdown() {
   countdown = $interval(function() {
     var minutes = Math.floor($scope.resendTimeout / 60);
@@ -10366,6 +10400,7 @@ function startCountdown() {
     $scope.timerDisplay = padZero(minutes) + ':' + padZero(seconds);
   }, 1000);
 }
+
 startCountdown();
 function padZero(number) {
   return (number < 10 ? '0' : '') + number;
@@ -11592,11 +11627,18 @@ async function createPaymentMethod(paymentDetails) {
 			Backend.post("/setupWorkspace", data).then(function( res ) {
 				$shared.changingPage = false;
 				if (res.data.success) {
-					$scope.invalidWorkspaceTaken = false;
-					// doSpinup();
-					$scope.step = 4;
+
+					// check if questionnaire is enabled and if we have questions
+					if ($shared.customizations.registration_questionnaire_enabled && $scope.registrationQuestions.length > 0) {
+						$scope.step = 4;
+						$scope.invalidWorkspaceTaken = false;
+						return;
+					}
+
+					$scope.step = 5;
 					return;
 				}
+
 				$scope.invalidWorkspaceTaken = true;
 				$scope.workspace = res.data.workspace;
 			});
