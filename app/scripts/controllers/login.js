@@ -40,10 +40,13 @@ angular.module('Lineblocs')
   $scope.changeTheme = function(theme){
     $window.localStorage.setItem('THEME', theme);
     $scope.selectedTheme = theme;
+    Backend.applyTheme( theme );
+    /*
     Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
       addStyle($scope.theme[theme]);
       removeStyle($scope.theme[theme]);
     });
+    */
   }
   function addStyle(path) {
     var link = document.createElement('link');

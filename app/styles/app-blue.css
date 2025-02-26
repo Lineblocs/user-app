@@ -1403,8 +1403,8 @@ button {
   border-radius: 4px;
   cursor: pointer; }
 
-/* button:hover {
-  background-color: #5469d4; } */
+button:hover {
+  background-color: #5469d4; }
 
 /* Login page styles */
 .login-overlay {

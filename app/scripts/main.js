@@ -919,12 +919,6 @@ return changed;
           dark: 'styles/app-grey.css'
         }
 
-        // do not apply theme on pages that dont alternate themes
-        var ignoreOnPages = ['login', 'register', 'forgot', 'reset'];
-        if (ignoreOnPages.includes($state.current.name)) {
-            return;
-        }
-
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
         }
@@ -4866,7 +4860,7 @@ angular.module('Lineblocs').controller('CreatePortCtrl', function ($scope, $time
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
         }
-		debugger
+
         ThemeService.addStyle(themes[theme]);
         ThemeService.removeStyle(themes[theme]);
     }
@@ -10365,10 +10359,13 @@ angular.module('Lineblocs')
   $scope.changeTheme = function(theme){
     $window.localStorage.setItem('THEME', theme);
     $scope.selectedTheme = theme;
+    Backend.applyTheme( theme );
+    /*
     Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
       addStyle($scope.theme[theme]);
       removeStyle($scope.theme[theme]);
     });
+    */
   }
   function addStyle(path) {
     var link = document.createElement('link');

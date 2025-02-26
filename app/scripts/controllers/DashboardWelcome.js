@@ -92,7 +92,7 @@
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
         }
-		debugger
+
         ThemeService.addStyle(themes[theme]);
         ThemeService.removeStyle(themes[theme]);
     }
