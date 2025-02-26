@@ -1396,15 +1396,15 @@ md-content::-webkit-scrollbar-thumb:hover {
   margin-bottom: 10px; }
 
 button {
-  background-color: #6772e5;
+  /* background-color: #6772e5; */
   color: #fff;
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer; }
 
-button:hover {
-  background-color: #5469d4; }
+/* button:hover {
+  background-color: #5469d4; } */
 
 /* Login page styles */
 .login-overlay {
@@ -3241,5 +3241,22 @@ body {
 .login-page .content .text h2, .signup-page .content .text h2, .login-page .content .text p, .signup-page .content .text p,
 .login-page .content .text p span, .signup-page .content .text p span, .login-page .content .login-form h3 {
   color: #ffff; }
+
+body {
+  background: #22272e !important; }
+
+html.md-default-theme, html, body.md-default-theme, body {
+  background-color: #22272e !important; }
+
+.theme-moon {
+  width: 3%;
+  position: absolute;
+  right: 60px;
+  border-radius: 50%;
+  padding: 8px;
+  background: #395373;
+  transform: rotate(80deg);
+  top: 30px;
+  cursor: pointer; }
 
 /* meeran code for new home page end here */
