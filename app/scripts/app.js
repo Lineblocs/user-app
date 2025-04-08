@@ -1937,7 +1937,7 @@ var regParams = {
         // do something
         console.log("state is changing ", arguments);
 
-        Backend.applyTheme();
+        // Backend.applyTheme();
         if(toState.requireAuthentication) {
           if(!Authenticator.isAuthenticated() || !Authenticator.checkAuthenticationTime()) {
             $state.go('login');

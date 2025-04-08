@@ -211,3 +211,115 @@
     cursor: pointer;
   }
   /* meeran code for new home page end here */
+
+
+  // support update page css
+  .badgehdr{
+    position: relative;
+  }
+  .directionbadge{
+    background: #3f51b5;
+    font-size: 12px;
+    padding: 1px 6px;
+    border-radius: 5px;
+    position: absolute;
+    left: 130px;
+    top: 2px;
+  }
+  .chat-direc-badge{
+    // background: #3f51b5;
+    font-size: 12px;
+    padding: 1px 6px;
+    border-radius: 5px;
+    margin-left: 10px;
+  }
+  .staffclr{
+    background: #3f51b5;
+  }
+  .userclr{
+    background: #78909c;
+  }
+  .customcss{
+    display: flex !important;
+  }
+  .customcss i{
+    margin-right: 10px;
+  }
+  .parentdv{
+    display: flex;
+    justify-content: space-between;
+  }
+  .detail-support{
+    width: 40%;
+  }
+  .chat-support{
+    width: 60%;
+  }
+  .chat-card{
+    margin: 4px 8px 0px 8px;
+    border-radius:0;
+  }
+  .chat-card:first-child{
+    border-radius: 20px 20px 0px 0px;
+    margin-top: 8px;
+  }
+  .reply-box{
+    border-radius: 0px 0px 20px 20px !important;
+  }
+  .reply-card{
+    border-radius: 0px 0px 20px 20px !important;
+  }
+  .chat-head{
+    padding: 24px 16px 0px;
+  }
+  .chat-head .customcss{
+    font-size: 18px;
+    text-transform: capitalize;
+    position: relative;
+  }
+
+ .chat-head .customcss .mdi{
+  padding: 0px 7px;
+  border: 1px solid;
+  border-radius: 30px;
+}
+.list-head .customcss{
+  font-size: 18px;
+}
+.list-head .customcss .mdi{
+  // padding: 0px 7px;
+  // border: 1px solid rgb(189, 189, 189);
+  // border-radius: 10px;
+}
+.cap{
+  text-transform: capitalize;
+}
+
+// support list page css
+.bg-color{
+  background-color: #3e3e3e;
+}
+.pad-30{
+  padding: 0 30px;
+}
+.custom-md-table{
+  padding: 0 20px 20px 20px;
+}
+.td-non-color{
+  border-color: transparent !important;
+}
+.bg{
+  background: black;
+}
+.custom-td{
+  border-bottom: 10px solid #3e3e3e !important;
+}
+tr:last-child .custom-td{
+  border-bottom: 0px solid #3e3e3e !important;
+}
+.td-first{
+  border-radius: 10px 0 0 10px;
+}
+.td-last{
+  border-radius: 0px 10px 10px 0px;
+}
