@@ -919,12 +919,6 @@ return changed;
           dark: 'styles/app-grey.css'
         }
 
-        // do not apply theme on pages that dont alternate themes
-        var ignoreOnPages = ['login', 'register', 'forgot', 'reset'];
-        if (ignoreOnPages.includes($state.current.name)) {
-            return;
-        }
-
         if (theme !== ThemeService.getTheme()) {
           ThemeService.setTheme(theme);
         }
