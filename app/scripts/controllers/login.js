@@ -40,13 +40,10 @@ angular.module('Lineblocs')
   $scope.changeTheme = function(theme){
     $window.localStorage.setItem('THEME', theme);
     $scope.selectedTheme = theme;
-    Backend.applyTheme( theme );
-    /*
-    Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+    // Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
       addStyle($scope.theme[theme]);
       removeStyle($scope.theme[theme]);
-    });
-    */
+    // });
   }
   function addStyle(path) {
     var link = document.createElement('link');
@@ -111,6 +108,10 @@ if (code) {
 }
 
 function redirectUser() {
+  Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+    addStyle($scope.theme[$scope.selectedTheme]);
+    removeStyle($scope.theme[$scope.selectedTheme]);
+  });
 		Idle.watch();
 		var hash = window.location.hash.substr(1);
 		var query = URI(hash).query(true);
@@ -134,6 +135,10 @@ function redirectUser() {
 				}
 				$shared.isAdmin = true;
 				$shared.setAdminAuthToken(data.adminWorkspaceToken);
+        Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+          addStyle($scope.theme[theme]);
+          removeStyle($scope.theme[theme]);
+        });
 				Backend.get("/admin/getWorkspaces").then(function(res) {
 					$shared.workspaces = res.data.data;
 					$state.go('dashboard-user-welcome', {});

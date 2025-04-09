@@ -1,22 +1,20 @@
-<div>
+<!-- <div>
     <md-card>
-
         <md-card-title>
-
             <md-card-title-text>
-                <span class="md-headline">Support Ticket {{ticket.ref_number}}</span>
+                <span class="md-headline customcss">
+                    <i class="mdi mdi-ticket-confirmation"></i>
+                    Support Ticket {{ticket.ref_number}}
+                </span>
                 <span class="md-subhead"></span>
             </md-card-title-text>
         </md-card-title>
-
         <md-card-content>
-
             Subject: {{ticket.subject}}
             <br />
             <br />
             {{ticket.comment}}
         </md-card-content>
-
     </md-card>
 
     <div ng-if="ticket.updates.length===0">
@@ -34,17 +32,20 @@
     <md-card ng-repeat="update in ticket.updates">
         <div ng-if="update.direction==='STAFF'">
             <md-card-title>
-
-                <md-card-title-text>
-                    <span class="md-headline">Staff response</span>
+                <md-card-title-text class="badgehdr">
+                    <span class="md-headline customcss">
+                        <i class="mdi mdi-reply"></i>
+                        <span ng-if="update.first_name">{{update.first_name}} </span>
+                        <span ng-if="update.last_name">{{update.last_name}} </span>
+                        <span ng-if="!update.first_name && !update.last_name">Staff</span> <span> Response</span>
+                    </span>
+                    <span class="directionbadge">{{update.direction}}</span>
                     <span class="md-subhead"></span>
                 </md-card-title-text>
             </md-card-title>
-
             <md-card-content>
                 <div ng-bind-html="update.commentHTML">
                 </div>
-
                 <div ng-if="update.attachments.length>0">
                     <ul>
                         <li ng-repeat="attachment in update.attachments">
@@ -56,16 +57,13 @@
         </div>
         <div ng-if="update.direction==='ENDUSER'">
             <md-card-title>
-
                 <md-card-title-text>
-                    <span class="md-headline">User</span>
+                    <span class="md-headline customcss"><i class="mdi mdi-reply" style="display:inline-block; transform: rotate(180deg);"></i> User</span>
                     <span class="md-subhead"></span>
                 </md-card-title-text>
             </md-card-title>
-
             <md-card-content>
                 {{update.comment}}
-
                 <div ng-if="update.attachments.length>0">
                     <ul>
                         <li ng-repeat="attachment in update.attachments">
@@ -74,23 +72,18 @@
                     </ul>
                 </div>
             </md-card-content>
-
         </div>
-
     </md-card>
 
     <md-card>
-
         <md-card-title>
-
             <md-card-title-text>
-                <span class="md-headline">Add Reply</span>
+                <span class="md-headline customcss"><i class="mdi mdi-message-reply"></i>Add Reply</span>
                 <span class="md-subhead">send a follow up message</span>
             </md-card-title-text>
         </md-card-title>
 
         <md-card-content>
-
             <form name="updateForm" ng-submit="submitUpdate(updateForm)" novalidate>
                 <md-content class="md-padding">
                     <div layout="row">
@@ -99,13 +92,172 @@
                             <textarea required ng-model="newUpdate.comment" rows="3" md-select-on-focus></textarea>
                         </md-input-container>
                     </div>
-                            <div class="form-btns">
-                                <div class="submit">
-                                    <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
-                                </div>
-                            </div>
+                    <div class="form-btns">
+                        <div class="submit">
+                            <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                        </div>
+                    </div>
+                </md-content>
             </form>
         </md-card-content>
-
     </md-card>
+</div> -->
+<div class="parentdv">
+    <div class="detail-support">
+        <md-card>
+            <md-card-title class="list-head">
+                <md-card-title-text>
+                    <span class="md-headline customcss">
+                        <i class="mdi mdi-ticket-confirmation"></i>
+                        Support Ticket {{ticket.ref_number}}
+                    </span>
+                    <span>Category: {{ticket.category_name}}</span>
+                    <span class="md-subhead"></span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content class="cap">
+                Subject: {{ticket.subject}}
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-title class="list-head">
+                <md-card-title-text>
+                    <span class="md-headline customcss">
+                        <i class="mdi mdi-comment"></i>
+                        Comment
+                    </span>
+                    <span class="md-subhead"></span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content class="cap">
+                {{ticket.comment}}
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-title class="list-head">
+                <md-card-title-text>
+                    <span class="md-headline customcss">
+                        <i class="mdi mdi-book"></i>
+                        Status
+                    </span>
+                    <span class="md-subhead"></span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                {{ticket.status}}
+            </md-card-content>
+        </md-card>
+        <md-card ng-if="ticket.updates.length > 0">
+            <md-card-title class="list-head">
+                <md-card-title-text class="badgehdr">
+                    <span class="md-headline customcss">
+                        <i class="mdi mdi-clipboard-account"></i>
+                        Assigned To
+                    </span>
+                    <span class="directionbadge">{{ticket.updates[0].direction}}</span>
+                    <span class="md-subhead"></span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content class="cap">
+                <span ng-if="ticket.updates[0].first_name">{{ticket.updates[0].first_name}} </span>
+                <span ng-if="ticket.updates[0].last_name">{{ticket.updates[0].last_name}} </span>
+                <span ng-if="!ticket.updates[0].first_name && !ticket.updates[0].last_name">Staff</span>
+            </md-card-content>
+        </md-card>
+    </div>
+    
+    <div class="chat-support">
+        <div ng-if="ticket.updates.length===0">
+            <md-card md-theme="'default'" md-theme-watch>
+                <div class="no-results">
+                    <div class="inner">
+                        <center>
+                            <h5>No updates at this time</h5>
+                        </center>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+
+        <md-card ng-repeat="update in ticket.updates" class="chat-card">
+            <div ng-if="update.direction==='STAFF'">
+                <md-card-title class="chat-head">
+                    <md-card-title-text class="badgehdr">
+                        <span class="md-headline customcss">
+                            <i class="mdi mdi-reply"></i>
+                            <span ng-if="update.first_name">{{update.first_name}}&nbsp; </span>
+                            <span ng-if="update.last_name">{{update.last_name}}&nbsp; </span>
+                            <span ng-if="!update.first_name && !update.last_name">Staff&nbsp;</span>
+                            <div><span class="chat-direc-badge staffclr">{{update.direction}}</span></div>
+                        </span>
+                        <!-- <span class="chat-direc-badge">{{update.direction}}</span> -->
+                        <span class="md-subhead"></span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <div ng-bind-html="update.commentHTML">
+                    </div>
+                    <div ng-if="update.attachments.length>0">
+                        <ul>
+                            <li ng-repeat="attachment in update.attachments">
+                                {{attachment}}
+                            </li>
+                        </ul>
+                    </div>
+                </md-card-content>
+            </div>
+            <div ng-if="update.direction==='ENDUSER'">
+                <md-card-title class="chat-head">
+                    <md-card-title-text class="badgehdr">
+                        <span class="md-headline customcss">
+                            <i class="mdi mdi-reply" style="display:inline-block; transform: rotate(180deg);"></i>
+                            <span ng-if="update.first_name">{{update.first_name}}&nbsp;</span>
+                            <span ng-if="update.last_name">{{update.last_name}}&nbsp;</span>
+                            <span ng-if="!update.first_name && !update.last_name">Staff&nbsp;</span>
+                            <div><span class="chat-direc-badge userclr">{{update.direction}}</span></div>
+                        </span>
+                        
+                        <span class="md-subhead"></span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    {{update.comment}}
+                    <div ng-if="update.attachments.length>0">
+                        <ul>
+                            <li ng-repeat="attachment in update.attachments">
+                                {{attachment}}
+                            </li>
+                        </ul>
+                    </div>
+                </md-card-content>
+            </div>
+        </md-card>
+    
+        <md-card class="reply-card">
+            <md-card-title class="list-head">
+                <md-card-title-text>
+                    <span class="md-headline customcss"><i class="mdi mdi-message-reply"></i>Add Reply</span>
+                    <span class="md-subhead cap">send a follow up message</span>
+                </md-card-title-text>
+            </md-card-title>
+    
+            <md-card-content class="reply-box">
+                <form name="updateForm" ng-submit="submitUpdate(updateForm)" novalidate>
+                    <md-content class="md-padding">
+                        <div layout="row">
+                            <md-input-container>
+                                <label>Comment</label>
+                                <textarea required ng-model="newUpdate.comment" rows="3" md-select-on-focus></textarea>
+                            </md-input-container>
+                        </div>
+                        <div class="form-btns">
+                            <div class="submit">
+                                <md-button type="submit" class="md-raised md-primary no-margin-sides">Save</md-button>
+                            </div>
+                        </div>
+                    </md-content>
+                </form>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>
