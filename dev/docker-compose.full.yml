@@ -44,8 +44,13 @@ services:
   user-app:
     # use image from dockerhub. Using node 11.10.1
     image: node:11.10.1
-    volumes:
-      - ..:/app
+    develop:
+      watch:
+        - action: sync+restart
+          path: ..
+          target: /app
+   ## volumes:
+   ##   - ..:/app
     logging: *default-logging
     working_dir: /app
     container_name: lineblocs-user-app
@@ -61,6 +66,8 @@ services:
       "
     environment:
       - DEPLOYMENT_DOMAIN=app.${DEPLOYMENT_DOMAIN}
+      - VIRTUAL_HOST=app.${DEPLOYMENT_DOMAIN}
+      - VIRTUAL_PORT=9000
     networks:
       - lineblocs_internal_app
   editor: 
