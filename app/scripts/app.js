@@ -1914,7 +1914,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, $state, Backend, Authenticator, $window) {
+}).run(function($rootScope, $shared, $state, Backend, Authenticator, $window, $q) {
     $rootScope.shared = $shared;
     $rootScope.$watch('shared.title', function(newTitle, oldTitle) {
         document.title = newTitle;
@@ -1986,13 +1986,19 @@ var regParams = {
 
      console.log("getting all settings...")
      $shared.isLoading = true;
-    Backend.get("/getAllSettings").then(function(res) {
+    $q.all([
+        Backend.get("/getAllSettings"),
+        Backend.get("/getSIPCredentials")
+     ]).then(function(res) {
             console.log('state is currently', $state.current.name);
-            var data = res.data;
+            console.log("SIP credentials ", res[1]);
+            var data = res[0].data;
                 $shared.customizations = data['customizations'];
                 $shared.frontend_api_creds = data['frontend_api_creds'];
                 $shared.available_themes = data['available_themes'];
             console.log('customizations are ', $shared.customizations);
+
+            $shared.SIPCredentials = res[1].data;
           addSocialLoginScript();
           addAnalyticsScript();
           addPaymentScript();
