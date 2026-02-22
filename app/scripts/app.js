@@ -1986,19 +1986,26 @@ var regParams = {
 
      console.log("getting all settings...")
      $shared.isLoading = true;
-    $q.all([
-        Backend.get("/getAllSettings"),
-        Backend.get("/getSIPCredentials")
-     ]).then(function(res) {
+
+    var requests = [Backend.get("/getAllSettings")];
+    var hasSIPCredentialsRequest = false;
+    if (getJWTToken()) {
+        requests.push(Backend.get("/getSIPCredentials"));
+        hasSIPCredentialsRequest = true;
+    }
+
+    $q.all(requests).then(function(res) {
             console.log('state is currently', $state.current.name);
-            console.log("SIP credentials ", res[1]);
             var data = res[0].data;
                 $shared.customizations = data['customizations'];
                 $shared.frontend_api_creds = data['frontend_api_creds'];
                 $shared.available_themes = data['available_themes'];
             console.log('customizations are ', $shared.customizations);
 
-            $shared.SIPCredentials = res[1].data;
+            if (hasSIPCredentialsRequest) {
+                console.log("SIP credentials ", res[1]);
+                $shared.SIPCredentials = res[1].data;
+            }
           addSocialLoginScript();
           addAnalyticsScript();
           addPaymentScript();

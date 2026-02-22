@@ -1914,7 +1914,7 @@ var regParams = {
         parent: 'dashboard',
         templateUrl: 'views/pages/dashboard/blank.html',
     })
-}).run(function($rootScope, $shared, $state, Backend, Authenticator, $window) {
+}).run(function($rootScope, $shared, $state, Backend, Authenticator, $window, $q) {
     $rootScope.shared = $shared;
     $rootScope.$watch('shared.title', function(newTitle, oldTitle) {
         document.title = newTitle;
@@ -1986,13 +1986,26 @@ var regParams = {
 
      console.log("getting all settings...")
      $shared.isLoading = true;
-    Backend.get("/getAllSettings").then(function(res) {
+
+    var requests = [Backend.get("/getAllSettings")];
+    var hasSIPCredentialsRequest = false;
+    if (getJWTToken()) {
+        requests.push(Backend.get("/getSIPCredentials"));
+        hasSIPCredentialsRequest = true;
+    }
+
+    $q.all(requests).then(function(res) {
             console.log('state is currently', $state.current.name);
-            var data = res.data;
+            var data = res[0].data;
                 $shared.customizations = data['customizations'];
                 $shared.frontend_api_creds = data['frontend_api_creds'];
                 $shared.available_themes = data['available_themes'];
             console.log('customizations are ', $shared.customizations);
+
+            if (hasSIPCredentialsRequest) {
+                console.log("SIP credentials ", res[1]);
+                $shared.SIPCredentials = res[1].data;
+            }
           addSocialLoginScript();
           addAnalyticsScript();
           addPaymentScript();
@@ -10359,6 +10372,10 @@ angular.module('Lineblocs')
   $scope.changeTheme = function(theme){
     $window.localStorage.setItem('THEME', theme);
     $scope.selectedTheme = theme;
+    // Backend.post("/updateSelf", { theme: $scope.selectedTheme }).then(function(res) {
+      addStyle($scope.theme[theme]);
+      removeStyle($scope.theme[theme]);
+    // });
   }
   function addStyle(path) {
     var link = document.createElement('link');
