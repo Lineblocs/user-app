@@ -720,5 +720,28 @@ angular.module('Lineblocs')
     	$state.go('billing-upgrade-plan', {});
 	}
 
+	$scope.viewEstimatedCharges = function() {
+		$shared.isLoading = true;
+		Backend.get("/billing/viewEstimatedCharges", { responseType: 'blob' }).then(function(res) {
+			var blob = new Blob([res.data], { type: 'application/pdf' });
+			var url = window.URL.createObjectURL(blob);
+			var link = document.createElement('a');
+			link.href = url;
+			link.download = 'estimated-charges.pdf';
+			link.click();
+			window.URL.revokeObjectURL(url);
+			$shared.endIsLoading();
+		}, function(err) {
+			console.error("Error fetching estimated charges", err);
+			$shared.endIsLoading();
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Failed to load estimated charges')
+				.position("top right")
+				.hideDelay(3000)
+			);
+		});
+	}
+
 	loadData(false);
   });
