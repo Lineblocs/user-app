@@ -623,9 +623,10 @@
                 <div ng-show="step===6" class="payment-container">
                     <div class="login-form" layout="row">
                         <div class="payment-details-container">
-                            <h3 class="top-payment-heading">Start free 30-day Pro trial</h3>
-                            <p class="payment-info">{{$shared.customizations.site_name}} free trial with more details.</p>
+                            <h3 class="top-payment-heading" ng-show="isTrial">Start free {{numTrialDays}}-day Pro trial</h3>
+                            <p ng-show="isTrial" class="payment-info">{{$shared.customizations.site_name}} free trial with more details.</p>
 
+                            <h3 class="top-payment-heading" ng-show="!isTrial">Start making calls with {{$shared.customizations.site_name}} today!</h3>
                             <div layout="row">
                                 <md-button type="button" class="md-raised no-margin-sides payment-button" ng-click="displayCard()"
                                     ng-class="{'md-primary': cardVisible, '': !cardVisible}">Payment Card
@@ -844,24 +845,29 @@
                             </form>
                         </div>
                         <div class="login-form payment-value-conatiner">
+
                             <div class="pay-trial">
-                                <b class="trial-text">PRO Trial (30 Days)</b>
-                                <b class="trial-text">$0.00</b>
+                                <b class="trial-text">Plan</b>
+                                <b class="trial-text">{{planName}} (${{planPrice}}/mo)</b>
+                            </div>
+                            <div class="pay-trial">
+                                <b class="trial-text">Billing Period</b>
+                                <b class="trial-text">{{billingStartDate}} – {{billingEndDate}}</b>
+                            </div>
+                            <div class="pay-trial">
+                                <b class="trial-text">Prorated Adjustment</b>
+                                <b class="trial-text" style="color: green;">-${{proratedAdjustment}} ({{daysRemaining}} days remaining)</b>
                             </div>
                             <hr>
                             <div class="pay-trial">
-                                <b class="trial-text">Payable on {{nextTrialDate}}</b>
-                                <b class="trial-text">${{planPrice}}</b>
+                                <b class="trial-text" style="font-size: 1.2em;">Due Today</b>
+                                <b class="trial-text" style="font-size: 1.2em;"><strong>${{dueToday}}</strong></b>
                             </div>
-                            <div class="pay-trial-details">
-                                <p class="payment-info-billed font-trial">You will not be billed today.</p>
-                                <p class="payment-info-billed">Your card will be charged ${{planPrice}} on {{nextTrialDate}}.</p>
-                            </div>
-                            <div class="pay-trial-details">
-                                <p class="payment-info-billed font-trial">You can cancel auto-renewal.</p>
-                                <p class="payment-info-billed">You can cancel your trial & auto-renewal BEFORE {{nextTrialDate}}
-                                    and you will not be charged at all.
-                                </p>
+
+
+                            <div class="pay-trial-details" style="display: flex; align-items: center; gap: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
+                                <p class="payment-info-billed font-trial" style="font-size: 1em; font-weight: 600; margin: 0; white-space: nowrap;">Next Bill Date:</p>
+                                <p class="payment-info-billed" style="font-size: 1em; font-weight: 600; margin: 0; color: #317780;">{{nextBillDate}} ({{planPrice}}/mo)</p>
                             </div>
                         </div>
                     </div>

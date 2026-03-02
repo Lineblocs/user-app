@@ -11118,7 +11118,19 @@ angular.module('Lineblocs')
 	  $scope.invalidNumber =false;
 	  $scope.paymentErrorMsg = null;
 	  $scope.planInfo = null;
+
     $scope.planPrice = null;
+    $scope.proratedFee = null;
+
+    $scope.savingsInDollars = null;
+    $scope.savingsInPct = null;
+    $scope.planName = null;
+    $scope.billingStartDate = null;
+    $scope.billingEndDate = null;
+    $scope.proratedAdjustment = null;
+    $scope.daysRemaining = null;
+    $scope.dueToday = null;
+    $scope.nextBillDate = null;
 	$scope.hasWorkspaceNameErr = false;
 	$scope.user = {
 		first_name: "",
@@ -11861,7 +11873,30 @@ async function createPaymentMethod(paymentDetails) {
       $shared.changingPage = false;
       console.log("plans ", $scope.plans);
       $scope.planInfo = plan.nice_name;
+      $scope.planName = plan.nice_name;
       $scope.planPrice = plan.monthly_charge;
+      $scope.proratedFee = plan.prorated_monthly_charge;
+      
+      // Calculate savings
+      $scope.savingsInDollars = $scope.planPrice - $scope.proratedFee;
+      $scope.savingsInPct = Math.round(($scope.savingsInDollars / $scope.planPrice) * 100);
+      
+      // Set billing dates
+      const now = new Date();
+      $scope.billingStartDate = $filter('date')(now, 'MMM dd, yyyy');
+      const endDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      $scope.billingEndDate = $filter('date')(endDate, 'MMM dd, yyyy');
+      $scope.nextBillDate = $filter('date')(endDate, 'MMM dd, yyyy');
+      
+      // Calculate prorated adjustment and days remaining
+      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      const dayOfMonth = now.getDate();
+      $scope.daysRemaining = daysInMonth - dayOfMonth + 1;
+      $scope.proratedAdjustment = $scope.proratedFee;
+      $scope.dueToday = $scope.proratedFee;
+
+
+      
       console.log("user selected plan is ", $stateParams['plan'] );
       // if ( $stateParams['plan'] ) {
       // 	$scope.planInfo = $scope.plans[ $stateParams['plan'] ];
