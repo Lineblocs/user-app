@@ -1489,6 +1489,12 @@ md-content{
   margin-bottom: 0px;
   margin-top: 0px;
 }
+
+.top-payment-heading.payment-method-txt
+{
+  margin-bottom: 25px;
+}
+
 .payment-info{
   margin-bottom: 40px;
   font-weight: 400;

@@ -1405,7 +1405,7 @@ var regParams = {
         controller: 'LoginCtrl'
     })
     .state('register', {
-        url: '/register?plan',
+        url: '/register?plan&period',
         parent: 'base',
         templateUrl: 'views/pages/register.html',
         controller: 'RegisterCtrl',

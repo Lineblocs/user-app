@@ -1405,7 +1405,7 @@ var regParams = {
         controller: 'LoginCtrl'
     })
     .state('register', {
-        url: '/register?plan',
+        url: '/register?plan&period',
         parent: 'base',
         templateUrl: 'views/pages/register.html',
         controller: 'RegisterCtrl',
@@ -11106,6 +11106,7 @@ angular.module('Lineblocs')
 		  US: "+1",
 		  CA: "+1",
 	  };
+	  $scope.isTrial = $shared.customizations.trial_mode_enabled;
 	  $scope.acceptTerms =true;
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
@@ -11292,7 +11293,11 @@ angular.module('Lineblocs')
   function doSpinup() {
 	$scope.shouldSplash = true;
 	$shared.setAuthToken( $scope.token );
-	var data = { "userId": $scope.userId, "plan": $scope.plan.key_name };
+	var data = { 
+		"userId": $scope.userId, 
+		"plan": $scope.plan.key_name,
+		"billing_cycle": $scope.period.toUpperCase(),
+	};
 	console.log("do spinup data ", data);
 	$scope.invalidCode = false;
 	$shared.changingPage = true;
@@ -11821,7 +11826,12 @@ async function createPaymentMethod(paymentDetails) {
 		$shared.scrollToTop();
     	$state.go('login');
 	}
-		function stripeResponseHandler(status, response) {
+
+	$scope.isMonthlyBilling = function() {
+		return $scope.period.toLowerCase() === 'monthly';
+	}
+
+	function stripeResponseHandler(status, response) {
 			$timeout(function() {
 				$scope.$apply();
 				if (response.error) { // Problem!
@@ -11868,26 +11878,42 @@ async function createPaymentMethod(paymentDetails) {
 	  $scope.width = ((1 / $scope.registrationQuestions.length) * 100).toString() + '%';
 
 	  var plan = getBestServicePlanOption();
+	  console.log("best plan option is ", plan);
+	  $scope.period = $stateParams['period'] || 'MONTHLY';
+	  console.log("billing period ", $scope.period);
 	  $scope.plan = plan;
 	  console.log("selected plan option is ", plan);
       $shared.changingPage = false;
       console.log("plans ", $scope.plans);
       $scope.planInfo = plan.nice_name;
       $scope.planName = plan.nice_name;
-      $scope.planPrice = plan.monthly_charge;
-      $scope.proratedFee = plan.prorated_monthly_charge;
+
+	  const now = new Date();
+	  $scope.billingStartDate = $filter('date')(now, 'MMM dd, yyyy');
+
+
+	  if ($scope.isMonthlyBilling()) {
+      	$scope.planPrice = plan.monthly_charge;
+      	$scope.proratedFee = plan.prorated_monthly_charge;
+		// Set billing dates - first day of next month
+		
+		const nextBillDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+		$scope.billingEndDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
+		$scope.nextBillDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
+	  } else { //  annual billing
+		$scope.planPrice = plan.annual_charge;
+	  	$scope.proratedFee = plan.prorated_annual_charge;			
+		// Set billing dates - first day of next year
+		const nextBillDate = new Date(now.getFullYear() + 1, 0, 1);
+		$scope.billingEndDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
+		$scope.nextBillDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
+	  }
       
       // Calculate savings
       $scope.savingsInDollars = $scope.planPrice - $scope.proratedFee;
       $scope.savingsInPct = Math.round(($scope.savingsInDollars / $scope.planPrice) * 100);
       
-      // Set billing dates
-      const now = new Date();
-      $scope.billingStartDate = $filter('date')(now, 'MMM dd, yyyy');
-      const endDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-      $scope.billingEndDate = $filter('date')(endDate, 'MMM dd, yyyy');
-      $scope.nextBillDate = $filter('date')(endDate, 'MMM dd, yyyy');
-      
+            
       // Calculate prorated adjustment and days remaining
       const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
       const dayOfMonth = now.getDate();

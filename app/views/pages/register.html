@@ -623,11 +623,12 @@
                 <div ng-show="step===6" class="payment-container">
                     <div class="login-form" layout="row">
                         <div class="payment-details-container">
-                            <h3 class="top-payment-heading" ng-show="isTrial">Start free {{numTrialDays}}-day Pro trial</h3>
+                            <h3 class="top-payment-heading" ng-show="isTrial">{{numTrialDays}}-day Pro trial</h3>
                             <p ng-show="isTrial" class="payment-info">{{$shared.customizations.site_name}} free trial with more details.</p>
 
-                            <h3 class="top-payment-heading" ng-show="!isTrial">Start making calls with {{$shared.customizations.site_name}} today!</h3>
-                            <div layout="row">
+                            <h1 class="top-payment-heading" ng-show="!isTrial">Start making calls with {{$shared.customizations.site_name}} today!</h1>
+                            <!-- todo: renable this when paypal billing is supported -->
+                            <div layout="row" ng-show="false">
                                 <md-button type="button" class="md-raised no-margin-sides payment-button" ng-click="displayCard()"
                                     ng-class="{'md-primary': cardVisible, '': !cardVisible}">Payment Card
                                 </md-button>
@@ -637,8 +638,9 @@
                             </div>
                             <form id="paymentForm" ng-submit="submitPaymentForm($event, paymentForm)" name="paymentForm" novalidate>
                                 <div ng-show="cardVisible">
-                                    <h4 class="top-payment-heading payment-detail">Add a credit card or debit card</h4>
-                                    <p class="payment-info">Note: you won't be charged for this.</p>
+                                    <h3 class="top-payment-heading payment-detail payment-method-txt">Add a payment method to get started</h3>
+
+                                    <!--<p class="payment-info">Note: you won't be charged for this.</p>-->
                                     <div ng-show="errorMsg" class="error-box">
                                         <span class="red"><strong>{{errorMsg}}</strong></span>
                                     </div>
@@ -848,7 +850,8 @@
 
                             <div class="pay-trial">
                                 <b class="trial-text">Plan</b>
-                                <b class="trial-text">{{planName}} (${{planPrice}}/mo)</b>
+                                <b ng-if="isMonthlyBilling() "class="trial-text">{{planName}} (${{planPrice}}/mo)</b>
+                                <b ng-if="!isMonthlyBilling() "class="trial-text">{{planName}} (${{planPrice}}/yr)</b>
                             </div>
                             <div class="pay-trial">
                                 <b class="trial-text">Billing Period</b>
@@ -867,7 +870,7 @@
 
                             <div class="pay-trial-details" style="display: flex; align-items: center; gap: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
                                 <p class="payment-info-billed font-trial" style="font-size: 1em; font-weight: 600; margin: 0; white-space: nowrap;">Next Bill Date:</p>
-                                <p class="payment-info-billed" style="font-size: 1em; font-weight: 600; margin: 0; color: #317780;">{{nextBillDate}} ({{planPrice}}/mo)</p>
+                                <p class="payment-info-billed" style="font-size: 1em; font-weight: 600; margin: 0; color: #317780;">{{nextBillDate}}</p>
                             </div>
                         </div>
                     </div>
