@@ -223,10 +223,7 @@ angular
       selectedItem: null,
   };
         factory.billingPackages = ['gold', 'silver', 'bronze'];
-        factory.customizations = {
-
-
-        };
+        factory.customizations = null;
   var flickerTimeout = 0;
 
     function searchModule(text, state, tags, stateParams, perms, setting)
@@ -1977,44 +1974,50 @@ var regParams = {
             $shared.billInfo = res.data;
         });
         */
+
+        // get settings & customizations
+
+        console.log("getting all settings...")
+        $shared.isLoading = true;
+
+        if ($shared.customizations) {
+            return;
+        }
+
+        var requests = [Backend.get("/getAllSettings")];
+        var hasSIPCredentialsRequest = false;
+        if (getJWTToken()) {
+            requests.push(Backend.get("/getSIPCredentials"));
+            hasSIPCredentialsRequest = true;
+        }
+
+        $q.all(requests).then(function(res) {
+                console.log('state is currently', $state.current.name);
+                var data = res[0].data;
+                    $shared.customizations = data['customizations'];
+                    $shared.frontend_api_creds = data['frontend_api_creds'];
+                    $shared.available_themes = data['available_themes'];
+                console.log('customizations are ', $shared.customizations);
+
+                if (hasSIPCredentialsRequest) {
+                    console.log("SIP credentials ", res[1]);
+                    $shared.SIPCredentials = res[1].data;
+                }
+            addSocialLoginScript();
+            addAnalyticsScript();
+            addPaymentScript();
+        });
+        Backend.get("/getBillingCountries").then((res) => {
+            $shared.billingCountries = res.data;
+            applyDefaultTheme();
+        });
+
+
     })
     $rootScope.$on('$stateChangeError', function(event) {
         console.log("no page found - 404");
         $state.go('404');
      });
-     // get settings & customizations
-
-     console.log("getting all settings...")
-     $shared.isLoading = true;
-
-    var requests = [Backend.get("/getAllSettings")];
-    var hasSIPCredentialsRequest = false;
-    if (getJWTToken()) {
-        requests.push(Backend.get("/getSIPCredentials"));
-        hasSIPCredentialsRequest = true;
-    }
-
-    $q.all(requests).then(function(res) {
-            console.log('state is currently', $state.current.name);
-            var data = res[0].data;
-                $shared.customizations = data['customizations'];
-                $shared.frontend_api_creds = data['frontend_api_creds'];
-                $shared.available_themes = data['available_themes'];
-            console.log('customizations are ', $shared.customizations);
-
-            if (hasSIPCredentialsRequest) {
-                console.log("SIP credentials ", res[1]);
-                $shared.SIPCredentials = res[1].data;
-            }
-          addSocialLoginScript();
-          addAnalyticsScript();
-          addPaymentScript();
-    });
-    Backend.get("/getBillingCountries").then((res) => {
-        $shared.billingCountries = res.data;
-        applyDefaultTheme();
-    });
-
     function applyDefaultTheme() {
       const defaultTheme = $shared.available_themes && $shared.available_themes.length && $shared.available_themes.find((theme) => theme.is_default);
       if (!$window.localStorage.THEME && defaultTheme) {
