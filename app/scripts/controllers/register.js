@@ -21,7 +21,6 @@ angular.module('Lineblocs')
 		  US: "+1",
 		  CA: "+1",
 	  };
-	  $scope.isTrial = $shared.customizations.trial_mode_enabled;
 	  $scope.acceptTerms =true;
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
@@ -743,6 +742,10 @@ async function createPaymentMethod(paymentDetails) {
 	}
 
 	$scope.isMonthlyBilling = function() {
+		if (!$scope.period) {
+			return 'monthly';
+		}
+		
 		return $scope.period.toLowerCase() === 'monthly';
 	}
 
@@ -787,6 +790,7 @@ async function createPaymentMethod(paymentDetails) {
       Backend.get("/getServicePlans"),
 	  Backend.get("/getRegistrationQuestions"),
     ]).then(async function (res) {
+	  $scope.isTrial = $shared.customizations.trial_mode_enabled;
       $scope.templates = res[0].data;
 	  $scope.plans = res[2].data;
 	  $scope.registrationQuestions = res[3].data;
@@ -794,7 +798,7 @@ async function createPaymentMethod(paymentDetails) {
 
 	  var plan = getBestServicePlanOption();
 	  console.log("best plan option is ", plan);
-	  $scope.period = $stateParams['period'] || 'MONTHLY';
+	  $scope.period = $stateParams['billingPeriod'] || 'MONTHLY';
 	  console.log("billing period ", $scope.period);
 	  $scope.plan = plan;
 	  console.log("selected plan option is ", plan);

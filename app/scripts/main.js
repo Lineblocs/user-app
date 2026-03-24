@@ -391,6 +391,10 @@ searchModule("Support", "support", ['support'], [], ['support']),
         return getBaseUrl() + "/assets/img/" + icon;
      }
      factory.getAltAppLogo = function() {
+        if (!factory.customizations) {
+            return '';
+        }
+
         var logo = factory.customizations['alt_app_logo'];
         if ( !logo || logo === '' ) {
             return '/images/new-logo-blue.png';
@@ -1019,6 +1023,7 @@ if (checked.length === 0) {
                 //var next = $state.current.name;
                 console.log("next URL is: ", next);
                 console.log("current state is ", $state.current);
+                localStorage.clear();
                 window.location.replace("/#/login?next=" + next);
                 //$state.go('login');
                 return false;
@@ -1402,7 +1407,7 @@ var regParams = {
         controller: 'LoginCtrl'
     })
     .state('register', {
-        url: '/register?plan&period',
+        url: '/register?plan&billingPeriod',
         parent: 'base',
         templateUrl: 'views/pages/register.html',
         controller: 'RegisterCtrl',
@@ -1931,8 +1936,9 @@ var regParams = {
         // Backend.applyTheme();
         if(toState.requireAuthentication) {
           if(!Authenticator.isAuthenticated() || !Authenticator.checkAuthenticationTime()) {
-            $state.go('login');
             localStorage.clear();
+            $state.go('login');
+            return;
           } else {
             Authenticator.resetLastAuthenticationTime();
           }
@@ -1964,7 +1970,7 @@ var regParams = {
 
             });
         }
-        if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && token) {
+        if ((!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) && Authenticator.isAuthenticated()) {
             Backend.refreshWorkspaceData().then(function(res) {
                 console.log("updated UI data");
             });
@@ -1986,7 +1992,7 @@ var regParams = {
 
         var requests = [Backend.get("/getAllSettings")];
         var hasSIPCredentialsRequest = false;
-        if (getJWTToken()) {
+        if (Authenticator.isAuthenticated()) {
             requests.push(Backend.get("/getSIPCredentials"));
             hasSIPCredentialsRequest = true;
         }
@@ -2071,7 +2077,11 @@ var regParams = {
         const authObject = JSON.parse($window.localStorage.AUTH || '');
         if (!authObject) return false;
         if (!authObject.token.expire_in_timestamp) return false;
-        return Date.now() < authObject.token.expire_in_timestamp * 1000;
+        const expiresDate = new Date(authObject.token.expire_in_timestamp * 1000);
+        const nowDate = new Date();
+        console.log('expires date ', expiresDate);
+        console.log('now date ', nowDate);
+        return expiresDate.getTime() > nowDate.getTime();
    };
    this.checkAuthenticationTime = function() {
       var currentTime = new Date().getTime();
@@ -11109,7 +11119,6 @@ angular.module('Lineblocs')
 		  US: "+1",
 		  CA: "+1",
 	  };
-	  $scope.isTrial = $shared.customizations.trial_mode_enabled;
 	  $scope.acceptTerms =true;
 	  $scope.triedSubmit = false;
 	  $scope.passwordsDontMatch = false;
@@ -11831,6 +11840,10 @@ async function createPaymentMethod(paymentDetails) {
 	}
 
 	$scope.isMonthlyBilling = function() {
+		if (!$scope.period) {
+			return 'monthly';
+		}
+		
 		return $scope.period.toLowerCase() === 'monthly';
 	}
 
@@ -11875,6 +11888,7 @@ async function createPaymentMethod(paymentDetails) {
       Backend.get("/getServicePlans"),
 	  Backend.get("/getRegistrationQuestions"),
     ]).then(async function (res) {
+	  $scope.isTrial = $shared.customizations.trial_mode_enabled;
       $scope.templates = res[0].data;
 	  $scope.plans = res[2].data;
 	  $scope.registrationQuestions = res[3].data;
@@ -11882,7 +11896,7 @@ async function createPaymentMethod(paymentDetails) {
 
 	  var plan = getBestServicePlanOption();
 	  console.log("best plan option is ", plan);
-	  $scope.period = $stateParams['period'] || 'MONTHLY';
+	  $scope.period = $stateParams['billingPeriod'] || 'MONTHLY';
 	  console.log("billing period ", $scope.period);
 	  $scope.plan = plan;
 	  console.log("selected plan option is ", plan);
