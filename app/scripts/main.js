@@ -2074,7 +2074,14 @@ var regParams = {
 }).service('Authenticator', function($window, $q, $shared, $state, $rootScope) {
    var lastAuthenticationTime;
    this.isAuthenticated = function() {
-        const authObject = JSON.parse($window.localStorage.AUTH || '');
+        let authObject = null;
+        try {
+            authObject = JSON.parse($window.localStorage.AUTH || '');
+        } catch ( e ) {
+            //console.error( e );
+            authObject = null;
+        }
+
         if (!authObject) return false;
         if (!authObject.token.expire_in_timestamp) return false;
         const expiresDate = new Date(authObject.token.expire_in_timestamp * 1000);
