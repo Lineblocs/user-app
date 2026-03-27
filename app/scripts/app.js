@@ -621,7 +621,8 @@ return changed;
   factory.completeChangeRoute = function(route, params, other) {
       $state.go(route, params, other);
       $timeout(function() {
-
+        var scope = angular.element(document.getElementById('scopeCtrl')).scope();
+        scope.$apply()
       }, 0);
 
   }
@@ -636,6 +637,8 @@ return changed;
       }
         if ( factory.state.name === 'flow-editor' ) {
             var flowEditorFrame = document.getElementById('flowEditorFrame');
+            factory.isLoading = false;
+
             // check if all changes are saved before exiting
             if ( flowEditorFrame ) {
                 flowEditorFrame.contentWindow.postMessage('check', '*');
@@ -651,8 +654,8 @@ return changed;
           if ( createLoad ) {
               factory.isCreateLoading = true;
           } else {
-                factory.isLoading = true;
-        }
+              factory.isLoading = true;
+          }
       }
     factory.completeChangeRoute(route, params, {"reload": false});
   }

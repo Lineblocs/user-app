@@ -621,7 +621,8 @@ return changed;
   factory.completeChangeRoute = function(route, params, other) {
       $state.go(route, params, other);
       $timeout(function() {
-
+        var scope = angular.element(document.getElementById('scopeCtrl')).scope();
+        scope.$apply()
       }, 0);
 
   }
@@ -636,6 +637,8 @@ return changed;
       }
         if ( factory.state.name === 'flow-editor' ) {
             var flowEditorFrame = document.getElementById('flowEditorFrame');
+            factory.isLoading = false;
+
             // check if all changes are saved before exiting
             if ( flowEditorFrame ) {
                 flowEditorFrame.contentWindow.postMessage('check', '*');
@@ -651,8 +654,8 @@ return changed;
           if ( createLoad ) {
               factory.isCreateLoading = true;
           } else {
-                factory.isLoading = true;
-        }
+              factory.isLoading = true;
+          }
       }
     factory.completeChangeRoute(route, params, {"reload": false});
   }
@@ -5956,7 +5959,7 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $stateParams, $sce, $window) {
+angular.module('Lineblocs').controller('FlowEditorCtrl', function ($scope, Backend, $location, $state, $mdDialog, $shared, $stateParams, $sce, $window, $timeout) {
 	  $shared.updateTitle("Flow Editor");
   $scope.settings = {
     page: 0
@@ -5968,6 +5971,13 @@ angular.module('Lineblocs').controller('FlowEditorCtrl', function ($scope, Backe
     var padding = 0;
     element.attr("height",windowHeight);
   }
+
+  $scope.load = function() {
+    $timeout(function() {
+        $shared.endIsLoading();
+    },0);
+  }
+
   var flowUrl;
   var token = $shared.getAuthToken();
   var workspace = $shared.getWorkspace();
@@ -5990,6 +6000,8 @@ angular.module('Lineblocs').controller('FlowEditorCtrl', function ($scope, Backe
   angular.element("window").on("resize.editor", function() {
     sizeTheIframe();
   });
+
+  $scope.load();
 });
 
 
