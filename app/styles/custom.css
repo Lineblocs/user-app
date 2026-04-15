@@ -1666,3 +1666,10 @@ md-checkbox.md-checked .md-icon {
   cursor: pointer;
 }
 
+.login-page .input-box md-input-container {
+  width: 100% !important;
+}
+.login-page .input-box md-input-container label,
+.login-page .input-box md-input-container label.md-required {
+  padding-left: 6px !important;
+}
