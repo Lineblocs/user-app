@@ -34,10 +34,16 @@
                     <li>
                 <md-menu md-position-mode="target-right target">
                     <div class="nav-item">
+                     
+
                         <md-button aria-label="Open demo menu" class="md-raised md-primary md-small"
                             ng-click="$mdOpenMenu($event)">
-                            <!--<i class="mdi mdi-settings"></i>-->
                             Create
+                        </md-button>
+                         <md-button aria-label="Open demo menu" class="md-raised md-primary md-small"
+                         ng-show="$shared.isListViewPages()"
+                      ng-click="$shared.refreshPage()"> 
+                      <i class="mdi mdi-refresh"></i>
                         </md-button>
                     </div>
                     <md-menu-content width="3">
