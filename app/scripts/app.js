@@ -548,7 +548,7 @@ angular
 
       factory.isListViewPages = function () {
         var name = $state.current.name || $state.name || '';
-        return ['calls', 'debugger-logs'].some((sub) => name.includes(sub));
+        return ['calls', 'debugger-logs', 'extensions'].some((sub) => name.includes(sub));
       };
       factory.cleanWorkspaceName = function (name) {
         var changed = name.toLowerCase();

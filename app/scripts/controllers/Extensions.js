@@ -98,7 +98,9 @@ angular
             </p>
 
             <md-input-container class="md-block" style="margin-left: 16px; width: 50%; margin-top: 16px;">
-              <label>Type <b>I agree</b> to enable delete</label>
+              <label>Type <b>
+              ${extension ? extension?.username : 'no name'}
+              </b> to enable delete</label>
               <input ng-model="confirmText">
             </md-input-container>
           </md-dialog-content>
@@ -108,7 +110,7 @@ angular
             <md-button ng-click="cancel()">No</md-button>
             <md-button 
                 class="md-raised md-warn"
-                ng-disabled="confirmText !== 'I agree'"
+                ng-disabled="confirmText !== '${extension ? extension?.username : 'no name'}'"
                 ng-click="confirm()">
               Delete
             </md-button>
