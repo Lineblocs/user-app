@@ -232,13 +232,28 @@ angular
         );
       }
 
+      $scope.processLoginVerfication = function (token) {
+        let errorMsg = '';
+        if ($shared.customizations.login_verification === 'cf-turnstile' && !$scope.turnstileToken) {
+          errorMsg = 'Please complete the CAPTCHA';
+          return {error: errorMsg, valid: false};
+        } else if ($shared.customizations.login_verification === 'recaptcha') { 
+          // add code for recaptcha verification
+        }
+
+        return {valid: true};
+      }
+
       $scope.validateEmail = function ($event, loginForm) {
         $scope.triedSubmit = true;
 
-        if (!$scope.turnstileToken) {
-          $scope.errorMsg = 'Please complete the CAPTCHA';
+        let processedVerification = $scope.processLoginVerfication();
+        if (!processedVerification.valid) {
+          $scope.errorMsg = processedVerification.error;
           return;
         }
+
+        $scope.errorMsg = '';
         if (!loginForm.$valid) {
           $scope.errorMsg = 'Please enter a valid email';
           return;
@@ -442,8 +457,7 @@ angular
         $scope.turnstileWidgetId = window.turnstile.render(
           document.getElementById('turnstile-container'),
           {
-            sitekey: '0x4AAAAAAC-GyN_VLXyZuyls',
-
+            sitekey: $shared.frontend_api_creds.cloudflare_turnstile_site_key,
             callback: function (token) {
               // IMPORTANT: tell angular value changed
               $scope.$apply(function () {
@@ -455,8 +469,13 @@ angular
       }
 
       $timeout(function () {
-        renderTurnstile();
-        renderButton();
+        $shared.waitUntilLoaded().then(function () {
+          if ($shared.customizations.login_verification === 'cf-turnstile') {
+            renderTurnstile();
+          }
+
+          renderButton();
+        });
       }, 0);
 
       function resetTurnstile() {

@@ -550,6 +550,24 @@ angular
         var name = $state.current.name || $state.name || '';
         return ['calls', 'debugger-logs', 'extensions'].some((sub) => name.includes(sub));
       };
+
+      factory.waitUntilLoaded = function () { 
+        return new Promise((resolve) => {
+          if (factory.customizations) {
+            return resolve();
+          }
+          const startTime = Date.now();
+          const checkInterval = setInterval(() => {
+            if (factory.customizations) {
+              clearInterval(checkInterval);
+              resolve();
+            } else if (Date.now() - startTime > 15000) {
+              clearInterval(checkInterval);
+              resolve();
+            }
+          }, 100);
+        });
+      }
       factory.cleanWorkspaceName = function (name) {
         var changed = name.toLowerCase();
         changed = changed.replace(/[^a-z0-9\-]/g, '');
@@ -2046,6 +2064,14 @@ angular
         $shared.frontend_api_creds = data['frontend_api_creds'];
         $shared.available_themes = data['available_themes'];
         console.log('customizations are ', $shared.customizations);
+
+        if ($shared.customizations.login_verification === 'cf-turnstile') {
+          console.log('adding cloudflare turnstile script');
+          addScript('https://challenges.cloudflare.com/turnstile/v0/api.js');
+        } else if ($shared.customizations.login_verification === 'hcaptcha') {
+          // implement code for recaptcha
+          //addScript('https://js.hcaptcha.com/1/api.js');
+        }
 
         if (hasSIPCredentialsRequest) {
           console.log('SIP credentials ', res[1]);

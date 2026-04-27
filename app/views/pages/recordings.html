@@ -70,7 +70,41 @@
 
         </md-content>
     </md-card>
+
+   <div layout="row side-options" layout-align="end center">
+        <div flex="10" style="display: flex; align-items: end; justify-content: right; gap: 24px;">
+
+              <md-button
+                  aria-label="Open demo menu"
+                  class="md-raised md-primary md-small"
+                  ng-click="$shared.refreshPage()"
+                  style="width: 32px; margin: 0 10px 0 0; height: 100%;"
+                >
+                  <i class="mdi mdi-refresh"></i>
+                </md-button>
+        </div>
+        <div>
+            <md-menu md-position-mode="target-right target">
+                <div class="nav-item">
+                    <md-button aria-label="Open demo menu" class="md-raised md-primary bulk-actions"
+                        ng-click="$mdOpenMenu($event)">
+                        Actions
+                        <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
+                    </md-button>
+                </div>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button href="" ng-click="Backend.deleteAllChecked('calls', calls)" style="display:flex;">
+                            Delete All</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+      </div>
+
+
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && recordings.length === 0" class="no-results">
+
   <md-card md-theme="'default'"" md-theme-watch class="card-radius">
     <div class="no-results">
       <div class="inner">
