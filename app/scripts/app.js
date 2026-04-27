@@ -985,7 +985,7 @@ angular
 
     factory.refreshWorkspaceData = function () {
       return $q(function (resolve, reject) {
-        factory.get('/dashboard').then(
+        factory.get('/dashboard', {}, false).then(
           function (res) {
             var graph = res.data[0];
             console.log('GOT state data ', res);
@@ -999,7 +999,10 @@ angular
             resolve(res);
           },
           function (err) {
+            $shared.doLogout();
+            $state.go('login', {});
             reject(err);
+            //reject(err);
           }
         );
       });
@@ -1709,6 +1712,13 @@ angular
         templateUrl: 'views/pages/make-payment.html',
         controller: 'MakePaymentCtrl',
       })
+      .state('billing-add-credit', {
+        url: '/billing/add-credit',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/add-credit.html',
+        controller: 'AddCreditCtrl',
+      })
+
       .state('home', {
         url: '/home',
         parent: 'dashboard',
@@ -2031,9 +2041,12 @@ angular
         (!$shared.billInfo || !$shared.userInfo || !$shared.planInfo) &&
         Authenticator.isAuthenticated()
       ) {
-        Backend.refreshWorkspaceData().then(function (res) {
-          console.log('updated UI data');
-        });
+        try {
+          Backend.refreshWorkspaceData();
+        } catch (err) {
+          console.log('error refreshing workspace data');
+          console.error(err);
+        }
       }
       /*
 		Backend.get("/getBillingInfo").then(function(res) {

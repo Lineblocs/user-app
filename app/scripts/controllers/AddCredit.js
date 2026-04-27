@@ -2,33 +2,30 @@
 
 /**
  * @ngdoc function
- * @name Lineblocs.controller:MainCtrl
+ * @name Lineblocs.controller:AddCreditCtrl
  * @description
  * # MainCtrl
  * Controller of Lineblocs
  */
 angular.module('Lineblocs')
-  .controller('BillingCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window, $stateParams) {
+  .controller('AddCreditCtrl', function($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
 	var stripeElements;
 	var stripeCard;
 	var stripe;
-	// var explicitPlan  = $stateParams['frm'];
-	if($stateParams['frm'] === 'PS'){
-		$scope.selectedIndex = 1;
-	}
-	$shared.updateTitle("Billing");
-	  $scope.$shared = $shared;
-	  $scope.triedSubmit = false;
-	  $scope.isTabLoaded = false;
-	  $scope.startDate = moment().startOf('month').toDate();
-	  $scope.endDate = moment().endOf('month').toDate();
+	$shared.updateTitle("Add Credit");
+	$scope.$shared = $shared;
+	$scope.triedSubmit = false;
+	$scope.isTabLoaded = false;
+	$scope.startDate = moment().startOf('month').toDate();
+	$scope.endDate = moment().endOf('month').toDate();
 	$scope.cards = [];
+	$scope.selectedAmount = 25.00;
 	$scope.creditAmounts = [
 		{"name": "$10", "value": 10.00},
 		{"name": "$25", "value": 25.00},
-		{"name": "$50", "value": 50.00},
+		{"name": "$75", "value": 75.00},
 		{"name": "$100", "value": 100.00},
-		{"name": "$250", "value": 250.00}
+		{"name": "$250", "value": 250.00},
 	];
 	$scope.settings = {
 		newCard: false,
@@ -48,12 +45,14 @@ angular.module('Lineblocs')
 		expires: "",
 		cvv: ""
 	};
+
 	$timeout(function() {
         $scope.isTabLoaded = true;
 		if (!$scope.$$phase) {
 			$scope.$apply();
 		}
     }, 1000); 
+
     function TriggerDialogController($scope, $mdDialog,$shared, onCreate) {
       $scope.$shared = $shared;
 	  $scope.data = {
@@ -70,6 +69,7 @@ angular.module('Lineblocs')
       $scope.close = function() {
         $mdDialog.hide();
 	  }
+
 	  $scope.save = function() {
 		var data = angular.copy($scope.data);
 		Backend.post("/addUsageTrigger", data).then(function(res) {
@@ -78,63 +78,50 @@ angular.module('Lineblocs')
 		});
 	  }
     }
+
 	function toCents(dollars) {
 		return dollars * 100;
 	}
 
-  async function initializePaymentGateway() {
-    return new Promise(async (resolve, reject) => {
-      switch ($shared.customizations.payment_gateway) {
-        case 'stripe': {
-			console.log('initializing stripe client');
-          //Stripe.setPublishableKey($shared.frontend_api_creds.stripe_pub_key);
-		  $scope.stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
-          resolve();
-        }
-        default: {
-          reject();
-        }
-      }
-    });
-  }
-		function submitBilling(cardId, amount) {
-			var data = {};
-			data['card_id'] = cardId;
-			data['amount'] =  amount;
-			$scope.data.creditAmount.value;
-			$shared.isCreateLoading =true;
-			Backend.post("/credit/", data).then(function(res) {
-				console.log("added credit amount");
-						loadData(true).then(function() {
-							$mdToast.show(
-							$mdToast.simple()
-								.textContent('Added credits successfully')
-								.position('top right')
-								.hideDelay(3000)
-							);
+	function submitCredit(cardId, amount) {
+		var data = {};
+	data['card_id'] = cardId;
+	data['amount'] =  amount;
+	$scope.data.creditAmount.value;
+	$shared.isCreateLoading =true;
+	Backend.post("/credit", data).then(function(res) {
+		console.log("added credit amount");
+				loadData(true).then(function() {
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Added credits successfully')
+						.position('top right')
+						.hideDelay(3000)
+					);
 
-								})
-					});
-					//$shared.endIsCreateLoading();
-		}
+					$state.go('billing', {"frm": 'PS'});
 
-		function createCardResource(paymentMethod) {
-			return $q(function(resolve, reject) {
-				var data = {};
-				//data['card_token'] = response.id;
-				//data['stripe_card'] = response.card.id;
-				data['payment_method_id'] = paymentMethod.id;
-				data['last_4'] = paymentMethod.card.last4;
-				data['issuer'] = paymentMethod.card.brand;
-				$shared.isCreateLoading =true;
-				Backend.post("/card", data).then(function(res) {
-					resolve(res);
-					$shared.endIsCreateLoading();
-				}, function(err) {
-					console.error("an error occured ", err);
-				});
+						})
 			});
-		}
+			//$shared.endIsCreateLoading();
+	}
+
+	function stripeRespAddCard(response) {
+		return $q(function(resolve, reject) {
+			var data = {};
+			data['card_token'] = response.id;
+			data['stripe_card'] = response.card.id;
+			data['last_4'] = response.card.last4;
+			data['issuer'] = response.card.brand;
+			$shared.isCreateLoading =true;
+			Backend.post("/card", data).then(function(res) {
+				resolve(res);
+				$shared.endIsCreateLoading();
+			}, function(err) {
+				console.error("an error occured ", err);
+			});
+		});
+	}
 
 	function DialogController($scope, $timeout, $mdDialog, onSuccess, onError, $shared) {
 		$scope.$shared = $shared;
@@ -185,8 +172,6 @@ angular.module('Lineblocs')
 				}
 			});
 		})
-
-		$scope.$shared = $shared;
 		$scope.card = {
 			name: "",
 			address: "",
@@ -196,7 +181,6 @@ angular.module('Lineblocs')
 			expires: "",
 			cvv: ""
 		};
-
 
 		// function stripeResponseHandler(status, response) {
 		// 	$timeout(function() {
@@ -213,112 +197,9 @@ angular.module('Lineblocs')
 		// 	}, 0);
 		// }
 
-		// function setupStripeElements() {
-		// 	console.log('setupStripeElements called');
-		// 	// Create an instance of Elements.
-		// 	stripeElements = stripe.elements();
-
-		// 	// Custom styling can be passed to options when creating an Element.
-		// 	var style = {
-		// 		base: {
-		// 			color: '#ffffff', // Set font color to white
-		// 			fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-		// 			fontSmoothing: 'antialiased',
-		// 			fontSize: '16px',
-		// 			'::placeholder': {
-		// 				color: '#aab7c4'
-		// 			}
-		// 		},
-		// 		invalid: {
-		// 			color: '#fa755a',
-		// 			iconColor: '#fa755a'
-		// 		}
-		// 	};
-
-		// 	// Create an instance of the card Element.
-		// 	stripeCard = stripeElements.create('card', {style: style});
-
-		// 	// Add an instance of the card Element into the `card-element` <div>.
-		// 	stripeCard.mount('#card-element');
-
-		// 	// Handle real-time validation errors from the card Element.
-		// 	stripeCard.on('change', function(event) {
-		// 		if (event.error) {
-		// 			// Show the errors on the form
-		// 			$scope.errorMsg = event.error.message;
-		// 			//angular.element('.add-card-form').scrollTop(0)
-		// 		} else {
-		// 			$scope.errorMsg = null;
-		// 		}
-		// 	});
-		// }
-
-		async function createPaymentMethod() {
-			console.log('createPaymentMethod called');
-			const name = $scope.card.name;
-
-			console.log('createPaymentMethod users name: ' + name);
-
-			try {
-				const result = await stripe.createPaymentMethod({
-					type: 'card',
-					card: stripeCard,
-					billing_details: {
-						name: name,
-					},
-				})
-				console.log('createPaymentMethod result ', result)
-
-				// Handle result.error or result.paymentMethod
-				const { paymentMethod, error } = result;
-				if (error) {
-					// Display error to user
-					console.error('createPaymentMethod error', error.message);
-					console.error(error);
-					return Promise.reject(error.message);
-				}
-
-				return Promise.resolve( paymentMethod );
-			} catch ( err ) {
-				console.error('createPaymentMethod error', err);
-				console.error(err);
-				return Promise.reject( err );
-			}
-		}
-
 		$scope.cancel = function() {
 			$mdDialog.cancel();
 		}
-		// $scope.submit = function() {
-		// 	/*
-		// 	var data = {};
-		// 	data['number'] = $scope.card.number;
-		// 	data['cvc'] = $scope.card.cvv;
-		// 	var splitted = $scope.card.expires.split("/");
-		// 	data['exp_month'] = splitted[ 0 ];
-		// 	data['exp_year'] = splitted[ 1 ];
-		// 	data['address_zip'] = $scope.card.postal_code;
-		// 	Stripe.card.createToken(data, stripeResponseHandler);
-		// 	*/
-		// 	console.log('submit add card form');
-		// 	createPaymentMethod().then(function(paymentMethod) {
-		// 		console.log('created payment method ', paymentMethod)
-		// 		// Get the token ID:
-		// 		$mdDialog.hide();
-		// 		onSuccess(paymentMethod);
-		// 	}).catch(function(error) {
-		// 		// Show the errors on the form
-		// 		$scope.errorMsg = error;
-		// 		angular.element('.add-card-form').scrollTop(0)
-		// 	});
-		// }
-
-		// setTimeout(() => {
-		// 	waitForElement('#cardNumber').then(function() {
-		// 		stripe = Stripe($shared.frontend_api_creds.stripe_pub_key);
-		// 		setupStripeElements();
-		// 	});
-		// }, 0);
 
 		$scope.submit = async function() {
 			const paymentMethod = await createPaymentMethod();
@@ -336,8 +217,8 @@ angular.module('Lineblocs')
 					data['payment_method_id'] = paymentMethod.id;
 					Backend.post("/card", data).then(function(res) {
 						// resolve(res);
-						console.log(res);
 						$mdDialog.hide();
+						console.log(res);
 						loadData(true);
 						$shared.endIsCreateLoading();
 						$mdToast.show(
@@ -360,6 +241,39 @@ angular.module('Lineblocs')
 			// 	}
 			// })
 		}
+		async function createPaymentMethod(paymentDetails) {
+			console.log('createPaymentMethod called');
+			const name = $scope.card.name;
+		
+			console.log('createPaymentMethod users name: ' + name);
+		
+			try {
+				const result = await stripe.createPaymentMethod({
+					type: 'card',
+					card: stripeCard,
+					billing_details: {
+						name: name,
+					},
+				})
+				console.log('createPaymentMethod result ', result)
+		
+				// Handle result.error or result.paymentMethod
+				const { paymentMethod, error } = result;
+				if (error) {
+					// Display error to user
+					console.error('createPaymentMethod error', error.message);
+					console.error(error);
+					return Promise.reject(error.message);
+				}
+		
+				return Promise.resolve( paymentMethod );
+			} catch ( err ) {
+				console.error('createPaymentMethod error', err);
+				console.error(err);
+				return Promise.reject( err );
+			}
+		}
+
 		async function initializePaymentGateway() {
 			return new Promise(async (resolve, reject) => {
 			  switch ($shared.customizations.payment_gateway) {
@@ -375,18 +289,20 @@ angular.module('Lineblocs')
 		}
 
 		initializePaymentGateway();
+
 	}
+
 	$scope.createLabel = function(card) {
 		return "**** **** **** " + card.last_4;
 	}
 	$scope.addCard = function($event) {
 		function onSuccess(response) {
-			createCardResource(response).then(function() {
+			stripeRespAddCard(response).then(function() {
 				loadData(true);
 			});
 		}
-		function onError() {
-
+		function onError(err) {
+			console.log('Payment card add error: '+ err);
 		}
 		$mdDialog.show({
 			controller: DialogController,
@@ -404,55 +320,28 @@ angular.module('Lineblocs')
 			$scope.status = 'You cancelled the dialog.';
 		});
 	}
-	$scope.makePayment = function($event) {
-		console.log('$scope.makePayment called');
-    	$state.go('billing-make-payment', {});
-	}
 
 	$scope.addCredit = function() {
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
-		if (!$scope.data.selectedCard) {
+		if (!$scope.data.creditAmount) {
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Please select a card.')
+				.position('top right')
+				.hideDelay(3000)
+			);
 			return;
 		}
-		if ($scope.data.selectedCard === 'new') {
-			var data = {};
-			data['number'] = $scope.card.number;
-			data['cvc'] = $scope.card.cvv;
-			var splitted = $scope.card.expires.split("/");
-			data['exp_month'] = splitted[ 0 ];
-			data['exp_year'] = splitted[ 1 ];
-			data['address_zip'] = $scope.card.postal_code;
-			Stripe.card.createToken(data, function (status, response) {
-				if (response.error) { // Problem!
-					// Show the errors on the form
-					$scope.errorMsg = response.error.message;
 
-				} else { // Token was created!
-					// Get the token ID:
-					$mdDialog.hide();
-					createCardResource(response).then(function(res) {
-						var cardId = res.headers('X-Card-ID');
-						$timeout(function() {
-							$scope.$apply();
-							submitBilling(cardId, $scope.data.creditAmount.value);
-						}, 0);
-					})
-				}
-				$timeout(function() {
-					$scope.$apply();
-					submitBilling(cardId, $scope.data.creditAmount.value);
-				}, 0);
-			});
-			return;
-		}
 		$timeout(function() {
 			$scope.$apply();
-			submitBilling($scope.data.selectedCard, $scope.data.creditAmount.value);
+			submitCredit($scope.data.selectedCard, $scope.data.creditAmount.value);
 		}, 0);
 
 	}
+
 	$scope.addCreditPayPal = function() {
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
@@ -468,11 +357,11 @@ angular.module('Lineblocs')
 		});
 	}
 
-
 	$scope.getCardOptions = function() {
 		var options = angular.copy($scope.cards);
 		//options.push({""})
 	}
+
 	$scope.changeCard = function(value) {
 		console.log("changeCard ", value);
 		$scope.data.selectedCard = value;
@@ -482,21 +371,26 @@ angular.module('Lineblocs')
 			$scope.settings.newCard = false;
 		}
 	}
-  $scope.changeBillingPackage = function(newPackage) {
-    console.log("changeBillingPackage ", newPackage);
-    $scope.settings.billing_package = newPackage;
-  }
+
+	$scope.changeBillingPackage = function(newPackage) {
+		console.log("changeBillingPackage ", newPackage);
+		$scope.settings.billing_package = newPackage;
+	}
+
 	$scope.changeAmount = function(value) {
 		console.log("changeAmount ", value);
 		$scope.data.creditAmount = value;
 	}
+
 	$scope.changeAutoRechargeAmount = function(value) {
 		console.log("changeAutoRechargeAmount ", value);
 		$scope.settings.db.auto_recharge_top_up = value;
 	}
+
 	$scope.changeType = function(newType) {
 		$scope.settings.type = newType;
 	}
+
 	$scope.saveSettings = function() {
 		var data = {};
 		data['auto_recharge'] = $scope.settings.db.auto_recharge;
@@ -517,25 +411,12 @@ angular.module('Lineblocs')
 			});
 	}
 
-
-  $scope.cancelSubscription = function($event) {
-    $state.go('billing-cancel-subscription', {});
-  }
+	$scope.cancelSubscription = function($event) {
+		$state.go('billing-cancel-subscription', {});
+	}
 
 	function billHistory() {
-		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate));
-	}
-	
-	$scope.changeStartDate = function() {
-		console.log('changeStartDate', arguments);
-		console.log('start date ', $scope.startDate);
-		$scope.startDate = angular.element('#startDate').val();
-	}
-
-	$scope.changeEndDate = function() {
-		console.log('changeEndDate', arguments);
-		console.log('end date ', $scope.endDate);
-		$scope.endDate = angular.element('#endDate').val();
+		return 	Backend.get("/getBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true));
 	}
 
 	$scope.filterBilling = function() {
@@ -545,10 +426,12 @@ angular.module('Lineblocs')
 				$shared.endIsCreateLoading();
 		});
 	}
+
 	$scope.downloadBilling = function() {
 		var token = getJWTTokenObj();
-		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate) + "&auth=" + token.token.auth));
+		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate, true) + "&endDate=" + formatDate($scope.endDate, true) + "&auth=" + token.token.auth));
 	}
+
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {
 			"gold": "Gold Route",
@@ -569,11 +452,10 @@ angular.module('Lineblocs')
 			$q.all([
 				Backend.get("/billing"),
 				billHistory()
-			]).then(function(res) {
+			]).then(async function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
-				$scope.plan = res[0].data[0].info.plan;
 				var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
 				if ($scope.settings.db.auto_recharge_top_up) {
@@ -590,20 +472,18 @@ angular.module('Lineblocs')
 				$scope.usageTriggers = res[0].data[4];
 				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
-
-				initializePaymentGateway().then(function() {
-					console.log("billing data is ", $scope.billing);
-					console.log("cards are ", $scope.cards);
-					console.log("settings are ", $scope.settings);
-					console.log("usage triggers are ", $scope.usageTriggers);
-					$scope.creditAmount = $scope.creditAmounts[0];
-					if (createLoading) {
-						$shared.endIsCreateLoading();
-					} else {
-						$shared.endIsLoading();
-					}
-					resolve();
-				});
+				console.log("billing data is ", $scope.billing);
+				console.log("cards are ", $scope.cards);
+				console.log("settings are ", $scope.settings);
+				console.log("usage triggers are ", $scope.usageTriggers);
+				$scope.creditAmount = $scope.creditAmounts[0];
+				if (createLoading) {
+					$shared.endIsCreateLoading();
+				} else {
+					$shared.endIsLoading();
+				}
+				resolve();
+				// await initializePaymentGateway();
 			}, reject);
 		});
 	}
@@ -634,10 +514,10 @@ angular.module('Lineblocs')
 		});
 
 	}
-	$scope.setPrimary = function(card)
-	{
+
+	$scope.setPrimary = function(card){
       Backend.put("/card/" + card.id + "/setPrimary").then(function() {
-		loadData(true).then(function() {
+				loadData(true).then(function() {
 		 $mdToast.show(
           $mdToast.simple()
             .textContent('Set card as primary')
@@ -647,6 +527,19 @@ angular.module('Lineblocs')
 		 });
           });
 	}
+
+	// $scope.deleteCard = function(card){
+    //   Backend.delete("/card/" + card.id).then(function() {
+	// 			loadData(true).then(function() {
+	// 	 $mdToast.show(
+    //       $mdToast.simple()
+    //         .textContent('Removed card successfully..')
+    //         .position("top right")
+    //         .hideDelay(3000)
+	// 	);
+	// 	 });
+    //       });
+	// }
 	$scope.deleteCard = function($event, card)
 	{
 		if(card.primary === 1){
@@ -680,17 +573,8 @@ angular.module('Lineblocs')
 			}, function() {
 			});
 		}
-		// Backend.delete("/card/" + card.id).then(function() {
-		// 	loadData(true).then(function() {
-		// 		$mdToast.show(
-		// 			$mdToast.simple()
-		// 			.textContent('Removed card successfully..')
-		// 			.position("top right")
-		// 			.hideDelay(3000)
-		// 		);
-		// 	});
-		// });
 	}
+
 	$scope.deleteUsageTrigger = function($event, item) {
 	// Appending dialog to document.body to cover sidenav in docs app
 	console.log("deleteUsageTrigger ", item);
@@ -717,31 +601,25 @@ angular.module('Lineblocs')
     }, function() {
     });
 	}
+
 	$scope.upgradePlan = function() {
     	$state.go('billing-upgrade-plan', {});
 	}
 
-	$scope.viewEstimatedCharges = function() {
-		$shared.isLoading = true;
-		Backend.get("/billing/viewEstimatedCharges", { responseType: 'blob' }).then(function(res) {
-			var blob = new Blob([res.data], { type: 'application/pdf' });
-			var url = window.URL.createObjectURL(blob);
-			var link = document.createElement('a');
-			link.href = url;
-			link.download = 'estimated-charges.pdf';
-			link.click();
-			window.URL.revokeObjectURL(url);
-			$shared.endIsLoading();
-		}, function(err) {
-			console.error("Error fetching estimated charges", err);
-			$shared.endIsLoading();
-			$mdToast.show(
-				$mdToast.simple()
-				.textContent('Failed to load estimated charges')
-				.position("top right")
-				.hideDelay(3000)
-			);
-		});
+	$scope.selectAmount = function(amount) {
+		console.log('selectAmount ', amount)
+		if(amount === 0){
+			$scope.active_custom = true;
+			$scope.selectedAmount = amount;
+			// $scope.selectedAmount = $scope.custom_amount;
+		}else{
+			$scope.active_custom = false;
+			$scope.selectedAmount = amount;
+		}
+	}
+
+	$scope.changeCustoAmount = function(cus_amount) {
+		$scope.selectedAmount = parseInt(cus_amount);
 	}
 
 	loadData(false);

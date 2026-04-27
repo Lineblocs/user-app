@@ -346,6 +346,15 @@
                                 Make a payment
                             </span>
                         </md-button>
+                        <md-button ng-click="addCredit($event)" class="md-raised md-primary" ng-show="plan.pay_as_you_go">
+                            <span>
+                                <md-icon class="tooltip-icon">
+                                    <i class="mdi mdi-filter-variant"></i>
+                                </md-icon>
+                                Add credit
+                            </span>
+                        </md-button>
+
                     </div>
                     <!-- <h5>Account Balance {{billing.info.accountBalance}}</h5>
                     <small>

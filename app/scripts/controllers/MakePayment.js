@@ -18,6 +18,7 @@ angular.module('Lineblocs')
 	$scope.isTabLoaded = false;
 	$scope.startDate = moment().startOf('month').toDate();
 	$scope.endDate = moment().endOf('month').toDate();
+	$scope.outstandingInvoices = [];
 	$scope.cards = [];
 	$scope.selectedAmount = 25.00;
 	$scope.creditAmounts = [
@@ -70,6 +71,14 @@ angular.module('Lineblocs')
         $mdDialog.hide();
 	  }
 
+	$scope.toggleInvoice = function(invoice) {
+		console.log('toggleInvoice', invoice);
+		// Invoice selection is handled by ng-model binding on the checkbox
+		// This function can be used to perform additional actions when an invoice is toggled
+
+		invoice.selected = !invoice.selected;
+		console.log('Invoice selected state is now: ', invoice.selected);
+	};
 	  $scope.save = function() {
 		var data = angular.copy($scope.data);
 		Backend.post("/addUsageTrigger", data).then(function(res) {
@@ -83,27 +92,25 @@ angular.module('Lineblocs')
 		return dollars * 100;
 	}
 
-	function submitCredit(cardId, amount) {
+	function payInvoices(cardId, invoices) {
 		var data = {};
-	data['card_id'] = cardId;
-	data['amount'] =  amount;
-	$scope.data.creditAmount.value;
-	$shared.isCreateLoading =true;
-	Backend.post("/credit", data).then(function(res) {
-		console.log("added credit amount");
-				loadData(true).then(function() {
-					$mdToast.show(
-					$mdToast.simple()
-						.textContent('Added credits successfully')
-						.position('top right')
-						.hideDelay(3000)
-					);
+		data['card_id'] = cardId;
+		data['invoices'] =  invoices;
+		$shared.isCreateLoading =true;
+		Backend.post("/billing/invoices/settle", data).then(function(res) {
+		loadData(true).then(function() {
+			$mdToast.show(
+			$mdToast.simple()
+				.textContent('Payment submitted. You can view the status of your payment in the billing history tab.')
+				.position('top right')
+				.hideDelay(3000)
+			);
 
-					$state.go('billing', {"frm": 'PS'});
+			$state.go('billing', {"frm": 'PS'});
 
-						})
-			});
-			//$shared.endIsCreateLoading();
+		})
+	});
+	//$shared.endIsCreateLoading();
 	}
 
 	function stripeRespAddCard(response) {
@@ -321,14 +328,34 @@ angular.module('Lineblocs')
 		});
 	}
 
-	$scope.addCredit = function() {
+	$scope.payInvoices = function() {
 		var data = {};
 		console.log("card is ", $scope.data.selectedCard);
 		console.log("amount is ", $scope.data.creditAmount);
-		if (!$scope.data.creditAmount) {
+
+		if (!$scope.data.selectedCard) {
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent('Please select a card.')
+				.textContent('Please select a card before making a payment.')
+				.position('top right')
+				.hideDelay(3000)
+			);
+			return;
+		}
+
+		let invoices = $scope.outstandingInvoices.filter((invoice) => {
+			if (invoice.selected) {
+				return true;
+			}
+			return false;
+		}).map((invoice) => {
+			return invoice.id
+		});
+
+		if (invoices.length === 0) {
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('No invoices available to pay.')
 				.position('top right')
 				.hideDelay(3000)
 			);
@@ -337,7 +364,7 @@ angular.module('Lineblocs')
 
 		$timeout(function() {
 			$scope.$apply();
-			submitCredit($scope.data.selectedCard, $scope.data.creditAmount.value);
+			payInvoices($scope.data.selectedCard, invoices);
 		}, 0);
 
 	}
@@ -441,6 +468,8 @@ angular.module('Lineblocs')
 		return map[ugly];
 	}
 
+	
+
 	function loadData(createLoading) {
 		if (createLoading) {
 			$shared.isCreateLoading =true;
@@ -451,11 +480,13 @@ angular.module('Lineblocs')
 		return $q(function(resolve, reject) {
 			$q.all([
 				Backend.get("/billing"),
-				billHistory()
+				billHistory(),
+				Backend.get("/billing/invoices?status=PENDING"),
 			]).then(async function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
+				$scope.outstandingInvoices = res[2].data.invoices;
 				var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
 				if ($scope.settings.db.auto_recharge_top_up) {

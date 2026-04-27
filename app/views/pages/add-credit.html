@@ -33,7 +33,19 @@
                 <md-content class="md-padding">
                     <div class="bottom-sheet-demo inset no-padding">
                         <div class="left">
-                            <div ng-show="settings.type==='CARD'" style="width: 500px;">
+                            <div class="pay-options">
+                                <h5>Pay With</h5>
+                                <md-button ng-disabled="settings.type==='CARD'" type="button"
+                                    ng-click="changeType('CARD')" class="md-raised md-primary no-margin-sides">
+                                    Credit Card</md-button>
+                                <br />
+                                <md-button ng-disabled="settings.type==='PAYPAL'" type="button"
+                                    ng-click="changeType('PAYPAL')" class="md-raised md-primary no-margin-sides">
+                                    PayPal</md-button>
+                            </div>
+                        </div>
+                        <div class="left line-left">
+                            <div ng-show="settings.type==='CARD'">
                                 <div ng-show="cards.length === 0">
                                     <h5>Select Payment Amount</h5>
                                     <ul class="pay-amount">
@@ -131,31 +143,18 @@
                                             </md-content>
                                         </form>
                                     </div>
-                                    <div style="margin-bottom: 20px;">
-                                    <h5>Outstanding Invoices</h5>
-                                    <p>You can select which invoices to pay by clicking the checkbox next to them.</p>
-                                    <md-table-container class="md-table-container-wide" style="width: 100%; overflow-x: auto;">
-                                        <table md-table class="md-primary md-striped" style="width: 100%;">
-                                            <thead md-head>
-                                                <tr md-row>
-                                                    <th md-column md-column-align="left">Select</th>
-                                                    <th md-column md-column-align="left">Date</th>
-                                                    <th md-column md-column-align="left">Amount</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                                <tr md-row ng-repeat="invoice in outstandingInvoices">
-                                                    <td md-cell><md-checkbox ng-model="invoice.selected" ng-change="toggleInvoice(invoice)" aria-label="Select invoice"></md-checkbox></td>
-                                                    <td md-cell>{{invoice.friendly_created_at}}</td>
-                                                    <td md-cell>{{invoice.amount_in_dollars}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </md-table-container>
-                                    </div>
-                                    <md-button ng-click="payInvoices($event)"
-                                        class="md-raised md-primary no-margin-sides">
-                                        Pay invoice(s)
+                                    <md-input-container>
+                                        <label>Add credit Amount</label>
+                                        <md-select ng-model="data.creditAmount"
+                                            ng-change="changeAmount(data.creditAmount)">
+                                            <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                                {{amount.name}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-button ng-click="addCredit($event)"
+                                        class="md-raised md-primary no-margin-sides">Add
+                                        Credit
                                     </md-button>
                                 </div>
                             </div>
