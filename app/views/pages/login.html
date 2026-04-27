@@ -1,76 +1,104 @@
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
-    <div ng-show="$shared.changingPage" class="change-page-mask"></div>
-    <div class="login-page login-page-block">
-        <a href="{{$shared.getHomeLink()}}" class="logo-link">
-            <div class="logo">
-                <img src="{{$shared.getAltAppLogo()}}"/>
-            </div>
-        </a>
-        <img src="../../icons/dark-mode.png" ng-show="selectedTheme === 'default'" class="theme-moon" ng-click="changeTheme('dark')">
-        <img src="../../icons/light-mode.png" ng-show="selectedTheme === 'dark'" class="theme-moon" ng-click="changeTheme('default')">
-        <div style="display: flex; align-items: center; justify-content: center; position: absolute; width: 100%;">
-            <div ng-show="isLoading">
-                <md-progress-circular md-mode="indeterminate" style="margin: 0 auto;"></md-progress-circular>
-                <p>Logging you in..</p>
-            </div>
-            <div ng-show="$shared.changingPage">
-                <md-progress-circular md-mode="indeterminate" style="margin: 0 auto;"></md-progress-circular>
-                <p>Please wait..</p>
-            </div>
+<link
+  href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap"
+  rel="stylesheet"
+/>
+<div ng-show="$shared.changingPage" class="change-page-mask"></div>
+<div class="login-page login-page-block">
+  <a href="{{$shared.getHomeLink()}}" class="logo-link">
+    <div class="logo">
+      <img src="{{$shared.getAltAppLogo()}}" />
+    </div>
+  </a>
+  <img
+    src="../../icons/dark-mode.png"
+    ng-show="selectedTheme === 'default'"
+    class="theme-moon"
+    ng-click="changeTheme('dark')"
+  />
+  <img
+    src="../../icons/light-mode.png"
+    ng-show="selectedTheme === 'dark'"
+    class="theme-moon"
+    ng-click="changeTheme('default')"
+  />
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+    "
+  >
+    <div ng-show="isLoading">
+      <md-progress-circular md-mode="indeterminate" style="margin: 0 auto"></md-progress-circular>
+      <p>Logging you in..</p>
+    </div>
+    <div ng-show="$shared.changingPage">
+      <md-progress-circular md-mode="indeterminate" style="margin: 0 auto"></md-progress-circular>
+      <p>Please wait..</p>
+    </div>
+  </div>
+
+  <div class="content login-page-content">
+    <div ng-show="step===1" class="login-block">
+      <form
+        class="login-form"
+        ng-submit="validateEmail($event, login1Form)"
+        name="login1Form"
+        novalidate
+      >
+        <div class="top-heading">
+          <h3>Login</h3>
+
+          <div layout="row" layout-align="center">
+            <center>
+              <p>
+                <a ng-click="gotoRegister()">Register here</a>
+              </p>
+            </center>
+          </div>
+
+          <div class="box invalid-login">
+            <center>
+              <div ng-show="couldNotLogin" class="red">
+                User credentials were invalid. please try again.
+              </div>
+              <div ng-show="noUserFound" class="red">No user exists.</div>
+              <div ng-show="errorMsg !== ''" class="red">{{errorMsg}}</div>
+            </center>
+          </div>
+        </div>
+        <small>Login with Email</small>
+        <div class="field-input">
+          <div class="input-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
+              <path
+                fill="#317780"
+                fill-rule="nonzero"
+                d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z"
+              />
+            </svg>
+
+            <!-- <input type="text" placeholder="Company Email Address"> -->
+            <md-input-container>
+              <input
+                name="email"
+                ng-model="user.email"
+                type="email"
+                placeholder="Email"
+                required=""
+              />
+              <div ng-show="triedSubmit">
+                <div class="box">
+                  <div ng-show="loginForm.email.$error.required">This field is required</div>
+                </div>
+              </div>
+            </md-input-container>
+          </div>
         </div>
 
-        <div class="content login-page-content">
-            <div ng-show="step===1" class="login-block">
-
-                <form class="login-form" ng-submit="validateEmail($event, login1Form)" name="login1Form" novalidate>
-                    <div class="top-heading">
-
-                        <h3>Login</h3>
-
-                        <div layout="row" layout-align="center">
-                            <center>
-                                <p>
-                                    <a ng-click="gotoRegister()">Register here</a>
-                                </p>
-                            </center>
-                        </div>
-
-                        <div class="box invalid-login">
-
-                            <center>
-                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
-                                    again.
-                                </div>
-                                <div ng-show="noUserFound" class="red">No user exists.</div>
-                                <div ng-show="errorMsg !== ''" class="red">
-                                    {{errorMsg}}
-                                </div>
-
-                            </center>
-                        </div>
-                    </div>
-                    <small>Login with Email</small>
-                    <div class="field-input">
-                        <div class="input-box">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
-                                <path fill="#317780" fill-rule="nonzero"
-                                    d="M19.219 8.858A.773.773 0 0 0 20 8.093V3.08C20 1.392 18.598.02 16.875.02H3.125C1.402.02 0 1.391 0 3.08v8.84c0 1.688 1.402 3.06 3.125 3.06h13.75c1.723 0 3.125-1.372 3.125-3.06a.773.773 0 0 0-.781-.766.773.773 0 0 0-.782.766c0 .844-.7 1.53-1.562 1.53H3.125c-.862 0-1.563-.686-1.563-1.53V3.243L8.35 7.377a3.168 3.168 0 0 0 3.3 0l6.787-4.134v4.85c0 .423.35.765.782.765zm-8.394-2.78a1.58 1.58 0 0 1-1.65 0l-6.96-4.24c.256-.182.57-.288.91-.288h13.75c.34 0 .654.106.91.287l-6.96 4.24z" />
-                            </svg>
-
-                            <!-- <input type="text" placeholder="Company Email Address"> -->
-                            <md-input-container>
-                                <input name="email" ng-model="user.email" type="email" placeholder="Email" required="">
-                                <div ng-show="triedSubmit">
-                                    <div class="box">
-                                        <div ng-show="loginForm.email.$error.required">This field is required</div>
-                                    </div>
-                                </div>
-                            </md-input-container>
-                        </div>
-
-                    </div>
-
-                    <!--
+        <!--
                 <div class="field-input password">
 
 
@@ -104,166 +132,204 @@
                     <a ng-click="gotoForgot()">Forgot Password</a>
             -->
 
-                    <div class="login-btn">
+        <div class="login-btn" style="display: flex; flex-direction: column; gap: 12px">
+            <div id="turnstile-container" style="margin:20px 0;"></div>
 
-                        <button type="submit" class="custom">
-                            <span class="login-button-custom" >Continue</span>
-                        </button>
-                    </div>
-                    <div layout="row" layout-align="center" ng-show="$shared.customizations.enable_msft_signin || $shared.customizations.enable_google_signin || $shared.customizations.enable_apple_signin">
-                        <small>OR</small>
-                    </div>
-                    <div ng-show="$shared.customizations.enable_google_signin">
-                        <div layout="row" layout-align="center" ng-non-bindable>
-                            <div id="gSignIn"></div>
-                        </div>
-                    </div>
-                    <button type="button" ng-click="loginWithMicrosoft()" class="microsoft-login-btn" ng-show="$shared.customizations.enable_msft_signin">
-                        <div class="icon-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M11.55 21H3v-8.55h8.55V21zM21 21h-8.55v-8.55H21V21zm-9.45-9.45H3V3h8.55v8.55zm9.45 0h-8.55V3H21v8.55z"></path></svg>
-                        </div>
-                        <div class="login-button-custom" style="padding:0;">Sign in with Microsoft</div>
-                    </button>
+          <button type="submit" class="custom">
+            <span class="login-button-custom">Continue</span>
+          </button>
+        </div>
+        <div
+          layout="row"
+          layout-align="center"
+          ng-show="$shared.customizations.enable_msft_signin || $shared.customizations.enable_google_signin || $shared.customizations.enable_apple_signin"
+        >
+          <small>OR</small>
+        </div>
+        <div ng-show="$shared.customizations.enable_google_signin">
+          <div layout="row" layout-align="center" ng-non-bindable>
+            <div id="gSignIn"></div>
+          </div>
+        </div>
+        <button
+          type="button"
+          ng-click="loginWithMicrosoft()"
+          class="microsoft-login-btn"
+          ng-show="$shared.customizations.enable_msft_signin"
+        >
+          <div class="icon-block">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              style="fill: rgba(0, 0, 0, 1)"
+            >
+              <path
+                d="M11.55 21H3v-8.55h8.55V21zM21 21h-8.55v-8.55H21V21zm-9.45-9.45H3V3h8.55v8.55zm9.45 0h-8.55V3H21v8.55z"
+              ></path>
+            </svg>
+          </div>
+          <div class="login-button-custom" style="padding: 0">Sign in with Microsoft</div>
+        </button>
 
-                    <button type="button" ng-click="loginWithApple()" class="microsoft-login-btn" ng-show="$shared.customizations.enable_apple_signin">
-                        <div class="icon-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M19.665 16.811a10.316 10.316 0 0 1-1.021 1.837c-.537.767-.978 1.297-1.316 1.592-.525.482-1.089.73-1.692.744-.432 0-.954-.123-1.562-.373-.61-.249-1.17-.371-1.683-.371-.537 0-1.113.122-1.73.371-.616.25-1.114.381-1.495.393-.577.025-1.154-.229-1.729-.764-.367-.32-.826-.87-1.377-1.648-.59-.829-1.075-1.794-1.455-2.891-.407-1.187-.611-2.335-.611-3.447 0-1.273.275-2.372.826-3.292a4.857 4.857 0 0 1 1.73-1.751 4.65 4.65 0 0 1 2.34-.662c.46 0 1.063.142 1.81.422s1.227.422 1.436.422c.158 0 .689-.167 1.593-.498.853-.307 1.573-.434 2.163-.384 1.6.129 2.801.759 3.6 1.895-1.43.867-2.137 2.08-2.123 3.637.012 1.213.453 2.222 1.317 3.023a4.33 4.33 0 0 0 1.315.863c-.106.307-.218.6-.336.882zM15.998 2.38c0 .95-.348 1.838-1.039 2.659-.836.976-1.846 1.541-2.941 1.452a2.955 2.955 0 0 1-.021-.36c0-.913.396-1.889 1.103-2.688.352-.404.8-.741 1.343-1.009.542-.264 1.054-.41 1.536-.435.013.128.019.255.019.381z"></path></svg>
-                        </div>
-                        <div class="login-button-custom" style="padding:0;">Sign in with Apple</div>
-                    </button>
-                </form>
-            </div>
-            <div ng-show="step===2" class="login-block">
-                <form class="login-form" ng-submit="validatePassword($event, login2Form)" name="login2Form" novalidate>
-                    <div class="top-heading">
+        <button
+          type="button"
+          ng-click="loginWithApple()"
+          class="microsoft-login-btn"
+          ng-show="$shared.customizations.enable_apple_signin"
+        >
+          <div class="icon-block">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              style="fill: rgba(0, 0, 0, 1)"
+            >
+              <path
+                d="M19.665 16.811a10.316 10.316 0 0 1-1.021 1.837c-.537.767-.978 1.297-1.316 1.592-.525.482-1.089.73-1.692.744-.432 0-.954-.123-1.562-.373-.61-.249-1.17-.371-1.683-.371-.537 0-1.113.122-1.73.371-.616.25-1.114.381-1.495.393-.577.025-1.154-.229-1.729-.764-.367-.32-.826-.87-1.377-1.648-.59-.829-1.075-1.794-1.455-2.891-.407-1.187-.611-2.335-.611-3.447 0-1.273.275-2.372.826-3.292a4.857 4.857 0 0 1 1.73-1.751 4.65 4.65 0 0 1 2.34-.662c.46 0 1.063.142 1.81.422s1.227.422 1.436.422c.158 0 .689-.167 1.593-.498.853-.307 1.573-.434 2.163-.384 1.6.129 2.801.759 3.6 1.895-1.43.867-2.137 2.08-2.123 3.637.012 1.213.453 2.222 1.317 3.023a4.33 4.33 0 0 0 1.315.863c-.106.307-.218.6-.336.882zM15.998 2.38c0 .95-.348 1.838-1.039 2.659-.836.976-1.846 1.541-2.941 1.452a2.955 2.955 0 0 1-.021-.36c0-.913.396-1.889 1.103-2.688.352-.404.8-.741 1.343-1.009.542-.264 1.054-.41 1.536-.435.013.128.019.255.019.381z"
+              ></path>
+            </svg>
+          </div>
+          <div class="login-button-custom" style="padding: 0">Sign in with Apple</div>
+        </button>
+      </form>
+    </div>
+    <div ng-show="step===2" class="login-block">
+      <form
+        class="login-form"
+        ng-submit="validatePassword($event, login2Form)"
+        name="login2Form"
+        novalidate
+      >
+        <div class="top-heading">
+          <h3>Login</h3>
+          <div layout="row" layout-align="center">
+            <center>
+              <p>Welcome back {{userInfo.name}}</p>
+            </center>
+          </div>
+          <div class="box invalid-login">
+            <center>
+              <div ng-show="couldNotLogin" class="red">
+                User credentials were invalid. please try again.
+              </div>
+            </center>
+          </div>
+        </div>
+        <div class="field-input password">
+          <div class="input-box no-margin">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+              <g fill="#317780" fill-rule="nonzero">
+                <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
+                <path
+                  d="M19.107 16.262a.896.896 0 0 0 .893-.899V12.04c0-1.982-1.602-3.594-3.571-3.594h-1.074V5.277C15.355 2.367 12.952 0 9.998 0S4.641 2.367 4.641 5.277v3.168h-1.07C1.602 8.445 0 10.057 0 12.04v7.367C0 21.388 1.602 23 3.571 23H16.43C18.398 23 20 21.388 20 19.406c0-.496-.4-.898-.893-.898a.896.896 0 0 0-.893.898c0 .991-.8 1.797-1.785 1.797H3.57a1.793 1.793 0 0 1-1.785-1.797V12.04c0-.99.8-1.797 1.785-1.797H16.43c.984 0 1.785.806 1.785 1.797v3.324c0 .496.4.899.893.899zM13.57 8.445H6.427V5.277c0-1.919 1.602-3.48 3.571-3.48 1.97 0 3.572 1.561 3.572 3.48v3.168z"
+                />
+                <ellipse cx="8.348" cy="15.543" rx="1" ry="1" />
+                <ellipse cx="5" cy="15.543" rx="1" ry="1" />
+                <ellipse cx="11.696" cy="15.543" rx="1" ry="1" />
+              </g>
+            </svg>
 
+            <md-input-container>
+              <input
+                name="password"
+                ng-model="user.password"
+                type="password"
+                placeholder="Password"
+                required=""
+              />
+              <div ng-show="triedSubmit">
+                <div class="box">
+                  <div ng-show="loginForm.password.$error.required">This field is required</div>
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+        </div>
+        <br />
 
-                        <h3>Login</h3>
-                        <div layout="row" layout-align="center">
-                            <center>
-                                <p>
-                                    Welcome back {{userInfo.name}}
-                                </p>
-                            </center>
-                        </div>
-                        <div class="box invalid-login">
-
-
-                            <center>
-                                <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
-                                    again.
-                                </div>
-                            </center>
-                        </div>
-                    </div>
-                    <div class="field-input password">
-
-
-                        <div class="input-box no-margin">
-
-
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
-                                <g fill="#317780" fill-rule="nonzero">
-                                    <ellipse cx="15.089" cy="15.543" rx="1" ry="1" />
-                                    <path
-                                        d="M19.107 16.262a.896.896 0 0 0 .893-.899V12.04c0-1.982-1.602-3.594-3.571-3.594h-1.074V5.277C15.355 2.367 12.952 0 9.998 0S4.641 2.367 4.641 5.277v3.168h-1.07C1.602 8.445 0 10.057 0 12.04v7.367C0 21.388 1.602 23 3.571 23H16.43C18.398 23 20 21.388 20 19.406c0-.496-.4-.898-.893-.898a.896.896 0 0 0-.893.898c0 .991-.8 1.797-1.785 1.797H3.57a1.793 1.793 0 0 1-1.785-1.797V12.04c0-.99.8-1.797 1.785-1.797H16.43c.984 0 1.785.806 1.785 1.797v3.324c0 .496.4.899.893.899zM13.57 8.445H6.427V5.277c0-1.919 1.602-3.48 3.571-3.48 1.97 0 3.572 1.561 3.572 3.48v3.168z" />
-                                    <ellipse cx="8.348" cy="15.543" rx="1" ry="1" />
-                                    <ellipse cx="5" cy="15.543" rx="1" ry="1" />
-                                    <ellipse cx="11.696" cy="15.543" rx="1" ry="1" />
-                                </g>
-                            </svg>
-
-                            <md-input-container>
-                                <input name="password" ng-model="user.password" type="password" placeholder="Password"
-                                    required="">
-                                <div ng-show="triedSubmit">
-                                    <div class="box">
-                                        <div ng-show="loginForm.password.$error.required">This field is required</div>
-                                    </div>
-                                </div>
-                            </md-input-container>
-                        </div>
-                    </div>
-                    <br />
-
-                    <div class="login-btn">
-                        <button type="submit" class="custom">
-                            <span class="login-button-custom" >Continue</span>
-                        </button>
-                    </div>
-                    <div layout="row" layout-align="center">
-                        <a ng-click="backStep1()">Not You?</a>
-                    </div>
-                    <div layout="row" layout-align="center">
-                        <a ng-click="gotoForgot()">Forgot Password</a>
-                    </div>
-
-                </form>
-            </div>
-            <div ng-show="step===3" class="login-block">
-                <form class="login-form" ng-submit="validateOtp($event, login3Form)" name="login3Form" novalidate>
-                    <div class="top-heading">
-                        <h3>Verify Otp</h3>
-                        <div layout="row" layout-align="center">
-                            <center>
-                                <p>
-                                    Welcome back {{userInfo.name}}
-                                </p>
-                            </center>
-                        </div>
-                        <div class="box invalid-login">
-                            <center>
-                                <div ng-show="invalideOtp" class="red">Invalid OTP. Please try again.</div>
-
-                            </center>
-                        </div>
-                    </div>
-                    <p class="request-otp-info">OTP verification is a security feature used to confirm the identity of the user.</p>
-                    <div class="field-input otp">
-                        <div class="input-box no-margin">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
-                                <g fill="#317780" fill-rule="nonzero">
-                                    <title>cellphone-settings</title>
-                                    <path d="M16,16H8V4H16M16,0H8A2,2 0 0,0 6,2V18A2,2 0 0,0 8,20H16A2,2 0 0,0 18,18V2A2,2 0 0,0 16,0M15,24H17V22H15M11,24H13V22H11M7,24H9V22H7V24Z" />
-                                </g>
-                            </svg>
-                            <md-input-container>
-                                <input name="otp" ng-model="user.otp" type="number" placeholder="OTP"
-                                    required="">
-                                <div ng-show="triedSubmit">
-                                    <div class="box">
-                                        <div ng-show="loginForm.otp.$error.required">This field is required</div>
-                                    </div>
-                                </div>
-                            </md-input-container>
-                        </div>
-                    </div>
-                    <div class="reset-otp">
-                        <p class="request-otp-info" ng-show="resendTimeout > 0">Resend OTP in {{timerDisplay}}</p>
-                        <span ng-show="resendTimeout <= 0" ng-click="requestOtp()">Resend OTP</span>
-                    </div>
-                    <br />
-                    <div class="login-btn">
-                        <button type="submit" class="custom">
-                            <span>Verify Otp</span>
-                        </button>
-                    </div>
-                    <div layout="row" layout-align="center">
-                        <a ng-click="backStep1()">Not You?</a>
-                    </div>
-                    <!-- <div layout="row" layout-align="center">
+        <div class="login-btn">
+          <button type="submit" class="custom">
+            <span class="login-button-custom">Continue</span>
+          </button>
+        </div>
+        <div layout="row" layout-align="center">
+          <a ng-click="backStep1()">Not You?</a>
+        </div>
+        <div layout="row" layout-align="center">
+          <a ng-click="gotoForgot()">Forgot Password</a>
+        </div>
+      </form>
+    </div>
+    <div ng-show="step===3" class="login-block">
+      <form
+        class="login-form"
+        ng-submit="validateOtp($event, login3Form)"
+        name="login3Form"
+        novalidate
+      >
+        <div class="top-heading">
+          <h3>Verify Otp</h3>
+          <div layout="row" layout-align="center">
+            <center>
+              <p>Welcome back {{userInfo.name}}</p>
+            </center>
+          </div>
+          <div class="box invalid-login">
+            <center>
+              <div ng-show="invalideOtp" class="red">Invalid OTP. Please try again.</div>
+            </center>
+          </div>
+        </div>
+        <p class="request-otp-info">
+          OTP verification is a security feature used to confirm the identity of the user.
+        </p>
+        <div class="field-input otp">
+          <div class="input-box no-margin">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23">
+              <g fill="#317780" fill-rule="nonzero">
+                <title>cellphone-settings</title>
+                <path
+                  d="M16,16H8V4H16M16,0H8A2,2 0 0,0 6,2V18A2,2 0 0,0 8,20H16A2,2 0 0,0 18,18V2A2,2 0 0,0 16,0M15,24H17V22H15M11,24H13V22H11M7,24H9V22H7V24Z"
+                />
+              </g>
+            </svg>
+            <md-input-container>
+              <input name="otp" ng-model="user.otp" type="number" placeholder="OTP" required="" />
+              <div ng-show="triedSubmit">
+                <div class="box">
+                  <div ng-show="loginForm.otp.$error.required">This field is required</div>
+                </div>
+              </div>
+            </md-input-container>
+          </div>
+        </div>
+        <div class="reset-otp">
+          <p class="request-otp-info" ng-show="resendTimeout > 0">Resend OTP in {{timerDisplay}}</p>
+          <span ng-show="resendTimeout <= 0" ng-click="requestOtp()">Resend OTP</span>
+        </div>
+        <br />
+        <div class="login-btn">
+          <button type="submit" class="custom">
+            <span>Verify Otp</span>
+          </button>
+        </div>
+        <div layout="row" layout-align="center">
+          <a ng-click="backStep1()">Not You?</a>
+        </div>
+        <!-- <div layout="row" layout-align="center">
                         <a ng-click="gotoForgot()">Resend OTP</a>
                     </div> -->
-                    <div class="request-assistant">
-                        <span ng-click="requestAssistant()">Request Assistant</span>
-                    </div>
-
-                </form>
-            </div>
-            <div class="text login-text">
-                <h2>Your Line</h2>
-                <p><span>login to start configuring your DIDs, and flows!</span></p>
-            </div>
+        <div class="request-assistant">
+          <span ng-click="requestAssistant()">Request Assistant</span>
         </div>
+      </form>
     </div>
+    <div class="text login-text">
+      <h2>Your Line</h2>
+      <p><span>login to start configuring your DIDs, and flows!</span></p>
+    </div>
+  </div>
+</div>
