@@ -728,6 +728,7 @@ async function createPaymentMethod(paymentDetails) {
 	}
 	    $scope.useTemplate = function (template) {
       $scope.selectedTemplate = template;
+      $scope.finishSignup();
     };
     $scope.isSelected = function (template) {
       if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {

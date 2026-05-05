@@ -813,6 +813,13 @@ table {
 
 /*# sourceMappingURL=custom.css.map */
 
+/* Workspace name step - full-width input with domain suffix */
+.login-page .content .login-form .inputs md-input-container {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
 /*
 * custom sidebar styles for dashboard for mobile responsiveness
 */
@@ -1502,13 +1509,14 @@ md-content{
   line-height: 1.5;
 }
 .accept-payment{
-  margin-right: 0px;
+  margin-right: 10px !important;
   margin-bottom: 50px;
 }
 .accept-payment-terms{
   font-size: 10px;
   font-weight: 400;
   line-height: 1.8;
+  margin-top: 4px;
 }
 .payment-detail{
   font-size: 20px;
