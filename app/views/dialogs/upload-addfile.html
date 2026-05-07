@@ -15,19 +15,19 @@
             <input
               type="file"
               id="uploadFile"
-              accept=".webp,.mp3"
+              accept=".webp,.mp3,.wav"
               ngf-select
               ngf-change="onFilesChanged($files, $invalidFiles)"
-              ngf-pattern="'.webp,.mp3'"
-              ngf-accept="'.webp,.mp3'"
+              ngf-pattern="'.webp,.mp3,.wav'"
+              ngf-accept="'.webp,.mp3,.wav'"
               multiple
             />
         </label>
         <div
           ngf-drop
           ngf-change="onFilesChanged($files, $invalidFiles)"
-          ngf-pattern="'.webp,.mp3'"
-          ngf-accept="'.webp,.mp3'"
+          ngf-pattern="'.webp,.mp3,.wav'"
+          ngf-accept="'.webp,.mp3,.wav'"
           ngf-multiple="true"
           ngf-drag-over-class="'drag-over'"
           class="upload-drop-zone"
