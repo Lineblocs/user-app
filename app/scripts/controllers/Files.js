@@ -77,10 +77,22 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
-        file: null
+        file: null,
+        files: []
+      };
+      $scope.onFilesChanged = function(files, invalidFiles) {
+        if (invalidFiles && invalidFiles.length > 0) {
+          $scope.errorText = "Some files are invalid. Please use .webp or .mp3 files only.";
+          return;
+        }
+        $scope.errorText = "";
+        $scope.data.files = files || [];
       };
       $scope.submit = function($event) {
-        var files = angular.element("#uploadFile").prop("files");
+        var files = $scope.data.files;
+        if (!files || files.length === 0) {
+          files = angular.element("#uploadFile").prop("files");
+        }
         if ( files.length === 0 ) {
           $scope.errorText="Please select atleast 1 file..";
           return;
@@ -107,7 +119,7 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
       }
       $scope.close = function() {
         $mdDialog.hide(); 
-      }
+      };
     }
 
 

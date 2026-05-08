@@ -283,6 +283,7 @@ var deps = [
 "./bower_components/angular-material-data-table/dist/md-data-table.js",
 "./bower_components/zxcvbn/dist/zxcvbn.js",
 "./bower_components/ng-idle/angular-idle.js",
+'./bower_components/ng-file-upload/ng-file-upload.js',
 './bower_components/urijs/src/URI.min.js',
 ];
 var files = [
@@ -319,6 +320,7 @@ gulp.task('compress-js', ['scripts'], function() {
 './bower_components/angular-material-data-table/dist/md-data-table.js',
 './bower_components/zxcvbn/dist/zxcvbn.js',
 './bower_components/ng-idle/angular-idle.js',
+'./bower_components/ng-file-upload/ng-file-upload.js',
 './bower_components/moment/moment.js',
 './bower_components/clipboard/dist/clipboard.js',
 './bower_components/ngclipboard/dist/ngclipboard.js',
