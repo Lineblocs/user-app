@@ -642,6 +642,11 @@ table {
   padding: 15px 70px !important;
 }
 
+.login-btn .btn-wrapper {
+   background-color: #395373;
+   border-radius: 35px;
+}
+
 .login-page .content .login-form #gSignIn .abcRioButtonBlue {
   width: 100% !important;
 }
