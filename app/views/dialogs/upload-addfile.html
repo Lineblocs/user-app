@@ -12,8 +12,33 @@
     </md-toolbar>
     <md-dialog-content class="padding16">
         <label for="uploadFile" class="choose-file">
-            <input type="file" id="uploadFile" accept=".webp,.mp3"/>
+            <input
+              type="file"
+              id="uploadFile"
+              accept=".webp,.mp3,.wav"
+              ngf-select
+              ngf-change="onFilesChanged($files, $invalidFiles)"
+              ngf-pattern="'.webp,.mp3,.wav'"
+              ngf-accept="'.webp,.mp3,.wav'"
+              multiple
+            />
         </label>
+        <div
+          ngf-drop
+          ngf-change="onFilesChanged($files, $invalidFiles)"
+          ngf-pattern="'.webp,.mp3,.wav'"
+          ngf-accept="'.webp,.mp3,.wav'"
+          ngf-multiple="true"
+          ngf-drag-over-class="'drag-over'"
+          class="upload-drop-zone"
+          style="margin-top:12px;border:2px dashed #3f51b5;border-radius:10px;padding:14px;text-align:center;color:#3f51b5;background:#f7f9ff;height: 100px;padding-top: 35px;"
+        >
+          Drag and drop file(s) here
+        </div>
+        <div ng-if="data.files && data.files.length" style="margin-top:8px;font-size:13px;color:#222;">
+          Selected: {{data.files[0].name}}<span ng-if="data.files.length > 1"> +{{data.files.length - 1}} more</span>
+        </div>
+        <div ng-if="errorText" style="margin-top:8px;color:#d32f2f;font-size:13px;">{{errorText}}</div>
     </md-dialog-content>
   <md-dialog-actions layout="row">
     <md-button  class="md-raised md-primary m0" ng-click="submit()">

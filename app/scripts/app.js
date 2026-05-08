@@ -175,6 +175,7 @@ angular
     'md.data.table',
     'ngIdle',
     'ngclipboard',
+    'ngFileUpload',
   ])
   .service('JWTHttpInterceptor', function () {
     return {
