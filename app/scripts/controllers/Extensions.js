@@ -32,8 +32,67 @@ angular
       function DialogController($scope, $mdDialog, extension, $shared) {
         $scope.$shared = $shared;
         $scope.extension = extension;
+        $scope.isSendingEmail = false;
         $scope.close = function () {
           $mdDialog.hide();
+        };
+        $scope.sendCredentialsEmail = function (ev) {
+          var prompt = $mdDialog
+            .prompt()
+            .title('Send SIP Credentials')
+            .textContent('Enter the email address to receive these SIP credentials.')
+            .placeholder('name@example.com')
+            .ariaLabel('Destination email')
+            .targetEvent(ev)
+            .ok('Send')
+            .cancel('Cancel');
+
+          $mdDialog.show(prompt).then(function (email) {
+            var normalizedEmail = (email || '').trim();
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var extensionId = extension.id;
+
+            if (!emailRegex.test(normalizedEmail)) {
+              $mdToast.show(
+                $mdToast
+                  .simple()
+                  .textContent('Please enter a valid email address.')
+                  .position('top right')
+                  .hideDelay(3000)
+              );
+              return;
+            }
+
+            if (!extensionId) {
+              $mdToast.show(
+                $mdToast
+                  .simple()
+                  .textContent('Could not determine extension id.')
+                  .position('top right')
+                  .hideDelay(3000)
+              );
+              return;
+            }
+
+            $scope.isSendingEmail = true;
+            Backend.post('/emailSIPCredentials', {
+              to_email: normalizedEmail,
+              extension_id: extensionId,
+            }).then(
+              function () {
+                $mdToast.show(
+                  $mdToast
+                    .simple()
+                    .textContent('SIP credentials sent successfully.')
+                    .position('top right')
+                    .hideDelay(3000)
+                );
+              },
+              function () {}
+            )['finally'](function () {
+              $scope.isSendingEmail = false;
+            });
+          });
         };
       }
       $scope.settings = {
