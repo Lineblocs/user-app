@@ -550,21 +550,14 @@ angular.module('Lineblocs')
 		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate) + "&auth=" + token.token.auth));
 	}
 
-	$scope.getInvoiceId = function(item) {
-		if (!item) {
-			return null;
-		}
-		return item.invoice_id || item.invoiceId || item.id || null;
-	}
-
 	$scope.canDownloadInvoice = function(item) {
-		var invoiceId = $scope.getInvoiceId(item);
+		var invoiceId = item.id;
 		var sourceType = ((item && item.type) || "").toString().toLowerCase();
 		return !!invoiceId && sourceType.indexOf("invoice") !== -1;
 	}
 
 	$scope.downloadInvoice = function(item) {
-		var invoiceId = $scope.getInvoiceId(item);
+		var invoiceId = item.id;
 		if (!invoiceId) {
 			$mdToast.show(
 				$mdToast.simple()
