@@ -422,7 +422,8 @@
                                     <th md-column>Amount</th>
                                     <th md-column>Balance</th>
                                     <th md-column>Date/Time</th>
-                                    <th md-column>&nbsp;</th>
+                                    <th md-column>Status</th>
+                                    <th md-column>Action</th>
                                 </tr>
                             </thead>
                             <tbody md-body>
@@ -433,6 +434,20 @@
                                     <td md-cell>{{item.balance}}</td>
                                     <td md-cell>{{item.created_at}}</td>
                                     <td md-cell>{{item.status}}</td>
+                                    <td md-cell>
+                                        <md-button
+                                            ng-if="canDownloadInvoice(item)"
+                                            ng-click="downloadInvoice(item)"
+                                            class="md-raised md-warn no-margin-top-bottom"
+                                            style="min-height: 35px; line-height: 35px; padding: 0 13px; font-size: 13px;">
+                                            <span style="display: inline-flex; align-items: center; gap: 0px;">
+                                                <md-icon class="tooltip-icon">
+                                                    <i class="mdi mdi-download"></i>
+                                                </md-icon>
+                                                Download
+                                            </span>
+                                        </md-button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

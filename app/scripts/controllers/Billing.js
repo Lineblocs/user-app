@@ -549,6 +549,63 @@ angular.module('Lineblocs')
 		var token = getJWTTokenObj();
 		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate) + "&auth=" + token.token.auth));
 	}
+
+	$scope.canDownloadInvoice = function(item) {
+		var invoiceId = item.id;
+		var sourceType = ((item && item.type) || "").toString().toLowerCase();
+		return !!invoiceId && sourceType.indexOf("invoice") !== -1;
+	}
+
+	$scope.downloadInvoice = function(item) {
+		var invoiceId = item.id;
+		if (!invoiceId) {
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Invoice ID not found for this row')
+					.position("top right")
+					.hideDelay(3000)
+			);
+			return;
+		}
+
+		$shared.isCreateLoading = true;
+		Backend.get("/billing/invoices/" + invoiceId + "/download", { responseType: 'blob' }).then(function(res) {
+			var contentType = 'application/pdf';
+			var contentDisposition = null;
+			if (res.headers) {
+				contentType = res.headers('content-type') || contentType;
+				contentDisposition = res.headers('content-disposition');
+			}
+
+			var filename = 'invoice-' + invoiceId + '.pdf';
+			if (contentDisposition) {
+				var matches = /filename\*?=(?:UTF-8''|\")?([^\";]+)/i.exec(contentDisposition);
+				if (matches && matches[1]) {
+					filename = decodeURIComponent(matches[1].replace(/\"/g, ''));
+				}
+			}
+
+			var blob = new Blob([res.data], { type: contentType });
+			var url = window.URL.createObjectURL(blob);
+			var link = document.createElement('a');
+			link.href = url;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			window.URL.revokeObjectURL(url);
+			$shared.endIsCreateLoading();
+		}, function(err) {
+			console.error('Error downloading invoice', err);
+			$shared.endIsCreateLoading();
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Failed to download invoice')
+					.position("top right")
+					.hideDelay(3000)
+			);
+		});
+	}
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {
 			"gold": "Gold Route",
