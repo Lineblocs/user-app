@@ -71,14 +71,14 @@
         </md-content>
     </md-card>
 
-   <div layout="row side-options" layout-align="end center">
-        <div flex="10" style="display: flex; align-items: end; justify-content: right; gap: 24px;">
+     <div layout="row side-options" layout-align="end center" style="gap: 8px;">
+       <div flex="none" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
 
               <md-button
                   aria-label="Open demo menu"
                   class="md-raised md-primary md-small"
                   ng-click="$shared.refreshPage()"
-                  style="width: 32px; margin: 0 10px 0 0; height: 100%;"
+                  style="min-width: 32px; width: 32px; height: 32px; margin: 0; padding: 0;"
                 >
                   <i class="mdi mdi-refresh"></i>
                 </md-button>
@@ -93,10 +93,14 @@
                     </md-button>
                 </div>
                 <md-menu-content width="3">
-                    <md-menu-item>
-                        <md-button href="" ng-click="Backend.deleteAllChecked('calls', calls)" style="display:flex;">
-                            Delete All</md-button>
-                    </md-menu-item>
+                  <md-menu-item>
+                    <md-button href="" ng-click="downloadAllRecordings()" style="display:flex;">
+                      Download All</md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-button href="" ng-click="Backend.deleteAllChecked('recordings', recordings)" style="display:flex;">
+                      Delete All</md-button>
+                  </md-menu-item>
                 </md-menu-content>
             </md-menu>
         </div>
@@ -147,6 +151,14 @@
               </audio>
             </td>
             <td md-cell>
+              <md-button ng-click="downloadRecording(recording)" class="md-icon-button" aria-label="Download recording">
+                  <md-icon>
+                    <i class="mdi mdi-download"></i>
+                    <md-tooltip class="helper-tooltip" md-direction="top">
+                      Download recording
+                    </md-tooltip>
+                  </md-icon>
+              </md-button>
               <md-button ng-click="deleteRecording($event, recording)" class="md-icon-button" aria-label="Flow">
                   <md-icon >
 
