@@ -13,10 +13,27 @@ angular.module('Lineblocs')
 	  $scope.$shared = $shared;
     $scope.plans = '';
 
-    $scope.canUpgrade = function(plan) {
+    $scope.gotoDashboard = function() {
+		  $state.go('dashboard');
+	  }
+
+    $scope.getCurrentPlan = function() {
       const info = $shared.planInfo;
-      const currentRank = $scope.plans.find((plan) => plan.key_name === info.key_name).rank;
-      if (plan.rank >= currentRank) return false;
+      return $scope.plans.find((plan) => plan.key_name === info.key_name);
+    }
+
+    $scope.isUpgradePlanned = function(plan) {
+      const subscription = $scope.subscription;
+      if (subscription.scheduled_plan_id) {
+        return true;
+      }
+
+      return false;
+    }
+    $scope.canUpgrade = function(plan) {
+      const currentPlan = $scope.getCurrentPlan();
+      if (!currentPlan) return false;
+      if (plan.rank <= currentPlan.rank) return false;
       return true;
     }
 
@@ -24,9 +41,18 @@ angular.module('Lineblocs')
       $state.go('billing-upgrade-submit', {"plan": plan});
     }
 
-    Backend.get("/getServicePlans").then(function(res) {
-      console.log("getServicePlans ", res.data);
-      $scope.plans = res.data;
-    });
+    $scope.load = function () {
+      $q.all([
+        Backend.get("/getServicePlans"),
+        Backend.get("/billing"),
+      ]).then(function(res) {
+        console.log("getServicePlans ", res.data);
+        $scope.plans = res[0].data;
+        $scope.subscription = res[1].data[5];
+        $shared.endIsLoading();
+      });
+    };
+
+    $scope.load();
 });
 

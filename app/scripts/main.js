@@ -175,6 +175,7 @@ angular
     'md.data.table',
     'ngIdle',
     'ngclipboard',
+    'ngFileUpload',
   ])
   .service('JWTHttpInterceptor', function () {
     return {
@@ -669,6 +670,14 @@ angular
           }, flickerTimeout);
         });
       };
+
+    factory.endAllLoading = function () {
+        return $q.all([
+          factory.endIsLoading(),
+          factory.endIsCreateLoading(),
+        ]);
+      };
+
       factory.nullIfEmpty = function (value) {
         if (!value || value === '') {
           return null;
@@ -4078,6 +4087,63 @@ angular.module('Lineblocs')
 		var token = getJWTTokenObj();
 		$window.location.replace(createUrl("/downloadBillingHistory?startDate=" + formatDate($scope.startDate) + "&endDate=" + formatDate($scope.endDate) + "&auth=" + token.token.auth));
 	}
+
+	$scope.canDownloadInvoice = function(item) {
+		var invoiceId = item.id;
+		var sourceType = ((item && item.type) || "").toString().toLowerCase();
+		return !!invoiceId && sourceType.indexOf("invoice") !== -1;
+	}
+
+	$scope.downloadInvoice = function(item) {
+		var invoiceId = item.id;
+		if (!invoiceId) {
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Invoice ID not found for this row')
+					.position("top right")
+					.hideDelay(3000)
+			);
+			return;
+		}
+
+		$shared.isCreateLoading = true;
+		Backend.get("/billing/invoices/" + invoiceId + "/download", { responseType: 'blob' }).then(function(res) {
+			var contentType = 'application/pdf';
+			var contentDisposition = null;
+			if (res.headers) {
+				contentType = res.headers('content-type') || contentType;
+				contentDisposition = res.headers('content-disposition');
+			}
+
+			var filename = 'invoice-' + invoiceId + '.pdf';
+			if (contentDisposition) {
+				var matches = /filename\*?=(?:UTF-8''|\")?([^\";]+)/i.exec(contentDisposition);
+				if (matches && matches[1]) {
+					filename = decodeURIComponent(matches[1].replace(/\"/g, ''));
+				}
+			}
+
+			var blob = new Blob([res.data], { type: contentType });
+			var url = window.URL.createObjectURL(blob);
+			var link = document.createElement('a');
+			link.href = url;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			window.URL.revokeObjectURL(url);
+			$shared.endIsCreateLoading();
+		}, function(err) {
+			console.error('Error downloading invoice', err);
+			$shared.endIsCreateLoading();
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Failed to download invoice')
+					.position("top right")
+					.hideDelay(3000)
+			);
+		});
+	}
 	$scope.makeNicePackageName = function(ugly) {
 		var map = {
 			"gold": "Gold Route",
@@ -4319,18 +4385,19 @@ angular.module('Lineblocs')
 	  $scope.gotoDashboard = function() {
 		  $state.go('dashboard');
 	  }
-		Backend.refreshWorkspaceData().then(function(res) {
-				console.log("updated info");
-						$mdToast.show(
-						$mdToast.simple()
-							.textContent('Plan upgraded')
-							.position('top right')
-							.hideDelay(3000)
-						);
-				$scope.plan = res.data[ 4 ];
-				$shared.setWorkspace(res.data[ 5 ]);
-					$shared.endIsCreateLoading();
-            });
+
+	Backend.refreshWorkspaceData().then(function(res) {
+			console.log("updated info");
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Plan upgraded')
+						.position('top right')
+						.hideDelay(3000)
+					);
+			$scope.plan = res.data[ 4 ];
+			$shared.setWorkspace(res.data[ 5 ]);
+			$shared.endAllLoading();
+		});
 
   });
 
@@ -4349,10 +4416,27 @@ angular.module('Lineblocs')
 	  $scope.$shared = $shared;
     $scope.plans = '';
 
-    $scope.canUpgrade = function(plan) {
+    $scope.gotoDashboard = function() {
+		  $state.go('dashboard');
+	  }
+
+    $scope.getCurrentPlan = function() {
       const info = $shared.planInfo;
-      const currentRank = $scope.plans.find((plan) => plan.key_name === info.key_name).rank;
-      if (plan.rank >= currentRank) return false;
+      return $scope.plans.find((plan) => plan.key_name === info.key_name);
+    }
+
+    $scope.isUpgradePlanned = function(plan) {
+      const subscription = $scope.subscription;
+      if (subscription.scheduled_plan_id) {
+        return true;
+      }
+
+      return false;
+    }
+    $scope.canUpgrade = function(plan) {
+      const currentPlan = $scope.getCurrentPlan();
+      if (!currentPlan) return false;
+      if (plan.rank <= currentPlan.rank) return false;
       return true;
     }
 
@@ -4360,10 +4444,19 @@ angular.module('Lineblocs')
       $state.go('billing-upgrade-submit', {"plan": plan});
     }
 
-    Backend.get("/getServicePlans").then(function(res) {
-      console.log("getServicePlans ", res.data);
-      $scope.plans = res.data;
-    });
+    $scope.load = function () {
+      $q.all([
+        Backend.get("/getServicePlans"),
+        Backend.get("/billing"),
+      ]).then(function(res) {
+        console.log("getServicePlans ", res.data);
+        $scope.plans = res[0].data;
+        $scope.subscription = res[1].data[5];
+        $shared.endIsLoading();
+      });
+    };
+
+    $scope.load();
 });
 
 
@@ -4530,12 +4623,9 @@ angular.module('Lineblocs')
 			}
 		}
 
-		function loadData(createLoading) {
-			if (createLoading) {
-				$shared.isCreateLoading = true;
-			} else {
-				$shared.isLoading = true;
-			}
+		function loadData() {
+			$shared.isLoading = true;
+
 			return $q(function (resolve, reject) {
 				$q.all([
 					Backend.get("/billing"),
@@ -4555,14 +4645,10 @@ angular.module('Lineblocs')
 						console.log("cards are ", $scope.cards);
 						console.log("settings are ", $scope.settings);
 						console.log("usage triggers are ", $scope.usageTriggers);
-						if (createLoading) {
-							$shared.endIsCreateLoading();
-						} else {
-							$shared.endIsLoading();
-						}
 
 						// setup stripe
 						setupStripeElements();
+						$shared.endIsLoading();
 						resolve(res);
 					}, reject);
 				}, reject);
@@ -4702,7 +4788,7 @@ angular.module('Lineblocs')
 
 	}
 
-	loadData(true).then(function(res) {
+	loadData(false).then(function(res) {
 		console.log("plans ", res.data);
 	  });
   });
@@ -6298,8 +6384,67 @@ angular
       function DialogController($scope, $mdDialog, extension, $shared) {
         $scope.$shared = $shared;
         $scope.extension = extension;
+        $scope.isSendingEmail = false;
         $scope.close = function () {
           $mdDialog.hide();
+        };
+        $scope.sendCredentialsEmail = function (ev) {
+          var prompt = $mdDialog
+            .prompt()
+            .title('Send SIP Credentials')
+            .textContent('Enter the email address to receive these SIP credentials.')
+            .placeholder('name@example.com')
+            .ariaLabel('Destination email')
+            .targetEvent(ev)
+            .ok('Send')
+            .cancel('Cancel');
+
+          $mdDialog.show(prompt).then(function (email) {
+            var normalizedEmail = (email || '').trim();
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var extensionId = extension.id;
+
+            if (!emailRegex.test(normalizedEmail)) {
+              $mdToast.show(
+                $mdToast
+                  .simple()
+                  .textContent('Please enter a valid email address.')
+                  .position('top right')
+                  .hideDelay(3000)
+              );
+              return;
+            }
+
+            if (!extensionId) {
+              $mdToast.show(
+                $mdToast
+                  .simple()
+                  .textContent('Could not determine extension id.')
+                  .position('top right')
+                  .hideDelay(3000)
+              );
+              return;
+            }
+
+            $scope.isSendingEmail = true;
+            Backend.post('/emailSIPCredentials', {
+              to_email: normalizedEmail,
+              extension_id: extensionId,
+            }).then(
+              function () {
+                $mdToast.show(
+                  $mdToast
+                    .simple()
+                    .textContent('SIP credentials sent successfully.')
+                    .position('top right')
+                    .hideDelay(3000)
+                );
+              },
+              function () {}
+            )['finally'](function () {
+              $scope.isSendingEmail = false;
+            });
+          });
         };
       }
       $scope.settings = {
@@ -6567,10 +6712,22 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
       $scope.error = false;
       $scope.errorText = "";
       $scope.data = {
-        file: null
+        file: null,
+        files: []
+      };
+      $scope.onFilesChanged = function(files, invalidFiles) {
+        if (invalidFiles && invalidFiles.length > 0) {
+          $scope.errorText = "Some files are invalid. Please use .webp or .mp3 files only.";
+          return;
+        }
+        $scope.errorText = "";
+        $scope.data.files = files || [];
       };
       $scope.submit = function($event) {
-        var files = angular.element("#uploadFile").prop("files");
+        var files = $scope.data.files;
+        if (!files || files.length === 0) {
+          files = angular.element("#uploadFile").prop("files");
+        }
         if ( files.length === 0 ) {
           $scope.errorText="Please select atleast 1 file..";
           return;
@@ -6597,7 +6754,7 @@ function DialogUploadController($scope, $mdDialog, Backend, $shared, onFinished)
       }
       $scope.close = function() {
         $mdDialog.hide(); 
-      }
+      };
     }
 
 
@@ -9335,7 +9492,7 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
  * # MainCtrl
  * Controller of Lineblocs
  */
-angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams) {
+angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backend, pagination, $location, $state, $mdDialog, $sce, $shared, $q, $mdToast, $stateParams, $http) {
 	  $shared.updateTitle("Recordings");
   $scope.settings = {
     page: 0
@@ -9420,6 +9577,80 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
     }, function() {
     });
   }
+
+  function parseFilenameFromDisposition(contentDisposition) {
+    if (!contentDisposition) {
+      return null;
+    }
+    var encodedMatch = /filename\*=UTF-8''([^;]+)/i.exec(contentDisposition);
+    if (encodedMatch && encodedMatch[1]) {
+      return decodeURIComponent(encodedMatch[1]);
+    }
+    var plainMatch = /filename="?([^";]+)"?/i.exec(contentDisposition);
+    return plainMatch && plainMatch[1] ? plainMatch[1] : null;
+  }
+
+  function triggerDownloadFromResponse(res, defaultFileName) {
+    var contentType = res.headers('Content-Type') || 'application/octet-stream';
+    var contentDisposition = res.headers('Content-Disposition') || '';
+    var fileName = parseFilenameFromDisposition(contentDisposition) || defaultFileName;
+    var blob = new Blob([res.data], { type: contentType });
+    var url = window.URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  }
+
+  $scope.downloadRecording = function(recording) {
+    if (!recording || !recording.id) {
+      return;
+    }
+    $shared.isLoading = true;
+    $http.post(
+      createUrl('/recording/downloadRecordings'),
+      { recording_ids: recording.id },
+      { responseType: 'blob' }
+    ).then(function(res) {
+      triggerDownloadFromResponse(res, 'recording-' + recording.id + '.wav');
+    }).catch(function() {
+      $shared.showError('Unable to download recording. Please try again.');
+    }).finally(function() {
+      $shared.endIsLoading();
+    });
+  };
+
+  $scope.downloadAllRecordings = function() {
+    var checked = ($scope.recordings || []).filter(function(recording) {
+      return recording && recording.checked;
+    });
+    var ids = checked.map(function(recording) {
+      return recording && recording.id;
+    }).filter(function(id) {
+      return !!id;
+    });
+
+    if (!ids.length) {
+      $shared.showError('Please select one or more recordings to download.');
+      return;
+    }
+
+    $shared.isLoading = true;
+    $http.post(
+      createUrl('/recording/downloadRecordings'),
+      { recording_ids: ids.join(',') },
+      { responseType: 'blob' }
+    ).then(function(res) {
+      triggerDownloadFromResponse(res, 'recordings.zip');
+    }).catch(function() {
+      $shared.showError('Unable to download recordings. Please try again.');
+    }).finally(function() {
+      $shared.endIsLoading();
+    });
+  };
 
   $scope.load();
 });
@@ -12759,6 +12990,7 @@ async function createPaymentMethod(paymentDetails) {
 	}
 	    $scope.useTemplate = function (template) {
       $scope.selectedTemplate = template;
+      $scope.finishSignup();
     };
     $scope.isSelected = function (template) {
       if ($scope.selectedTemplate && template.id === $scope.selectedTemplate.id) {

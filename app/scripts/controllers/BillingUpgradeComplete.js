@@ -14,17 +14,18 @@ angular.module('Lineblocs')
 	  $scope.gotoDashboard = function() {
 		  $state.go('dashboard');
 	  }
-		Backend.refreshWorkspaceData().then(function(res) {
-				console.log("updated info");
-						$mdToast.show(
-						$mdToast.simple()
-							.textContent('Plan upgraded')
-							.position('top right')
-							.hideDelay(3000)
-						);
-				$scope.plan = res.data[ 4 ];
-				$shared.setWorkspace(res.data[ 5 ]);
-					$shared.endIsCreateLoading();
-            });
+
+	Backend.refreshWorkspaceData().then(function(res) {
+			console.log("updated info");
+					$mdToast.show(
+					$mdToast.simple()
+						.textContent('Plan upgraded')
+						.position('top right')
+						.hideDelay(3000)
+					);
+			$scope.plan = res.data[ 4 ];
+			$shared.setWorkspace(res.data[ 5 ]);
+			$shared.endAllLoading();
+		});
 
   });

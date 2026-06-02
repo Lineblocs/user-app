@@ -161,12 +161,9 @@ angular.module('Lineblocs')
 			}
 		}
 
-		function loadData(createLoading) {
-			if (createLoading) {
-				$shared.isCreateLoading = true;
-			} else {
-				$shared.isLoading = true;
-			}
+		function loadData() {
+			$shared.isLoading = true;
+
 			return $q(function (resolve, reject) {
 				$q.all([
 					Backend.get("/billing"),
@@ -186,14 +183,10 @@ angular.module('Lineblocs')
 						console.log("cards are ", $scope.cards);
 						console.log("settings are ", $scope.settings);
 						console.log("usage triggers are ", $scope.usageTriggers);
-						if (createLoading) {
-							$shared.endIsCreateLoading();
-						} else {
-							$shared.endIsLoading();
-						}
 
 						// setup stripe
 						setupStripeElements();
+						$shared.endIsLoading();
 						resolve(res);
 					}, reject);
 				}, reject);
@@ -333,7 +326,7 @@ angular.module('Lineblocs')
 
 	}
 
-	loadData(true).then(function(res) {
+	loadData(false).then(function(res) {
 		console.log("plans ", res.data);
 	  });
   });

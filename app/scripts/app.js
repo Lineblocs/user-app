@@ -670,6 +670,14 @@ angular
           }, flickerTimeout);
         });
       };
+
+    factory.endAllLoading = function () {
+        return $q.all([
+          factory.endIsLoading(),
+          factory.endIsCreateLoading(),
+        ]);
+      };
+
       factory.nullIfEmpty = function (value) {
         if (!value || value === '') {
           return null;
