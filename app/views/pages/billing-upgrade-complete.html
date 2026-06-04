@@ -2,9 +2,12 @@
     <md-card md-theme="'default'" md-theme-watch style="max-width: 500px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
         <md-card-content>
             <md-content style="text-align: center; padding: 40px 20px;">
-            <h2 style="color: #fff; margin-top: 0; font-size: 32px; margin-bottom: 20px;">✓ Upgrade Complete</h2>
+            <h2 style="color: #fff; margin-top: 0; font-size: 32px; margin-bottom: 20px;">⏳ Upgrade Pending</h2>
             <p style="color: #fff; font-size: 18px; margin-bottom: 40px; line-height: 1.6;">
-                You are now subscribed to <strong>{{plan.nice_name}}</strong>
+                Your upgrade to <strong>{{plan.nice_name}}</strong> is being processed.
+            </p>
+            <p style="color: #fff; font-size: 16px; margin-bottom: 40px; line-height: 1.6;">
+                We will notify you via email when the upgrade is complete. This process may take up to 5 minutes.
             </p>
 
         <md-button type="button" ng-click="gotoDashboard()"
