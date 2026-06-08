@@ -19,6 +19,7 @@ angular.module('Lineblocs')
 	$scope.startDate = moment().startOf('month').toDate();
 	$scope.endDate = moment().endOf('month').toDate();
 	$scope.outstandingInvoices = [];
+	$scope.amountToPay = 0;
 	$scope.cards = [];
 	$scope.selectedAmount = 25.00;
 	$scope.creditAmounts = [
@@ -71,6 +72,9 @@ angular.module('Lineblocs')
         $mdDialog.hide();
 	  }
 
+
+	
+
 	$scope.toggleInvoice = function(invoice) {
 		console.log('toggleInvoice', invoice);
 		// Invoice selection is handled by ng-model binding on the checkbox
@@ -96,6 +100,14 @@ angular.module('Lineblocs')
 		var data = {};
 		data['card_id'] = cardId;
 		data['invoices'] =  invoices;
+		data['amount_to_pay'] = 0;
+		$scope.outstandingInvoices.forEach((invoice) => {
+			if (invoice.selected) {
+				data['amount_to_pay'] += invoice.amount_due;
+			}
+
+		});
+		console.log('amount to pay in cents is ', data['amount_to_pay']);
 		$shared.isCreateLoading =true;
 		Backend.post("/billing/invoices/settle", data).then(function(res) {
 		loadData(true).then(function() {
@@ -481,12 +493,13 @@ angular.module('Lineblocs')
 			$q.all([
 				Backend.get("/billing"),
 				billHistory(),
-				Backend.get("/billing/invoices?status=PENDING"),
+				Backend.get("/billing/overdueInvoices")
 			]).then(async function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
 				$scope.outstandingInvoices = res[2].data.invoices;
+				console.log('billing data ', $scope.billing);
 				var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
 				if ($scope.settings.db.auto_recharge_top_up) {
@@ -647,6 +660,13 @@ angular.module('Lineblocs')
 			$scope.active_custom = false;
 			$scope.selectedAmount = amount;
 		}
+	}
+
+	$scope.payEntireBalance = function() {
+		angular.forEach($scope.outstandingInvoices, function(invoice) {
+			invoice.selected = true;
+		});
+		$scope.payInvoices();
 	}
 
 	$scope.changeCustoAmount = function(cus_amount) {

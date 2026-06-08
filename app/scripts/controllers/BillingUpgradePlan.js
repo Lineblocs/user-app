@@ -31,9 +31,10 @@ angular.module('Lineblocs')
       return false;
     }
     $scope.canUpgrade = function(plan) {
-      const currentPlan = $scope.getCurrentPlan();
+      const currentPlan = $scope.currentPlan;
+      console.log('currentPlan ', currentPlan);
       if (!currentPlan) return false;
-      if (plan.rank <= currentPlan.rank) return false;
+      if (plan.rank <= currentPlan.rank || currentPlan.id === plan.id) return false;
       return true;
     }
 
@@ -49,6 +50,7 @@ angular.module('Lineblocs')
         console.log("getServicePlans ", res.data);
         $scope.plans = res[0].data;
         $scope.subscription = res[1].data[5];
+        $scope.currentPlan = $scope.getCurrentPlan();
         $shared.endIsLoading();
       });
     };

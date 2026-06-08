@@ -4434,9 +4434,10 @@ angular.module('Lineblocs')
       return false;
     }
     $scope.canUpgrade = function(plan) {
-      const currentPlan = $scope.getCurrentPlan();
+      const currentPlan = $scope.currentPlan;
+      console.log('currentPlan ', currentPlan);
       if (!currentPlan) return false;
-      if (plan.rank <= currentPlan.rank) return false;
+      if (plan.rank <= currentPlan.rank || currentPlan.id === plan.id) return false;
       return true;
     }
 
@@ -4452,6 +4453,7 @@ angular.module('Lineblocs')
         console.log("getServicePlans ", res.data);
         $scope.plans = res[0].data;
         $scope.subscription = res[1].data[5];
+        $scope.currentPlan = $scope.getCurrentPlan();
         $shared.endIsLoading();
       });
     };
@@ -4497,6 +4499,21 @@ angular.module('Lineblocs')
 		expires: "",
 		cvv: ""
 	};
+
+		function getUpgradeFees(planKey) {
+			return $q(function(resolve, reject) {
+				var params = {
+					plan_key: planKey
+				};
+				console.log("getting upgrade fees with params ", params);
+				Backend.get("/getUpgradeFees", {"params": params}).then(function(res) {
+					resolve(res.data);
+				}, function(err) {
+					console.error("error getting upgrade fees", err);
+					reject(err);
+				});
+			});
+		}
 
 		function submitBilling(cardId, amount) {
 			var data = {};
@@ -4629,7 +4646,8 @@ angular.module('Lineblocs')
 			return $q(function (resolve, reject) {
 				$q.all([
 					Backend.get("/billing"),
-					Backend.get("/getServicePlans")
+					Backend.get("/getServicePlans"),
+					getUpgradeFees($stateParams['plan']),
 				]).then(function (res) {
 					console.log("finished loading..");
 					$scope.billing = res[0].data[0];
@@ -4639,6 +4657,8 @@ angular.module('Lineblocs')
 					$scope.plan = res[1].data.find(function (obj) {
 						return obj.key_name == $stateParams['plan'];
 					});
+					$scope.upgradeFees = res[2];
+					console.log("upgrade fees are ", $scope.upgradeFees);
 					console.log("config is ", $scope.config);
 					initializePaymentGateway().then(() => {
 						console.log("billing data is ", $scope.billing);
@@ -7498,6 +7518,7 @@ angular.module('Lineblocs')
 	$scope.startDate = moment().startOf('month').toDate();
 	$scope.endDate = moment().endOf('month').toDate();
 	$scope.outstandingInvoices = [];
+	$scope.amountToPay = 0;
 	$scope.cards = [];
 	$scope.selectedAmount = 25.00;
 	$scope.creditAmounts = [
@@ -7550,6 +7571,9 @@ angular.module('Lineblocs')
         $mdDialog.hide();
 	  }
 
+
+	
+
 	$scope.toggleInvoice = function(invoice) {
 		console.log('toggleInvoice', invoice);
 		// Invoice selection is handled by ng-model binding on the checkbox
@@ -7575,6 +7599,14 @@ angular.module('Lineblocs')
 		var data = {};
 		data['card_id'] = cardId;
 		data['invoices'] =  invoices;
+		data['amount_to_pay'] = 0;
+		$scope.outstandingInvoices.forEach((invoice) => {
+			if (invoice.selected) {
+				data['amount_to_pay'] += invoice.amount_due;
+			}
+
+		});
+		console.log('amount to pay in cents is ', data['amount_to_pay']);
 		$shared.isCreateLoading =true;
 		Backend.post("/billing/invoices/settle", data).then(function(res) {
 		loadData(true).then(function() {
@@ -7960,12 +7992,13 @@ angular.module('Lineblocs')
 			$q.all([
 				Backend.get("/billing"),
 				billHistory(),
-				Backend.get("/billing/invoices?status=PENDING"),
+				Backend.get("/billing/overdueInvoices")
 			]).then(async function(res) {
 				console.log("finished loading..");
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
 				$scope.outstandingInvoices = res[2].data.invoices;
+				console.log('billing data ', $scope.billing);
 				var compare = parseFloat( $scope.settings.db.auto_recharge_top_up_dollars );
 
 				if ($scope.settings.db.auto_recharge_top_up) {
@@ -8126,6 +8159,13 @@ angular.module('Lineblocs')
 			$scope.active_custom = false;
 			$scope.selectedAmount = amount;
 		}
+	}
+
+	$scope.payEntireBalance = function() {
+		angular.forEach($scope.outstandingInvoices, function(invoice) {
+			invoice.selected = true;
+		});
+		$scope.payInvoices();
 	}
 
 	$scope.changeCustoAmount = function(cus_amount) {

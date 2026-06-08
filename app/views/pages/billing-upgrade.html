@@ -77,10 +77,13 @@
                     </md-card-content>
                 </md-content>
                 <md-card-actions layout="row" layout-align="center" class="button-plan">
-                    <md-button ng-show="canUpgrade(plan)" ng-click="upgradePlan(plan.key_name)" type="submit" class="no-margin-sides started-button">
+                    <md-button ng-show="canUpgrade(plan) && currentPlan.id !== plan.id" ng-click="upgradePlan(plan.key_name)" type="submit" class="no-margin-sides started-button">
                         Select</md-button>
-                    <md-button ng-show="!canUpgrade(plan)" ng-click="upgradePlan(plan.key_name)" type="submit" class="no-margin-sides md-primary md-raised started-button-downgrade" ng-disabled="true">
+                    <md-button ng-show="!canUpgrade(plan) && currentPlan.id !== plan.id" ng-click="upgradePlan(plan.key_name)" type="submit" class="no-margin-sides md-primary md-raised started-button-downgrade" ng-disabled="true">
                         Cannot Downgrade</md-button>
+                    <md-button ng-show="currentPlan.id === plan.id" type="submit" class="no-margin-sides md-primary md-raised started-button-downgrade" ng-disabled="true">
+                        Your current plan</md-button>
+
                 </md-card-actions>
             </md-card>
         </div>

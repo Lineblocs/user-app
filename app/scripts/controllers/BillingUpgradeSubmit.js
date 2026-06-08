@@ -36,6 +36,21 @@ angular.module('Lineblocs')
 		cvv: ""
 	};
 
+		function getUpgradeFees(planKey) {
+			return $q(function(resolve, reject) {
+				var params = {
+					plan_key: planKey
+				};
+				console.log("getting upgrade fees with params ", params);
+				Backend.get("/getUpgradeFees", {"params": params}).then(function(res) {
+					resolve(res.data);
+				}, function(err) {
+					console.error("error getting upgrade fees", err);
+					reject(err);
+				});
+			});
+		}
+
 		function submitBilling(cardId, amount) {
 			var data = {};
 			data['card_id'] = cardId;
@@ -167,7 +182,8 @@ angular.module('Lineblocs')
 			return $q(function (resolve, reject) {
 				$q.all([
 					Backend.get("/billing"),
-					Backend.get("/getServicePlans")
+					Backend.get("/getServicePlans"),
+					getUpgradeFees($stateParams['plan']),
 				]).then(function (res) {
 					console.log("finished loading..");
 					$scope.billing = res[0].data[0];
@@ -177,6 +193,8 @@ angular.module('Lineblocs')
 					$scope.plan = res[1].data.find(function (obj) {
 						return obj.key_name == $stateParams['plan'];
 					});
+					$scope.upgradeFees = res[2];
+					console.log("upgrade fees are ", $scope.upgradeFees);
 					console.log("config is ", $scope.config);
 					initializePaymentGateway().then(() => {
 						console.log("billing data is ", $scope.billing);

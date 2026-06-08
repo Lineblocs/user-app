@@ -4,10 +4,19 @@
         <md-tab label="Checkout">
             <div layout="row">
                 <div flex="33">
-                    <div class="plan-upgrade-box">
-                        <md-content>
-                            <h5>Upgrading To</h5>
-                            <h3>{{plan.nice_name}}</3>
+                    <div class="plan-upgrade-box" style="border-radius: 12px; padding: 32px; color: #333; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border-left: 5px solid #667eea;">
+                        <md-content class="md-padding" style="padding: 0;">
+                            <h5 class="md-title" style="color: #999; margin: 0 0 12px 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">Upgrading To</h5>
+                            <h3 class="md-display-1" style="color: #333; margin: 0 0 28px 0; font-size: 36px; font-weight: 500;">{{plan.nice_name}}</h3>
+                            <div class="upgrade-summary" layout="column" layout-gap="18px">
+                                <p class="upgrade-fee-info" style="color: #999; margin: 0 0 4px 0; font-size: 12px; font-weight: 500;">
+                                    UPGRADE FEE
+                                </p>
+                                <div class="fee-amount md-headline" style="color: #667eea; font-size: 40px; font-weight: 400; margin: 0 0 20px 0;">${{upgradeFees['fees_dollars']}}</div>
+                                <p class="upgrade-description" style="color: #666; margin: 0; font-size: 13px; line-height: 1.7;">
+                                    <small>This fee covers the remaining days in your current billing cycle. Your upgrade will be in effect immediately after payment is processed.</small>
+                                </p>
+                            </div>
                         </md-content>
                     </div>
                 </div>
