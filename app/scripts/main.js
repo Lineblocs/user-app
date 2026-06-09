@@ -9890,6 +9890,7 @@ angular.module('Lineblocs')
 				return obj;
 			});
 			$scope.ticket = ticket;
+			$shared.endAllLoading();
 		});
 	}
 	load();
