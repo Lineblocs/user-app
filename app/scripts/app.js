@@ -353,6 +353,13 @@ angular
         searchModule('Support', 'support', ['support'], [], ['support']),
       ];
 
+      factory.toTitleCase = function(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+      };
+      factory.accountTypeValue = function(accounttype) {
+        return accounttype ? accounttype.toUpperCase() : '';
+      };
+
       factory.centsToDollars = function (cents, addDollarSign) {
         addDollarSign = addDollarSign || false;
         // Convert to dollars and ensure 2 decimal places
