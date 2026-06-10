@@ -15,8 +15,13 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
   $scope.load = function() {
       $shared.isLoading = true;
       return $q(function(resolve, reject) {
-        Backend.get("/workspaceUser/list").then(function(res) {
-          $scope.users = res.data;
+
+        $q.all([
+          Backend.get("/workspaceUser/list"),
+          Backend.get("/workspaceUser/getWorkspaceRoles")
+        ]).then(function(res) {
+          $scope.users = res[0].data;
+          $scope.roleList = res[1].data.roles;
           $shared.endIsLoading();
           resolve();
         }, function() {
@@ -93,10 +98,34 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
     }, function() {
     });
   }
+  $scope.reactivateAccount = function($event, user) {
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to reactivate this account?')
+          .textContent('This will reactivate the user account')
+          .ariaLabel('Reactivate account')
+          .targetEvent($event)
+          .ok('Yes')
+          .cancel('No');
+    $mdDialog.show(confirm).then(function() {
+        $shared.isLoading = true;
+      Backend.post("/workspaceUser/" + user.public_id + "/reactivate").then(function() {
+          $scope.load().then(function() {
+           $mdToast.show(
+          $mdToast.simple()
+            .textContent('Account reactivated..')
+            .position("top right")
+            .hideDelay(3000)
+        );
+          });
+      })
+    }, function() {
+    });
+  }
+
   $scope.changeAccountType = function($event, user) {
     var dialogScope = $scope.$new();
-    dialogScope.accountTypes = ['ADMIN', 'EDITOR', 'VIEWER'];
-    dialogScope.selectedType = user.account_type || 'VIEWER';
+    dialogScope.accountTypes = $scope.roleList;
+    dialogScope.selectedType = user.assigned_role_id;
     
     var dialog = $mdDialog.show({
       scope: dialogScope,
@@ -118,8 +147,8 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
             <md-input-container class="md-block" style="margin-top: 20px;">
               <label>Select Account Type</label>
               <md-select ng-model="selectedType" style="min-width: 100%;">
-                <md-option ng-repeat="type in accountTypes" value="{{type}}">
-                  {{$shared.accountTypeValue(type)}}
+                <md-option ng-repeat="type in accountTypes" value="{{type.id}}">
+                  {{type.name}}
                 </md-option>
               </md-select>
             </md-input-container>
@@ -138,11 +167,13 @@ angular.module('Lineblocs').controller('WorkspaceUserCtrl', function ($scope, Ba
     
     dialogScope.confirm = function() {
       $shared.isLoading = true;
-      Backend.post("/workspaceUser/" + user.public_id + "/changeAccountType", { accountType: dialogScope.selectedType }).then(function() {
+      Backend.post("/workspaceUser/" + user.public_id + "/changeAccountType", { assigned_role_id: dialogScope.selectedType }).then(function() {
         $scope.load().then(function() {
+          var selectedRole = $scope.roleList.find(function(role) { return role.id == dialogScope.selectedType; });
+          var roleName = selectedRole ? selectedRole.name : dialogScope.selectedType;
           $mdToast.show(
             $mdToast.simple()
-              .textContent('Account type changed to ' + dialogScope.selectedType)
+              .textContent('Account type changed to ' + roleName)
               .position("top right")
               .hideDelay(3000)
           );

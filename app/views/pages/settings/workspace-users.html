@@ -53,32 +53,27 @@
                         <md-checkbox ng-model="user.checked" aria-label="Checkbox" class="md-warn md-align-top-left" flex></md-checkbox>
                     </td>
             <td md-cell>{{user.email}}</td>
-            <td md-cell style="text-align: right;">
-              <span ng-if="user.status === 'ACTIVE'">
+            <td md-cell style="text-align: right; display: flex; align-items: center; gap: 0;">
+              <span ng-if="user.status === 'ACTIVE'" style="display: flex; align-items: center; gap: 4px;">
                 <i class="mdi mdi-check-circle"></i>
                 active
               </span>
-              <span ng-if="user.status === 'DEACTIVATED'">
+              <span ng-if="user.status === 'DEACTIVATED'" style="display: flex; align-items: center; gap: 4px;">
                 <i class="mdi mdi-block-helper"></i>
                 deactivated
               </span>
-              <span ng-if="user.status === 'INVITED'">
+              <span ng-if="user.status === 'INVITED'" style="display: flex; align-items: center; gap: 4px;">
                 <i class="mdi mdi-clock-outline"></i>
                 invited
               </span>
-              <md-button ng-show="user.status === 'INVITED'" class="md-raised md-primary md-small resend-invite" ng-click="resendInvite(user)">
-                <i class="mdi mdi-email"></i>
-                Reinvite
-              </md-button>
+              <i ng-show="user.status === 'INVITED'" class="mdi mdi-email" ng-click="resendInvite(user)" style="margin-left: 4px; cursor: pointer; font-size: 24px; color: blue;" aria-label="Reinvite user">
+                <md-tooltip class="helper-tooltip" md-direction="top">Resend invite</md-tooltip>
+              </i>
             </td>
             <td md-cell style="text-align: right;">
               <md-button ng-click="editUser($event, user)" class="md-icon-button" aria-label="Edit">
                 <md-icon><i class="mdi mdi-pencil"></i></md-icon>
                 <md-tooltip class="helper-tooltip" md-direction="top">Edit workspace user</md-tooltip>
-              </md-button>
-              <md-button ng-click="deleteUser($event, user)" class="md-icon-button" aria-label="Delete">
-                <md-icon><i class="mdi mdi-delete"></i></md-icon>
-                <md-tooltip class="helper-tooltip" md-direction="top">Delete workspace user</md-tooltip>
               </md-button>
             </td>
             <td md-cell style="text-align: right;">
@@ -87,8 +82,11 @@
                   <md-icon><i class="mdi mdi-dots-vertical"></i></md-icon>
                 </md-button>
                 <md-menu-content width="3">
-                  <md-menu-item>
+                  <md-menu-item ng-show="user.status === 'ACTIVE'">
                     <md-button ng-click="deactivateAccount($event, user)">Deactivate Account</md-button>
+                  </md-menu-item>
+                  <md-menu-item ng-show="user.status === 'DEACTIVATED'">
+                    <md-button ng-click="reactivateAccount($event, user)">Reactivate Account</md-button>
                   </md-menu-item>
                   <md-menu-item>
                     <md-button ng-click="changeAccountType($event, user)">Change Account Type</md-button>
