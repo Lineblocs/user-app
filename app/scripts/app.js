@@ -938,7 +938,7 @@ angular
   .factory('Backend', function ($http, $q, $shared, $mdDialog, $state, $timeout, ThemeService) {
     var factory = this;
     factory.queued = [];
-    var skip = ['login', 'register', 'forgot', 'reset'];
+    var skip = ['login', 'register', 'forgot', 'reset', 'join-workspace'];
 
     function pushToQueue(item) {
       $shared.tempStopErrors = true;

@@ -1,4 +1,115 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+    <style>
+        .login-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .logo {
+            margin: 30px 0;
+        }
+        .logo img {
+            max-width: 120px;
+        }
+        .content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .top-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .top-heading h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .top-heading small {
+            color: #666;
+            font-size: 14px;
+        }
+        .field-input {
+            margin-bottom: 20px;
+        }
+        .input-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            transition: border-color 0.3s ease;
+        }
+        .input-box:focus-within {
+            border-bottom-color: #667eea;
+        }
+        .input-box svg {
+            flex-shrink: 0;
+        }
+        md-input-container {
+            width: 100%;
+            margin: 0;
+            padding-bottom: 0;
+        }
+        md-input-container input {
+            border: none !important;
+            padding: 12px 0 !important;
+            font-size: 14px;
+            background-color: transparent !important;
+        }
+        md-input-container .md-input {
+            color: #333;
+        }
+        .login-btn {
+            margin-top: 30px;
+        }
+        .login-btn button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .login-btn button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        .invalid-login {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+        }
+        .invalid-login .red {
+            color: #d32f2f;
+            margin: 0;
+            font-size: 13px;
+        }
+        center {
+            width: 100%;
+        }
+    </style>
     <div ng-show="$shared.changingPage" class="change-page-mask"></div>
     <div class="login-page">
         <a ng-href="{{$shared.getHomeLink()}}">
@@ -17,38 +128,29 @@
                 <p>Please wait..</p>
             </div>
         </center>
-        <div ng-show="!info.workspaceUser.hash_expired">
+        <div ng-show="info.workspaceUser && !info.workspaceUser.hash_expired">
             <div class="content" ng-show="passwordSet">
                 <div>
 
-                    <form class="login-form" ng-submit="submit($event, inviteForm)" name="inviteForm" novalidate>
+                    <form class="login-form" ng-submit="acceptInvite()" name="inviteForm" novalidate>
                         <div class="top-heading">
 
                             <h3>Join Workspace {{info.workspace.name}}</h3>
                             <small>to join {{info.workspace.name}} on lineblocs please enter fill in the form below</small>
-                            <div class="box invalid-login">
-
-                                <center>
-                                    <div ng-show="couldNotLogin" class="red">User credentials were invalid. please try
-                                        again.
-                                    </div>
-                                    <div ng-show="noUserFound" class="red">No user exists.</div>
-                                    <div ng-show="errorMsg !== ''" class="red">
-                                        {{errorMsg}}
-                                    </div>
-
-                                </center>
-                            </div>
                         </div>
+                        <div ng-show="errorMsg" class="invalid-login">
+                            <p class="red">{{errorMsg}}</p>
+                        </div>
+
                         <div class="field-input">
                             <div class="input-box">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
                                     <path fill="#317780" fill-rule="nonzero"
                                         d="M19.95 17.138a.781.781 0 1 0-1.53.318.816.816 0 0 1-.166.684.794.794 0 0 1-.625.297H2.371a.794.794 0 0 1-.625-.297.816.816 0 0 1-.166-.684c.811-3.894 4.246-6.739 8.213-6.835a5.36 5.36 0 0 0 .415 0 8.594 8.594 0 0 1 6.94 3.815.781.781 0 1 0 1.299-.87 10.162 10.162 0 0 0-5.266-4.001 5.308 5.308 0 0 0 2.132-4.252A5.319 5.319 0 0 0 10 0a5.319 5.319 0 0 0-5.313 5.313c0 1.738.84 3.284 2.135 4.254-1.187.39-2.3.998-3.274 1.8a10.192 10.192 0 0 0-3.497 5.77A2.372 2.372 0 0 0 2.37 20h15.258c.716 0 1.386-.318 1.837-.874.454-.558.63-1.283.483-1.988zM6.25 5.312A3.754 3.754 0 0 1 10 1.563a3.754 3.754 0 0 1 3.75 3.75 3.755 3.755 0 0 1-3.56 3.746 9.903 9.903 0 0 0-.38 0 3.755 3.755 0 0 1-3.56-3.745z" />
                                 </svg>
-                                <md-input-container>
-                                    <input name="first_name" ng-model="values.first_name" type="text" placeholder="First Name"
-                                        required="">
+                                <md-input-container md-no-float>
+                                    <input class="md-input" name="first_name" ng-model="values.first_name" type="text" placeholder="First Name"
+                                        required="" autocomplete="off">
 
                                     <div ng-show="triedSubmit">
 
@@ -68,9 +170,9 @@
                                         d="M19.95 17.138a.781.781 0 1 0-1.53.318.816.816 0 0 1-.166.684.794.794 0 0 1-.625.297H2.371a.794.794 0 0 1-.625-.297.816.816 0 0 1-.166-.684c.811-3.894 4.246-6.739 8.213-6.835a5.36 5.36 0 0 0 .415 0 8.594 8.594 0 0 1 6.94 3.815.781.781 0 1 0 1.299-.87 10.162 10.162 0 0 0-5.266-4.001 5.308 5.308 0 0 0 2.132-4.252A5.319 5.319 0 0 0 10 0a5.319 5.319 0 0 0-5.313 5.313c0 1.738.84 3.284 2.135 4.254-1.187.39-2.3.998-3.274 1.8a10.192 10.192 0 0 0-3.497 5.77A2.372 2.372 0 0 0 2.37 20h15.258c.716 0 1.386-.318 1.837-.874.454-.558.63-1.283.483-1.988zM6.25 5.312A3.754 3.754 0 0 1 10 1.563a3.754 3.754 0 0 1 3.75 3.75 3.755 3.755 0 0 1-3.56 3.746 9.903 9.903 0 0 0-.38 0 3.755 3.755 0 0 1-3.56-3.745z" />
                                 </svg>
 
-                                <md-input-container>
-                                    <input name="last_name" ng-model="values.last_name" type="text" placeholder="Last Name"
-                                        required="">
+                                <md-input-container md-no-float>
+                                    <input class="md-input" name="last_name" ng-model="values.last_name" type="text" placeholder="Last Name"
+                                        required="" autocomplete="off">
                                     <div ng-show="triedSubmit">
                                         <div class="box">
                                             <div ng-show="inviteForm.last_name.$error.required">This field is
@@ -95,9 +197,9 @@
                                 </svg>
 
                                 <!-- <input type="text" placeholder="Password"> -->
-                                <md-input-container>
-                                    <input name="password" ng-model="values.password" type="password" placeholder="Password"
-                                        minlength="5" required="" />
+                                <md-input-container md-no-float>
+                                    <input class="md-input" name="password" ng-model="values.password" type="password" placeholder="Password"
+                                        minlength="5" required="" autocomplete="off" />
                                     <div ng-show="triedSubmit">
                                         <div class="box">
                                             <div ng-show="inviteForm.password.$error.minlength">Please enter 5
@@ -125,9 +227,9 @@
                                 </svg>
 
                                 <!-- <input type="text" placeholder="Password"> -->
-                                <md-input-container>
-                                    <input name="password2" ng-model="values.password2" type="password"
-                                        placeholder="Confirm Password" required="" />
+                                <md-input-container md-no-float>
+                                    <input class="md-input" name="password2" ng-model="values.password2" type="password"
+                                        placeholder="Confirm Password" required="" autocomplete="off" />
                                     <div ng-show="triedSubmit">
                                         <div class="box">
                                             <div ng-show="passwordsDontMatch">Passwords don't match</div>
@@ -137,60 +239,33 @@
                             </div>
                         </div>
                         <div class="login-btn">
-
-
-
-                            <button style="width: 100%;">
-                                <span style="padding: 15px 165px;">Submit & Join</span>
-                            </button>
-                        </div>
-                        <div layout="row" layout-align="center">
-                            <small>OR</small>
-                        </div>
-                        <div layout="row" layout-align="center">
-
-                            <div>
-
-
-
-                                <div ng-non-bindable>
-                                    <div id="gSignIn"></div>
-                                </div>
-                            </div>
+                            <button type="submit" style="width: 100%; padding: 15px;">Submit & Join</button>
                         </div>
                     </form>
                 </div>
             </div>
 
-
-
-
             <div class="content" ng-show="!passwordSet">
                 <div>
 
-                    <form class="login-form" ng-submit="submit($event, inviteForm)" name="inviteForm" novalidate>
+                    <form class="login-form" ng-submit="acceptInvite()" name="inviteForm" novalidate>
                     <div class="top-heading">
 
                         <h3>Join Workspace {{info.workspace.name}}</h3>
                     </div>
                     <div class="login-btn">
-
-
-
-                        <button ng-click="acceptInvite()" style="width: 100%;">
-                            <span style="padding: 15px 165px;">Accept Invite</span>
-                        </button>
+                        <button type="submit" style="width: 100%; padding: 15px;">Accept Invite</button>
                     </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div ng-show="!info.workspaceUser.hash_expired">
-            <div class="content" ng-show="passwordSet">
+        <div ng-show="info.workspaceUser && info.workspaceUser.hash_expired">
+            <div class="content">
                 <div>
 
-                    <form class="login-form" ng-submit="submit($event, inviteForm)" name="inviteForm" novalidate>
+                    <form class="login-form">
                         <div class="top-heading">
 
                             <h3>Invitation Expired</h3>
@@ -199,7 +274,5 @@
                     </form>
                 </div>
             </div>
-
-
-
+        </div>
     </div>

@@ -938,7 +938,7 @@ angular
   .factory('Backend', function ($http, $q, $shared, $mdDialog, $state, $timeout, ThemeService) {
     var factory = this;
     factory.queued = [];
-    var skip = ['login', 'register', 'forgot', 'reset'];
+    var skip = ['login', 'register', 'forgot', 'reset', 'join-workspace'];
 
     function pushToQueue(item) {
       $shared.tempStopErrors = true;
@@ -11418,6 +11418,8 @@ angular.module('Lineblocs')
 		  "password": "",
 		  "password2": ""
 	  };
+
+
 	function finishLogin(token, workspace) {
 		console.log("finishLogin ", arguments);
 				$scope.isLoading = false;
@@ -11429,6 +11431,46 @@ angular.module('Lineblocs')
 				Idle.watch();
 				$state.go('dashboard-user-welcome', {});
 	}
+   function finishLogin2(data) {
+        console.log('finishLogin ', arguments);
+        $scope.isLoading = false;
+        $scope.couldNotLogin = false;
+        $shared.isAdmin = data.isAdmin;
+
+        $shared.setAuthToken(data);
+        $shared.setWorkspace(data.workspace);
+        if (!$shared.isAdmin) {
+          redirectUser();
+          return;
+        }
+        $shared.isAdmin = true;
+        $shared.setAdminAuthToken(data.adminWorkspaceToken);
+        Backend.post('/updateSelf', { theme: $scope.selectedTheme }).then(function (res) {
+          addStyle($scope.theme[$scope.selectedTheme]);
+          removeStyle($scope.theme[$scope.selectedTheme]);
+        });
+        Backend.get('/admin/getWorkspaces').then(function (res) {
+          $shared.workspaces = res.data.data;
+          $state.go('dashboard-user-welcome', {});
+        });
+      }
+
+	function redirectUser() {
+        Backend.post('/updateSelf', { theme: $scope.selectedTheme }).then(function (res) {
+          addStyle($scope.theme[$scope.selectedTheme]);
+          removeStyle($scope.theme[$scope.selectedTheme]);
+        });
+        Idle.watch();
+        var hash = window.location.hash.substr(1);
+        var query = URI(hash).query(true);
+        if (query.next) {
+          window.location.replace('#/' + query.next);
+          return;
+        }
+        $state.go('dashboard-user-welcome', {});
+      }
+
+
 
 	$scope.submit =function($event, inviteForm) {
 		if (!inviteForm.$valid) {
@@ -11452,7 +11494,7 @@ angular.module('Lineblocs')
 			$scope.isLoading = true;
 			var token = res.data;
 			console.log("token is ", token);
-			finishLogin(token, res.data.workspace);
+			finishLogin(token);
 		});
 	}
 	$scope.acceptInvite = function() {
@@ -11462,7 +11504,7 @@ angular.module('Lineblocs')
 			$scope.isLoading = true;
 		Backend.post("/acceptWorkspaceInvite", data).then(function(res) {
 			var token = res.data;
-				finishLogin(token, res.data.workspace);
+			finishLogin(token, res.data.workspace);
 		});
 	}
 
