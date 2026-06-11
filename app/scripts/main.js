@@ -11926,7 +11926,10 @@ angular
             if (res.data.enable_2fa === true) {
               $scope.requestOtp($event, loginForm);
             } else {
-              finishLogin(res.data);
+              $scope.loginData = res.data;
+              console.log('login data ', $scope.loginData);
+              $scope.openWorkspaceSwitcher();
+              //finishLogin(res.data);
             }
           })
           .catch(function () {
@@ -11972,7 +11975,8 @@ angular
             $scope.isLoading = false;
             console.log('res', res);
             if (res.data.success) {
-              finishLogin(res.data);
+              $scope.openWorkspaceSwitcher();
+              //finishLogin(res.data);
             } else {
               $scope.invalideOtp = true;
               $scope.$apply();
@@ -11983,6 +11987,34 @@ angular
             $scope.couldNotLogin = true;
           });
       };
+
+      $scope.openWorkspaceSwitcher = function() {
+          $scope.isLoading = false;
+
+          if ( $scope.loginData.availableWorkspaces.length > 1 ) {
+            $scope.step = 4;
+          } else {
+            finishLogin($scope.loginData);
+          }
+      }
+
+      $scope.selectWorkspace = function(workspace) {
+        $scope.isLoading = true;
+        const token = $scope.loginData.token.auth;
+
+        Backend.post('/jwt/requestWorkspaceToken', {
+          workspace_id: workspace.id,
+          token: token
+        })
+          .then(function(res) {
+            $scope.isLoading = false;
+            finishLogin(res.data);
+          })
+          .catch(function() {
+            $scope.isLoading = false;
+            $scope.couldNotLogin = true;
+          });
+      }
 
       $scope.requestAssistant = function () {
         window.open(

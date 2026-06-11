@@ -327,6 +327,47 @@
         </div>
       </form>
     </div>
+
+    <div ng-show="step===4" class="login-block">
+      <form
+        class="login-form"
+        novalidate
+      >
+        <div class="workspace-selection">
+          <div class="top-heading">
+            <h3>Select Workspace</h3>
+            <div layout="row" layout-align="center">
+              <center>
+                <p>Choose a workspace to continue</p>
+              </center>
+            </div>
+          </div>
+
+          <div class="workspaces-container">
+            <md-list>
+              <md-list-item
+                ng-repeat="workspace in loginData.availableWorkspaces"
+                ng-click="selectWorkspace(workspace)"
+                class="workspace-list-item"
+                style="width: 100%; display: flex; align-items: center;"
+              >
+                <md-icon class="md-avatar-icon">business</md-icon>
+                <div class="md-list-item-text" style="flex: 1; min-width: 0;">
+                  <h3 style="margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">{{workspace.name}}</h3>
+                  <p>ID: {{workspace.id}}</p>
+                </div>
+                <span ng-show="workspace.is_creator" class="creator-badge">Creator</span>
+              </md-list-item>
+              <md-divider ng-if="!$last"></md-divider>
+            </md-list>
+          </div>
+
+          <div layout="row" layout-align="center" style="margin-top: 20px">
+            <a ng-click="backStep1()">Back</a>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="text login-text">
       <h2>Your Line</h2>
       <p><span>login to start configuring your DIDs, and flows!</span></p>
