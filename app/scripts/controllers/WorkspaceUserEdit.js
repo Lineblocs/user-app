@@ -28,6 +28,59 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     secretStrength: 0
   }
   $scope.triedSubmit = false;
+
+  $scope.applyPresetPermissions = function(preset) {
+    // Reset all permissions to false first
+    $scope.values.roles = $shared.makeDefaultWorkspaceRoles();
+    
+    // Define preset permission mappings
+    var presets = {
+      'calling_manager': {
+        manage_calls: true,
+        manage_extensions: true,
+        create_extension: true,
+        manage_recordings: true,
+      },
+      'billing_manager': {
+        manage_billing: true,
+      },
+      'reporting_analyst': {
+        manage_calls: true,
+        manage_recordings: true,
+      },
+      'support_agent': {
+        manage_support: true,
+        manage_calls: true,
+      },
+      'account_admin': {
+        manage_users: true,
+        manage_extensions: true,
+        manage_billing: true,
+        manage_workspace: true,
+        manage_dids: true,
+        manage_flows: true,
+        manage_phones: true,
+        manage_ports: true,
+        manage_byo_carriers: true,
+        manage_byo_did_numbers: true,
+        manage_trunks: true,
+        create_extension: true,
+        create_flow: true,
+        create_phone: true,
+        create_phonegroup: true,
+        manage_phonegroups: true,
+      },
+      'viewer': {
+        manage_calls: true,
+        manage_recordings: true,
+      }
+    };
+    
+    if (presets[preset]) {
+      angular.extend($scope.values.roles, presets[preset]);
+    }
+  };
+
   $scope.submit = function(form) {
     console.log("submitting workspace user form ", arguments);
     $scope.triedSubmit = true;
@@ -115,6 +168,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     }, function() {
     });
   }
+
+
 
   function load() {
     $q.all([

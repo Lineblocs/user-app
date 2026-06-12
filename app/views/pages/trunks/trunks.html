@@ -5,7 +5,7 @@
         <center>
 
             <h5>No trunks listed</h5>
-            <md-button ng-click="createTrunk()" class="md-raised md-primary">Create New Trunk</md-button>
+            <md-button ng-show="$shared.hasAccess('create_trunk')" ng-click="createTrunk()" class="md-raised md-primary">Create New Trunk</md-button>
         </center>
     </div>
 </div>
@@ -80,7 +80,7 @@
                           </md-tooltip>
                   </md-icon>
               </md-button>
-              <md-button ng-click="deleteTrunk($event, trunk)" class="md-icon-button" aria-label="Trunk">
+              <md-button ng-show="$shared.hasAccess('delete_trunk')" ng-click="deleteTrunk($event, trunk)" class="md-icon-button" aria-label="Trunk">
                   <md-icon >
                     
                     <i class="mdi mdi-delete"></i>

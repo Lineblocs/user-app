@@ -200,8 +200,35 @@
 
 
 
+
                 <h5>Action</h5>
                 <p>allow or disallow this user to perform certain actions in the workspace</p>
+                
+                <div layout="row">
+                  <div flex="95">
+                    <md-input-container>
+                      <label>Quick Preset Options</label>
+                      <md-select ng-model="values.presetOption" ng-change="applyPresetPermissions(values.presetOption)">
+                        <md-option value="">Custom</md-option>
+                        <md-option value="calling_manager">Calling Manager</md-option>
+                        <md-option value="billing_manager">Billing Manager</md-option>
+                        <md-option value="reporting_analyst">Reporting Analyst</md-option>
+                        <md-option value="support_agent">Support Agent</md-option>
+                        <md-option value="account_admin">Account Administrator</md-option>
+                        <md-option value="viewer">Viewer (Read-Only)</md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                  <div flex="5">
+                    <md-icon class="tooltip-icon">
+                      <i class="mdi mdi-information"></i>
+                      <md-tooltip class="helper-tooltip" md-direction="top">
+                        Select a preset to automatically enable related permissions
+                      </md-tooltip>
+                    </md-icon>
+                  </div>
+                </div>
+
                 <div ng-repeat="role in availableRoles" flex="95">
                     <div layout="row">
                         <div flex="95">

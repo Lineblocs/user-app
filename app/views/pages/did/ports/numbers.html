@@ -22,7 +22,7 @@
                 <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
             </md-input-container>
           </div>
-    <md-button ng-click="portNumber()" class="md-raised md-primary">Create New</md-button>
+    <md-button ng-show="$shared.hasAccess('create_port_request')" ng-click="portNumber()" class="md-raised md-primary">Create New</md-button>
   </div>
 <div ng-show="pagination.checkIfSearched() && !$shared.isInLoadingState() && numbers.length === 0" class="no-results">
   <md-card md-theme="'default'"" md-theme-watch>

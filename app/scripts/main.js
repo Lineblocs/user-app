@@ -353,6 +353,17 @@ angular
         searchModule('Support', 'support', ['support'], [], ['support']),
       ];
 
+      factory.hasAccess = function (feature) {
+        const workspace = getWorkspace();
+        const user = workspace.user_info;
+        console.log('checking access for feature ', feature, ' with user info ', user);
+        if (user && user[feature]) {
+          return true;
+        }
+
+        return false;
+      }
+
       factory.toTitleCase = function(str) {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
       };
@@ -849,23 +860,62 @@ angular
       factory.makeDefaultWorkspaceRoles = function (addInfo) {
         if (!addInfo) {
           return {
+
             manage_users: false,
+            manage_support: false,
             manage_extensions: false,
             create_extension: false,
+            delete_extension: false,
             manage_billing: false,
             manage_workspace: false,
+            manage_workspace_options: false,
             manage_dids: false,
             create_did: false,
+            delete_did: false,
             manage_calls: false,
             manage_recordings: false,
+            manage_faxes: false,
+            manage_files: false,
             manage_blocked_numbers: false,
             manage_ip_whitelist: false,
             manage_verified_caller_ids: false,
             create_flow: false,
+            delete_flow: false,
             manage_flows: false,
+            manage_functions: false,
+            create_function: false,
+            delete_function: false,
+            manage_params: false,
+            manage_extension_codes: false,
+            manage_geo_permissions: false,
+            manage_extended_settings: false,
+            manage_ports: false,
+            manage_phones: false,
+            create_phone: false,
+            delete_phone: false,
+            manage_phonegroups: false,
+            create_phonegroup: false,
+            delete_phonegroup: false,
+            create_phoneglobalsetting: false,
+            delete_phoneglobalsetting: false,
+            manage_phoneglobalsettings: false,
+            create_phoneindividualsetting: false,
+            delete_phoneindividualsetting: false,
+            manage_phoneindividualsettings: false,
+            manage_byo_carriers: false,
+            create_byo_carrier: false,
+            delete_byo_carrier: false,
+            manage_byo_did_numbers: false,
+            create_byo_did_number: false,
+            delete_byo_did_number: false,
+            create_trunks: false,
+            delete_trunks: false,
+            manage_trunks: false,
+            create_port_request: false,
           };
         }
         var info = [];
+
         info.push({
           id: 'manage_users',
           name: 'Manage Users',
@@ -936,6 +986,191 @@ angular
           name: 'Create Flow',
           info: 'Allow this user to create flows',
         });
+        info.push({
+          id: 'delete_extension',
+          name: 'Delete Extension',
+          info: 'Allow this user to delete extensions',
+        });
+        info.push({
+          id: 'manage_support',
+          name: 'Manage Support',
+          info: 'Allow this user to manage support tickets',
+        });
+        info.push({
+          id: 'delete_did',
+          name: 'Delete DID',
+          info: 'Allow this user to delete DIDs',
+        });
+        info.push({
+          id: 'manage_faxes',
+          name: 'Manage Faxes',
+          info: 'Allow this user to manage faxes',
+        });
+        info.push({
+          id: 'manage_files',
+          name: 'Manage Files',
+          info: 'Allow this user to manage files',
+        });
+        info.push({
+          id: 'manage_workspace_options',
+          name: 'Manage Workspace Options',
+          info: 'Allow this user to manage workspace options',
+        });
+        info.push({
+          id: 'create_function',
+          name: 'Create Function',
+          info: 'Allow this user to create functions',
+        });
+        info.push({
+          id: 'delete_function',
+          name: 'Delete Function',
+          info: 'Allow this user to delete functions',
+        });
+        info.push({
+          id: 'manage_functions',
+          name: 'Manage Functions',
+          info: 'Allow this user to manage functions',
+        });
+        info.push({
+          id: 'manage_params',
+          name: 'Manage Parameters',
+          info: 'Allow this user to manage parameters',
+        });
+        info.push({
+          id: 'manage_extension_codes',
+          name: 'Manage Extension Codes',
+          info: 'Allow this user to manage extension codes',
+        });
+        info.push({
+          id: 'manage_geo_permissions',
+          name: 'Manage Geo Permissions',
+          info: 'Allow this user to manage geo permissions',
+        });
+        info.push({
+          id: 'manage_extended_settings',
+          name: 'Manage Extended Settings',
+          info: 'Allow this user to manage extended settings',
+        });
+        info.push({
+          id: 'manage_ports',
+          name: 'Manage Ports',
+          info: 'Allow this user to manage ports',
+        });
+        info.push({
+          id: 'manage_phones',
+          name: 'Manage Phones',
+          info: 'Allow this user to manage phones',
+        });
+        info.push({
+          id: 'create_phone',
+          name: 'Create Phone',
+          info: 'Allow this user to create phones',
+        });
+        info.push({
+          id: 'delete_phone',
+          name: 'Delete Phone',
+          info: 'Allow this user to delete phones',
+        });
+        info.push({
+          id: 'manage_phonegroups',
+          name: 'Manage Phone Groups',
+          info: 'Allow this user to manage phone groups',
+        });
+        info.push({
+          id: 'create_phonegroup',
+          name: 'Create Phone Group',
+          info: 'Allow this user to create phone groups',
+        });
+        info.push({
+          id: 'delete_phonegroup',
+          name: 'Delete Phone Group',
+          info: 'Allow this user to delete phone groups',
+        });
+        info.push({
+          id: 'create_phoneglobalsetting',
+          name: 'Create Phone Global Setting',
+          info: 'Allow this user to create phone global settings',
+        });
+        info.push({
+          id: 'delete_phoneglobalsetting',
+          name: 'Delete Phone Global Setting',
+          info: 'Allow this user to delete phone global settings',
+        });
+        info.push({
+          id: 'manage_phoneglobalsettings',
+          name: 'Manage Phone Global Settings',
+          info: 'Allow this user to manage phone global settings',
+        });
+        info.push({
+          id: 'create_phoneindividualsetting',
+          name: 'Create Phone Individual Setting',
+          info: 'Allow this user to create phone individual settings',
+        });
+        info.push({
+          id: 'delete_phoneindividualsetting',
+          name: 'Delete Phone Individual Setting',
+          info: 'Allow this user to delete phone individual settings',
+        });
+        info.push({
+          id: 'manage_phoneindividualsettings',
+          name: 'Manage Phone Individual Settings',
+          info: 'Allow this user to manage phone individual settings',
+        });
+        info.push({
+          id: 'manage_byo_carriers',
+          name: 'Manage BYO Carriers',
+          info: 'Allow this user to manage BYO carriers',
+        });
+        info.push({
+          id: 'create_byo_carrier',
+          name: 'Create BYO Carrier',
+          info: 'Allow this user to create BYO carriers',
+        });
+        info.push({
+          id: 'delete_byo_carrier',
+          name: 'Delete BYO Carrier',
+          info: 'Allow this user to delete BYO carriers',
+        });
+        info.push({
+          id: 'manage_byo_did_numbers',
+          name: 'Manage BYO DID Numbers',
+          info: 'Allow this user to manage BYO DID numbers',
+        });
+        info.push({
+          id: 'create_byo_did_number',
+          name: 'Create BYO DID Number',
+          info: 'Allow this user to create BYO DID numbers',
+        });
+        info.push({
+          id: 'delete_byo_did_number',
+          name: 'Delete BYO DID Number',
+          info: 'Allow this user to delete BYO DID numbers',
+        });
+        info.push({
+          id: 'create_trunks',
+          name: 'Create Trunks',
+          info: 'Allow this user to create trunks',
+        });
+        info.push({
+          id: 'delete_trunks',
+          name: 'Delete Trunks',
+          info: 'Allow this user to delete trunks',
+        });
+        info.push({
+          id: 'manage_trunks',
+          name: 'Manage Trunks',
+          info: 'Allow this user to manage trunks',
+        });
+        info.push({
+          id: 'create_port_request',
+          name: 'Create Port Request',
+          info: 'Allow this user to create port requests',
+        });
+        info.push({
+          id: 'delete_flow',
+          name: 'Delete Flow',
+          info: 'Allow this user to delete flows',
+        });
 
         return info;
       };
@@ -979,6 +1214,8 @@ angular
 
       $shared.showError(message);
     }
+
+
 
     factory.applyTheme = function (theme) {
       theme = theme || ThemeService.getTheme();
@@ -10604,6 +10841,60 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
     roles: $shared.makeDefaultWorkspaceRoles()
   };
   $scope.triedSubmit = false;
+
+
+  $scope.applyPresetPermissions = function(preset) {
+    // Reset all permissions to false first
+    $scope.values.roles = $shared.makeDefaultWorkspaceRoles();
+    
+    // Define preset permission mappings
+    var presets = {
+      'calling_manager': {
+        manage_calls: true,
+        manage_extensions: true,
+        create_extension: true,
+        manage_recordings: true,
+      },
+      'billing_manager': {
+        manage_billing: true,
+      },
+      'reporting_analyst': {
+        manage_calls: true,
+        manage_recordings: true,
+      },
+      'support_agent': {
+        manage_support: true,
+        manage_calls: true,
+      },
+      'account_admin': {
+        manage_users: true,
+        manage_extensions: true,
+        manage_billing: true,
+        manage_workspace: true,
+        manage_dids: true,
+        manage_flows: true,
+        manage_phones: true,
+        manage_ports: true,
+        manage_byo_carriers: true,
+        manage_byo_did_numbers: true,
+        manage_trunks: true,
+        create_extension: true,
+        create_flow: true,
+        create_phone: true,
+        create_phonegroup: true,
+        manage_phonegroups: true,
+      },
+      'viewer': {
+        manage_calls: true,
+        manage_recordings: true,
+      }
+    };
+    
+    if (presets[preset]) {
+      angular.extend($scope.values.roles, presets[preset]);
+    }
+  };
+
   $scope.submit = function(form) {
     console.log("submitting workspace user form ", arguments);
     $scope.triedSubmit = true;
@@ -10640,6 +10931,8 @@ angular.module('Lineblocs').controller('WorkspaceUserCreateCtrl', function ($sco
       });
     }
   }
+
+
 
   // $scope.changeRole = function(value) {
   //   console.log(value)
@@ -10691,6 +10984,59 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     secretStrength: 0
   }
   $scope.triedSubmit = false;
+
+  $scope.applyPresetPermissions = function(preset) {
+    // Reset all permissions to false first
+    $scope.values.roles = $shared.makeDefaultWorkspaceRoles();
+    
+    // Define preset permission mappings
+    var presets = {
+      'calling_manager': {
+        manage_calls: true,
+        manage_extensions: true,
+        create_extension: true,
+        manage_recordings: true,
+      },
+      'billing_manager': {
+        manage_billing: true,
+      },
+      'reporting_analyst': {
+        manage_calls: true,
+        manage_recordings: true,
+      },
+      'support_agent': {
+        manage_support: true,
+        manage_calls: true,
+      },
+      'account_admin': {
+        manage_users: true,
+        manage_extensions: true,
+        manage_billing: true,
+        manage_workspace: true,
+        manage_dids: true,
+        manage_flows: true,
+        manage_phones: true,
+        manage_ports: true,
+        manage_byo_carriers: true,
+        manage_byo_did_numbers: true,
+        manage_trunks: true,
+        create_extension: true,
+        create_flow: true,
+        create_phone: true,
+        create_phonegroup: true,
+        manage_phonegroups: true,
+      },
+      'viewer': {
+        manage_calls: true,
+        manage_recordings: true,
+      }
+    };
+    
+    if (presets[preset]) {
+      angular.extend($scope.values.roles, presets[preset]);
+    }
+  };
+
   $scope.submit = function(form) {
     console.log("submitting workspace user form ", arguments);
     $scope.triedSubmit = true;
@@ -10778,6 +11124,8 @@ angular.module('Lineblocs').controller('WorkspaceUserEditCtrl', function ($scope
     }, function() {
     });
   }
+
+
 
   function load() {
     $q.all([

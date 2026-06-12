@@ -6,7 +6,7 @@
       <div class="inner">
         <center>
           <h5>No phone groups created</h5>
-          <md-button ng-click="createPhoneGroup($event)" class="md-raised md-primary">Add Phone Group</md-button>
+          <md-button ng-show="$shared.hasAccess('create_phonegroup')" ng-click="createPhoneGroup($event)" class="md-raised md-primary">Add Phone Group</md-button>
         </center>
       </div>
       </div>
@@ -22,7 +22,7 @@
                 <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
             </md-input-container>
         </div>
-        <md-button ng-click="createPhoneGroup($event)" class="md-raised md-primary create-new">Add Phone Group</md-button>
+        <md-button ng-show="$shared.hasAccess('create_phonegroup')" ng-click="createPhoneGroup($event)" class="md-raised md-primary create-new">Add Phone Group</md-button>
         <div>
             <md-menu md-position-mode="target-right target">
                 <div class="nav-item">

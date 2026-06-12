@@ -215,7 +215,7 @@
                 ></md-button
               >
             </li>
-            <li class="show-subnav">
+            <li class="show-subnav" ng-show="$shared.hasAccess('manage_dids')">
               <md-button href="" class="show-menu" ng-click="subnav('ui')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -243,7 +243,7 @@
                 </li>
               </ul>
             </li>
-            <li ng-class="{active: $shared.isSectionActive('flows')}">
+            <li ng-class="{active: $shared.isSectionActive('flows')}" ng-show="$shared.hasAccess('manage_flows')">
               <md-button href="" ng-click="$shared.changeRoute('flows')" class=""
                 ><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text">
                   {{ 'flows' | translate }}</span
@@ -252,7 +252,7 @@
             </li>
             <li
               ng-class="{active: $shared.isSectionActive('extensions')}"
-              ng-show="$shared.canPerformAction('manage_extensions')"
+              ng-show="$shared.hasAccess('manage_extensions')"
             >
               <md-button href="" ng-click="$shared.changeRoute('extensions')" class=""
                 ><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text"
@@ -260,7 +260,7 @@
                 ></md-button
               >
             </li>
-            <li class="show-subnav" ng-show="$shared.isSettingEnabled('provisioner')">
+            <li class="show-subnav" ng-show="$shared.isSettingEnabled('provisioner') && $shared.hasAccess('manage_phones')">
               <md-button href="" class="show-menu" ng-click="subnav('ui-2')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-2'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -304,7 +304,7 @@
                 </li>
               </ul>
             </li>
-            <li class="show-subnav">
+            <li class="show-subnav" ng-show="$shared.hasAccess('manage_calls')">
               <md-button href="" class="show-menu" ng-click="subnav('ui-4')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-4'}"></i>
                 <i class="mdi mdi-cellphone"></i> &nbsp;
@@ -323,7 +323,7 @@
                 </li>
               </ul>
             </li>
-            <li ng-class="{active: $shared.isSectionActive('recordings')}">
+            <li ng-class="{active: $shared.isSectionActive('recordings')}" ng-show="$shared.hasAccess('manage_recordings')">
               <md-button href="" ng-click="$shared.changeRoute('recordings')" class=""
                 ><i class="mdi mdi-record"></i> &nbsp;<span class="text"
                   >{{ 'recordings' | translate }}</span
@@ -332,15 +332,14 @@
             </li>
             <li
               ng-class="{active: $shared.isSectionActive('faxes')}"
-              ng-show="$shared.isSettingEnabled('fax')"
-            >
+              ng-show="$shared.isSettingEnabled('fax') && $shared.hasAccess('manage_faxes')">
               <md-button href="" ng-click="$shared.changeRoute('faxes')" class=""
                 ><i class="mdi mdi-file-document"></i> &nbsp;<span class="text"
                   >{{ 'faxes' | translate }}</span
                 ></md-button
               >
             </li>
-            <li ng-class="{active: $shared.isSectionActive('files')}">
+            <li ng-class="{active: $shared.isSectionActive('files')}" ng-show="$shared.hasAccess('manage_files')">
               <md-button href="" ng-click="$shared.changeRoute('files')" class=""
                 ><i class="mdi mdi-library-music"></i> &nbsp;<span class="text"
                   >{{ 'media-files' | translate }}</span
@@ -348,7 +347,7 @@
               >
             </li>
 
-            <li ng-class="{active: $shared.isSectionActive('hosted-trunks')}">
+            <li ng-class="{active: $shared.isSectionActive('hosted-trunks')}" ng-show="$shared.hasAccess('manage_trunks')">
               <md-button href="" ng-click="$shared.changeRoute('hosted-trunks')" class=""
                 ><i class="mdi mdi-credit-card-multiple"></i> &nbsp;<span class="text"
                   >{{ 'hosted-trunks' | translate }}</span
@@ -356,7 +355,7 @@
               >
             </li>
 
-            <li class="show-subnav" ng-show="$shared.isSettingEnabled('bring_carrier')">
+            <li class="show-subnav" ng-show="$shared.isSettingEnabled('bring_carrier') && $shared.hasAccess('manage_byo_carriers')">
               <md-button href="" class="show-menu" ng-click="subnav('ui-3')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-3'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -376,14 +375,14 @@
               </ul>
             </li>
 
-            <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}">
+            <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}" ng-show="$shared.hasAccess('manage_users')">
               <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""
                 ><i class="mdi mdi-account"></i> &nbsp;<span class="text"
                   >{{ 'users' | translate }}</span
                 ></md-button
               >
             </li>
-            <li ng-class="{active: $shared.isSectionActive('support')}">
+            <li ng-class="{active: $shared.isSectionActive('support')}" ng-show="$shared.hasAccess('manage_support')">
               <md-button href="" ng-click="$shared.changeRoute('support')" class=""
                 ><i class="mdi mdi-credit-card-multiple"></i> &nbsp;<span class="text"
                   >{{ 'support' | translate }}</span
@@ -391,7 +390,7 @@
               >
             </li>
 
-            <li ng-class="{active: $shared.isSectionActive('billing')}">
+            <li ng-class="{active: $shared.isSectionActive('billing')}" ng-show="$shared.hasAccess('manage_billing')">
               <md-button href="" ng-click="$shared.changeRoute('billing')" class=""
                 ><i class="mdi mdi-credit-card-multiple"></i> &nbsp;<span class="text"
                   >{{ 'billing' | translate }}</span
@@ -406,7 +405,7 @@
                 <span class="text"> {{ 'settings' | translate }}</span>
               </md-button>
               <ul class="sub-menu" ng-class="{'visible': showingSubNav=='ui-1'}">
-                <li ng-class="{active: $state.includes('settings-verified-callerids')}">
+                <li ng-class="{active: $state.includes('settings-verified-callerids')}" ng-show="$shared.hasAccess('manage_verified_caller_ids')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-verified-callerids')"
@@ -414,7 +413,7 @@
                     ><span class="text">{{ 'verified-caller-ids' | translate }}</span>
                   </md-button>
                 </li>
-                <li ng-class="{active: $state.includes('settings-blocked-numbers')}">
+                <li ng-class="{active: $state.includes('settings-blocked-numbers')}" ng-show="$shared.hasAccess('manage_blocked_numbers')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-blocked-numbers')"
@@ -422,7 +421,7 @@
                     ><span class="text">{{ 'blocked-numbers' | translate }}</span>
                   </md-button>
                 </li>
-                <li ng-class="{active: $state.includes('settings-ip-whitelist')}">
+                <li ng-class="{active: $state.includes('settings-ip-whitelist')}" ng-show="$shared.hasAccess('manage_ip_whitelist')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-ip-whitelist')"
@@ -431,7 +430,7 @@
                     <span class="text">{{ 'ip-whitelist' | translate }}</span></md-button
                   >
                 </li>
-                <li ng-class="{active: $state.includes('settings-workspace-params')}">
+                <li ng-class="{active: $state.includes('settings-workspace-params')}" ng-show="$shared.hasAccess('manage_workspace_options')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-workspace-params')"
@@ -439,7 +438,7 @@
                     ><span class="text">{{ 'workspace-params' | translate }}</span>
                   </md-button>
                 </li>
-                <li ng-class="{active: $state.includes('settings-extension-codes')}">
+                <li ng-class="{active: $state.includes('settings-extension-codes')}" ng-show="$shared.hasAccess('manage_extension_codes')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-extension-codes')"
@@ -447,7 +446,7 @@
                     ><span class="text">{{ 'extension-codes' | translate }}</span>
                   </md-button>
                 </li>
-                <li ng-class="{active: $state.includes('settings-geo-permission')}">
+                <li ng-class="{active: $state.includes('settings-geo-permission')}" ng-show="$shared.hasAccess('manage_geo_permissions')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-geo-permission')"
@@ -455,7 +454,7 @@
                     ><span class="text">{{ 'geo-permission' | translate }}</span>
                   </md-button>
                 </li>
-                <li ng-class="{active: $state.includes('settings-workspace-options')}">
+                <li ng-class="{active: $state.includes('settings-workspace-options')}" ng-show="$shared.hasAccess('manage_workspace')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-workspace-options')"
@@ -463,7 +462,7 @@
                     ><span class="text">{{ 'workspace-options' | translate }}</span>
                   </md-button>
                 </li>
-                <li ng-class="{active: $state.includes('settings-workspace-api-settings')}">
+                <li ng-class="{active: $state.includes('settings-workspace-api-settings')}" ng-show="$shared.hasAccess('manage_extended_settings')">
                   <md-button
                     href=""
                     ng-click="$shared.changeRoute('settings-workspace-api-settings')"

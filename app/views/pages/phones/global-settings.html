@@ -6,7 +6,7 @@
       <div class="inner">
         <center>
           <h5>No settings listed</h5>
-          <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Global Phone Settings</md-button>
+          <md-button ng-show="$shared.hasAccess('create_phone_globalsettings')" ng-click="createSettings($event)" class="md-raised md-primary">Add Global Phone Settings</md-button>
         </center>
       </div>
       </div>
@@ -15,7 +15,7 @@
   <div ng-show="settings.length > 0">
       <div layout="row" layout-align="end center">
         <div>
-            <md-button ng-click="createSettings($event)" class="md-raised md-primary">Add Global Settings</md-button>
+            <md-button ng-show="$shared.hasAccess('create_phone_globalsettings')" ng-click="createSettings($event)" class="md-raised md-primary">Add Global Settings</md-button>
           </div>
       </div>
   <md-card md-theme="'default'"" md-theme-watch>

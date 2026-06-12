@@ -20,7 +20,7 @@
                 <a ng-show="!pagination.shouldShowClear()" class="clear-search important-dont-show">X</a>
             </md-input-container>
         </div>
-        <md-button ng-click="createExtension()" class="md-raised md-primary create-new">Create New</md-button>
+        <md-button ng-click="createExtension()" class="md-raised md-primary create-new" ng-show="$shared.hasAccess('create_extension')">Create New</md-button>
         <div>
             <md-menu md-position-mode="target-right target">
                 <div class="nav-item">
