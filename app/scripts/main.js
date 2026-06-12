@@ -908,7 +908,7 @@ angular
             manage_byo_did_numbers: false,
             create_byo_did_number: false,
             delete_byo_did_number: false,
-            create_trunks: false,
+            create_trunk: false,
             delete_trunks: false,
             manage_trunks: false,
             create_port_request: false,
@@ -1147,7 +1147,7 @@ angular
           info: 'Allow this user to delete BYO DID numbers',
         });
         info.push({
-          id: 'create_trunks',
+          id: 'create_trunk',
           name: 'Create Trunks',
           info: 'Allow this user to create trunks',
         });
