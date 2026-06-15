@@ -909,7 +909,7 @@ angular
             create_byo_did_number: false,
             delete_byo_did_number: false,
             create_trunk: false,
-            delete_trunks: false,
+            delete_trunk: false,
             manage_trunks: false,
             create_port_request: false,
           };
