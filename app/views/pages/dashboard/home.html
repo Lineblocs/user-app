@@ -121,90 +121,205 @@
 	<div class="mrgndv" flex="100" flex-sm="100" flex-xs="100">
 		<div class="pd-60">
 			<div class="mdl-cell">
-				<h4>Home</h4>
+				<h4>Dashboard</h4>
 			</div>
+
+			<!-- Analytics Section -->
+			<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-bottom: 30px;">
+				<md-card flex="33" flex-sm="100" flex-xs="100" class="analytics-card" style="margin: 8px;">
+					<md-card-content class="analytics-content">
+						<div class="d-flex" style="align-items: center; justify-content: space-between;">
+							<div>
+								<p class="analytics-label">
+									<i class="mdi mdi-phone-outgoing" style="margin-right: 8px; font-size: 18px;"></i>
+									Calls Today
+								</p>
+								<p class="analytics-value">{{todayCalls || 0}}</p>
+							</div>
+							<i class="mdi mdi-phone-outgoing" style="font-size: 48px; opacity: 0.2;"></i>
+						</div>
+					</md-card-content>
+				</md-card>
+
+				<md-card flex="33" flex-sm="100" flex-xs="100" class="analytics-card" style="margin: 8px;">
+					<md-card-content class="analytics-content">
+						<div class="d-flex" style="align-items: center; justify-content: space-between;">
+							<div>
+								<p class="analytics-label">
+									<i class="mdi mdi-phone-check" style="margin-right: 8px; font-size: 18px;"></i>
+									Active DID Numbers
+								</p>
+								<p class="analytics-value">{{activeDIDCount || 0}}</p>
+							</div>
+							<i class="mdi mdi-phone-check" style="font-size: 48px; opacity: 0.2;"></i>
+						</div>
+					</md-card-content>
+				</md-card>
+
+				<md-card flex="33" flex-sm="100" flex-xs="100" class="analytics-card" style="margin: 8px;">
+					<md-card-content class="analytics-content">
+						<div class="d-flex" style="align-items: center; justify-content: space-between;">
+							<div>
+								<p class="analytics-label">
+									<i class="mdi mdi-account-multiple" style="margin-right: 8px; font-size: 18px;"></i>
+									Active Members
+								</p>
+								<p class="analytics-value">{{activeMembers || 0}}</p>
+							</div>
+							<i class="mdi mdi-account-multiple" style="font-size: 48px; opacity: 0.2;"></i>
+						</div>
+					</md-card-content>
+				</md-card>
+			</div>
+
+			<!-- Activity Section Title -->
+			<div class="mdl-cell" style="margin-bottom: 20px;">
+				<h5 style="color: #333; font-weight: 500;">
+					<i class="mdi mdi-history" style="margin-right: 8px;"></i>
+					Recent Activity
+				</h5>
+			</div>
+
+			<!-- No Items Message -->
 			<div ng-if="feeds.length===0">
-				<div class="mdl-cell grid-margin feed-card rec-clr" flex="100" flex-sm="100">
-					<div class="d-flex df-main">
-						<h5>No items available at the moment.</h5>
-					</div>
-				</div>
-
+				<md-card flex="100" flex-sm="100">
+					<md-card-content class="d-flex" style="text-align: center; padding: 40px;">
+						<i class="mdi mdi-inbox" style="font-size: 48px; opacity: 0.3; margin-right: 20px;"></i>
+						<h5 style="margin: 0; color: #999;">No items available at the moment.</h5>
+					</md-card-content>
+				</md-card>
 			</div>
+
+			<!-- Activity Items -->
 			<div ng-repeat="feed in feeds">
-				<div ng-if="feed.event_type === 'recordings'" class="mdl-cell grid-margin feed-card rec-clr" flex="100" flex-sm="100">
-					<div class="d-flex df-main">
-						<p class="p-rec-name p-com">{{feed.name || 'Anonymous'}}</p>
-						<img src="../../../icons/record.png" class="mlimg">
-					</div>
-					<div class="pm">
-						<div class="d-flex">
-							<img src="../../../icons/system.png" class="statimg">
-							<p class="p-rec-stat p-com clr-blu">{{feed.status}}</p>
-							<div class="rec-btn rbtn-clr" ng-click="gotorecoring()">
-								Recording
+				<!-- Recording Card -->
+				<md-card ng-if="feed.event_type === 'recordings'" flex="100" flex-sm="100" style="margin-bottom: 16px; border-left: 5px solid #c51162;">
+					<md-card-content style="padding: 20px;">
+						<div class="d-flex" style="align-items: center; margin-bottom: 15px; justify-content: space-between;">
+							<div class="d-flex" style="align-items: center;">
+								<div style="background-color: #c51162; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+									<i class="mdi mdi-record-rec" style="color: white; font-size: 24px;"></i>
+								</div>
+								<div>
+									<p style="margin: 0; font-weight: 600; font-size: 16px;">{{feed.name || 'Anonymous'}}</p>
+									<p style="margin: 0; font-size: 12px; color: #999;">
+										<i class="mdi mdi-record-rec" style="margin-right: 4px;"></i>
+										Recording Captured
+									</p>
+								</div>
+							</div>
+							<div style="text-align: right;">
+								<span style="display: inline-block; background-color: #c51162; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+									<i class="mdi mdi-check-circle" style="margin-right: 4px;"></i>
+									{{feed.status}}
+								</span>
 							</div>
 						</div>
-					</div>
-					<div class="mid-dv">
-						<p>From: {{feed.from}}</p>
-						<p>To: {{feed.from}}</p>
-					</div>
-					<div class="d-flex dur-dv">
-						<img src="../../../icons/clock.png">
-						<p class="dur-p">Duration: {{feed.friendly_duration}}</p>
-					</div>
-					<div class="aud-dv">
-						<audio class="small" controls>
-							<source ng-src="{{feed.public_url}}" type="audio/wav"></source>
-						</audio>
-					</div>
-				</div>
-
-				<div ng-if="feed.event_type === 'did_numbers'" class="mdl-cell grid-margin feed-card did-clr" flex="100" flex-sm="100">
-					<div class="d-flex df-main">
-						<div class="round-dv">
-							<img src="../../../icons/telephone (1).png">
+						<div style="margin-bottom: 15px; padding: 12px; background-color: #f5f5f5; border-radius: 4px;">
+							<p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
+								<i class="mdi mdi-phone" style="margin-right: 6px;"></i>
+								<strong>From:</strong> {{feed.from}}
+							</p>
+							<p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
+								<i class="mdi mdi-phone" style="margin-right: 6px;"></i>
+								<strong>To:</strong> {{feed.to}}
+							</p>
+							<p style="margin: 0; font-size: 12px; color: #666;">
+								<i class="mdi mdi-clock" style="margin-right: 6px;"></i>
+								<strong>Duration:</strong> {{feed.friendly_duration}}
+							</p>
 						</div>
-						<p class="p-rec-name p-com round-p">{{feed.name || 'Anonymous'}}</p>
-					</div>
-					<div class="p20">
-						<div class="d-flex">
-							<div class="rec-btn dbtn-clr" ng-click="gotodid(feed)">
-								DID Number
+						<div style="margin-bottom: 15px;">
+							<p style="margin: 0 0 8px 0; font-size: 12px; font-weight: 600; color: #333;">Audio Playback</p>
+							<audio class="small" controls style="width: 100%;">
+								<source ng-src="{{feed.public_url}}" type="audio/wav"></source>
+							</audio>
+						</div>
+						<md-button class="md-primary" ng-click="gotorecoring()" style="margin: 0;">
+							<i class="mdi mdi-play-circle" style="margin-right: 6px;"></i>
+							View Full Recording
+						</md-button>
+					</md-card-content>
+				</md-card>
+
+				<!-- DID Numbers Card -->
+				<md-card ng-if="feed.event_type === 'did_numbers'" flex="100" flex-sm="100" style="margin-bottom: 16px; border-left: 5px solid #339797;">
+					<md-card-content style="padding: 20px;">
+						<div class="d-flex" style="align-items: center; margin-bottom: 15px; justify-content: space-between;">
+							<div class="d-flex" style="align-items: center;">
+								<div style="background-color: #339797; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+									<i class="mdi mdi-phone" style="color: white; font-size: 24px;"></i>
+								</div>
+								<div>
+									<p style="margin: 0; font-weight: 600; font-size: 16px;">{{feed.name || 'Anonymous'}}</p>
+									<p style="margin: 0; font-size: 12px; color: #999;">
+										<i class="mdi mdi-phone-check" style="margin-right: 4px;"></i>
+										DID Number Purchased
+									</p>
+								</div>
 							</div>
-							<p class="p-rec-stat clr-blck p-com">{{feed.number}}</p>
+							<div style="text-align: right;">
+								<img src="../../../flags/1x1/{{feed.country}}.svg" style="height: 32px; width: auto; border-radius: 4px; margin-bottom: 8px;">
+								<p style="margin: 0; font-size: 12px; font-weight: 600;">{{feed.country}}</p>
+							</div>
 						</div>
-					</div>
-					<div class="d-flex p-flag">
-						<img src="../../../flags/1x1/{{feed.country}}.svg" class="flg-img">
-						<p>{{feed.country}}</p>
-					</div>
-					<p class="cost"><span>Monthly Cost</span>{{$shared.centsToDollars(feed.monthly_cost, true)}}</p>
-				</div>
+						<div style="margin-bottom: 15px; padding: 12px; background-color: #f5f5f5; border-radius: 4px;">
+							<p style="margin: 0; font-size: 14px; font-weight: 600; color: #333;">
+								<i class="mdi mdi-phone-number" style="margin-right: 6px;"></i>
+								{{feed.number}}
+							</p>
+						</div>
+						<div style="margin-bottom: 15px; padding: 12px; background-color: #e8f5f5; border-radius: 4px;">
+							<p style="margin: 0; font-size: 12px; color: #666;">Monthly Cost</p>
+							<p style="margin: 0; font-size: 18px; font-weight: 600; color: #339797;">
+								<i class="mdi mdi-currency-usd" style="margin-right: 4px;"></i>
+								{{$shared.centsToDollars(feed.monthly_cost, true)}}
+							</p>
+						</div>
+						<md-button class="md-primary" ng-click="gotodid(feed)" style="margin: 0;">
+							<i class="mdi mdi-phone-check" style="margin-right: 6px;"></i>
+							Manage DID Number
+						</md-button>
+					</md-card-content>
+				</md-card>
 
-				<div ng-if="feed.event_type === 'calls'" class="mdl-cell grid-margin feed-card call-clr" flex="100" flex-sm="100">
-					<div class="d-flex df-main">
-						<p class="p-rec-name p-com call-p">{{feed.name || 'Anonymous'}}</p>
-						<div class="call-btn">
-							Calls
+				<!-- Calls Card -->
+				<md-card ng-if="feed.event_type === 'calls'" flex="100" flex-sm="100" style="margin-bottom: 16px; border-left: 5px solid #1976d2;">
+					<md-card-content style="padding: 20px;">
+						<div class="d-flex" style="align-items: center; margin-bottom: 15px; justify-content: space-between;">
+							<div class="d-flex" style="align-items: center;">
+								<div style="background-color: #1976d2; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+									<i class="mdi mdi-phone" style="color: white; font-size: 24px;"></i>
+								</div>
+								<div>
+									<p style="margin: 0; font-weight: 600; font-size: 16px;">{{feed.name || 'Anonymous'}}</p>
+									<p style="margin: 0; font-size: 12px; color: #999;">
+										<i class="mdi mdi-phone-outgoing" style="margin-right: 4px;"></i>
+										Call Logged
+									</p>
+								</div>
+							</div>
+							<div style="text-align: right;">
+								<i class="mdi mdi-calendar" style="color: #1976d2; font-size: 20px; margin-bottom: 6px;"></i>
+								<p style="margin: 0; font-size: 12px; font-weight: 600;">{{feed.date}}</p>
+							</div>
 						</div>
-					</div>
-					<div class="d-flex p-date">
-						<img src="../../../icons/calendar.png">
-						<p>{{feed.date}}</p>
-					</div>
-					<div class="call-num">
-						<p>
-							<span class="ttl">From: </span>
-							<span class="val">{{feed.from}}</span>
-						</p>
-						<p>
-							<span class="ttl">To: </span>
-							<span class="val">{{feed.to}}</span>
-						</p>
-					</div>
-				</div>
+						<div style="margin-bottom: 15px; padding: 12px; background-color: #f5f5f5; border-radius: 4px;">
+							<p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">
+								<i class="mdi mdi-phone-incoming" style="margin-right: 6px; color: #d32f2f;"></i>
+								<strong>From:</strong> {{feed.from}}
+							</p>
+							<p style="margin: 0; font-size: 12px; color: #666;">
+								<i class="mdi mdi-phone-outgoing" style="margin-right: 6px; color: #388e3c;"></i>
+								<strong>To:</strong> {{feed.to}}
+							</p>
+						</div>
+						<md-button class="md-primary" style="margin: 0;">
+							<i class="mdi mdi-phone-log" style="margin-right: 6px;"></i>
+							View Call Details
+						</md-button>
+					</md-card-content>
+				</md-card>
 			</div>
 		</div>
 	</div>

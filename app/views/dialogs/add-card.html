@@ -1,7 +1,7 @@
-<md-dialog>
-      <md-toolbar>
+<md-dialog style="width: 90%; max-width: 800px;">
+      <md-toolbar class="md-primary">
       <div class="md-toolbar-tools">
-        <h2>Add Card</h2>
+        <h2 style="font-size: 28px; font-weight: 500;">Add Card</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
@@ -13,54 +13,58 @@
       <div id="card-element"></div>
       <button type="submit">Pay Now</button>
     </form> -->
-  <form ng-cloak ng-submit="submit()" id="payment-form">
+  <form ng-cloak ng-submit="submit()" id="payment-form" name="paymentForm">
     <md-dialog-content class="add-card-form"> 
-      <div class="md-dialog-content">
+      <div class="md-dialog-content" style="padding: 16px;">
         <div ng-show="errorMsg" class="error-box">
           <span class="red"><strong>{{errorMsg}}</strong></span>
         </div>
 
-        <md-input-container>
-            <label>Your Name</label>
-            <input ng-model="card.name"/>
-        </md-input-container>
-        <md-input-container>
-          <label>Address</label>
-          <input ng-model="card.address"/>
-        </md-input-container>
-        <div layout="row">
+        <div layout="row" layout-align="center" style="margin-bottom: 6px;">
+          <md-input-container style="flex: 1;">
+              <label style="font-size: 15px;">Your Name</label>
+              <input ng-model="card.name" style="font-size: 17px;" required/>
+          </md-input-container>
+        </div>
+        
+        <div layout="row" layout-align="center" style="margin-bottom: 6px;">
+          <md-input-container style="flex: 1;">
+            <label style="font-size: 15px;">Address</label>
+            <input ng-model="card.address" style="font-size: 17px;" required/>
+          </md-input-container>
+        </div>
+        
+        <div layout="row" layout-gap="12px" style="margin-bottom: 6px;">
           <div flex>
-          <md-input-container>
-              <label>City</label>
-              <input ng-model="card.city"/>
-            </md-input-container>
+            <div layout="row" layout-align="center">
+              <md-input-container style="flex: 1;">
+                <label style="font-size: 15px;">City</label>
+                <input ng-model="card.city" style="font-size: 17px;" required/>
+              </md-input-container>
+            </div>
           </div>
           
           <div flex>
-            <md-input-container>
-              <label>Postal Code</label>
-              <input ng-model="card.postal_code"/>
-            </md-input-container>
-          </div>
-         
-          <div flex>
-            <md-input-container>
-              <label>Country</label>
-              <md-select ng-model="card.country" ng-change="changeCountry(card.country)">
-                <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
-                  {{country.name}}
-                </md-option>
-              </md-select>
-            </md-input-container>
+            <div layout="row" layout-align="center">
+              <md-input-container style="flex: 1;">
+                <label style="font-size: 15px;">Country</label>
+                <md-select ng-model="card.country" ng-change="changeCountry(card.country)" style="font-size: 17px;" required>
+                  <md-option ng-repeat="country in $shared.billingCountries" ng-value="country">
+                    {{country.name}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </div>
           </div>
         </div>
-        <h5>Card Details</h5>
+        
         <!-- <div layout="row">
           <div flex>
             <div ng-non-bindable id="card-element"></div>
           </div>
         </div> -->
 
+        <h3 style="font-size: 15px; font-weight: 500; margin-top: 16px; margin-bottom: 12px;">Card details</h3>
         <div ng-non-bindable id="card-element"></div>
 
         <!-- <div layout="row">
@@ -96,12 +100,9 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <md-button ng-click="submit()">
-        Submit
-      </md-button>
       <span flex></span>
-      <md-button ng-click="cancel()">
-        Close
+      <md-button class="md-raised md-primary" ng-click="submit()">
+        Submit
       </md-button>
     </md-dialog-actions>
   </form>

@@ -1,38 +1,56 @@
-<div class="billing-container">
-    <div layout="row" layout-align="end center" class="billing-title-container" layout-margin ng-show="$shared.planName()==='pay-as-you-go'">
-        <div class="title-block">
-            <h5>Remaining Balance</h5>
-            <div class="bill-info">
-            <strong>{{billing.info.remainingBalance}}</strong>
+<div class="billing-container" style="padding: 24px; background: linear-gradient(135deg, #f5f7fa 0%, #f9fafb 100%); min-height: calc(100vh - 60px);">
+    <div layout="row" layout-align="end center" class="billing-title-container" layout-margin ng-show="$shared.planName()==='pay-as-you-go'" style="margin-bottom: 32px; background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <div class="title-block" style="text-align: right; margin-right: 64px;">
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 16px;">
+                <md-icon style="font-size: 24px; color: #1976d2;"><i class="mdi mdi-wallet"></i></md-icon>
+                <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">Remaining Balance</h4>
+            </div>
+            <div class="bill-info" style="margin: 0; background: linear-gradient(135deg, #f0f4ff 0%, #f5f8ff 100%); padding: 24px; border-radius: 8px; border: 1px solid #e3f2fd;">
+                <strong style="font-size: 32px; color: #1976d2;">{{billing.info.remainingBalance}}</strong>
             </div>
         </div>
-        <div class="title-block">
-            <h5>Plan:</h5>
-            <div class="bill-info">
-                <strong>{{$shared.planInfo.nice_name}}</strong>
-                <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+        <div class="title-block" style="text-align: right;">
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 16px;">
+                <md-icon style="font-size: 24px; color: #4caf50;"><i class="mdi mdi-star"></i></md-icon>
+                <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">Current Plan</h4>
+            </div>
+            <div class="bill-info" style="margin: 0; background: linear-gradient(135deg, #f0fff4 0%, #f5fff8 100%); padding: 24px; border-radius: 8px; border: 1px solid #e8f5e9;">
+                <strong style="font-size: 18px; color: #333; display: block; margin-bottom: 12px;">{{$shared.planInfo.nice_name}}</strong>
+                <a class="link" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
+                    <span>↗</span>
+                    <span>Upgrade Plan</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <div layout="row" layout-align="end center"  class="billing-title-container" layout-margin ng-show="$shared.planName()!=='pay-as-you-go'">
-        <div class="title-block">
-            <h5 class="title-text">Plan:</h5>
-            <div class="bill-info sub-title-text">
-            {{$shared.planInfo.nice_name}}
-            <a class="link" ng-click="upgradePlan()">(Upgrade)</a>
+    <div layout="row" layout-align="end center"  class="billing-title-container" layout-margin ng-show="$shared.planName()!=='pay-as-you-go'" style="margin-bottom: 32px; background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <div class="title-block" style="text-align: right;">
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 16px;">
+                <md-icon style="font-size: 24px; color: #4caf50;"><i class="mdi mdi-star"></i></md-icon>
+                <h4 class="title-text" style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">Current Plan</h4>
+            </div>
+            <div class="bill-info sub-title-text" style="margin: 0; background: linear-gradient(135deg, #f0fff4 0%, #f5fff8 100%); padding: 24px; border-radius: 8px; border: 1px solid #e8f5e9;">
+                <strong style="font-size: 18px; color: #333; display: block; margin-bottom: 12px;">{{$shared.planInfo.nice_name}}</strong>
+                <a class="link" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
+                    <span>↗</span>
+                    <span>Upgrade Plan</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <md-card md-theme="'default'" md-theme-watch class="card-radius">
-        <md-tabs class=" md-primary" md-center-tabs layout-fill md-dynamic-height="true" ng-if="isTabLoaded" md-selected="selectedIndex">
-            <md-tab label="Add Credit" ng-if="$shared.planName()==='pay-as-you-go'">
+    <md-card md-theme="'default'" md-theme-watch class="card-radius" style="margin-top: 16px;">
+        <md-tabs class="md-primary md-hue-2" layout-fill md-dynamic-height="true" ng-if="isTabLoaded" md-selected="selectedIndex" style="background: white;">
+            <md-tab label="Add Credit" ng-if="$shared.planName()==='pay-as-you-go'" style="padding: 0;">
                 <md-content class="md-padding">
                     <div class="bottom-sheet-demo inset no-padding">
                         <div class="left">
                             <div class="pay-options">
-                                <h5>Pay With</h5>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                                    <md-icon style="font-size: 24px; color: #1976d2;"><i class="mdi mdi-credit-card-multiple"></i></md-icon>
+                                    <h4 style="margin: 0; color: #333; font-size: 18px; font-weight: 600;">Payment Method</h4>
+                                </div>
                                 <md-button ng-disabled="settings.type==='CARD'" type="button" ng-click="changeType('CARD')"
                                     class="md-raised md-primary no-margin-sides">
                                     Credit Card</md-button>
@@ -44,14 +62,15 @@
                         </div>
                         <div class="left line-left">
                             <div ng-show="settings.type==='CARD'">
-                                <div ng-show="cards.length === 0">
-                                    <h5>No Cards Added</h5>
+                                <div ng-show="cards.length === 0" style="padding: 32px; text-align: center;">
+                                    <md-icon style="font-size: 48px; color: #ccc; display: block; margin-bottom: 16px;"><i class="mdi mdi-credit-card"></i></md-icon>
+                                    <h5 style="margin: 0 0 8px 0; color: #666; font-size: 16px; font-weight: 600;">No Cards Added</h5>
                                     <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A
                                         Card</md-button>
 
                                 </div>
-                                <div ng-show="cards.length > 0">
-                                    <h5>Use Existing Card</h5>
+                                <div ng-show="cards.length > 0" style="margin-top: 20px;">
+                                    <h5 style="margin: 0 0 16px 0; color: #333; font-size: 16px; font-weight: 600;">Use Existing Card</h5>
                                     <div layout="row">
                                         <div flex="">
                                             <md-radio-group ng-model="data.selectedCard"
@@ -129,7 +148,28 @@
                                             </md-content>
                                         </form>
                                     </div>
-                                    <md-input-container>
+                                    <div style="margin-top: 24px; padding: 20px; background: #f5f5f5; border-radius: 8px;">
+                                        <md-input-container style="width: 100%; margin-bottom: 16px;">
+                                            <label>Add credit Amount</label>
+                                            <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
+                                                <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
+                                                    {{amount.name}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                        <md-button ng-click="addCredit($event)" class="md-raised md-primary no-margin-sides" style="width: 100%; height: 48px; font-size: 16px;">
+                                            <span style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                                <md-icon style="margin: 0; font-size: 20px;"><i class="mdi mdi-plus-circle"></i></md-icon>
+                                                Add Credit
+                                            </span>
+                                        </md-button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div ng-show="settings.type==='PAYPAL'" style="margin-top: 20px;">
+                                <div style="padding: 20px; background: #f5f5f5; border-radius: 8px;">
+                                    <md-input-container style="width: 100%; margin-bottom: 16px;">
                                         <label>Add credit Amount</label>
                                         <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
                                             <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
@@ -137,29 +177,15 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
-                                    <md-button ng-click="addCredit($event)" class="md-raised md-primary no-margin-sides">Add
-                                        Credit
-                                    </md-button>
-
-                                </div>
-                            </div>
-                            <div ng-show="settings.type==='PAYPAL'">
-                                <md-input-container>
-                                    <label>Add credit Amount</label>
-                                    <md-select ng-model="data.creditAmount" ng-change="changeAmount(data.creditAmount)">
-                                        <md-option ng-repeat="amount in creditAmounts" ng-value="amount">
-                                            {{amount.name}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
                                 <!--
                                     <md-button ng-click="addCreditPayPal($event)" class="md-raised md-primary no-margin-sides">Add Credit
                                     </md-button>                            <br/>
                                 -->
-                                <!-- PayPal Logo -->
-                                <a class="clickable" title="How PayPal Works" ng-click="addCreditPayPal($event)"><img
-                                        src="https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_m.png"
-                                        alt="Pay with PayPal" /></a>
+                                    <!-- PayPal Logo -->
+                                    <a class="clickable" title="How PayPal Works" ng-click="addCreditPayPal($event)" style="display: inline-block; margin-top: 8px;"><img
+                                            src="https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_m.png"
+                                            alt="Pay with PayPal" /></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,59 +195,56 @@
                 <md-content class="md-padding">
                     <div class="bottom-sheet-demo inset no-padding">
                         <div class="data-container">
-                            <div ng-show="cards.length === 0" class="no-card-block">
-                                <h5 class="title-text">No Cards Added</h5>
-                                <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides tooltip-icon ">
-                                    <span>
-                                        <md-icon class="tooltip-icon">
-                                            <i class="mdi mdi-credit-card"></i>
+                            <div ng-show="cards.length === 0" class="no-card-block" style="text-align: center; padding: 60px 20px;">
+                                <h5 class="title-text">No Payment Methods on File</h5>
+                                <p style="color: #999; margin-bottom: 30px;">Get started by adding your first payment method</p>
+                                <md-button ng-click="addCard($event)" class="md-raised md-primary" style="padding: 0 32px; height: 48px; font-size: 16px; font-weight: 500; letter-spacing: 0.5px; border-radius: 4px; box-shadow: 0 3px 12px rgba(25,118,210,0.25); transition: all 0.3s ease; text-transform: uppercase;">
+                                    <span style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                                        <md-icon style="margin: 0; font-size: 20px;">
+                                            <i class="mdi mdi-credit-card-plus"></i>
                                         </md-icon>
-                                        Add A
-                                        Card
+                                        <span style="letter-spacing: 0.5px;">Add Payment Method</span>
                                     </span>
                                     <md-tooltip class="helper-tooltip" md-direction="top">
-                                        Add Card
+                                        Add a new credit or debit card
                                     </md-tooltip>
                                 </md-button>
                             </div>
                             <div ng-show="cards.length > 0">
-                                <h5>Existing Cards</h5>
-                                <md-button ng-click="addCard($event)" class="md-raised md-primary no-margin-sides">Add A
-                                    Card</md-button>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <h5 style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">Saved Payment Methods</h5>
+                                    <md-button ng-click="addCard($event)" class="md-raised md-primary md-sm" style="text-transform: uppercase; font-weight: 500;">
+                                        Add Card
+                                    </md-button>
+                                </div>
 
-                                <div layout="row">
-                                    <div flex="">
-                                        <ul id="cards" class="no-padding">
-                                            <li ng-repeat="card in cards">
-                                                <div layout="row" layout-align="start start">
-                                                    <div>
-                                                        <img ng-src="{{$shared.getCardImg(card)}}" height="28"/>
-                                                    </div>
-
-                                                    <div>
-                                                        {{$shared.createCardLabel(card)}}
-                                                    </div>
-                                                    <div>
-                                                        <md-button ng-click="setPrimary(card)" ng-show="card.primary"
-                                                            disabled="" class="md-raised md-small no-margin-top-bottom card-primary-opt">
-                                                            Primary</md-button>
-                                                        <md-button ng-click="setPrimary(card)" ng-show="!card.primary"
-                                                            class="md-raised md-primary md-small no-margin-top-bottom card-primary-opt">
-                                                            Set Primary</md-button>
-                                                            <md-button ng-click="deleteCard($event, card)" class="md-icon-button" aria-label="Delete card">
-                                                                <md-icon >
-                                                                    <i class="mdi mdi-delete"></i>
-                                                                        <md-tooltip class="helper-tooltip" md-direction="top">
-                                                                            Delete card
-                                                                        </md-tooltip>
-                                                                </md-icon>
-                                                            </md-button>
-                                                    </div>
-                                                </div>
-
-                                            </li>
-
-                                        </ul>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                                    <div ng-repeat="card in cards" style="border: 1px solid #e0e0e0; border-radius: 4px; padding: 16px; background: #fafafa;">
+                                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                            <img ng-src="{{$shared.getCardImg(card)}}" height="32" style="flex-shrink: 0;"/>
+                                            <div style="flex: 1;">
+                                                <div style="font-weight: 500;">{{$shared.createCardLabel(card)}}</div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                            <md-button ng-click="setPrimary(card)" ng-show="card.primary" disabled class="md-raised md-small" style="flex: 1; margin: 0; text-transform: uppercase; font-size: 12px;">
+                                                <md-icon style="margin-right: 4px;">
+                                                    <i class="mdi mdi-check-circle"></i>
+                                                </md-icon>
+                                                Default
+                                            </md-button>
+                                            <md-button ng-click="setPrimary(card)" ng-show="!card.primary" class="md-raised md-primary md-small" style="flex: 1; margin: 0; text-transform: uppercase; font-size: 12px;">
+                                                Make Default
+                                            </md-button>
+                                            <md-button ng-click="deleteCard($event, card)" class="md-icon-button md-small" aria-label="Delete card" style="margin: 0;">
+                                                <md-icon>
+                                                    <i class="mdi mdi-delete"></i>
+                                                    <md-tooltip class="helper-tooltip" md-direction="top">
+                                                        Delete card
+                                                    </md-tooltip>
+                                                </md-icon>
+                                            </md-button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div ng-show="settings.newCard">
@@ -293,68 +316,63 @@
             </md-tab>
             <md-tab label="History & Payments">
                 <md-content class="md-padding">
-                    <div class="content-data-block">
-                        <div class="data-block">
-                            <h5 class="sub-title-text">Account Balance </h5>
-                            <span class="title-text">{{billing.info.accountBalance}}</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px;">
+                        <div class="content-data-block" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 24px; border-radius: 8px; border: 1px solid #ffe0b2; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+                                <h5 class="sub-title-text" style="margin: 0; color: #333; font-size: 14px; font-weight: 600; text-transform: uppercase;">Account Balance</h5>
+                            </div>
+                            <span class="title-text" style="font-size: 24px; color: #f57c00; font-weight: 700; display: block; margin-bottom: 8px;">{{billing.info.accountBalance}}</span>
+                            <small class="info-text" style="color: #666; font-size: 12px;">finalized invoices and payments</small>
                         </div>
-                        <small class="info-text">finalized invoices and payments</small>
+
+                        <div class="content-data-block" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 24px; border-radius: 8px; border: 1px solid #e1bee7; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+                                <h5 class="sub-title-text" style="margin: 0; color: #333; font-size: 14px; font-weight: 600; text-transform: uppercase;">Membership Fees</h5>
+                            </div>
+                            <span class="title-text" style="font-size: 24px; color: #7b1fa2; font-weight: 700; display: block; margin-bottom: 8px;">{{billing.info.membershipFees}}</span>
+                            <small class="info-text" style="color: #666; font-size: 12px;">total in membership fees</small>
+                        </div>
+
+                        <div class="content-data-block" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 24px; border-radius: 8px; border: 1px solid #bbdefb; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+                                <h5 class="sub-title-text" style="margin: 0; color: #333; font-size: 14px; font-weight: 600; text-transform: uppercase;">Charges This Month</h5>
+                            </div>
+                            <span class="title-text" style="font-size: 24px; color: #1976d2; font-weight: 700; display: block; margin-bottom: 8px;">{{billing.info.chargesThisMonth}}</span>
+                            <small class="info-text" style="color: #666; font-size: 12px;">invoiced {{billing.info.nextInvoiceDue}}</small>
+                        </div>
+
+                        <div class="content-data-block" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 24px; border-radius: 8px; border: 1px solid #c8e6c9; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+                                <h5 class="sub-title-text" style="margin: 0; color: #333; font-size: 14px; font-weight: 600; text-transform: uppercase;">Estimated Balance</h5>
+                            </div>
+                            <span class="title-text" style="font-size: 24px; color: #388e3c; font-weight: 700; display: block; margin-bottom: 8px;">{{billing.info.estimatedBalance}}</span>
+                            <small class="info-text" style="color: #666; font-size: 12px;">balance including charges this month</small>
+                        </div>
                     </div>
 
-
-                    <div class="content-data-block">
-                        <div class="data-block">
-                            <h5 class="sub-title-text">Membership Fees</h5>
-                            <span class="title-text">{{billing.info.membershipFees}}</span>
-                        </div>
-                        <small class="info-text">total in membership fees</small>
-                    </div>
-
-                    <div class="content-data-block">
-                        <div class="data-block">
-                            <h5 class="sub-title-text">Charges This Month</h5>
-                            <span class="title-text">{{billing.info.chargesThisMonth}}</span>
-                        </div>
-                        <small class="info-text">invoiced {{billing.info.nextInvoiceDue}}</small>
-                    </div>
-
-                    <div class="content-data-block">
-                        <div class="data-block">
-                            <h5 class="sub-title-text">Estimated Balance</h5>
-                            <span class="title-text">{{billing.info.estimatedBalance}}</span>
-                        </div>
-                        <small class="info-text">balance including charges this month.</small>
-                    </div>
-
-                    <div class="content-data-block">
-                        <a ng-click="viewEstimatedCharges($event)" class="styled-link" style="display: inline-flex; align-items: center; gap: 8px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; transition: color 0.3s ease; vertical-align: middle;">
-
-                            <md-icon class="tooltip-icon" style="margin-top: 5px;">
+                    <div style="display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
+                        <a ng-click="viewEstimatedCharges($event)" class="styled-link" style="display: inline-flex; align-items: center; gap: 8px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; transition: color 0.3s ease; padding: 12px 16px; background: #f5f5f5; border-radius: 4px;">
+                            <md-icon class="tooltip-icon" style="font-size: 20px; margin: 0;">
                                 <i class="mdi mdi-chart-line"></i>
                             </md-icon>
                             <span>View Estimated Charges</span>
                         </a>
                     </div>
 
-                    <div class="content-data-block">
-
-                        <md-button ng-click="makePayment($event)" class="md-raised md-primary">
-                            <span>
-                                <md-icon class="tooltip-icon">
-                                    <i class="mdi mdi-filter-variant"></i>
-                                </md-icon>
-                                Make a payment
+                    <div style="display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
+                        <md-button ng-click="makePayment($event)" class="md-raised md-primary" style="padding: 0 32px; height: 48px; font-size: 16px;">
+                            <span style="display: flex; align-items: center; gap: 8px;">
+                                Make a Payment
                             </span>
                         </md-button>
-                        <md-button ng-click="addCredit($event)" class="md-raised md-primary" ng-show="plan.pay_as_you_go">
-                            <span>
-                                <md-icon class="tooltip-icon">
-                                    <i class="mdi mdi-filter-variant"></i>
+                        <md-button ng-click="addCredit($event)" class="md-raised md-primary" ng-show="plan.pay_as_you_go" style="padding: 0 32px; height: 48px; font-size: 16px;">
+                            <span style="display: flex; align-items: center; gap: 8px;">
+                                <md-icon style="margin: 0; font-size: 20px;">
+                                    <i class="mdi mdi-plus-circle"></i>
                                 </md-icon>
-                                Add credit
+                                Add Credit
                             </span>
                         </md-button>
-
                     </div>
                     <!-- <h5>Account Balance {{billing.info.accountBalance}}</h5>
                     <small>
@@ -368,8 +386,10 @@
                     <small>
                         balance including charges this month.
                     </small> -->
-                    <h5 class="title-text">History</h5>
-                    <small>Filter Dates</small>
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 32px 0 20px 0;">
+                        <h4 class="title-text" style="margin: 0; color: #333; font-size: 18px; font-weight: 600;">Transaction History</h4>
+                    </div>
+                    <small style="color: #666; margin-bottom: 16px; display: block;">Filter by Date Range</small>
                     <div layout="row" class="filter-row">
                         <div>
                             <input type="date" id="startDate" ng-change="changeStartDate()" ng-model="startDate" class="start-date date-scheme"/>
@@ -457,24 +477,28 @@
             </md-tab>
             <md-tab label="Limits">
                 <md-content class="md-padding">
-                    <div class="content-data-block">
-                        <div class="data-block">
-                            <h5 class="sub-title-text">Call Duration</h5>
-                            <span class="title-text">{{billing.info.limits.call_duration}}</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px;">
+                        <div class="content-data-block" style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); padding: 24px; border-radius: 8px; border: 1px solid #b2dfdb; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <h5 class="sub-title-text" style="margin: 0 0 16px 0; color: #333; font-size: 14px; font-weight: 600; text-transform: uppercase; text-align: left;">Call Duration</h5>
+                            <span class="title-text" style="font-size: 24px; color: #00897b; font-weight: 700; display: block; text-align: left;">{{billing.info.limits.call_duration}}</span>
                         </div>
-                    </div>
 
-                    <div class="content-data-block">
-                        <div class="data-block">
-                            <h5 class="sub-title-text">Recording space</h5>
-                            <span class="title-text"> {{billing.info.limits.recording_space}}</span>
+                        <div class="content-data-block" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); padding: 24px; border-radius: 8px; border: 1px solid #f8bbd0; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <h5 class="sub-title-text" style="margin: 0 0 16px 0; color: #333; font-size: 14px; font-weight: 600; text-transform: uppercase; text-align: left;">Recording Space</h5>
+                            <span class="title-text" style="font-size: 24px; color: #c2185b; font-weight: 700; display: block; text-align: left;">{{billing.info.limits.recording_space}}</span>
                         </div>
                     </div>
                     <!-- <p><strong>Call Duration:</strong> {{billing.info.limits.call_duration}}</p>
                     <br /> -->
                     <!-- <p><strong>Recording space:</strong> {{billing.info.limits.recording_space}}</p> -->
-                    <h5 class="title-text">Usage Triggers</h5>
-                    <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides">Create New
+                    <div style="display: flex; align-items: center; gap: 10px; margin: 32px 0 20px 0;">
+                        <h4 class="title-text" style="margin: 0; color: #333; font-size: 18px; font-weight: 600;">Usage Triggers</h4>
+                    </div>
+                    <md-button ng-click="createTrigger($event)" class="md-raised md-primary no-margin-sides" style="margin-bottom: 20px; padding: 0 24px; height: 44px;">
+                        <span style="display: flex; align-items: center; gap: 8px;">
+                            <md-icon style="margin: 0; font-size: 20px;"><i class="mdi mdi-plus"></i></md-icon>
+                            Create New Trigger
+                        </span>
                     </md-button>
                     <div ng-show="usageTriggers.length===0">
                         <p class="sub-title-text">No usage triggers setup..</p>
@@ -513,10 +537,18 @@
             </md-tab>
             <md-tab label="Settings">
                 <md-content class="md-padding">
-                    <md-checkbox ng-model="settings.db.invoices_by_email" aria-label="Receive Invoices By Email">
-                        Receive Invoices By Email
-                    </md-checkbox>
-                    <a class="cancel-subscribe" ng-click="cancelSubscription($event)" href>Cancel Subscription</a>
+                    <div style="background: #f5f5f5; padding: 24px; border-radius: 8px; margin-bottom: 32px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                            <h4 style="margin: 0; color: #333; font-size: 16px; font-weight: 600;">Email Preferences</h4>
+                        </div>
+                        <md-checkbox ng-model="settings.db.invoices_by_email" aria-label="Receive Invoices By Email" style="margin-bottom: 16px;">
+                            Receive Invoices By Email
+                        </md-checkbox>
+                    </div>
+                    <a class="cancel-subscribe" ng-click="cancelSubscription($event)" href style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; background: #ffebee; color: #c62828; text-decoration: none; border-radius: 4px; font-weight: 500; transition: all 0.3s ease; margin-bottom: 32px;">
+                        <md-icon style="font-size: 20px; margin: 0;"><i class="mdi mdi-close-circle-outline"></i></md-icon>
+                        <span>Cancel Subscription</span>
+                    </a>
                     <div ng-show="$shared.planName()==='pay-as-you-go'">
                         <md-input-container>
                             <label>Billing Package</label>

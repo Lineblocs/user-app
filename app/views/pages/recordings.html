@@ -1,69 +1,74 @@
 <div ng-show="!pagination.checkIfSearched() && !$shared.isInLoadingState() && recordings.length === 0" class="no-results">
-  <md-card md-theme="'default'"" md-theme-watch>
+  <md-card md-theme="'default'" md-theme-watch>
     <div class="no-results">
       <div class="inner">
       <center>
+        <md-icon style="font-size: 48px; color: #999;">
+          <i class="mdi mdi-microphone-off"></i>
+        </md-icon>
         <h5>No recordings listed</h5>
+        <p style="color: #999; font-size: 14px;">Start by recording a call to see it appear here</p>
       </center>
     </div>
     </div>
   </md-card>
 </div>
 <div ng-show="pagination.checkIfSearched() || (!pagination.checkIfSearched() && recordings.length > 0)" class="recording-screen-block">
-    <md-card md-theme="'default'"" md-theme-watch class="card-radius">
-        <md-card-title class="p-16">
-            <span class="md-headline title-text">Recordings Filter</span>
+    <md-card md-theme="'default'" md-theme-watch class="card-radius" style="margin-bottom: 24px;">
+        <md-card-title class="p-16" style="border-bottom: 1px solid #e0e0e0;">
+            <span class="md-headline title-text" style="display: flex; align-items: center; gap: 8px;">
+              <i class="mdi mdi-filter-variant"></i>
+              Filter Recordings
+            </span>
         </md-card-title>
-        <md-content>
-            <div class="filte-block p-16">
-                <div class="tag-block">
-                    <md-input-container>
-                        <label>Tags</label>
-                        <input placeholder="comma separated tags. e.g: voicemail, 1000" ng-model="filterArgs.tags" type="text">
-                    </md-input-container>
-                </div>
+        <md-content style="padding: 24px;">
+            <div class="filte-block">
+                <div layout="column" layout-gt-md="row" layout-align="space-between start">
+                    <div class="tag-block" flex-gt-md="100" style="margin-bottom: 16px;">
+                        <md-input-container class="md-block" style="margin: 0;">
+                            <md-icon class="mdi mdi-tag-multiple"></md-icon>
+                            <label>Tags</label>
+                            <input placeholder="e.g: voicemail, 1000" ng-model="filterArgs.tags" type="text" style="font-size: 14px;">
+                        </md-input-container>
+                    </div>
 
-                <div class="filter-side">
-                    <div layout="row" class="filter-row">
-                        <div class="from-to-text">
-                            <md-input-container >
-                                <label>From</label>
-                                <input ng-model="filterArgs.from" type="text" class="start-date custom-input" />
-                            </md-input-container>
-                        </div>
-                        <div class="from-to-text">
-                            <md-input-container >
-                                <label>To</label>
-                                <input ng-model="filterArgs.to" type="text"  class="start-date custom-input" />
-                            </md-input-container>
-                        </div>
-                        <div>
-                            <md-input-container >
-                                <label>Date start</label>
-                                <input ng-model="filterArgs.start_date" type="date"  class="start-date custom-input" />
-                            </md-input-container>
-                        </div>
-                        <div>
-                            <md-input-container >
-                                <label>Date end</label>
-                                <input ng-model="filterArgs.end_date" type="date"  class="end-date custom-input" />
-
-                            </md-input-container>
-                        </div>
-                        <div class="m-lr-16">
-                            <md-button  class="md-raised md-primary" ng-click="filter()">
-                                <span>
-                                    <md-icon class="tooltip-icon">
-                                        <i class="mdi mdi-filter-variant"></i>
-                                    </md-icon>
+                    <div class="filter-side" flex-gt-md="100">
+                        <div layout="column" layout-gt-sm="row" layout-align="space-between start" class="filter-row" style="gap: 16px;">
+                            <div flex-gt-sm="20" style="min-width: 180px;">
+                                <md-input-container class="md-block" style="margin: 0;">
+                                    <md-icon class="mdi mdi-phone-outgoing"></md-icon>
+                                    <label>From</label>
+                                    <input ng-model="filterArgs.from" type="text" style="font-size: 14px;" />
+                                </md-input-container>
+                            </div>
+                            <div flex-gt-sm="20" style="min-width: 180px;">
+                                <md-input-container class="md-block" style="margin: 0;">
+                                    <md-icon class="mdi mdi-phone-incoming"></md-icon>
+                                    <label>To</label>
+                                    <input ng-model="filterArgs.to" type="text" style="font-size: 14px;" />
+                                </md-input-container>
+                            </div>
+                            <div flex-gt-sm="20" style="min-width: 180px;">
+                                <md-input-container class="md-block" style="margin: 0;">
+                                    <md-icon class="mdi mdi-calendar-start"></md-icon>
+                                    <label>Start Date</label>
+                                    <input ng-model="filterArgs.start_date" type="date" style="font-size: 14px;" />
+                                </md-input-container>
+                            </div>
+                            <div flex-gt-sm="20" style="min-width: 180px;">
+                                <md-input-container class="md-block" style="margin: 0;">
+                                    <md-icon class="mdi mdi-calendar-end"></md-icon>
+                                    <label>End Date</label>
+                                    <input ng-model="filterArgs.end_date" type="date" style="font-size: 14px;" />
+                                </md-input-container>
+                            </div>
+                            <div flex-gt-sm="20" style="display: flex; align-items: flex-end;">
+                                <md-button class="md-raised md-primary" ng-click="filter()" style="width: 100%; margin: 0;">
+                                    <md-icon class="mdi mdi-filter-variant"></md-icon>
                                     Filter
-                                </span>
-                                <md-tooltip class="helper-tooltip" md-direction="top">
-                                    Filter
-                                </md-tooltip>
-                            </md-button>
+                                </md-button>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -146,9 +151,14 @@
             <td md-cell>{{recording.tags}}</td>
             <td md-cell>{{recording.friendly_dates.created_at}}</td>
             <td md-cell>
-              <audio class="small" controls>
-                <source ng-src="{{recording.public_url}}" type="audio/wav"></source>
-              </audio>
+              <md-button ng-click="openRecordingModal(recording)" class="md-icon-button" aria-label="Play recording">
+                <md-icon>
+                  <i class="mdi mdi-play-circle"></i>
+                  <md-tooltip class="helper-tooltip" md-direction="top">
+                    Play recording
+                  </md-tooltip>
+                </md-icon>
+              </md-button>
             </td>
             <td md-cell>
               <md-button ng-click="downloadRecording(recording)" class="md-icon-button" aria-label="Download recording">
