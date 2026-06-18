@@ -15,8 +15,9 @@ angular.module('Lineblocs')
 	$scope.couldNotReset = false;
 	$scope.couldNotResetMsg = "";
 	var token = $location.search()['token'];
+	var email = $location.search()['email'];
 	$scope.user = {
-		email: "",
+		email: email,
 		password: "",
 		confirmPassword: "",
 		token: token
