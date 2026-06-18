@@ -13315,9 +13315,11 @@ angular.module('Lineblocs')
       console.log('saved payment details', res);
       $scope.step = 7;
     }).catch(function(err) {
+
       console.log('error saving payment details', err);
 
-	  showPaymentError("Internal error occured. Please contact support.");
+	  const errorMsg = err.data?.message || "Internal error occured. Please contact support.";
+	  showPaymentError(errorMsg);
     });
   }
 
@@ -13340,7 +13342,12 @@ angular.module('Lineblocs')
 function showPaymentError(msg) {
 	// Show the errors on the form
 	$scope.paymentErrorMsg = msg;
-	angular.element('#paymentForm').scrollTop(0)
+	setTimeout(function() {
+		var paymentForm = document.getElementById('paymentForm');
+		if (paymentForm) {
+			paymentForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	}, 0);
 }
 
 function setupStripeElements() {

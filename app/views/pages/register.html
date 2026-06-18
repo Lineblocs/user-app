@@ -635,7 +635,10 @@
 
                                     <!--<p class="payment-info">Note: you won't be charged for this.</p>-->
                                     <div ng-show="errorMsg" class="error-box">
-                                        <span class="red"><strong>{{errorMsg}}</strong></span>
+                                        <span class="red" style="color: red;"><strong>{{errorMsg}}</strong></span>
+                                    </div>
+                                    <div ng-show="paymentErrorMsg" class="error-box">
+                                        <span class="red" style="color: red;"><strong>{{paymentErrorMsg}}</strong></span>
                                     </div>
                                     <div ng-show="!needsCustomPaymentForm()">
                                         <div class="field-input" layout="column">
