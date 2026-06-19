@@ -13117,7 +13117,7 @@ angular.module('Lineblocs')
 
   }
 
-  $scope.checkoutDashboard = function() {
+  $scope.spinupAfterPayment = function() {
     doSpinup();
   }
 
