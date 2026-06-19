@@ -13117,8 +13117,12 @@ angular.module('Lineblocs')
 
   }
 
+  const SPINUP_TIMEOUT_DELAY = 5000;
+
   $scope.spinupAfterPayment = function() {
-    doSpinup();
+    $timeout(function() {
+      doSpinup();
+    }, SPINUP_TIMEOUT_DELAY);
   }
 
   $scope.validateExpirationDate = function(value) {
@@ -13314,6 +13318,7 @@ angular.module('Lineblocs')
     Backend.post("/saveCustomerPaymentDetails", data, true).then(function( res ) {
       console.log('saved payment details', res);
       $scope.step = 7;
+	  $scope.spinupAfterPayment();
     }).catch(function(err) {
 
       console.log('error saving payment details', err);
