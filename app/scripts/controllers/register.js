@@ -804,7 +804,6 @@ async function createPaymentMethod(paymentDetails) {
 	  Backend.get("/getRegistrationQuestions"),
     ]).then(async function (res) {
 	  //$scope.isTrial = $shared.customizations.trial_mode_enabled;
-	  $scope.isTrial = $shared.customizations.is_trial_enabled;
       $scope.templates = res[0].data;
 	  $scope.billingDates = res[2].data.billing_dates;
 	  $scope.trialDurationDays = res[2].data.trial_duration_days;
@@ -814,6 +813,12 @@ async function createPaymentMethod(paymentDetails) {
 
 	  var plan = getBestServicePlanOption();
 	  console.log("best plan option is ", plan);
+	  $scope.isTrial = false;
+	
+	  if ( $shared.customizations.is_trial_enabled && !plan.free_trial_exempt ) {
+		$scope.isTrial = true;
+	  }
+
 	  $scope.period = $stateParams['billingPeriod'] || 'MONTHLY';
 	  console.log("billing period ", $scope.period);
 	  $scope.plan = plan;
@@ -860,9 +865,9 @@ async function createPaymentMethod(paymentDetails) {
 		} else {
 			$scope.billingEndDate = $scope.billingDates['next_annual_billing_date_formatted'];
 		}
-
-		$scope.nextBillDate = $scope.billingEndDate;
 	  }
+
+	$scope.nextBillDate = $scope.billingEndDate;
       
       // Calculate savings
       $scope.savingsInDollars = $scope.planPrice - $scope.proratedFee;

@@ -850,7 +850,8 @@
                                 <b ng-if="isMonthlyBilling() "class="trial-text">{{planName}} (${{planPrice}}/mo)</b>
                                 <b ng-if="!isMonthlyBilling() "class="trial-text">{{planName}} (${{planPrice}}/yr)</b>
                             </div>
-                            <div class="pay-trial">
+                            <div class="pay-trial" ng-show="!isTrial">
+
                                 <b class="trial-text">Billing Period</b>
                                 <b class="trial-text">{{billingStartDate}} – {{billingEndDate}}</b>
                             </div>
@@ -859,17 +860,40 @@
                                 <b class="trial-text" style="color: green;">-${{proratedAdjustment}} ({{daysRemaining}} days remaining)</b>
                             </div>
                             <hr>
-                            <div class="pay-trial">
-                                <b class="trial-text" style="font-size: 1.2em;">Due Today</b>
-                                <b class="trial-text" style="font-size: 1.2em;"><strong>${{dueToday}}</strong></b>
+
+                            <div ng-show="!isTrial">
+                                <div class="pay-trial">
+                                    <b class="trial-text" style="font-size: 1.2em;">Due Today</b>
+                                    <b class="trial-text" style="font-size: 1.2em;"><strong>${{dueToday}}</strong></b>
+                                </div>
+                                <div class="pay-trial-details" style="display: flex; align-items: center; gap: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
+                                    <p class="payment-info-billed font-trial" style="font-size: 1em; font-weight: 600; margin: 0; white-space: nowrap;">Billing starts:</p>
+                                    <p class="payment-info-billed" style="font-size: 1em; font-weight: 600; margin: 0; color: #317780;">{{nextBillDate}} • Cancel anytime, free of cost</p>
+                                </div>
                             </div>
 
 
-                            <div class="pay-trial-details" style="display: flex; align-items: center; gap: 16px; padding-top: 12px; border-top: 1px solid #e0e0e0;">
-                                <p class="payment-info-billed font-trial" style="font-size: 1em; font-weight: 600; margin: 0; white-space: nowrap;">Next Bill Date:</p>
-                                <p class="payment-info-billed" style="font-size: 1em; font-weight: 600; margin: 0; color: #317780;">{{nextBillDate}}</p>
+                            <div ng-show="isTrial" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 24px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
+
+                                <div class="pay-trial" style="display: flex; align-items: center; gap: 16px;">
+                                    <i class="mdi mdi-gift" style="font-size: 2.5em; color: #fff;"></i>
+                                    <div>
+                                        <b class="trial-text" style="font-size: 1.2em; color: #fff; display: block;">Trial Period</b>
+                                        <b class="trial-text" style="font-size: 1.2em; color: #fff;"><strong>✨ No charge for {{trialDurationDays}} days</strong></b>
+                                    </div>
+                                </div>
+                                <div class="pay-trial-details" style="display: flex; align-items: center; gap: 16px; padding-top: 16px; margin-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.3);">
+                                    <i class="mdi mdi-calendar-clock" style="font-size: 1.3em; color: #fff;"></i>
+                                    <div>
+                                        <p class="payment-info-billed font-trial" style="font-size: 0.9em; font-weight: 600; margin: 0; color: rgba(255, 255, 255, 0.8);">Billing starts:</p>
+                                        <p class="payment-info-billed" style="font-size: 1em; font-weight: 600; margin: 0; color: #fff;">{{nextBillDate}} • Cancel anytime before trial ends on {{nextBillDate}} free of cost</p>
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+
+
+                                       </div>
                     </div>
 
                 </div>
