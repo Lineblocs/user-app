@@ -616,7 +616,7 @@
                 <div ng-show="step===6" class="payment-container">
                     <div class="login-form" layout="row">
                         <div class="payment-details-container">
-                            <h3 class="top-payment-heading" ng-show="isTrial">{{numTrialDays}}-day Pro trial</h3>
+                            <h3 class="top-payment-heading" ng-show="isTrial">{{trialDurationDays}}-day Pro trial</h3>
                             <p ng-show="isTrial" class="payment-info">{{$shared.customizations.site_name}} free trial with more details.</p>
 
                             <h1 class="top-payment-heading" ng-show="!isTrial">Start making calls with {{$shared.customizations.site_name}} today!</h1>
@@ -837,7 +837,8 @@
                                         ng-href="{{$shared.createDomainLink('pages/tos')}}">these terms.</a>
                                     </p>
                                 </div>
-                                <md-button ng-show="cardVisible" type="submit" class="md-raised md-primary no-margin-sides trial-button" ng-click="selectPaymentMethod('card')">Start 30-day free trial</md-button>
+                                <md-button ng-show="cardVisible && isTrial" type="submit" class="md-raised md-primary no-margin-sides trial-button" ng-click="selectPaymentMethod('card')">Start {{trialDurationDays}}-day free trial</md-button>
+                                <md-button ng-show="cardVisible && !isTrial" type="submit" class="md-raised md-primary no-margin-sides trial-button" ng-click="selectPaymentMethod('card')">Sign Up</md-button>
                                 <div ng-show="paypalVisible" id="paypal-button-container" class="md-raised no-margin-sides paypal-button" ng-click="selectPaymentMethod('paypal')"></div>
                                 <div id="card-errors" role="alert"></div>
                             </form>
@@ -853,7 +854,7 @@
                                 <b class="trial-text">Billing Period</b>
                                 <b class="trial-text">{{billingStartDate}} – {{billingEndDate}}</b>
                             </div>
-                            <div class="pay-trial">
+                            <div class="pay-trial" ng-show="!$shared.isAnniversaryFlowActive()">
                                 <b class="trial-text">Prorated Adjustment</b>
                                 <b class="trial-text" style="color: green;">-${{proratedAdjustment}} ({{daysRemaining}} days remaining)</b>
                             </div>

@@ -803,9 +803,12 @@ async function createPaymentMethod(paymentDetails) {
       Backend.get("/getServicePlans"),
 	  Backend.get("/getRegistrationQuestions"),
     ]).then(async function (res) {
-	  $scope.isTrial = $shared.customizations.trial_mode_enabled;
+	  //$scope.isTrial = $shared.customizations.trial_mode_enabled;
+	  $scope.isTrial = $shared.customizations.is_trial_enabled;
       $scope.templates = res[0].data;
-	  $scope.plans = res[2].data;
+	  $scope.billingDates = res[2].data.billing_dates;
+	  $scope.trialDurationDays = res[2].data.trial_duration_days;
+	  $scope.plans = res[2].data.plans;
 	  $scope.registrationQuestions = res[3].data;
 	  $scope.width = ((1 / $scope.registrationQuestions.length) * 100).toString() + '%';
 
@@ -828,17 +831,37 @@ async function createPaymentMethod(paymentDetails) {
       	$scope.planPrice = plan.monthly_charge;
       	$scope.proratedFee = plan.prorated_monthly_charge;
 		// Set billing dates - first day of next month
-		
+	
+		/*
 		const nextBillDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 		$scope.billingEndDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
 		$scope.nextBillDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
+		*/
+
+		$scope.billingEndDate = $scope.billingDates['next_monthly_billing_date_formatted'];
+		if ($shared.customizations.is_trial_enabled) {
+			$scope.billingEndDate = $scope.billingDates['next_monthly_billing_date_w_trial_formatted'];
+		} else {
+			$scope.billingEndDate = $scope.billingDates['next_monthly_billing_date_formatted'];
+		}
+
 	  } else { //  annual billing
 		$scope.planPrice = plan.annual_charge;
 	  	$scope.proratedFee = plan.prorated_annual_charge;			
 		// Set billing dates - first day of next year
+		/*
 		const nextBillDate = new Date(now.getFullYear() + 1, 0, 1);
 		$scope.billingEndDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
 		$scope.nextBillDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
+		*/	
+
+		if ($shared.customizations.is_trial_enabled) {
+			$scope.billingEndDate = $scope.billingDates['next_annual_billing_date_w_trial_formatted'];
+		} else {
+			$scope.billingEndDate = $scope.billingDates['next_annual_billing_date_formatted'];
+		}
+
+		$scope.nextBillDate = $scope.billingEndDate;
 	  }
       
       // Calculate savings
@@ -851,9 +874,11 @@ async function createPaymentMethod(paymentDetails) {
       const dayOfMonth = now.getDate();
       $scope.daysRemaining = daysInMonth - dayOfMonth + 1;
       $scope.proratedAdjustment = $scope.proratedFee;
-      $scope.dueToday = $scope.proratedFee;
-
-
+	  if ($shared.isAnniversaryFlowActive()) {
+		$scope.dueToday = $scope.planPrice;
+	  } else {
+		$scope.dueToday = $scope.proratedFee;
+	  }
       
       console.log("user selected plan is ", $stateParams['plan'] );
       // if ( $stateParams['plan'] ) {

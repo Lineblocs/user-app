@@ -378,6 +378,11 @@ angular
         // Return with or without dollar sign based on parameter
         return addDollarSign ? `$${dollars}` : dollars;
       };
+
+      factory.isAnniversaryFlowActive = function() {
+        const settings = factory.customizations;
+        return settings && settings.billing_flow === 'ANNIVERSARY';
+      }
       factory.isSectionActive = function (area) {
         var current = factory.state.name;
         var maps = {
