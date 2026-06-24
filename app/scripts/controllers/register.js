@@ -844,7 +844,7 @@ async function createPaymentMethod(paymentDetails) {
 		*/
 
 		$scope.billingEndDate = $scope.billingDates['next_monthly_billing_date_formatted'];
-		if ($shared.customizations.is_trial_enabled) {
+		if ($shared.isTrial) {
 			$scope.billingEndDate = $scope.billingDates['next_monthly_billing_date_w_trial_formatted'];
 		} else {
 			$scope.billingEndDate = $scope.billingDates['next_monthly_billing_date_formatted'];
@@ -860,7 +860,7 @@ async function createPaymentMethod(paymentDetails) {
 		$scope.nextBillDate = $filter('date')(nextBillDate, 'MMM dd, yyyy');
 		*/	
 
-		if ($shared.customizations.is_trial_enabled) {
+		if ($shared.isTrial) {
 			$scope.billingEndDate = $scope.billingDates['next_annual_billing_date_w_trial_formatted'];
 		} else {
 			$scope.billingEndDate = $scope.billingDates['next_annual_billing_date_formatted'];
