@@ -94,6 +94,7 @@ angular.module('Lineblocs').controller('HomeCtrl', ['$scope', '$timeout', 'Backe
 				var graph = res.data[0];
 				$shared.billInfo=  res.data[1];
 				$shared.userInfo=  res.data[2];
+				$scope.metrics= res.data[6];
 				console.log("graph data is ", graph);
 				$scope.callsMade = [
 					{
