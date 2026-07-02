@@ -69,6 +69,7 @@
                                         Card</md-button>
 
                                 </div>
+
                                 <div ng-show="cards.length > 0" style="margin-top: 20px;">
                                     <h5 style="margin: 0 0 16px 0; color: #333; font-size: 16px; font-weight: 600;">Use Existing Card</h5>
                                     <div layout="row">
@@ -86,6 +87,22 @@
                                                 </md-radio-button>
                                             </md-radio-group>
                                         </div>
+                                    </div>
+                                    <div style="display: flex; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e0e0e0;">
+                                        <md-button ng-click="setPrimaryCard(data.selectedCard)" 
+                                            ng-disabled="!data.selectedCard" 
+                                            class="md-raised md-primary no-margin-sides"
+                                            style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                            <md-icon style="font-size: 18px;"><i class="mdi mdi-check-circle"></i></md-icon>
+                                            <span>Set as Primary</span>
+                                        </md-button>
+                                        <md-button ng-click="setBackupCard(data.selectedCard)" 
+                                            ng-disabled="!data.selectedCard"
+                                            class="md-raised no-margin-sides"
+                                            style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; background-color: #f5f5f5; color: #666;">
+                                            <md-icon style="font-size: 18px; color: #1976d2;"><i class="mdi mdi-shield-account"></i></md-icon>
+                                            <span style="color: #1976d2; font-weight: 500;">Set as Backup</span>
+                                        </md-button>
                                     </div>
                                     <div ng-show="settings.newCard">
                                         <form ng-cloak ng-submit="submit()">

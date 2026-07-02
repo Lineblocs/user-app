@@ -4491,6 +4491,21 @@ angular.module('Lineblocs')
 		 });
           });
 	}
+
+	$scope.setBackupCard = function(cardId)
+	{
+		Backend.put("/card/" + cardId + "/setBackup").then(function() {
+			loadData(true).then(function() {
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Set card as backup')
+					.position("top right")
+					.hideDelay(3000)
+				);
+			});
+		});
+	}
+
 	$scope.deleteCard = function($event, card)
 	{
 		if(card.primary === 1){
