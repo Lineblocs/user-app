@@ -253,6 +253,10 @@
                                             <md-button ng-click="setPrimary(card)" ng-show="!card.primary" class="md-raised md-primary md-small" style="flex: 1; margin: 0; text-transform: uppercase; font-size: 12px;">
                                                 Make Default
                                             </md-button>
+                                            <md-button ng-click="setBackup(card)" ng-show="!card.primary" ng-disabled="card.backup" class="md-raised md-small" style="flex: 1; margin: 0; text-transform: uppercase; font-size: 12px;">
+                                                Set as Backup
+                                            </md-button>
+
                                             <md-button ng-click="deleteCard($event, card)" class="md-icon-button md-small" aria-label="Delete card" style="margin: 0;">
                                                 <md-icon>
                                                     <i class="mdi mdi-delete"></i>

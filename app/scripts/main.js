@@ -4484,7 +4484,7 @@ angular.module('Lineblocs')
 		loadData(true).then(function() {
 		 $mdToast.show(
           $mdToast.simple()
-            .textContent('Set card as primary')
+            .textContent('Card set as primary payment method successfully')
             .position("top right")
             .hideDelay(3000)
 		);
@@ -4492,13 +4492,13 @@ angular.module('Lineblocs')
           });
 	}
 
-	$scope.setBackupCard = function(cardId)
+	$scope.setBackup = function(card)
 	{
-		Backend.put("/card/" + cardId + "/setBackup").then(function() {
+		Backend.put("/card/" + card.id + "/setBackup").then(function() {
 			loadData(true).then(function() {
 				$mdToast.show(
 					$mdToast.simple()
-					.textContent('Set card as backup')
+					.textContent('Card set as backup payment method successfully')
 					.position("top right")
 					.hideDelay(3000)
 				);
