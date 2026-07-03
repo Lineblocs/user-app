@@ -39,6 +39,36 @@ function checkExpires(expiresIn)
 
 }
 
+function refreshWorkspacePermissions(permissionsMap) {
+    var workspace = getWorkspace();
+    if (!workspace) {
+        return;
+    }
+    
+    if (!workspace.user_info) {
+        workspace.user_info = {};
+    }
+    
+    var hasChanged = false;
+    
+    // Update permissions that start with create_*, manage_*, or delete_*
+    for (var key in permissionsMap) {
+        if (permissionsMap.hasOwnProperty(key)) {
+            if (key.startsWith('create_') || key.startsWith('manage_') || key.startsWith('delete_')) {
+                if (workspace.user_info[key] !== permissionsMap[key]) {
+                    workspace.user_info[key] = permissionsMap[key];
+                    hasChanged = true;
+                }
+            }
+        }
+    }
+    
+    // Update localStorage only if values changed
+    if (hasChanged) {
+        localStorage.setItem('WORKSPACE', JSON.stringify(workspace));
+    }
+}
+
 function createBaseTitle() {
     return DEPLOYMENT_DOMAIN;
 }
@@ -443,13 +473,21 @@ angular
         return factory.getHomeLink() + path;
       };
       factory.getAppLogo = function () {
+        if (factory.customizations == null) {
+          return '';
+        }
+
         var logo = factory.customizations['app_logo'];
-        if (!logo || logo === '') {
+        if (logo === null || logo === '') {
           return '/images/new-logo-blue.png';
         }
         return getBaseUrl() + '/assets/img/' + logo;
       };
       factory.getAppIcon = function () {
+        if (factory.customizations == null) {
+          return '';
+        }
+
         var icon = factory.customizations['app_icon'];
         console.log('loading icon ', icon);
 
@@ -1253,6 +1291,8 @@ angular
             $shared.planInfo = res.data[4];
             // $shared.planInfo.rank = 3;
             $shared.workspaceInfo = res.data[5];
+            const userInfo = $shared.workspaceInfo.user_info;
+            refreshWorkspacePermissions(userInfo);
             console.log('updated UI state');
             resolve(res);
           },
