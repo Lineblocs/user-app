@@ -147,10 +147,9 @@
 		</md-menu>
 	-->
   </header>
-  <!-- Subscription inactive message -->
-  <div ng-show="!$shared.isSubscriptionActive()" class="subscription-inactive-box" style="padding: 20px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; margin: 20px; color: #856404;">
-    <strong>Subscription Inactive</strong>
-    <p>Your subscription is currently inactive. Please update your subscription status to access all features.</p>
+  <!-- Pending Cancellation Message -->
+  <div ng-show="$shared.isSubscriptionPendingCancellation()" class="pending-cancellation-banner">
+    <strong>Subscription Pending Cancellation:</strong> Your subscription is pending cancellation and will be cancelled at the start of the next billing cycle.
   </div>
   <!-- Side bar here -->
   <aside id="" class="sidebar">
@@ -220,7 +219,7 @@
                 ></md-button
               >
             </li>
-            <li class="show-subnav" ng-show="$shared.hasAccess('manage_dids')">
+            <li class="show-subnav" ng-show="$shared.hasAccess('manage_dids') && $shared.subscription.status === 'ACTIVE' && $shared.isSubscriptionActive()">
               <md-button href="" class="show-menu" ng-click="subnav('ui')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -248,7 +247,7 @@
                 </li>
               </ul>
             </li>
-            <li ng-class="{active: $shared.isSectionActive('flows')}" ng-show="$shared.hasAccess('manage_flows')">
+            <li ng-class="{active: $shared.isSectionActive('flows')}" ng-show="$shared.hasAccess('manage_flows') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('flows')" class=""
                 ><i class="mdi mdi-chart-scatterplot-hexbin"></i> &nbsp;<span class="text">
                   {{ 'flows' | translate }}</span
@@ -257,7 +256,7 @@
             </li>
             <li
               ng-class="{active: $shared.isSectionActive('extensions')}"
-              ng-show="$shared.hasAccess('manage_extensions')"
+              ng-show="$shared.hasAccess('manage_extensions') && $shared.isSubscriptionActive()"
             >
               <md-button href="" ng-click="$shared.changeRoute('extensions')" class=""
                 ><i class="mdi mdi-cellphone"></i> &nbsp;<span class="text"
@@ -265,7 +264,7 @@
                 ></md-button
               >
             </li>
-            <li class="show-subnav" ng-show="$shared.isSettingEnabled('provisioner') && $shared.hasAccess('manage_phones')">
+            <li class="show-subnav" ng-show="$shared.isSettingEnabled('provisioner') && $shared.hasAccess('manage_phones') && $shared.isSubscriptionActive()">
               <md-button href="" class="show-menu" ng-click="subnav('ui-2')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-2'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -309,7 +308,7 @@
                 </li>
               </ul>
             </li>
-            <li class="show-subnav" ng-show="$shared.hasAccess('manage_calls')">
+            <li class="show-subnav" ng-show="$shared.hasAccess('manage_calls') && $shared.isSubscriptionActive()">
               <md-button href="" class="show-menu" ng-click="subnav('ui-4')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-4'}"></i>
                 <i class="mdi mdi-cellphone"></i> &nbsp;
@@ -328,7 +327,7 @@
                 </li>
               </ul>
             </li>
-            <li ng-class="{active: $shared.isSectionActive('recordings')}" ng-show="$shared.hasAccess('manage_recordings')">
+            <li ng-class="{active: $shared.isSectionActive('recordings')}" ng-show="$shared.hasAccess('manage_recordings') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('recordings')" class=""
                 ><i class="mdi mdi-record"></i> &nbsp;<span class="text"
                   >{{ 'recordings' | translate }}</span
@@ -337,14 +336,14 @@
             </li>
             <li
               ng-class="{active: $shared.isSectionActive('faxes')}"
-              ng-show="$shared.isSettingEnabled('fax') && $shared.hasAccess('manage_faxes')">
+              ng-show="$shared.isSettingEnabled('fax') && $shared.hasAccess('manage_faxes') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('faxes')" class=""
                 ><i class="mdi mdi-file-document"></i> &nbsp;<span class="text"
                   >{{ 'faxes' | translate }}</span
                 ></md-button
               >
             </li>
-            <li ng-class="{active: $shared.isSectionActive('files')}" ng-show="$shared.hasAccess('manage_files')">
+            <li ng-class="{active: $shared.isSectionActive('files')}" ng-show="$shared.hasAccess('manage_files') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('files')" class=""
                 ><i class="mdi mdi-library-music"></i> &nbsp;<span class="text"
                   >{{ 'media-files' | translate }}</span
@@ -352,7 +351,7 @@
               >
             </li>
 
-            <li ng-class="{active: $shared.isSectionActive('hosted-trunks')}" ng-show="$shared.hasAccess('manage_trunks')">
+            <li ng-class="{active: $shared.isSectionActive('hosted-trunks')}" ng-show="$shared.hasAccess('manage_trunks') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('hosted-trunks')" class=""
                 ><i class="mdi mdi-credit-card-multiple"></i> &nbsp;<span class="text"
                   >{{ 'hosted-trunks' | translate }}</span
@@ -360,7 +359,7 @@
               >
             </li>
 
-            <li class="show-subnav" ng-show="$shared.isSettingEnabled('bring_carrier') && $shared.hasAccess('manage_byo_carriers')">
+            <li class="show-subnav" ng-show="$shared.isSettingEnabled('bring_carrier') && $shared.hasAccess('manage_byo_carriers') && $shared.isSubscriptionActive()">
               <md-button href="" class="show-menu" ng-click="subnav('ui-3')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-3'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;
@@ -380,14 +379,14 @@
               </ul>
             </li>
 
-            <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}" ng-show="$shared.hasAccess('manage_users')">
+            <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}" ng-show="$shared.hasAccess('manage_users') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""
                 ><i class="mdi mdi-account"></i> &nbsp;<span class="text"
                   >{{ 'users' | translate }}</span
                 ></md-button
               >
             </li>
-            <li ng-class="{active: $shared.isSectionActive('support')}" ng-show="$shared.hasAccess('manage_support')">
+            <li ng-class="{active: $shared.isSectionActive('support')}" ng-show="$shared.hasAccess('manage_support') && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('support')" class=""
                 ><i class="mdi mdi-credit-card-multiple"></i> &nbsp;<span class="text"
                   >{{ 'support' | translate }}</span
@@ -403,7 +402,7 @@
               >
             </li>
 
-            <li class="show-subnav">
+            <li class="show-subnav" ng-show="$shared.isSubscriptionActive()">
               <md-button href="" class="show-menu" ng-click="subnav('ui-1')">
                 <i class="mdi mdi-chevron-down" ng-class="{'active': showingSubNav=='ui-1'}"></i>
                 <i class="mdi mdi-arrange-bring-to-front"></i> &nbsp;

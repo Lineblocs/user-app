@@ -415,6 +415,7 @@ angular
         const settings = factory.customizations;
         return settings && settings.billing_flow === 'ANNIVERSARY';
       }
+
       factory.isSubscriptionActive = function() {
         if (!factory.subscription) {
           return false;
@@ -425,6 +426,14 @@ angular
         }
 
         return true;
+      }
+
+      factory.isSubscriptionPendingCancellation = function() {
+        if (!factory.subscription) {
+          return false;
+        }
+
+        return factory.subscription.cancel_at_period_end === true;
       }
       factory.isSectionActive = function (area) {
         var current = factory.state.name;

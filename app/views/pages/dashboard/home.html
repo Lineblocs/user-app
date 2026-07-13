@@ -133,9 +133,23 @@
 				</md-card>
 			</div>
 
-			<div class="mdl-cell">
-				<h4>Dashboard</h4>
+			<!-- Subscription Pending Cancellation Alert -->
+			<div ng-if="$shared.isSubscriptionPendingCancellation()" style="margin-bottom: 20px;">
+				<md-card style="background-color: #ffebee; border-left: 4px solid #d32f2f;">
+					<md-card-content style="padding: 20px; display: flex; align-items: center;">
+						<i class="mdi mdi-alert-circle" style="font-size: 32px; color: #d32f2f; margin-right: 16px;"></i>
+						<div>
+							<p style="margin: 0; font-weight: 600; color: #333; font-size: 16px;">Subscription Pending Cancellation</p>
+							<p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">Your subscription is pending cancellation and will be canceled at the start of the next billing cycle.</p>
+						</div>
+					</md-card-content>
+				</md-card>
 			</div>
+
+			<div ng-if="$shared.isSubscriptionActive()">
+				<div class="mdl-cell">
+					<h4>Dashboard</h4>
+				</div>
 
 			<!-- Analytics Section -->
 			<div layout="row" layout-sm="column" layout-xs="column" class="mdl-grid" style="margin-bottom: 30px;">

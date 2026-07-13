@@ -244,6 +244,7 @@ angular
       factory.isLoading = true;
       factory.currentWorkspace = '';
       factory.billingCountries = [];
+      factory.subscription = null;
       factory.ranges = ['/8', '/16', '/24', '/32'];
       factory.acSearch = {
         isDisabled: false,
@@ -383,6 +384,7 @@ angular
         searchModule('Support', 'support', ['support'], [], ['support']),
       ];
 
+
       factory.hasAccess = function (feature) {
         const workspace = getWorkspace();
         const user = workspace.user_info;
@@ -412,6 +414,26 @@ angular
       factory.isAnniversaryFlowActive = function() {
         const settings = factory.customizations;
         return settings && settings.billing_flow === 'ANNIVERSARY';
+      }
+
+      factory.isSubscriptionActive = function() {
+        if (!factory.subscription) {
+          return false;
+        }
+          
+        if (factory.subscription.status !== 'ACTIVE') {
+          return false;
+        }
+
+        return true;
+      }
+
+      factory.isSubscriptionPendingCancellation = function() {
+        if (!factory.subscription) {
+          return false;
+        }
+
+        return factory.subscription.cancel_at_period_end === true;
       }
       factory.isSectionActive = function (area) {
         var current = factory.state.name;
@@ -1297,6 +1319,7 @@ angular
             $shared.planInfo = res.data[4];
             // $shared.planInfo.rank = 3;
             $shared.workspaceInfo = res.data[5];
+            $shared.subscription = res.data[7];
             const userInfo = $shared.workspaceInfo.user_info;
             refreshWorkspacePermissions(userInfo);
             console.log('updated UI state');
@@ -5747,7 +5770,7 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
 angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
   $shared.updateTitle("Cancel Subscription");
   $scope.cancelSubscription = false;
-  $shared.endIsCreateLoading();
+  $shared.endAllLoading();
   $scope.cancelSubscription = function ($event) {
     $scope.cancelSubscription = true;
     const confirm = $mdDialog.confirm()

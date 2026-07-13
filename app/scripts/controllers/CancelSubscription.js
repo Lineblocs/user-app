@@ -10,7 +10,7 @@
 angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
   $shared.updateTitle("Cancel Subscription");
   $scope.cancelSubscription = false;
-  $shared.endIsCreateLoading();
+  $shared.endAllLoading();
   $scope.cancelSubscription = function ($event) {
     $scope.cancelSubscription = true;
     const confirm = $mdDialog.confirm()
