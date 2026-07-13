@@ -18,8 +18,16 @@
 
             <md-divider></md-divider>
 
+            <!-- No outstanding invoices message -->
+            <div ng-show="outstandingInvoices.length === 0" layout="column" layout-align="center center" style="padding: 24px 0;">
+                <p style="color: #666; margin: 12px 0; font-size: 20px;">No outstanding invoices to pay at this time. You're all caught up!</p>
+                <md-button ng-click="$shared.changeRoute('billing', {})" class="md-raised md-primary" style="margin-top: 16px;">
+                    Back to Billing
+                </md-button>
+            </div>
+
             <!-- Card payment -->
-            <div ng-show="settings.type==='CARD'" style="margin-top: 20px;">
+            <div ng-show="settings.type==='CARD' && outstandingInvoices.length > 0" style="margin-top: 20px;">
 
                 <!-- No cards added -->
                 <div ng-show="cards.length === 0" layout="column" layout-align="center center" style="padding: 24px 0;">

@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <nav class="right">
+      <nav class="right" ng-show="$shared.isSubscriptionActive()">
         <ul>
           <li>
             <md-menu md-position-mode="target-right target">
@@ -147,6 +147,11 @@
 		</md-menu>
 	-->
   </header>
+  <!-- Subscription inactive message -->
+  <div ng-show="!$shared.isSubscriptionActive()" class="subscription-inactive-box" style="padding: 20px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; margin: 20px; color: #856404;">
+    <strong>Subscription Inactive</strong>
+    <p>Your subscription is currently inactive. Please update your subscription status to access all features.</p>
+  </div>
   <!-- Side bar here -->
   <aside id="" class="sidebar">
     <div class="sidebar-content scroll">

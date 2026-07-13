@@ -19,12 +19,16 @@ angular.module('Lineblocs')
 
     $scope.getCurrentPlan = function() {
       const info = $shared.planInfo;
-      return $scope.plans.find((plan) => plan.key_name === info.key_name);
+      if ($scope.plans && $scope.plans.length > 0) {
+        return $scope.plans.find((plan) => plan.key_name === info.key_name);
+      }
+
+      return null;
     }
 
     $scope.isUpgradePlanned = function(plan) {
       const subscription = $scope.subscription;
-      if (subscription.scheduled_plan_id) {
+      if (subscription && subscription.scheduled_plan_id) {
         return true;
       }
 
@@ -51,7 +55,7 @@ angular.module('Lineblocs')
         $scope.plans = res[0].data;
         $scope.subscription = res[1].data[5];
         $scope.currentPlan = $scope.getCurrentPlan();
-        $shared.endIsLoading();
+        $shared.endAllLoading();
       });
     };
 

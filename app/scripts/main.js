@@ -748,6 +748,12 @@ angular
       factory.scrollToTop = function () {
         $window.scrollTo(0, 0);
       };
+      factory.smoothScrollToTop = function () {
+        $window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      };
       factory.completeChangeRoute = function (route, params, other) {
         $state.go(route, params, other);
         $timeout(function () {
@@ -4726,12 +4732,16 @@ angular.module('Lineblocs')
 
     $scope.getCurrentPlan = function() {
       const info = $shared.planInfo;
-      return $scope.plans.find((plan) => plan.key_name === info.key_name);
+      if ($scope.plans && $scope.plans.length > 0) {
+        return $scope.plans.find((plan) => plan.key_name === info.key_name);
+      }
+
+      return null;
     }
 
     $scope.isUpgradePlanned = function(plan) {
       const subscription = $scope.subscription;
-      if (subscription.scheduled_plan_id) {
+      if (subscription && subscription.scheduled_plan_id) {
         return true;
       }
 
@@ -4758,7 +4768,7 @@ angular.module('Lineblocs')
         $scope.plans = res[0].data;
         $scope.subscription = res[1].data[5];
         $scope.currentPlan = $scope.getCurrentPlan();
-        $shared.endIsLoading();
+        $shared.endAllLoading();
       });
     };
 
@@ -13262,6 +13272,7 @@ angular.module('Lineblocs')
 		});
 	}
     $scope.submit = function($event, registerForm) {
+		$shared.smoothScrollToTop();
 		console.log("called submit");
 		$scope.triedSubmit = true;
 		console.log("data is ", $scope.user);
@@ -13300,6 +13311,7 @@ angular.module('Lineblocs')
 	}
 
 	$scope.submitQuestion = function(event, form, id) {
+		$shared.smoothScrollToTop();
 		if($scope.qIndex !== $scope.registrationQuestions.length-1){
 			$scope.qIndex++;
 			$scope.width = ((($scope.qIndex+1) / $scope.registrationQuestions.length) * 100).toString() + '%';
@@ -13341,6 +13353,7 @@ angular.module('Lineblocs')
 	return true;
   }
   $scope.submitPaymentForm = function($event, paymentForm) {
+    $shared.smoothScrollToTop();
     console.log("called click PaymentForm");
     $scope.triedSubmit = true;
     if(!$scope.paymentDetails.accept_terms) return;
@@ -13517,6 +13530,7 @@ async function createPaymentMethod(paymentDetails) {
 
 
 	$scope.submitVerify1Form = function($event, verify1Form) {
+		$shared.smoothScrollToTop();
 		console.log("called submitVerify1Form");
 		$scope.triedSubmit = true;
 		if (verify1Form.$valid) {
@@ -13541,6 +13555,7 @@ async function createPaymentMethod(paymentDetails) {
 	}
 
 	$scope.submitVerify2Form = function($event, verify2Form) {
+		$shared.smoothScrollToTop();
 		console.log("called submitVerify2Form");
 		$scope.triedSubmit = true;
 		if (verify2Form.$valid) {
@@ -13590,6 +13605,7 @@ async function createPaymentMethod(paymentDetails) {
 			Stripe.card.createToken(data, stripeResponseHandler);
 	}
 	$scope.submitWorkspaceForm = function($event, workspaceForm) {
+		$shared.smoothScrollToTop();
 		console.log("called submitWorkspaceForm");
 		$scope.triedSubmit = true;
 		if (!checkWorkspaceName($scope.workspace)) {

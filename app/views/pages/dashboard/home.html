@@ -120,6 +120,19 @@
 	
 	<div class="mrgndv" flex="100" flex-sm="100" flex-xs="100">
 		<div class="pd-60">
+			<!-- Subscription Status Alert -->
+			<div ng-if="!$shared.isSubscriptionActive()" style="margin-bottom: 20px;">
+				<md-card style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
+					<md-card-content style="padding: 20px; display: flex; align-items: center;">
+						<i class="mdi mdi-alert-circle" style="font-size: 32px; color: #ff9800; margin-right: 16px;"></i>
+						<div>
+							<p style="margin: 0; font-weight: 600; color: #333; font-size: 16px;">Subscription Inactive</p>
+							<p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">Your subscription is currently {{$shared.subscription.status || 'INACTIVE'}}. Please update your subscription to access all features.</p>
+						</div>
+					</md-card-content>
+				</md-card>
+			</div>
+
 			<div class="mdl-cell">
 				<h4>Dashboard</h4>
 			</div>
