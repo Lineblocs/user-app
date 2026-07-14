@@ -1,0 +1,29 @@
+<div class="cancel-subscription-block" ng-if="reactivateSubscription">
+    <div class="cancel-subscription-header">
+        Welcome Back! Let's Reactivate Your Account
+    </div>
+    <div class="cancel-subscription-description">
+        Your subscription will be reactivated immediately. Unlock full access to all premium features and services.
+    </div>
+    <div layout="row" class="cancel-subscription-note">
+        <i class="mdi mdi-information"></i>
+        <div class="info-cancel">Your subscription will be reactivated right away, and you'll regain access to all premium features instantly. You can manage your subscription settings at any time. For more details on billing and subscriptions, please refer to our guide:
+        <a href='https://lineblocs.com/resources/billing-and-pricing/cancelling-memberships'
+            target="_blank">https://lineblocs.com/resources/billing-and-pricing/cancelling-memberships</a></div>
+    </div>
+    <div class="confirm-cancel">
+        <md-button ng-click="reactivateSubscription($event)" class="md-raised md-primary no-margin-sides confirm-button">Confirm Reactivation</md-button>
+    </div>
+</div>
+<div class="cancel-subscription-block" ng-if="!reactivateSubscription">
+    <div class="cancel-subscription-header">
+        Your Subscription is Now Active!
+    </div>
+    <div class="cancel-subscription-description">
+        Congratulations! Your subscription has been successfully reactivated. You now have full access to all premium features and benefits. Welcome back to the community, and we're thrilled to have you on board again!
+    </div>
+
+    <div class="cancel-subscription-description">
+       Manage your subscription settings from the <a ng-click="goBilling()" href>Billing Page</a>
+    </div>
+</div>

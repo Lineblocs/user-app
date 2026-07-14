@@ -1,4 +1,4 @@
-<div class="cancel-subscription-block" ng-if="cancelSubscription">
+<div class="cancel-subscription-block" ng-if="!cancelledSubscription">
     <div class="cancel-subscription-header">
         We're sorry to see you go!
     </div>
@@ -16,7 +16,7 @@
         <md-button ng-click="cancelSubscription($event)" class="md-raised md-warn no-margin-sides confirm-button">Confirm Cancellation</md-button>
     </div>
 </div>
-<div class="cancel-subscription-block" ng-if="!cancelSubscription">
+<div class="cancel-subscription-block" ng-if="cancelledSubscription">
     <div class="cancel-subscription-header">
         We're sorry to see you go!
     </div>

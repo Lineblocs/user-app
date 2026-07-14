@@ -429,11 +429,16 @@ angular
       }
 
       factory.isSubscriptionPendingCancellation = function() {
+        console.log('checking if subscription is pending cancellation ', factory.subscription);
         if (!factory.subscription) {
           return false;
         }
 
-        return factory.subscription.cancel_at_period_end === true;
+        if (factory.subscription.cancel_at_period_end) {
+          return true;
+        }
+
+        return false;
       }
       factory.isSectionActive = function (area) {
         var current = factory.state.name;
@@ -2009,6 +2014,12 @@ angular
         templateUrl: 'views/pages/billing-upgrade.html',
         controller: 'BillingUpgradePlanCtrl',
       })
+      .state('billing-reactivate-subscription', {
+        url: '/billing/reactivate-subscription',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-reactivate-subscription.html',
+        controller: 'BillingReactivateSubscriptionCtrl',
+      } )
       .state('billing-upgrade-submit', {
         url: '/billing/upgrade-submit?plan',
         parent: 'dashboard',

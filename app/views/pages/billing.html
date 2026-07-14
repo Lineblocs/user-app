@@ -16,10 +16,18 @@
             </div>
             <div class="bill-info" style="margin: 0; background: linear-gradient(135deg, #f0fff4 0%, #f5fff8 100%); padding: 24px; border-radius: 8px; border: 1px solid #e8f5e9;">
                 <strong style="font-size: 18px; color: #333; display: block; margin-bottom: 12px;">{{$shared.planInfo.nice_name}}</strong>
-                <a class="link" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
+                <a class="link" ng-if="$shared.isSubscriptionActive() && !$shared.isSubscriptionPendingCancellation()" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
                     <span>↗</span>
                     <span>Upgrade Plan</span>
                 </a>
+                <a class="link" ng-if="!$shared.isSubscriptionActive() || $shared.isSubscriptionPendingCancellation()" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
+                    <span>↻</span>
+                    <span>Reactivate Subscription</span>
+                </a>
+                <div ng-show="$shared.isSubscriptionPendingCancellation()" style="margin-top: 12px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                    <p style="margin: 0; color: #856404; font-size: 13px; font-weight: 500;">Your subscription will be cancelled on {{formatCancellationDate($shared.subscription.next_billing_date)}}</p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -32,10 +40,18 @@
             </div>
             <div class="bill-info sub-title-text" style="margin: 0; background: linear-gradient(135deg, #f0fff4 0%, #f5fff8 100%); padding: 24px; border-radius: 8px; border: 1px solid #e8f5e9;">
                 <strong style="font-size: 18px; color: #333; display: block; margin-bottom: 12px;">{{$shared.planInfo.nice_name}}</strong>
-                <a class="link" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
+                <a class="link" ng-if="$shared.isSubscriptionActive() && !$shared.isSubscriptionPendingCancellation()" ng-click="upgradePlan()" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
                     <span>↗</span>
                     <span>Upgrade Plan</span>
                 </a>
+                <a class="link" ng-if="!$shared.isSubscriptionActive() || $shared.isSubscriptionPendingCancellation()" ng-click="reactivateSubscription($event)" style="display: inline-flex; align-items: center; gap: 6px; color: #1976d2; text-decoration: none; cursor: pointer; font-weight: 500; font-size: 14px; transition: color 0.3s ease;">
+                    <span>↻</span>
+                    <span>Reactivate Subscription</span>
+                </a>
+                <div ng-show="$shared.isSubscriptionPendingCancellation()" style="margin-top: 12px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                    <p style="margin: 0; color: #856404; font-size: 13px; font-weight: 500;">Your subscription will be cancelled on {{formatCancellationDate($shared.subscription.next_billing_date)}}</p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -566,7 +582,8 @@
                             Receive Invoices By Email
                         </md-checkbox>
                     </div>
-                    <a class="cancel-subscribe" ng-click="cancelSubscription($event)" href style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; background: #ffebee; color: #c62828; text-decoration: none; border-radius: 4px; font-weight: 500; transition: all 0.3s ease; margin-bottom: 32px;">
+                    <a 
+                    ng-if="$shared.isSubscriptionActive() && !$shared.isSubscriptionPendingCancellation()" class="cancel-subscribe" ng-click="cancelSubscription($event)" href style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; background: #ffebee; color: #c62828; text-decoration: none; border-radius: 4px; font-weight: 500; transition: all 0.3s ease; margin-bottom: 32px;">
                         <md-icon style="font-size: 20px; margin: 0;"><i class="mdi mdi-close-circle-outline"></i></md-icon>
                         <span>Cancel Subscription</span>
                     </a>

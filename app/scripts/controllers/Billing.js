@@ -793,6 +793,11 @@ angular.module('Lineblocs')
     	$state.go('billing-upgrade-plan', {});
 	}
 
+	$scope.reactivateSubscription = function($event) {
+    	$state.go('billing-reactivate-subscription', {});
+	}
+
+
 	$scope.viewEstimatedCharges = function() {
 		$shared.isLoading = true;
 		Backend.get("/billing/viewEstimatedCharges", { responseType: 'blob' }).then(function(res) {
@@ -815,6 +820,12 @@ angular.module('Lineblocs')
 			);
 		});
 	}
+
+	$scope.formatCancellationDate = function(date) {
+		if (!date) return '';
+		return moment(date).format('MMMM Do YYYY');
+	}
+
 
 	loadData(false);
   });

@@ -429,11 +429,16 @@ angular
       }
 
       factory.isSubscriptionPendingCancellation = function() {
+        console.log('checking if subscription is pending cancellation ', factory.subscription);
         if (!factory.subscription) {
           return false;
         }
 
-        return factory.subscription.cancel_at_period_end === true;
+        if (factory.subscription.cancel_at_period_end) {
+          return true;
+        }
+
+        return false;
       }
       factory.isSectionActive = function (area) {
         var current = factory.state.name;
@@ -2009,6 +2014,12 @@ angular
         templateUrl: 'views/pages/billing-upgrade.html',
         controller: 'BillingUpgradePlanCtrl',
       })
+      .state('billing-reactivate-subscription', {
+        url: '/billing/reactivate-subscription',
+        parent: 'dashboard',
+        templateUrl: 'views/pages/billing-reactivate-subscription.html',
+        controller: 'BillingReactivateSubscriptionCtrl',
+      } )
       .state('billing-upgrade-submit', {
         url: '/billing/upgrade-submit?plan',
         parent: 'dashboard',
@@ -4649,6 +4660,11 @@ angular.module('Lineblocs')
     	$state.go('billing-upgrade-plan', {});
 	}
 
+	$scope.reactivateSubscription = function($event) {
+    	$state.go('billing-reactivate-subscription', {});
+	}
+
+
 	$scope.viewEstimatedCharges = function() {
 		$shared.isLoading = true;
 		Backend.get("/billing/viewEstimatedCharges", { responseType: 'blob' }).then(function(res) {
@@ -4671,6 +4687,12 @@ angular.module('Lineblocs')
 			);
 		});
 	}
+
+	$scope.formatCancellationDate = function(date) {
+		if (!date) return '';
+		return moment(date).format('MMMM Do YYYY');
+	}
+
 
 	loadData(false);
   });
@@ -5769,10 +5791,11 @@ angular.module('Lineblocs').controller('CallsCtrl', function ($scope, Backend, p
  */
 angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
   $shared.updateTitle("Cancel Subscription");
-  $scope.cancelSubscription = false;
+  $scope.isLoading = false;
   $shared.endAllLoading();
+  $scope.cancelledSubscription = false;
   $scope.cancelSubscription = function ($event) {
-    $scope.cancelSubscription = true;
+    $scope.isLoading = true;
     const confirm = $mdDialog.confirm()
       .title('Are you sure you want to cancel your subscription?')
       .textContent('You will not be able to use Lineblocs until you subscribe again.')
@@ -5784,7 +5807,8 @@ angular.module('Lineblocs').controller('CancelSubscriptionCtrl', function ($scop
       $shared.isCreateLoading = true;
       Backend.post("/billingDiscontinue").then(function (res) {
         $mdToast.show($mdToast.simple().textContent('Subscription cancelled').position("top right").hideDelay(3000));
-        $scope.cancelSubscription = false;
+        $scope.isLoading = false;
+        $scope.cancelledSubscription = true;
         $shared.endIsCreateLoading();
       });
     });
@@ -9859,6 +9883,42 @@ angular.module('Lineblocs').controller('PortNumbersCtrl', function ($scope, Back
   $scope.load();
 });
 
+
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name Lineblocs.controller:ReactivateSubscriptionCtrl
+ * @description
+ * # ReactivateSubscriptionCtrl
+ * Controller of Lineblocs
+ */
+angular.module('Lineblocs').controller('BillingReactivateSubscriptionCtrl', function ($scope, $location, $timeout, $q, Backend, $shared, $state, $mdToast, $mdDialog, $window) {
+  $shared.updateTitle("Reactivate Subscription");
+  $scope.reactivateSubscription = false;
+  $shared.endAllLoading();
+  $scope.reactivateSubscription = function ($event) {
+    $scope.reactivateSubscription = true;
+    const confirm = $mdDialog.confirm()
+      .title('Are you sure you want to reactivate your subscription?')
+      .textContent('You will be able to use Lineblocs once your subscription is reactivated.')
+      .ariaLabel('Reactivate Subscription')
+      .targetEvent($event)
+      .ok('Confirm')
+      .cancel('Dismiss');
+    $mdDialog.show(confirm).then(function () {
+      $shared.isCreateLoading = true;
+      Backend.post("/billingReactivate").then(function (res) {
+        $mdToast.show($mdToast.simple().textContent('Subscription reactivated').position("top right").hideDelay(3000));
+        $scope.reactivateSubscription = false;
+        $shared.endIsCreateLoading();
+      });
+    });
+  }
+  $scope.goBilling = function() {
+    $state.go('billing');
+  }
+});
 
 'use strict';
 
