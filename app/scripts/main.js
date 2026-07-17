@@ -4809,8 +4809,8 @@ angular.module('Lineblocs')
         Backend.get("/getServicePlans"),
         Backend.get("/billing"),
       ]).then(function(res) {
-        console.log("getServicePlans ", res.data);
-        $scope.plans = res[0].data;
+        console.log("getServicePlans ", res[0].data);
+        $scope.plans = res[0].data.plans;
         $scope.subscription = res[1].data[5];
         $scope.currentPlan = $scope.getCurrentPlan();
         $shared.endAllLoading();
