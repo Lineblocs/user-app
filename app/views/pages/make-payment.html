@@ -46,10 +46,10 @@
                         <strong style="flex: 1;">Pay with:</strong>
                         <md-button ng-click="addCard($event)" class="md-primary" style="margin: 0;">+ Add a Card</md-button>
                     </div>
-                    <md-radio-group ng-model="data.selectedCard" ng-change="changeCard(data.selectedCard)" layout="row" layout-wrap style="margin-bottom: 16px;">
+                    <md-radio-group ng-model="data.selectedCard" ng-change="changeCard(data.selectedCard)" layout="column" style="margin-bottom: 16px;">
                         <md-radio-button ng-repeat="card in cards" ng-value="card.id"
                             aria-label="{{$shared.createCardLabel(card)}}"
-                            style="margin-right: 16px;">
+                            style="margin-right: 16px; margin-bottom: 8px;">
                             <img ng-src="{{$shared.getCardImg(card)}}" height="22" style="vertical-align: middle; margin-right: 6px;"/>
                             {{$shared.createCardLabel(card)}}
                         </md-radio-button>
@@ -62,24 +62,31 @@
                         <h5 style="margin-bottom: 4px;">Overdue Invoices</h5>
                         <p style="color: #666; margin: 0 0 12px;">Tick the invoices you'd like to pay, then click <em>Pay Selected</em>. Or pay everything at once with <em>Pay Entire Balance</em>.</p>
 
-                        <md-table-container style="width: 100%; overflow-x: auto;">
+                        <md-table-container style="width: 100%; overflow-x: auto; border-radius: 4px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
                             <table md-table class="md-primary md-striped" style="width: 100%;">
-                                <thead md-head>
-                                    <tr md-row>
-                                        <th md-column md-column-align="left" style="width: 48px;"></th>
-                                        <th md-column md-column-align="left">Date</th>
-                                        <th md-column md-column-align="left">Amount</th>
+                                <thead md-head style="background: linear-gradient(135deg, #0d47a1 0%, #1a237e 100%);">
+                                    <tr md-row style="height: 56px; border-bottom: none;">
+                                        <th md-column md-column-align="left" style="width: 48px; padding: 16px 12px; color: white;"></th>
+                                        <th md-column md-column-align="left" style="padding: 16px 12px; font-weight: 700; color: white; letter-spacing: 0.5px;">Date</th>
+                                        <th md-column md-column-align="left" style="padding: 16px 12px; font-weight: 700; color: white; letter-spacing: 0.5px;">Amount</th>
+                                        <th md-column md-column-align="left" style="padding: 16px 12px; font-weight: 700; color: white; letter-spacing: 0.5px;">Status</th>
+                                        <th md-column md-column-align="left" style="padding: 16px 12px; font-weight: 700; color: white; letter-spacing: 0.5px;">Due Date</th>
                                     </tr>
                                 </thead>
                                 <tbody md-body>
                                     <tr md-row ng-repeat="invoice in outstandingInvoices"
                                         ng-click="invoice.selected = !invoice.selected; toggleInvoice(invoice)"
-                                        style="cursor: pointer;">
-                                        <td md-cell>
+                                        style="cursor: pointer; height: 56px; border-bottom: 1px solid #e8e8e8; transition: all 0.2s ease;"
+                                        ng-class="{'md-selected': invoice.selected}"
+                                        onmouseover="this.style.backgroundColor='#f8f9ff'"
+                                        onmouseout="this.style.backgroundColor='transparent'">
+                                        <td md-cell style="padding: 12px;">
                                             <md-checkbox ng-model="invoice.selected" ng-change="toggleInvoice(invoice)" aria-label="Select invoice" ng-click="$event.stopPropagation()"></md-checkbox>
                                         </td>
-                                        <td md-cell>{{invoice.friendly_created_at}}</td>
-                                        <td md-cell><strong>{{invoice.amount_in_dollars}}</strong></td>
+                                        <td md-cell style="padding: 12px; color: #424242; font-size: 14px;">{{invoice.friendly_created_at}}</td>
+                                        <td md-cell style="padding: 12px;"><strong style="color: #1976D2; font-size: 15px; font-weight: 700;">{{invoice.amount_in_dollars}}</strong></td>
+                                        <td md-cell style="padding: 12px;"><span style="display: inline-block; padding: 5px 10px; border-radius: 4px; background-color: #fff3e0; color: #e65100; font-size: 12px; font-weight: 700; letter-spacing: 0.3px;">{{invoice.status}}</span></td>
+                                        <td md-cell style="padding: 12px; color: #d84315; font-weight: 600; font-size: 14px;">{{invoice.friendly_due_date}}</td>
                                     </tr>
                                 </tbody>
                             </table>
