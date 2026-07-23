@@ -92,10 +92,10 @@
             <div class="nav-item balance">
               <strong>Balance</strong>
               <br />
-              <span class="account-balance" ng-show="!$shared.billInfo.info.trialMode">
+              <span class="account-balance" ng-show="!$shared.isTrialMode()">
                 {{$shared.billInfo.info.remainingBalance}}
               </span>
-              <span class="account-balance" ng-show="$shared.billInfo.info.trialMode">
+              <span class="account-balance" ng-show="$shared.isTrialMode()">
                 {{$shared.billInfo.info.remainingBalance}} (trial)
               </span>
             </div>

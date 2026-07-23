@@ -103,7 +103,7 @@ angular.module('Lineblocs')
 			data['amount'] =  amount;
 			$scope.data.creditAmount.value;
 			$shared.isCreateLoading =true;
-			Backend.post("/credit/", data).then(function(res) {
+			Backend.post("/credit", data).then(function(res) {
 				console.log("added credit amount");
 						loadData(true).then(function() {
 							$mdToast.show(
@@ -497,6 +497,32 @@ angular.module('Lineblocs')
 	$scope.changeType = function(newType) {
 		$scope.settings.type = newType;
 	}
+	$scope.saveAutoTopupSettings = function() {
+		console.log("saveAutoTopupSettings ", $scope.subscription);
+		var data = {};
+		data['auto_topup_threshold'] = $scope.subscription.auto_topup_threshold;
+		data['auto_topup_amount'] = $scope.subscription.auto_topup_amount;
+		data['auto_topup_enabled'] = $scope.subscription.auto_topup_enabled;
+		$shared.isCreateLoading = true;
+		Backend.post("/saveAutoTopupSettings", data).then(function(res) {
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Auto top-up settings saved successfully')
+					.position("top right")
+					.hideDelay(3000)
+			);
+			$shared.endIsCreateLoading();
+		}, function(err) {
+			console.error('Error saving auto top-up settings', err);
+			$shared.endIsCreateLoading();
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Failed to save auto top-up settings')
+					.position("top right")
+					.hideDelay(3000)
+			);
+		});
+	}
 	$scope.saveSettings = function() {
 		var data = {};
 		data['auto_recharge'] = $scope.settings.db.auto_recharge;
@@ -615,6 +641,7 @@ angular.module('Lineblocs')
 		return map[ugly];
 	}
 
+
 	function loadData(createLoading) {
 		if (createLoading) {
 			$shared.isCreateLoading =true;
@@ -628,6 +655,7 @@ angular.module('Lineblocs')
 				billHistory()
 			]).then(function(res) {
 				console.log("finished loading..");
+				console.log("billing data ", res);
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
 				$scope.plan = res[0].data[0].info.plan;
@@ -647,6 +675,8 @@ angular.module('Lineblocs')
 				$scope.usageTriggers = res[0].data[4];
 				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
+
+				$scope.subscription = res[0].data[5];
 
 				initializePaymentGateway().then(function() {
 					console.log("billing data is ", $scope.billing);

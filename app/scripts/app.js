@@ -388,7 +388,6 @@ angular
       factory.hasAccess = function (feature) {
         const workspace = getWorkspace();
         const user = workspace.user_info;
-        console.log('checking access for feature ', feature, ' with user info ', user);
         if (user && user[feature]) {
           return true;
         }
@@ -429,7 +428,6 @@ angular
       }
 
       factory.isSubscriptionPendingCancellation = function() {
-        console.log('checking if subscription is pending cancellation ', factory.subscription);
         if (!factory.subscription) {
           return false;
         }
@@ -516,7 +514,6 @@ angular
         }
 
         var icon = factory.customizations['app_icon'];
-        console.log('loading icon ', icon);
 
         if (!icon || icon === '') {
           return '/images/logo-icon-white.png';
@@ -546,7 +543,6 @@ angular
         return theme;
       };
       factory.getCardImg = function (card) {
-        console.log('getCardImg ', card);
         return '/images/cards/' + card.issuer + '.png';
       };
       factory.isInLoadingState = function () {
@@ -580,6 +576,15 @@ angular
         return getWorkspace();
       };
 
+      factory.getSubscription = function () {
+        var workspace = getWorkspace();
+        if (!workspace) {
+          return null;
+        }
+        return workspace.subscription_info;
+      };
+
+
       factory.isSettingEnabled = function (option) {
         if (factory.planInfo) {
           if (factory.planInfo[option]) {
@@ -601,6 +606,17 @@ angular
         var workspace = getWorkspace();
         return workspace.plan;
       };
+
+      factory.isPayAsYouGo = function () {
+        var workspace = getWorkspace();
+        return workspace.subscription_info && workspace.subscription_info.pay_as_you_go === true;
+      };
+
+      factory.isTrialMode = function () {
+        var workspace = getWorkspace();
+        return workspace.subscription_info && workspace.subscription_info.is_free_trial_active === true;
+      }
+
 
       factory.deleteAllChecked = function (module, items) {
         var checked = items.filter(function (item) {

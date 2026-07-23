@@ -388,7 +388,6 @@ angular
       factory.hasAccess = function (feature) {
         const workspace = getWorkspace();
         const user = workspace.user_info;
-        console.log('checking access for feature ', feature, ' with user info ', user);
         if (user && user[feature]) {
           return true;
         }
@@ -429,7 +428,6 @@ angular
       }
 
       factory.isSubscriptionPendingCancellation = function() {
-        console.log('checking if subscription is pending cancellation ', factory.subscription);
         if (!factory.subscription) {
           return false;
         }
@@ -516,7 +514,6 @@ angular
         }
 
         var icon = factory.customizations['app_icon'];
-        console.log('loading icon ', icon);
 
         if (!icon || icon === '') {
           return '/images/logo-icon-white.png';
@@ -546,7 +543,6 @@ angular
         return theme;
       };
       factory.getCardImg = function (card) {
-        console.log('getCardImg ', card);
         return '/images/cards/' + card.issuer + '.png';
       };
       factory.isInLoadingState = function () {
@@ -580,6 +576,15 @@ angular
         return getWorkspace();
       };
 
+      factory.getSubscription = function () {
+        var workspace = getWorkspace();
+        if (!workspace) {
+          return null;
+        }
+        return workspace.subscription_info;
+      };
+
+
       factory.isSettingEnabled = function (option) {
         if (factory.planInfo) {
           if (factory.planInfo[option]) {
@@ -601,6 +606,17 @@ angular
         var workspace = getWorkspace();
         return workspace.plan;
       };
+
+      factory.isPayAsYouGo = function () {
+        var workspace = getWorkspace();
+        return workspace.subscription_info && workspace.subscription_info.pay_as_you_go === true;
+      };
+
+      factory.isTrialMode = function () {
+        var workspace = getWorkspace();
+        return workspace.subscription_info && workspace.subscription_info.is_free_trial_active === true;
+      }
+
 
       factory.deleteAllChecked = function (module, items) {
         var checked = items.filter(function (item) {
@@ -3970,7 +3986,7 @@ angular.module('Lineblocs')
 			data['amount'] =  amount;
 			$scope.data.creditAmount.value;
 			$shared.isCreateLoading =true;
-			Backend.post("/credit/", data).then(function(res) {
+			Backend.post("/credit", data).then(function(res) {
 				console.log("added credit amount");
 						loadData(true).then(function() {
 							$mdToast.show(
@@ -4364,6 +4380,32 @@ angular.module('Lineblocs')
 	$scope.changeType = function(newType) {
 		$scope.settings.type = newType;
 	}
+	$scope.saveAutoTopupSettings = function() {
+		console.log("saveAutoTopupSettings ", $scope.subscription);
+		var data = {};
+		data['auto_topup_threshold'] = $scope.subscription.auto_topup_threshold;
+		data['auto_topup_amount'] = $scope.subscription.auto_topup_amount;
+		data['auto_topup_enabled'] = $scope.subscription.auto_topup_enabled;
+		$shared.isCreateLoading = true;
+		Backend.post("/saveAutoTopupSettings", data).then(function(res) {
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Auto top-up settings saved successfully')
+					.position("top right")
+					.hideDelay(3000)
+			);
+			$shared.endIsCreateLoading();
+		}, function(err) {
+			console.error('Error saving auto top-up settings', err);
+			$shared.endIsCreateLoading();
+			$mdToast.show(
+				$mdToast.simple()
+					.textContent('Failed to save auto top-up settings')
+					.position("top right")
+					.hideDelay(3000)
+			);
+		});
+	}
 	$scope.saveSettings = function() {
 		var data = {};
 		data['auto_recharge'] = $scope.settings.db.auto_recharge;
@@ -4482,6 +4524,7 @@ angular.module('Lineblocs')
 		return map[ugly];
 	}
 
+
 	function loadData(createLoading) {
 		if (createLoading) {
 			$shared.isCreateLoading =true;
@@ -4495,6 +4538,7 @@ angular.module('Lineblocs')
 				billHistory()
 			]).then(function(res) {
 				console.log("finished loading..");
+				console.log("billing data ", res);
 				$scope.billing = res[0].data[0];
 				$scope.settings.db = res[0].data[0].info.settings;
 				$scope.plan = res[0].data[0].info.plan;
@@ -4514,6 +4558,8 @@ angular.module('Lineblocs')
 				$scope.usageTriggers = res[0].data[4];
 				$scope.history = res[1].data;
 				console.log("config is ", $scope.config);
+
+				$scope.subscription = res[0].data[5];
 
 				initializePaymentGateway().then(function() {
 					console.log("billing data is ", $scope.billing);
