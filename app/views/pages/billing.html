@@ -349,7 +349,7 @@
                                 <div style="margin-bottom: 32px;" ng-show="subscription.auto_topup_enabled">
                                     <label style="display: block; margin-bottom: 14px; color: #222; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px; opacity: 0.8;">Amount to top up:</label>
                                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
-                                        <md-button ng-repeat="amount in [25, 50, 100, 500, 1000, 5000]" 
+                                        <md-button ng-repeat="amount in topupAmounts" 
                                             ng-click="subscription.auto_topup_amount = amount"
                                             ng-class="{'md-primary md-raised': subscription.auto_topup_amount === amount, 'md-raised': subscription.auto_topup_amount !== amount}"
                                             class="md-button"

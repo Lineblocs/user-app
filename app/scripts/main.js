@@ -3913,6 +3913,16 @@ angular.module('Lineblocs')
 		{"name": "$100", "value": 100.00},
 		{"name": "$250", "value": 250.00}
 	];
+	$scope.topupAmounts = [
+		5,
+		10,
+		25,
+		50,
+		100,
+		500,
+		1000,
+		5000
+	];
 	$scope.settings = {
 		newCard: false,
 		type: 'CARD'
