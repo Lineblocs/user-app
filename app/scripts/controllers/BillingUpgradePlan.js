@@ -12,6 +12,9 @@ angular.module('Lineblocs')
 	  $shared.updateTitle("Billing Upgrade");
 	  $scope.$shared = $shared;
     $scope.plans = '';
+    $scope.cantUpgrade = false;
+    $scope.cantUpgradeReason = null;
+
 
     $scope.gotoDashboard = function() {
 		  $state.go('dashboard');
@@ -55,6 +58,10 @@ angular.module('Lineblocs')
         $scope.plans = res[0].data.plans;
         $scope.subscription = res[1].data[5];
         $scope.currentPlan = $scope.getCurrentPlan();
+        if ($scope.currentPlan.pay_as_you_go) {
+          $scope.cantUpgrade = true;
+          $scope.cantUpgradeReason = "You are on a pay-as-you-go plan. You cannot upgrade to a different plan.";
+        }
         $shared.endAllLoading();
       });
     };

@@ -190,7 +190,8 @@ angular.module('Lineblocs')
 					$scope.cards = res[0].data[1];
 					$scope.config = res[0].data[2];
 					$scope.usageTriggers = res[0].data[4];
-					$scope.plan = res[1].data.find(function (obj) {
+					const plans = res[1].data.plans;
+					$scope.plan = plans.find(function (obj) {
 						return obj.key_name == $stateParams['plan'];
 					});
 					$scope.upgradeFees = res[2];

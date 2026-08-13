@@ -379,7 +379,7 @@
               </ul>
             </li>
 
-            <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}" ng-show="$shared.hasAccess('manage_users') && $shared.isSubscriptionActive()">
+            <li ng-class="{active: $shared.isSectionActive('settings-workspace-users')}" ng-show="$shared.hasAccess('manage_users') && $shared.planInfo.allow_multiple_workspace_users && $shared.isSubscriptionActive()">
               <md-button href="" ng-click="$shared.changeRoute('settings-workspace-users')" class=""
                 ><i class="mdi mdi-account"></i> &nbsp;<span class="text"
                   >{{ 'users' | translate }}</span
