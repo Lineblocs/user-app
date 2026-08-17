@@ -41,8 +41,8 @@
     <div layout="row">
       <ul class="call-recordings no-list-style">
         <li ng-repeat="recording in call.recordings">
-          <audio ng-if="recording.public_url" controls>
-            <source ng-src="{{recording.public_url}}" type="audio/wav">
+          <audio ng-if="recording.presigned_url" controls>
+            <source ng-src="{{recording.presigned_url}}" type="audio/wav">
           </audio>
         </li>
       </ul>

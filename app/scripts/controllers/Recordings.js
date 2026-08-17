@@ -125,10 +125,9 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
       return;
     }
     $shared.isLoading = true;
-    $http.post(
-      createUrl('/recording/downloadRecordings'),
-      { recording_ids: recording.id },
-      { responseType: 'blob' }
+    Backend.post(
+      '/recording/downloadRecordings',
+      { recording_ids: recording.id }
     ).then(function(res) {
       triggerDownloadFromResponse(res, 'recording-' + recording.id + '.wav');
     }).catch(function() {
@@ -154,10 +153,9 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
     }
 
     $shared.isLoading = true;
-    $http.post(
-      createUrl('/recording/downloadRecordings'),
-      { recording_ids: ids.join(',') },
-      { responseType: 'blob' }
+    Backend.post(
+      '/recording/downloadRecordings',
+      { recording_ids: ids.join(',') }
     ).then(function(res) {
       triggerDownloadFromResponse(res, 'recordings.zip');
     }).catch(function() {
@@ -168,14 +166,34 @@ angular.module('Lineblocs').controller('RecordingsCtrl', function ($scope, Backe
   };
 
   $scope.openRecordingModal = function(recording) {
-    if (!recording || !recording.s3_url) {
+    if (!recording || !recording.id) {
       $shared.showError('Unable to play recording.');
       return;
     }
 
+    $shared.isLoading = true;
+    Backend.post(
+      '/recording/generatePresignedURL',
+      { recording_id: recording.id }
+    ).then(function(res) {
+      var presignedUrl = res && res.data && res.data.presigned_url;
+      if (!presignedUrl) {
+        $shared.showError('Unable to play recording.');
+        return;
+      }
+      showRecordingModal(recording, presignedUrl);
+    }).catch(function() {
+      $shared.showError('Unable to play recording. Please try again.');
+    }).finally(function() {
+      $shared.endIsLoading();
+    });
+  };
+
+  function showRecordingModal(recording, presignedUrl) {
     var controller = function($scope, $mdDialog) {
       $scope.recording = recording;
-      $scope.audioUrl = $sce.trustAsResourceUrl(recording.s3_url);
+      console.log('presignedUrl ', presignedUrl);
+      $scope.audioUrl = $sce.trustAsResourceUrl(presignedUrl);
       $scope.playbackSpeed = 1;
       $scope.annotations = recording.annotations || [
         { "topic": "conversation starts", "time": 110 },
