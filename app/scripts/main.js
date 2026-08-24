@@ -212,6 +212,11 @@ angular
       // optional method
       request: function (config) {
         // do something on success
+
+        if (config.url && config.url.indexOf('/jwt/authenticate') !== -1) {
+          return config;
+        }
+
         var token = localStorage.getItem('AUTH');
         if (token) {
           config.headers['Authorization'] = getJWTToken();
