@@ -90,7 +90,8 @@ Check node log  `docker logs lineblocs-user-app`
 
 Log in to terminal of container  -> `docker exec -it lineblocs-user-app bash`
 
-Modify lineblocs-site project under `user-app/app`
+Modify lineblocs-site project under `user-app/app` or check config on gulpfile.js
 
+Use `docker logs -f lineblocs-user-app` to track file modification. If file content changed (*.js, *.html or *.css) but nothing happen on web browser, Please run `docker compose restart`
 ### Note
 Please remember, lineblocs app integrated with lineblocs editor and libeblocs site. So make sure can access https://lineblocs.com and https://editor.lineblocs.com
